@@ -1,16 +1,14 @@
 # Game-On
 
+EARLY BETA: This version is being released to allow teachers to build their game over the summer, but is not ready for game play.  The badges, bonus loot, groups, stats panel, and clipboard are still being built.  Please visit <a href="https://gameful.me/forums/" target="_blank">the forum on Gameful.me</a> to report bugs and get the latest news.
+
 Game-On (GO) is an educational framework that provides teachers with a vast amount of tools to create their own <a href="http://en.wikipedia.org/wiki/Gamification" target="_blank">gamified</a> learning system.
 
 <a href="http://maclab.guhsd.net/game-on" target="_blank">Game-On Documentation</a>
 
 <a href="http://edex.adobe.com/group/game-on/discussions/" target="_blank">Adobe Education Exchange (AEE) Game-On Group Forum</a>
 
-If you think Game-On could use a new feature or would like to discuss the v3.X versions, refer to the <a href="https://edex.adobe.com/group/game-on/discussion/-9038000/" target="_blank">Questions and Observations</a> thread.
-
-If you found a bug or are having any difficulties in v3.X versions, refer to the <a href="https://edex.adobe.com/group/game-on/discussion/v9f80aa7d/" target="_blank">Game On v3.x Discussion</a> thread.
-
-Currently, (August '17) AEE does not support thread subscription without commenting. If you'd like to recieve updates in any of the AEE threads, be sure to leave a comment. Something as simple as "Hi, following along." will do!
+Currently, AEE does not support thread subscription without commenting. If you'd like to recieve updates in any of the AEE threads, be sure to leave a comment. Something as simple as "Hi, following along." will do!
 
 ### Installation Requirements
 
@@ -33,11 +31,12 @@ We highly recommend keeping your WordPress installation up to date. This not onl
 ### Lovingly Created By
 
 Current Authors:
+* Mick McMurray
 
-* Zach Hofmeister
 
 Previous Authors/Contributors:
 
+* Zach Hofmeister
 * <a href='http://foresthoffman.com' target='_blank'>Forest Hoffman</a>
 * Ezio Ballarin
 * Charles Leon
