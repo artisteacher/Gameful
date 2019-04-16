@@ -1,3 +1,50 @@
+@import url(../css/go-acf-input.css);
+@import url(../css/go-acf-global.css);
+.go_favorite_container label {
+  cursor: pointer; }
+  .go_favorite_container label input[type="checkbox"] {
+    display: none; }
+  .go_favorite_container label .go_favorite_label:before {
+    font-family: Fontawesome !important;
+    content: '\f08a';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    color: #aaaaaa;
+    line-height: 2;
+    -webkit-font-smoothing: antialiased;
+    font-size: 2em; }
+  .go_favorite_container label input[type="checkbox"]:checked + .go_favorite_label:before {
+    font-family: Fontawesome !important;
+    content: "\f004";
+    color: #8B0000;
+    font-size: 2em; }
+
+.go_favorite_container span.checkbox::before {
+  width: 27px;
+  height: 27px;
+  background-color: #fff;
+  left: -35px;
+  box-sizing: border-box;
+  border: 3px solid transparent;
+  transition: border-color .2s; }
+
+.go_favorite_container span.checkbox:hover::before {
+  border: 3px solid #F0FF76; }
+
+.go_favorite_container span.checkbox::after {
+  content: '\f00c';
+  font-family: 'FontAwesome';
+  left: -31px;
+  top: 2px;
+  color: transparent;
+  transition: color .2s; }
+
+input[type="checkbox"]:checked + label span.checkbox::after {
+  color: #62AFFF; }
+
 .go_blog_stage {
   border: solid 1px;
   padding: 10px 20px 10px 20px;
@@ -62,14 +109,31 @@ video.wp-video-shortcode {
 #__wp-uploader-id-2 {
   z-index: 100003 !important; }
 
+.swal-overlay {
+  z-index: 100005 !important; }
+
+.swal-button--save {
+  background-color: forestgreen !important; }
+
+.swal-button--save:hover {
+  background-color: darkseagreen !important; }
+
+.swal-button--exit {
+  background-color: indianred !important; }
+
+.swal-button--exit:hover {
+  background-color: pink !important; }
+
 /**
  *ACF Loot Color
  */
-#go_loot_table .acf-switch {
+#go_loot_table .acf-switch,
+#go_loot_table .go-acf-switch {
   background: pink !important;
   border-color: indianred !important; }
 
-#go_loot_table .acf-switch.-on {
+#go_loot_table .acf-switch.-on,
+#go_loot_table .go-acf-switch.-on {
   background: forestgreen !important;
   border-color: darkgreen !important; }
 
@@ -128,9 +192,17 @@ video.wp-video-shortcode {
 #go_button {
   float: right; }
 
+.go_save_button {
+  float: left;
+  margin: 10px; }
+
+#go_blog_submit, .go_blog_trash {
+  float: right;
+  margin: 10px; }
+
 #go_back_button,
 #go_button,
-#frontend-button {
+.go_frontend-button {
   cursor: pointer; }
 
 #go_upload_button {
@@ -142,6 +214,9 @@ video.wp-video-shortcode {
   background-color: gold;
   color: black;
   border: 1px solid; }
+
+.go_required_blog_content {
+  padding: 20px; }
 
 /********************
 *	locks
@@ -180,9 +255,6 @@ video.wp-video-shortcode {
 /********************
 *	Outro
 ********************/
-.go_task_rewards {
-  display: flex; }
-
 /********************
 *	Featherlight
 ********************/
@@ -691,6 +763,45 @@ input#go_pass_lock::-moz-placeholder {
   border-bottom: solid 1px;
   color: lightgray; }
 
+#wp-go_blog_post-wrap {
+  margin-top: 20px; }
+
+#go_all_content .go_buttons,
+#go_all_content .insert-media,
+#go_all_content .wp-editor-tabs,
+#go_all_content #go_bonus_button {
+  opacity: .5;
+  cursor: default;
+  pointer-events: none !important; }
+
+#go_all_content .wp-editor-container textarea.wp-editor-area {
+  height: 50px; }
+
+#go_task_rewards {
+  display: flex; }
+
+#go_task_rewards > * {
+  padding: 20px; }
+
+/********************
+*	Blue Pulse on filter button
+********************/
+@-webkit-keyframes bluePulse {
+  from {
+    background: #C9E0E2;
+    -webkit-box-shadow: 0 0 9px #50B7E3; }
+  50% {
+    background: #C9E0E2;
+    -webkit-box-shadow: 0 0 18px #2CC8EF; }
+  to {
+    background: #C9E0E2;
+    -webkit-box-shadow: 0 0 9px #50B7E3; } }
+
+#go_leaderboard_update_button button.bluepulse {
+  -webkit-animation-name: bluePulse;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite; }
+
 .featherlight.stats .featherlight-content {
   width: 90%;
   height: 90%;
@@ -837,7 +948,7 @@ END TOOLTIP
   font-family: verdana;
   display: flex;
   flex-wrap: wrap;
-  background-color: lightgray;
+  background-color: #d9d9d9;
   padding: 10px; }
 
 #go_stats_header_lite .go_stats_gravatar, #go_stats_header_lite .go_stats_gravatar img {
@@ -1172,21 +1283,37 @@ store lightbox styles
   bottom: 1px; }
 
 /* ------------------------------------------------------------
-	Loader (from https://www.w3schools.com/howto/howto_css_loader.asp)
------------------------------------------------------------- */
-/* ------------------------------------------------------------
     lightbox
 ------------------------------------------------------------ */
 .featherlight.map .featherlight-content {
   min-width: 90%;
   min-height: 90%; }
 
+/* Center the loader */
+#loader {
+  position: relative;
+  left: 50%;
+  z-index: 1;
+  width: 150px;
+  height: 150px;
+  margin: 40px 0 0 -75px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+  overflow: auto; }
+
 #maps {
   visibility: hidden;
   /* ------------------------------------------------------------
         Reset Styles (from meyerweb.com)
     ------------------------------------------------------------ */
-  /* Center the loader */
+  /* ------------------------------------------------------------
+	Loader (from https://www.w3schools.com/howto/howto_css_loader.asp)
+------------------------------------------------------------ */
   /* Add animation to "page content" */
   /* ------------------------------------------------------------
         Checkmarks
@@ -1249,21 +1376,6 @@ store lightbox styles
     font-size: 100%;
     font-family: inherit;
     vertical-align: baseline; }
-  #maps #loader {
-    position: relative;
-    left: 50%;
-    top: 50%;
-    z-index: 1;
-    width: 150px;
-    height: 150px;
-    margin: 40px 0 0 -75px;
-    border: 16px solid #f3f3f3;
-    border-radius: 50%;
-    border-top: 16px solid #3498db;
-    width: 120px;
-    height: 120px;
-    -webkit-animation: spin 2s linear infinite;
-    animation: spin 2s linear infinite; }
 
 @-webkit-keyframes spin {
   0% {
@@ -1574,7 +1686,7 @@ store lightbox styles
 /* ------------------------------------------------------------
     Utility Navigation
 ------------------------------------------------------------ */
-#myDropdown {
+#go_Dropdown {
   float: left;
   max-width: 100%;
   margin-right: 10px; }
@@ -1583,7 +1695,7 @@ store lightbox styles
   float: left;
   margin-bottom: 10px; }
 
-#myDropdown a {
+#go_Dropdown a {
   display: block;
   font-size: 12px;
   min-width: 150px;
@@ -1591,18 +1703,18 @@ store lightbox styles
   background: #bae9ff;
   cursor: pointer; }
 
-#myDropdown a:hover {
+#go_Dropdown a:hover {
   background: #aee1ff;
   box-shadow: inset 0 -1px 0 #928c8c; }
 
-#myDropdown .locked a,
-#myDropdown .locked a:hover {
+#go_Dropdown .locked a,
+#go_Dropdown .locked a:hover {
   background-color: #cccccc;
   border-color: #000;
   color: #555; }
 
-#myDropdown .done a,
-#myDropdown .done a:hover {
+#go_Dropdown .done a,
+#go_Dropdown .done a:hover {
   background-color: #cee3ac;
   border-color: #b8da83; }
 

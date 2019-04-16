@@ -73,6 +73,8 @@ final class WP_Term_Order {
 	 */
 	public function __construct() {
 
+        add_action( 'wp_ajax_check_if_top_term', 'go_check_if_top_term' );
+
 		// Setup plugin
 		$this->file     = __FILE__;
 		$this->url      = plugin_dir_url( $this->file );
@@ -151,7 +153,6 @@ final class WP_Term_Order {
 
 		// Enqueue fancy ordering
 		if ( true === $this->fancy ) {
-				add_action( 'wp_ajax_check_if_top_term', 'go_check_if_top_term' );
 				$ajax_url   = admin_url( 'admin-ajax.php' );        // Localized AJAX URL
 				wp_register_script( 'term-order-reorder', $this->url . 'js/reorder.js', array( 'jquery-ui-sortable' ), $this->db_version, true );
 				wp_localize_script('term-order-reorder','ajax_url',$ajax_url);
@@ -830,20 +831,6 @@ function _wp_term_order() {
 }
 add_action( 'init', '_wp_term_order', 99 );
 
-/**
- *Added for Game ON
- */
-
-
-function go_reset_map_transient($term_id){
-    $term = get_term($term_id, 'task_chains');
-    //Get the parent object
-    $termParent = ($term->parent == 0) ? $term : get_term($term->parent, 'task_chains');
-    //GET THE ID FROM THE MAP OBJECT
-    $term_id = $termParent->term_id;
-    $key = 'go_get_map_chain_term_ids_' . $term_id;
-    delete_transient($key);
-}
 
 function go_check_if_top_term () {
     global $wpdb;

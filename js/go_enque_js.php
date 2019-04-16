@@ -6,6 +6,7 @@
 
 function go_scripts () {
     global $go_js_version;
+    global $go_debug;
     wp_register_script( 'go_wp_media', get_site_url(null, 'wp-admin/css/media.css'), null, $go_js_version );
 	/*
 	 * Registering Scripts For The Front-end
@@ -13,16 +14,21 @@ function go_scripts () {
     wp_enqueue_script( 'mce-view' );
 
 	wp_enqueue_style( 'dashicons' );
-		//task shortcode script is registered here, but enqueued and localized in the shortcode.
-		wp_register_script( 'go_tasks', plugin_dir_url( __FILE__ ).'min/go_tasks-min.js', null, $go_js_version );
 
-		//COMBINED FILE
-		wp_register_script( 'go_frontend-min', plugin_dir_url( __FILE__ ).'min/go_frontend-min.js', array('jquery'), $go_js_version, false);
-
-		//All GO
-        wp_register_script( 'go_scripts', plugin_dir_url( __FILE__ ).'min/go_scripts-min.js', array( 'jquery' ), $go_js_version, true);
+	//task shortcode script is registered here, but enqueued and localized in the shortcode.
+    wp_register_script( 'go_tasks', plugin_dir_url( __FILE__ ).'min/go_tasks-min.js', null, $go_js_version );
 
 
+    //COMBINED FILE
+    wp_register_script( 'go_frontend-min', plugin_dir_url( __FILE__ ).'min/go_frontend-min.js', array('jquery'), $go_js_version, false);
+
+    //All GO
+    wp_register_script( 'go_scripts', plugin_dir_url( __FILE__ ).'min/go_scripts-min.js', array( 'jquery' ), $go_js_version, true);
+
+    if(!$go_debug) {
+        wp_register_script('go_admin_notifications', plugin_dir_url(__FILE__) . 'scripts/go_admin_notifications.js', array('jquery'), $go_js_version, true);
+        wp_enqueue_script('go_admin_notifications');
+    }
     /*
      * Enqueueing Scripts For The Front-end
      */
@@ -45,7 +51,7 @@ function go_scripts () {
             );
         }
 
-		//END COMBINED
+    //END COMBINED
 
 		// Dependencies
 		wp_enqueue_script( 'jquery' );
@@ -102,12 +108,16 @@ function go_scripts () {
                     'go_create_admin_message' => wp_create_nonce('go_create_admin_message'),
                     'go_send_message' => wp_create_nonce('go_send_message'),
                     'go_blog_opener'                => wp_create_nonce('go_blog_opener'),
+                    'go_blog_trash'                => wp_create_nonce('go_blog_trash'),
                     'go_blog_submit'                => wp_create_nonce('go_blog_submit'),
                     'go_to_this_map'                => wp_create_nonce('go_to_this_map'),
                     'go_blog_lightbox_opener'                => wp_create_nonce('go_blog_lightbox_opener'),
                     'go_blog_user_task'             => wp_create_nonce('go_blog_user_task'),
                     'go_user_map_ajax'              => wp_create_nonce('go_user_map_ajax'),
-                    'go_update_last_map'            => wp_create_nonce('go_update_last_map')
+                    'go_update_last_map'            => wp_create_nonce('go_update_last_map'),
+                    'go_blog_favorite_toggle'            => wp_create_nonce('go_blog_favorite_toggle'),
+                    'go_filter_reader'            => wp_create_nonce('go_filter_reader')
+
                 ),
                 'go_is_admin'                   => $is_admin,
                 'go_lightbox_switch'            => $go_lightbox_switch,
@@ -126,10 +136,21 @@ function go_scripts () {
 			)
 
 		);
-        $ajax_url   = admin_url( 'admin-ajax.php' );        // Localized AJAX URL
-        wp_localize_script('go_frontend-min','map_ajax_admin_url',$ajax_url);
-
-
-
+    /**
+     * Resize All Images on Client Side
+     */
+    /*
+    //wp_enqueue_script( 'client-resize' , plugins_url( 'scripts/client-side-image-resize.js' , __FILE__ ) , array('media-editor' ) , '0.0.1' );
+    wp_localize_script( 'client-resize' , 'client_resize' , array(
+        'plupload' => array(
+            'resize' => array(
+                'enabled' => true,
+                'width' => 1920, // enter your width here
+                'height' => 1200, // enter your width here
+                'quality' => 90,
+            ),
+        )
+    ) );
+    */
 }
 ?>

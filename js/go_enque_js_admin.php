@@ -2,10 +2,12 @@
 
 function go_admin_scripts ($hook) {
     global $post;
-	$user_id = get_current_user_id();
+    global $go_js_version;
+    global $go_debug;
+
+    $user_id = get_current_user_id();
     //is the current user an admin
     $is_admin = go_user_is_admin($user_id);
-    global $go_js_version;
 
     /*
      * Registering Scripts For Admin Pages
@@ -27,6 +29,11 @@ function go_admin_scripts ($hook) {
 
     //this one doesn't minify for some reason
     wp_register_script( 'go_admin-tools', plugin_dir_url( __FILE__ ).'scripts/go_tools.js', array( 'jquery' ), $go_js_version, true);
+
+    if(!$go_debug) {
+        wp_register_script('go_admin_notifications', plugin_dir_url(__FILE__) . 'scripts/go_admin_notifications.js', array('jquery'), $go_js_version, true);
+        wp_enqueue_script('go_admin_notifications');
+    }
 
 
     /*
@@ -103,7 +110,8 @@ function go_admin_scripts ($hook) {
                     'go_blog_lightbox_opener'       => wp_create_nonce('go_blog_lightbox_opener'),
                     'go_blog_user_task'             => wp_create_nonce('go_blog_user_task'),
                     'go_user_map_ajax'              => wp_create_nonce('go_user_map_ajax'),
-                    'go_update_last_map'            => wp_create_nonce('go_update_last_map')
+                    'go_update_last_map'            => wp_create_nonce('go_update_last_map'),
+                    'go_blog_favorite_toggle'            => wp_create_nonce('go_blog_favorite_toggle')
 				),
 				'go_is_admin'                   => $is_admin,
                 'go_lightbox_switch'            => $go_lightbox_switch,
@@ -173,6 +181,24 @@ function go_admin_scripts ($hook) {
             }
         }
     }
+
+    /**
+     * Resize All Images on Client Side
+     */
+    //wp_enqueue_script( 'client-resize' , plugins_url( 'scripts/client-side-image-resize.js' , __FILE__ ) , array('media-editor' ) , '0.0.1' );
+    /*
+    wp_localize_script( 'client-resize' , 'client_resize' , array(
+        'plupload' => array(
+            'resize' => array(
+                'enabled' => true,
+                'width' => 1920, // enter your width here
+                'height' => 1200, // enter your width here
+                'quality' => 90,
+            ),
+        )
+    ) );
+    */
+
 }
 
 

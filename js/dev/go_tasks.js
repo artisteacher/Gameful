@@ -1,27 +1,23 @@
+//this needs to be run on both task and blog pages
+//it has the code to verify the blog content
+//and assign the click to the opener
 jQuery( document ).ready( function() {
 
     //add onclick to blog edit buttons
-
-    //jQuery( document ).ready( function() {
-        jQuery(".go_blog_opener").one("click", function(e){
-            go_blog_opener( this );
-        });
+    //console.log("opener3");
+    //jQuery(".go_blog_opener").one("click", function(e){
+    //    go_blog_opener( this );
     //});
 
 
-	jQuery.ajaxSetup({
+
+    jQuery.ajaxSetup({
 		url: go_task_data.url += '/wp-admin/admin-ajax.php'
 	});
 
 
 	go_make_clickable();
 	jQuery( ".go_stage_message" ).show(  );
-
-    // remove existing editor instance
-    tinymce.execCommand('mceRemoveEditor', true, 'go_blog_post');
-    tinymce.execCommand('mceRemoveEditor', true, 'go_blog_post_edit');
-    jQuery('#go_hidden_mce').remove();
-    jQuery('#go_hidden_mce_edit').remove();
 
     var go_select_admin_view = jQuery('#go_select_admin_view').val();
     console.log(go_select_admin_view);
@@ -30,10 +26,14 @@ jQuery( document ).ready( function() {
 
         //add onclick to continue buttons
         jQuery('#go_button').one("click", function (e) {
-            task_stage_check_input(this);
+            task_stage_check_input(this, true);
         });
         jQuery('#go_back_button').one("click", function (e) {
-            task_stage_check_input(this);
+            task_stage_change(this);
+        });
+        jQuery('#go_save_button').one("click", function (e) {
+            //task_stage_check_input(this, false, false);
+            go_blog_submit( this, false );
         });
     }
 
@@ -50,6 +50,16 @@ jQuery( document ).ready( function() {
     jQuery('#go_admin_override').click( function () {
         jQuery('.go_password').show();
     });
+
+    // remove existing editor instance
+    //tinymce.execCommand('mceRemoveEditor', true, 'go_blog_post');
+    //tinymce.execCommand('mceRemoveEditor', true, 'go_blog_post_edit');
+
+
+    //tinymce.execCommand('mceRemoveEditor', true, 'go_blog_post');
+    //tinymce.execCommand( 'mceAddEditor', true, 'go_blog_post' );
+
+
 });
 
 function go_update_bonus_loot(){
@@ -77,7 +87,7 @@ function go_update_bonus_loot(){
 
 //For the Timer (v4)
 function getTimeRemaining(endtime) {
-	  var t = Date.parse(endtime) - Date.parse(new Date());
+	  var t = endtime - Date.parse(new Date());
 	  var seconds = Math.floor((t / 1000) % 60);
 	  var minutes = Math.floor((t / 1000 / 60) % 60);
 	  var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
@@ -89,11 +99,12 @@ function getTimeRemaining(endtime) {
 	    'minutes': minutes,
 	    'seconds': seconds
 	  };
-
-	}
+}
 
 //Initializes the new timer (v4)
 function initializeClock(id, endtime) {
+    console.log("initializeClock");
+    endtime = endtime + Date.parse(new Date());
 	var clock = document.getElementById(id);
 	var daysSpan = clock.querySelector('.days');
 	var hoursSpan = clock.querySelector('.hours');
@@ -123,18 +134,15 @@ function initializeClock(id, endtime) {
   	updateClock();
   	var t = getTimeRemaining(endtime);
   	var time_ms = t.total;
-	console.log (t.total);
+	console.log ("total" + t.total);
   	if (time_ms > 0 ){
   		var timeinterval = setInterval(updateClock, 1000);
   	}else {
-
   	}
-
 }
 
 function go_timer_abandon() {
-	 var redirectURL = go_task_data.redirectURL
- 	//window.location = $homeURL;
+	 var redirectURL = go_task_data.redirectURL;
     window.location = redirectURL;
 }
 
@@ -152,206 +160,25 @@ function flash_error_msg( elem ) {
     });
 }
 
-// disables the target stage button, and adds a loading gif to it
-function go_enable_loading( target ) {
-	//prevent further events with this button
-	//jQuery('#go_button').prop('disabled',true);
-	// prepend the loading gif to the button's content, to show that the request is being processed
-	target.innerHTML = '<span class="go_loading"></span>' + target.innerHTML;
-}
-
-// re-enables the stage button, and removes the loading gif
-function go_disable_loading( ) {
-    console.log ("oneclick");
-    jQuery('.go_loading').remove();
-
-    jQuery('#go_button').off().one("click", function(e){
-        task_stage_check_input( this );
-    });
-    jQuery('#go_back_button').off().one("click", function(e){
-        task_stage_check_input( this );
-    });
-
-    jQuery( "#go_bonus_button" ).off().one("click", function(e) {
-        go_update_bonus_loot(this);
-    });
-
-    jQuery('.go_str_item').off().one("click", function(e){
-        go_lb_opener( this.id );
-    });
-
-    jQuery(".go_blog_opener").off().one("click", function(e){
-        go_blog_opener( this );
-    });
-
-
-    //add active class to checks and buttons
-    jQuery(".progress").closest(".go_checks_and_buttons").addClass('active');
-
-}
-
-function task_stage_check_input( target ) {
-	console.log('button clicked');
-    //disable button to prevent double clicks
-    go_enable_loading( target );
-
-    //BUTTON TYPES
-    //Abandon
-    //Start Timer
-    //Continue
-    //Undo
-    //Repeat
-    //Undo Repeat --is this different than just undo
-
-    //Continue or Complete button needs to validate input for:
-    ////quizes
-    ///URLs
-    ///passwords
-    ///uploads
-
-    //if it passes validation:
-    ////send information to php with ajax and wait for a response
-
-    //if response is success
-    ////update totals
-    ///flash rewards and sounds
-    ////update last check
-    ////update current stage and check
-
-
-    //v4 Set variables
-    var button_type = "";
-    if ( 'undefined' !== typeof jQuery( target ).attr( 'button_type' ) ) {
-        button_type = jQuery( target ).attr( 'button_type' )
-    }
-
-    var task_status = "";
-    if ( 'undefined' !== typeof jQuery( target ).attr( 'status' ) ) {
-        task_status = jQuery( target ).attr( 'status' )
-    }
-
-    var check_type = "";
-    if ( 'undefined' !== typeof jQuery( target ).attr( 'check_type' ) ) {
-        check_type = jQuery( target ).attr( 'check_type' )
-    }
-
-    ///v4 START VALIDATE FIELD ENTRIES BEFORE SUBMIT
-    if (button_type == 'continue' || button_type == 'complete' || button_type =='continue_bonus' || button_type =='complete_bonus') {
-    	if (check_type === 'password' || check_type == 'unlock') {
-            var pass_entered = jQuery('#go_result').attr('value').length > 0 ? true : false;
-            if (!pass_entered) {
-                jQuery('#go_stage_error_msg').show();
-                var error = "Retrieve the password from " + go_task_data.admin_name + ".";
-                if (jQuery('#go_stage_error_msg').text() != error) {
-                    jQuery('#go_stage_error_msg').text(error);
-                } else {
-                    flash_error_msg('#go_stage_error_msg');
-                }
-                go_disable_loading();
-                return;
-            }
-        } else if (check_type == 'URL') {
-            var the_url = jQuery('#go_result').attr('value').replace(/\s+/, '');
-            if (the_url.length > 0) {
-                if (the_url.match(/^(http:\/\/|https:\/\/).*\..*$/) && !(the_url.lastIndexOf('http://') > 0) && !(the_url.lastIndexOf('https://') > 0)) {
-                    var url_entered = true;
-                } else {
-                    jQuery('#go_stage_error_msg').show();
-                    var error = "Enter a valid URL.";
-                    if (jQuery('#go_stage_error_msg').text() != error) {
-                        jQuery('#go_stage_error_msg').text(error);
-                    } else {
-                        flash_error_msg('#go_stage_error_msg');
-                    }
-                    go_disable_loading();
-                    return;
-                }
-            } else {
-                jQuery('#go_stage_error_msg').show();
-                var error = "Enter a valid URL.";
-                if (jQuery('#go_stage_error_msg').text() != error) {
-                    jQuery('#go_stage_error_msg').text(error);
-                } else {
-                    flash_error_msg('#go_stage_error_msg');
-                }
-                go_disable_loading();
-                return;
-            }
-        }else if (check_type == 'upload') {
-            var result = jQuery("#go_result").attr( 'value');
-            if (result == undefined) {
-                jQuery('#go_stage_error_msg').show();
-                var error = "Please attach a file.";
-                if (jQuery('#go_stage_error_msg').text() != error) {
-                    jQuery('#go_stage_error_msg').text(error);
-                } else {
-                    flash_error_msg('#go_stage_error_msg');
-                }
-                go_disable_loading();
-                return;
-            }
-
-        }else if (check_type == 'quiz') {
-            var test_list = jQuery(".go_test_list");
-            if (test_list.length >= 1) {
-                var checked_ans = 0;
-                for (var i = 0; i < test_list.length; i++) {
-                    var obj_str = "#" + test_list[i].id + " input:checked";
-                    var chosen_answers = jQuery(obj_str);
-                    if (chosen_answers.length >= 1) {
-                        checked_ans++;
-                    }
-                }
-                //if all questions were answered
-                if (checked_ans >= test_list.length) {
-                    go_quiz_check_answers(task_status, target);
-                    go_disable_loading();
-                    return;
-
-                }
-                //else print error message
-                else if (test_list.length > 1) {
-                    jQuery('#go_stage_error_msg').show();
-                    if (jQuery('#go_stage_error_msg').text() != "Please answer all questions!") {
-                        jQuery('#go_stage_error_msg').text("Please answer all questions!");
-                    } else {
-                        flash_error_msg('#go_stage_error_msg');
-                    }
-                    go_disable_loading();
-                    return;
-                }
-                //} else {
-                //if (jQuery(".go_test_list input:checked").length >= 1) {
-                // go_quiz_check_answers();
-                //}
-                else {
-                    jQuery('#go_stage_error_msg').show();
-                    if (jQuery('#go_stage_error_msg').text() != "Please answer the question!") {
-                        jQuery('#go_stage_error_msg').text("Please answer the question!");
-                    } else {
-                        flash_error_msg('#go_stage_error_msg');
-                    }
-                    go_disable_loading();
-                    return;
-                }
-            }
-        }
-    }
-    task_stage_change( target );
-}
-
 function task_stage_change( target ) {
+
     console.log( "change");
+
     //v4 Set variables
     var button_type = "";
     if ( 'undefined' !== typeof jQuery( target ).attr( 'button_type' ) ) {
         button_type = jQuery( target ).attr( 'button_type' )
     }
-    //console.log(button_type);
+    console.log("Button:" + button_type);
 
     var task_status = "";
     if ( 'undefined' !== typeof jQuery( target ).attr( 'status' ) ) {
         task_status = jQuery( target ).attr( 'status' )
+    }
+
+    var next_bonus = "";
+    if ( 'undefined' !== typeof jQuery( target ).attr( 'next_bonus' ) ) {
+        next_bonus = jQuery( target ).attr( 'next_bonus' )
     }
 
     var check_type = "";
@@ -359,15 +186,23 @@ function task_stage_change( target ) {
         check_type = jQuery( target ).attr( 'check_type' )
     }
 
-    var color = jQuery( '#go_admin_bar_progress_bar' ).css( "background-color" );
+    var blog_post_id = "";
+    if ( 'undefined' !== typeof jQuery( target ).attr( 'blog_post_id' ) ) {
+        check_type = jQuery( target ).attr( 'blog_post_id' )
+    }
+
     var result = jQuery( '#go_result' ).attr( 'value' );
 
     if( check_type == 'blog' && button_type != 'undo_last_bonus'){
         //result = tinyMCE.activeEditor.getContent();
-        result = go_get_tinymce_content_check();
-        var result_title = jQuery( '#go_result_title_check' ).val( );
-        var blog_post_id= jQuery( '#go_result_title_check' ).data( 'blog_post_id' );
-        //console.log(blog_post_id);
+        result = go_get_tinymce_content_blog('task_stage_change');
+        var result_title = jQuery( '#go_blog_title' ).html();
+        var blog_post_id= jQuery( '#go_blog_title' ).data( 'blog_post_id' );
+        var blog_url= jQuery( '#go_result_url' ).val();
+        var blog_media= jQuery( '#go_result_media' ).attr( 'value' );
+        var blog_video= jQuery( '#go_result_video' ).val();
+        //==console.log("ID" + blog_post_id);
+        //console.log("BV" + blog_video);
 
     }else{
         var result_title = null;
@@ -380,15 +215,18 @@ function task_stage_change( target ) {
             post_id: go_task_data.ID,
             user_id: go_task_data.userID,
             status: task_status,
+            next_bonus: next_bonus,
             button_type: button_type,
             check_type: check_type,
             result: result,
             result_title: result_title,
-            blog_post_id: blog_post_id
+            blog_post_id: blog_post_id,
+            blog_url: blog_url,
+            blog_media: blog_media,
+            blog_video: blog_video,
+
         },
         success: function( raw ) {
-            console.log('success');
-            //console.log(raw);
             // parse the raw response to get the desired JSON
             var res = {};
             try {
@@ -396,18 +234,17 @@ function task_stage_change( target ) {
             } catch (e) {
                 res = {
                     json_status: '101',
-                    timer_start: '',
+                    timer_start: '',//doesn;t do anything
                     button_type: '',
                     time_left: '',
                     html: '',
                     redirect: '',
-                    rewards: {
+                    rewards: { //this doesn't do anything? check this function
                         gold: 0,
                     },
                 };
             }
-            //console.log(res.html);
-            //alert(json_status);
+            //console.log("HTML: " + res.html);
             if ( '101' === Number.parseInt( res.json_status ) ) {
                 console.log (101);
                 jQuery( '#go_stage_error_msg' ).show();
@@ -463,7 +300,6 @@ function task_stage_change( target ) {
                     jQuery( '#go_wrapper > div' ).slice(-3).remove();
                 }
                 else if ( res.button_type == 'abandon' ){
-
                     window.location = res.redirect;
                 }
                 else if ( res.button_type == 'timer' ){
@@ -471,27 +307,15 @@ function task_stage_change( target ) {
                     var audio = new Audio( PluginDir.url + 'media/sounds/airhorn.mp3' );
                     audio.play();
                 }
-                    go_append(res);
-                //Pop up currency awards
-                jQuery( '#notification' ).html( res.notification );
-                jQuery( '#go_admin_bar_progress_bar' ).css({ "background-color": color });
-                jQuery( '#go_button' ).ready( function() {
-                    //check_locks();
+                go_append(res);
+                jQuery( document ).ready( function() {
+                    jQuery( ".feedback_accordion" ).accordion({
+                        collapsible: true
+                    });
                 });
             }
         }
     });
-}
-
-function go_get_tinymce_content_check(){
-    console.log("html");
-    if (jQuery("#wp-go_blog_post-wrap .wp-editor-area").is(":visible")){
-        return jQuery('#wp-go_blog_post-wrap .wp-editor-area').val();
-
-    }else{
-        console.log("visual");
-        return tinyMCE.activeEditor.getContent();
-    }
 }
 
 //This isn't currently used, but saving just in case . . .
@@ -499,9 +323,6 @@ function go_mce_reset() {
     // remove existing editor instance
     tinymce.execCommand('mceRemoveEditor', true, 'go_blog_post');
     tinymce.execCommand( 'mceAddEditor', true, 'go_blog_post' );
-
-    tinymce.execCommand('mceRemoveEditor', true, 'go_blog_post_edit');
-    tinymce.execCommand( 'mceAddEditor', true, 'go_blog_post_edit' );
 }
 
 function go_append (res){
@@ -513,9 +334,65 @@ function go_append (res){
         go_disable_loading();
         //go_mce();
         // remove existing editor instance, and add new one
-        tinymce.execCommand('mceRemoveEditor', true, 'go_blog_post');
-        tinymce.execCommand( 'mceAddEditor', true, 'go_blog_post' );
+        //tinymce.execCommand('mceRemoveEditor', true, 'go_blog_post');
+        //tinymce.execCommand( 'mceAddEditor', true, 'go_blog_post' );
 
+        //https://stackoverflow.com/questions/25732679/load-wordpress-editor-via-ajax-plugin
+        var fullId = 'go_blog_post';
+        //tinymce.execCommand('mceRemoveEditor', true, 'go_blog_post_lightbox');
+        tinymce.execCommand('mceRemoveEditor', true, fullId);
+        //quicktags({id :'go_blog_post_lightbox'});
+
+        quicktags({id : fullId});
+        // use wordpress settings
+        tinymce.init({
+            selector: fullId,
+            branding: false,
+            theme:"modern",
+            skin:"lightgray",
+            language:"en",
+            formats:{
+                alignleft: [
+                    {selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li', styles: {textAlign:'left'}},
+                    {selector: 'img,table,dl.wp-caption', classes: 'alignleft'}
+                ],
+                aligncenter: [
+                    {selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li', styles: {textAlign:'center'}},
+                    {selector: 'img,table,dl.wp-caption', classes: 'aligncenter'}
+                ],
+                alignright: [
+                    {selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li', styles: {textAlign:'right'}},
+                    {selector: 'img,table,dl.wp-caption', classes: 'alignright'}
+                ],
+                strikethrough: {inline: 'del'}
+            },
+            relative_urls:false,
+            remove_script_host:false,
+            convert_urls:false,
+            browser_spellcheck:true,
+            fix_list_elements:true,
+            entities:"38,amp,60,lt,62,gt",
+            entity_encoding:"raw",
+            keep_styles:false,
+            paste_webkit_styles:"font-weight font-style color",
+            preview_styles:"font-family font-size font-weight font-style text-decoration text-transform",
+            wpeditimage_disable_captions:false,
+            wpeditimage_html5_captions:true,
+            plugins:"charmap,hr,lists,media,paste,tabfocus,textcolor,fullscreen,wordpress,wpeditimage,wpgallery,wplink,wpdialogs,wpview,wordcount",
+            selector:"#" + fullId,
+            resize:"vertical",
+            menubar:false,
+            wpautop:true,
+            wordpress_adv_hidden:false,
+            indent:false,
+            toolbar1:"formatselect,bold,italic,bullist,numlist,blockquote,alignleft,aligncenter,alignright,link,wp_more,spellchecker,fullscreen,wp_adv",
+            toolbar2:"strikethrough,hr,forecolor,pastetext,removeformat,charmap,outdent,indent,undo,redo,wp_help",
+            toolbar3:"",
+            toolbar4:"",
+            tabfocus_elements:":prev,:next",
+            body_class:"id post-type-post post-status-publish post-format-standard",});
+        // this is needed for the editor to initiate
+        tinyMCE.execCommand('mceAddEditor', false, fullId);
     });
 }
 
