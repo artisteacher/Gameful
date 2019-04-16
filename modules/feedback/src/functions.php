@@ -35,15 +35,13 @@ function go_reader_template_include($template)
 
 add_action('go_blog_template_after_post', 'go_user_feedback_container', 10, 2);
 
-function go_user_feedback_container($post_id, $show_form = false){
+function go_user_feedback_container($post_id, $show_form = true){
     $admin_user = go_user_is_admin();
 
-    go_task_status_icon($post_id);
-    go_blog_is_private($post_id);
-    go_blog_favorite($post_id);
+
     //go_blog_tags_select($post_id);
     ?>
-    <div class="feedback_accordion">
+    <div class="feedback_accordion" style="clear: both;">
         <h3>Feedback</h3>
         <div><?php go_user_feedback($post_id); ?></div>
         <h3>Revision History</h3>
@@ -117,15 +115,18 @@ function go_feedback_form($post_id){
 
 function go_task_status_icon($post_id){
     $status = get_post_status($post_id);
+    $is_admin = go_user_is_admin();
     $icon ='';
     if ($status == 'read'){
-        $icon ='<i class="fa fa-eye" aria-hidden="true"></i>';
+        $icon ='<span class="tooltip" data-tippy-content="This post has been marked as Read."><i class="fa fa-eye fa-2x" aria-hidden="true"></i></span>';
     }else if ($status == 'reset'){
-        $icon ='<i class="fa fa-times-circle" aria-hidden="true"></i>';
-    }else if ($status == 'revise'){
-        $icon ='<i class="fa fa-exclamation-circle" aria-hidden="true"></i>';
+        $icon ='<span class="tooltip" data-tippy-content="This post has been reset."><i class="fa fa-times-circle fa-2x" aria-hidden="true"></i></span>';
+    }else if ($status == 'unread' && $is_admin == true){
+        $icon ='<span class="tooltip" data-tippy-content="This post has NOT been read."><i class="fa fa-eye-slash fa-2x" aria-hidden="true"></i></span>';
     }else if ($status == 'draft'){
-        $icon ='<span>DRAFT</span>';
+        //$icon ='<span class="tooltip" data-tippy-content="This post is a draft."><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></span>';
+    }else if ($status == 'trash'){
+        $icon ='<span class="tooltip" data-tippy-content="This post is in the trash."><i class="fa fa-trash fa-2x" aria-hidden="true"></i></span>';
     }
     echo '<div class="go_status_icon" >'.$icon.'</div>';
 }
@@ -138,7 +139,7 @@ function go_blog_is_private($post_id){
     if ($status) {
 
         //$status = get_post_status($post_id);
-        echo '<div class="go_blog_visibility" ><i class="fa fa-user-secret" aria-hidden="true"></i></div>';
+        echo '<div class="go_blog_visibility" ><span class="tooltip" data-tippy-content="This is a private post.  It is only viewable by the author and site administrators."><i class="fa fa-user-secret fa-2x" aria-hidden="true"></i></span></div>';
     }
 }
 
@@ -164,7 +165,11 @@ function go_blog_favorite($post_id){
 }
 
 function go_blog_favorite_toggle(){
-    check_ajax_referer( 'go_blog_favorite_toggle' );
+    //check_ajax_referer( 'go_blog_favorite_toggle' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_blog_favorite_toggle' ) ) {
+        echo "refresh";
+        die( );
+    }
     $post_id = !empty($_POST['blog_post_id']) ? intval($_POST['blog_post_id']) : false;
     $status = !empty($_POST['checked']) ? $_POST['checked'] : false;
     update_post_meta( $post_id, 'go_blog_favorite', $status);

@@ -59,7 +59,11 @@ function go_task_change_stage() {
         );
         die();
     }
-    check_ajax_referer( 'go_task_change_stage_' . $post_id . '_' . $user_id );
+    //check_ajax_referer( 'go_task_change_stage_' . $post_id . '_' . $user_id );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_task_change_stage' ) ) {
+        echo "refresh";
+        die( );
+    }
 
     //Sets the $status variable
     // and checks if the status on the button is the same as the database
@@ -238,6 +242,32 @@ function go_task_change_stage() {
                 $badge_ids = serialize($badge_ids);
             }
         }
+
+        //Get previous stage#
+        //Get all "go_blogs" with parent of this task
+        //check if they are attached to this stage
+        //then set $blog_post_id
+        global $post;
+
+        $args = array(
+            'post_parent' => $post_id,
+            'post_type' => 'go_blogs', //you can use also 'any'
+        );
+
+        $the_query = new WP_Query( $args );
+        // The Loop
+        if ( $the_query->have_posts() ) :
+            while ( $the_query->have_posts() ) : $the_query->the_post();
+                $blog_post_id = get_the_ID();
+                $meta = get_post_meta($blog_post_id, 'go_blog_task_stage', true);
+                if (intval($meta) == ($status -1)){
+                    wp_trash_post(intval($blog_post_id));
+                }
+            endwhile;
+        endif;
+// Reset Post Data
+        wp_reset_postdata();
+
 
 
         go_update_stage_table ($user_id, $post_id, $custom_fields, $status, null, false, 'undo', null, $badge_ids, $group_ids );

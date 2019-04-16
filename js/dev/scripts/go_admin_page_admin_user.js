@@ -1,24 +1,28 @@
-/*
- * go_tasks_admin.js
- *
- * Where all the functionality for the task edit page goes.
- *
- * @see go_generate_accordion_array() below, it maps all the functions to their appropriate
- *      settings/accordions.
- */
-/*
- * Disable sorting of metaboxes
 
-jQuery(document).ready( function($) {
-    $('.meta-box-sortables').sortable({
-        disabled: true
-    });
 
-    $('.postbox .hndle').css('cursor', 'pointer');
+jQuery(document).ready(function(){
+
+    setTimeout(set_height_mce, 1000);
+
 });
 
 
- */
+function go_acf_repeater_accordion(){
+    jQuery('.go_acf_header').one('click', function(e) {
+        console.log("collapse repeater");
+        jQuery('.go_acf_header').off();
+        if(jQuery(e.target).is('input')){
+            e.preventDefault();
+        }else {
+            jQuery(this).closest('.acf-row').find('.-collapse').trigger('click');
+        }
+        //jQuery(this).closest('.acf-row').hide();
+        go_acf_repeater_accordion();
+
+    });
+}
+
+
 
 //fix https://stackoverflow.com/questions/9588025/change-tinymce-editors-height-dynamically
 function set_height_mce() {
@@ -26,15 +30,6 @@ function set_height_mce() {
 
 }
 
-jQuery(document).ready(function(){
-    go_hide_child_tax_acfs();
-    jQuery('.taxonomy-task_chains #parent, .taxonomy-go_badges #parent').change(function(){
-        go_hide_child_tax_acfs();
-    });
-
-    setTimeout(set_height_mce, 1000);
-
-});
 
 
 /*
@@ -76,6 +71,7 @@ function go_hide_child_tax_acfs() {
     }
 
 }
+
 
 
 

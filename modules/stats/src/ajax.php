@@ -132,7 +132,11 @@ function go_loot_headers($totals = null){
  *
  */
 function go_admin_bar_stats() {
-    check_ajax_referer( 'go_admin_bar_stats_' );
+    //check_ajax_referer( 'go_admin_bar_stats_' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_admin_bar_stats' ) ) {
+        echo "refresh";
+        die( );
+    }
     //$user_id = 0;
     //Get the user_id for the stats
     if ( ! empty( $_POST['uid'] ) ) {
@@ -432,7 +436,11 @@ function go_stats_about($user_id = null, $not_ajax = false) {
     }
 
     if (!$not_ajax){
-        check_ajax_referer( 'go_stats_about' );
+        //check_ajax_referer( 'go_stats_about' );
+        if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_about' ) ) {
+            echo "refresh";
+            die( );
+        }
     }
 
     echo "<div id='go_stats_about' class='go_datatables'>";
@@ -461,7 +469,11 @@ function go_stats_about($user_id = null, $not_ajax = false) {
 
 function go_stats_task_list() {
 
-    check_ajax_referer( 'go_stats_task_list_' );
+    //check_ajax_referer( 'go_stats_task_list_' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_task_list' ) ) {
+        echo "refresh";
+        die( );
+    }
     $current_user = get_current_user_id();
     $is_admin = go_user_is_admin($current_user);
 
@@ -476,9 +488,9 @@ function go_stats_task_list() {
 
     echo "<div id='go_task_list' class='go_datatables'><table id='go_tasks_datatable' class='pretty display'>
                    <thead>
-						<tr>";
+						<tr><th></th>";
     if ($is_admin){
-        echo "<th></th><th class='header go_tasks_reset_multiple'  style='color: red;'><a href='#' class='go_tasks_reset_multiple_clipboard'><i class='fa fa-times-circle' aria-hidden='true'></i></a></th>
+        echo "<th class='header go_tasks_reset_multiple'  style='color: red;'><a href='#' class='go_tasks_reset_multiple_clipboard'><i class='fa fa-times-circle' aria-hidden='true'></i></a></th>
     <th class='header go_tasks_reset' ><a href='#'></a></th>";
     }
     echo "    
@@ -495,9 +507,9 @@ function go_stats_task_list() {
             </tr>
             </thead>
             <tfoot>
-            <tr>";
+            <tr><th></th>";
     if ($is_admin){
-        echo "<th></th><th class='header go_tasks_reset_multiple'  style='color: red;'><a href='#' class='go_tasks_reset_multiple_clipboard'><i class='fa fa-times-circle' aria-hidden='true'></i></a></th>
+        echo "<th class='header go_tasks_reset_multiple'  style='color: red;'><a href='#' class='go_tasks_reset_multiple_clipboard'><i class='fa fa-times-circle' aria-hidden='true'></i></a></th>
     <th class='header go_tasks_reset' ><a href='#'></a></th>";
     }
     echo "
@@ -525,6 +537,7 @@ function go_tasks_dataloader_ajax(){
     $aColumns = array( 'id', 'uid', 'post_id', 'status', 'bonus_status' ,'xp', 'gold', 'health', 'start_time', 'last_time', 'badges', 'groups' );
     $sIndexColumn = "id";
     $sTable = $go_task_table_name;
+    $is_admin = go_user_is_admin($current_user);
 
     /*
     $sLimit = "";
@@ -721,12 +734,21 @@ function go_tasks_dataloader_ajax(){
         $links = array_reverse($links);
         $links = $comma_separated = implode(" ", $links);
         $check_box = "<input class='go_checkbox' type='checkbox' name='go_selected' data-uid='" . $user_id . "' data-task='". $post_id . "'/>";
-        $row[] = "";
-        $row[] = "{$check_box}";
-        $row[] = '<a><i data-uid="' . $user_id . '" data-task="'. $post_id . '" style="padding: 0px 10px;" class="go_reset_task_clipboard fa fa-times-circle" aria-hidden="true"></a>';
+        $row[] = "";//empty
+        if($is_admin) {
+            $row[] = "{$check_box}";//checkbox
+
+            $row[] = '<a><i data-uid="' . $user_id . '" data-task="' . $post_id . '" style="padding: 0px 10px;" class="go_reset_task_clipboard fa fa-times-circle" aria-hidden="true"></a>';
+        }
         $row[] = "{$time}";
         $row[] = "<a href='{$post_link}' >{$post_name}</a>";
-        $row[] = "{$status} / {$total_stages}";
+        if($status == -2) {
+            $row[] = "reset";
+        }else if($status == -1) {
+            $row[] = "abandoned";
+        }else {
+            $row[] = "{$status} / {$total_stages}";
+        }
         $row[] = "{$bonus_status}";
         $row[] = '<a href="javascript:;" class="go_blog_user_task" data-UserId="'.$user_id.'" onclick="go_blog_user_task('.$user_id.', '.$post_id.');"><i style="padding: 0px 10px;" class="fa fa-eye" aria-hidden="true"></i></a>';//actions
 
@@ -778,7 +800,11 @@ function go_stats_single_task_activity_list($post_id) {
     if ( ! empty( $_POST['user_id'] ) ) {
         $user_id = (int) $_POST['user_id'];
     }
-    check_ajax_referer( 'go_stats_single_task_activity_list' );
+    //check_ajax_referer( 'go_stats_single_task_activity_list' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_single_task_activity_list' ) ) {
+        echo "refresh";
+        die( );
+    }
     $post_id = (int) $_POST['postID'];
 
     $task_name = get_option('options_go_tasks_name_singular');
@@ -927,7 +953,11 @@ function go_stats_single_task_activity_list($post_id) {
  *
  */
 function go_stats_item_list() {
-    check_ajax_referer( 'go_stats_item_list_' );
+    //check_ajax_referer( 'go_stats_item_list_' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_item_list' ) ) {
+        echo "refresh";
+        die( );
+    }
 
     $xp_abbr = get_option( "options_go_loot_xp_abbreviation" );
     $gold_abbr = get_option( "options_go_loot_gold_abbreviation" );
@@ -1145,7 +1175,11 @@ function go_stats_store_item_dataloader(){
  *
  */
 function go_stats_messages() {
-    check_ajax_referer( 'go_stats_messages' );
+    //check_ajax_referer( 'go_stats_messages' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_messages' ) ) {
+        echo "refresh";
+        die( );
+    }
 
     $xp_abbr = get_option( "options_go_loot_xp_abbreviation" );
     $gold_abbr = get_option( "options_go_loot_gold_abbreviation" );
@@ -1390,7 +1424,11 @@ function go_messages_dataloader_ajax(){
  *
  */
 function go_stats_activity_list() {
-    check_ajax_referer( 'go_stats_activity_list_' );
+    //check_ajax_referer( 'go_stats_activity_list_' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_activity_list' ) ) {
+        echo "refresh";
+        die( );
+    }
 
     $xp_abbr = get_option( "options_go_loot_xp_abbreviation" );
     $gold_abbr = get_option( "options_go_loot_gold_abbreviation" );
@@ -1783,7 +1821,11 @@ function go_stats_badges_list($user_id) {
     if ( ! empty( $_POST['user_id'] ) ) {
         $user_id = (int) $_POST['user_id'];
     }
-    check_ajax_referer( 'go_stats_badges_list_' );
+    //check_ajax_referer( 'go_stats_badges_list_' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_badges_list' ) ) {
+        echo "refresh";
+        die( );
+    }
     $badges_array = $wpdb->get_var ("SELECT badges FROM {$go_loot_table_name} WHERE uid = {$user_id}");
     $badges_array = unserialize($badges_array);
     if (empty($badges_array)){
@@ -1906,7 +1948,11 @@ function go_stats_groups_list($user_id) {
     } else {
         $user_id = get_current_user_id();
     }
-    check_ajax_referer( 'go_stats_groups_list_' );
+    //check_ajax_referer( 'go_stats_groups_list_' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_groups_list' ) ) {
+        echo "refresh";
+        die( );
+    }
     $badges_array = $wpdb->get_var ("SELECT groups FROM {$go_loot_table_name} WHERE uid = {$user_id}");
     $badges_array = unserialize($badges_array);
     $args = array(
@@ -2012,7 +2058,11 @@ function go_stats_groups_list($user_id) {
  */
 function go_stats_leaderboard() {
 
-    check_ajax_referer('go_stats_leaderboard_');
+    //check_ajax_referer('go_stats_leaderboard_');
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_leaderboard' ) ) {
+        echo "refresh";
+        die( );
+    }
     if (!empty($_POST['user_id'])) {
         $current_user_id = (int)$_POST['user_id'];
     }
@@ -2377,7 +2427,11 @@ function go_stats_leaderboard_dataloader_ajax(){
  */
 function go_stats_lite(){
 
-    check_ajax_referer( 'go_stats_lite' );
+    //check_ajax_referer( 'go_stats_lite' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_lite' ) ) {
+        echo "refresh";
+        die( );
+    }
     if ( ! empty( $_POST['uid'] ) ) {
         $user_id = (int) $_POST['uid'];
         $current_user = get_userdata( $user_id );

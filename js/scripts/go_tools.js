@@ -40,18 +40,31 @@ function go_update_go_ajax_no_task_loot (){
 
 function go_reset_all_users_dialog (){
 
-    swal({
-      title: "Reset User Game Data",
-      text: "Are you sure? This can't be undone!",
-      icon: "warning",
-      buttons: ["Cancel", "Reset All User Game Data"],
-        dangerMode: true,
-    }).
-    then((willDelete) => {
-        if (willDelete) {
+    swal.fire({
+        title: "Reset User Game Data",
+        text: "Are you sure? This can't be undone!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Reset All User Game Data',
+        cancelButtonText: 'Cancel',
+        reverseButtons: true,
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+        },
+    })
+    .then((result) => {
+        if (result.value) {
             go_reset_all_users ();
+
         } else {
-            swal("No action taken.");
+            swal.fire({
+                    text: "Your user data is safe.",
+                    title: "No action taken."
+                }
+            );
+            jQuery('#go_reset_all_users').one("click", function() {go_reset_all_users_dialog();});
+
         }
     });
     
@@ -67,7 +80,9 @@ function go_reset_all_users (){
             action: 'go_reset_all_users'
         },
         success: function( res ) {
-            swal("Success", "All user game data was reset.", "success");
+            swal.fire("Success", "All user game data was reset.", "success");
+            jQuery('#go_reset_all_users').one("click", function() {go_reset_all_users_dialog();});
+
         }
     });
 }

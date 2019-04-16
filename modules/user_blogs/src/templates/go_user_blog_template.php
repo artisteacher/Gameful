@@ -41,9 +41,6 @@ get_header();
     $page_title = $user_display_name . "'s Blog";
     ?><script>
     document.title = "<?php echo $page_title; ?>";//set page title
-    jQuery( document ).ready(function() {//create lightbox links for images
-        go_lightbox_blog_img();
-    });
     </script><?php
     $use_local_avatars = get_option('options_go_avatars_local');
     $use_gravatar = get_option('options_go_avatars_gravatars');
@@ -131,10 +128,11 @@ if ( empty($posts) ) {
    foreach ($posts as $post){
        $post = json_decode(json_encode($post), True);//convert stdclass to array by encoding and decoding
        $post_id = $post['ID'];
-       go_blog_post($post_id, false, true);
+       go_blog_post($post_id, false, true, false, true);
        //go_user_feedback_container($post_id);
    }
    ?>
+
 
    <div class="pagination">
     <?php

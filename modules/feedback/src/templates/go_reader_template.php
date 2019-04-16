@@ -21,7 +21,7 @@
 get_header();
 
 
-echo "<h1 style='padding-top:30px;'>reader</h1>";
+echo "<h2 style='padding-top:10px;'>Reader</h2>";
 go_make_reader();
 
 get_footer();

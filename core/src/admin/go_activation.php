@@ -139,7 +139,7 @@ function go_tsk_actv_activate() {
 //this is the activation notification
 function go_admin_head_notification() {
     if ( get_option( 'go_display_admin_explanation' ) && current_user_can( 'manage_options' ) ) {
-        $nonce = wp_create_nonce( 'go_admin_remove_notification_' . get_current_user_id() );
+        $nonce = wp_create_nonce( 'go_admin_remove_notification' );
         $url = get_site_url(null, 'wp-admin/admin.php?page=game-tools');
         echo "<div id='go_activation_message' class='update-nag' style='font-size: 16px; padding-right: 50px;'>This is a fresh installation of <a href='https://github.com/mcmick/game-on-v4/releases' target='_blank'>Game On</a>.
 

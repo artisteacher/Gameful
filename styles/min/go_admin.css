@@ -13,9 +13,6 @@
 #records_tabs a, #records_tabs .tooltip {
   color: blue; }
 
-#go_messages .select2-container {
-  width: 100% !important; }
-
 .dt-buttons {
   padding: 10px; }
 
@@ -36,6 +33,12 @@
 
 .go_call_to_action {
   background-color: cornsilk; }
+
+.go_acf_header {
+  background-color: lightblue; }
+
+table tbody tr td.go_acf_header {
+  top-padding: 10em; }
 
 /**
  * Date Picker Setting Row

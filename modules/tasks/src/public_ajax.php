@@ -88,9 +88,10 @@ function go_task_shortcode($atts, $content = null ) {
      */
     $task_shortcode_nonces = array(
         //'go_task_abandon' => wp_create_nonce( 'go_task_abandon_' . $post_id . '_' . $user_id ),
-        'go_unlock_stage' => wp_create_nonce( 'go_unlock_stage_' . $post_id . '_' . $user_id ),
-        //'go_test_point_update' => wp_create_nonce( 'go_test_point_update_' . $post_id . '_' . $user_id ),
-        'go_task_change_stage' => wp_create_nonce( 'go_task_change_stage_' . $post_id . '_' . $user_id ),
+        'go_check_quiz_answers' => wp_create_nonce( 'go_check_quiz_answers' ),
+        'go_save_quiz_result' => wp_create_nonce( 'go_save_quiz_result' ),
+        //'go_test_point_update' => wp_create_nonce( 'go_test_point_update'),
+        'go_task_change_stage' => wp_create_nonce( 'go_task_change_stage' ),
     );
 
     $redirect_url = get_option('options_go_landing_page_on_login', '');
@@ -108,8 +109,9 @@ function go_task_shortcode($atts, $content = null ) {
             //'homeURL'	=>  home_url(),
             'redirectURL'	=> $redirect_url, //ok
             'admin_name'	=>  $admin_name, //ok
-            'go_unlock_stage'	=>  $task_shortcode_nonces['go_unlock_stage'], //ok
-            'go_task_change_stage'	=>  $task_shortcode_nonces['go_task_change_stage'], //ok
+            'go_check_quiz_answers'	=>  $task_shortcode_nonces['go_check_quiz_answers'], //ok
+            'go_task_change_stage'	=>  $task_shortcode_nonces['go_task_change_stage'],
+            'go_save_quiz_result'	=>  $task_shortcode_nonces['go_save_quiz_result'],//ok
 
         )
     );
@@ -168,7 +170,7 @@ function go_task_shortcode($atts, $content = null ) {
     /**
      * Due date mods
      */
-    go_due_date_mods ($custom_fields, $is_logged_in, $task_name );
+   // go_due_date_mods ($custom_fields, $is_logged_in, $task_name );
 
 
     /**
@@ -205,7 +207,7 @@ function go_task_shortcode($atts, $content = null ) {
     $locks_status = go_display_timer ($custom_fields, $is_logged_in, $user_id, $post_id, $task_name );
     if ($locks_status){
 
-        echo "</div>";
+        //echo "</div>";
         go_task_render_chain_pagination ( $post_id, $custom_fields );
         go_hidden_footer ();
         echo "</div>";
@@ -247,226 +249,7 @@ function go_task_shortcode($atts, $content = null ) {
 }
 add_shortcode( 'go_task','go_task_shortcode' );
 
-/**
- * @param $task_id
- * @param null $user_id
- * @return int|null
- */
-function go_get_bonus_status($task_id, $user_id = null ) {
-    global $wpdb;
-    $go_task_table_name = "{$wpdb->prefix}go_tasks";
 
-    if ( empty( $task_id ) ) {
-        return null;
-    }
-
-    if ( empty( $user_id ) ) {
-        $user_id = get_current_user_id();
-    } else {
-        $user_id = (int) $user_id;
-    }
-
-    $task_count = $wpdb->get_var(
-        $wpdb->prepare(
-            "SELECT bonus_status
-			FROM {$go_task_table_name} 
-			WHERE uid = %d AND post_id = %d",
-            $user_id,
-            $task_id
-        )
-    );
-
-    if ( null !== $task_count && ! is_int( $task_count ) ) {
-        $task_count = (int) $task_count;
-    }
-
-    return $task_count;
-}
-
-/**
- * go_print_bonus_stage
- * @param $user_id
- * @param $post_id
- * @param $custom_fields
- * @param $task_name
- * @param $all_content
- */
-function go_print_bonus_stage ($user_id, $post_id, $custom_fields, $all_content){
-    $bonus_status = go_get_bonus_status($post_id, $user_id);
-    $content = (isset($custom_fields['go_bonus_stage_content'][0]) ?  $custom_fields['go_bonus_stage_content'][0] : null);
-    $content  = apply_filters( 'go_awesome_text', $content );
-
-    $bonus_stage_name =  get_option( 'options_go_tasks_bonus_stage' );
-    $repeat_max = (isset($custom_fields['go_bonus_limit'][0]) ?  $custom_fields['go_bonus_limit'][0] : null);
-
-    echo "
-        <div id='bonus_stage' >
-            <h3>" . ucwords($bonus_stage_name)   . "</h3>
-            ". $content . "
-            <h3>This ".$bonus_stage_name." can be submitted ".$repeat_max." times.</h3>
-        </div>
-    ";
-
-    $i = 0;
-
-    if (!$all_content) {
-        while ($i <= $bonus_status && $repeat_max > $i) {
-
-
-            //Print Checks for Understanding for the last stage message printed and buttons
-            go_checks_for_understanding($custom_fields, $i, null, $user_id, $post_id, true, $bonus_status, $repeat_max, $all_content);
-            $i++;
-        }
-    }else{
-        go_checks_for_understanding($custom_fields, $i, null, $user_id, $post_id, true, $bonus_status, $repeat_max, $all_content);
-    }
-
-    //if ($bonus_status == $i ) {
-    //}
-
-}
-
-/**
- * @param $user_id
- * @param $post_id
- * @param $custom_fields
- * @param $stage_count
- * @param $status
- */
-function go_print_outro ($user_id, $post_id, $custom_fields, $stage_count, $status, $all_content){
-    global $wpdb;
-    $go_task_table_name = "{$wpdb->prefix}go_tasks";
-    //$custom_fields = get_post_custom( $post_id );
-    $task_name = strtolower( get_option( 'options_go_tasks_name_singular' ) );
-    $outro_message = (isset($custom_fields['go_outro_message'][0]) ?  $custom_fields['go_outro_message'][0] : null);
-    //$outro_message = do_shortcode($outro_message);
-    $outro_message  = apply_filters( 'go_awesome_text', $outro_message );
-    echo "<div id='outro' class='go_checks_and_buttons'>";
-    echo "    
-        <h3>" . ucwords($task_name) . " Complete!</h3>
-        <p>" . $outro_message . "</p>
-        You earned:";
-
-
-    if (!$all_content) {
-        echo "
-        <div class='go_task_rewards'>
-        <div class='go_task_reward'>";
-        
-
-        $loot = $wpdb->get_results("SELECT * FROM {$go_task_table_name} WHERE uid = {$user_id} AND post_id = {$post_id}");
-        $loot = $loot[0];
-        if (get_option('options_go_loot_xp_toggle')) {
-            $xp_on = true;
-            $xp_name = get_option('options_go_loot_xp_name');
-            $xp_loot = $loot->xp;
-        }
-        if (get_option('options_go_loot_gold_toggle')) {
-            $gold_on = true;
-            $gold_name = get_option('options_go_loot_gold_name');
-            $gold_loot = $loot->gold;
-        }
-        if (get_option('options_go_loot_health_toggle')) {
-            $health_on = true;
-            $health_name = get_option('options_go_loot_health_name');
-            $health_loot = $loot->health;
-        }
-
-        if (isset($xp_on)) {
-            echo "{$xp_loot} {$xp_name} ";
-        }
-        if (isset($gold_on)) {
-            echo "<br>{$gold_loot} {$gold_name} ";
-        }
-        if (isset($health_on)) {
-            echo "<br>{$health_loot} {$health_name} ";
-        }
-        echo "</div>";
-        if (get_option('options_go_badges_toggle')) {
-            //$badges_on = true;
-            //$badges_name = get_option('options_go_badges_name_plural');
-            $badges = $loot->badges;
-            //if($badges) {
-            //   $badges = unserialize($badges);
-            // }
-            go_display_stage_badges($badges);
-            echo "</div>";
-        }
-    }else{
-        go_display_rewards( $custom_fields, $task_name, false, $user_id, 'bottom');
-    }
-
-    $bonus_loot_radio = (isset($custom_fields['bonus_loot_toggle'][0]) ? $custom_fields['bonus_loot_toggle'][0] : false);//number of loot drops;
-    if ($bonus_loot_radio == true || $bonus_loot_radio == 'default' ) {
-        global $wpdb;
-        $go_actions_table_name = "{$wpdb->prefix}go_actions";
-        $previous_bonus_attempt = $wpdb->get_var($wpdb->prepare("SELECT result 
-                FROM {$go_actions_table_name} 
-                WHERE source_id = %d AND uid = %d AND action_type = %s
-                ORDER BY id DESC LIMIT 1", $post_id, $user_id, 'bonus_loot'));
-        //ob_start();
-        if(empty($previous_bonus_attempt)) {
-            go_bonus_loot($custom_fields, $user_id);
-        }
-
-    }
-
-
-
-    $bonus_status = go_get_bonus_status($post_id, $user_id);
-    if ($bonus_status <= 0){
-        go_buttons($user_id, $custom_fields, null, $stage_count, $status, 'show_bonus', false, null, null, true);
-    }
-    echo "</div>";
-    if ($bonus_status > 0 || $all_content){
-        go_print_bonus_stage ($user_id, $post_id, $custom_fields, $all_content);
-    }
-}
-
-function go_print_bonus_loot_possibilities($custom_fields, $user_id){
-
-    $rows = go_get_bonus_loot_rows($custom_fields, false, $user_id);
-
-    if (count($rows) >0) {
-        echo "<ul>";
-        foreach ($rows as $row) {
-            $title = (isset($row['title']) ? $row['title'] : null);
-            echo "<li>";
-            echo $title . "";
-            //$message = (isset($row['title']) ? $row['title'] : null);
-            if (go_get_loot_toggle( 'xp')){
-                $loot = (isset($row['$xp']) ? $row['$xp'] : null);
-                if ($loot > 0) {
-                    $name = go_get_loot_short_name('xp');
-
-                    echo " " . $loot . " " . $name;
-                }
-            }
-            if (go_get_loot_toggle( 'gold')){
-                $loot = (isset($row['gold']) ? $row['gold'] : null);
-                if ($loot > 0) {
-                    $name = go_get_loot_short_name('gold');
-                    echo " " . $loot . " " . $name;
-                }
-            }
-            if (go_get_loot_toggle( 'health')){
-                $loot = (isset($row['health']) ? $row['health'] : null);
-                if ($loot > 0) {
-                    $name = go_get_loot_short_name('health');
-                    echo " " . $loot . " " . $name;
-                }
-            }
-
-            //$drop = get_option($drop);
-
-
-
-            echo "</li>";
-        }
-        echo "</ul>";
-    }
-
-}
 
 
 
@@ -783,6 +566,8 @@ function go_print_messages ( $status, $custom_fields, $user_id, $post_id){
  * @param $i
  */
 function go_print_1_message ( $custom_fields, $i ){
+
+    $heading = (isset($custom_fields['go_stages_' . $i . '_heading'][0]) ?  $custom_fields['go_stages_' . $i . '_heading'][0] : "");
     $key = 'go_stages_' . $i . '_content';
     $content = $custom_fields[$key][0];
     $message = ( ! empty( $content ) ? $content : '' ); // Completion Message
@@ -792,7 +577,7 @@ function go_print_1_message ( $custom_fields, $i ){
     //echo "<div id='message_" . $i . "' class='go_stage_message'  style='display: none;'>".do_shortcode(wpautop( $message  ) )."</div>";
 
     $message  = apply_filters( 'go_awesome_text', $message );
-    echo "<div id='message_" . $i . "' class='go_stage_message'  style='display: none;'>". $message ."</div>";
+    echo "<div id='message_" . $i . "' class='go_stage_message'  style='display: none;'><h3>".$heading."</h3>". $message ."</div>";
 }
 
 /**
@@ -821,6 +606,229 @@ function go_bonus_loot ($custom_fields, $user_id) {
         </div>
     </div>";
 }
+
+/**
+ * @param $task_id
+ * @param null $user_id
+ * @return int|null
+ */
+function go_get_bonus_status($task_id, $user_id = null ) {
+    global $wpdb;
+    $go_task_table_name = "{$wpdb->prefix}go_tasks";
+
+    if ( empty( $task_id ) ) {
+        return null;
+    }
+
+    if ( empty( $user_id ) ) {
+        $user_id = get_current_user_id();
+    } else {
+        $user_id = (int) $user_id;
+    }
+
+    $task_count = $wpdb->get_var(
+        $wpdb->prepare(
+            "SELECT bonus_status
+			FROM {$go_task_table_name} 
+			WHERE uid = %d AND post_id = %d",
+            $user_id,
+            $task_id
+        )
+    );
+
+    if ( null !== $task_count && ! is_int( $task_count ) ) {
+        $task_count = (int) $task_count;
+    }
+
+    return $task_count;
+}
+
+/**
+ * go_print_bonus_stage
+ * @param $user_id
+ * @param $post_id
+ * @param $custom_fields
+ * @param $task_name
+ * @param $all_content
+ */
+function go_print_bonus_stage ($user_id, $post_id, $custom_fields, $all_content){
+    $bonus_status = go_get_bonus_status($post_id, $user_id);
+    $content = (isset($custom_fields['go_bonus_stage_content'][0]) ?  $custom_fields['go_bonus_stage_content'][0] : null);
+    $content  = apply_filters( 'go_awesome_text', $content );
+
+    $bonus_stage_name =  get_option( 'options_go_tasks_bonus_stage' );
+    $repeat_max = (isset($custom_fields['go_bonus_limit'][0]) ?  $custom_fields['go_bonus_limit'][0] : null);
+
+    echo "
+        <div id='bonus_stage' >
+            <h3>" . ucwords($bonus_stage_name)   . "</h3>
+            ". $content . "
+            <h3>This ".$bonus_stage_name." can be submitted ".$repeat_max." times.</h3>
+        </div>
+    ";
+
+    $i = 0;
+
+    if (!$all_content) {
+        while ($i <= $bonus_status && $repeat_max > $i) {
+
+
+            //Print Checks for Understanding for the last stage message printed and buttons
+            go_checks_for_understanding($custom_fields, $i, null, $user_id, $post_id, true, $bonus_status, $repeat_max, $all_content);
+            $i++;
+        }
+    }else{
+        go_checks_for_understanding($custom_fields, $i, null, $user_id, $post_id, true, $bonus_status, $repeat_max, $all_content);
+    }
+
+    //if ($bonus_status == $i ) {
+    //}
+
+}
+
+/**
+ * @param $user_id
+ * @param $post_id
+ * @param $custom_fields
+ * @param $stage_count
+ * @param $status
+ */
+function go_print_outro ($user_id, $post_id, $custom_fields, $stage_count, $status, $all_content){
+    global $wpdb;
+    $go_task_table_name = "{$wpdb->prefix}go_tasks";
+    //$custom_fields = get_post_custom( $post_id );
+    $task_name = strtolower( get_option( 'options_go_tasks_name_singular' ) );
+    $outro_message = (isset($custom_fields['go_outro_message'][0]) ?  $custom_fields['go_outro_message'][0] : null);
+    //$outro_message = do_shortcode($outro_message);
+    $outro_message  = apply_filters( 'go_awesome_text', $outro_message );
+    echo "<div id='outro' class='go_checks_and_buttons'>";
+    echo "    
+        <h3>" . ucwords($task_name) . " Complete!</h3>
+        <p>" . $outro_message . "</p>
+        You earned:";
+
+
+    if (!$all_content) {
+        echo "
+        <div class='go_task_rewards'>
+        <div class='go_task_reward'>";
+
+
+        $loot = $wpdb->get_results("SELECT * FROM {$go_task_table_name} WHERE uid = {$user_id} AND post_id = {$post_id}");
+        $loot = $loot[0];
+        if (get_option('options_go_loot_xp_toggle')) {
+            $xp_on = true;
+            $xp_name = get_option('options_go_loot_xp_name');
+            $xp_loot = $loot->xp;
+        }
+        if (get_option('options_go_loot_gold_toggle')) {
+            $gold_on = true;
+            $gold_name = get_option('options_go_loot_gold_name');
+            $gold_loot = $loot->gold;
+        }
+        if (get_option('options_go_loot_health_toggle')) {
+            $health_on = true;
+            $health_name = get_option('options_go_loot_health_name');
+            $health_loot = $loot->health;
+        }
+
+        if (isset($xp_on)) {
+            echo "{$xp_loot} {$xp_name} ";
+        }
+        if (isset($gold_on)) {
+            echo "<br>{$gold_loot} {$gold_name} ";
+        }
+        if (isset($health_on)) {
+            echo "<br>{$health_loot} {$health_name} ";
+        }
+        echo "</div>";
+        if (get_option('options_go_badges_toggle')) {
+            //$badges_on = true;
+            //$badges_name = get_option('options_go_badges_name_plural');
+            $badges = $loot->badges;
+            //if($badges) {
+            //   $badges = unserialize($badges);
+            // }
+            go_display_stage_badges($badges);
+            echo "</div>";
+        }
+    }else{
+        go_display_rewards( $custom_fields, $task_name, false, $user_id, 'bottom');
+    }
+
+    $bonus_loot_radio = (isset($custom_fields['bonus_loot_toggle'][0]) ? $custom_fields['bonus_loot_toggle'][0] : false);//number of loot drops;
+    if ($bonus_loot_radio == true || $bonus_loot_radio == 'default' ) {
+        global $wpdb;
+        $go_actions_table_name = "{$wpdb->prefix}go_actions";
+        $previous_bonus_attempt = $wpdb->get_var($wpdb->prepare("SELECT result 
+                FROM {$go_actions_table_name} 
+                WHERE source_id = %d AND uid = %d AND action_type = %s
+                ORDER BY id DESC LIMIT 1", $post_id, $user_id, 'bonus_loot'));
+        //ob_start();
+        if(empty($previous_bonus_attempt)) {
+            go_bonus_loot($custom_fields, $user_id);
+        }
+
+    }
+
+
+
+    $bonus_status = go_get_bonus_status($post_id, $user_id);
+    if ($bonus_status <= 0){
+        go_buttons($user_id, $custom_fields, null, $stage_count, $status, 'show_bonus', false, null, null, true);
+    }
+    echo "</div>";
+    if ($bonus_status > 0 || $all_content){
+        go_print_bonus_stage ($user_id, $post_id, $custom_fields, $all_content);
+    }
+}
+
+function go_print_bonus_loot_possibilities($custom_fields, $user_id){
+
+    $rows = go_get_bonus_loot_rows($custom_fields, false, $user_id);
+
+    if (count($rows) >0) {
+        echo "<ul>";
+        foreach ($rows as $row) {
+            $title = (isset($row['title']) ? $row['title'] : null);
+            echo "<li>";
+            echo $title . "";
+            //$message = (isset($row['title']) ? $row['title'] : null);
+            if (go_get_loot_toggle( 'xp')){
+                $loot = (isset($row['$xp']) ? $row['$xp'] : null);
+                if ($loot > 0) {
+                    $name = go_get_loot_short_name('xp');
+
+                    echo " " . $loot . " " . $name;
+                }
+            }
+            if (go_get_loot_toggle( 'gold')){
+                $loot = (isset($row['gold']) ? $row['gold'] : null);
+                if ($loot > 0) {
+                    $name = go_get_loot_short_name('gold');
+                    echo " " . $loot . " " . $name;
+                }
+            }
+            if (go_get_loot_toggle( 'health')){
+                $loot = (isset($row['health']) ? $row['health'] : null);
+                if ($loot > 0) {
+                    $name = go_get_loot_short_name('health');
+                    echo " " . $loot . " " . $name;
+                }
+            }
+
+            //$drop = get_option($drop);
+
+
+
+            echo "</li>";
+        }
+        echo "</ul>";
+    }
+
+}
+
+
 
 /**
  * @param $badges
@@ -900,65 +908,65 @@ function go_display_rewards($custom_fields, $task_name, $top = true, $user_id, $
     if($top){
         echo "<p>This is a {$stage_count} {$stage_name} {$task_name}.</p>";
 
-        echo "<div><p style='margin-bottom: 0px;'>You can earn:</>";
+        echo "<div><p style='margin-bottom: 0px;'>You can earn:</p>";
     }
 
-    if (get_option( 'options_go_loot_xp_toggle' )){
-        $xp_on = true;
-        $xp_name = get_option('options_go_loot_xp_name');
-        $xp_loot = (isset($custom_fields['go_entry_rewards_xp'][0]) ?  $custom_fields['go_entry_rewards_xp'][0] : null);
-    }else{
-        $xp_on = false;
-    }
-    if (get_option( 'options_go_loot_gold_toggle' )){
-        $gold_on = true;
-        $gold_name = get_option('options_go_loot_gold_name');
-        $gold_loot = (isset($custom_fields['go_entry_rewards_gold'][0]) ?  $custom_fields['go_entry_rewards_gold'][0] : null);
+            if (get_option( 'options_go_loot_xp_toggle' )){
+                $xp_on = true;
+                $xp_name = get_option('options_go_loot_xp_name');
+                $xp_loot = (isset($custom_fields['go_entry_rewards_xp'][0]) ?  $custom_fields['go_entry_rewards_xp'][0] : null);
+            }else{
+                $xp_on = false;
+            }
+            if (get_option( 'options_go_loot_gold_toggle' )){
+                $gold_on = true;
+                $gold_name = get_option('options_go_loot_gold_name');
+                $gold_loot = (isset($custom_fields['go_entry_rewards_gold'][0]) ?  $custom_fields['go_entry_rewards_gold'][0] : null);
 
-    }else{
-        $gold_on = false;
-    }
-    if (get_option( 'options_go_loot_health_toggle' )){
-        $health_on = true;
-        $health_name = get_option('options_go_loot_health_name');
-        $health_loot = (isset($custom_fields['go_entry_rewards_health'][0]) ?  $custom_fields['go_entry_rewards_health'][0] : null);
-    }else{
-        $health_on = false;
-    }
+            }else{
+                $gold_on = false;
+            }
+            if (get_option( 'options_go_loot_health_toggle' )){
+                $health_on = true;
+                $health_name = get_option('options_go_loot_health_name');
+                $health_loot = (isset($custom_fields['go_entry_rewards_health'][0]) ?  $custom_fields['go_entry_rewards_health'][0] : null);
+            }else{
+                $health_on = false;
+            }
 
-    if (get_option( 'options_go_badges_toggle' )){
-        $badges_on = true;
-        $badges_name = get_option('options_go_badges_name_plural');
-        $badges = (isset($custom_fields['go_badges'][0]) ?  $custom_fields['go_badges'][0] : null);
-        //$badges = unserialize($badges);
-    }
+            if (get_option( 'options_go_badges_toggle' )){
+                $badges_on = true;
+                $badges_name = get_option('options_go_badges_name_plural');
+                $badges = (isset($custom_fields['go_badges'][0]) ?  $custom_fields['go_badges'][0] : null);
+                //$badges = unserialize($badges);
+            }
 
-    $i = 0;
-    while ( $stage_count > $i ) {
-        if ($xp_on) {
-            $key = 'go_stages_' . $i . '_rewards_xp';
-            //$xp = $custom_fields[$key][0];
-            $xp = (isset($custom_fields[$key][0]) ?  $custom_fields[$key][0] : null);
-            $xp_loot = $xp + $xp_loot;
-        }
+            $i = 0;
+            while ( $stage_count > $i ) {
+                if ($xp_on) {
+                    $key = 'go_stages_' . $i . '_rewards_xp';
+                    //$xp = $custom_fields[$key][0];
+                    $xp = (isset($custom_fields[$key][0]) ?  $custom_fields[$key][0] : null);
+                    $xp_loot = $xp + $xp_loot;
+                }
 
-        if($gold_on) {
-            $key = 'go_stages_' . $i . '_rewards_gold';
-            $gold = (isset($custom_fields[$key][0]) ?  $custom_fields[$key][0] : null);
-            $gold_loot = $gold + $gold_loot;
-        }
+                if($gold_on) {
+                    $key = 'go_stages_' . $i . '_rewards_gold';
+                    $gold = (isset($custom_fields[$key][0]) ?  $custom_fields[$key][0] : null);
+                    $gold_loot = $gold + $gold_loot;
+                }
 
-        if($health_on) {
-            $key = 'go_stages_' . $i . '_rewards_health';
-            $health = (isset($custom_fields[$key][0]) ?  $custom_fields[$key][0] : null);
-            $health_loot = $health + $health_loot;
-        }
+                if($health_on) {
+                    $key = 'go_stages_' . $i . '_rewards_health';
+                    $health = (isset($custom_fields[$key][0]) ?  $custom_fields[$key][0] : null);
+                    $health_loot = $health + $health_loot;
+                }
 
-        $i++;
-    }
-    if($health_loot > 200){
-        $health_loot = 200;
-    }
+                $i++;
+            }
+            if($health_loot > 200){
+                $health_loot = 200;
+            }
 
     echo "<div id='go_task_rewards'>
         <div id='go_task_rewards_loot'>";
@@ -986,7 +994,13 @@ $bonus_radio =(isset($custom_fields['bonus_loot_toggle'][0]) ? $custom_fields['b
         echo "</div>";
     }
 
-    echo "</div></div>";
+    echo "</div>";
+
+    if($top){
+        echo "</div>";
+    }
+
+
 
 }
 

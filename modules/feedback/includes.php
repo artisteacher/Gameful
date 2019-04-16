@@ -9,15 +9,18 @@
 //conditional includes
 if ( !is_admin() ) {
      include_once('src/public.php');
+    include_once('src/public_ajax.php');
 
 
 }else if ( defined( 'DOING_AJAX' )) {
     include_once('src/ajax.php');
     include_once('src/admin_ajax.php');
-    add_action( 'wp_ajax_go_filter_reader', 'go_filter_reader' ); //OK
+    add_action( 'wp_ajax_go_filter_reader', 'go_filter_reader' );
+    add_action( 'wp_ajax_go_reader_bulk_read', 'go_reader_bulk_read' );
+    include_once('src/public_ajax.php');
 }else{
-    include_once('src/admin.php');
-    include_once('src/admin_ajax.php');
+    //include_once('src/admin.php');
+    //include_once('src/admin_ajax.php');
 }
 
 //always include

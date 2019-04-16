@@ -23,7 +23,9 @@ function go_get_loot($user_id){
         if ($data === false || empty($data)) {
             $go_loot_table_name = "{$wpdb->prefix}go_loot";
             $loot = $wpdb->get_results("SELECT * FROM {$go_loot_table_name} WHERE uid = {$user_id}");
-            $loot = $loot[0];
+            if (!empty($loot)){
+                $loot = $loot[0];
+            }
             $data = json_decode(json_encode($loot), True);
             wp_cache_set($key, $data, 'go_single');
             set_transient($key, $data, 3600 );

@@ -12,7 +12,8 @@ if ( !is_admin() ) {
 }else if ( defined( 'DOING_AJAX' )) {
     include_once('src/ajax.php');
     include_once('src/public_ajax.php');
-    add_action( 'wp_ajax_go_unlock_stage', 'go_unlock_stage' ); //OK
+    add_action( 'wp_ajax_go_check_quiz_answers', 'go_check_quiz_answers' );
+    add_action( 'wp_ajax_go_save_quiz_result', 'go_save_quiz_result' );//OK
 
 
 }else{

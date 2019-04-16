@@ -5,6 +5,11 @@ function go_buy_item() {
     //check_ajax_referer( 'go_buy_item' );
     //$user_id = get_current_user_id();
 
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_buy_item' ) ) {
+        echo "refresh";
+        die( );
+    }
+
     $user_id = ( ! empty( $_POST['user_id'] ) ? (int) $_POST['user_id'] : 0 ); // User id posted from ajax function
     $is_logged_in = ! empty( $user_id ) && $user_id > 0  || is_user_member_of_blog( $user_id ) ? true : false;
     if (!$is_logged_in){
@@ -18,16 +23,7 @@ function go_buy_item() {
                 }).show();parent.window.$.featherlight.current().close();</script>";
         die();
     }
-    if ( ! check_ajax_referer( 'go_buy_item_' . $user_id, false ) ) {
-        echo "<script> new Noty({
-                type: 'info',
-                layout: 'topRight',
-                text: 'Error: WordPress hiccuped, try logging in again.' ,
-                theme: 'relax',
-                visibilityControl: true
-                }).show();parent.window.$.featherlight.current().close();</script>";
-        die();
-    }
+
 
     $post_id = ( ! empty( $_POST["the_id"] ) ? (int) $_POST["the_id"] : 0 );
     $custom_fields = get_post_custom( $post_id );
@@ -173,7 +169,11 @@ function go_buy_item() {
 
 // Main Lightbox Ajax Function
 function go_the_lb_ajax() {
-    check_ajax_referer( 'go_the_lb_ajax');
+    //check_ajax_referer( 'go_the_lb_ajax');
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_the_lb_ajax' ) ) {
+        echo "refresh";
+        die( );
+    }
 
 
     $post_id = (int) $_POST['the_item_id'];

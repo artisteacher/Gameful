@@ -10,6 +10,10 @@ function tinymce_getContentLength() {
 }
 */
 jQuery( document ).ready( function() {
+//jQuery(window).bind("load", function() {
+    go_lightbox_blog_img();
+
+    console.log("jQuery is loaded");
 
     //add onclick to blog edit buttons
     //console.log("opener3");
@@ -24,7 +28,8 @@ jQuery( document ).ready( function() {
     jQuery('#go_hidden_mce_edit').remove();
 
     jQuery( ".feedback_accordion" ).accordion({
-        collapsible: true
+        collapsible: true,
+        active: false
     });
 
     jQuery(".go_blog_favorite").click(function() {
@@ -106,6 +111,9 @@ function go_blog_tags_select2(){
     });
 }
 
+//on_task is used to determine where to show the error message
+//it could be on the page or in a lightbox
+//why not just have one place?--fix this
 function task_stage_check_input( target, on_task) {
 
     console.log('button clicked');
@@ -154,9 +162,9 @@ function task_stage_check_input( target, on_task) {
         console.log("Check Type: " + check_type);
     }
     var fail = false;
-    jQuery('#go_blog_stage_error_msg').text("");
-    jQuery('#go_blog_error_msg').text("");
-    var error_message = '<h3>Your post was not saved.</h3><ul> ';
+    jQuery('.go_error_msg').text("");
+    //jQuery('#go_blog_error_msg').text("");
+    var error_message = '<ul> ';
 
     var url_toggle = jQuery(target).attr('url_toggle');
     var video_toggle = jQuery(target).attr('video_toggle');
@@ -258,20 +266,25 @@ function task_stage_check_input( target, on_task) {
     }
 
     if (check_type == 'quiz') {
-        var test_list = jQuery(".go_test_list");
+        var test_list = jQuery(target).closest(".go_checks_and_buttons").find(" .go_test_list");
+        //console.log("test_list.length: " + test_list.length);
         if (test_list.length >= 1) {
             var checked_ans = 0;
             for (var i = 0; i < test_list.length; i++) {
-                var obj_str = "#" + test_list[i].id + " input:checked";
+                var obj_str = "#go_test_container_" + (parseFloat(task_status)+1) + " .go_test_" + i + " input:checked";
+                console.log("obj_str: " + obj_str);
                 var chosen_answers = jQuery(obj_str);
                 if (chosen_answers.length >= 1) {
                     checked_ans++;
                 }
             }
+            console.log("checked_ans:" + checked_ans );
+
             //if all questions were answered
             if (checked_ans >= test_list.length) {
                 go_quiz_check_answers(task_status, target);
-                fail = false;
+                fail = true;//always set as failed to end this function. The check answers function handles the rest.
+                //
 
             }
             //else print error message
@@ -279,10 +292,6 @@ function task_stage_check_input( target, on_task) {
                 error_message +="<li>Please answer all questions!</li>";
                 fail = true;
             }
-            //} else {
-            //if (jQuery(".go_test_list input:checked").length >= 1) {
-            // go_quiz_check_answers();
-            //}
             else {
                 error_message += "<li>Please answer the question!</li>";
                 fail = true;
@@ -292,8 +301,12 @@ function task_stage_check_input( target, on_task) {
     //}
     error_message += "</ul>";
     if (fail == true){
+
+        jQuery('.go_error_msg').append(error_message);
+        jQuery('.go_error_msg').show();
         if (on_task == true) {
             console.log("error_stage");
+            console.log("message:" + error_message);
             //flash_error_msg('#go_stage_error_msg');
             jQuery('#go_blog_stage_error_msg').append(error_message);
             jQuery('#go_blog_stage_error_msg').show();
@@ -534,41 +547,44 @@ function go_blog_opener( el ) {
                     //var go_blog_saved= jQuery( 'body' ).attr( 'data-go_blog_saved' );
                     var go_blog_updated= jQuery( 'body' ).attr( 'data-go_blog_updated' );
                     if (go_blog_updated == '1') {
-                        swal({
+                        swal.fire({ //sw2 OK
                             title: "You have unsaved changes.",
                             text: "Would you like to save? If you don't save you will not be able to recover these changes.",
-                            icon: "warning",
+                            type: "warning",
                            //buttons: ["Save and Close", "Close without Saving"],
                             //dangerMode: true,
-
-                            buttons: {
-                                exit: {
-                                    text: "Close without Saving",
-                                    value: "exit",
-                                },
-                                save: {
-                                    text: "Save and Close",
-                                    value: "save"
-                                }
-                            }
+                            showCancelButton: true,
+                            confirmButtonText: 'Save and Close',
+                            cancelButtonText: 'Close without Saving',
+                            reverseButtons: true,
+                            customClass: {
+                                confirmButton: 'btn btn-success',
+                                cancelButton: 'btn btn-danger'
+                            },
                         })
-                            .then((value) => {
-                                switch (value) {
+                    .then((result) => {
+                            if (result.value) {
+                                if ( jQuery( "#go_save_button_lightbox" ).length ) {
 
-                                    case "exit":
-                                        swal("Your changes were not saved.");
-                                        jQuery( 'body' ).attr( 'data-go_blog_updated', '0' );
-                                        jQuery.featherlight.close();
-                                        break;
+                                    jQuery('#go_save_button_lightbox').trigger('click');
 
-                                    case "save":
-                                        jQuery('#go_blog_submit').trigger('click');
-                                        break;
-
-                                    default:
-
+                                }else{
+                                    jQuery('#go_blog_submit').trigger('click');
                                 }
-                            });
+
+
+
+                               // break;
+
+
+                            } else {
+                                Swal.fire("Your changes were not saved.");//sw2 OK
+                                jQuery( 'body' ).attr( 'data-go_blog_updated', '0' );
+                                jQuery.featherlight.close();
+                               // break;
+                            }
+                        });
+
                         return false;
                     }else {
                         var post_wrapper_class = ".go_blog_post_wrapper_" + blog_post_id;
@@ -607,7 +623,14 @@ function go_blog_submit( el, reload ) {
     var suffix = jQuery( el ).attr( 'blog_suffix' );
 
     //var result = tinyMCE.activeEditor.getContent();
-    var result_title = jQuery( '#go_blog_title' + suffix ).html();
+    if(jQuery('#go_blog_title' + suffix).data('blog_post_title') == 'fixed') {
+        var result_title = jQuery('#go_blog_title' + suffix).html();
+    }else {
+        var result_title = jQuery('#go_blog_title' + suffix).val();
+        if (result_title == ''){
+            result_title = 'My Blog Post'
+        }
+    }
     var button= jQuery( el ).attr( 'button_type' );
     var result = go_get_tinymce_content_blog(suffix);
     //console.log("title: " + result_title);
@@ -700,7 +723,8 @@ function go_blog_submit( el, reload ) {
                 if (jQuery(post_wrapper_class).length > 0) {
                     jQuery(post_wrapper_class).replaceWith(res.wrapper);
                     jQuery( ".feedback_accordion" ).accordion({
-                        collapsible: true
+                        collapsible: true,
+                        active: false
                     });
                     //go_blog_tags_select2();
                     go_disable_loading();
@@ -719,15 +743,22 @@ function go_blog_submit( el, reload ) {
 function go_blog_trash( el ) {
     go_enable_loading( el );
 
-    swal({
+
+    Swal.fire({//sw2 OK
         title: "Are you sure?",
         text: "Do you really want to delete this post?",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!',
+        reverseButtons: true,
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+        },
     })
-        .then((willDelete) => {
-            if (willDelete) {
+        .then((result) => {
+            if (result.value) {
                 var nonce = GO_EVERY_PAGE_DATA.nonces.go_blog_trash;
 
                 var blog_post_id= jQuery( el ).attr( 'blog_post_id' );
@@ -751,16 +782,20 @@ function go_blog_trash( el ) {
                         jQuery(".go_blog_trash").off().one("click", function(e){
                             go_blog_trash( this );
                         });
-                        swal("Poof! Your post has been deleted!", {
-                            icon: "success",
-                        });
+                        swal.fire({//sw2 OK
+                                text: "Poof! Your post has been deleted!",
+                                type: 'success'
+                            }
+                        );
                     }
                 });
                 go_disable_loading( el );
 
 
             } else {
-                swal("Your post is safe!");
+                swal.fire({//sw2 OK
+                    text: "Your post is safe!"
+                });
                 go_disable_loading( el );
             }
         });

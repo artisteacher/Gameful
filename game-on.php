@@ -20,7 +20,7 @@ add_filter('plupload_default_settings', function ($settings) {
     return $settings;
 });
 
-$go_debug = false;//set to true when coding
+$go_debug = true;//set to true when coding
 global $go_debug;
 
 $go_js_version = 4.65;
@@ -118,7 +118,7 @@ include_once('modules/tasks/includes.php');
 include_once('modules/tools/includes.php');
 include_once('modules/user_profiles/includes.php');
 include_once('modules/user_blogs/includes.php');
-// include_once('modules/feedback/includes.php');
+include_once('modules/feedback/includes.php');
 
 /*
     * Plugin Activation Hooks

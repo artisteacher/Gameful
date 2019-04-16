@@ -873,7 +873,11 @@ function acf_load_order_field_list() {
    // if (!wp_verify_nonce($_POST['nonce'], 'acf_nonce')) {
         // die();
     //}
-    check_ajax_referer( 'acf_load_order_field_list' );
+    //check_ajax_referer( 'acf_load_order_field_list' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'acf_load_order_field_list' ) ) {
+        echo "refresh";
+        die( );
+    }
 
    // ob_start();
 

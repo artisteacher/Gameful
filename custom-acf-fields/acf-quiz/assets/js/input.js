@@ -111,10 +111,25 @@ function add_block (obj) {
     //console.log(stage);
     //number of current questions
     var block_num = parseInt(jQuery(obj).next().val());
+    console.log("Block#: " + block_num);
     //add ++ to value the hidden field under the add block button
-    jQuery(obj).next().value++;
+    jQuery(obj).next().val(block_num + 1);
     /////
-    var field_block = "<tr class='go_test_field_input_row' data-block_num='" + block_num + "'><td><select class='go_test_field_input_select quiz_input' name='go_test_field_select_" + stage + "[]' onchange='update_checkbox_type(this);'><option value='radio' class='go_test_field_input_option'>Multiple Choice</option><option value='checkbox' class='go_test_field_input_option'>Multiple Select</option></select><br/><br/><input class='go_test_field_input_question quiz_input' name='go_test_field_input_question_" + stage + "[]' placeholder='Shall We Play a Game?' type='text' /><ul><li><input class='go_test_field_input_checkbox' name='unused_go_test_field_input_checkbox_" + stage + "_" + block_num + "' type='radio' onchange='update_checkbox_value(this);' /><input class='go_test_field_input_checkbox_hidden' name='go_test_field_values_" + stage + "[" + block_num + "][1][]' type='hidden' /><input class='go_test_field_input quiz_input' name='go_test_field_values_" + stage + "[" + block_num + "][0][]' placeholder='Enter an answer!' type='text' style='margin: 0 5px 0 9px !important;' oninput='update_checkbox_value(this);' oncut='update_checkbox_value(this);' onpaste='update_checkbox_value(this);' /></li><li><input class='go_test_field_input_checkbox' name='unused_go_test_field_input_checkbox_" + stage + "_" + block_num + "' type='radio' onchange='update_checkbox_value(this);' /><input class='go_test_field_input_checkbox_hidden' name='go_test_field_values_" + stage + "[" + block_num + "][1][]' type='hidden' /><input class='go_test_field_input quiz_input' name='go_test_field_values_" + stage + "[" + block_num + "][0][]' placeholder='Enter an answer!' type='text' style='margin: 0 5px 0 9px !important;' oninput='update_checkbox_value(this);' oncut='update_checkbox_value(this);' onpaste='update_checkbox_value(this);' /></li><input class='go_button_add_field go_test_field_add go_test_field_add_input_button' type='button' value='+' onclick='add_field(this);'/></ul><ul><li><input class='go_button_del_field go_test_field_rm_row_button go_test_field_input_rm_row_button' type='button' value='Remove' style='margin-left: -2px;' onclick='remove_block(this);' /><input class='go_test_field_input_count' name='go_test_field_input_count_" + stage + "[]' type='hidden' value='2' /></li></ul></td></tr>";
+    var field_block = "<tr class='go_test_field_input_row' data-block_num='" + block_num + "'>" +
+        "<td>" +
+        "<select class='go_test_field_input_select quiz_input' name='go_test_field_select_" + stage + "[]' onchange='update_checkbox_type(this);'>" +
+        "<option value='radio' class='go_test_field_input_option'>Multiple Choice</option><option value='checkbox' class='go_test_field_input_option'>Multiple Select</option>" +
+        "</select><br/><br/>" +
+        "<input class='go_test_field_input_question quiz_input' name='go_test_field_input_question_" + stage + "[]' placeholder='Shall We Play a Game?' type='text' />" +
+        "<ul>" +
+        //"<li><input class='go_test_field_input_checkbox' name='unused_go_test_field_input_checkbox_" + stage + "_" + block_num + "' type='radio' onchange='update_checkbox_value(this);' /><input class='go_test_field_input_checkbox_hidden' name='go_test_field_values_" + stage + "[" + block_num + "][1][]' type='hidden' /><input class='go_test_field_input quiz_input' name='go_test_field_values_" + stage + "[" + block_num + "][0][]' placeholder='Enter an answer!' type='text' style='margin: 0 5px 0 9px !important;' oninput='update_checkbox_value(this);' oncut='update_checkbox_value(this);' onpaste='update_checkbox_value(this);' /></li>" +
+        "<li>" +
+        "<input class='go_test_field_input_checkbox' name='unused_go_test_field_input_checkbox_" + stage + "_" + block_num + "' type='radio' onchange='update_checkbox_value(this);' checked />" +
+        "<input class='go_test_field_input_checkbox_hidden' name='go_test_field_values_" + stage + "[" + block_num + "][1][]' type='hidden' />" +
+        "<input class='go_test_field_input quiz_input' name='go_test_field_values_" + stage + "[" + block_num + "][0][]' placeholder='Enter an answer!' type='text' style='margin: 0 5px 0 9px !important;' oninput='update_checkbox_value(this);' oncut='update_checkbox_value(this);' onpaste='update_checkbox_value(this);' />" +
+        "<input class='go_button_del_field go_test_field_rm' type='button' value='x' onclick='remove_field(this);'>" +
+        "</li>" +
+        "<input class='go_button_add_field go_test_field_add go_test_field_add_input_button' type='button' value='+' onclick='add_field(this);'/></ul><ul><li><input class='go_button_del_field go_test_field_rm_row_button go_test_field_input_rm_row_button' type='button' value='Remove' style='margin-left: -2px;' onclick='remove_block(this);' /><input class='go_test_field_input_count' name='go_test_field_input_count_" + stage + "[]' type='hidden' value='1' /></li></ul></td></tr>";
     jQuery(obj).parent().parent().before(field_block);
     acf_quiz_no_submit_on_enter();
 }

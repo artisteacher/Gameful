@@ -7,7 +7,11 @@
  */
 
 function go_update_admin_view (){
-    check_ajax_referer( 'go_update_admin_view'  );
+    //check_ajax_referer( 'go_update_admin_view'  );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_update_admin_view' ) ) {
+        echo "refresh";
+        die( );
+    }
 
     if(empty($_POST) || !isset($_POST)) {
         ajaxStatus('error', 'Nothing to update.');

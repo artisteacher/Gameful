@@ -8,7 +8,11 @@
 
 function go_upgade4 (){
     global $wpdb;
-    check_ajax_referer( 'go_upgade4' );
+    //check_ajax_referer( 'go_upgade4' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_upgade4' ) ) {
+        echo "refresh";
+        die( );
+    }
     $go_posts_table = "{$wpdb->prefix}posts";
     $tasks = $wpdb->get_results(
         $wpdb->prepare(
@@ -239,7 +243,11 @@ function go_upgade4 (){
 
 function go_reset_all_users(){
     global $wpdb;
-    check_ajax_referer( 'go_reset_all_users' );
+    //check_ajax_referer( 'go_reset_all_users' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_reset_all_users' ) ) {
+        echo "refresh";
+        die( );
+    }
     global $wpdb;
     $loot_table  = $wpdb->prefix . 'go_loot';
     $wpdb->query("TRUNCATE TABLE $loot_table");

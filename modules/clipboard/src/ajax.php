@@ -445,7 +445,11 @@ function go_clipboard_stats() {
     }
 
     global $wpdb;
-    check_ajax_referer( 'go_clipboard_stats_' . get_current_user_id() );
+    //check_ajax_referer( 'go_clipboard_stats_' . get_current_user_id() );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_clipboard_stats' ) ) {
+        echo "refresh";
+        die( );
+    }
 
     $xp_toggle = get_option('options_go_loot_xp_toggle');
     $gold_toggle = get_option('options_go_loot_gold_toggle');
@@ -625,53 +629,12 @@ function go_clipboard_stats_dataloader_ajax(){
         $badge_ids = $action['badges'];
         $group_ids = $action['groups'];
 
+        $group_count = go_print_group_list($group_ids);
 
-        $group_ids_array = unserialize($group_ids);
-        if (is_array($group_ids_array)){
-            $group_list = array();
-            $group_count = count($group_ids_array);
-            foreach ($group_ids_array as $group_id){
-                if (!empty($group_id)) {
-                    $term = get_term($group_id);
-                    if (!empty($term)) {
-                        $name = $term->name;
-                        $group_list[] = $name;
-                    }
-                }
-            }
-            $group_list = implode(",<br>", $group_list);
-            //$group_count = '<span class="tooltip" data-tippy-content="'. $group_list .'">'. $group_count . '</span>';
-            $group_count = '<span>'. $group_list . '</span>';
+        $badge_count = go_print_badge_list($badge_ids);
 
 
-            //$group_count = "<span class='tooltip' target='_blank'><span class='tooltiptext'>$group_list</span>{$group_count}</span>";
-        }
-        else{
-            $group_count = null;
 
-        }
-
-        $badge_ids_array = unserialize($badge_ids);
-        $badge_count = $action['badge_count'];
-        $badge_list = array();
-        if (is_array($badge_ids_array)){
-            foreach ($badge_ids_array as $badge_id){
-                if (!empty($badge_id)) {
-                    $term = get_term($badge_id);
-                    if (!empty($term)) {
-                        $name = $term->name;
-                        $badge_list[] = $name;
-                    }
-                }
-            }
-            $badge_list = implode(",<br>", $badge_list);
-            //$badge_count = '<span class="tooltip" data-tippy-content="'. $badge_list .'">'. $badge_count . '</span>';
-            $badge_count = '<span>'. $badge_list . '</span>';
-            //$badge_count = "<span class='tooltip' target='_blank'><span class='tooltiptext'>$badge_list</span>{$badge_count}</span>";
-        }
-        else{
-            $badge_count = null;
-        }
 
         $rank = go_get_rank ( $user_id, $xp );
         $current_rank_name = $rank['current_rank'];
@@ -701,11 +664,72 @@ function go_clipboard_stats_dataloader_ajax(){
     die();
 }
 
+function go_print_group_list($group_ids){
+    if (is_serialized($group_ids)) {
+        $group_ids = unserialize($group_ids);
+    }
+    if (is_array($group_ids)){
+        $group_list = array();
+        $group_count = count($group_ids);
+        foreach ($group_ids as $group_id){
+            if (!empty($group_id)) {
+                $term = get_term($group_id);
+                if (!empty($term)) {
+                    $name = $term->name;
+                    $group_list[] = $name;
+                }
+            }
+        }
+        $group_list = implode(",<br>", $group_list);
+        //$group_count = '<span class="tooltip" data-tippy-content="'. $group_list .'">'. $group_count . '</span>';
+        $group_count = '<span>'. $group_list . '</span>';
+
+
+        //$group_count = "<span class='tooltip' target='_blank'><span class='tooltiptext'>$group_list</span>{$group_count}</span>";
+    }
+    else{
+        $group_count = null;
+
+    }
+    return $group_count;
+}
+
+function go_print_badge_list($badge_ids){
+    if (is_serialized($badge_ids)) {
+        $badge_ids = unserialize($badge_ids);
+    }
+
+    //$badge_count = $action['badge_count'];
+    $badge_list = array();
+    if (is_array($badge_ids)){
+        foreach ($badge_ids as $badge_id){
+            if (!empty($badge_id)) {
+                $term = get_term($badge_id);
+                if (!empty($term)) {
+                    $name = $term->name;
+                    $badge_list[] = $name;
+                }
+            }
+        }
+        $badge_list = implode(",<br>", $badge_list);
+        //$badge_count = '<span class="tooltip" data-tippy-content="'. $badge_list .'">'. $badge_count . '</span>';
+        $badge_count = '<span>'. $badge_list . '</span>';
+        //$badge_count = "<span class='tooltip' target='_blank'><span class='tooltiptext'>$badge_list</span>{$badge_count}</span>";
+    }
+    else{
+        $badge_count = null;
+    }
+    return $badge_count;
+}
 /**
  *
  */
 function go_clipboard_store() {
-    check_ajax_referer( 'go_clipboard_store' );
+    //check_ajax_referer( 'go_clipboard_store' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_clipboard_store' ) ) {
+        echo "refresh";
+        die( );
+    }
 
     $xp_abbr = get_option( "options_go_loot_xp_abbreviation" );
     $gold_abbr = get_option( "options_go_loot_gold_abbreviation" );
@@ -929,7 +953,11 @@ function go_clipboard_store_dataloader_ajax(){
  *
  */
 function go_clipboard_messages() {
-    check_ajax_referer( 'go_clipboard_messages' );
+    //check_ajax_referer( 'go_clipboard_messages' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_clipboard_messages' ) ) {
+        echo "refresh";
+        die( );
+    }
 
     $xp_abbr = get_option( "options_go_loot_xp_abbreviation" );
     $gold_abbr = get_option( "options_go_loot_gold_abbreviation" );
@@ -1217,7 +1245,11 @@ function go_clipboard_activity() {
         die( -1 );
     }
 
-    check_ajax_referer( 'go_clipboard_activity_' . get_current_user_id() );
+    //check_ajax_referer( 'go_clipboard_activity_' . get_current_user_id() );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_clipboard_activity' ) ) {
+        echo "refresh";
+        die( );
+    }
     global $wpdb;
 
     /*

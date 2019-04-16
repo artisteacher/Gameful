@@ -59,7 +59,7 @@ function go_lightbox_blog_img(){
 
 function go_admin_bar_stats_page_button( id ) {//this is called from the admin bar and is hard coded in the php code
     var nonce = GO_EVERY_PAGE_DATA.nonces.go_admin_bar_stats;
-
+    //nonce = 'fail';
     jQuery.ajax({
         type: "post",
         url: MyAjax.ajaxurl,
@@ -69,7 +69,27 @@ function go_admin_bar_stats_page_button( id ) {//this is called from the admin b
             uid: id
         },
         success: function( res ) {
-            if ( -1 !== res ) {
+            console.log(res);
+            if (res ==='refresh'){
+                Swal.fire({//sw2 OK
+                    title: "Error",
+                    text: "Refresh the page and then try again.",
+                    type: 'warning',
+                    //showCancelButton: true,
+                    confirmButtonText: 'Refresh Now',
+                    //cancelButtonText: 'No, cancel!',
+                    reverseButtons: true,
+                    customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                    },
+                })
+                    .then((result) => {
+                        //refresh
+                        location.reload();
+                    });
+            }
+            else if ( -1 !== res ) {
 
                 jQuery.featherlight(res, {variant: 'stats'});
 
@@ -109,6 +129,7 @@ function go_admin_bar_stats_page_button( id ) {//this is called from the admin b
 
 
             }
+
         }
     });
 }
@@ -326,6 +347,7 @@ function go_stats_task_list() {
 
                     });
                 }
+                go_reset_opener(null);
             }
         });
     }
@@ -713,14 +735,18 @@ function go_stats_lite (user_id) {
     });
 }
 
+function go_activate_apply_filters() {
+    console.log("go_activate_apply_filters");
+    jQuery('.go_update_clipboard').addClass("bluepulse");
+    jQuery('.go_update_clipboard').html('<span class="ui-button-text">Apply Filters<i class="fa fa-filter" aria-hidden="true"></i></span>');
+}
+
 function go_date_loader(start, end, is_default) {
     if (is_default == true){
         start = moment();
         end = moment();
     }else{
-        jQuery('.go_update_clipboard').addClass("bluepulse");
-        jQuery('.go_update_clipboard').html('<span class="ui-button-text">Apply Filters<i class="fa fa-filter" aria-hidden="true"></i></span>');
-
+        go_activate_apply_filters();
     }
 
     jQuery('#go_datepicker').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
@@ -728,8 +754,8 @@ function go_date_loader(start, end, is_default) {
 
 }
 
-function go_load_daterangepicker(){
-
+function go_load_daterangepicker(page){
+    console.log("go_load_daterangepicker");
     jQuery('#go_datepicker_clipboard').daterangepicker({
         ranges: {
             'Today': [moment(), moment()],
@@ -747,16 +773,21 @@ function go_load_daterangepicker(){
         }
     }, function(start, end, label) {
         console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
+
             go_date_loader(start, end, false);
+
     });
 
     jQuery('#go_datepicker_clipboard').on('cancel.daterangepicker', function(ev, picker) {
         jQuery('#go_datepicker_clipboard span').html('');
     });
 
-    go_date_loader(null, null, true);
+        go_date_loader(null, null, true);
+
+
 }
 
+//NOT USED
 function go_load_daterangepicker_empty(){
 
     jQuery('#go_datepicker_clipboard').daterangepicker({
@@ -777,11 +808,14 @@ function go_load_daterangepicker_empty(){
 }
 
 
-function go_make_select2_filter(taxonomy, my_value){
+function go_make_select2_filter(taxonomy, my_value, is_clipboard) {
 
-    // Get saved data from sessionStorage
-    var value = localStorage.getItem('go_clipboard_' + my_value);
-    var value_name = localStorage.getItem('go_clipboard_' + my_value + '_name');
+    if (is_clipboard) {
+
+        // Get saved data from sessionStorage
+        var value = localStorage.getItem('go_clipboard_' + my_value);
+        var value_name = localStorage.getItem('go_clipboard_' + my_value + '_name');
+    }
 
 
     jQuery('#go_clipboard_' + taxonomy + '_select').select2({
@@ -871,25 +905,34 @@ function go_make_select2_cpt( my_div, cpt) {
 }
 
 
-function go_setup_reset_filter_button(){
+function go_setup_reset_filter_button(is_reader){
     jQuery('#go_clipboard_user_go_sections_select, #go_clipboard_user_go_groups_select, #go_clipboard_go_badges_select, #go_task_select, #go_store_item_select').on('select2:select', function (e) {
         // Do something
-        jQuery('.go_update_clipboard').addClass("bluepulse");
-        jQuery('.go_update_clipboard').html('<span class="ui-button-text">Apply Filters<i class="fa fa-filter" aria-hidden="true"></i></span>');
+        go_activate_apply_filters();
     });
     jQuery('#go_clipboard_user_go_sections_select, #go_clipboard_user_go_groups_select, #go_clipboard_go_badges_select, #go_task_select, #go_store_item_select').on('select2:unselect', function (e) {
         // Do something
-        jQuery('.go_update_clipboard').addClass("bluepulse");
-        jQuery('.go_update_clipboard').html('<span class="ui-button-text">Apply Filters<i class="fa fa-filter" aria-hidden="true"></i></span>');
+        go_activate_apply_filters();
     });
 
     jQuery('.go_reset_clipboard').on("click", function () {
         jQuery('#go_datepicker').html("");
         jQuery('#go_clipboard_user_go_sections_select, #go_clipboard_user_go_groups_select, #go_clipboard_go_badges_select, #go_task_select, #go_store_item_select').val(null).trigger('change');
-        jQuery('.go_update_clipboard').addClass("bluepulse");
-        jQuery('.go_update_clipboard').html('<span class="ui-button-text">Apply Filters<i class="fa fa-filter" aria-hidden="true"></i></span>');
-        jQuery('#go_unmatched_toggle').prop('checked', false); // Uncheck
+
+
+        if(is_reader){
+            jQuery('#go_reader_read, #go_reader_reset, #go_reader_trash, #go_reader_draft').prop('checked', false);
+            jQuery('#go_reader_unread').prop('checked', true);
+            jQuery("#go_reader_order_oldest").prop("checked", true);
+            jQuery("#go_posts_num").val("10");
+
+        }else{
+            jQuery('#go_unmatched_toggle').prop('checked', false); // Uncheck
+        }
+        go_activate_apply_filters();
+
     });
+
 
     go_daterange_clear();
 
@@ -897,6 +940,7 @@ function go_setup_reset_filter_button(){
 }
 
 function go_daterange_clear(){
+
     jQuery('#go_reset_datepicker').on("click", function (e){
         e.stopPropagation();
         jQuery('#go_datepicker_container').html('<div id="go_datepicker_clipboard"><i class="fa fa-calendar" style="float: left;"></i><span id="go_datepicker"></span> <i id="go_reset_datepicker" class=""select2-selection__clear><b> × </b></i><i class="fa fa-caret-down"></i></div>');
@@ -904,10 +948,11 @@ function go_daterange_clear(){
         jQuery('#go_reset_datepicker').hide();
         jQuery('#go_datepicker_container').one("click", function (){
             //console.log("hi there one");
-            go_load_daterangepicker();
+            go_load_daterangepicker('clear');
             jQuery('#go_reset_datepicker').show();
             go_daterange_clear();
         });
+        go_activate_apply_filters();
 
         //go_load_daterangepicker_empty();
 
@@ -919,7 +964,7 @@ function go_clear_daterange(){
 }
 
 //this now saves to session data
-function go_save_clipboard_filters(is_reader){
+function go_save_clipboard_filters(){
     //SESSION STORAGE
     var section = jQuery( '#go_clipboard_user_go_sections_select' ).val();
     var section_name = jQuery("#go_clipboard_user_go_sections_select option:selected").text();
@@ -927,9 +972,9 @@ function go_save_clipboard_filters(is_reader){
     var group_name = jQuery("#go_clipboard_user_go_groups_select option:selected").text();
     var badge = jQuery( '#go_clipboard_go_badges_select' ).val();
     var badge_name = jQuery("#go_clipboard_go_badges_select option:selected").text();
-    if(!is_reader) {
+
         var unmatched = document.getElementById("go_unmatched_toggle").checked;
-    }
+
     console.log("b " + badge);
 
 
@@ -940,6 +985,29 @@ function go_save_clipboard_filters(is_reader){
     localStorage.setItem('go_clipboard_badge_name', badge_name);
     localStorage.setItem('go_clipboard_group_name', group_name);
     localStorage.setItem('go_clipboard_unmatched', unmatched);
+
+    /*
+    if(is_reader){
+        var date = jQuery('#go_datepicker_clipboard span').html();
+        var tasks = jQuery("#go_task_select").val();
+        var unread = jQuery('#go_reader_unread').prop('checked');
+        var read = jQuery('#go_reader_read').prop('checked');
+        var reset = jQuery('#go_reader_reset').prop('checked');
+        var trash = jQuery('#go_reader_trash').prop('checked');
+        var draft = jQuery('#go_reader_draft').prop('checked');
+        var order = jQuery("input[name='go_reader_order']:checked").val();
+        var limit = jQuery('#go_posts_num').val();
+        localStorage.setItem('go_reader_date', date);
+        localStorage.setItem('go_reader_tasks', tasks);
+        localStorage.setItem('go_reader_unread', unread);
+        localStorage.setItem('go_reader_read', read);
+        localStorage.setItem('go_reader_reset', reset);
+        localStorage.setItem('go_reader_trash', trash);
+        localStorage.setItem('go_reader_draft', draft);
+        localStorage.setItem('go_reader_order', order);
+        localStorage.setItem('go_reader_limit', limit);
+    }
+    */
 
     /*
     //THIS IS FOR SAVING AS OPTION IN DB WITH AJAX

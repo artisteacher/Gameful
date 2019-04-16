@@ -235,6 +235,38 @@ function go_get_health_mod ($user_id){
     return $health_mod;
 }
 
+function go_get_quiz_mod($user_id, $post_id, $status ){
+    global $wpdb;
+    $go_actions_table_name = "{$wpdb->prefix}go_actions";
+
+    $quiz_mod = $wpdb->get_var($wpdb->prepare("SELECT result 
+            FROM {$go_actions_table_name} 
+            WHERE source_id = %d AND uid = %d AND stage = %d AND action_type = %s", $post_id, $user_id, $status, 'quiz_mod'));
+
+    return $quiz_mod;
+
+}
+
+function go_get_quiz_result($user_id, $post_id, $status, $type ){
+    global $wpdb;
+    $go_actions_table_name = "{$wpdb->prefix}go_actions";
+
+    $query = "SELECT result, check_type 
+            FROM {$go_actions_table_name} 
+            WHERE source_id = $post_id AND uid = $user_id AND stage = $status AND action_type = 'quiz_mod'";
+
+    $quiz_result = $wpdb->get_results($query, ARRAY_A);
+
+    if($type == 'array'){
+        return $quiz_result;
+    }
+    else if($type == 'mod'){
+        $quiz_mod = $quiz_result[0]['result'];
+        return $quiz_mod;
+    }
+    //$quiz_mod = $wpdb->get_results(($wpdb->prepare(, ARRAY_A)));
+}
+
 /**
  * @param $user_id
  * @param $loot_type
@@ -353,9 +385,7 @@ function go_update_stage_table ($user_id, $post_id, $custom_fields, $status, $bo
                 //if stage check is a quiz
                 if ($check_type == 'quiz') {
                     $temp_status = $status + 1;
-                    $questions_missed = $wpdb->get_var($wpdb->prepare("SELECT result 
-                FROM {$go_actions_table_name} 
-                WHERE source_id = %d AND uid = %d AND stage = %d AND action_type = %s", $post_id, $user_id, $temp_status, 'quiz_mod'));
+                    $questions_missed = go_get_quiz_mod($user_id, $post_id, $temp_status );
                     if ($questions_missed > 0) {
                         $quiz_stage_mod = 'go_stages_' . $status . '_quiz_modifier'; //% to take off for each question missed
                         $quiz_stage_mod = (isset($custom_fields[$quiz_stage_mod][0]) ? $custom_fields[$quiz_stage_mod][0] : 0);
@@ -417,27 +447,6 @@ function go_update_stage_table ($user_id, $post_id, $custom_fields, $status, $bo
                 $stage_mod = 1;
             }
 
-            //$xp_mod_toggle = false;
-            //$gold_mod_toggle = true;
-            //$health_mod_toggle = false;
-
-            /*
-            if ($xp_toggle) {
-                $xp_mod_toggle = get_option('options_go_loot_xp_mods_toggle');
-            } else {
-                $xp_mod_toggle = false;
-            }
-            if ($gold_toggle) {
-                $gold_mod_toggle = get_option('options_go_loot_gold_mods_toggle');
-            } else {
-                $gold_mod_toggle = false;
-            }
-            if ($health_toggle) {
-                $health_mod_toggle = get_option('options_go_loot_health_mods_toggle');
-            } else {
-                $health_mod_toggle = false;
-            }
-            */
             if ($status === -1) {
                 /// get entry loot
                 $xp = $custom_fields['go_entry_rewards_xp'][0];
@@ -887,6 +896,7 @@ function go_update_actions($user_id, $type, $source_id, $status, $bonus_status, 
     $go_actions_table_name = "{$wpdb->prefix}go_actions";
     //$time = date( 'Y-m-d G:i:s', current_time( 'timestamp', 0 ) );
     $time = current_time('mysql');
+
     $wpdb->insert($go_actions_table_name, array('uid' => $user_id, 'action_type' => $type, 'source_id' => $source_id, 'TIMESTAMP' => $time, 'stage' => $status, 'bonus_status' => $bonus_status, 'check_type' => $check_type, 'result' => $result, 'quiz_mod' => $quiz_mod, 'late_mod' => $late_mod, 'timer_mod' => $timer_mod, 'global_mod' => $global_mod, 'xp' => $xp, 'gold' => $gold, 'health' => $health, 'badges' => $badge_ids, 'groups' => $group_ids, 'xp_total' => $new_xp_total, 'gold_total' => $new_gold_total, 'health_total' => $new_health_total));
 
     //if notify = admin than this action is just creating
@@ -1282,7 +1292,7 @@ function go_update_admin_bar_v4($user_id, $xp, $xp_name, $gold, $gold_name, $hea
         $display_short = go_display_shorthand_currency('gold', $go_current_gold) ;
         echo "jQuery( '#go_admin_bar_gold' ).html( '{$display}' );";
         //echo "jQuery( '#go_admin_bar_rank' ).html( '{$rank_str}' );";
-        echo "jQuery( '#go_admin_bar_gold' ).html( '{$display_short}' );";
+        //echo "jQuery( '#go_admin_bar_gold' ).html( '{$display_short}' );";
         echo "jQuery( '#go_admin_bar_gold_2' ).html( '{$display_short}' );";
     }
     if (get_option('options_go_loot_health_toggle')){
@@ -1405,13 +1415,15 @@ function go_get_bonus_loot_rows($custom_fields, $health_mod = false, $user_id = 
     return array();
 }
 
-
-
 /**
  * @param $post_id
  */
 function go_update_bonus_loot ($post_id){
-    check_ajax_referer( 'go_update_bonus_loot' );
+    //check_ajax_referer( 'go_update_bonus_loot' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_update_bonus_loot' ) ) {
+        echo "refresh";
+        die( );
+    }
     $post_id = $_POST['post_id'];
 
     $user_id = get_current_user_id();

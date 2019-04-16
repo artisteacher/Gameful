@@ -1,7 +1,7 @@
 
 function go_reset_opener(message_type){
-
-    if (message_type == "multiple_messages") {
+    console.log("go_reset_opener");
+    if (message_type == "multiple_messages" || message_type == null ) {
         //apply on click to the messages button at the top
         jQuery('.go_messages_icon_multiple_clipboard').parent().prop('onclick', null).off('click');
         jQuery(".go_messages_icon_multiple_clipboard").parent().one("click", function (e) {
@@ -9,7 +9,7 @@ function go_reset_opener(message_type){
         });
     }
 
-    if (message_type == "single_reset") {
+    if (message_type == "single_reset" || message_type == null) {
         //apply on click to the individual task reset icons
         jQuery('.go_reset_task_clipboard').prop('onclick', null).off('click');
         jQuery(".go_reset_task_clipboard").one("click", function () {
@@ -17,7 +17,7 @@ function go_reset_opener(message_type){
         });
     }
 
-    if (message_type == "multiple_reset") {
+    if (message_type == "multiple_reset" || message_type == null) {
         //apply on click to the reset button at the top
         jQuery('.go_tasks_reset_multiple_clipboard').parent().prop('onclick', null).off('click');
         jQuery(".go_tasks_reset_multiple_clipboard").parent().one("click", function () {
@@ -25,11 +25,19 @@ function go_reset_opener(message_type){
         });
     }
 
-    if (message_type == "single_message") {
+    if (message_type == "single_message" || message_type == null) {
         jQuery(".go_stats_messages_icon").prop('onclick', null).off('click');
         jQuery(".go_stats_messages_icon").one("click", function (e) {
             var user_id = this.getAttribute('data-uid');
             go_messages_opener(user_id, null, "single_message");
+        });
+    }
+
+    if (message_type == "reset_stage" || message_type == null) {
+        //apply on click to the individual task reset icons
+        jQuery('.go_reset_task_clipboard').prop('onclick', null).off('click');
+        jQuery(".go_reset_task_clipboard").one("click", function () {
+            go_messages_opener(this.getAttribute('data-uid'), this.getAttribute('data-task'), 'reset_stage');
         });
     }
 
@@ -38,12 +46,12 @@ function go_reset_opener(message_type){
 function go_messages_opener( user_id, post_id, message_type ) {
     post_id = (typeof post_id !== 'undefined') ?  post_id : null;
     message_type = (typeof message_type !== 'undefined') ?  message_type : null;
-    console.log("type" + message_type);
+    console.log("type: " + message_type);
+    console.log("UID: " + user_id);
+    console.log("post_id: " + post_id);
     jQuery('.go_tasks_reset_multiple_clipboard').prop('onclick',null).off('click');
 
     var reset_vars = [];
-    var uids = [];
-    var post_ids = [];
     if (message_type == 'multiple_messages' || message_type == 'multiple_reset' ){//the reset button or messages button on clipboard was pressed
         var inputs = jQuery(".go_checkbox:visible");
         for(var i = 0; i < inputs.length; i++){
@@ -57,7 +65,7 @@ function go_messages_opener( user_id, post_id, message_type ) {
             }
         }
     }
-    else if (message_type == 'single_reset' || message_type == 'single_message'){ //single task reset or message was pressed
+    else if (message_type == 'single_reset' || message_type == 'single_message' || message_type == 'reset_stage'){ //single task reset or message was pressed
         reset_vars.push({uid:user_id, task:post_id});
     }
     //if only a uid was passed, this is just a send message to single user box (no reset)
@@ -76,14 +84,81 @@ function go_messages_opener( user_id, post_id, message_type ) {
         type:'POST',
         data: gotoSend,
         success: function( results ) {
-            //console.log(results);
-            jQuery.featherlight(results, {variant: 'message'});
+            //console.log("results:" + results);
+            var res = jQuery.parseJSON(results);
 
+
+
+            //console.log(results);
+            //jQuery.featherlight(results, {variant: 'message'});
+            if (res.type == 'reset') {
+                var type = '';
+                var show_cancel = true;
+                var showConfirmButton = true;
+                var confirmButtonColor = 'IndianRed';
+                var confirmButtonText = '<i class="fa fa-times-circle"></i> Send';
+                var cancelButtonText = '<i class="fa fa-times-circle"></i> Cancel';
+
+            }else if (res.type == 'no_users') {
+                var type = 'error';
+                var show_cancel = true;
+                var showConfirmButton = false;
+                var confirmButtonColor = 'grey';
+                var cancelButtonText= '<i class="fa fa-times-circle"></i> Try again!';
+                var confirmButtonText= 'Cancel';
+
+
+            }
+            else {
+                var type = '';
+                var show_cancel = true;
+                var showConfirmButton = true;
+                var confirmButtonColor = '';
+                var confirmButtonText= '<i class="fa fa-paper-plane"></i> Send Message';
+                var cancelButtonText = '<i class="fa fa-times-circle"></i> Cancel';
+
+            }
+
+
+                swal.fire({//sw2 OK
+                    title: res.title,
+                    html: res.message,
+                    type: type,
+                    showCancelButton: show_cancel,
+                    showConfirmButton: showConfirmButton,
+                    reverseButtons: true,
+                    confirmButtonColor: confirmButtonColor,
+                    confirmButtonText: confirmButtonText,
+                    cancelButtonText: cancelButtonText,
+                }).then((result) => {
+                    if (result.value) {
+                        go_send_message(reset_vars, message_type, post_id);
+
+                    }
+                });
+            go_reset_opener(message_type);
+
+
+            /*
             jQuery('#go_message_submit').one("click", function(e){
                 go_send_message(reset_vars, message_type);
             });
 
             go_reset_opener(message_type);
+            */
+
+            jQuery('.go-acf-switch').click(function () {
+                console.log("click");
+                if (jQuery(this).hasClass('-on') == false) {
+                    jQuery(this).prev('input').prop('checked', true);
+                    jQuery(this).addClass('-on');
+                    jQuery(this).removeClass('-off');
+                } else {
+                    jQuery(this).prev('input').prop('checked', false);
+                    jQuery(this).removeClass('-on');
+                    jQuery(this).addClass('-off');
+                }
+            });
 
             jQuery('#go_messages_go_badges_select').select2({
                 ajax: {
@@ -152,9 +227,9 @@ function go_messages_opener( user_id, post_id, message_type ) {
                 var penalty = document.getElementById("go_additional_penalty_toggle").checked;
                 //console.log(penalty);
                 if (penalty == true){
-                    jQuery("#go_penalty_table").css('display', 'block');
+                    jQuery(".go_penalty_table").css('display', 'block');
                 }else{
-                    jQuery("#go_penalty_table").css('display', 'none');
+                    jQuery(".go_penalty_table").css('display', 'none');
                 }
             });
 
@@ -172,20 +247,28 @@ function go_messages_opener( user_id, post_id, message_type ) {
 
         },
         error: function(e, ts, et) {
+            Swal.fire(//sw2 OK --need to set the error message
+                'Ajax error.',
+                'Error code 101.',
+                'error'
+            )
+
             go_reset_opener(message_type);
         }
     });
 }
 
-function go_send_message(reset_vars, message_type) {
+function go_send_message(reset_vars, message_type, post_id) {
     var title = jQuery('[name=title]').val();
-    if (message_type == "multiple_reset" || message_type == "single_reset"){
+    if (message_type == "multiple_reset" || message_type == "single_reset" ){
         message_type = "reset";
-    }else {
+    }else if(message_type == 'reset_stage'){
+        message_type = 'reset_stage';
+    }  else{
         message_type = "message";
     }
 
-    if (message_type == "reset"){
+    if (message_type == "reset" || message_type == "reset_stage"){
         var message_toggle =  document.getElementById("go_custom_message_toggle").checked;
         var additional_penalty_toggle =  document.getElementById("go_additional_penalty_toggle").checked;
     }
@@ -194,7 +277,7 @@ function go_send_message(reset_vars, message_type) {
         var additional_penalty_toggle =  null;
     }
 
-    if (message_type == "message" || (message_type == "reset" && message_toggle == true ) ){
+    if (message_type == "message" || ((message_type == "reset" || message_type == "reset_stage") && message_toggle == true ) ){
         var message = jQuery('[name=message]').val();
     }
     else{
@@ -202,7 +285,7 @@ function go_send_message(reset_vars, message_type) {
     }
 
 
-    if (message_type == "message" || (message_type == "reset" && additional_penalty_toggle == true ) ){
+    if (message_type == "message" || ((message_type == "reset" || message_type == "reset_stage") && additional_penalty_toggle == true ) ){
         if (message_type == "message" ){
             var xp_toggle = (jQuery('[name=xp_toggle]').siblings().hasClass("-on")) ? 1 : -1;
             var gold_toggle = (jQuery('[name=gold_toggle]').siblings().hasClass("-on")) ? 1 : -1;
@@ -216,14 +299,15 @@ function go_send_message(reset_vars, message_type) {
             var badges_toggle = false;
             var groups_toggle = false;
         }
-        var xp = jQuery('[name=xp]').val() * xp_toggle;
-        var gold = jQuery('[name=gold]').val() * gold_toggle;
-        var health = jQuery('[name=health]').val() * health_toggle;
+        console.log("xp: " + jQuery('.xp_messages').val());
+        var xp = jQuery('.xp_messages').val() * xp_toggle;
+        var gold = jQuery('.gold_messages').val() * gold_toggle;
+        var health = jQuery('.health_messages').val() * health_toggle;
 
         var badges = jQuery('#go_messages_go_badges_select').val();
         var groups = jQuery('#go_messages_user_go_groups_select').val();
     }
-    else if (message_type == "reset" && additional_penalty_toggle == false ){
+    else if ((message_type == "reset" || message_type == "reset_stage") && additional_penalty_toggle == false ){
         var badges_toggle = false;
         var groups_toggle = false;
         var xp = 0;
@@ -248,7 +332,8 @@ function go_send_message(reset_vars, message_type) {
         badges_toggle: badges_toggle,
         badges: badges,
         groups_toggle: groups_toggle,
-        groups: groups
+        groups: groups,
+        penalty: additional_penalty_toggle
 
     };
     jQuery.ajax({
@@ -257,13 +342,31 @@ function go_send_message(reset_vars, message_type) {
         data: gotoSend,
         success: function( results ) {
             // show success or error message
-            jQuery("#go_messages_container").html("Message sent successfully.");
+            console.log("send successful");
+            Swal.fire(//sw2 OK
+                'Success!',
+                '',
+                'success'
+            );
+
             jQuery( "#go_tasks_datatable" ).remove();
             go_stats_task_list();
-            go_toggle_off();
+
+
+
+            if(message_type == 'reset_stage'){
+                var post_wrapper_class = ".go_blog_post_wrapper_" + post_id;
+                jQuery(post_wrapper_class).hide();
+            }else{
+                go_toggle_off();
+            }
         },
         error: function(e, ts, et) {
-            jQuery("#go_messages_container").html("Error.");
+            Swal.fire(//sw2 OK --need to set error message
+                'Ajax error.',
+                'Error code 101.',
+                'error'
+            )
         }
     });
 }

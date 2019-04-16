@@ -29,6 +29,8 @@ $go_datatables_css_url   = 'https://cdn.datatables.net/v/ju/jszip-2.5.0/dt-1.10.
 $go_featherlight_js_url  = 'https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.7.13/featherlight.min.js';
 $go_noty_js_url          = 'https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js'; 
 $go_sweetalert_js_url    = 'https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js';
+$go_sweetalert2_js_url   = 'https://cdn.jsdelivr.net/npm/sweetalert2@8';
+
 $go_tippy_js_url		= 'https://unpkg.com/tippy.js@3/dist/tippy.all.min.js';
 
 //DateRangePicker
@@ -62,7 +64,7 @@ function go_admin_includes ($hook) {
     global $js_in_footer;
     global $go_select2_js_url, $go_datatables_js_url, $go_datatables_ns_js_url,
        $go_pdfmake_js_url, $go_pdfmake_fonts_js_url, $go_featherlight_js_url,
-       $go_noty_js_url, $go_sweetalert_js_url, $go_select2_css_url,
+       $go_noty_js_url, $go_sweetalert_js_url, $go_sweetalert2_js_url, $go_select2_css_url,
        $go_datatables_css_url, $go_featherlight_css_url, $go_noty_css_url, $go_tippy_js_url, $font_awesome_url, $go_moment_js_url, $go_daterangepicker_js_url, $go_daterangepicker_css_url;
 
     /**
@@ -164,8 +166,11 @@ function go_admin_includes ($hook) {
     /**
      * Sweet Alert
      */
-    wp_register_script( 'go_sweet_alert', $go_sweetalert_js_url, null,'v1', $js_in_footer );
-    wp_enqueue_script( 'go_sweet_alert' );
+    //wp_register_script( 'go_sweet_alert', $go_sweetalert_js_url, null,'v1', $js_in_footer );
+    //wp_enqueue_script( 'go_sweet_alert' );
+
+    wp_register_script( 'go_sweet_alert2', $go_sweetalert2_js_url, null,'v1', $js_in_footer );
+    wp_enqueue_script( 'go_sweet_alert2' );
 
     /**
      * Tabs
@@ -184,7 +189,7 @@ function go_includes () {
     global $js_in_footer;
     global $go_select2_js_url, $go_datatables_js_url, $go_datatables_ns_js_url,
        $go_pdfmake_js_url, $go_pdfmake_fonts_js_url, $go_featherlight_js_url,
-       $go_noty_js_url, $go_sweetalert_js_url, $go_select2_css_url,
+       $go_noty_js_url, $go_sweetalert_js_url, $go_sweetalert2_js_url, $go_select2_css_url,
        $go_datatables_css_url, $go_featherlight_css_url, $go_noty_css_url, $font_awesome_url, $go_tippy_js_url,
            $go_moment_js_url, $go_daterangepicker_js_url, $go_daterangepicker_css_url;
 
@@ -277,8 +282,12 @@ function go_includes () {
     /**
      * Sweet Alert
      */
-    wp_register_script( 'go_sweet_alert', $go_sweetalert_js_url, null,'v1', $js_in_footer );
-    wp_enqueue_script( 'go_sweet_alert' );
+    //wp_register_script( 'go_sweet_alert', $go_sweetalert_js_url, null,'v1', $js_in_footer );
+    //wp_enqueue_script( 'go_sweet_alert' );
+
+    wp_register_script( 'go_sweet_alert2', $go_sweetalert2_js_url, null,'v1', $js_in_footer );
+    wp_enqueue_script( 'go_sweet_alert2' );
+
 
 
     /**

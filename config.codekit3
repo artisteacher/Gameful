@@ -3367,6 +3367,17 @@
 		"sC": 3,
 		"tS": 0
 		},
+	"/js/dev/scripts/go_acf_admin.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/js/min/go_acf_admin-min.js",
+		"oF": 2,
+		"sC": 3,
+		"tS": 0
+		},
 	"/js/dev/scripts/go_admin_page_admin_user.js": {
 		"bF": 0,
 		"ft": 64,
@@ -3408,6 +3419,17 @@
 		"oA": 1,
 		"oAP": "/js/dev/scripts/go_every_page-min.js",
 		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/js/dev/scripts/go_feedback.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/js/dev/scripts/go_feedback-min.js",
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
@@ -3455,17 +3477,6 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"/js/dev/scripts/go_quiz_admin.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/js/dev/scripts/go_quiz_admin-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
 	"/js/dev/scripts/go_videos_fit_and_box.js": {
 		"bF": 0,
 		"ft": 64,
@@ -3503,6 +3514,17 @@
 		"oA": 0,
 		"oAP": "/js/go_enque_js_admin.php",
 		"oF": 0
+		},
+	"/js/min/go_acf_admin-min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/js/min/go_acf_admin-min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
 		},
 	"/js/min/go_admin_user-min.js": {
 		"bF": 0,
@@ -4084,22 +4106,6 @@
 		"oAP": "/modules/feedback/includes.php",
 		"oF": 0
 		},
-	"/modules/feedback/src/admin.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/modules/feedback/src/admin.php",
-		"oF": 0
-		},
-	"/modules/feedback/src/admin_ajax.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/modules/feedback/src/admin_ajax.php",
-		"oF": 0
-		},
 	"/modules/feedback/src/ajax.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -4122,6 +4128,14 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/modules/feedback/src/public.php",
+		"oF": 0
+		},
+	"/modules/feedback/src/public_ajax.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/feedback/src/public_ajax.php",
 		"oF": 0
 		},
 	"/modules/feedback/src/templates/go_reader_template.php": {

@@ -10,7 +10,11 @@ function go_admin_remove_notification() {
     if ( ! current_user_can( 'manage_options' ) ) {
         die( -1 );
     }
-    check_ajax_referer( 'go_admin_remove_notification_' . get_current_user_id() );
+    //check_ajax_referer( 'go_admin_remove_notification_' . get_current_user_id() );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_admin_remove_notification' ) ) {
+        echo "refresh";
+        die( );
+    }
 
     update_option( 'go_display_admin_explanation', false );
 
@@ -22,7 +26,11 @@ function go_deactivate_plugin() {
     if ( ! current_user_can( 'manage_options' ) ) {
         die( -1 );
     }
-    check_ajax_referer( 'go_deactivate_plugin_' . get_current_user_id() );
+    //check_ajax_referer( 'go_deactivate_plugin_' . get_current_user_id() );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_deactivate_plugin' ) ) {
+        echo "refresh";
+        die( );
+    }
 
     include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
     $plugin = plugin_basename( __FILE__ );

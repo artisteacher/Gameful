@@ -8,7 +8,11 @@
 
 
 function go_blog_opener(){
-    check_ajax_referer( 'go_blog_opener' );
+    //check_ajax_referer( 'go_blog_opener' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_blog_opener' ) ) {
+        echo "refresh";
+        die( );
+    }
 
     $blog_post_id = ( ! empty( $_POST['blog_post_id'] ) ? (int) $_POST['blog_post_id'] : 0 );
     $check_for_understanding = ( ! empty( $_POST['check_for_understanding'] ) ? (int) $_POST['check_for_understanding'] : false );
@@ -57,7 +61,7 @@ function go_blog_opener(){
 
     go_blog_form($blog_post_id, '_lightbox', $go_blog_task_id, $i, $bonus, $check_for_understanding );
     echo "<button id='go_blog_submit' style='display:block;' check_type='blog_lightbox' button_type='submit' blog_post_id ={$blog_post_id} blog_suffix ='_lightbox'  task_id='{$go_blog_task_id}' required_string='".$required_string."' min_words='{$min_words}' blog_suffix ='' url_toggle='{$url_toggle}' video_toggle='{$video_toggle}' file_toggle='{$file_toggle}' text_toggle='{$text_toggle}' data-check_for_understanding ='{$check_for_understanding}'>Submit</button>";
-    echo "<p id='go_blog_error_msg' style='display: none; color: red;'></p>";
+    echo "<p id='go_blog_error_msg' class='go_error_msg' style='display: none; color: red;'></p>";
     ?>
     <script>
 
@@ -76,7 +80,11 @@ function go_blog_opener(){
 
 function go_blog_trash(){
     global $wpdb;
-    check_ajax_referer( 'go_blog_trash' );
+    //check_ajax_referer( 'go_blog_trash' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_blog_trash' ) ) {
+        echo "refresh";
+        die( );
+    }
 
     $blog_post_id = ( ! empty( $_POST['blog_post_id'] ) ? (int) $_POST['blog_post_id'] : 0 );
 
@@ -138,9 +146,9 @@ function go_blog_trash(){
             $id = $result['id'];
             $uid = $result['uid'];
 
-            if ($stage_type === 'stage'){
+            if ($stage_type === 'stage'){ //remove all loot since this stage, including this stage and mark all other blog posts deleted
 
-                //remove all loot since this stage, including this stage and mark all other blog posts deleted
+
                 $loot = $wpdb->get_results($wpdb->prepare("SELECT xp, gold, health, badges, groups, check_type, result
 				FROM {$aTable} 
 				WHERE uid = %d AND source_id = %d AND action_type = %s AND id >= %d
@@ -152,6 +160,7 @@ function go_blog_trash(){
             $health = 0;
             $badge_array = array();
             $group_array = array();
+
             foreach($loot as $loot_row){
                 $xp = $loot_row['xp'] + $xp;
                 $gold = $loot_row['gold'] + $gold;
@@ -226,7 +235,9 @@ function go_blog_trash(){
                     intval($go_blog_task_id)
                 )
             );
-            go_update_actions( $uid, 'delete',  $go_blog_task_id, $new_status_task, $new_bonus_status_task, null, null, null, null, null, null,  $xp, $gold, $health, $badge_ids, $group_ids, true, true);
+            go_update_actions( $uid, 'reset',  $go_blog_task_id, $new_status_task, $new_bonus_status_task, null, null, null, null, null, null,  $xp, $gold, $health, $badge_ids, $group_ids, false, true);
+
+            update_user_option(intval($uid), 'go_new_messages', true);
         }
     }
 }
@@ -258,7 +269,11 @@ function go_blog_lightbox_opener(){
 */
 
 function go_blog_submit(){
-    check_ajax_referer( 'go_blog_submit' );
+    //check_ajax_referer( 'go_blog_submit' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_blog_submit' ) ) {
+        echo "refresh";
+        die( );
+    }
     $blog_post_id = intval(!empty($_POST['blog_post_id']) ? (string)$_POST['blog_post_id'] : '');
     $check_for_understanding = !empty($_POST['check_for_understanding']) ? (string)$_POST['check_for_understanding'] : false;
     $button = !empty($_POST['button']) ? (string)$_POST['button'] : false;
@@ -301,7 +316,7 @@ function go_blog_submit(){
     ob_end_clean();
 
     ob_start();
-    go_blog_post($blog_post_id, $check_for_understanding, true);
+    go_blog_post($blog_post_id, $check_for_understanding, true, false, true);
     $wrapper = ob_get_contents();
 
     ob_end_clean();
@@ -404,12 +419,16 @@ function go_save_blog_post($post_id = null, $stage = null, $bonus_status = null,
 }
 
 /**
- * Prints content for the clipboard tasks table
+ * Prints content for the clipboard tasks table and user map viewer
  */
 function go_blog_user_task(){
     global $wpdb;
 
-    check_ajax_referer( 'go_blog_user_task' );
+    //check_ajax_referer( 'go_blog_user_task' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_blog_user_task' ) ) {
+        echo "refresh";
+        die( );
+    }
 
     $user_id = intval($_POST['uid']);
     $post_id = intval($_POST['task_id']);
@@ -558,7 +577,7 @@ function go_blog_user_task(){
             if ($check_type == "blog"){
                 echo "Blog Post</h3>";
                 //go_print_blog_check_result($result, false);
-                go_blog_post($result, false);
+                go_blog_post($result, false, false, false, true);
             }else if($check_type == "URL"){
                 echo "URL</h3>";
                 go_print_URL_check_result($result);
@@ -572,8 +591,20 @@ function go_blog_user_task(){
                 echo "No Check for Understanding</h3>";
             }
             else if($check_type == "quiz"){
+                $quiz_result = go_get_quiz_result($user_id, $post_id, $current_stage, 'array' );
+                $quiz_mod = (isset($quiz_result[0]['result']) ?  $quiz_result[0]['result'] : null);
+                $total_questions = (isset($quiz_result[0]['check_type']) ?  $quiz_result[0]['check_type'] : null);
+                //$total_questions = $quiz_result[0]['check_type'];
+                $score = ($total_questions - $quiz_mod )."/".$total_questions;
+                if (!($quiz_mod > 0)){
+                    $score = $total_questions."/".$total_questions;
+                }
                 echo "Quiz</h3>";
-                echo "Quiz Score: " .$result;
+                echo "<h3>{$score}</h3>";
+                //echo "Quiz Score: " .$result;
+                go_test_check (null, $current_stage - 1, null, null, $user_id, $post_id, $bonus, $bonus_status, true);
+
+
             }
 
             $this_result[]= ob_get_contents();

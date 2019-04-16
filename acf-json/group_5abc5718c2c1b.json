@@ -919,7 +919,7 @@
                             "name": "growth",
                             "type": "number",
                             "instructions": "This will auto increment new rows added by this multiplier. The high the multiplier the more difficult the high levels will be obtain.",
-                            "required": 1,
+                            "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
                                 "width": "",
@@ -940,7 +940,7 @@
                             "name": "go_first_level_up",
                             "type": "number",
                             "instructions": "This is used to calculate new rows below.",
-                            "required": 1,
+                            "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
                                 "width": "",
@@ -2186,5 +2186,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1554273169
+    "modified": 1555226292
 }

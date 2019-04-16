@@ -80,14 +80,14 @@ function go_checks_for_understanding ($custom_fields, $i, $status, $user_id, $po
     } else if ($check_type == 'password') {
         go_password_check($custom_fields, $i, $status, $go_actions_table_name, $user_id, $post_id, $bonus, $bonus_status);
     } else if ($check_type == 'quiz') {
-        go_test_check($custom_fields, $i, $status, $go_actions_table_name, $user_id, $post_id, $bonus, $bonus_status);
+        go_test_check($custom_fields, $i, $status, $go_actions_table_name, $user_id, $post_id, $bonus, $bonus_status, false);
     } else if ($check_type == 'none' || $check_type == null) {
         go_no_check($i, $status, $custom_fields, $bonus, $bonus_status);
     }
 
     if ($check_type != 'blog') {
         //Buttons
-        go_buttons($user_id, $custom_fields, $i, $stage_count, $status, $check_type, $bonus, $bonus_status, $repeat_max, false, $blog_post_id);
+        go_buttons($user_id, $custom_fields, $i, $stage_count, $status, $check_type, $bonus, $bonus_status, $repeat_max, false, $blog_post_id, false);
     }
 
 
@@ -321,7 +321,7 @@ function go_blog_check ($custom_fields = null, $i, $status, $go_actions_table_na
 
             }
             $blog_post_id = (isset($blog_post_id) ?  $blog_post_id : null);
-            go_blog_post($blog_post_id, true, true);
+            go_blog_post($blog_post_id, true, true, false, true);
         }
         else{//this is the current stage and print the form
             if (!$all_content) {
@@ -355,13 +355,11 @@ function go_blog_check ($custom_fields = null, $i, $status, $go_actions_table_na
                 wp_reset_postdata();
             }
             $blog_post_id = (isset($blog_post_id) ?  $blog_post_id : null);
-            if($blog_post_id) {
-                wp_trash_post(intval($blog_post_id));
-            }
+
             go_blog_form($blog_post_id, '', $post_id, $i, $bonus_status, true);
 
             go_buttons($user_id, $custom_fields, $i, $stage_count, $status, $check_type, $bonus, $bonus_status, $repeat_max, false, $blog_post_id);
-            if($blog_post_id){do_action('go_blog_template_after_post', $blog_post_id, false);}
+
 
 
             return $blog_post_id;
@@ -414,7 +412,7 @@ function go_blog_check ($custom_fields = null, $i, $status, $go_actions_table_na
             } // end if
             wp_reset_postdata();
             $blog_post_id = (isset($blog_post_id) ?  $blog_post_id : null);
-            go_blog_post($blog_post_id, true, true);
+            go_blog_post($blog_post_id, true, true, false, true);
             $go_print_next++;
             return $blog_post_id;
         }
@@ -689,39 +687,98 @@ function go_print_upload_check_result($media_id){
  * @param $post_id
  * @param $bonus
  * @param $bonus_status
+ * @param $show_first
  */
-function go_test_check ($custom_fields, $i, $status, $go_actions_table_name, $user_id, $post_id, $bonus, $bonus_status){
-    if ($i == $status) {
-        //$quiz_data = 'go_stages_' . $i . '_quiz';
-        //$quiz_data = $custom_fields[$check_type][0];
+function go_test_check ($custom_fields, $i, $status, $go_actions_table_name, $user_id, $post_id, $bonus, $bonus_status, $show_first){
+    global $wpdb;
+    $go_actions_table_name = (isset($go_actions_table_name) ?  $go_actions_table_name : $wpdb->prefix ."go_actions");
+    if ($i === $status) {
 
-        //Quiz Check for Understanding
-        //$test_stage_active = ( ! empty( $custom_fields['go_mta_test_'.$stage_short_name.'_lock'][0] ) ? $custom_fields['go_mta_test_'.$stage_short_name.'_lock'][0] : false );
+        $test_array = $custom_fields['go_stages_' . $i . '_quiz'][0];
 
+        $atts['quiz'] = $test_array;
+        $atts['stage'] = $i + 1;
 
-        $test_stage_array = go_task_get_test_meta($custom_fields, $i);
-        //$test_stage_returns = $test_stage_array[0];
-        $test_stage_num = $test_stage_array[0];
-        $test_stage_all_questions = $test_stage_array[1][0];
-        $test_stage_all_types = $test_stage_array[1][1];
-        $test_stage_all_answers = $test_stage_array[1][2];
-        $test_stage_all_keys = $test_stage_array[1][3];
+        go_test_shortcode( $atts );
+            //do_shortcode("[go_test $atts ]");
 
-        if ($test_stage_num > 1) {
-            for ($i = 0; $i < $test_stage_num; $i++) {
-                if (!empty($test_stage_all_types[$i]) && !empty($test_stage_all_questions[$i]) && !empty($test_stage_all_answers[$i]) && !empty($test_stage_all_keys[$i])) {
-                    echo do_shortcode("[go_test type='" . $test_stage_all_types[$i] . "' question='" . $test_stage_all_questions[$i] . "' possible_answers='" . $test_stage_all_answers[$i] . "' key='" . $test_stage_all_keys[$i] . "' test_id='" . $i . "' total_num='" . $test_stage_num . "']");
-                }
-            }
-            echo "<p id='go_test_error_msg' style='color: red;'></p>";
-            //echo "<div class='go_test_submit_div' style='display: none;'><button class='go_test_submit' button_type='quiz' >Submit</button></div>";
-        } elseif (!empty($test_stage_all_types[0]) && !empty($test_stage_all_questions[0]) && !empty($test_stage_all_answers[0]) && !empty($test_stage_all_keys[0])) {
-            echo do_shortcode("[go_test type='" . $test_stage_all_types[0] . "' question='" . $test_stage_all_questions[0] . "' possible_answers='" . $test_stage_all_answers[0] . "' key='" . $test_stage_all_keys[0] . "' test_id='0']");
-            //."<div class='go_test_submit_div' style='display: none;'><button class='go_test_submit button_type='quiz''>Submit</button></div>";
-        }
     }
     else {
-        echo "Questions answered correctly.";
+        //for bonus stages
+        $stage = 'stage';
+        if ($bonus){
+            $status = $bonus_status;
+            $stage = 'bonus_status';
+        }
+        //end for bonus stages
+        //echo "Questions answered correctly.";
+        $i++;
+
+        //$quiz_mod = go_get_quiz_mod($user_id, $post_id, $i,  );
+        $quiz_result = go_get_quiz_result($user_id, $post_id, $i, 'array' );
+        $quiz_mod = (isset($quiz_result[0]['result']) ?  $quiz_result[0]['result'] : null);
+        $total_questions = (isset($quiz_result[0]['check_type']) ?  $quiz_result[0]['check_type'] : null);
+        //$total_questions = $quiz_result[0]['check_type'];
+        $score = ($total_questions - $quiz_mod )."/".$total_questions;
+        $first = '';
+        $first_link = '';
+        if ($quiz_mod > 0) {
+
+            $html = (string) $wpdb->get_var(
+                $wpdb->prepare(
+                    "SELECT result 
+				FROM {$go_actions_table_name} 
+				WHERE uid = %d AND source_id = %d AND {$stage}  = %d AND action_type = %s
+				ORDER BY id ASC LIMIT 1",
+                    $user_id,
+                    $post_id,
+                    $i,
+                    'quiz_result'
+                )
+            );
+            $html = stripslashes($html);
+             //$html = '<ul><li><div>Do it 50%<span class="go_correct_answer_marker">correct</span></div></li><li><input type="radio" value="Yes" checked="checked"> Yes</li><li><input type="radio" name="go_test_answer_0" value="no"> no</li></ul><ul><li><div >Nope<span class="go_wrong_answer_marker" style="">wrong</span></div></li><li class="go_test go_test_element"><input type="radio"  value="yup" checked="checked"> yup</li><li class="go_test go_test_element"><input type="radio" value="nope"> nope</li></ul>';
+            $show = '';
+            if ($show_first) {
+                $show = 'show';
+            }
+            //echo "<br>On your first attempt you missed {$quiz_mod}.";
+            $first_link = "<div>On your <a href='#' data-featherlight='#go_first_quiz_attempt_{$i} '>first attempt</a> you got {$score} correct.</div>";
+            $first = "<div id='go_first_quiz_attempt_{$i}' class='go_first_quiz_attempt{$show}' >{$html}</div>";
+
+        }else{
+            $first_link = "<div>You got 100% correct!</div>";
+
+        }
+
+
+
+        $html = (string) $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT result 
+				FROM {$go_actions_table_name} 
+				WHERE uid = %d AND source_id = %d AND {$stage}  = %d AND action_type = %s
+				ORDER BY id DESC LIMIT 1",
+                $user_id,
+                $post_id,
+                $i,
+                'quiz_result'
+            )
+        );
+
+        if ($show_first){//only show the first attempt if on the clipboard
+
+            echo $first;
+            return;
+        }else{//this is a view for the user regular check for understanding
+            echo $first_link;
+            echo $first;
+            echo "<div>".stripslashes($html)."</div>";
+        }
+
+
+
+
     }
 
 
@@ -781,3 +838,5 @@ function go_task_get_test_meta($custom_fields, $stage ) {
         return null;
     }
 }
+
+

@@ -46,9 +46,9 @@ function go_user_links($user_id, $website = true, $stats = false, $profile = fal
 
     if ($stats){
         if ($stats_lite) {
-            echo "<div class='go_user_link'><a href='javascript:;' class='go_stats_lite' data-UserId='{$user_id}' onclick='go_stats_lite({$user_id});'><i class='fa fa-area-chart ab-icon' aria-hidden='true'></i></a></div>";
+            echo "<div class='go_user_link'><a href='javascript:void(0);' class='go_stats_lite' data-UserId='{$user_id}' onclick='go_stats_lite({$user_id});'><i class='fa fa-area-chart ab-icon' aria-hidden='true'></i></a></div>";
         }else{//regular stats link
-            echo "<div class='go_user_link_stats go_user_link' name='{$user_id}'><a href='#';'><i class='fa fa-area-chart ab-icon' aria-hidden='true'></i></a></div>";
+            echo "<div class='go_user_link_stats go_user_link' name='{$user_id}'><a href='javascript:void(0);';'><i class='fa fa-area-chart ab-icon' aria-hidden='true'></i></a></div>";
         }
     }
     if ($clipboard){
@@ -88,7 +88,7 @@ function go_user_links($user_id, $website = true, $stats = false, $profile = fal
     }
 
     if($show_messages && ($clipboard || $is_admin)){
-        echo "<div class='go_stats_messages_icon go_user_link ' data-uid='" . $user_id . "' ><a href='#' ><i class='fa fa-bullhorn' aria-hidden='true'></i></a></div>";
+        echo "<div class='go_stats_messages_icon go_user_link ' data-uid='" . $user_id . "' ><a href='javascript:void(0);' ><i class='fa fa-bullhorn' aria-hidden='true'></i></a></div>";
         //make the messages icon a link to this user
     }
     echo "</div>";
@@ -126,13 +126,13 @@ function go_result_link($check_type, $result, $stage, $time, $bonus = false){
         $image_url = wp_get_attachment_url($result);
         $is_image = wp_attachment_is_image($result);
         if ($is_image) {
-            $link = "<a href='#' class='tooltip' data-featherlight='{$image_url}'><span class=\"dashicons dashicons-format-image\"></span> <span class=\"tooltiptext\">{$stage} at <br> {$time}</span></a>";
+            $link = "<a href='javascript:void(0);' class='tooltip' data-featherlight='{$image_url}'><span class=\"dashicons dashicons-format-image\"></span> <span class=\"tooltiptext\">{$stage} at <br> {$time}</span></a>";
         }else{
             $link = "<a href='{$image_url}' class='tooltip' target='_blank'><span class=\"dashicons dashicons-media-default\"></span><span class=\"tooltiptext\">{$stage} at <br> {$time}</span></a>";
         }
     }
     else if ($check_type == 'blog'){
-        $link = "<a href='#' onclick='return false' id='$result' class='go_blog_lightbox tooltip' target='_blank'><span class=\"dashicons dashicons-admin-post\"></span><span class=\"tooltiptext\">{$stage} at <br> {$time}</span></a>";
+        $link = "<a href='javascript:void(0);' onclick='return false' id='$result' class='go_blog_lightbox tooltip' target='_blank'><span class=\"dashicons dashicons-admin-post\"></span><span class=\"tooltiptext\">{$stage} at <br> {$time}</span></a>";
         //$link = "<a href='javascript:;' id='$result' class='go_blog_lightbox' target='_blank'><span class=\"dashicons dashicons-admin-post\"></span>{$stage} at <br> {$time}</a>";
 
     }
@@ -163,7 +163,7 @@ function go_bonus_result_link($check_type, $result, $stage, $time, $bonus = true
         $image_url = wp_get_attachment_url($result);
         $is_image = wp_attachment_is_image($result);
         if ($is_image) {
-            $link = "<a href='{#}' class='tooltip' data-featherlight='{$image_url}'><span class=\"dashicons dashicons-format-image\"></span>{$stage} at <br> {$time}</a>";
+            $link = "<a href='javascript:void(0);' class='tooltip' data-featherlight='{$image_url}'><span class=\"dashicons dashicons-format-image\"></span>{$stage} at <br> {$time}</a>";
         }else{
             $link = "<a href='{$image_url}' class='tooltip' target='_blank'><span class=\"dashicons dashicons-media-default\"></span>{$stage} at <br> {$time}</a>";
         }

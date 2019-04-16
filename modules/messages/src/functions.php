@@ -50,7 +50,11 @@ function go_check_messages(){
             $groups = $action->groups;
             $groups = unserialize($groups);
 
-            if ($type != 'admin_notification') {
+            if ($type == 'admin_notification'){
+                go_noty_message_generic('warning', '', $title, '15000');
+            } else if ( $type == 'reset' && $type = 'reset_stage') {
+                go_noty_message_generic('warning', $title, $message, '');
+            }else{
 
 
                 if (empty($xp)) {
@@ -169,22 +173,21 @@ function go_check_messages(){
                 }
 
                 if (!empty($xp_penalty) || !empty($gold_penalty) || !empty($health_penalty) || !empty($badge_penalty) || !empty($group_penalty)) {
-                    if (empty($post_id)){
-                        $penalty = "<h4>Penalty:</h4>{$xp_penalty}{$gold_penalty}{$health_penalty}{$badge_penalty}{$group_penalty}";
-                    }
-                    else{
-                        $penalty = "<h4>Additional Penalty:</h4>{$xp_penalty}{$gold_penalty}{$health_penalty}{$badge_penalty}{$group_penalty}";
-                    }
+                    //if (empty($post_id)){
+                    $penalty = "<h4>Penalty:</h4>{$xp_penalty}{$gold_penalty}{$health_penalty}{$badge_penalty}{$group_penalty}";
+                    //}
+                    //else{
+                    //    $penalty = "<h4>Additional Penalty:</h4>{$xp_penalty}{$gold_penalty}{$health_penalty}{$badge_penalty}{$group_penalty}";
+                    // }
                 } else {
                     $penalty = '';
                 }
+
                 $message = "<div> {$message}</div><div>{$reward}{$penalty}</div>";
 
-                go_noty_message_generic('warning', $title, $message, '15000');
+                go_noty_message_generic('warning', $title, $message, '');
             }
-            else{
-                go_noty_message_generic('warning', '', $title, '15000');
-            }
+
         }
         //set messages flag to read
         $wpdb->update(

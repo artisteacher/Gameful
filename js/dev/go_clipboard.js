@@ -2,7 +2,7 @@ jQuery( document ).ready( function() {
     //jQuery( "#datepicker_clipboard" ).datepicker({ firstDay: 0 });
     //jQuery("#datepicker_clipboard").datepicker('setDate', new Date());//today's date
 
-    go_load_daterangepicker();
+    go_load_daterangepicker('clipboard');
 
 
     //Tabs
@@ -64,7 +64,7 @@ jQuery( document ).ready( function() {
         jQuery('#go_unmatched_toggle').prop('checked', true);
     }
 
-    go_make_select2_filter('user_go_sections', 'section');
+    go_make_select2_filter('user_go_sections', 'section', true);
 
     //jQuery('#go_clipboard_user_go_sections_select').select2({data: go_get_menu_data('go_user_sections')});
    // go_cache_menu(1, 'stats');
@@ -73,10 +73,10 @@ jQuery( document ).ready( function() {
 
 
 
-    go_make_select2_filter('user_go_groups', 'group')
+    go_make_select2_filter('user_go_groups', 'group', true)
 
 
-    go_make_select2_filter('go_badges', 'badge')
+    go_make_select2_filter('go_badges', 'badge', true)
 
 
     //jQuery('#go_clipboard_user_go_sections_select').val(section).trigger('change');;
@@ -90,7 +90,7 @@ jQuery( document ).ready( function() {
         jQuery('.go_update_clipboard').html('<span class="ui-button-text">Apply Filters<i class="fa fa-filter" aria-hidden="true"></i></span>');
     });
 
-    go_setup_reset_filter_button();
+    go_setup_reset_filter_button(false);
 });
 
 
@@ -280,7 +280,8 @@ function go_clipboard_callback() {
 }
 
 function go_clipboard_update() {
-    go_save_clipboard_filters(false);
+    console.log("go_clipboard_update");
+    go_save_clipboard_filters();
     jQuery('.go_update_clipboard').removeClass("bluepulse");
     jQuery('.go_update_clipboard').html('<span class="ui-button-text">Refresh Data <span class="dashicons dashicons-update" style="vertical-align: center;"></span></span>');
 

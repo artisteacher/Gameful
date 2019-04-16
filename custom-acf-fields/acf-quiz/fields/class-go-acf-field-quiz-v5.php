@@ -147,14 +147,14 @@ class go_acf_field_quiz extends acf_field {
 
         //$temp_array = ( ! empty( $custom[ $meta_id ][0] ) ? $custom[ $meta_id ][0] : null );
         $temp_uns = $field['value'];
-        if (!empty($temp_uns)) {
+        //if (!empty($temp_uns)) {
             //$temp_uns = unserialize( $temp_array );
-            $test_field_input_question = (!empty($temp_uns[0]) ? $temp_uns[0] : null);
-            $test_field_input_array = (!empty($temp_uns[1]) ? $temp_uns[1] : null);
-            $test_field_select_array = (!empty($temp_uns[2]) ? $temp_uns[2] : null);
-            $test_field_block_count = (!empty($temp_uns[3]) ? (int)$temp_uns[3] : null);
-            $test_field_input_count = (!empty($temp_uns[4]) ? $temp_uns[4] : null);
-        }
+            $test_field_input_question = (!empty($temp_uns[0]) ? $temp_uns[0] : null);//an array of the questions
+            $test_field_input_array = (!empty($temp_uns[1]) ? $temp_uns[1] : null);//an array of the answers[0] and the correct answer[1]
+            $test_field_select_array = (!empty($temp_uns[2]) ? $temp_uns[2] : null);//an array of the type of questions (radio or checkbox)
+            $test_field_block_count = (!empty($temp_uns[3]) ? (int)$temp_uns[3] : null);//an integer of the number of questions
+            $test_field_input_count = (!empty($temp_uns[4]) ? $temp_uns[4] : null);//an array of integers of the number of answers
+       //}
 
         ?>
         <input class="<?php echo esc_attr($field['id']) . '-input' ?>" name="<?php echo esc_attr($field['name']) ?>" value="" type="hidden">
@@ -167,67 +167,102 @@ class go_acf_field_quiz extends acf_field {
                     ";
             }
 
-            //if this quiz exists, then print it out
-            if (!empty($test_field_block_count) && !empty($test_field_input_array)) { //for each question (block)
-                for ($i = 0; $i < $test_field_block_count; $i++) {
-                    if (!empty($test_field_input_array[$i][0])) {
-                        $correct = $test_field_input_array[$i][1];
-                        echo "
-					<tr class='go_test_field_input_row' data-block_num='{$i}'> 
-						<td>
-							<select name='go_test_field_select_{$ttc}[]' onchange='update_checkbox_type(this);'>
-								<option value='radio' " . (($test_field_select_array[$i] == 'radio') ? 'selected' : '') . ">Multiple Choice</option>
-								<option value='checkbox' " . (($test_field_select_array[$i] == 'checkbox') ? 'selected' : '') . ">Multiple Select</option>
-							</select>"; //the question type
-                        if (!empty($test_field_input_question)) {
-                            echo "<br/><br/><input class=' go_test_field_input_question quiz_input' name='go_test_field_input_question_{$ttc}[]' placeholder='Shall We Play a Game?' type='textarea' value=\"" . htmlspecialchars($test_field_input_question[$i], ENT_QUOTES) . "\" />";
-                        } else {
-                            echo "<br/><br/><input class=' go_test_field_input_question quiz_input' name='go_test_field_input_question_{$ttc}[]' placeholder='Shall We Play a Game?' type='textarea' />";
-                        }
-                        if (!empty($test_field_input_count)) {
-                            echo "<ul>";
-                            for ($x = 0; $x < $test_field_input_count[$i]; $x++) {
-                                if (in_array($test_field_input_array[$i][0][$x], $correct)){
-                                    $checked = "checked";
-                                    $value = "value='" . htmlspecialchars($test_field_input_array[$i][0][$x], ENT_QUOTES) . "'";
-                                }
-                                else{
-                                    $checked = "";
-                                    $value = "";
-                                }
-                                echo "
-								<li><input class=' go_test_field_input_checkbox' name='unused_go_test_field_input_checkbox_{$ttc}_{$i}' type='{$test_field_select_array[ $i]}' onchange='update_checkbox_value(this);' {$checked} />
-								<input class=' go_test_field_input_checkbox_hidden ' name='go_test_field_values_{$ttc}[{$i}][1][]' type='hidden' {$value}/>
-								<input class=' go_test_field_input' name='go_test_field_values_{$ttc}[{$i}][0][]' placeholder='Enter an answer!' type='text' value='" . htmlspecialchars($test_field_input_array[$i][0][$x], ENT_QUOTES) . "' oninput='update_checkbox_value(this);' oncut='update_checkbox_value(this);' onpaste='update_checkbox_value(this);' />";
-                                if ($x > 1) {
-                                    echo "<input class='go_button_del_field go_test_field_rm' type='button' value='x' onclick='remove_field(this);'>";
-                                }
-                                echo "</li>";
-                                if (($x + 1) == $test_field_input_count[$i]) {
-                                    echo "<input class='go_button_add_field go_test_field_add' type='button' value='+' onclick='add_field(this);'/>";
+            //if this is a question
+            //print the question
+            //else
+            $new = false;
+           //Does this quiz already exist?
+            if (empty($test_field_block_count) || $test_field_block_count <= 0 ) { //for each question (block)
+                $test_field_block_count = 1;
+                $new = true;
+            }
+            for ($i = 0; $i < $test_field_block_count; $i++) {//print out at least one question block
+               // if (!empty($test_field_input_array[$i][0])) {
+                    //$correct = $test_field_input_array[$i][1];
+                    $correct = (isset($test_field_input_array[$i][1]) ? $test_field_input_array[$i][1] : array());
+                    $question_type = (isset($test_field_select_array[$i]) ? $test_field_select_array[$i] : 'radio');
+                    $question = (isset($test_field_input_question[$i]) ? $test_field_input_question[$i] : "");
+                    $answer_count = (isset($test_field_input_count[$i]) ? $test_field_input_count[$i] : 1);
+
+                    echo "
+                    <tr class='go_test_field_input_row' data-block_num='{$i}'> 
+                        <td>
+                            <select name='go_test_field_select_{$ttc}[]' onchange='update_checkbox_type(this);'>
+                                <option value='radio' " . (($question_type == 'radio') ? 'selected' : '') . ">Multiple Choice</option>
+                                <option value='checkbox' " . (($question_type == 'checkbox') ? 'selected' : '') . ">Multiple Select</option>
+                            </select>
+                        
+                            <br/><br/><input class=' go_test_field_input_question quiz_input' name='go_test_field_input_question_{$ttc}[]' placeholder='Shall We Play a Game?' type='textarea' value=\"" . htmlspecialchars($question, ENT_QUOTES) . "\" />
+                            <ul>";
+
+                        for ($x = 0; $x < $answer_count; $x++) {
+                            $answer = (isset($test_field_input_array[$i][0][$x]) ? $test_field_input_array[$i][0][$x] : null);
+                            if (in_array($answer, $correct)) {
+                            //if ($correct == $answer){
+                                $checked = "checked";
+                                $value = "value='" . htmlspecialchars($answer, ENT_QUOTES) . "'";
+                            } else {
+                                $checked = "";
+                                $value = "";
+                                if ($new){
+                                    $checked = 'checked';
                                 }
                             }
-                            echo "</ul><ul>";
-                            if ($i > 0) {
-                                echo "<li><input class=' go_test_field_input_rm_row_button' type='button' value='Remove Question' onclick='remove_block(this);' /></li>";
-                            }
-                            echo "<li><input class=' go_test_field_input_count' name='go_test_field_input_count_{$ttc}[]' type='hidden' value='{$test_field_input_count[ $i]}' /></li></ul>";
-                        } else {
                             echo "
-						<ul>
-							<li><input class=' go_test_field_input_checkbox' name='go_test_field_input_checkbox_{$ttc}_{$i}' type='{$test_field_select_array[ $i]}' onchange='update_checkbox_value(this);' /><input class='go_test_field_input_checkbox_hidden' name='go_test_field_values_{$ttc}[{$i}][1][]' type='hidden' /><input class=' go_test_field_input quiz_input' name='go_test_field_values_{$ttc}[{$i}][0][]' placeholder='Enter an answer!' type='text' value=\"" . htmlspecialchars($test_field_input_array[$i][0][0], ENT_QUOTES) . "\" oninput='update_checkbox_value(this);' oncut='update_checkbox_value(this);' onpaste='update_checkbox_value(this);' /></li>
-							<li><input class=' go_test_field_input_checkbox' name='go_test_field_input_checkbox_{$ttc}_{$i}' type='{$test_field_select_array[ $i]}' onchange='update_checkbox_value(this);' /><input class='go_test_field_input_checkbox_hidden' name='go_test_field_values_{$ttc}[{$i}][1][]' type='hidden' /><input class=' go_test_field_input quiz_input' name='go_test_field_values_{$ttc}[{$i}][0][]' placeholder='Enter an answer!' type='text' value=\"" . htmlspecialchars($test_field_input_array[$i][0][1], ENT_QUOTES) . "\" oninput='update_checkbox_value(this);' oncut='update_checkbox_value(this);' onpaste='update_checkbox_value(this);' /></li>";
-                            echo "</ul><ul><li>";
-                            if ($i > 0) {
-                                echo "<input class='go_test_field_input_rm_row_button' type='button' value='Remove Question' onclick='remove_block(this);' /></li><li>";
+                            <li>
+                                <input class=' go_test_field_input_checkbox' name='unused_go_test_field_input_checkbox_{$ttc}_{$i}' type='{$question_type}' onchange='update_checkbox_value(this);' {$checked} />
+                                <input class=' go_test_field_input_checkbox_hidden ' name='go_test_field_values_{$ttc}[{$i}][1][]' type='hidden' {$value}/>
+                                <input class=' go_test_field_input' name='go_test_field_values_{$ttc}[{$i}][0][]' placeholder='Enter an answer!' type='text' value='" . htmlspecialchars($answer, ENT_QUOTES) . "' oninput='update_checkbox_value(this);' oncut='update_checkbox_value(this);' onpaste='update_checkbox_value(this);' />";
+                            //if ($x > 1) {
+                                echo "<input class='go_button_del_field go_test_field_rm' type='button' value='x' onclick='remove_field(this);'>";
+                            //}
+                            echo "</li>";
+                            if (($x + 1) == $answer_count) {
+                                echo "<input class='go_button_add_field go_test_field_add' type='button' value='+' onclick='add_field(this);'/>";
                             }
-                            echo "<input class=' go_test_field_input_count' name='go_test_field_input_count_{$ttc}[]' type='hidden' value='2' /></li></ul>";
                         }
+                        echo "</ul>";
+                        //remove question button
+                            echo"<ul>";
+                        if ($i > 0) {
+                            echo "<li><input class=' go_test_field_input_rm_row_button' type='button' value='Remove Question' onclick='remove_block(this);' /></li>";
+                        }
+                        echo "<li><input class=' go_test_field_input_count' name='go_test_field_input_count_{$ttc}[]' type='hidden' value='{$answer_count}' /></li></ul>";
+                   // }
+                    /*
+                    else {
                         echo "
-						</td>
-					</tr>";
+                        <ul>
+                            <li>
+                                <input class=' go_test_field_input_checkbox' name='go_test_field_input_checkbox_{$ttc}_{$i}' type='{$test_field_select_array[ $i]}' onchange='update_checkbox_value(this);' />
+                                <input class='go_test_field_input_checkbox_hidden' name='go_test_field_values_{$ttc}[{$i}][1][]' type='hidden' />
+                                <input class=' go_test_field_input quiz_input' name='go_test_field_values_{$ttc}[{$i}][0][]' placeholder='Enter an answer!' type='text' value=\"" . htmlspecialchars($test_field_input_array[$i][0][0], ENT_QUOTES) . "\" oninput='update_checkbox_value(this);' oncut='update_checkbox_value(this);' onpaste='update_checkbox_value(this);' />
+                            </li>
+                            <li>
+                                <input class=' go_test_field_input_checkbox' name='go_test_field_input_checkbox_{$ttc}_{$i}' type='{$test_field_select_array[ $i]}' onchange='update_checkbox_value(this);' />
+                                <input class='go_test_field_input_checkbox_hidden' name='go_test_field_values_{$ttc}[{$i}][1][]' type='hidden' />
+                                <input class=' go_test_field_input quiz_input' name='go_test_field_values_{$ttc}[{$i}][0][]' placeholder='Enter an answer!' type='text' value=\"" . htmlspecialchars($test_field_input_array[$i][0][1], ENT_QUOTES) . "\" oninput='update_checkbox_value(this);' oncut='update_checkbox_value(this);' onpaste='update_checkbox_value(this);' />
+                            </li>
+                       </ul>";
+
+
+                        //the remove question button
+                        echo"
+                           <ul>
+                                <li>";
+                        if ($i > 0) {
+                            echo "<input class='go_test_field_input_rm_row_button' type='button' value='Remove Question' onclick='remove_block(this);' /></li><li>";
+                        }
+                        echo "<input class=' go_test_field_input_count' name='go_test_field_input_count_{$ttc}[]' type='hidden' value='2' /></li></ul>";
                     }
-                }
+                    */
+                    echo "
+                        </td>
+                    </tr>";
+            }
+               // }
+    /*
+
             } else { //else this is a new quiz and print the template
                 echo "
 				<tr class='go_test_field_input_row' data-block_num='0'>
@@ -242,12 +277,12 @@ class go_acf_field_quiz extends acf_field {
 							<li>
 								<input class=' go_test_field_input_checkbox ' name='unused_go_test_field_input_checkbox_{$ttc}_0' type='radio' onchange='update_checkbox_value(this);' />
 								<input class=' go_test_field_input_checkbox_hidden' name='go_test_field_values_{$ttc}[0][1][]' type='hidden' />
-								<input class=' go_test_field_input quiz_input' name='go_test_field_values_{$ttc}[0][0][]' placeholder='Yes' type='text' oninput='update_checkbox_value(this);' oncut='update_checkbox_value(this);' onpaste='update_checkbox_value(this);' />
+								<input class=' go_test_field_input quiz_input' name='go_test_field_values_{$ttc}[0][0][]' placeholder='Enter an answer!' type='text' oninput='update_checkbox_value(this);' oncut='update_checkbox_value(this);' onpaste='update_checkbox_value(this);' />
 							</li>
 							<li>
 								<input class='go_test_field_input_checkbox' name='unused_go_test_field_input_checkbox_{$ttc}_0' type='radio' onchange='update_checkbox_value(this);' />
 								<input class='go_test_field_input_checkbox_hidden' name='go_test_field_values_{$ttc}[0][1][]' type='hidden' />
-								<input class='go_test_field_input quiz_input' name='go_test_field_values_{$ttc}[0][0][]' placeholder='No' type='text' oninput='update_checkbox_value(this);' oncut='update_checkbox_value(this);' onpaste='update_checkbox_value(this);' />
+								<input class='go_test_field_input quiz_input' name='go_test_field_values_{$ttc}[0][0][]' placeholder='Enter an answer!' type='text' oninput='update_checkbox_value(this);' oncut='update_checkbox_value(this);' onpaste='update_checkbox_value(this);' />
 							</li>
 							<input class='go_test_field_add go_button_add_field' type='button' value='+' onclick='add_field(this);'/>
 						</ul>
@@ -260,6 +295,8 @@ class go_acf_field_quiz extends acf_field {
 				</tr>
 			";
             }
+    */
+            //buttons to add questions below
             ?>
             <tr>
                 <td>
@@ -496,13 +533,12 @@ class go_acf_field_quiz extends acf_field {
             $ttc =$ttc + 1;
         }
 
-
-
-
         $question_temp 		= ( ! empty( $_POST["go_test_field_input_question_{$ttc}"] )	? $_POST["go_test_field_input_question_{$ttc}"] : null );
 
         if (!empty($question_temp) ){
             $block_count = count($question_temp);
+        }else{
+            $block_count = 1;
         }
 
         $test_temp 			= ( ! empty( $_POST["go_test_field_values_{$ttc}"] ) 			? $_POST["go_test_field_values_{$ttc}"] : null );
@@ -560,12 +596,13 @@ class go_acf_field_quiz extends acf_field {
             }
         }
 
-        $validated_data = array();
-        if ( ! empty( $question ) && ! empty( $test ) && ! empty( $select ) &&
-            ! empty( $block_count ) && ! empty( $input_count ) ) {
 
-            $validated_data = array( $question, $test, $select, $block_count, $input_count );
-        }
+        $validated_data = array( $question, $test, $select, $block_count, $input_count );
+        //$question = an array of the questions
+        //$test = an array of the answers[0] and the correct answer[1]
+        //$select = an array of the type of questions (radio or checkbox)
+        //$block_count = an integer of the number of questions
+        //$input_count = an array of integers of the number of answers
 
         return $validated_data;
 

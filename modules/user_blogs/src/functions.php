@@ -97,7 +97,12 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id = null, $i = null
     if( !empty($go_blog_task_id) && $is_private) {
         echo "<div ><h3>This post is private. Only you and the site administrators/instructors will be able to see it.</h3></div>";
     }
-    echo "<div><h3 style='width: 100%;' data-blog_post_id ='{$blog_post_id}' id='go_blog_title{$suffix}'>".$title."</h3> </div>";
+    if($go_blog_task_id) {
+        echo "<div><h3 style='width: 100%;' data-blog_post_title='fixed' data-blog_post_id ='{$blog_post_id}' id='go_blog_title{$suffix}'>" . $title . "</h3> </div>";
+    }else{
+        echo "<div>Title:<div><input style='width: 100%;' data-blog_post_title='custom' id='go_blog_title".$suffix."' type='text' placeholder='' value ='{$title}' data-blog_post_id ='{$blog_post_id}' ></div> </div>";
+
+    }
 
     if ($url_toggle) {
         echo "<div>URL:";
@@ -173,14 +178,14 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id = null, $i = null
         wp_editor($content, 'go_blog_post'.$suffix, $settings);
 
     }
-    echo "</div>";
+
     if($text_toggle) { //add stuff below the mce window if it is shown
 
         //Private Post Toggle
-        if(empty($go_blog_task_id)){//only if not attached to quest
-            if ($is_private){
+        if (empty($go_blog_task_id)) {//only if not attached to quest
+            if ($is_private) {
                 $checked = 'checked';
-            }else{
+            } else {
                 $checked = '';
             }
             echo "<div style='width: 100%;text-align: right;'><input type='checkbox' id='go_private_post{$suffix}' value='go_private_post{$suffix}' {$checked}> Private Post</div>";
@@ -190,31 +195,54 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id = null, $i = null
             echo "<div id='go_blog_min' style='text-align:right'><span class='char_count'>" . $min_words . "</span> Words Required</div>";
         }
 
-        echo "<p id='go_blog_stage_error_msg' style='display: none; color: red;'></p>";
 
+    }
+    echo "<p id='go_blog_stage_error_msg' class='go_error_msg' style='display: none; color: red;'></p>";
+
+
+    $current_user = get_current_user_id();
+    $is_admin = go_user_is_admin();
+    if($suffix !='_lightbox') {
+        go_blog_status($blog_post_id, $check_for_understanding, $current_user, $current_user, $is_admin);
+        $button_class = "right";
+    }else {
+        $button_class = "left";
+    }
+
+    if($text_toggle) {
         //show save button if this is a draft, reset, trashed or new post
         $allow_drafts = array("draft", "reset", "trash", null);
         if (in_array($post_status, $allow_drafts)) {
-            echo "<button id='go_save_button{$suffix}' class='go_buttons go_save_button progress left'  status='{$i}' data-bonus_status='{$bonus}' check_type='skip' button_type='save{$suffix}'  admin_lock='true' blog_post_id='{$blog_post_id}' blog_suffix='{$suffix}' task_id='{$go_blog_task_id}' data-check_for_understanding ='{$check_for_understanding}'>Save Draft</button>";
+            echo "<button id='go_save_button{$suffix}' class='go_buttons go_save_button progress {$button_class}'  status='{$i}' data-bonus_status='{$bonus}' check_type='skip' button_type='save{$suffix}'  admin_lock='true' blog_post_id='{$blog_post_id}' blog_suffix='{$suffix}' task_id='{$go_blog_task_id}' data-check_for_understanding ='{$check_for_understanding}'>Save Draft</button>";
 
-        }
-
-
-
-        //Save Draft Button
-        if($suffix =='_lightbox') {
-            ?>
-            <script>
-                jQuery(document).ready(function () {
-                    jQuery('#go_save_button_lightbox').one("click", function (e) {
-                        go_blog_submit( this, true );
-                    });
-                });
-
-            </script>
-            <?php
         }
     }
+    if($suffix !='_lightbox') {
+        if ($blog_post_id) {
+            do_action('go_blog_template_after_post', $blog_post_id, false);
+        }
+    }
+
+    echo "</div>";
+
+
+
+
+
+    //Save Draft Button
+    if($suffix =='_lightbox') {
+        ?>
+        <script>
+            jQuery(document).ready(function () {
+                jQuery('#go_save_button_lightbox').one("click", function (e) {
+                    go_blog_submit( this, true );
+                });
+            });
+
+        </script>
+        <?php
+    }
+
 }
 
 //add_filter( 'option_page_capability_' . ot_options_id(), create_function( '$caps', "return '$caps';" ), 999 );
@@ -222,9 +250,9 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id = null, $i = null
 //add_filter( 'option_page_capability_' . ot_options_id(), function($caps) {return $caps;},999);
 
 
-function go_blog_post($blog_post_id, $check_for_understanding = false, $with_feedback = false){
+function go_blog_post($blog_post_id, $check_for_understanding = false, $with_feedback = false, $is_reader = false, $show_edit = false){
     //$blog_post_id = 10704;
-    $current_user = get_current_user_id();
+        $current_user = get_current_user_id();
     $is_admin = go_user_is_admin();
 
     $file_toggle = false;
@@ -242,6 +270,8 @@ function go_blog_post($blog_post_id, $check_for_understanding = false, $with_fee
     $post = get_post($blog_post_id, OBJECT, 'edit');
     $author_id = $post->post_author;
     $content = $post->post_content;
+    $post_date = $post->post_date;
+    $post_modified = $post->post_modified;
     $content = apply_filters( 'go_awesome_text', $content );
     $title = get_the_title($blog_post_id);
     $blog_meta = get_post_custom($blog_post_id);
@@ -279,12 +309,6 @@ function go_blog_post($blog_post_id, $check_for_understanding = false, $with_fee
 
     }
 
-    ?><script>
-
-        jQuery( document ).ready(function() {
-            go_lightbox_blog_img();
-        });
-    </script><?php
 
 
     echo "<div class=\"go_blog_post_wrapper go_blog_post_wrapper_$blog_post_id\" style=\"padding: 10px;margin: 10px; background-color: white;\">";
@@ -293,11 +317,29 @@ function go_blog_post($blog_post_id, $check_for_understanding = false, $with_fee
         echo "<div style='font-size: .8em;'>Submitted on <a href='{$task_url}'>{$task_title} stage {$stage}</a>.</div>";
     }
     */
+    $status = get_post_status($blog_post_id);
+    if($status == 'draft'){
+        echo "<span style='color: red;'>DRAFT</span>";
+    }
+    if ($is_reader){
+        $user_data = get_userdata($author_id);
+        $display_name = $user_data->display_name;
+        $blogURL = get_site_url() . "/user/" . $user_data->user_login;
+        echo "<span id='go-name'>Author: {$user_data->first_name} {$user_data->last_name}: <a href='{$blogURL}'>{$user_data->display_name}</a></span>";
+    }
+
+
     if (!empty($task_url)) {
         echo "<h2><a href='{$task_url}'>" . $title . "</a></h2>";
     }else{
         echo "<h2>" . $title . "</a></h2>";
     }
+
+    echo "post date: " . $post_date . "<br> modified date: " . $post_modified;
+
+
+
+
 
     if($url_toggle){
         $url_content = (isset($blog_meta['go_blog_url'][0]) ?  $blog_meta['go_blog_url'][0] : null);
@@ -324,23 +366,61 @@ function go_blog_post($blog_post_id, $check_for_understanding = false, $with_fee
 
 
     if($text_toggle) {
-        echo $content;
-    }
-    if ($current_user == $author_id) {//if current user then show edit and maybe trash
-        echo "<button class='go_blog_opener' blog_post_id ='{$blog_post_id}' data-check_for_understanding ='{$check_for_understanding}'>edit post</button>";
-        if (($current_user == $author_id && $check_for_understanding == false  && empty($go_blog_task_id))) {
-            echo '<span class="go_blog_trash" blog_post_id ="' . $blog_post_id . '"><i class="fa fa-trash fa-2x"></i></span>';
-        }
 
-    }else if ($is_admin) {
-        echo '<span class="go_blog_trash" blog_post_id ="' . $blog_post_id . '"><i class="fa fa-times-circle fa-2x"></i></span>';
+        echo "<div class='go_blog_content'>". $content . "</div>";
     }
+
+
+    go_blog_status($blog_post_id, $check_for_understanding, $current_user, $author_id, $is_admin);
+
+    echo "<div class='go_blog_actions'>";
+
+
+    if ($current_user == $author_id && $show_edit) {//if current user then show edit and maybe trash
+        echo "<button class='go_blog_opener' blog_post_id ='{$blog_post_id}' data-check_for_understanding ='{$check_for_understanding}'>edit post</button>";
+    }
+    if ((($current_user == $author_id || $is_admin) && $check_for_understanding == false && empty($go_blog_task_id))) {
+        echo '<span class="go_blog_trash" blog_post_id ="' . $blog_post_id . '"><i class="fa fa-trash fa-2x"></i></span>';
+    }else if ($is_admin ) {
+        echo '<div><span class="go_blog_reset" ><i data-uid="" data-task="' .$blog_post_id. '" class="go_reset_task_clipboard fa fa-times-circle fa-2x"></i></span></div>';
+        //echo '<span class="go_blog_trash" blog_post_id ="' . $blog_post_id . '"><i class="fa fa-times-circle fa-2x"></i></span>';
+    }
+
+
+    echo "</div>";
+
+
     if ($with_feedback){
         do_action('go_blog_template_after_post', $blog_post_id);
     }
 
     echo "</div>";
 }
+
+function go_blog_status($blog_post_id, $check_for_understanding, $current_user, $author_id, $is_admin){
+
+    echo "<div class='go_blog_status_container'>
+            <div class='go_blog_status' style='display: inline-flex;
+    flex-direction: column;
+    background-color: white;
+    width: auto;
+    padding: 10px;
+    border: 1px solid;
+    border-radius: 20px;
+        margin: 10px;
+        float: left;'>
+            <div class='go_blog_status_icons' style='display: flex; float: left;' >";
+
+    go_task_status_icon($blog_post_id);
+    go_blog_is_private($blog_post_id);
+    if ($is_admin) {
+        go_blog_favorite($blog_post_id);
+    }
+    echo "</div><div class='go_blog_status_caption' style='font-size: '>Status</div></div></div>";
+
+}
+
+
 
 // Register Custom Taxonomy
 function go_blog_tags() {

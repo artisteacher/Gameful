@@ -174,8 +174,21 @@ function go_admin_bar() {
                     '</div>';
             } else {
                 $progress_bar = '';
+                $go_current_xp = '';
             }
 
+            if ($gold_toggle) {
+                // the user's current amount of currency
+                //$go_current_gold = go_get_user_loot($user_id, 'gold');
+                $go_current_gold = $user_loot['gold'];
+                $gold_total = '<div id="go_admin_bar_gold_2" class="admin_bar_loot">' . go_display_shorthand_currency('gold', $go_current_gold) . '</div>';
+            } else {
+                $gold_total = '';
+                $go_current_gold ='';
+                $current_rank ='';
+                $rank_num ='';
+                $go_option_ranks ='';
+            }
 
             if ($health_toggle) {
                 // the user's current amount of bonus currency,
@@ -192,16 +205,10 @@ function go_admin_bar() {
 
             } else {
                 $health_bar = '';
+                $go_current_health = '';
             }
 
-            if ($gold_toggle) {
-                // the user's current amount of currency
-                //$go_current_gold = go_get_user_loot($user_id, 'gold');
-                $go_current_gold = $user_loot['gold'];
-                $gold_total = '<div id="go_admin_bar_gold_2" class="admin_bar_loot">' . go_display_shorthand_currency('gold', $go_current_gold) . '</div>';
-            } else {
-                $gold_total = '';
-            }
+
 
 
             $wp_admin_bar->add_node(
@@ -210,8 +217,8 @@ function go_admin_bar() {
                     'title' =>
                         '<div style="padding-top:5px;">' .
                         $progress_bar .
-                        $health_bar .
                         $gold_total .
+                        $health_bar .
                         '</div>',
                     'href' => '#',
                 )
