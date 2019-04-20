@@ -18,7 +18,6 @@ function go_task_locks ( $id, $user_id, $task_name, $custom_fields, $is_logged_i
 
     if($user_id === null){
         $user_id = get_current_user_id();
-
     }
 
 
@@ -41,10 +40,7 @@ function go_task_locks ( $id, $user_id, $task_name, $custom_fields, $is_logged_i
     }
 
     $task_is_locked = false;
-    //$task_is_locked_l = false;
-    if (!$task_name){
-        $check_only = true;
-    }
+
 
     /**
      * This section is for the chain locks

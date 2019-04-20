@@ -106,8 +106,8 @@ function go_scripts () {
                     'go_update_admin_view'         => wp_create_nonce( 'go_update_admin_view' ),
                     'go_the_lb_ajax'                => wp_create_nonce( 'go_the_lb_ajax' ),
                     'go_update_bonus_loot'          => wp_create_nonce('go_update_bonus_loot'),
-                    'go_create_admin_message' => wp_create_nonce('go_create_admin_message'),
-                    'go_send_message' => wp_create_nonce('go_send_message'),
+                    'go_create_admin_message'       => wp_create_nonce('go_create_admin_message'),
+                    'go_send_message'               => wp_create_nonce('go_send_message'),
                     'go_blog_opener'                => wp_create_nonce('go_blog_opener'),
                     'go_blog_trash'                => wp_create_nonce('go_blog_trash'),
                     'go_blog_submit'                => wp_create_nonce('go_blog_submit'),
@@ -118,7 +118,8 @@ function go_scripts () {
                     'go_update_last_map'            => wp_create_nonce('go_update_last_map'),
                     'go_blog_favorite_toggle'            => wp_create_nonce('go_blog_favorite_toggle'),
                     'go_filter_reader'            => wp_create_nonce('go_filter_reader'),
-                    'go_reader_bulk_read'            => wp_create_nonce('go_reader_bulk_read')
+                    'go_reader_bulk_read'            => wp_create_nonce('go_reader_bulk_read'),
+                    'go_show_private'            => wp_create_nonce('go_show_private')
 
                 ),
                 'go_is_admin'                   => $is_admin,

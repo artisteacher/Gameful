@@ -1115,6 +1115,10 @@ jQuery( document ).ready( function() {
         go_blog_trash(this);
     });
 
+    jQuery("#go_show_private").one("click", function (e) {
+        go_show_private(this);
+    });
+
     jQuery('#go_hidden_mce').remove();
     jQuery('#go_hidden_mce_edit').remove();
 
@@ -1266,22 +1270,103 @@ function task_stage_check_input( target, on_task) {
     //jQuery('#go_blog_error_msg').text("");
     var error_message = '<ul style=" text-align: left;"> ';
 
-    var url_toggle = jQuery(target).attr('url_toggle');
-    var video_toggle = jQuery(target).attr('video_toggle');
-    var file_toggle = jQuery(target).attr('file_toggle');
-    var text_toggle = jQuery(target).attr('text_toggle');
+    //var url_toggle = jQuery(target).attr('url_toggle');
+    //var video_toggle = jQuery(target).attr('video_toggle');
+    //var file_toggle = jQuery(target).attr('file_toggle');
+   // var text_toggle = jQuery(target).attr('text_toggle');
     var suffix = jQuery( target ).attr( 'blog_suffix' );
 
-    var go_result_video = '#go_result_video' + suffix;
-    var go_result_url = '#go_result_url' + suffix;
-    var go_result_media = '#go_result_media' + suffix;
+    //var go_result_video = '#go_result_video' + suffix;
+    //var go_result_url = '#go_result_url' + suffix;
+    //var go_result_media = '#go_result_media' + suffix;
     console.log ("suffix: " + suffix);
 
     ///v4 START VALIDATE FIELD ENTRIES BEFORE SUBMIT
     //if (button_type == 'continue' || button_type == 'complete' || button_type =='continue_bonus' || button_type =='complete_bonus') {
 
     if ( check_type == 'blog' || check_type == 'blog_lightbox') { //min words and Video field on blog form validation
+        //jquery to get all the elements
+        //for each element
+            //get the type
+            //get the content
 
+        jQuery('.go_blog_element_error').remove();
+
+        jQuery(target).closest('.go_blog_div').find('.go_blog_element_input').each(
+            function(  ) {
+                const type = jQuery(this).attr('data-type');
+
+                if (type ==='URL'){
+                    const required_string = jQuery(this).attr('data-required');
+                    const URL_error = "<span class='go_blog_element_error' style='color: red;'><br>Enter a valid URL.</span>";
+                    ///
+                    //const the_url =jQuery(this).val().replace(/\s+/, '');
+                    const the_url =jQuery(this).val();
+                    console.log("URL" + the_url);
+                    if (the_url.length > 0) {
+                        if (the_url.match(/^(http:\/\/|https:\/\/).*\..*$/) && !(the_url.lastIndexOf('http://') > 0) && !(the_url.lastIndexOf('https://') > 0)) {
+                            if ( check_type == 'blog' || check_type == 'blog_lightbox') {
+                                if ((the_url.indexOf(required_string) == -1) ){
+                                    error_message += "<li>Enter a valid URL. The URL must contain \"" + required_string + "\".</li>";
+                                    fail = true;
+                                    jQuery(this).after(URL_error);
+                                }
+                            }
+                        } else {
+
+                            error_message += "<li>Enter a valid URL.</li>";
+                            fail = true;
+                            jQuery(this).after(URL_error);
+
+                        }
+                    } else {
+                        error_message += "<li>Enter a valid URL.</li>";
+                        go_disable_loading();
+                        fail = true;
+                        jQuery(this).after(URL_error);
+                    }
+                }
+                if (type ==='video'){
+                    const the_url =jQuery(this).val().replace(/\s+/, '');
+                    const video_error = "<span class='go_blog_element_error' style='color: red;'><br>Enter a valid video URL. YouTube and Vimeo are supported.</span>";
+                    console.log("videoURL" + the_url);
+                    if (the_url.length > 0) {
+                        if (the_url.match(/^(http:\/\/|https:\/\/).*\..*$/) && !(the_url.lastIndexOf('http://') > 0) && !(the_url.lastIndexOf('https://') > 0)) {
+                            if ((the_url.search("youtube") == -1) && (the_url.search("vimeo") == -1)) {
+                                error_message += "<li>Enter a valid video URL. YouTube and Vimeo are supported.</li>";
+                                fail = true;
+                                jQuery(this).after(video_error);
+
+                            }
+                        } else {
+                            error_message += "<li>Enter a valid video URL. YouTube and Vimeo are supported.</li>";
+                            fail = true;
+                            jQuery(this).after(video_error);
+                        }
+                    } else {
+                        error_message += "<li>Enter a valid video URL. YouTube and Vimeo are supported.</li>";
+                        fail = true;
+                        jQuery(this).after(video_error);
+                    }
+                }
+
+                if (type ==='file'){
+                    const result = jQuery(this).val();
+                    const file_error = "<br><span class='go_blog_element_error' style='color: red;'><br>Please attach a file.</span>";
+
+                    //var result = jQuery("#go_result").attr('value');
+                    if (result == undefined) {
+                        error_message += "<li>Please attach a file.</li>";
+                        fail = true;
+                        jQuery(this).after(file_error);
+                    }
+
+                }
+
+            }
+        );
+
+        /*
         if(video_toggle == '1') {
             var the_url = jQuery(go_result_video).attr('value').replace(/\s+/, '');
             console.log(the_url);
@@ -1316,6 +1401,7 @@ function task_stage_check_input( target, on_task) {
             }
 
         }
+        */
 
     }
     if (check_type === 'password' || check_type == 'unlock') {
@@ -1324,47 +1410,6 @@ function task_stage_check_input( target, on_task) {
             error_message += "Retrieve the password from " + go_task_data.admin_name + ".";
             fail = true;
         }
-    }
-    if (check_type == 'URL' || ((check_type == 'blog' || check_type == 'blog_lightbox') && url_toggle == true)) {
-
-        if (check_type == 'URL') {
-            var the_url = jQuery('#go_result').attr('value').replace(/\s+/, '');
-        }else{
-            var the_url = jQuery(go_result_url).attr('value').replace(/\s+/, '');
-            var required_string = jQuery( target ).attr('required_string');
-        }
-        console.log("URL" + the_url);
-
-        if (the_url.length > 0) {
-            if (the_url.match(/^(http:\/\/|https:\/\/).*\..*$/) && !(the_url.lastIndexOf('http://') > 0) && !(the_url.lastIndexOf('https://') > 0)) {
-                if ( check_type == 'blog' || check_type == 'blog_lightbox') {
-                    if ((the_url.indexOf(required_string) == -1) ){
-                        error_message += "<li>Enter a valid URL. The URL must contain \"" + required_string + "\".</li>";
-                        fail = true;
-                    }
-                }
-            } else {
-                error_message += "<li>Enter a valid URL.</li>";
-                fail = true;
-            }
-        } else {
-            error_message += "<li>Enter a valid URL.</li>";
-            go_disable_loading();
-            fail = true;
-        }
-
-    }
-    if (check_type == 'upload' || ((check_type == 'blog' || check_type == 'blog_lightbox') && file_toggle == true)) {
-        if (check_type == 'upload') {
-            var result = jQuery("#go_result").attr('value');
-        }else{
-            var result = jQuery(go_result_media).attr('value');
-        }
-        if (result == undefined) {
-            error_message += "<li>Please attach a file.</li>";
-            fail = true;
-        }
-
     }
 
     if (check_type == 'quiz') {
@@ -1380,13 +1425,13 @@ function task_stage_check_input( target, on_task) {
                     checked_ans++;
                 }
             }
-            console.log("checked_ans:" + checked_ans );
+           // console.log("checked_ans:" + checked_ans );
 
             //if all questions were answered
             if (checked_ans >= test_list.length) {
                 go_quiz_check_answers(task_status, target);
-                fail = true;//always set as failed to end this function. The check answers function handles the rest.
-                //
+                return;
+
 
             }
             //else print error message
@@ -1402,18 +1447,19 @@ function task_stage_check_input( target, on_task) {
     }
     //}
     error_message += "</ul>";
-    if (fail == true){
+    if (fail === true){
 
+        alert (error_message);
         //jQuery('.go_error_msg').append(error_message);
         //jQuery('.go_error_msg').show();
         if (on_task == true) {
-            console.log("error_stage");
-            console.log("message:" + error_message);
+            //console.log("error_stage");
+            //console.log("message:" + error_message);
             //flash_error_msg('#go_stage_error_msg');
             jQuery('#go_blog_stage_error_msg').append(error_message);
             jQuery('#go_blog_stage_error_msg').show();
         }else {
-            console.log("error_blog");
+            //console.log("error_blog");
             jQuery('#go_blog_error_msg').append(error_message);
             jQuery('#go_blog_error_msg').show();
         }
@@ -1440,11 +1486,13 @@ function task_stage_check_input( target, on_task) {
         );
 
         go_disable_loading();
+        //console.log('disable loading');
         return;
     }else{
         jQuery('#go_blog_stage_error_msg').hide();
         jQuery('#go_blog_error_msg').hide();
     }
+    console.log("end");
 
 
     if (on_task == true) {
@@ -1452,6 +1500,7 @@ function task_stage_check_input( target, on_task) {
     }else{ //this was a blog submit button in a lightbox, so just save without changing stage.
         go_blog_submit( target, true );
     }
+
 }
 
 // disables the target stage button, and adds a loading gif to it
@@ -1761,9 +1810,36 @@ function go_blog_opener( el ) {
     });
 }
 
+function go_get_blog_required_elements(){
+    const required_elements = {};
+    jQuery('.go_blog_element_input').each(
+        function(  ) {
+            const type = jQuery(this).attr('data-type');
+            //console.log('element: '+type);
+            const uniqueID = jQuery(this).attr('data-uniqueID');
+            if (type ==='URL'){
+
+                const the_url = jQuery(this).val();
+                required_elements[uniqueID] = the_url;
+            }
+            if (type ==='video'){
+                const the_video =jQuery(this).val();
+                required_elements[uniqueID] = the_video;
+            }
+
+            if (type ==='file'){
+                const result = jQuery(this).attr( 'value' );
+                required_elements[uniqueID] = result;
+            }
+
+        }
+    );
+    return required_elements;
+}
+
 function go_blog_submit( el, reload ) {
 
-    go_enable_loading( el );
+    //go_enable_loading( el );
 
     var nonce = GO_EVERY_PAGE_DATA.nonces.go_blog_submit;
     var suffix = jQuery( el ).attr( 'blog_suffix' );
@@ -1795,12 +1871,15 @@ function go_blog_submit( el, reload ) {
     //var blog_private= jQuery( '#go_private_post' + suffix ).val();
     if (jQuery('#go_private_post' + suffix).is(":checked"))
     {
-        var blog_private = true;
+        var blog_private = 1;
     }
-    var blog_media= jQuery( '#go_result_media' + suffix ).attr( 'value' );
-    var blog_video= jQuery( '#go_result_video' + suffix).val();
+    //var blog_media= jQuery( '#go_result_media' + suffix ).attr( 'value' );
+    //var blog_video= jQuery( '#go_result_video' + suffix).val();
     //console.log("go_blog_bonus_stage: " + go_blog_bonus_stage);
     console.log("blog_private: " + blog_private);
+
+    //make an array of the required elements type and values
+    const required_elements = go_get_blog_required_elements();
 
     var gotoSend = {
         action:"go_blog_submit",
@@ -1808,9 +1887,10 @@ function go_blog_submit( el, reload ) {
         result: result,
         result_title: result_title,
         blog_post_id: blog_post_id,
-        blog_url: blog_url,
-        blog_media: blog_media,
-        blog_video: blog_video,
+        required_elements: required_elements,
+        //blog_url: blog_url,
+        //blog_media: blog_media,
+        //blog_video: blog_video,
         blog_private: blog_private,
         go_blog_task_stage: go_blog_task_stage,
         go_blog_bonus_stage: go_blog_bonus_stage,
@@ -1979,7 +2059,7 @@ function go_get_tinymce_content_blog( source ){
 
     }else{
         //console.log("visual");
-        //alert("content2");
+        //alert(go_tmce_getContent('go_blog_post'));
 
         if (source == '_lightbox'){//this was a save in a lightbox
             //return tinymce.get('go_blog_post_lightbox').getContent();
@@ -2094,6 +2174,47 @@ function go_tmce_focus(editor_id, textarea_id) {
     }else{
         return jQuery('#'+textarea_id).focus();
     }
+}
+
+function go_show_private(target){
+    //show loader
+    const checked = jQuery(target).attr('checked');
+    //send ajax to set variable
+    const nonce = GO_EVERY_PAGE_DATA.nonces.go_show_private;
+    const userid = jQuery(target).data('userid');
+    const gotoSend = {
+        action:"go_show_private",
+        _ajax_nonce: nonce,
+        checked: checked,
+        userid: userid
+    };
+    //jQuery.ajaxSetup({ cache: true });
+    jQuery.ajax({
+        url: MyAjax.ajaxurl,
+        type: 'POST',
+        data: gotoSend,
+        cache: false,
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
+        success: function (raw) {
+            console.log(raw);
+            //refresh page
+            jQuery("#go_wrapper").html(raw);
+            //enable checkbox
+            jQuery("#go_show_private").one("click", function (e) {
+                go_show_private(this);
+            });
+        }
+    });
+
+    //refresh page (or posts)
 }
 
 

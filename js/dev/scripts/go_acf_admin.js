@@ -14,5 +14,8 @@ jQuery(document).ready(function(){
         go_hide_child_tax_acfs();
     });
 
+    jQuery('.acf-th[data-name="uniqueid"]').hide();
+    jQuery('.acf-field[data-name="uniqueid"]').hide();
+
 
 });

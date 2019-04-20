@@ -45,6 +45,7 @@ add_action( 'admin_enqueue_scripts', 'go_admin_includes' );
 if ( is_admin() ) {
 
     include_once('includes/acf/acf.php');
+    include_once('includes/wp-acf-unique_id-master/acf-unique_id.php');
 
     include_once('custom-acf-fields/acf-order-posts/acf-order-posts.php');
 
@@ -239,6 +240,7 @@ function go_total_query_time(){
     $total_time = $total_time;
 }
 
+//This is the code that puts the login modal on the frontend
 //code used
 //check if logged in: https://wordpress.stackexchange.com/questions/69814/check-if-user-is-logged-in-using-jquery
 //and the JS https://wordpress.stackexchange.com/questions/163292/how-can-i-test-the-login-for-an-expired-session

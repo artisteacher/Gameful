@@ -3,7 +3,7 @@
 global $wpdb;
 
 function go_update_db_check() {
-    $go_db_version = 4.6;
+    $go_db_version = 5;
     if ( get_site_option( 'go_db_version' ) != $go_db_version ) {
         update_option('go_db_version', $go_db_version);
         go_update_db();
@@ -344,78 +344,150 @@ function go_open_comments() {
 
 function go_v5_update_db()
 {
+    if ( get_site_option( 'go_update_version' ) < 5 ) {
+        update_option('go_update_version', 4);
+
+        $query = new WP_Query(array(
+            'post_type' => 'tasks',
+            'posts_per_page' => 10000
+        ));
 
 
-    $query = new WP_Query(array(
-        'post_type' => 'tasks',
-        'posts_per_page' => 10000
-    ));
+        while ($query->have_posts()) {
+            $query->the_post();
+            $post_id = get_the_ID();
 
 
-    while ($query->have_posts()) {
-        $query->the_post();
-        $post_id = get_the_ID();
+            //get number of stages
+            $stage_count = get_post_meta($post_id, 'go_stages', true);
+            for ($i = 0; $i <= $stage_count; $i++) {
 
-        $element_count = 0;
-        //get number of stages
-        $stage_count = get_post_meta($post_id, 'go_stages', true);
-        for ($i = 0; $i <= $stage_count; $i++) {
-            $title = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_title', true);
-            update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_title',  $title);
+                $element_count = 0;
+                $title = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_title', true);
+                update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_title', $title);
 
-            $private = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_title', true);
-            update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_title',  $private);
+                $private = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_private', true);
+                update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_private', $private);
 
-            $text = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_blog_text_toggle', true);
-            update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_text_toggle',  $text);
+                $text = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_blog_text_toggle', true);
+                update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_text_toggle', $text);
 
-            $min = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_blog_text_minimum_length', true);
-            update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_text_minimum_length',  $min);
-            
-            $url = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_url_toggle', true);
-            if ($url) {
-                update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $element_count . '_element', 'URL');
-                $validate = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_url_url_validation', true);
-                update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $element_count . '_requirements_url_validation', $validate);
-                update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $element_count . '_requirements_url_validation', $validate);
-                //maybe add a uniqueID
-                // go_stages_0_blog_options_blog_elements_{$element_count}_uniqueid = taskID_StageID_ROW#
+                $min = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_blog_text_minimum_length', true);
+                update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_text_minimum_length', $min);
 
-                $element_count++;
-            }
+                $check_type = get_post_meta($post_id, 'go_stages_' . $i . '_check', true);
 
-            $file = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_attach_file_toggle', true);
-            if ($file) {
-                update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $element_count . '_element', 'File');
-                $restrict = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_attach_file_restrict_file_types', true);
-                if($restrict) {
-                    $types = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_attach_file_allowed_types', true);
-                    update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $element_count . '_requirements_allowed_types', $types);
+                if ($check_type == 'blog') {
+                    $url = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_url_toggle', true);
+                    if ($url) {
+                        update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $element_count . '_element', 'URL');
+                        $validate = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_url_url_validation', true);
+                        update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $element_count . '_requirements_url_validation', $validate);
+                        //maybe add a uniqueID
+                        // go_stages_0_blog_options_blog_elements_{$element_count}_uniqueid = taskID_StageID_ROW#
+
+                        $element_count++;
+                    }
+
+                    $file = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_attach_file_toggle', true);
+                    if ($file) {
+                        update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $element_count . '_element', 'File');
+                        $restrict = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_attach_file_restrict_file_types', true);
+                        if ($restrict) {
+                            $types = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_attach_file_allowed_types', true);
+                            update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $element_count . '_requirements_allowed_types', $types);
+                        }
+                        //maybe add a uniqueID
+                        // go_stages_0_blog_options_blog_elements_{$element_count}_uniqueid = taskID_StageID_ROW#
+
+                        $element_count++;
+                    }
+
+
+                    $video = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_video', true);
+                    if ($video) {
+                        update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $element_count . '_element', 'Video');
+                        //maybe add a uniqueID
+                        // go_stages_0_blog_options_blog_elements_{$element_count}_uniqueid = taskID_StageID_ROW#
+                        $element_count++;
+                    }
+
+                    update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements', $element_count);
                 }
-                //maybe add a uniqueID
-                // go_stages_0_blog_options_blog_elements_{$element_count}_uniqueid = taskID_StageID_ROW#
+                else if($check_type=='upload'){
+                    update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_0_element', 'File');
+                    update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements', 1);
+                    update_post_meta($post_id, 'go_stages_' . $i . '_check', 'blog');
+                }
+                else if($check_type=='URL'){
+                    update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_0_element', 'URL');
+                    update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements', 1);
+                    update_post_meta($post_id, 'go_stages_' . $i . '_check', 'blog');
+                }
+            }
 
-                $element_count++;
+            //Bonus Stage
+            $bonus_element_count = 0;
+            $check_type = get_post_meta($post_id, 'go_bonus_stage_check', true);
+
+            if ($check_type == 'blog') {
+                $private = get_post_meta($post_id, 'go_bonus_stage_blog_options_bonus_private', true);
+                update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_private', $private);
+
+                $text = get_post_meta($post_id, 'go_bonus_stage_blog_options_bonus_blog_text_toggle', true);
+                update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_blog_text_toggle', $text);
+
+                $min = get_post_meta($post_id, 'go_bonus_stage_blog_options_bonus_blog_text_minimum_length', true);
+                update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_blog_text_minimum_length', $min);
+
+                $url = get_post_meta($post_id, 'go_bonus_stage_blog_options_bonus_url_toggle', true);
+                if ($url) {
+                    update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_blog_elements_' . $bonus_element_count . '_element', 'URL');
+                    $validate = get_post_meta($post_id, 'go_bonus_stage_blog_options_bonus_url_url_validation', true);
+                    update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_blog_elements_' . $bonus_element_count . '_requirements_url_validation', $validate);
+                    $bonus_element_count++;
+                }
+
+                $file = get_post_meta($post_id, 'go_bonus_stage_blog_options_bonus_attach_file_toggle', true);
+                if ($file) {
+                    update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_blog_elements_' . $bonus_element_count . '_element', 'File');
+                    $restrict = get_post_meta($post_id, 'go_bonus_stage_blog_options_bonus_attach_file_restrict_file_types', true);
+                    if ($restrict) {
+                        $types = get_post_meta($post_id, 'go_bonus_stage_blog_options_bonus_attach_file_allowed_types', true);
+                        update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_blog_elements_' . $bonus_element_count . '_requirements_allowed_types', $types);
+                    }
+                    $bonus_element_count++;
+                }
+
+
+                $video = get_post_meta($post_id, 'go_bonus_stage_blog_options_bonus_video', true);
+                if ($video) {
+                    update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_blog_elements_' . $bonus_element_count . '_element', 'Video');
+                    $bonus_element_count++;
+                }
+
+                update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_blog_elements', $bonus_element_count);
+            }
+            else if($check_type=='upload'){
+                update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_blog_elements_0_element', 'File');
+                update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_blog_elements', 1);
+                update_post_meta($post_id, 'go_bonus_stage_check', 'blog');
+            }
+            else if($check_type=='URL'){
+                update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_blog_elements_0_element', 'URL');
+                update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_blog_elements', 1);
+                update_post_meta($post_id, 'go_bonus_stage_check', 'blog');
             }
 
 
 
-            $video = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_video', true);
-            if ($video) {
-                update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $element_count . '_element', 'Video');
-                //maybe add a uniqueID
-                // go_stages_0_blog_options_blog_elements_{$element_count}_uniqueid = taskID_StageID_ROW#
-                $element_count++;
-            }
-
-            update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements',  $element_count);
         }
+        wp_reset_query();
     }
-    wp_reset_query();
 }
 
 
-add_action('shutdown', 'go_v5_update_db');
+//add_action('shutdown', 'go_v5_update_db');
 
 
 

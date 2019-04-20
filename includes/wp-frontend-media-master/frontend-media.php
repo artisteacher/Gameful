@@ -72,16 +72,19 @@ class Front_End_Media {
 	function frontend_shortcode( $atts ) {
         $atts = shortcode_atts( array(
             'div_id' => '',
+            'uniqueid' => '',
             'mime_types' => ''
+
         ), $atts);
         $div_id = $atts['div_id'];
         $mime_types = $atts['mime_types'];
+        $uniqueid = $atts['uniqueid'];
 		// check if user can upload files
         $role = get_role( 'subscriber' );
         $role->add_cap( 'upload_files' );
 		if ( current_user_can( 'read' ) ) {
 			$str = __( 'Select File', 'frontend-media' );
-			return '<img id="'.$div_id.'" /><div id="go_upload_button"><input class="go_frontend-button" type="button" onclick="go_upload_frontend(\''.$div_id.'\', \''.$mime_types.'\');" value="' . $str . '" class="button" style="position: relative; z-index: 1;"></div>';
+			return '<img id="'.$div_id.'" style="width: 300px;" class="go_blog_element_input" data-type="file" data-uniqueID="'.$uniqueid.'"  /><div id="go_upload_button"><input class="go_frontend-button" type="button" onclick="go_upload_frontend(\''.$div_id.'\', \''.$mime_types.'\');" value="' . $str . '" class="button"  style="position: relative; z-index: 1;"></div>';
 		}
 
 		return __( 'Please Login To Upload', 'frontend-media' );
@@ -91,11 +94,15 @@ class Front_End_Media {
         $atts = shortcode_atts( array(
             'id' => '', // ID defined in Shortcode
             'div_id' => '',
-            'mime_types' => ''
+            'mime_types' => '',
+            'uniqueid' => '',
+            'class' => ''
         ), $atts);
         $div_id = $atts['div_id'];
         $media_id = $atts['id'];
         $mime_types = $atts['mime_types'];
+        $class = $atts['class'];
+        $uniqueid = $atts['uniqueid'];
         // check if user can upload files
         $role = get_role( 'subscriber' );
         $role->add_cap( 'upload_files' );
@@ -120,7 +127,7 @@ class Front_End_Media {
                 $med = wp_get_attachment_image_src( $media_id, 'medium' );
                 $full = wp_get_attachment_image_src( $media_id, 'full' );
                 $str = __( 'Change File', 'frontend-media' );
-                echo '<a href="#" data-featherlight="' . $full[0] . '"><img id="'.$div_id.'" src="' . $med[0] . '" value="'.$media_id.'"></a>';
+                echo '<a href="#" data="1" data-featherlight="' . $full[0] . '"><img id="'.$div_id.'" class="'.$class.'" data-type="file" data-uniqueID="' . $uniqueid . '" src="' . $med[0] . '" value="'.$media_id.'" style="width: 300px;"></a>';
                 //return '<img id="'.$div_id.'" src="'.$attachment_url.'" value="'.$media_id.'" /><div id="go_upload_button"><input id="frontend-button" type="button" onclick="go_upload_frontend(\''.$div_id.'\', \''.$mime_types.'\');" value="' . $str . '" class="button" style="position: relative; z-index: 1;"></div>';
             }
             else{

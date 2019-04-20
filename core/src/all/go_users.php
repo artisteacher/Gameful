@@ -15,9 +15,18 @@ function go_user_redirect( $redirect_to, $request, $user )
         $redirect_url = get_option('options_go_landing_page_on_login', '');
         $default_map = get_option('options_go_locations_map_default', '');
         $user_id = $user->ID;
-        if ($default_map !== '') {
-            update_user_option($user_id, 'go_last_map', $default_map);
+        if ($redirect_url == 'map') {
+            if ($default_map !== '') {
+                update_user_option($user_id, 'go_last_map', $default_map);
+            }
         }
+        if (!empty ($redirect_url)) {
+            return (site_url() . '/' . $redirect_url);
+        } else {
+            return site_url();
+        }
+
+        /*
         if (isset($user->roles) && is_array($user->roles)) {
             $roles = $user->roles;
             if (is_array($roles)) {
@@ -45,7 +54,9 @@ function go_user_redirect( $redirect_to, $request, $user )
     } else {
         return $redirect_to;
     }
-    //}
+        */
+
+    }
 }
 add_action( 'login_redirect', 'go_user_redirect', 10, 3 );
 

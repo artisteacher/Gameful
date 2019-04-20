@@ -120,24 +120,24 @@ function go_buttons($user_id, $custom_fields, $i, $stage_count, $status, $check_
     $continue = 'continue';
     $stage = $i;
 
-    if ($bonus != true) {
-        $url_toggle = (isset($custom_fields['go_stages_' . $i . '_blog_options_url_toggle'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_url_toggle'][0] : null);
-        $file_toggle = (isset($custom_fields['go_stages_' . $i . '_blog_options_attach_file_toggle'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_attach_file_toggle'][0] : null);
-        $video_toggle = (isset($custom_fields['go_stages_' . $i . '_blog_options_video'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_video'][0] : null);
+    if ($bonus != true) {//not a bonus stage
+        //$url_toggle = (isset($custom_fields['go_stages_' . $i . '_blog_options_url_toggle'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_url_toggle'][0] : null);
+        //$file_toggle = (isset($custom_fields['go_stages_' . $i . '_blog_options_attach_file_toggle'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_attach_file_toggle'][0] : null);
+        //$video_toggle = (isset($custom_fields['go_stages_' . $i . '_blog_options_video'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_video'][0] : null);
         $text_toggle = (isset($custom_fields['go_stages_' . $i . '_blog_options_blog_text_toggle'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_blog_text_toggle'][0] : null);
-        $restrict_mime_types = (isset($custom_fields['go_stages_' . $i . '_blog_options_attach_file_restrict_file_types'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_attach_file_restrict_file_types'][0] : null);
+        //$restrict_mime_types = (isset($custom_fields['go_stages_' . $i . '_blog_options_attach_file_restrict_file_types'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_attach_file_restrict_file_types'][0] : null);
         $min_words = (isset($custom_fields['go_stages_' . $i . '_blog_options_blog_text_minimum_length'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_blog_text_minimum_length'][0] : null);
-        $required_string = (isset($custom_fields['go_stages_'.$i.'_blog_options_url_url_validation'][0]) ?  $custom_fields['go_stages_'.$stage.'_blog_options_url_url_validation'][0] : null);
+        //$required_string = (isset($custom_fields['go_stages_'.$i.'_blog_options_url_url_validation'][0]) ?  $custom_fields['go_stages_'.$stage.'_blog_options_url_url_validation'][0] : null);
 
     }
-    else{
-        $url_toggle = (isset($custom_fields['go_bonus_stage_blog_options_bonus_url_toggle'][0]) ? $custom_fields['go_bonus_stage_blog_options_bonus_url_toggle'][0] : null);
-        $file_toggle = (isset($custom_fields['go_bonus_stage_blog_options_bonus_attach_file_toggle'][0]) ? $custom_fields['go_bonus_stage_blog_options_bonus_attach_file_toggle'][0] : null);
-        $video_toggle = (isset($custom_fields['go_bonus_stage_blog_options_bonus_video'][0]) ? $custom_fields['go_bonus_stage_blog_options_bonus_video'][0] : null);
+    else{//this is a bonus stage blog
+        //$url_toggle = (isset($custom_fields['go_bonus_stage_blog_options_bonus_url_toggle'][0]) ? $custom_fields['go_bonus_stage_blog_options_bonus_url_toggle'][0] : null);
+        //$file_toggle = (isset($custom_fields['go_bonus_stage_blog_options_bonus_attach_file_toggle'][0]) ? $custom_fields['go_bonus_stage_blog_options_bonus_attach_file_toggle'][0] : null);
+        //$video_toggle = (isset($custom_fields['go_bonus_stage_blog_options_bonus_video'][0]) ? $custom_fields['go_bonus_stage_blog_options_bonus_video'][0] : null);
         $text_toggle = (isset($custom_fields['go_bonus_stage_blog_options_bonus_blog_text_toggle'][0]) ? $custom_fields['go_bonus_stage_blog_options_bonus_blog_text_toggle'][0] : null);
-        $restrict_mime_types = (isset($custom_fields['go_bonus_stage_blog_options_bonus_attach_file_restrict_file_types'][0]) ? $custom_fields['go_bonus_stage_blog_options_bonus_attach_file_restrict_file_types'][0] : null);
+        //$restrict_mime_types = (isset($custom_fields['go_bonus_stage_blog_options_bonus_attach_file_restrict_file_types'][0]) ? $custom_fields['go_bonus_stage_blog_options_bonus_attach_file_restrict_file_types'][0] : null);
         $min_words = (isset($custom_fields['go_bonus_stage_blog_options_bonus_blog_text_minimum_length'][0]) ? $custom_fields['go_bonus_stage_blog_options_bonus_blog_text_minimum_length'][0] : null);
-        $required_string = (isset($custom_fields['go_bonus_stage_blog_options_url_url_validation'][0]) ?  $custom_fields['go_stages_'.$stage.'_blog_options_url_url_validation'][0] : null);
+        //$required_string = (isset($custom_fields['go_bonus_stage_blog_options_url_url_validation'][0]) ?  $custom_fields['go_stages_'.$stage.'_blog_options_url_url_validation'][0] : null);
 
     }
 
@@ -191,10 +191,10 @@ function go_buttons($user_id, $custom_fields, $i, $stage_count, $status, $check_
             echo "<div id='go_back_button' class='go_buttons' undo='true' button_type='{$undo}' next_bonus='{$go_print_next}' status='{$status}' next_bonus='{$go_print_next}' check_type='{$check_type}' blog_post_id='{$blog_post_id}'>⬆ Undo</div>";
         }
         if (($i + 1) == $stage_count) {
-            echo "<button id='go_button' class='progress go_buttons' status='{$status}' check_type='{$check_type}' button_type='{$complete}' next_bonus='{$go_print_next}' admin_lock='true' required_string='".$required_string."' min_words='{$min_words}' blog_suffix ='' url_toggle='{$url_toggle}' video_toggle='{$video_toggle}' file_toggle='{$file_toggle}' text_toggle='{$text_toggle}' >Complete</button> ";
+            echo "<button id='go_button' class='progress go_buttons' status='{$status}' check_type='{$check_type}' button_type='{$complete}' next_bonus='{$go_print_next}' admin_lock='true' min_words='{$min_words}' blog_suffix ='' text_toggle='{$text_toggle}' blog_post_id='{$blog_post_id}' >Complete</button> ";
         } else {
 
-            echo "<button id='go_button' class='progress go_buttons' status='{$status}' check_type='{$check_type}' button_type='{$continue}' next_bonus='{$go_print_next}' admin_lock='true' required_string='{$required_string}' min_words='{$min_words}' blog_suffix ='' url_toggle='{$url_toggle}' video_toggle='{$video_toggle}' file_toggle='{$file_toggle}' text_toggle='{$text_toggle}'>Continue</button>";
+            echo "<button id='go_button' class='progress go_buttons' status='{$status}' check_type='{$check_type}' button_type='{$continue}' next_bonus='{$go_print_next}' admin_lock='true' min_words='{$min_words}' blog_suffix ='' text_toggle='{$text_toggle}' blog_post_id='{$blog_post_id}'>Continue</button>";
 
         }
         echo "</div>";
@@ -278,11 +278,6 @@ function go_print_password_check_result($password_type){
 function go_blog_check ($custom_fields = null, $i, $status, $go_actions_table_name, $user_id, $post_id, $bonus, $bonus_status, $all_content, $repeat_max, $check_type, $stage_count){
     global $wpdb;
 
-    //$url_toggle = (isset($custom_fields['go_stages_'.$i.'_blog_options_url_toggle'][0]) ?  $custom_fields['go_stages_'.$i.'_blog_options_url_toggle'][0] : null);
-    //$file_toggle = (isset($custom_fields['go_stages_'.$i.'_blog_options_attach_file_toggle'][0]) ?  $custom_fields['go_stages_'.$i.'_blog_options_attach_file_toggle'][0] : null);
-    //$video_toggle = (isset($custom_fields['go_stages_'.$i.'_blog_options_video'][0]) ?  $custom_fields['go_stages_'.$i.'_blog_options_video'][0] : null);
-    //$text_toggle = (isset($custom_fields['go_stages_'.$i.'_blog_options_blog_text_toggle'][0]) ?  $custom_fields['go_stages_'.$i.'_blog_options_blog_text_toggle'][0] : null);
-
     if (!$bonus){//if this is not a bonus
         $stage = 'stage';
         if ($i != $status && !$all_content){//if this is a complete stage
@@ -364,7 +359,8 @@ function go_blog_check ($custom_fields = null, $i, $status, $go_actions_table_na
 
             return $blog_post_id;
         }
-    }else{//this is a bonus
+    }
+    else{//this is a bonus
         global $go_bonus_count;//the number of stages that have been printed
         global $go_print_next;//the bonus stage to be printed, sometimes they print out of order if posts were trashed
         $go_print_next = (isset($go_print_next) ?  $go_print_next : 0);
@@ -413,48 +409,25 @@ function go_blog_check ($custom_fields = null, $i, $status, $go_actions_table_na
             wp_reset_postdata();
             $blog_post_id = (isset($blog_post_id) ?  $blog_post_id : null);
             go_blog_post($blog_post_id, true, true, false, true);
+            if($bonus_status == $go_bonus_count){
+                go_buttons($user_id, $custom_fields, $i, $stage_count, $status, $check_type, $bonus, $bonus_status, $repeat_max, false, $blog_post_id);
+
+            }
             $go_print_next++;
             return $blog_post_id;
         }
         else{//this is the current bonus stage and print the form
             //get the next, trashed or not
-            if (!$all_content) {
-                $args = array(
-                    'post_status' => array('draft', 'unread', 'read', 'publish', 'reset', 'revise'),
-                    'post_type' => 'go_blogs',
-                    'post_parent' => intval($post_id),
-                    'author' => $user_id,
-                    'posts_per_page' => 1,
-                    'offset' => $go_print_next,
-                    'meta_query' => array(
-                        array(
-                            'key' => 'go_blog_bonus_stage',
-                            'value' => 1,
-                            'compare' => '>=',
-                        )
-                    ),
-                    'orderby' => 'modified',
-                    'order' => 'ASC'
-                );
-                $my_query = new WP_Query($args);
-
-
-                if ($my_query->have_posts()) {
-                    while ($my_query->have_posts()) {
-                        $my_query->the_post();
-                        $blog_post_id = get_the_ID();
-                        //$go_print_next = get_post_meta($blog_post_id, 'go_blog_bonus_stage')[0];
-                        // Do your work...
-                    } // end while
-                } else {//if there were no posts found, check for trashed posts
-                    //global $go_print_next_trash;//the bonus stage to be printed, sometimes they print out of order if posts were trashed
-                    //$go_print_next_trash = (isset($go_print_next_trash) ?  $go_print_next_trash : 1);
+            $blog_post_id = (isset($_POST['blog_post)id']) ? $_POST['blog_post)id']  : false);
+            if(!$blog_post_id) {
+                if (!$all_content) {
                     $args = array(
-                        'post_status' => 'trash',
+                        'post_status' => array('draft', 'unread', 'read', 'publish', 'reset', 'revise'),
                         'post_type' => 'go_blogs',
                         'post_parent' => intval($post_id),
                         'author' => $user_id,
                         'posts_per_page' => 1,
+                        'offset' => $go_print_next,
                         'meta_query' => array(
                             array(
                                 'key' => 'go_blog_bonus_stage',
@@ -466,19 +439,46 @@ function go_blog_check ($custom_fields = null, $i, $status, $go_actions_table_na
                         'order' => 'ASC'
                     );
                     $my_query = new WP_Query($args);
-
-
                     if ($my_query->have_posts()) {
                         while ($my_query->have_posts()) {
                             $my_query->the_post();
                             $blog_post_id = get_the_ID();
-                            //$go_print_next_trash = get_post_meta($blog_post_id, 'go_blog_bonus_stage')[0];
+                            //$go_print_next = get_post_meta($blog_post_id, 'go_blog_bonus_stage')[0];
                             // Do your work...
                         } // end while
-                    }
+                    } else {//if there were no posts found, check for trashed posts
+                        //global $go_print_next_trash;//the bonus stage to be printed, sometimes they print out of order if posts were trashed
+                        //$go_print_next_trash = (isset($go_print_next_trash) ?  $go_print_next_trash : 1);
+                        $args = array(
+                            'post_status' => 'trash',
+                            'post_type' => 'go_blogs',
+                            'post_parent' => intval($post_id),
+                            'author' => $user_id,
+                            'posts_per_page' => 1,
+                            'meta_query' => array(
+                                array(
+                                    'key' => 'go_blog_bonus_stage',
+                                    'value' => 1,
+                                    'compare' => '>=',
+                                )
+                            ),
+                            'orderby' => 'modified',
+                            'order' => 'ASC'
+                        );
+                        $my_query = new WP_Query($args);
 
-                } // end if
-                wp_reset_postdata();
+                        if ($my_query->have_posts()) {
+                            while ($my_query->have_posts()) {
+                                $my_query->the_post();
+                                $blog_post_id = get_the_ID();
+                                //$go_print_next_trash = get_post_meta($blog_post_id, 'go_blog_bonus_stage')[0];
+                                // Do your work...
+                            } // end while
+                        }
+
+                    } // end if
+                    wp_reset_postdata();
+                }
             }
             $blog_post_id = (isset($blog_post_id) ?  $blog_post_id : null);
             if($blog_post_id) {
@@ -487,7 +487,7 @@ function go_blog_check ($custom_fields = null, $i, $status, $go_actions_table_na
             go_blog_form($blog_post_id, '', $post_id, $i, $bonus, true);
 
             go_buttons($user_id, $custom_fields, $i, $stage_count, $status, $check_type, $bonus, $bonus_status, $repeat_max, false, $blog_post_id);
-            if($blog_post_id){do_action('go_blog_template_after_post', $blog_post_id, false);}
+            //if($blog_post_id){do_action('go_blog_template_after_post', $blog_post_id, false);}
 
             return $blog_post_id;
 
@@ -551,16 +551,16 @@ function go_url_check ($custom_fields, $i, $status, $go_actions_table_name, $use
     }
 }
 
-function go_url_check_blog ($placeholder = 'Enter URL', $id = 'go_result', $url = null){
+function go_url_check_blog ($placeholder = 'Enter URL', $id = 'go_result', $url = null, $data_type = 'url', $required_string = null, $uniqueID = null){
     global $wpdb;
 
         echo "<div class='go_url_div'>";
-        echo "<input id='{$id}' class='clickable' type='url' placeholder='{$placeholder}' value='{$url}'>";
+        echo "<input id='{$id}' class='clickable go_blog_element_input' type='url' data-type='{$data_type}' data-required='{$required_string}' data-uniqueID='{$uniqueID}' placeholder='{$placeholder}' value='{$url}' style='width: 90%;'>";
         echo "</div>";
 }
 
 function go_print_URL_check_result($url){
-    echo "<div class='go_required_blog_content'>";
+    echo "<div class='go_required_blog_content width100'>";
     echo "<div>URL Submitted : <a href='" . $url . "' target='blank'>" . $url . "</a></div>";
     echo "</div>";
 }
@@ -613,34 +613,12 @@ function go_upload_check ($custom_fields, $i, $status, $go_actions_table_name, $
 
 }
 
-function go_upload_check_blog ($media_id = null, $div_id, $mime_types) {
-    //$restrict_mime_types = (isset($custom_fields['go_stages_' . $i . '_blog_options_attach_file_restrict_file_types'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_attach_file_restrict_file_types'][0] : null);
-
-    /*
-    $doc_mime_types = unserialize(isset($custom_fields['go_stages_' . $i . '_blog_options_attach_file_file_types_documents'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_attach_file_file_types_documents'][0] : null);
-    $doc_mime_types = is_array($doc_mime_types) ? $doc_mime_types :  array();
-    $image_mime_types = unserialize(isset($custom_fields['go_stages_' . $i . '_blog_options_attach_file_file_types_images'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_attach_file_file_types_images'][0] : null);
-    $image_mime_types = is_array($image_mime_types) ? $image_mime_types :  array();
-    $adobe_mime_types = unserialize(isset($custom_fields['go_stages_' . $i . '_blog_options_attach_file_file_types_adobe'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_attach_file_file_types_adobe'][0] : null);
-    $adobe_mime_types = is_array($adobe_mime_types) ? $adobe_mime_types :  array();
-
-    $mime_types = implode(",", array_merge($doc_mime_types, $image_mime_types, $adobe_mime_types));
-    */
-
-    /*
-    if ($restrict_mime_types) {
-        $mime_types = unserialize(isset($custom_fields['go_stages_' . $i . '_blog_options_attach_file_allowed_types'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_attach_file_allowed_types'][0] : null);
-        $mime_types = is_array($mime_types) ? $mime_types : array();
-        $mime_types = implode(",", $mime_types);
-    }else{
-        $mime_types = '';
-    }
-    */
+function go_upload_check_blog ($media_id = null, $div_id, $mime_types, $uniqueID = null) {
 
     if (empty($media_id)) {
-        echo do_shortcode('[frontend-button div_id="'.$div_id.'" mime_types="'.$mime_types.'"]');
+        echo do_shortcode('[frontend-button div_id="'.$div_id.'" mime_types="'.$mime_types.'" uniqueid="'.$uniqueID.'"]');
     }else{
-        echo do_shortcode( '[frontend_submitted_media div_id="'.$div_id.'" id="'.$media_id.'" mime_types="'.$mime_types.'"]' );
+        echo do_shortcode( '[frontend_submitted_media div_id="'.$div_id.'" id="'.$media_id.'" mime_types="'.$mime_types.'" uniqueid="'.$uniqueID.'" class="go_blog_element_input" ]' );
     }
 }
 

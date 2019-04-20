@@ -31,14 +31,21 @@ get_header();
         $user_id = 0;
     }
     $current_user_id = get_current_user_id();
-    ?>
 
-    <?php
+    if($current_user_id ===$user_id){
+        $is_current_user = true;
+    }else{
+        $is_current_user = false;
+    }
+    $is_admin = go_user_is_admin($current_user_id);
+
     $user_fullname = $user_obj->first_name.' '.$user_obj->last_name;
     $user_login =  $user_obj->user_login;
     $user_display_name = $user_obj->display_name;
     $user_website = $user_obj->user_url;
     $page_title = $user_display_name . "'s Blog";
+
+
     ?><script>
     document.title = "<?php echo $page_title; ?>";//set page title
     </script><?php
@@ -70,9 +77,22 @@ get_header();
                     ?>
 
 
+
+
                 </div>
 
+
             </div>
+            <?php
+
+            if (($current_user_id === $user_id) || $is_admin){
+                $hide_private = get_user_meta($current_user_id, 'go_show_private', true);
+                $checked = '';
+                if ($hide_private){ $checked = 'checked'; };
+
+                echo "<div style='float:right;'><input id='go_show_private' data-userid='{$user_id}' type='checkbox' {$checked} ><label for='go_show_private'> Show Private, Trashed, and Reset Posts </label></div>";
+            }
+            ?>
 
         </div>
     </div>
@@ -81,86 +101,8 @@ get_header();
 
     /// END USER HEADER
 
-// get the username based from uname value in query var request.
+go_get_blog_posts($user_id);
 
-$paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
-//$paged = get_query_var('paged');
-// Query param
-$arg = array(
-    'post_type'         => 'go_blogs',
-    'posts_per_page'    => 5,
-    'orderby'           => 'publish_date',
-    'order'             => 'DESC',
-    'author_name'       => $user,
-    'paged' => $paged,
-    'post_status' => 'any'
-);
-//build query
-$query = new WP_Query( $arg );
-
-// get query request
-$posts = $query->get_posts();
-
-//video options
-    $go_lightbox_switch = get_option( 'options_go_video_lightbox' );
-    $go_video_unit = get_option ('options_go_video_width_unit');
-    if ($go_video_unit == 'px'){
-        $go_fitvids_maxwidth = get_option('options_go_video_width_pixels')."px";
-    }
-    if ($go_video_unit == '%'){
-        $go_fitvids_maxwidth = get_option('options_go_video_width_percent')."%";
-    }
-
-// check if there's any results
-if ( empty($posts) ) {
-    echo "Author doesn't have any posts";
-} else {
-    echo "<div id='go_wrapper' data-lightbox='{$go_lightbox_switch}' data-maxwidth='{$go_fitvids_maxwidth}' style='background-color: #f2f2f2' >";
-    ?>
-
-    <div class="go_blog_container1" style="display: flex; justify-content: center;">
-    <div class="go_blog_container" style="    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    padding: 20px;
-    flex-grow: 1;
-    max-width: 800px;"><?php
-   foreach ($posts as $post){
-       $post = json_decode(json_encode($post), True);//convert stdclass to array by encoding and decoding
-       $post_id = $post['ID'];
-       go_blog_post($post_id, false, true, false, true);
-       //go_user_feedback_container($post_id);
-   }
-   ?>
-
-
-   <div class="pagination">
-    <?php
-        echo paginate_links( array(
-            'base'         => str_replace( 999999999, '%#%', esc_url( get_pagenum_link( 999999999 ) ) ),
-            'total'        => $query->max_num_pages,
-            'current'      => max( 1, get_query_var( 'paged' ) ),
-            'format'       => '?paged=%#%',
-            'show_all'     => false,
-            'type'         => 'plain',
-            'end_size'     => 2,
-            'mid_size'     => 1,
-            'prev_next'    => true,
-            'prev_text'    => sprintf( '<i></i> %1$s', __( 'Newer Posts', 'text-domain' ) ),
-            'next_text'    => sprintf( '%1$s <i></i>', __( 'Older Posts', 'text-domain' ) ),
-            'add_args'     => false,
-            'add_fragment' => '',
-        ) );
-    ?>
-    </div>
-    </div>
-    </div>
-    </div>
-
-
-    <?php
-
-}
     go_hidden_footer();
 ?>
  <script>

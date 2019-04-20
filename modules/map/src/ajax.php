@@ -42,11 +42,7 @@ function go_update_last_map($map_id = false) {
  */
 function go_to_this_map(){
 
-    //check_ajax_referer( 'go_task_change_stage_' . $post_id . '_' . $user_id );
-    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_task_change_stage' ) ) {
-        echo "refresh";
-        die( );
-    }
+
     //check_ajax_referer( 'go_to_this_map');
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_to_this_map' ) ) {
         echo "refresh";
@@ -69,11 +65,6 @@ function go_user_map_ajax(){
         die();
     }
 
-    //check_ajax_referer( 'go_task_change_stage_' . $post_id . '_' . $user_id );
-    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_task_change_stage' ) ) {
-        echo "refresh";
-        die( );
-    }
     //check_ajax_referer( 'go_user_map_ajax');
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_user_map_ajax' ) ) {
         echo "refresh";

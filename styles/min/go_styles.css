@@ -209,6 +209,13 @@ video.wp-video-shortcode {
 .go_messages_penalties {
   background-color: pink; }
 
+.go_blog_elements {
+  display: flex;
+  flex-wrap: wrap; }
+
+.go_required_blog_content.width100 {
+  width: 100%; }
+
 /********************
 *	Select2 fields for taxonomy selects
 ********************/

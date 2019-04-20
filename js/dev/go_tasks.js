@@ -194,32 +194,34 @@ function task_stage_change( target ) {
         next_bonus = jQuery( target ).attr( 'next_bonus' )
     }
 
-    var check_type = "";
+    let check_type = "";
     if ( 'undefined' !== typeof jQuery( target ).attr( 'check_type' ) ) {
         check_type = jQuery( target ).attr( 'check_type' )
     }
 
-    var blog_post_id = "";
+    let blog_post_id = "";
     if ( 'undefined' !== typeof jQuery( target ).attr( 'blog_post_id' ) ) {
-        check_type = jQuery( target ).attr( 'blog_post_id' )
+        blog_post_id = jQuery( target ).attr( 'blog_post_id' )
     }
 
-    var result = jQuery( '#go_result' ).attr( 'value' );
+    let result = jQuery( '#go_result' ).attr( 'value' );
+    let result_title = null;
 
     if( check_type == 'blog' && button_type != 'undo_last_bonus'){
-        //result = tinyMCE.activeEditor.getContent();
-        result = go_get_tinymce_content_blog('task_stage_change');
-        var result_title = jQuery( '#go_blog_title' ).html();
-        var blog_post_id= jQuery( '#go_blog_title' ).data( 'blog_post_id' );
-        var blog_url= jQuery( '#go_result_url' ).val();
-        var blog_media= jQuery( '#go_result_media' ).attr( 'value' );
-        var blog_video= jQuery( '#go_result_video' ).val();
-        //==console.log("ID" + blog_post_id);
-        //console.log("BV" + blog_video);
-
+        result = tinyMCE.activeEditor.getContent();
+        //result = go_get_tinymce_content_blog('task_stage_change');
+        result_title = jQuery( '#go_blog_title' ).html();
+        //blog_post_id = jQuery( '#go_blog_title' ).data( 'blog_post_id' );
     }else{
-        var result_title = null;
+        let result_title = null;
     }
+
+    const required_elements = go_get_blog_required_elements();
+    console.log("required_elements");
+    console.log(required_elements);
+    const json = JSON.stringify(required_elements );
+    console.log(json);
+
     jQuery.ajax({
         type: "POST",
         data: {
@@ -234,9 +236,10 @@ function task_stage_change( target ) {
             result: result,
             result_title: result_title,
             blog_post_id: blog_post_id,
-            blog_url: blog_url,
-            blog_media: blog_media,
-            blog_video: blog_video,
+           // blog_url: blog_url,
+            //blog_media: blog_media,
+           // blog_video: blog_video,
+            required_elements: json
 
         },
         /**
@@ -597,14 +600,15 @@ function go_quiz_check_answers(status, target) {
                 go_send_save_quiz_result(target, status, function(){
                     task_stage_change(target);
                 } );
-
+                go_disable_loading();
+                //return false;
                 //return false;//fail is false
             } else if (typeof response === 'string') {
                 //console.log("response" + response);
                 var failed_questions = JSON.parse(response);
                 //var failed_count = failed_questions.length;
 
-                console.log("failed Questions");
+                //console.log("failed Questions");
                 //console.log(failed_questions);
                 for (var x = 0; x < test_list.length; x++) {
                     var test_id = test_list[x].id;
@@ -633,7 +637,8 @@ function go_quiz_check_answers(status, target) {
                     flash_error_msg('#go_stage_error_msg');
                 }
                 go_send_save_quiz_result(target, status, function(){} );
-
+                go_disable_loading();
+                //return true;
 
                     //go_disable_loading();
 
@@ -652,6 +657,7 @@ function go_send_save_quiz_result(target, status, callback ){
 
     var whitelist = ["type","checked","disabled"];
 
+    /*
     jQuery(clone).find('input').each(
         function() {
             var attributes = this.attributes;
@@ -664,6 +670,15 @@ function go_send_save_quiz_result(target, status, callback ){
             }
         }
     )​;
+    */
+
+    jQuery(clone).find("input").each(
+        function(){
+            for(var attributes=this.attributes,t=attributes.length;t--;)
+            {var attribute=attributes[t];
+            -1==jQuery.inArray(attribute.name,whitelist)&&this.removeAttributeNode(attribute)}
+        });
+
 
     var html = jQuery(clone).html();
     //var html="";

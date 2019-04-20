@@ -89,8 +89,16 @@ function go_reset_all_users (){
             }
         },
         success: function( res ) {
-            swal.fire("Success", "All user game data was reset.", "success");
-            jQuery('#go_reset_all_users').one("click", function() {go_reset_all_users_dialog();});
+            if (res = 'reset') {
+                swal.fire("Success", "All user game data was reset.", "success");
+                jQuery('#go_reset_all_users').one("click", function () {
+                    go_reset_all_users_dialog();
+                });
+            }
+            else{
+                swal.fire("Error", "There was an error. Please refresh the page and try again. No data was changed.", "error");
+
+            }
 
         }
     });

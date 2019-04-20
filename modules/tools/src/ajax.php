@@ -267,5 +267,7 @@ function go_reset_all_users(){
 
     $actions_table  = $wpdb->prefix . 'go_actions';
     $wpdb->query("TRUNCATE TABLE $actions_table");
+    echo "reset";
+    die();
 
 }
