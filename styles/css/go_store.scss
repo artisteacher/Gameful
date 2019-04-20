@@ -11,7 +11,7 @@ flex-wrap: wrap;
     }
     
 .store_cats {
-	width: 300px;
+	//width: 300px;
     float: left;
     padding: 10px 30px;
     margin: 10px;
@@ -20,8 +20,12 @@ flex-wrap: wrap;
 
 .store_items li{
     display: flex;
+    flex-direction: column;
     margin: 5px 0;
     align-items: flex-start;
+    border-bottom: 1px solid;
+    border-color: grey;
+    padding-bottom: 5px;
 }
 
 .go_store_loot_list{
@@ -113,8 +117,14 @@ store lightbox styles
     margin-top: 30px;
     padding: 10px;
     background-color: lightgoldenrodyellow;
-    display: flex;
+    display: flex;flex-wrap: wrap
 }
+
+#go_store_actions > div {
+    margin: 10px;
+}
+
+
 
 #go_purch_limits {
     flex-grow: 1;

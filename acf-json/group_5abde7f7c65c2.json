@@ -328,7 +328,7 @@
                             "append": "",
                             "min": 0,
                             "max": "",
-                            "step": 1
+                            "step": ".01"
                         },
                         {
                             "key": "field_5abde803a0864",
@@ -1101,22 +1101,10 @@
                                     },
                                     "choices": {
                                         "": "Select",
-                                        "0": "Level1 -  : 0 XP",
-                                        "100": "Level2 -  : 100 XP",
-                                        "150": "Level3 -  : 150 XP",
-                                        "225": "Level4 -  : 225 XP",
-                                        "337": "Level5 -  : 337 XP",
-                                        "505": "Level6 -  : 505 XP",
-                                        "757": "Level7 -  : 757 XP",
-                                        "1135": "Level8 -  : 1135 XP",
-                                        "1702": "Level9 -  : 1702 XP",
-                                        "2553": "Level10 -  : 2553 XP",
-                                        "3829": "Level11 -  : 3829 XP",
-                                        "5743": "Level12 -  : 5743 XP",
-                                        "8614": "Level13 -  : 8614 XP",
-                                        "12921": "Level14 -  : 12921 XP",
-                                        "19381": "Level15 - Guru : 19381 XP",
-                                        "29071": "Level16 - Guru Master : 29071 XP"
+                                        "0": "Level1 -  : 0 PP",
+                                        "50": "Level2 -  : 50 PP",
+                                        "105": "Level3 -  : 105 PP",
+                                        "170": "Level4 -  : 170 PP"
                                     },
                                     "default_value": [],
                                     "allow_null": 0,
@@ -1205,5 +1193,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1549906833
+    "modified": 1555710204
 }

@@ -8,6 +8,14 @@
 
 
 function go_blog_opener(){
+
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }else{
+        $is_logged_in = true;
+    }
+
     //check_ajax_referer( 'go_blog_opener' );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_blog_opener' ) ) {
         echo "refresh";
@@ -35,7 +43,14 @@ function go_blog_opener(){
 
 
         if(!empty($go_blog_task_id)) {
+
+
             $custom_fields = get_post_custom($go_blog_task_id);
+            $task_is_locked = go_task_locks($go_blog_task_id, null, false, $custom_fields, $is_logged_in, true);
+            if ( $task_is_locked ) {
+                echo "locked";
+                die();
+            }
 
             if ($stage !== null) {
                 $i = intval($stage);
@@ -79,12 +94,19 @@ function go_blog_opener(){
 }
 
 function go_blog_trash(){
-    global $wpdb;
+
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
     //check_ajax_referer( 'go_blog_trash' );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_blog_trash' ) ) {
         echo "refresh";
         die( );
     }
+
+    global $wpdb;
 
     $blog_post_id = ( ! empty( $_POST['blog_post_id'] ) ? (int) $_POST['blog_post_id'] : 0 );
 
@@ -269,6 +291,12 @@ function go_blog_lightbox_opener(){
 */
 
 function go_blog_submit(){
+
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
     //check_ajax_referer( 'go_blog_submit' );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_blog_submit' ) ) {
         echo "refresh";
@@ -422,13 +450,18 @@ function go_save_blog_post($post_id = null, $stage = null, $bonus_status = null,
  * Prints content for the clipboard tasks table and user map viewer
  */
 function go_blog_user_task(){
-    global $wpdb;
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
 
     //check_ajax_referer( 'go_blog_user_task' );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_blog_user_task' ) ) {
         echo "refresh";
         die( );
     }
+
+    global $wpdb;
 
     $user_id = intval($_POST['uid']);
     $post_id = intval($_POST['task_id']);
@@ -600,7 +633,7 @@ function go_blog_user_task(){
                     $score = $total_questions."/".$total_questions;
                 }
                 echo "Quiz</h3>";
-                echo "<h3>{$score}</h3>";
+                //echo "<h3>{$score}</h3>";
                 //echo "Quiz Score: " .$result;
                 go_test_check (null, $current_stage - 1, null, null, $user_id, $post_id, $bonus, $bonus_status, true);
 

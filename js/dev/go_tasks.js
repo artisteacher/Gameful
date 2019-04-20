@@ -79,6 +79,15 @@ function go_update_bonus_loot(){
             action: 'go_update_bonus_loot',
             post_id: post_id
         },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
         success: function( res ) {
             console.log("Bonus Loot");
             console.log(res);
@@ -230,7 +239,42 @@ function task_stage_change( target ) {
             blog_video: blog_video,
 
         },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            go_disable_loading();
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
         success: function( raw ) {
+            console.log(raw);
+            if (raw == 'login'){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            };
+            if (raw ==='refresh'){
+                Swal.fire({//sw2 OK
+                    title: "Error",
+                    text: "Refresh the page and then try again? You will lose unsaved changes. You can cancel and copy any unsaved changes to a safe location before refresh.",
+                    type: 'warning',
+                    //showCancelButton: true,
+                    confirmButtonText: 'Refresh Now',
+                    //cancelButtonText: 'No, cancel!',
+                    reverseButtons: true,
+                    customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                    },
+                })
+                    .then((result) => {
+                        if (result.value) {
+                            location.reload();
+                        }
+                    })
+            };
+
             // parse the raw response to get the desired JSON
             var res = {};
             try {
@@ -331,12 +375,21 @@ function go_mce_reset() {
 }
 
 function go_append (res){
+   console.log("go_append");
     //jQuery( res.html ).addClass('active');
+    var html = res.html;
+    console.log("html");
+    console.log(html);
+
     jQuery( res.html ).appendTo( '#go_wrapper' ).stop().hide().show( 'slow' ).promise().then(function() {
         // Animation complete
+        console.log("here");
         go_Vids_Fit_and_Box("body");
+        console.log("here2");
         go_make_clickable();
+        console.log("here3");
         go_disable_loading();
+        console.log("here4");
         //go_mce();
         // remove existing editor instance, and add new one
         //tinymce.execCommand('mceRemoveEditor', true, 'go_blog_post');
@@ -424,13 +477,18 @@ function go_update_admin_view(go_admin_view){
             //user_id: go_task_data.userID,
             'go_admin_view' : go_admin_view,
         },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
         success:function(data) {
             location.reload();
 
-        },
-        error: function(errorThrown){
-            console.log(errorThrown);
-            console.log("fail");
         }
     })
 }
@@ -510,12 +568,25 @@ function go_quiz_check_answers(status, target) {
             type: type,
             status: status,
         },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
         success: function( response ) {
             //console.log('answers: ' + response);
+            if (response === 'login'){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            };
             if ( response == 'refresh'){
                 location.reload();
             }else if (response == true) {//if is all are correct
                 var container_id = "#go_test_container_" + (parseFloat(status)+1);
+                console.log("All Correct");
                 console.log("container_id: " + container_id);
                 jQuery('.go_test_container').hide('slow');
                 jQuery('#test_failure_msg').hide('slow');
@@ -533,7 +604,7 @@ function go_quiz_check_answers(status, target) {
                 var failed_questions = JSON.parse(response);
                 //var failed_count = failed_questions.length;
 
-                //console.log("failed Questions");
+                console.log("failed Questions");
                 //console.log(failed_questions);
                 for (var x = 0; x < test_list.length; x++) {
                     var test_id = test_list[x].id;
@@ -571,6 +642,7 @@ function go_quiz_check_answers(status, target) {
     });
 }
 
+
 function go_send_save_quiz_result(target, status, callback ){
     var test_list = jQuery(target).closest(".go_checks_and_buttons").find(" .go_test_container");
     var clone = jQuery(test_list).clone();
@@ -580,15 +652,18 @@ function go_send_save_quiz_result(target, status, callback ){
 
     var whitelist = ["type","checked","disabled"];
 
-    jQuery(clone).find('input').each(function() {
-        var attributes = this.attributes;
-        var i = attributes.length;
-        while( i-- ) {
-            var attr = attributes[i];
-            if( jQuery.inArray(attr.name,whitelist) == -1 )
-                this.removeAttributeNode(attr);
+    jQuery(clone).find('input').each(
+        function() {
+            var attributes = this.attributes;
+            var i = attributes.length;
+            while( i-- ) {
+                var attr = attributes[i];
+                if( jQuery.inArray(attr.name,whitelist) == -1 ) {
+                    this.removeAttributeNode(attr);
+                }
+            }
         }
-    });​
+    )​;
 
     var html = jQuery(clone).html();
     //var html="";
@@ -596,7 +671,7 @@ function go_send_save_quiz_result(target, status, callback ){
     //jQuery(target).closest('.go_checks_and_buttons').find('input').prop('disabled', false);
 
     //jQuery('.go_test_container').unwrap();
-    console.log("Quiz HTML" + html);
+    console.log("Quiz HTML: " + html);
 
     jQuery.ajax({
         type: "POST",
@@ -607,6 +682,15 @@ function go_send_save_quiz_result(target, status, callback ){
             task_id: go_task_data.ID,
             user_id: go_task_data.userID,
             status: status
+        },
+
+         // A function to be called if the request fails.
+         // Assumes they are not logged in and shows the login message in lightbox
+
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
         },
         success: function(  ) {
             callback();

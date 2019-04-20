@@ -43,6 +43,15 @@ function go_to_this_map(map_id) {
             map_id: map_id
 
         },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
         success: function (res) {
             console.log("success");
             window.location.href=res;
@@ -73,6 +82,15 @@ function go_show_map(mapid) {
                 _ajax_nonce: nonce,
                 uid: uid
 			},
+            /**
+             * A function to be called if the request fails.
+             * Assumes they are not logged in and shows the login message in lightbox
+             */
+            error: function(jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status === 400){
+                    jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+                }
+            },
 			success:function(data) {			
           		jQuery('#mapwrapper').html(data);				
 				console.log("success!");
@@ -80,10 +98,6 @@ function go_show_map(mapid) {
 				document.getElementById("loader_container").style.display = "none";
  				document.getElementById("maps").style.display = "block";
 				
-			},
-			error: function(errorThrown){
-				console.log(errorThrown);
-				console.log("fail");
 			}
 			
 	});
@@ -198,6 +212,15 @@ function go_user_map(user_id) {
             _ajax_nonce: nonce,
             action: 'go_user_map_ajax',
             uid: user_id
+        },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
         },
         success: function (res) {
             if (-1 !== res) {

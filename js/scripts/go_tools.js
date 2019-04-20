@@ -79,6 +79,15 @@ function go_reset_all_users (){
             _ajax_nonce: nonce,
             action: 'go_reset_all_users'
         },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
         success: function( res ) {
             swal.fire("Success", "All user game data was reset.", "success");
             jQuery('#go_reset_all_users').one("click", function() {go_reset_all_users_dialog();});

@@ -91,7 +91,7 @@ function go_make_store_html() {
 
                     $store_item_name = get_the_title($go_store_obj);
                     //echo "<li><a id='$row' class='go_str_item' onclick='go_lb_opener(this.id);'>$store_item_name</a></li> ";
-                    echo "<li><a id='$store_item_id' class='go_str_item' >$store_item_name</a>";
+                    echo "<li><div><a id='$store_item_id' class='go_str_item' >$store_item_name</a></div>";
                     echo "<div class='go_store_loot_list'>";
                     if (!empty($xp_value)){
                         if ($xp_toggle == 1 ){
@@ -103,8 +103,10 @@ function go_make_store_html() {
                             $loot_class = 'go_store_loot_list_cost';
                             $loot_direction = "-";
                         }
-                        echo "<div id = 'go_store_loot_list_xp' class='go_store_loot_list_item " . $loot_class . "' >" . $loot_direction . $xp_value . $xp_abbr . "</div > ";
+                        $xp_value = go_display_shorthand_currency('xp', $xp_value);
+                        echo "<div id = 'go_store_loot_list_xp' class='go_store_loot_list_item " . $loot_class . "' >" . $loot_direction . $xp_value ."</div > ";
                     }
+
                     if (!empty($gold_value)){
                         if ($gold_toggle == 1 ){
                             $loot_class = 'go_store_loot_list_reward';
@@ -114,8 +116,10 @@ function go_make_store_html() {
                             $loot_class = 'go_store_loot_list_cost';
                             $loot_direction = "-";
                         }
-                        echo "<div id = 'go_store_loot_list_gold' class='go_store_loot_list_item " . $loot_class . "' >" . $loot_direction . $gold_value . $gold_abbr . "</div > ";
+                        $gold_value = go_display_shorthand_currency('gold', $gold_value);
+                        echo "<div id = 'go_store_loot_list_gold' class='go_store_loot_list_item " . $loot_class . "' >"  . $loot_direction . $gold_value . "</div > ";
                     }
+
                     if (!empty($health_value)){
                         if ($health_toggle == 1 ){
                             $loot_class = 'go_store_loot_list_reward';
@@ -125,7 +129,8 @@ function go_make_store_html() {
                             $loot_class = 'go_store_loot_list_cost';
                             $loot_direction = "-";
                         }
-                        echo "<div id = 'go_store_loot_list_health' class='go_store_loot_list_item " . $loot_class . "' >" . $loot_direction . $health_value . $health_abbr . "</div > ";
+                        $health_value = go_display_shorthand_currency('health', $health_value);
+                        echo "<div id = 'go_store_loot_list_health' class='go_store_loot_list_item " . $loot_class . "' >" . $loot_direction . $health_value . "</div > ";
                     }
 
                     echo "</div>";

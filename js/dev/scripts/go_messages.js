@@ -13,7 +13,7 @@ function go_reset_opener(message_type){
         //apply on click to the individual task reset icons
         jQuery('.go_reset_task_clipboard').prop('onclick', null).off('click');
         jQuery(".go_reset_task_clipboard").one("click", function () {
-            go_messages_opener(this.getAttribute('data-uid'), this.getAttribute('data-task'), 'single_reset');
+            go_messages_opener(this.getAttribute('data-uid'), this.getAttribute('data-task'), 'single_reset', this);
         });
     }
 
@@ -21,7 +21,7 @@ function go_reset_opener(message_type){
         //apply on click to the reset button at the top
         jQuery('.go_tasks_reset_multiple_clipboard').parent().prop('onclick', null).off('click');
         jQuery(".go_tasks_reset_multiple_clipboard").parent().one("click", function () {
-            go_messages_opener(null, null, 'multiple_reset');
+            go_messages_opener(null, null, 'multiple_reset', this);
         });
     }
 
@@ -29,7 +29,7 @@ function go_reset_opener(message_type){
         jQuery(".go_stats_messages_icon").prop('onclick', null).off('click');
         jQuery(".go_stats_messages_icon").one("click", function (e) {
             var user_id = this.getAttribute('data-uid');
-            go_messages_opener(user_id, null, "single_message");
+            go_messages_opener(user_id, null, "single_message", this);
         });
     }
 
@@ -37,13 +37,13 @@ function go_reset_opener(message_type){
         //apply on click to the individual task reset icons
         jQuery('.go_reset_task_clipboard').prop('onclick', null).off('click');
         jQuery(".go_reset_task_clipboard").one("click", function () {
-            go_messages_opener(this.getAttribute('data-uid'), this.getAttribute('data-task'), 'reset_stage');
+            go_messages_opener(this.getAttribute('data-uid'), this.getAttribute('data-task'), 'reset_stage', this);
         });
     }
 
 }
 
-function go_messages_opener( user_id, post_id, message_type ) {
+function go_messages_opener( user_id, post_id, message_type, target ) {
     post_id = (typeof post_id !== 'undefined') ?  post_id : null;
     message_type = (typeof message_type !== 'undefined') ?  message_type : null;
     console.log("type: " + message_type);
@@ -67,7 +67,13 @@ function go_messages_opener( user_id, post_id, message_type ) {
     }
     else if (message_type == 'single_reset' || message_type == 'single_message' || message_type == 'reset_stage'){ //single task reset or message was pressed
         reset_vars.push({uid:user_id, task:post_id});
+        if (message_type == 'reset_stage'){
+            console.log("target: " + target);
+                jQuery(target).find('.go_round_inner').html("<i class='fa fa-spinner fa-pulse'></i>")
+            }
     }
+
+
     //if only a uid was passed, this is just a send message to single user box (no reset)
 
     var nonce = GO_EVERY_PAGE_DATA.nonces.go_create_admin_message;
@@ -83,6 +89,16 @@ function go_messages_opener( user_id, post_id, message_type ) {
         url: MyAjax.ajaxurl,
         type:'POST',
         data: gotoSend,
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            go_reset_opener(message_type);
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
         success: function( results ) {
             //console.log("results:" + results);
             var res = jQuery.parseJSON(results);
@@ -96,7 +112,7 @@ function go_messages_opener( user_id, post_id, message_type ) {
                 var show_cancel = true;
                 var showConfirmButton = true;
                 var confirmButtonColor = 'IndianRed';
-                var confirmButtonText = '<i class="fa fa-times-circle"></i> Send';
+                var confirmButtonText = '<i class="fa fa-paper-plane"></i> Send';
                 var cancelButtonText = '<i class="fa fa-times-circle"></i> Cancel';
 
             }else if (res.type == 'no_users') {
@@ -135,17 +151,12 @@ function go_messages_opener( user_id, post_id, message_type ) {
                         go_send_message(reset_vars, message_type, post_id);
 
                     }
+
+
+
                 });
+            jQuery(target).find('.go_round_inner').html('<i class="fa fa-times-circle"></i>');
             go_reset_opener(message_type);
-
-
-            /*
-            jQuery('#go_message_submit').one("click", function(e){
-                go_send_message(reset_vars, message_type);
-            });
-
-            go_reset_opener(message_type);
-            */
 
             jQuery('.go-acf-switch').click(function () {
                 console.log("click");
@@ -245,15 +256,6 @@ function go_messages_opener( user_id, post_id, message_type ) {
 
 
 
-        },
-        error: function(e, ts, et) {
-            Swal.fire(//sw2 OK --need to set the error message
-                'Ajax error.',
-                'Error code 101.',
-                'error'
-            )
-
-            go_reset_opener(message_type);
         }
     });
 }
@@ -340,6 +342,15 @@ function go_send_message(reset_vars, message_type, post_id) {
         url: MyAjax.ajaxurl,
         type:'POST',
         data: gotoSend,
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
         success: function( results ) {
             // show success or error message
             console.log("send successful");
@@ -349,6 +360,8 @@ function go_send_message(reset_vars, message_type, post_id) {
                 'success'
             );
 
+
+
             jQuery( "#go_tasks_datatable" ).remove();
             go_stats_task_list();
 
@@ -356,17 +369,12 @@ function go_send_message(reset_vars, message_type, post_id) {
 
             if(message_type == 'reset_stage'){
                 var post_wrapper_class = ".go_blog_post_wrapper_" + post_id;
-                jQuery(post_wrapper_class).hide();
+                //jQuery(post_wrapper_class).hide();
+                jQuery(post_wrapper_class + " .go_reset_task_clipboard").hide();
+                jQuery(post_wrapper_class + " .go_status_icon .tooltip").html('<i class="fa fa-times-circle fa-2x"></i>');
             }else{
                 go_toggle_off();
             }
-        },
-        error: function(e, ts, et) {
-            Swal.fire(//sw2 OK --need to set error message
-                'Ajax error.',
-                'Error code 101.',
-                'error'
-            )
         }
     });
 }

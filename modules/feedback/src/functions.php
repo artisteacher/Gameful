@@ -124,11 +124,17 @@ function go_task_status_icon($post_id){
     }else if ($status == 'unread' && $is_admin == true){
         $icon ='<span class="tooltip" data-tippy-content="This post has NOT been read."><i class="fa fa-eye-slash fa-2x" aria-hidden="true"></i></span>';
     }else if ($status == 'draft'){
-        //$icon ='<span class="tooltip" data-tippy-content="This post is a draft."><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></span>';
+        $icon ='<span class="tooltip" data-tippy-content="This post is a draft."><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></span>';
     }else if ($status == 'trash'){
         $icon ='<span class="tooltip" data-tippy-content="This post is in the trash."><i class="fa fa-trash fa-2x" aria-hidden="true"></i></span>';
     }
-    echo '<div class="go_status_icon" >'.$icon.'</div>';
+
+    $user_statuses = array("read", "reset", "draft", "trash");
+    if(!empty($status) ){
+        if ((in_array($status, $user_statuses) || ($is_admin && $status == 'unread'))) {
+            return '<div class="go_status_icon" >' . $icon . '</div>';
+        }
+    }
 }
 
 function go_blog_is_private($post_id){
@@ -139,7 +145,7 @@ function go_blog_is_private($post_id){
     if ($status) {
 
         //$status = get_post_status($post_id);
-        echo '<div class="go_blog_visibility" ><span class="tooltip" data-tippy-content="This is a private post.  It is only viewable by the author and site administrators."><i class="fa fa-user-secret fa-2x" aria-hidden="true"></i></span></div>';
+        return '<div class="go_blog_visibility" ><span class="tooltip" data-tippy-content="This is a private post.  It is only viewable by the author and site administrators."><i class="fa fa-user-secret fa-2x" aria-hidden="true"></i></span></div>';
     }
 }
 
@@ -152,19 +158,18 @@ function go_blog_favorite($post_id){
             $checked = '';
         }
         //echo "<div style=''><input type='checkbox' class='go_blog_favorite ' value='go_blog_favorite' data-post_id='{$post_id}' {$checked}> Favorite</div>";
-        ?>
-    <div class="go_favorite_container">
-        <label>
-            <?php
-        echo "<input type='checkbox' class='go_blog_favorite ' value='go_blog_favorite' data-post_id='{$post_id}' {$checked}>";
-        ?>
-        <span class="go_favorite_label"></span>
-        </label>
-    </div>
-    <?php
+
+
+
+        return "<div class='go_favorite_container'><label><input type='checkbox' class='go_blog_favorite ' value='go_blog_favorite' data-post_id='".$post_id."' ".$checked."> <span class='go_favorite_label'></span></label></div>";
+
 }
 
 function go_blog_favorite_toggle(){
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
     //check_ajax_referer( 'go_blog_favorite_toggle' );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_blog_favorite_toggle' ) ) {
         echo "refresh";

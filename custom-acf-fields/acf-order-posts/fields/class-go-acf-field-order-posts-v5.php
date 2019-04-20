@@ -869,10 +869,10 @@ function acf_load_order_field_list() {
     // this function is called by AJAX to load posts
     // based on term selection
 
-    // we can use the acf nonce to verify
-   // if (!wp_verify_nonce($_POST['nonce'], 'acf_nonce')) {
-        // die();
-    //}
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
     //check_ajax_referer( 'acf_load_order_field_list' );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'acf_load_order_field_list' ) ) {
         echo "refresh";

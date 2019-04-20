@@ -25,6 +25,12 @@ function go_get_loot($user_id){
             $loot = $wpdb->get_results("SELECT * FROM {$go_loot_table_name} WHERE uid = {$user_id}");
             if (!empty($loot)){
                 $loot = $loot[0];
+            }else{
+                go_add_user_to_totals_table($user_id);
+                $loot = $wpdb->get_results("SELECT * FROM {$go_loot_table_name} WHERE uid = {$user_id}");
+                if (!empty($loot)){
+                    $loot = $loot[0];
+                }
             }
             $data = json_decode(json_encode($loot), True);
             wp_cache_set($key, $data, 'go_single');

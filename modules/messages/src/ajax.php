@@ -80,6 +80,10 @@ function go_get_reset_mixed($reset_vars){
 }
 
 function go_create_admin_message (){
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
 
     //check_ajax_referer( 'go_create_admin_message');
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_create_admin_message' ) ) {
@@ -259,7 +263,7 @@ function go_create_admin_message (){
                                                     <div class="go-acf-input">
                                                         <div class="go-acf-input-wrap"><input name="gold" type="number"
                                                                                               value="" min="0"
-                                                                                              step="1" placeholder="0" oninput="validity.valid||(value='');" class="gold_messages go_pink"></div>
+                                                                                              step=".01" placeholder="0" oninput="validity.valid||(value='');" class="gold_messages go_pink"></div>
                                                     </div>
                                                 </td>
                                                 <td class="go-acf-field go-acf-field-number go_reward go_health "
@@ -470,7 +474,7 @@ function go_create_admin_message (){
                                                             <div class="go-acf-input">
                                                                 <div class="go-acf-input-wrap"><input name="gold" type="number"
                                                                                                       value="" min="0"
-                                                                                                      step="1" placeholder="0" class="gold_messages" oninput="validity.valid||(value='');"></div>
+                                                                                                      step=".01" placeholder="0" class="gold_messages" oninput="validity.valid||(value='');"></div>
                                                             </div>
                                                         </td>
                                                         <td class="go-acf-field go-acf-field-number go_reward go_health "
@@ -597,6 +601,7 @@ function go_create_admin_message (){
  * Check for new admin messages
  */
 function go_admin_messages(){
+
     //$user_id = get_current_user_id();
     //check_ajax_referer( 'go_admin_messages');
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_admin_messages' ) ) {
@@ -625,13 +630,15 @@ function go_reset_message($this_message, $message, $penalty, $xp, $gold, $health
     $penalty_message = '';
 //reset stage
     if($xp_task != 0){
-        $xp_message = "<br>" . go_get_loot_short_name('xp').":".$xp_task;
+        go_display_shorthand_currency('xp',$xp_task,true, 'breaks');
     }
     if($gold_task != 0){
-        $gold_message = "<br>" . go_get_loot_short_name('gold').":".$gold_task;
+        //$gold_message = "<br>" . go_get_loot_short_name('gold').":".$gold_task;
+        go_display_shorthand_currency('gold',$gold_task,true, 'breaks');
     }
     if($health_task != 0){
-        $health_message = "<br>" . go_get_loot_short_name('health').":".$health_task;
+        //$health_message = "<br>" . go_get_loot_short_name('health').":".$health_task;
+        go_display_shorthand_currency('health',$health_task,true, 'breaks');
     }
     if (count($badge_array_task)){
         //$badge_name = get_option('options_go_badges_name_plural');
@@ -680,6 +687,12 @@ function go_reset_message($this_message, $message, $penalty, $xp, $gold, $health
 }
 
 function go_send_message(){
+
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
     //check_ajax_referer( 'go_send_message');
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_send_message' ) ) {
         echo "refresh";
@@ -845,12 +858,12 @@ function go_send_message(){
                     ///
                     ///
                     $result = $wpdb->get_results($wpdb->prepare("SELECT id, uid, xp, gold, health, badges, groups, check_type, result
-				FROM {$aTable} 
-				WHERE result = %d AND source_id = %d AND action_type = %s
-				ORDER BY id DESC LIMIT 1",
-                        $blog_post_id,
-                        $go_blog_task_id,
-                        'task'), ARRAY_A);
+                    FROM {$aTable} 
+                    WHERE result = %d AND source_id = %d AND action_type = %s
+                    ORDER BY id DESC LIMIT 1",
+                    $blog_post_id,
+                    $go_blog_task_id,
+                    'task'), ARRAY_A);
 
                     $loot = $result;
                     $result = $result[0];

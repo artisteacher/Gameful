@@ -2,6 +2,12 @@
 
 
 function go_filter_reader(){
+
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
     //check_ajax_referer( 'go_filter_reader' );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_filter_reader' ) ) {
         echo "refresh";
@@ -12,6 +18,12 @@ function go_filter_reader(){
 }
 
 function go_reader_bulk_read(){
+
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
     //check_ajax_referer( 'go_reader_bulk_read' );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_reader_bulk_read' ) ) {
         echo "refresh";

@@ -241,6 +241,17 @@ video.wp-video-shortcode {
 	z-index: 100003 !important;
 }
 
+.go_messages_loot {
+	padding: 10px;
+}
+.go_messages_rewards{
+	background-color: lightgreen;
+}
+
+.go_messages_penalties{
+	background-color: pink;
+}
+
 /********************
 *	Select2 fields for taxonomy selects
 ********************/
@@ -281,17 +292,60 @@ video.wp-video-shortcode {
 	float: right;
 }
 
+
+.go_button_round{/*dent around button*/
+	display: inline-block;
+	position: relative;
+	text-decoration: none;
+	color: #444;
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	text-align: center;
+	//background: #f7f7f7;
+	//box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.08);
+}
+.go_button_round .go_round_inner {/*Button itself*/
+	position: absolute;
+	content: '';
+	width: 60px;
+	height: 60px;
+	line-height: 60px;
+	vertical-align: middle;
+	left: 10px;
+	top: 9px;
+	border-radius: 50%;
+	font-size: 30px;
+	background-image: -webkit-linear-gradient(#e8e8e8 0%, #d6d6d6 100%);
+	background-image: linear-gradient(#e8e8e8 0%, #d6d6d6 100%);
+	text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.66);
+	box-shadow: inset 0 2px 0 rgba(255,255,255,0.5), 0 2px 2px rgba(0, 0, 0, 0.19);
+	border-bottom: solid 2px #b5b5b5;
+	cursor: pointer;
+}
+
+.go_button_round .go_round_inner:active{
+	background-image: -webkit-linear-gradient(#efefef 0%, #d6d6d6 100%);
+	box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 2px rgba(0, 0, 0, 0.19);
+	border-bottom: solid 2px #d8d8d8;
+}
+
+.go_button_round .go_round_inner:hover{
+	color: #3792bd;
+}
+
+
+
 .go_save_button.left {
 	float: left;
 	margin: 10px; }
 
 .go_save_button.right {
 	float: right;
-	margin: 10px; }
+	}
 
 #go_blog_submit, .go_blog_trash, .go_blog_reset  {
 	float: right;
-	margin: 10px;
 }
 
 .go_blog_actions {
@@ -413,14 +467,7 @@ video.wp-video-shortcode {
 	color: red;
 }
 
-span.go_loading {
-	background-image: url("../../media/images/ajax-loader.gif");
-	width: 16px;
-	height: 16px;
-	display: inline-block;
-	vertical-align: middle;
-	margin-right: 5px;
-}
+
 
 input[type='text'].go_error_red {
 	border: 2px solid red;
@@ -1017,6 +1064,7 @@ input#go_pass_lock::-moz-placeholder {
 
 #go_task_rewards {
 	display: flex;
+	justify-content: space-between;
 }
 #go_task_rewards > *{
 	padding: 20px;
@@ -1054,4 +1102,141 @@ input#go_pass_lock::-moz-placeholder {
 #go_blog_container{
 	width: 100%;
 	max-width: 800px;
+}
+
+/********************
+*	Login Modal
+********************/
+
+.wp-auth-check-close {
+	background: none;
+	z-index: 1;
+}
+
+/********************
+*	Coins
+********************/
+
+.go_coin p{
+
+	font-style: italic;
+	position: absolute;
+	font-size: 1em;
+	z-index: 700;
+	top: .3em;
+	left: .6em;
+}
+
+.go_coin.bronze p{  color: rgba(223,182,103,1);}
+.go_coin.silver p{  color: rgba(160,160,160,1);}
+.go_coin.gold p{  color: #b19b18;}
+
+.go_coin{
+	content: "";
+	width: 2em;
+	height: 2em;
+	display: inline-block;
+	position: relative;
+	margin: 0 0 .25em;
+	top: 6px;
+	border-radius: 50px;
+	z-index: 500;
+	box-shadow:  2px 2px 2px 1px rgba(0, 0, 0, .1);
+	line-height: 1.5em;
+}
+
+.go_coin:after{
+	content: "";
+	width: 1.5em;
+	height: 1.5em;
+	display: block;
+	top: .22em;
+	left: .22em;
+	position: absolute;
+	border-radius: 50px;
+	z-index: 600;
+}
+
+.go_coin:before{
+	content: "";
+	width: 1.5em;
+	height: 1.5em;
+	top: .22em;
+	left: .22em;
+	display: block;
+	position: absolute;
+	border-radius: 50px;
+	z-index: 500;
+}
+
+
+
+.bronze{
+	background: linear-gradient(45deg,  rgba(223,182,103,1) 0%,rgba(249,243,232,1) 56%,rgba(231,192,116,1) 96%);
+}
+
+.bronze:before{
+	background: linear-gradient(135deg,  #d19c35 0%,#f7e6c5 50%,#e8b558 100%);
+	border: 1px solid #e6b86a;
+}
+
+.bronze:after{
+	background: linear-gradient(45deg,  rgba(223,182,103,1) 0%,rgba(249,243,232,1) 56%,rgba(231,192,116,1) 96%);
+	border-top: 1px solid rgba(255,255,255,0.3);
+	border-left: 1px solid rgba(255,255,255,0.3);
+	border-bottom: 1px solid rgba(209,156,53,0.3);
+	border-right: 1px solid rgba(209,156,53,0.5);
+	box-shadow: inset 0px 0px 2px 2px rgba(153, 106, 26, .05);
+}
+
+
+
+.silver{
+	background: linear-gradient(45deg,  rgba(160,160,160,1) 0%,rgba(232,232,232,1) 56%);
+}
+
+.silver:before{
+	background: linear-gradient(45deg,  rgba(181,181,181,1) 0%,rgba(252,252,252,1) 56%,rgba(232,232,232,1) 96%);
+	border: 1px solid rgba(181,181,181,1);
+}
+
+
+.silver:after{
+	background: linear-gradient(45deg,  rgba(181,181,181,1) 0%,rgba(252,252,252,1) 56%,rgba(232,232,232,1) 96%);
+	border-top: 1px solid rgba(255,255,255,0.3);
+	border-left: 1px solid rgba(255,255,255,0.3);
+	border-bottom: 1px solid rgba(160,160,160,0.3);
+	border-right: 1px solid rgba(160,160,160,0.5);
+	box-shadow: inset 0px 0px 2px 2px rgba(150, 150, 150, .05);
+}
+
+
+
+.gold{
+	background: linear-gradient(45deg,  rgba(242,215,12,1) 0%,rgba(255,255,255,1) 56%,rgba(252,235,0,1) 96%);
+}
+
+.gold:before{
+	background: linear-gradient(45deg,  rgba(242,215,12,1) 0%,rgba(255,255,255,1) 56%,rgba(252,235,0,1) 96%);
+	border: 1px solid rgba(242,215,12,1);
+}
+
+
+.gold:after{
+	background: linear-gradient(45deg,  rgba(242,215,12,1) 0%,rgba(255,255,255,1) 56%,rgba(252,235,0,1) 96%);
+	border-top: 1px solid rgba(255,255,255,0.3);
+	border-left: 1px solid rgba(255,255,255,0.3);
+	border-bottom: 1px solid rgba(242,215,12,0.3);
+	border-right: 1px solid rgba(242,215,12,0.3);
+	box-shadow: inset 0px 0px 2px 2px rgba(150, 150, 150, .05);
+}
+
+.go_amount {
+	display: inline;
+	position: relative;
+	bottom: .5em;
+}
+
+.go_admin_bar_gold_2 .go_coin {
+	font-size:.5em;
 }

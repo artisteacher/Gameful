@@ -7,6 +7,15 @@ function go_user_profile_link(uid){
             action: 'go_user_profile_link',
             uid: uid
         },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
         success: function (url) {
             window.open(url);
         }
@@ -68,26 +77,20 @@ function go_admin_bar_stats_page_button( id ) {//this is called from the admin b
             action: 'go_admin_bar_stats',
             uid: id
         },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
         success: function( res ) {
             console.log(res);
             if (res ==='refresh'){
-                Swal.fire({//sw2 OK
-                    title: "Error",
-                    text: "Refresh the page and then try again.",
-                    type: 'warning',
-                    //showCancelButton: true,
-                    confirmButtonText: 'Refresh Now',
-                    //cancelButtonText: 'No, cancel!',
-                    reverseButtons: true,
-                    customClass: {
-                        confirmButton: 'btn btn-success',
-                        cancelButton: 'btn btn-danger'
-                    },
-                })
-                    .then((result) => {
-                        //refresh
-                        location.reload();
-                    });
+                go_refresh_page_on_error();
+                return;
             }
             else if ( -1 !== res ) {
 
@@ -140,7 +143,7 @@ function go_stats_links(){
     jQuery('.go_stats_messages_icon').prop('onclick',null).off('click');
     jQuery(".go_stats_messages_icon").one("click", function(e){
         var user_id = this.getAttribute('data-uid');
-        go_messages_opener(user_id, null, "single_message");
+        go_messages_opener(user_id, null, "single_message", this);
     });
 }
 
@@ -237,6 +240,15 @@ function go_stats_about(user_id) {
                 action: 'go_stats_about',
                 user_id: jQuery('#go_stats_hidden_input').val()
             },
+            /**
+             * A function to be called if the request fails.
+             * Assumes they are not logged in and shows the login message in lightbox
+             */
+            error: function(jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status === 400){
+                    jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+                }
+            },
             success: function (res) {
                 if (-1 !== res) {
                     //console.log(res);
@@ -291,6 +303,15 @@ function go_stats_task_list() {
                 _ajax_nonce: nonce,
                 action: 'go_stats_task_list',
                 user_id: jQuery('#go_stats_hidden_input').val()
+            },
+            /**
+             * A function to be called if the request fails.
+             * Assumes they are not logged in and shows the login message in lightbox
+             */
+            error: function(jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status === 400){
+                    jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+                }
             },
             success: function (res) {
                 if (-1 !== res) {
@@ -361,13 +382,13 @@ function go_enable_reset_buttons(){
     //apply on click to the individual task reset icons
     jQuery('.go_reset_task_clipboard').prop('onclick',null).off('click');
     jQuery(".go_reset_task_clipboard").one("click", function(){
-        go_messages_opener( this.getAttribute('data-uid'), this.getAttribute('data-task'), 'single_reset' );
+        go_messages_opener( this.getAttribute('data-uid'), this.getAttribute('data-task'), 'single_reset', this );
     });
 
     //apply on click to the reset button at the top
     jQuery('.go_tasks_reset_multiple_clipboard').parent().prop('onclick',null).off('click');
     jQuery(".go_tasks_reset_multiple_clipboard").parent().one("click", function(){
-        go_messages_opener( null, null, 'multiple_reset' );
+        go_messages_opener( null, null, 'multiple_reset', this );
     });
 }
 
@@ -387,7 +408,15 @@ function go_stats_single_task_activity_list (postID) {
             user_id: jQuery( '#go_stats_hidden_input' ).val(),
             postID: postID
         },
-
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
         success: function( res ) {
             if ( -1 !== res ) {
                 //jQuery( '#go_stats_body' ).html( '' );
@@ -419,6 +448,15 @@ function go_stats_item_list() {
                 _ajax_nonce: nonce,
                 action: 'go_stats_item_list',
                 user_id: jQuery('#go_stats_hidden_input').val()
+            },
+            /**
+             * A function to be called if the request fails.
+             * Assumes they are not logged in and shows the login message in lightbox
+             */
+            error: function(jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status === 400){
+                    jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+                }
             },
             success: function (res) {
                 if (-1 !== res) {
@@ -456,6 +494,15 @@ function go_stats_activity_list() {
                 _ajax_nonce: nonce,
                 action: 'go_stats_activity_list',
                 user_id: jQuery('#go_stats_hidden_input').val()
+            },
+            /**
+             * A function to be called if the request fails.
+             * Assumes they are not logged in and shows the login message in lightbox
+             */
+            error: function(jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status === 400){
+                    jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+                }
             },
             success: function (res) {
                 if (-1 !== res) {
@@ -525,6 +572,15 @@ function go_stats_messages() {
                 action: 'go_stats_messages',
                 user_id: jQuery('#go_stats_hidden_input').val()
             },
+            /**
+             * A function to be called if the request fails.
+             * Assumes they are not logged in and shows the login message in lightbox
+             */
+            error: function(jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status === 400){
+                    jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+                }
+            },
             success: function (res) {
                 if (-1 !== res) {
                     jQuery('#stats_messages').html(res);
@@ -562,6 +618,15 @@ function go_stats_badges_list() {
                 action: 'go_stats_badges_list',
                 user_id: jQuery('#go_stats_hidden_input').val()
             },
+            /**
+             * A function to be called if the request fails.
+             * Assumes they are not logged in and shows the login message in lightbox
+             */
+            error: function(jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status === 400){
+                    jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+                }
+            },
             success: function (res) {
                 //console.log(res);
                 if (-1 !== res) {
@@ -583,6 +648,15 @@ function go_stats_groups_list() {
                 _ajax_nonce: nonce,
                 action: 'go_stats_groups_list',
                 user_id: jQuery('#go_stats_hidden_input').val()
+            },
+            /**
+             * A function to be called if the request fails.
+             * Assumes they are not logged in and shows the login message in lightbox
+             */
+            error: function(jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status === 400){
+                    jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+                }
             },
             success: function (res) {
                 if (-1 !== res) {
@@ -609,6 +683,15 @@ function go_stats_leaderboard() {
                 _ajax_nonce: nonce_leaderboard,
                 action: 'go_stats_leaderboard',
                 user_id: jQuery('#go_stats_hidden_input').val()
+            },
+            /**
+             * A function to be called if the request fails.
+             * Assumes they are not logged in and shows the login message in lightbox
+             */
+            error: function(jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status === 400){
+                    jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+                }
             },
             success: function( raw ) {
                 //console.log(raw);
@@ -708,6 +791,15 @@ function go_stats_lite (user_id) {
             _ajax_nonce: nonce,
             action: 'go_stats_lite',
             uid: user_id
+        },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
         },
         success: function( res ) {
 
@@ -961,6 +1053,27 @@ function go_daterange_clear(){
 
 function go_clear_daterange(){
 
+}
+
+function go_refresh_page_on_error(){
+    Swal.fire({//sw2 OK
+        title: "Error",
+        text: "Refresh the page and then try again? You will lose unsaved changes. You can cancel and copy any unsaved changes to a safe location before refresh.",
+        type: 'warning',
+        //showCancelButton: true,
+        confirmButtonText: 'Refresh Now',
+        //cancelButtonText: 'No, cancel!',
+        reverseButtons: true,
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+        },
+    })
+        .then((result) => {
+            if (result.value) {
+                location.reload();
+            }
+        })
 }
 
 //this now saves to session data

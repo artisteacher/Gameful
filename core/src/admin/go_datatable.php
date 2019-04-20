@@ -8,6 +8,7 @@ function go_update_db_check() {
         update_option('go_db_version', $go_db_version);
         go_update_db();
     }
+
 }
 add_action( 'plugins_loaded', 'go_update_db_check' );
 
@@ -110,6 +111,7 @@ function go_table_totals() {
     dbDelta( $sql );
 }
 
+//this is just for older installs that didn't have the autoload on
 function go_set_options_autoload(){
     $options_array = array(
         'options_go_tasks_name_singular',
@@ -227,6 +229,16 @@ function go_install_data ($reset = false) {
         'options_go_loot_gold_abbreviation' => 'G',
         'options_go_loot_health_abbreviation' => 'HP',
 
+        'options_go_loot_gold_currency' => 'currency',
+        'options_go_loot_gold_coin_names_gold_name' => 'Gold',
+        'options_go_loot_gold_coin_names_gold_abbreviation' => 'G',
+        'options_go_loot_gold_coin_names_silver_name' => 'Silver',
+        'options_go_loot_gold_coin_names_silver_abbreviation' => 'S',
+        'options_go_loot_gold_coin_names_bronze_name' => 'Bronze',
+        'options_go_loot_gold_coin_names_bronze_abbreviation' => 'B',
+
+
+
         'options_go_loot_xp_levels_name_singular' => 'Level',
         'options_go_loot_xp_levels_name_plural' => 'Levels',
         'options_go_loot_xp_levels_growth' => '5',
@@ -329,6 +341,82 @@ function go_open_comments() {
     global $wpdb;
     $wpdb->update( $wpdb->posts, array( 'comment_status' => 'open', 'ping_status' => 'open' ), array( 'post_type' => 'tasks' ) );
 }
+
+function go_v5_update_db()
+{
+
+
+    $query = new WP_Query(array(
+        'post_type' => 'tasks',
+        'posts_per_page' => 10000
+    ));
+
+
+    while ($query->have_posts()) {
+        $query->the_post();
+        $post_id = get_the_ID();
+
+        $element_count = 0;
+        //get number of stages
+        $stage_count = get_post_meta($post_id, 'go_stages', true);
+        for ($i = 0; $i <= $stage_count; $i++) {
+            $title = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_title', true);
+            update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_title',  $title);
+
+            $private = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_title', true);
+            update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_title',  $private);
+
+            $text = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_blog_text_toggle', true);
+            update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_text_toggle',  $text);
+
+            $min = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_blog_text_minimum_length', true);
+            update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_text_minimum_length',  $min);
+            
+            $url = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_url_toggle', true);
+            if ($url) {
+                update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $element_count . '_element', 'URL');
+                $validate = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_url_url_validation', true);
+                update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $element_count . '_requirements_url_validation', $validate);
+                update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $element_count . '_requirements_url_validation', $validate);
+                //maybe add a uniqueID
+                // go_stages_0_blog_options_blog_elements_{$element_count}_uniqueid = taskID_StageID_ROW#
+
+                $element_count++;
+            }
+
+            $file = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_attach_file_toggle', true);
+            if ($file) {
+                update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $element_count . '_element', 'File');
+                $restrict = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_attach_file_restrict_file_types', true);
+                if($restrict) {
+                    $types = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_attach_file_allowed_types', true);
+                    update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $element_count . '_requirements_allowed_types', $types);
+                }
+                //maybe add a uniqueID
+                // go_stages_0_blog_options_blog_elements_{$element_count}_uniqueid = taskID_StageID_ROW#
+
+                $element_count++;
+            }
+
+
+
+            $video = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_video', true);
+            if ($video) {
+                update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $element_count . '_element', 'Video');
+                //maybe add a uniqueID
+                // go_stages_0_blog_options_blog_elements_{$element_count}_uniqueid = taskID_StageID_ROW#
+                $element_count++;
+            }
+
+            update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements',  $element_count);
+        }
+    }
+    wp_reset_query();
+}
+
+
+add_action('shutdown', 'go_v5_update_db');
+
 
 
 ?>

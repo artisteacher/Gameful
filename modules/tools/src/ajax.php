@@ -7,12 +7,18 @@
  */
 
 function go_upgade4 (){
-    global $wpdb;
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
     //check_ajax_referer( 'go_upgade4' );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_upgade4' ) ) {
         echo "refresh";
         die( );
     }
+
+    global $wpdb;
     $go_posts_table = "{$wpdb->prefix}posts";
     $tasks = $wpdb->get_results(
         $wpdb->prepare(
@@ -242,7 +248,11 @@ function go_upgade4 (){
 }
 
 function go_reset_all_users(){
-    global $wpdb;
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
     //check_ajax_referer( 'go_reset_all_users' );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_reset_all_users' ) ) {
         echo "refresh";

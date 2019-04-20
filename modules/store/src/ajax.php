@@ -5,6 +5,11 @@ function go_buy_item() {
     //check_ajax_referer( 'go_buy_item' );
     //$user_id = get_current_user_id();
 
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_buy_item' ) ) {
         echo "refresh";
         die( );
@@ -169,6 +174,12 @@ function go_buy_item() {
 
 // Main Lightbox Ajax Function
 function go_the_lb_ajax() {
+
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
     //check_ajax_referer( 'go_the_lb_ajax');
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_the_lb_ajax' ) ) {
         echo "refresh";
@@ -276,6 +287,7 @@ function go_the_lb_ajax() {
             //$xp_abbr         = get_option( 'options_go_loot_xp_abbreviation' );
             //$user_xp = go_return_points( $user_id );
             $store_toggle_xp = (isset($custom_fields['go_loot_reward_toggle_xp'][0]) ? $custom_fields['go_loot_reward_toggle_xp'][0] : null);
+            $store_cost_xp = go_display_shorthand_currency('xp', $store_abs_cost_xp);
 
         } else {
             $xp_on = false;
@@ -286,7 +298,7 @@ function go_the_lb_ajax() {
             $gold_on = true;
             $gold_name = get_option('options_go_loot_gold_name');
             $store_toggle_gold = (isset($custom_fields['go_loot_reward_toggle_gold'][0]) ? $custom_fields['go_loot_reward_toggle_gold'][0] : null);
-
+            $store_cost_gold = go_display_shorthand_currency('gold', $store_abs_cost_gold);
         } else {
             $gold_on = false;
         }
@@ -296,7 +308,7 @@ function go_the_lb_ajax() {
             $health_on = true;
             $health_name = get_option('options_go_loot_health_name');
             $store_toggle_health = (isset($custom_fields['go_loot_reward_toggle_health'][0]) ? $custom_fields['go_loot_reward_toggle_health'][0] : null);
-
+            $store_cost_health = go_display_shorthand_currency('health', $store_abs_cost_health);
         } else {
             $health_on = false;
         }
@@ -326,13 +338,13 @@ function go_the_lb_ajax() {
         if (($xp_on && $store_toggle_xp == false) || ($gold_on && $store_toggle_gold == false) || ($health_on && $store_toggle_health == false)) {
             echo "<div id='go_store_loot'><div id='go_cost'> <div id='go_store_cost_container' class='go_store_container'> <div class='go_store_loot_left'><div class='go_round_button_container'><div id='gp_store_minus' class='go_store_round_button'>-</div></div></div><div class='go_store_loot_right'><h3>Cost</h3>";
             if ($xp_on && $store_toggle_xp == false) {
-                echo '<div class="golb-fr-boxes-r">' . $store_abs_cost_xp . ' : ' . $xp_name . '</div>';
+                echo '<div class="golb-fr-boxes-r">' . $store_cost_xp . '</div>';
             }
             if ($gold_on && $store_toggle_gold == false) {
-                echo '<div class="golb-fr-boxes-r">' . $store_abs_cost_gold . ' : ' . $gold_name . '</div>';
+                echo '<div class="golb-fr-boxes-r">' . $store_cost_gold .  '</div>';
             }
             if ($health_on && $store_toggle_health == false) {
-                echo '<div class="golb-fr-boxes-r">' . $store_abs_cost_health . ' : ' . $health_name . '</div>';
+                echo '<div class="golb-fr-boxes-r">' . $store_cost_health . '</div>';
             }
 
             echo "</div></div></div>";
@@ -341,13 +353,13 @@ function go_the_lb_ajax() {
         if (($xp_on && $store_toggle_xp == true) || ($gold_on && $store_toggle_gold == true) || ($health_on && $store_toggle_health == true) || (!empty($badges)) || (!empty($groups))) {
             echo "<div id='go_reward'><div class='go_store_container'> <div class='go_store_loot_left'><div class='go_round_button_container'><div id='gp_store_plus' class='go_store_round_button'>+</div></div></div><div class='go_store_loot_right'><h3>Reward</h3>";
             if ($xp_on && $store_toggle_xp == true) {
-                echo '<div class="golb-fr-boxes-g">' . $store_abs_cost_xp . ' : ' . $xp_name . '</div>';
+                echo '<div class="golb-fr-boxes-g">' . $store_cost_xp .  '</div>';
             }
             if ($gold_on && $store_toggle_gold == true) {
-                echo '<div class="golb-fr-boxes-g">' . $store_abs_cost_gold . ' : ' . $gold_name . '</div>';
+                echo '<div class="golb-fr-boxes-g">' . $store_cost_gold . '</div>';
             }
             if ($health_on && $store_toggle_health == true) {
-                echo '<div class="golb-fr-boxes-g">' . $store_abs_cost_health . ' : ' . $health_name . '</div>';
+                echo '<div class="golb-fr-boxes-g">' . $store_cost_health . '</div>';
             }
 
             echo '<div id="go_badges_groups" style="display: flex; flex-wrap: wrap">';
@@ -378,7 +390,7 @@ function go_the_lb_ajax() {
         echo "</div></div></div>";
 
         ?>
-        <div id="go_store_actions" style="display:flex; flex-wrap: wrap;">
+        <div id="go_store_actions">
             <?php
             $store_multiple_toggle = (isset($custom_fields['go-store-options_multiple'][0]) ? $custom_fields['go-store-options_multiple'][0] : null);
 

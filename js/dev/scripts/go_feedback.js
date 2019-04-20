@@ -146,6 +146,17 @@ function go_reader_update() {
             order: order,
             limit: limit
         },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            jQuery('#loader_container').hide();
+            jQuery('#go_posts_wrapper').show();
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
         success: function( res ) {
             //console.log("success: " + res);
             if (-1 !== res) {
@@ -175,7 +186,7 @@ function go_reader_activate_buttons(){
     });
 
     jQuery(".go_reset_task_clipboard").one("click", function(){
-        go_messages_opener( this.getAttribute('data-uid'), this.getAttribute('data-task'), 'reset_stage' );
+        go_messages_opener( this.getAttribute('data-uid'), this.getAttribute('data-task'), 'reset_stage', this );
     });
 
     tippy('.tooltip', {
@@ -211,6 +222,15 @@ function go_reader_bulk_read(post_ids){
             _ajax_nonce: nonce,
             action: 'go_reader_bulk_read',
             post_ids: post_ids
+        },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
         },
         success: function( res ) {
 

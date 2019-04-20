@@ -115,6 +115,15 @@ function go_get_menu_data(taxonomy){
             group: group,
             unmatched: unmatched
         },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
         success: function( res ) {
            return res;
         }
@@ -138,7 +147,7 @@ function go_clipboard_callback() {
         //apply on click to the messages button at the top
         jQuery('.go_messages_icon_multiple_clipboard').parent().prop('onclick',null).off('click');
         jQuery(".go_messages_icon_multiple_clipboard").parent().one("click", function(e){
-            go_messages_opener(null, null, "multiple_messages");
+            go_messages_opener(null, null, "multiple_messages", this);
         });
 
         tippy('.tooltip', {
@@ -393,6 +402,15 @@ function go_clipboard_stats_datatable(refresh) {
                 action: 'go_clipboard_stats',
                 refresh: refresh
             },
+            /**
+             * A function to be called if the request fails.
+             * Assumes they are not logged in and shows the login message in lightbox
+             */
+            error: function(jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status === 400){
+                    jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+                }
+            },
             success: function( res ) {
                 //console.log("success");
                 if (-1 !== res) {
@@ -526,6 +544,15 @@ function go_clipboard_store_datatable(refresh) {
                 action: 'go_clipboard_store'
                 //go_clipboard_messages_datatable: jQuery( '#go_clipboard_store_datatable' ).val()
             },
+            /**
+             * A function to be called if the request fails.
+             * Assumes they are not logged in and shows the login message in lightbox
+             */
+            error: function(jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status === 400){
+                    jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+                }
+            },
             success: function( res ) {
                 //console.log("success");
                 if (-1 !== res) {
@@ -653,6 +680,15 @@ function go_clipboard_messages_datatable(refresh) {
                 _ajax_nonce: nonce,
                 action: 'go_clipboard_messages'
                 //go_clipboard_messages_datatable: jQuery( '#go_clipboard_messages_datatable' ).val()
+            },
+            /**
+             * A function to be called if the request fails.
+             * Assumes they are not logged in and shows the login message in lightbox
+             */
+            error: function(jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status === 400){
+                    jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+                }
             },
             success: function( res ) {
                 //console.log("success");
@@ -792,6 +828,15 @@ function go_clipboard_activity_datatable(refresh) {
                 _ajax_nonce: nonce,
                 action: 'go_clipboard_activity',
                 date: jQuery('#go_datepicker').html()
+            },
+            /**
+             * A function to be called if the request fails.
+             * Assumes they are not logged in and shows the login message in lightbox
+             */
+            error: function(jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status === 400){
+                    jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+                }
             },
             success: function( res ) {
                 //console.log("success");

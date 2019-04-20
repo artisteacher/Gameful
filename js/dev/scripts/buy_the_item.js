@@ -37,6 +37,15 @@ function go_lb_opener( id ) {
                 jQuery( "#lb-content" ).append( '<div class="go-lb-loading"></div>' );
             },
             cache: false,
+            /**
+             * A function to be called if the request fails.
+             * Assumes they are not logged in and shows the login message in lightbox
+             */
+            error: function(jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status === 400){
+                    jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+                }
+            },
             success: function( raw) {
                 console.log('success');
                 console.log(raw);
@@ -116,6 +125,15 @@ function goBuytheItem( id, count ) {
 				jQuery( '#golb-fr-buy' ).html( '' );
 				jQuery( '#golb-fr-buy' ).append( '<div id="go-buy-loading" class="buy_gold"></div>' );
 			},
+            /**
+             * A function to be called if the request fails.
+             * Assumes they are not logged in and shows the login message in lightbox
+             */
+            error: function(jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status === 400){
+                    jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+                }
+            },
 			success: function( raw ) {
                 var res = {};
                 try {
@@ -186,6 +204,15 @@ function go_store_password( id ){
             type:'POST',
             data: gotoSend,
             cache: false,
+            /**
+             * A function to be called if the request fails.
+             * Assumes they are not logged in and shows the login message in lightbox
+             */
+            error: function(jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status === 400){
+                    jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+                }
+            },
             success: function( raw) {
                     var res = JSON.parse( raw );
 
@@ -269,6 +296,15 @@ function go_count_item( item_id ) {
 			action: 'go_get_purchase_count',
 			item_id: item_id
 		},
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
 		success: function( res ) {
 			if ( -1 !== res ) {
 				var count = res.toString();

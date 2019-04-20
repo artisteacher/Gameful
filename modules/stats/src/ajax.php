@@ -132,11 +132,19 @@ function go_loot_headers($totals = null){
  *
  */
 function go_admin_bar_stats() {
+
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
+
     //check_ajax_referer( 'go_admin_bar_stats_' );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_admin_bar_stats' ) ) {
         echo "refresh";
         die( );
     }
+
     //$user_id = 0;
     //Get the user_id for the stats
     if ( ! empty( $_POST['uid'] ) ) {
@@ -435,7 +443,15 @@ function go_stats_about($user_id = null, $not_ajax = false) {
         $user_id = (int) $_POST['user_id'];
     }
 
+
+
     if (!$not_ajax){
+
+        if ( !is_user_logged_in() ) {
+            echo "login";
+            die();
+        }
+
         //check_ajax_referer( 'go_stats_about' );
         if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_about' ) ) {
             echo "refresh";
@@ -468,6 +484,11 @@ function go_stats_about($user_id = null, $not_ajax = false) {
 /**Tasks with Sever Side Processing--in case the tables get too large*/
 
 function go_stats_task_list() {
+
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
 
     //check_ajax_referer( 'go_stats_task_list_' );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_task_list' ) ) {
@@ -795,16 +816,24 @@ function go_loot_columns_stats($action){
  * @param $post_id
  */
 function go_stats_single_task_activity_list($post_id) {
-    global $wpdb;
-    $go_task_table_name = "{$wpdb->prefix}go_actions";
-    if ( ! empty( $_POST['user_id'] ) ) {
-        $user_id = (int) $_POST['user_id'];
+
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
     }
+
     //check_ajax_referer( 'go_stats_single_task_activity_list' );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_single_task_activity_list' ) ) {
         echo "refresh";
         die( );
     }
+
+    global $wpdb;
+    $go_task_table_name = "{$wpdb->prefix}go_actions";
+    if ( ! empty( $_POST['user_id'] ) ) {
+        $user_id = (int) $_POST['user_id'];
+    }
+
     $post_id = (int) $_POST['postID'];
 
     $task_name = get_option('options_go_tasks_name_singular');
@@ -953,6 +982,11 @@ function go_stats_single_task_activity_list($post_id) {
  *
  */
 function go_stats_item_list() {
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
     //check_ajax_referer( 'go_stats_item_list_' );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_item_list' ) ) {
         echo "refresh";
@@ -1175,6 +1209,12 @@ function go_stats_store_item_dataloader(){
  *
  */
 function go_stats_messages() {
+
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
     //check_ajax_referer( 'go_stats_messages' );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_messages' ) ) {
         echo "refresh";
@@ -1424,6 +1464,11 @@ function go_messages_dataloader_ajax(){
  *
  */
 function go_stats_activity_list() {
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
     //check_ajax_referer( 'go_stats_activity_list_' );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_activity_list' ) ) {
         echo "refresh";
@@ -1816,16 +1861,24 @@ function go_activity_dataloader_ajax(){
  * @param $user_id
  */
 function go_stats_badges_list($user_id) {
-    global $wpdb;
-    $go_loot_table_name = "{$wpdb->prefix}go_loot";
-    if ( ! empty( $_POST['user_id'] ) ) {
-        $user_id = (int) $_POST['user_id'];
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
     }
+
     //check_ajax_referer( 'go_stats_badges_list_' );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_badges_list' ) ) {
         echo "refresh";
         die( );
     }
+
+
+    global $wpdb;
+    $go_loot_table_name = "{$wpdb->prefix}go_loot";
+    if ( ! empty( $_POST['user_id'] ) ) {
+        $user_id = (int) $_POST['user_id'];
+    }
+
     $badges_array = $wpdb->get_var ("SELECT badges FROM {$go_loot_table_name} WHERE uid = {$user_id}");
     $badges_array = unserialize($badges_array);
     if (empty($badges_array)){
@@ -1941,6 +1994,18 @@ function go_stats_badges_list($user_id) {
  * @param $user_id
  */
 function go_stats_groups_list($user_id) {
+
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
+    //check_ajax_referer( 'go_stats_groups_list_' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_groups_list' ) ) {
+        echo "refresh";
+        die( );
+    }
+
     global $wpdb;
     $go_loot_table_name = "{$wpdb->prefix}go_loot";
     if ( ! empty( $_POST['user_id'] ) ) {
@@ -1948,11 +2013,8 @@ function go_stats_groups_list($user_id) {
     } else {
         $user_id = get_current_user_id();
     }
-    //check_ajax_referer( 'go_stats_groups_list_' );
-    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_groups_list' ) ) {
-        echo "refresh";
-        die( );
-    }
+
+
     $badges_array = $wpdb->get_var ("SELECT groups FROM {$go_loot_table_name} WHERE uid = {$user_id}");
     $badges_array = unserialize($badges_array);
     $args = array(
@@ -2057,6 +2119,10 @@ function go_stats_groups_list($user_id) {
  *
  */
 function go_stats_leaderboard() {
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
 
     //check_ajax_referer('go_stats_leaderboard_');
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_leaderboard' ) ) {
@@ -2426,7 +2492,10 @@ function go_stats_leaderboard_dataloader_ajax(){
  *
  */
 function go_stats_lite(){
-
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
     //check_ajax_referer( 'go_stats_lite' );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_lite' ) ) {
         echo "refresh";

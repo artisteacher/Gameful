@@ -714,29 +714,90 @@ function go_test_check ($custom_fields, $i, $status, $go_actions_table_name, $us
         //echo "Questions answered correctly.";
         $i++;
 
+
+
+        //LOGIC:
+        //get the first attempt
+        //get the score
+        //if on task and not 100%
+        //then get the most recent attempt
+
+        //build the html
+        //if on task
+            //if 100%
+                //echo the score
+                //echo first
+            //else
+                //echo link to first
+                //echo recent
+        //else if on clipboard
+            //echo message with score
+
+                //echo first
+
+        //get the first attempt
+        $first = (string) $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT result 
+				FROM {$go_actions_table_name} 
+				WHERE uid = %d AND source_id = %d AND {$stage}  = %d AND action_type = %s
+				ORDER BY id ASC LIMIT 1",
+                $user_id,
+                $post_id,
+                $i,
+                'quiz_result'
+            )
+        );
+        $first = stripslashes($first);
+
+        //get the score
         //$quiz_mod = go_get_quiz_mod($user_id, $post_id, $i,  );
         $quiz_result = go_get_quiz_result($user_id, $post_id, $i, 'array' );
         $quiz_mod = (isset($quiz_result[0]['result']) ?  $quiz_result[0]['result'] : null);
         $total_questions = (isset($quiz_result[0]['check_type']) ?  $quiz_result[0]['check_type'] : null);
         //$total_questions = $quiz_result[0]['check_type'];
         $score = ($total_questions - $quiz_mod )."/".$total_questions;
-        $first = '';
-        $first_link = '';
-        if ($quiz_mod > 0) {
 
-            $html = (string) $wpdb->get_var(
-                $wpdb->prepare(
-                    "SELECT result 
+        //if on task and not 100%
+        //then get the most recent attempt
+        if (!$show_first) {//on a task
+            if ($quiz_mod == 0) {
+                echo "<div>You got {$score} correct. 100% Good job!</div>";
+            }
+            else if ($quiz_mod > 0) {//not 100%
+                echo "<div>On your <a href='#' data-featherlight='#go_first_quiz_attempt_{$i} '>first attempt</a> you got {$score} correct.</div>";
+
+                //Get the most recent attempt
+                $recent = (string)$wpdb->get_var(
+                    $wpdb->prepare(
+                        "SELECT result 
 				FROM {$go_actions_table_name} 
 				WHERE uid = %d AND source_id = %d AND {$stage}  = %d AND action_type = %s
-				ORDER BY id ASC LIMIT 1",
-                    $user_id,
-                    $post_id,
-                    $i,
-                    'quiz_result'
-                )
-            );
-            $html = stripslashes($html);
+				ORDER BY id DESC LIMIT 1",
+                        $user_id,
+                        $post_id,
+                        $i,
+                        'quiz_result'
+                    )
+                );
+                $recent = stripslashes($recent);
+
+                //print the hidden div for the lightbox
+                echo "<div id='go_first_quiz_attempt_{$i}' class='go_first_quiz_attempt' >{$first}</div>";
+                echo "<div>{$recent}</div>";
+            }
+        }
+        else {//on the clipboard
+            echo "<h3>{$score}</h3>";
+
+            echo "<div>{$first}</div>";
+
+
+        }
+        /*
+        if ($quiz_mod > 0) {
+
+
              //$html = '<ul><li><div>Do it 50%<span class="go_correct_answer_marker">correct</span></div></li><li><input type="radio" value="Yes" checked="checked"> Yes</li><li><input type="radio" name="go_test_answer_0" value="no"> no</li></ul><ul><li><div >Nope<span class="go_wrong_answer_marker" style="">wrong</span></div></li><li class="go_test go_test_element"><input type="radio"  value="yup" checked="checked"> yup</li><li class="go_test go_test_element"><input type="radio" value="nope"> nope</li></ul>';
             $show = '';
             if ($show_first) {
@@ -777,7 +838,7 @@ function go_test_check ($custom_fields, $i, $status, $go_actions_table_name, $us
         }
 
 
-
+        */
 
     }
 

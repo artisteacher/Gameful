@@ -589,7 +589,7 @@ function go_bonus_loot ($custom_fields, $user_id) {
     //$mystery_box_url =
     echo "
 		<div id='go_bonus_loot'>
-    	<h4>{$bonus_loot_uc}</h4>
+		<hr>
         <p>Click the box to try and claim " . $bonus_loot . ".</p>
         ";
     $url = plugin_dir_url((dirname(dirname(dirname(__FILE__)))));
@@ -703,9 +703,12 @@ function go_print_outro ($user_id, $post_id, $custom_fields, $stage_count, $stat
     $outro_message  = apply_filters( 'go_awesome_text', $outro_message );
     echo "<div id='outro' class='go_checks_and_buttons'>";
     echo "    
-        <h3>" . ucwords($task_name) . " Complete!</h3>
-        <p>" . $outro_message . "</p>
-        You earned:";
+        <h3>" . ucwords($task_name) . " Complete!</h3>";
+     if (!empty($outro_message)){
+        echo '<p>" . $outro_message . "</p>';
+     }
+
+    echo "You earned:";
 
 
     if (!$all_content) {
@@ -716,31 +719,33 @@ function go_print_outro ($user_id, $post_id, $custom_fields, $stage_count, $stat
 
         $loot = $wpdb->get_results("SELECT * FROM {$go_task_table_name} WHERE uid = {$user_id} AND post_id = {$post_id}");
         $loot = $loot[0];
-        if (get_option('options_go_loot_xp_toggle')) {
-            $xp_on = true;
-            $xp_name = get_option('options_go_loot_xp_name');
+
+        if(get_option( 'options_go_loot_xp_toggle' )  ){
             $xp_loot = $loot->xp;
+            if($xp_loot > 0) {
+
+                go_display_longhand_currency('xp', $xp_loot, $output = true);
+            }
         }
-        if (get_option('options_go_loot_gold_toggle')) {
-            $gold_on = true;
-            $gold_name = get_option('options_go_loot_gold_name');
+        if(get_option( 'options_go_loot_gold_toggle' )){
+            //echo "<br>{$gold_loot} {$gold_name} ";
             $gold_loot = $loot->gold;
+            if ($gold_loot > 0) {
+                echo "<br>";
+                go_display_longhand_currency('gold', $gold_loot, $output = true, false);
+            }
         }
-        if (get_option('options_go_loot_health_toggle')) {
-            $health_on = true;
-            $health_name = get_option('options_go_loot_health_name');
+        if(get_option( 'options_go_loot_health_toggle' )){
             $health_loot = $loot->health;
+            //echo "<br>{$health_loot} {$health_name} ";
+            if(($health_loot > 0)) {
+                echo "<br>";
+                go_display_longhand_currency('health', $health_loot, $output = true);
+                echo "<br>";
+            }
         }
 
-        if (isset($xp_on)) {
-            echo "{$xp_loot} {$xp_name} ";
-        }
-        if (isset($gold_on)) {
-            echo "<br>{$gold_loot} {$gold_name} ";
-        }
-        if (isset($health_on)) {
-            echo "<br>{$health_loot} {$health_name} ";
-        }
+
         echo "</div>";
         if (get_option('options_go_badges_toggle')) {
             //$badges_on = true;
@@ -788,32 +793,34 @@ function go_print_bonus_loot_possibilities($custom_fields, $user_id){
     $rows = go_get_bonus_loot_rows($custom_fields, false, $user_id);
 
     if (count($rows) >0) {
-        echo "<ul>";
+        echo "<ul style='margin: 0 0 0 2em;'>";
         foreach ($rows as $row) {
             $title = (isset($row['title']) ? $row['title'] : null);
             echo "<li>";
-            echo $title . "";
+            echo $title . " : ";
             //$message = (isset($row['title']) ? $row['title'] : null);
             if (go_get_loot_toggle( 'xp')){
                 $loot = (isset($row['$xp']) ? $row['$xp'] : null);
                 if ($loot > 0) {
-                    $name = go_get_loot_short_name('xp');
-
-                    echo " " . $loot . " " . $name;
+                    go_display_shorthand_currency ( 'xp', $loot, true );
+                    //$name = go_get_loot_short_name('xp');
+                   // echo " " . $loot . " " . $name;
                 }
             }
             if (go_get_loot_toggle( 'gold')){
                 $loot = (isset($row['gold']) ? $row['gold'] : null);
                 if ($loot > 0) {
-                    $name = go_get_loot_short_name('gold');
-                    echo " " . $loot . " " . $name;
+                    go_display_shorthand_currency ( 'gold', $loot,  true );
+                    //$name = go_get_loot_short_name('gold');
+                   //echo " " . $loot . " " . $name;
                 }
             }
             if (go_get_loot_toggle( 'health')){
                 $loot = (isset($row['health']) ? $row['health'] : null);
                 if ($loot > 0) {
-                    $name = go_get_loot_short_name('health');
-                    echo " " . $loot . " " . $name;
+                    go_display_shorthand_currency ( 'health', $loot,  true );
+                    //$name = go_get_loot_short_name('health');
+                    //echo " " . $loot . " " . $name;
                 }
             }
 
@@ -910,74 +917,75 @@ function go_display_rewards($custom_fields, $task_name, $top = true, $user_id, $
 
         echo "<div><p style='margin-bottom: 0px;'>You can earn:</p>";
     }
+            $xp_loot = 0;
+            $gold_loot = 0;
+            $health_loot = 0;
 
+            //entry loot
             if (get_option( 'options_go_loot_xp_toggle' )){
-                $xp_on = true;
-                $xp_name = get_option('options_go_loot_xp_name');
                 $xp_loot = (isset($custom_fields['go_entry_rewards_xp'][0]) ?  $custom_fields['go_entry_rewards_xp'][0] : null);
-            }else{
-                $xp_on = false;
             }
             if (get_option( 'options_go_loot_gold_toggle' )){
-                $gold_on = true;
-                $gold_name = get_option('options_go_loot_gold_name');
                 $gold_loot = (isset($custom_fields['go_entry_rewards_gold'][0]) ?  $custom_fields['go_entry_rewards_gold'][0] : null);
-
-            }else{
-                $gold_on = false;
             }
             if (get_option( 'options_go_loot_health_toggle' )){
-                $health_on = true;
-                $health_name = get_option('options_go_loot_health_name');
                 $health_loot = (isset($custom_fields['go_entry_rewards_health'][0]) ?  $custom_fields['go_entry_rewards_health'][0] : null);
-            }else{
-                $health_on = false;
             }
 
             if (get_option( 'options_go_badges_toggle' )){
-                $badges_on = true;
-                $badges_name = get_option('options_go_badges_name_plural');
                 $badges = (isset($custom_fields['go_badges'][0]) ?  $custom_fields['go_badges'][0] : null);
                 //$badges = unserialize($badges);
+            }else{
+                $badges = array();
             }
 
             $i = 0;
+
+            //add all the loot from the stages
             while ( $stage_count > $i ) {
-                if ($xp_on) {
+                if (get_option( 'options_go_loot_xp_toggle' )) {
                     $key = 'go_stages_' . $i . '_rewards_xp';
                     //$xp = $custom_fields[$key][0];
                     $xp = (isset($custom_fields[$key][0]) ?  $custom_fields[$key][0] : null);
                     $xp_loot = $xp + $xp_loot;
                 }
 
-                if($gold_on) {
+                if(get_option( 'options_go_loot_gold_toggle' )) {
                     $key = 'go_stages_' . $i . '_rewards_gold';
                     $gold = (isset($custom_fields[$key][0]) ?  $custom_fields[$key][0] : null);
                     $gold_loot = $gold + $gold_loot;
                 }
 
-                if($health_on) {
+                if(get_option( 'options_go_loot_health_toggle' )) {
                     $key = 'go_stages_' . $i . '_rewards_health';
                     $health = (isset($custom_fields[$key][0]) ?  $custom_fields[$key][0] : null);
                     $health_loot = $health + $health_loot;
+                    if($health_loot > 200){
+                        $health_loot = 200;
+                    }
                 }
 
                 $i++;
             }
-            if($health_loot > 200){
-                $health_loot = 200;
-            }
+
 
     echo "<div id='go_task_rewards'>
         <div id='go_task_rewards_loot'>";
-    if($xp_on){
-        echo "{$xp_loot} {$xp_name} ";
+    if(get_option( 'options_go_loot_xp_toggle' )  && ($xp_loot > 0)){
+        //echo "{$xp_loot} {$xp_name} ";
+        //echo "<br>";
+        go_display_longhand_currency ( 'xp', $xp_loot, $output = true );
     }
-    if($gold_on){
-        echo "<br>{$gold_loot} {$gold_name} ";
+    if(get_option( 'options_go_loot_gold_toggle' ) && ($gold_loot > 0)){
+        //echo "<br>{$gold_loot} {$gold_name} ";
+        echo "<br>";
+        go_display_longhand_currency ( 'gold', $gold_loot, $output = true, false );
     }
-    if($health_on){
-        echo "<br>{$health_loot} {$health_name} ";
+    if(get_option( 'options_go_loot_health_toggle' )  && ($health_loot > 0)){
+        //echo "<br>{$health_loot} {$health_name} ";
+        echo "<br>";
+        go_display_longhand_currency ( 'health', $health_loot, $output = true );
+        echo "<br>";
     }
     echo "</div>";
 
@@ -988,7 +996,7 @@ $bonus_radio =(isset($custom_fields['bonus_loot_toggle'][0]) ? $custom_fields['b
 
 
     if ($bonus_radio == "1" || $bonus_radio == "default") {
-        echo "<div id='go_bonus_loot_possibilites'>";
+        echo "<div id='go_bonus_loot_possibilites' style='font-size: .9em;'>";
         echo "Complete the {$task_name} for a chance at a bonus of: ";
         go_print_bonus_loot_possibilities($custom_fields, $user_id);
         echo "</div>";

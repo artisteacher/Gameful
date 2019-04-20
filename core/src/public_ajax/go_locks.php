@@ -16,6 +16,12 @@
  */
 function go_task_locks ( $id, $user_id, $task_name, $custom_fields, $is_logged_in, $check_only){
 
+    if($user_id === null){
+        $user_id = get_current_user_id();
+
+    }
+
+
     //this is for maps.
     //This check is done later on tasks and store as well.
     //It is separated out because they treat it differently

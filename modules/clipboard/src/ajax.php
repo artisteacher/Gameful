@@ -444,7 +444,11 @@ function go_clipboard_stats() {
         die( -1 );
     }
 
-    global $wpdb;
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
     //check_ajax_referer( 'go_clipboard_stats_' . get_current_user_id() );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_clipboard_stats' ) ) {
         echo "refresh";
@@ -457,8 +461,6 @@ function go_clipboard_stats() {
     $badges_toggle = get_option('options_go_badges_toggle');
 
     // prepares tab titles
-    //$xp_name = get_option( "options_go_loot_xp_name" );
-    //$gold_name = get_option( "options_go_loot_gold_name" );
     $badges_name = get_option('options_go_badges_name_plural');
 
     $xp_abbr = get_option("options_go_loot_xp_abbreviation");
@@ -725,6 +727,12 @@ function go_print_badge_list($badge_ids){
  *
  */
 function go_clipboard_store() {
+
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
     //check_ajax_referer( 'go_clipboard_store' );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_clipboard_store' ) ) {
         echo "refresh";
@@ -953,6 +961,11 @@ function go_clipboard_store_dataloader_ajax(){
  *
  */
 function go_clipboard_messages() {
+
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
     //check_ajax_referer( 'go_clipboard_messages' );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_clipboard_messages' ) ) {
         echo "refresh";
@@ -1243,6 +1256,11 @@ function go_clipboard_messages_dataloader_ajax(){
 function go_clipboard_activity() {
     if ( ! current_user_can( 'manage_options' ) ) {
         die( -1 );
+    }
+
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
     }
 
     //check_ajax_referer( 'go_clipboard_activity_' . get_current_user_id() );

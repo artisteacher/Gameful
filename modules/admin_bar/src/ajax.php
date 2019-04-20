@@ -7,6 +7,11 @@
  */
 
 function go_update_admin_view (){
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
     //check_ajax_referer( 'go_update_admin_view'  );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_update_admin_view' ) ) {
         echo "refresh";

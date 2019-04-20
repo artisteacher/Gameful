@@ -239,6 +239,35 @@ function go_total_query_time(){
     $total_time = $total_time;
 }
 
+//code used
+//check if logged in: https://wordpress.stackexchange.com/questions/69814/check-if-user-is-logged-in-using-jquery
+//and the JS https://wordpress.stackexchange.com/questions/163292/how-can-i-test-the-login-for-an-expired-session
+//and the heavylifting below: //https://stackoverflow.com/questions/48698142/ajax-overlay-if-user-session-expires-wordpress-frontend
+function go_login_session_expired() {
+// we only care to add scripts and styles if the user is logged in.
+    if ( is_user_logged_in() ) {
+
+        // add javascript file
+        wp_register_script( 'wp_auth_check', '/wp-includes/js/wp-auth-check.js' , array('heartbeat'), false, 1);
+        wp_localize_script( 'wp_auth_check', 'authcheckL10n', array(
+           'interval' => apply_filters( 'wp_auth_check_interval', 1 * MINUTE_IN_SECONDS ), // default interval is 3 minutes
+        ) );
+        wp_enqueue_script ('wp_auth_check');
+
+        // add css file
+        wp_enqueue_style( 'wp_auth_check','/wp-includes/css/wp-auth-check.css', array( 'dashicons' ), NULL, 'all' );
+
+        // add the login html to the page
+        add_action( 'wp_print_footer_scripts', 'wp_auth_check_html', 5 );
+    }
+}
+add_action( 'wp_enqueue_scripts', 'go_login_session_expired' );
+
+// make sure the stylesheet appears on the lightboxed login iframe
+function go_login_session_expired_styles() {
+    wp_enqueue_style( 'wp_auth_check','/wp-includes/css/wp-auth-check.css', array( 'dashicons' ), NULL, 'all' );
+}
+add_action( 'login_enqueue_scripts', 'go_login_session_expired_styles' );
 
 
 

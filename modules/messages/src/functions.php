@@ -51,53 +51,52 @@ function go_check_messages(){
             $groups = unserialize($groups);
 
             if ($type == 'admin_notification'){
-                go_noty_message_generic('warning', '', $title, '15000');
+                go_noty_message_generic('alert', '', $title, '15000');
             } else if ( $type == 'reset' && $type = 'reset_stage') {
                 go_noty_message_generic('warning', $title, $message, '');
             }else{
 
 
-                if (empty($xp)) {
-                    $xp_penalty = null;
-                    $xp_reward = null;
-                } else if ($xp > 0) {
-                    $xp_reward = $xp . " " . $xp_abbr . "<br>";
-                    $xp_penalty = null;
+
+                $xp_penalty = null;
+                $xp_reward = null;
+                $xp_loot = null;
+                if($xp != 0){
+                    $xp_loot = go_display_longhand_currency('xp', $xp);
+                }
+                if ($xp > 0) {
+                    $xp_reward = $xp_loot.'<br>';
                 } else if ($xp < 0) {
-                    $xp_penalty = $xp . " " . $xp_abbr . "<br>";
-                    $xp_reward = null;
-                } else {
-                    $xp_penalty = null;
-                    $xp_reward = null;
+                    $xp_penalty = $xp_loot.'<br>';
                 }
 
-                if (empty($gold)) {
-                    $gold_penalty = null;
-                    $gold_reward = null;
-                } else if ($gold > 0) {
-                    $gold_reward = $gold . " " . $gold_abbr . "<br>";
-                    $gold_penalty = null;
-                } else if ($gold < 0) {
-                    $gold_penalty = $gold . " " . $gold_abbr . "<br>";
-                    $gold_reward = null;
-                } else {
-                    $gold_penalty = null;
-                    $gold_reward = null;
+                $gold_penalty = null;
+                $gold_reward = null;
+                $gold_loot = null;
+                if($gold != 0){
+                    $gold_loot = go_display_shorthand_currency('gold', $gold, false, 'breaks');
+                }
+                if ($gold > 0) {
+                    $gold_reward = $gold_loot;
+                }
+                else if ($gold < 0) {
+                    $gold_penalty = $gold_loot;
                 }
 
-                if (empty($health)) {
-                    $health_penalty = null;
-                    $health_reward = null;
-                } else if ($health > 0) {
-                    $health_reward = $health . " " . $health_abbr . "<br>";
-                    $health_penalty = null;
-                } else if ($health < 0) {
-                    $health_reward = null;
-                    $health_penalty = $health . " " . $health_abbr . "<br>";
-                } else {
-                    $health_penalty = null;
-                    $health_reward = null;
+
+                $health_penalty = null;
+                $health_reward = null;
+                $health_loot = null;
+                if ($health != 0){
+                    $health_loot = go_display_longhand_currency('health', $health);
                 }
+                if ($health > 0) {
+                    $health_reward = $health_loot.'<br>';
+                }
+                else if ($health < 0) {
+                    $health_penalty = $health_loot.'<br>';
+                }
+
 
                 $badges_toggle = get_option('options_go_badges_toggle');
                 if ($badges_toggle && !empty($badges)) {
@@ -106,7 +105,7 @@ function go_check_messages(){
                     $badges_name = get_option('options_go_badges_name_plural');
 
                     $badges_names = array();
-                    $badges_names[] = "<b>" . $badges_name . ":</b>";
+                    $badges_names[] = "<br><b>" . $badges_name . ":</b>";
                     foreach ($badges as $badge) {
                         $term = get_term($badge, "go_badges");
                         if (!empty($term)) {
@@ -117,12 +116,12 @@ function go_check_messages(){
 
                     if ($badge_dir == "badges+") {
                         //message for awarding badges
-                        $badge_award = implode("<br>", $badges_names);
+                        $badge_award = implode("<br>", $badges_names).'<br>';
                         $badge_penalty = null;
                     } else if ($badge_dir == "badges-") {
                         //message for taking badges
                         //get all badge names
-                        $badge_penalty = implode("<br>", $badges_names);
+                        $badge_penalty = implode("<br>", $badges_names).'<br>';
                         $badge_award = null;
                     } else {
                         $badge_penalty = null;
@@ -149,12 +148,12 @@ function go_check_messages(){
 
                     if ($groups_dir == "groups+") {
                         //message for awarding badges
-                        $group_award = implode("<br>", $groups_names);
+                        $group_award = implode("<br>", $groups_names).'<br>';
                         $group_penalty = null;
                     } else if ($groups_dir == "groups-") {
                         //message for taking badges
                         //get all badge names
-                        $group_penalty = implode("<br>", $groups_names);
+                        $group_penalty = implode("<br>", $groups_names).'<br>';
                         $group_award = null;
                     } else {
                         $group_penalty = null;
@@ -167,14 +166,14 @@ function go_check_messages(){
 
 
                 if (!empty($xp_reward) || !empty($gold_reward) || !empty($health_reward) || !empty($badge_award) || !empty($group_award)) {
-                    $reward = "<h4>Reward</h4>{$xp_reward}{$gold_reward}{$health_reward}{$badge_award}{$group_award}";
+                    $reward = "<div class='go_messages_loot go_messages_rewards'><h3>Reward:</h3>{$xp_reward}{$gold_reward}{$health_reward}{$badge_award}{$group_award}</div>";
                 } else {
                     $reward = '';
                 }
 
                 if (!empty($xp_penalty) || !empty($gold_penalty) || !empty($health_penalty) || !empty($badge_penalty) || !empty($group_penalty)) {
                     //if (empty($post_id)){
-                    $penalty = "<h4>Penalty:</h4>{$xp_penalty}{$gold_penalty}{$health_penalty}{$badge_penalty}{$group_penalty}";
+                    $penalty = "<div class='go_messages_loot go_messages_penalties'><h3>Penalty:</h3>{$xp_penalty}{$gold_penalty}{$health_penalty}{$badge_penalty}{$group_penalty}</div>";
                     //}
                     //else{
                     //    $penalty = "<h4>Additional Penalty:</h4>{$xp_penalty}{$gold_penalty}{$health_penalty}{$badge_penalty}{$group_penalty}";
@@ -185,7 +184,7 @@ function go_check_messages(){
 
                 $message = "<div> {$message}</div><div>{$reward}{$penalty}</div>";
 
-                go_noty_message_generic('warning', $title, $message, '');
+                go_noty_message_generic('alert', $title, $message, '');
             }
 
         }

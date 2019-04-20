@@ -11,7 +11,17 @@
  *
  */
 function go_task_change_stage() {
-    global $wpdb;
+
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
+    //check_ajax_referer( 'go_task_change_stage_' . $post_id . '_' . $user_id );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_task_change_stage' ) ) {
+        echo "refresh";
+        die( );
+    }
 
     /* variables
     */
@@ -59,11 +69,7 @@ function go_task_change_stage() {
         );
         die();
     }
-    //check_ajax_referer( 'go_task_change_stage_' . $post_id . '_' . $user_id );
-    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_task_change_stage' ) ) {
-        echo "refresh";
-        die( );
-    }
+
 
     //Sets the $status variable
     // and checks if the status on the button is the same as the database
@@ -335,9 +341,9 @@ function go_task_change_stage() {
 
     // stores the contents of the buffer and then clears it
     $buffer = ob_get_contents();
-
+    //$buffer ='';
     ob_end_clean();
-
+    //$buffer = 'This stuff here.';
     // constructs the JSON response
     echo json_encode(
         array(

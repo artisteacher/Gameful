@@ -14,6 +14,11 @@
 function go_check_quiz_answers() {
    //global $wpdb;
 
+    if ( !is_user_logged_in() ) {
+     echo "login";
+     die();
+    }
+
     //check_ajax_referer( 'go_check_quiz_answers' );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_check_quiz_answers' ) ) {
         echo "refresh";
@@ -89,11 +94,11 @@ function go_check_quiz_answers() {
         }
     }
 
+    $fail_count = count($fail_question_ids);
+    go_update_fail_count($user_id, $task_id, $fail_count, $status, $num_questions);
     if ($total_matches == $num_questions ){
         echo true;
     }else {
-        $fail_count = count($fail_question_ids);
-        go_update_fail_count($user_id, $task_id, $fail_count, $status, $num_questions);
         echo json_encode($fail_question_ids);
     }
 
@@ -106,6 +111,11 @@ function go_check_quiz_answers() {
 function go_save_quiz_result() {
     //global $wpdb;
 
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
     //check_ajax_referer( 'go_save_quiz_result' . $task_id . '_' . $user_id );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_save_quiz_result' ) ) {
         echo "refresh";
@@ -116,12 +126,12 @@ function go_save_quiz_result() {
     $user_id = (isset( $_POST['user_id'] ) ? intval($_POST['user_id']) : 0 );
 
 
-    global $wpdb;
-    $go_actions_table_name = "{$wpdb->prefix}go_actions";
+    //global $wpdb;
+    //$go_actions_table_name = "{$wpdb->prefix}go_actions";
     $html = (isset($_POST['html']) ?  $_POST['html'] : '');
     //check to see if a quiz-mod exists for this stage
-        go_update_actions($user_id, 'quiz_result', $task_id, $status + 1, null, null, $html, null, null, null, null, null, null, null, null, null, null, null, false);
-        //  go_update_actions($user_id, $type,              $source_id,     $status,        $bonus_status, $check_type, $result, $quiz_mod, $late_mod, $timer_mod, $global_mod, $xp, $gold, $health, $badge_ids, $group_ids, $notify, $debt)
+    go_update_actions($user_id, 'quiz_result', $task_id, $status + 1, null, null, $html, null, null, null, null, null, null, null, null, null, null, null, false);
+    //  go_update_actions($user_id, $type,              $source_id,     $status,        $bonus_status, $check_type, $result, $quiz_mod, $late_mod, $timer_mod, $global_mod, $xp, $gold, $health, $badge_ids, $group_ids, $notify, $debt)
 
 
     die();

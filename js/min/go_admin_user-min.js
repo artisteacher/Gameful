@@ -810,6 +810,15 @@ function go_lb_opener( id ) {
                 jQuery( "#lb-content" ).append( '<div class="go-lb-loading"></div>' );
             },
             cache: false,
+            /**
+             * A function to be called if the request fails.
+             * Assumes they are not logged in and shows the login message in lightbox
+             */
+            error: function(jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status === 400){
+                    jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+                }
+            },
             success: function( raw) {
                 console.log('success');
                 console.log(raw);
@@ -889,6 +898,15 @@ function goBuytheItem( id, count ) {
 				jQuery( '#golb-fr-buy' ).html( '' );
 				jQuery( '#golb-fr-buy' ).append( '<div id="go-buy-loading" class="buy_gold"></div>' );
 			},
+            /**
+             * A function to be called if the request fails.
+             * Assumes they are not logged in and shows the login message in lightbox
+             */
+            error: function(jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status === 400){
+                    jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+                }
+            },
 			success: function( raw ) {
                 var res = {};
                 try {
@@ -959,6 +977,15 @@ function go_store_password( id ){
             type:'POST',
             data: gotoSend,
             cache: false,
+            /**
+             * A function to be called if the request fails.
+             * Assumes they are not logged in and shows the login message in lightbox
+             */
+            error: function(jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status === 400){
+                    jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+                }
+            },
             success: function( raw) {
                     var res = JSON.parse( raw );
 
@@ -1042,6 +1069,15 @@ function go_count_item( item_id ) {
 			action: 'go_get_purchase_count',
 			item_id: item_id
 		},
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
 		success: function( res ) {
 			if ( -1 !== res ) {
 				var count = res.toString();
@@ -1120,6 +1156,15 @@ function  go_blog_favorite(target){
         url: MyAjax.ajaxurl,
         type: 'POST',
         data: gotoSend,
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
         success: function (raw) {
 
         }
@@ -1171,7 +1216,7 @@ function go_blog_tags_select2(){
 //why not just have one place?--fix this
 function task_stage_check_input( target, on_task) {
 
-    console.log('button clicked');
+    console.log('task_stage_check_input');
     //disable button to prevent double clicks
     go_enable_loading( target );
 
@@ -1219,7 +1264,7 @@ function task_stage_check_input( target, on_task) {
     var fail = false;
     jQuery('.go_error_msg').text("");
     //jQuery('#go_blog_error_msg').text("");
-    var error_message = '<ul> ';
+    var error_message = '<ul style=" text-align: left;"> ';
 
     var url_toggle = jQuery(target).attr('url_toggle');
     var video_toggle = jQuery(target).attr('video_toggle');
@@ -1267,7 +1312,9 @@ function task_stage_check_input( target, on_task) {
             if (my_words < min_words) {
                 error_message += "<li>Your post is not long enough. There must be " + min_words + " words minimum. You have " + my_words + " words.</li>";
                 fail = true;
+                jQuery(target).closest(".go_checks_and_buttons").find("#go_save_button").trigger('click');
             }
+
         }
 
     }
@@ -1357,21 +1404,21 @@ function task_stage_check_input( target, on_task) {
     error_message += "</ul>";
     if (fail == true){
 
-        jQuery('.go_error_msg').append(error_message);
-        jQuery('.go_error_msg').show();
+        //jQuery('.go_error_msg').append(error_message);
+        //jQuery('.go_error_msg').show();
         if (on_task == true) {
             console.log("error_stage");
             console.log("message:" + error_message);
             //flash_error_msg('#go_stage_error_msg');
             jQuery('#go_blog_stage_error_msg').append(error_message);
             jQuery('#go_blog_stage_error_msg').show();
-
         }else {
-
             console.log("error_blog");
             jQuery('#go_blog_error_msg').append(error_message);
             jQuery('#go_blog_error_msg').show();
         }
+
+
 
         console.log("error validation");
         /*
@@ -1384,6 +1431,13 @@ function task_stage_check_input( target, on_task) {
                 visibilityControl: true,
             }).show();
             */
+
+        swal.fire({//sw2 OK
+            title: 'There are errors with your submission.',
+                html: error_message,
+                type: 'error'
+            }
+        );
 
         go_disable_loading();
         return;
@@ -1405,14 +1459,28 @@ function go_enable_loading( target ) {
     //prevent further events with this button
     //jQuery('#go_button').prop('disabled',true);
     // prepend the loading gif to the button's content, to show that the request is being processed
-    jQuery('.go_loading').remove();
-    target.innerHTML = '<span class="go_loading"></span>' + target.innerHTML;
+    //jQuery('.go_loading').remove();
+
+    //console.log("target");
+   // console.log(target.innerHTML);
+
+    if (jQuery(target).hasClass('go_button_round')){
+        jQuery(target).find('.go_round_inner').html("<i class='fa fa-spinner fa-pulse'></i>");
+    }else{
+        target.innerHTML = '<span class="go_loading"><i class="fa fa-spinner fa-pulse"></i></span> ' + target.innerHTML;
+        //alert("loading");
+    }
+
 }
 
 // re-enables the stage button, and removes the loading gif
 function go_disable_loading( ) {
     //console.log ("oneclick");
     jQuery('.go_loading').remove();
+    jQuery('#go_save_button .go_round_inner').html("<i class='fa fa-save'></i>");
+    jQuery('.go_blog_trash .go_round_inner').html("<i class='fa fa-trash'></i>");
+
+    jQuery('.go_blog_opener_round .go_round_inner').html("<i class='fa fa-pencil'></i>");
 
     jQuery('#go_button').off().one("click", function(e){
         task_stage_check_input( this, true );
@@ -1503,7 +1571,30 @@ function go_blog_opener( el ) {
         type: 'POST',
         data: gotoSend,
         cache: false,
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            go_disable_loading();
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
         success: function (results) {
+            if (results == 'login'){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            };
+            if (results == 'locked'){
+                var title = jQuery(el).closest(".go_blog_post_wrapper").find('.go_post_title').html();
+                swal.fire({//sw2 OK
+                    title: "Locked",
+                    html: title + ' is locked. It must be unlocked before this blog post can be edited. Click on the blog post title to go to the ',
+                    type: 'warning',
+                });
+                go_disable_loading();
+                return;
+            };
             //console.log(results);
             //tinymce.execCommand('mceRemoveEditor', true, 'go_blog_post_edit');
             //tinymce.execCommand( 'mceAddEditor', true, 'go_blog_post_edit' );
@@ -1733,10 +1824,24 @@ function go_blog_submit( el, reload ) {
         type: 'POST',
         data: gotoSend,
         cache: false,
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
         success: function (raw) {
-            console.log('success1');
+            //console.log('success1');
             //console.log(raw);
             // parse the raw response to get the desired JSON
+            if (raw ==='refresh'){
+                go_refresh_page_on_error();
+                return;
+            };
+
             var res = {};
             try {
                 var res = JSON.parse( raw );
@@ -1829,6 +1934,15 @@ function go_blog_trash( el ) {
                     type: 'POST',
                     data: gotoSend,
                     cache: false,
+                    /**
+                     * A function to be called if the request fails.
+                     * Assumes they are not logged in and shows the login message in lightbox
+                     */
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        if (jqXHR.status === 400){
+                            jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+                        }
+                    },
                     success: function (raw) {
                         jQuery("body").append(raw);
                         var post_wrapper_class = ".go_blog_post_wrapper_" + blog_post_id;
@@ -1892,6 +2006,15 @@ function go_blog_user_task (user_id, task_id) {
             action: 'go_blog_user_task',
             uid: user_id,
             task_id: task_id
+        },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
         },
         success: function( res ) {
 
