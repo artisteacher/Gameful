@@ -602,19 +602,29 @@ jQuery(document).ready(function(){
         jQuery('#go_levels_growth').find('input').change(go_validate_growth);
 
 
+
         acf.add_action('append', function ($el) { //run limit function when new row is added and attach it to the input in the new field
             // $el will be equivalent to the new element being appended $('tr.row')
             //limit to the levels table
             if (jQuery($el).closest("#go_levels_repeater").length) {//if there is a previous field
                 var $input_num = $el.find('input').first(); // find the first input field
+
                 jQuery($input_num).change(go_levels_limit_each); //bind to input on change
 
+                //
                 var $input_name = $el.find('input').last(); // find the first input field
                 jQuery($input_name).change(go_level_names);
+
                 //console.log('-----------------row added------------------------');
                 go_levels_limit_each(); //run one time
                 go_level_names();
             }
+        });
+
+        jQuery('#go_levels_max').append('<br><a class="acf-button button button-primary" style="float: right;" href="#">Recaculate</a><br>');
+
+        jQuery('#go_levels_max').click(function() {
+            go_levels_recalc_each();
         });
 
         jQuery(".more_info_accordian").accordion({
@@ -624,6 +634,7 @@ jQuery(document).ready(function(){
         });
     }
 });
+
 
 function go_validate_growth() {
     var NewGrowth = jQuery('#go_levels_growth').find('input').val();
@@ -650,10 +661,10 @@ function go_level_names(){
         //console.log (thisName);
         //console.log (prevName);
         if (row > 1 && row != rows){
-            console.log ('Row:' + row)
+            //console.log ('Row:' + row)
             if (thisName == null || thisName ==''){
-                console.log ('empty:' + row)
-                console.log (thisName);
+                //console.log ('empty:' + row)
+                //console.log (thisName);
                 jQuery(this).val(prevName);
                 thisName = prevName;
             }
@@ -663,11 +674,16 @@ function go_level_names(){
 }
 
 function go_levels_limit_each(){
+    console.log('each');
+    //get the number of rows
     var rows = document.getElementById('go_levels_repeater').getElementsByTagName("tbody")[0].getElementsByTagName("tr").length;
     //var growth = jQuery('#go_levels_growth').find('input').val();
+    //get the growth rate
     var rate = Go_orgGrowth;
-    //rate = 5;
+    //get the first level up amount
     var firstUp = Number(jQuery('#go_first_up').find('input').val());
+
+    var maxVal = Number(jQuery('#go_levels_max').find('input').val());
 
     //alert(growth);
     //console.log('-----------------limit check------------------------');
@@ -692,22 +708,38 @@ function go_levels_limit_each(){
         //console.log('next' + nextVal);
         if (row === 1){   //the first row
             jQuery(this).attr({
-                "max" : 0,          // substitute your own
-                "min" : 0           // values (or variables) here
+                "max" : 0,
+                "min" : 0
             });
             jQuery(this).val(0);
             //console.log ('first:' + 0);
         }
         else if (row === rows -1 ){  //the last row
+            console.log('last');
             jQuery(this).attr({
                 "min" : prevVal     // min is prev row value
             });
             jQuery(this).removeAttr("max");
 
             if (thisVal <= prevVal){
-                //jQuery(this).val(Math.floor(prevVal * growth));
-                jQuery(this).val(((rowNum-1)*(rowNum-2)*rate)/2+firstUp+prevVal);
-                console.log("firstUp #:" + firstUp + " .  " + "rate Value: " + rate);
+                let newVal = (((rowNum-1)*(rowNum-2)*rate)/2+firstUp+prevVal);
+                console.log("newVal: " + newVal);
+                console.log(newVal);
+                console.log("prevVal: " + prevVal);
+                console.log("maxVal: " + maxVal);
+
+                if ((newVal - prevVal) > maxVal){
+                    jQuery(this).val(prevVal+maxVal);
+                }
+                else {
+
+                    jQuery(this).val(((rowNum - 1) * (rowNum - 2) * rate) / 2 + firstUp + prevVal);
+                }
+
+                //jQuery(this).val(addVal+firstUp+prevVal);
+                //jQuery(this).val(((rowNum-1)*(rowNum-2)*rate)/2+firstUp+prevVal);
+
+                //console.log("firstUp #:" + firstUp + " .  " + "rate Value: " + rate);
                 //console.log('Last row Value too low: set to ' + prevVal + '    ---- compared: ' + thisVal + ' < ' +prevVal );
             }
             else{
@@ -717,7 +749,8 @@ function go_levels_limit_each(){
         else if (row === rows){    //the template row for ACF
             //console.log('Template Row');
         }
-        else {  //all the rows in teh middle
+        else {  //all the rows in the middle
+            console.log('middle');
             if (thisVal < nextVal) {
                 jQuery(this).attr({
                     "min": prevVal,
@@ -729,15 +762,23 @@ function go_levels_limit_each(){
                     "min": prevVal
                 });
             }
-
             if (thisVal <= prevVal) {
-
-
                 //jQuery(this).val(prevVal * growth);
-                jQuery(this).val(((rowNum-1)*(rowNum-2)*rate)/2+firstUp+prevVal);
+                let newVal = (((rowNum-1)*(rowNum-2)*rate)/2+firstUp+prevVal);
+                console.log("newVal: " + newVal);
+                console.log(newVal);
+                console.log("prevVal: " + prevVal);
+                console.log("maxVal: " + maxVal);
 
+                if ((newVal - prevVal) > maxVal){
+                    jQuery(this).val(prevVal+maxVal);
+                }
+                else {
 
-                console.log("firstUp #:" + firstUp + " .  " + "rate Value: " + rate);
+                    jQuery(this).val(((rowNum - 1) * (rowNum - 2) * rate) / 2 + firstUp + prevVal);
+                }
+
+               // console.log("firstUp #:" + firstUp + " .  " + "rate Value: " + rate);
 
                 //console.log('value to low.  Set to ' + prevVal);
             }
@@ -751,6 +792,82 @@ function go_levels_limit_each(){
                 //console.log('middle Value:' + thisVal);
             }
             */
+        }
+    });
+}
+
+function go_levels_recalc_each(){
+    console.log('each');
+    //get the number of rows
+    var rows = document.getElementById('go_levels_repeater').getElementsByTagName("tbody")[0].getElementsByTagName("tr").length;
+    //var growth = jQuery('#go_levels_growth').find('input').val();
+    //get the growth rate
+    var rate = Go_orgGrowth;
+    //get the first level up amount
+    var firstUp = Number(jQuery('#go_first_up').find('input').val());
+
+    var maxVal = Number(jQuery('#go_levels_max').find('input').val());
+
+    //alert(growth);
+    //console.log('-----------------limit check------------------------');
+    var row;
+    row = 0;
+
+    jQuery('.go_levels_repeater_numbers').find('input').each(function(){
+        row++;
+        var rowNum = jQuery(this).closest('.acf-row').find('span').html();
+        console.log("row num:" + rowNum);
+        var prevVal = jQuery(this).closest('.acf-row').prev().find('.go_levels_repeater_numbers').find('input').val() || 0;
+        prevVal = parseInt (prevVal);
+
+        if (row === 1){   //the first row
+            jQuery(this).attr({
+                "max" : 0,
+                "min" : 0
+            });
+            jQuery(this).val(0);
+        }
+        else if (row === rows -1 ){  //the last row
+            console.log('last');
+            jQuery(this).attr({
+                "min" : prevVal     // min is prev row value
+            });
+            jQuery(this).removeAttr("max");
+
+            let newVal = (((rowNum-1)*(rowNum-2)*rate)/2+firstUp+prevVal);
+            console.log("newVal: " + newVal);
+            console.log(newVal);
+            console.log("prevVal: " + prevVal);
+            console.log("maxVal: " + maxVal);
+
+            if ((newVal - prevVal) > maxVal){
+                jQuery(this).val(prevVal+maxVal);
+            }
+            else {
+
+                jQuery(this).val(((rowNum - 1) * (rowNum - 2) * rate) / 2 + firstUp + prevVal);
+            }
+        }
+        else if (row === rows){    //the template row for ACF
+            //console.log('Template Row');
+        }
+        else {  //all the rows in the middle
+            console.log('middle');
+
+            //jQuery(this).val(prevVal * growth);
+            let newVal = (((rowNum-1)*(rowNum-2)*rate)/2+firstUp+prevVal);
+            console.log("newVal: " + newVal);
+            console.log(newVal);
+            console.log("prevVal: " + prevVal);
+            console.log("maxVal: " + maxVal);
+
+            if ((newVal - prevVal) > maxVal){
+                jQuery(this).val(prevVal+maxVal);
+            }
+            else {
+
+                jQuery(this).val(((rowNum - 1) * (rowNum - 2) * rate) / 2 + firstUp + prevVal);
+            }
         }
     });
 }
@@ -1102,18 +1219,8 @@ function tinymce_getContentLength() {
 */
 jQuery( document ).ready( function() {
 //jQuery(window).bind("load", function() {
-    go_lightbox_blog_img();
 
-    console.log("jQuery is loaded");
-
-    //add onclick to blog edit buttons
-    //console.log("opener3");
-    jQuery(".go_blog_opener").one("click", function (e) {
-        go_blog_opener(this);
-    });
-    jQuery(".go_blog_trash").one("click", function (e) {
-        go_blog_trash(this);
-    });
+    //console.log("jQuery is loaded");
 
     jQuery("#go_show_private").one("click", function (e) {
         go_show_private(this);
@@ -1122,18 +1229,24 @@ jQuery( document ).ready( function() {
     jQuery('#go_hidden_mce').remove();
     jQuery('#go_hidden_mce_edit').remove();
 
+    go_blog_new_posts();
+
+    //go_blog_tags_select2();
+
+
+});
+
+function go_blog_new_posts(){
+    go_lightbox_blog_img();
+
+    go_disable_loading();
+
     jQuery( ".feedback_accordion" ).accordion({
         collapsible: true,
         active: false
     });
 
-    jQuery(".go_blog_favorite").click(function() {
-        go_blog_favorite(this);
-    });
-
-    //go_blog_tags_select2();
-
-});
+}
 
 function  go_blog_favorite(target){
     blog_post_id = jQuery( target ).attr( 'data-post_id' );
@@ -1270,31 +1383,32 @@ function task_stage_check_input( target, on_task) {
     //jQuery('#go_blog_error_msg').text("");
     var error_message = '<ul style=" text-align: left;"> ';
 
-    //var url_toggle = jQuery(target).attr('url_toggle');
-    //var video_toggle = jQuery(target).attr('video_toggle');
-    //var file_toggle = jQuery(target).attr('file_toggle');
-   // var text_toggle = jQuery(target).attr('text_toggle');
     var suffix = jQuery( target ).attr( 'blog_suffix' );
-
-    //var go_result_video = '#go_result_video' + suffix;
-    //var go_result_url = '#go_result_url' + suffix;
-    //var go_result_media = '#go_result_media' + suffix;
     console.log ("suffix: " + suffix);
+
+
 
     ///v4 START VALIDATE FIELD ENTRIES BEFORE SUBMIT
     //if (button_type == 'continue' || button_type == 'complete' || button_type =='continue_bonus' || button_type =='complete_bonus') {
-
+    const required_elements = {};
     if ( check_type == 'blog' || check_type == 'blog_lightbox') { //min words and Video field on blog form validation
-        //jquery to get all the elements
-        //for each element
-            //get the type
-            //get the content
+
+        const text_toggle = jQuery(target).attr('text_toggle');
+        let blog_div = "";
+        if (check_type == 'blog_lightbox' ){
+
+            console.log('lb');
+            blog_div = jQuery(target).parent();
+        }else{
+            blog_div = jQuery(target).parent().prev();
+        }
 
         jQuery('.go_blog_element_error').remove();
+        jQuery(blog_div).find('.go_blog_element_input').each(
 
-        jQuery(target).closest('.go_blog_div').find('.go_blog_element_input').each(
             function(  ) {
                 const type = jQuery(this).attr('data-type');
+                const uniqueID = jQuery(this).attr('data-uniqueID');
 
                 if (type ==='URL'){
                     const required_string = jQuery(this).attr('data-required');
@@ -1302,6 +1416,7 @@ function task_stage_check_input( target, on_task) {
                     ///
                     //const the_url =jQuery(this).val().replace(/\s+/, '');
                     const the_url =jQuery(this).val();
+                    required_elements[uniqueID] = the_url;
                     console.log("URL" + the_url);
                     if (the_url.length > 0) {
                         if (the_url.match(/^(http:\/\/|https:\/\/).*\..*$/) && !(the_url.lastIndexOf('http://') > 0) && !(the_url.lastIndexOf('https://') > 0)) {
@@ -1328,6 +1443,7 @@ function task_stage_check_input( target, on_task) {
                 }
                 if (type ==='video'){
                     const the_url =jQuery(this).val().replace(/\s+/, '');
+                    required_elements[uniqueID] = the_url;
                     const video_error = "<span class='go_blog_element_error' style='color: red;'><br>Enter a valid video URL. YouTube and Vimeo are supported.</span>";
                     console.log("videoURL" + the_url);
                     if (the_url.length > 0) {
@@ -1351,11 +1467,13 @@ function task_stage_check_input( target, on_task) {
                 }
 
                 if (type ==='file'){
-                    const result = jQuery(this).val();
+                    const result = jQuery(this).attr('value');
+                    required_elements[uniqueID] = result;
+                    //alert(result);
                     const file_error = "<br><span class='go_blog_element_error' style='color: red;'><br>Please attach a file.</span>";
 
                     //var result = jQuery("#go_result").attr('value');
-                    if (result == undefined) {
+                    if (result == '') {
                         error_message += "<li>Please attach a file.</li>";
                         fail = true;
                         jQuery(this).after(file_error);
@@ -1386,7 +1504,7 @@ function task_stage_check_input( target, on_task) {
                 fail = true;
             }
         }
-
+        */
         if(text_toggle  == '1') {
             //Word count validation
             var min_words = jQuery(target).attr('min_words'); //this variable is used in the other functions as well
@@ -1401,18 +1519,17 @@ function task_stage_check_input( target, on_task) {
             }
 
         }
-        */
+
 
     }
-    if (check_type === 'password' || check_type == 'unlock') {
+    else if (check_type === 'password' || check_type == 'unlock') {
         var pass_entered = jQuery('#go_result').attr('value').length > 0 ? true : false;
         if (!pass_entered) {
             error_message += "Retrieve the password from " + go_task_data.admin_name + ".";
             fail = true;
         }
     }
-
-    if (check_type == 'quiz') {
+    else if (check_type == 'quiz') {
         var test_list = jQuery(target).closest(".go_checks_and_buttons").find(" .go_test_list");
         //console.log("test_list.length: " + test_list.length);
         if (test_list.length >= 1) {
@@ -1449,7 +1566,6 @@ function task_stage_check_input( target, on_task) {
     error_message += "</ul>";
     if (fail === true){
 
-        alert (error_message);
         //jQuery('.go_error_msg').append(error_message);
         //jQuery('.go_error_msg').show();
         if (on_task == true) {
@@ -1492,13 +1608,11 @@ function task_stage_check_input( target, on_task) {
         jQuery('#go_blog_stage_error_msg').hide();
         jQuery('#go_blog_error_msg').hide();
     }
-    console.log("end");
-
 
     if (on_task == true) {
-        task_stage_change(target);
+        task_stage_change(target, required_elements);
     }else{ //this was a blog submit button in a lightbox, so just save without changing stage.
-        go_blog_submit( target, true );
+        go_blog_submit( target, true, required_elements );
     }
 
 }
@@ -1568,6 +1682,10 @@ function go_disable_loading( ) {
 
     //add active class to checks and buttons
     jQuery(".progress").closest(".go_checks_and_buttons").addClass('active');
+
+    jQuery(".go_blog_favorite").off().click(function() {
+        go_blog_favorite(this);
+    });
 
 }
 
@@ -1837,7 +1955,7 @@ function go_get_blog_required_elements(){
     return required_elements;
 }
 
-function go_blog_submit( el, reload ) {
+function go_blog_submit( el, reload, required_elements = null ) {
 
     //go_enable_loading( el );
 
@@ -1879,7 +1997,7 @@ function go_blog_submit( el, reload ) {
     console.log("blog_private: " + blog_private);
 
     //make an array of the required elements type and values
-    const required_elements = go_get_blog_required_elements();
+    //const required_elements = go_get_blog_required_elements();
 
     var gotoSend = {
         action:"go_blog_submit",
@@ -1914,8 +2032,8 @@ function go_blog_submit( el, reload ) {
             }
         },
         success: function (raw) {
-            //console.log('success1');
-            //console.log(raw);
+            console.log('success1');
+            console.log(raw);
             // parse the raw response to get the desired JSON
             if (raw ==='refresh'){
                 go_refresh_page_on_error();
@@ -1953,6 +2071,7 @@ function go_blog_submit( el, reload ) {
             jQuery( '#go_blog_title' + suffix ).attr( 'data-blog_post_id', res.blog_post_id );
 
 
+
             if (reload == true) {
                 //alert("here");
                 var is_new = jQuery(post_wrapper_class).length;
@@ -1968,6 +2087,7 @@ function go_blog_submit( el, reload ) {
                     });
                     //go_blog_tags_select2();
                     go_disable_loading();
+                    go_Vids_Fit_and_Box("body");
                 }else{
                     location.reload();
                 }
@@ -2216,6 +2336,7 @@ function go_show_private(target){
 
     //refresh page (or posts)
 }
+
 
 
 // @codekit-prepend 'scripts/sorttable.js'

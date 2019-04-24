@@ -610,8 +610,6 @@ class go_acf_field_quiz extends acf_field {
 
     }
 
-
-
     /*
     *  format_value()
     *

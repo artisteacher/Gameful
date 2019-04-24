@@ -956,6 +956,27 @@
                             "step": 1
                         },
                         {
+                            "key": "field_5cbe9d1cb6698",
+                            "label": "Max Amount to Level",
+                            "name": "max",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": "go_levels_max"
+                            },
+                            "default_value": 1000,
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "min": 0,
+                            "max": "",
+                            "step": ""
+                        },
+                        {
                             "key": "field_5abc934260c5b",
                             "label": "Levels",
                             "name": "level",
@@ -2400,5 +2421,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1555701912
+    "modified": 1556028163
 }

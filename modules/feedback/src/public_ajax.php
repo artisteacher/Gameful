@@ -6,14 +6,16 @@
  * Time: 23:21
  */
 
-function go_reader_get_posts()
+function go_reader_get_posts($sQuery2 = null, $pWhere = null, $order = null)
 {
     global $wpdb;
 
 
     $uWhere = go_reader_uWhere_values();
 
-    $pWhere = go_reader_pWhere();
+    if(!isset($pWhere)) {
+        $pWhere = go_reader_pWhere();
+    }
 
     //$sOrder = go_sOrder('tasks', $section);
 
@@ -32,21 +34,25 @@ function go_reader_get_posts()
     }
 
     $lTable = "{$wpdb->prefix}go_loot";
-    $aTable = "{$wpdb->prefix}go_actions";
+    //$aTable = "{$wpdb->prefix}go_actions";
     $uTable = "{$wpdb->prefix}users";
     $umTable = "{$wpdb->prefix}usermeta";
     //$tTable = "{$wpdb->prefix}posts";
     $pTable = "{$wpdb->prefix}posts";
 
     //$order = $_POST['order'];
-    $order = (isset($_POST['order']) ? $_POST['order'] : 'ASC');
+    if(!isset($order)) {
+        $order = (isset($_POST['order']) ? $_POST['order'] : 'ASC');
+    }
+
     //$limit = intval($_POST['limit']);
     $limit = (isset($_POST['limit']) ? $_POST['limit'] : 10);
 
 
-    $sQuery = "
-          SELECT SQL_CALC_FOUND_ROWS
-            t4.ID, t4.post_status
+    $sQuery1 = "SELECT SQL_CALC_FOUND_ROWS
+            t4.ID, t4.post_status";
+    if (!isset($sQuery2)) {
+        $sQuery2 = "
           FROM (
               SELECT
               t1.uid, t1.badges, t1.groups,    
@@ -66,13 +72,16 @@ function go_reader_get_posts()
               GROUP BY t1.id
               $uWhere
           ) AS t5
-          INNER JOIN $pTable AS t4 ON t5.uid = t4.post_author $sOn 
-          $pWhere
-          ORDER BY t4.post_modified $order
-          LIMIT 200
-          
-            
-    ";
+          INNER JOIN {$pTable} AS t4 ON t5.uid = t4.post_author $sOn
+        ";
+    }
+
+        //$sQuery3 = $sQuery1 . $sQuery2 . $pWhere . " ORDER BY t4.post_modified " . $order;
+
+        $sQuery = $sQuery1 . $sQuery2 . $pWhere . " ORDER BY t4.post_modified " . $order . " LIMIT " . $limit;
+
+
+
     //LIMIT $limit
     //ORDER BY OPTIONS, OLDEST/NEWEST
     //LIMIT to 10 (or option)--Read more to show the next 10.
@@ -82,58 +91,92 @@ function go_reader_get_posts()
     //  And buttons on individual items to mark as read.
     //  Mark sure that Mark all as read gets all post_ids with jQuery.
 
-
-    //Add Badge and Group names from the action item?,
-    //can't do because they might have multiple saved in a serialized array so it can't be joined.
-    //go_write_log($sQuery);
     ////columns that will be returned
     $posts = $wpdb->get_results($sQuery, ARRAY_A);
     $posts_array = array_column($posts, 'ID');
-    $status_array = array_column($posts, 'post_status');
-    $counts = array_count_values($status_array);
-    $unread = (isset($counts['unread']) ?  $counts['unread'] : null);
+    //$status_array = array_column($posts, 'post_status');
+    //$counts = array_count_values($status_array);
+    //$unread = (isset($counts['unread']) ?  $counts['unread'] : null);
     //$unread = $counts['unread'];
 
-    $posts_serialized = json_encode($posts_array);
-    $posts_array = json_decode($posts_serialized);
+    //$posts_serialized = json_encode($posts_array);
+    //$posts_array = json_decode($posts_serialized);
 
-    $sQuery2 = "SELECT FOUND_ROWS()";
+    $fQuery = "SELECT FOUND_ROWS()";
 
-    $rResultFilterTotal = $wpdb->get_results($sQuery2, ARRAY_N);
+    $rResultFilterTotal = $wpdb->get_results($fQuery, ARRAY_N);
     $iFilteredTotal = $rResultFilterTotal [0][0];
-    if ($iFilteredTotal < 200 ) {
-        echo "<div>
-            {$iFilteredTotal} posts found.  ";
-            if($unread){
+
+
+    $tQuery1 = " SELECT COUNT(*) ";
+    $pWhere2 = " WHERE ((t4.post_type = 'go_blogs') AND (t4.post_status = 'unread')) ";
+    $tQuery = $tQuery1 . $sQuery2 . $pWhere2;
+
+    $TotalunRead = $wpdb->get_results($tQuery, ARRAY_N);
+    $TotalunRead = $TotalunRead[0][0];
+
+
+    //if ($iFilteredTotal < 1000 ) {
+    echo "<div id='go_post_found' style='width: 600px;float:left;'>";
+            if ($TotalunRead != $iFilteredTotal){
+                echo "<span>{$iFilteredTotal} posts found. </span>";
+            }
+            if($TotalunRead>0){
                 echo "
-                 <br>{$unread} unread posts found. 
-                 <br><a><span id='go_mark_all_read' data-post_ids='$posts_serialized'>Mark these unread posts as read and reload the reader..</span></a>";
+                 <span>{$TotalunRead} unread posts found. </span><span><a  id='go_mark_all_read' >Mark all as read</a>.</span>";//data-post_ids='$posts_serialized
             }
 
         echo "</div>";
-    }else {
-        echo "<div>
-            Over 200 unread posts found ";
-            if($unread){
+    //$sQuerynoLimit = $totalQuery;
+    //$sQuerynoLimit = 5;
+    ?>
+    <br>
+    <br>
+    <div style="float: right;clear:both;">
+        Posts per page
+        <select id="go_num_posts" class="go_num_posts" name="postNum" data-where="<?php echo $pWhere;?>"  data-order="<?php echo $order;?>" data-query="<?php echo $sQuery2;?>" >
+            <option value="10" <?php if($limit == 10) {echo 'selected';}?>>10</option>
+            <option value="25" <?php if($limit == 25) {echo 'selected';}?>>25</option>
+            <option value="50" <?php if($limit == 50) {echo 'selected';}?>>50</option>
+        </select>
+    </div>
+    <?php
 
-                echo "
-                <br>{$unread} unread posts found in the  set of the first 200 posts returned.  
-                <br><a><span id='go_mark_all_read' data-post_ids='$posts_serialized'>Mark these unread posts as read and reload the reader.</span></a>";
-            }
+    /*}else {
+        echo "<div>
+            Over 1000 unread posts found ";
+        if ($unread) {
+
+            echo "
+                <br>{$unread} unread posts found in the first 1000 posts returned.  
+                <br><a><span id='go_mark_all_read' data-post_ids='$posts_serialized'>Mark these {$unread} posts as read and reload the reader.</span></a>";
+        }
         echo "</div>";
-    }
+    }*/
 
 
 
     $i = 0;
+    echo "<div style='clear:both'></div>";
     foreach ($posts_array as $post){
         if ($i == $limit){
             break;
         }
         $i++;
+        //$post_id = get the_id();
         //$blog_post_id = $post['ID'];
-        go_blog_post($post, false, true, true, false);
+        go_blog_post($post, null, false, true, true, false);
     }
+
+
+    wp_localize_script( 'go_loadmore', 'misha_loadmore_params', array(
+        'ajaxurl' => site_url() . '/wp-admin/admin-ajax.php', // WordPress AJAX
+        //'posts' => json_encode( $go_query->query_vars ), // everything about your loop is here
+        'current_page' => get_query_var( 'paged' ) ? get_query_var('paged') : 1,
+        //'max_page' => $go_query->max_num_pages
+    ) );
+
+    wp_enqueue_script( 'go_loadmore' );
 
     //die();
 }

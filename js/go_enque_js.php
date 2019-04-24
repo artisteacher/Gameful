@@ -18,6 +18,8 @@ function go_scripts () {
 	//task shortcode script is registered here, but enqueued and localized in the shortcode.
     wp_register_script( 'go_tasks', plugin_dir_url( __FILE__ ).'min/go_tasks-min.js', null, $go_js_version );
 
+    wp_register_script( 'go_loadmore', plugin_dir_url( __FILE__ ).'dev/scripts/go_load_more.js', null, $go_js_version );
+
 
     //COMBINED FILE
     wp_register_script( 'go_frontend-min', plugin_dir_url( __FILE__ ).'min/go_frontend-min.js', array('jquery'), $go_js_version, true);
@@ -139,6 +141,8 @@ function go_scripts () {
 			)
 
 		);
+
+
     /**
      * Resize All Images on Client Side
      */

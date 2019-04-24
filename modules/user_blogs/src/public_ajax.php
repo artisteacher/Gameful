@@ -50,10 +50,11 @@ function go_get_blog_posts($user_id = null){
 
     );
 //build query
-    $query = new WP_Query( $arg );
+    global $go_query;
+    $go_query = new WP_Query( $arg );
 
 // get query request
-    $posts = $query->get_posts();
+    $posts = $go_query->get_posts();
 
 //video options
     $go_lightbox_switch = get_option( 'options_go_video_lightbox' );
@@ -83,7 +84,7 @@ function go_get_blog_posts($user_id = null){
                 foreach ($posts as $post){
                     $post = json_decode(json_encode($post), True);//convert stdclass to array by encoding and decoding
                     $post_id = $post['ID'];
-                    go_blog_post($post_id, false, true, false, true);
+                    go_blog_post($post_id, null,false, true, false, true);
                     //go_user_feedback_container($post_id);
                 }
                 ?>
@@ -91,9 +92,15 @@ function go_get_blog_posts($user_id = null){
 
                 <div class="pagination">
                     <?php
+
+
+                    // don't display the button if there are not enough posts
+                    if (  $go_query->max_num_pages > 1 )
+                        echo '<div class="misha_loadmore">More posts</div>'; // you can use <a> as well
+
                     echo paginate_links( array(
                         'base'         => str_replace( 999999999, '%#%', esc_url( get_pagenum_link( 999999999 ) ) ),
-                        'total'        => $query->max_num_pages,
+                        'total'        => $go_query->max_num_pages,
                         'current'      => max( 1, get_query_var( 'paged' ) ),
                         'format'       => '?paged=%#%',
                         'show_all'     => false,
@@ -107,11 +114,97 @@ function go_get_blog_posts($user_id = null){
                         'add_fragment' => '',
                     ) );
                     ?>
+
+
                 </div>
+
             </div>
         </div>
 
         <?php
     }
     echo "</div>";
+
+
+    // now the most interesting part
+    // we have to pass parameters to myloadmore.js script but we can get the parameters values only in PHP
+    // you can define variables directly in your HTML but I decided that the most proper way is wp_localize_script()
+    wp_localize_script( 'go_loadmore', 'misha_loadmore_params', array(
+        'ajaxurl' => site_url() . '/wp-admin/admin-ajax.php', // WordPress AJAX
+        //'posts' => json_encode( $go_query->query_vars ), // everything about your loop is here
+        'current_page' => get_query_var( 'paged' ) ? get_query_var('paged') : 1,
+        'max_page' => $go_query->max_num_pages
+    ) );
+
+    wp_enqueue_script( 'go_loadmore' );
+
 }
+
+//https://rudrastyh.com/wordpress/load-more-posts-ajax.html
+function misha_loadmore_ajax_handler(){
+
+    // prepare our arguments for the query
+    //$args = json_decode( stripslashes( $_POST['query'] ), true );
+    $args['paged'] = $_POST['page'] + 1; // we need next page to be loaded
+
+    $current_user_id = get_current_user_id();
+    $user_id = $args['author'];
+
+    if($current_user_id === intval($user_id)){
+        $is_current_user = true;
+    }else{
+        $is_current_user = false;
+    }
+    $is_admin = go_user_is_admin($current_user_id);
+
+    $show_private = get_user_meta($user_id, 'go_show_private', true);
+
+    if(($is_admin || $is_current_user) && $show_private){
+        $query_statuses = array("read", "unread", "reset", "draft", "trash");
+        $private_query = array();
+    }else{
+        $query_statuses = array("read", "unread");
+        $private_query = array(
+            'key'     => 'go_blog_private_post',
+            'value'   => 1,
+            'compare' => '!=',
+        );
+    }
+
+    $args['post_status'] = $query_statuses;
+    $args['meta_query'] = array($private_query);
+
+    // it is always better to use WP_Query but not here
+    $go_query = new WP_Query( $args );
+    /*
+    if( have_posts() ) :
+
+        // run the loop
+        while( have_posts() ): the_post();
+
+            // look into your theme code how the posts are inserted, but you can use your own HTML of course
+            // do you remember? - my example is adapted for Twenty Seventeen theme
+            get_template_part( 'template-parts/post/content', get_post_format() );
+            // for the test purposes comment the line above and uncomment the below one
+            // the_title();
+
+        endwhile;
+
+    endif;
+    */
+    $posts = $go_query->get_posts();
+    foreach ($posts as $post){
+        $post = json_decode(json_encode($post), True);//convert stdclass to array by encoding and decoding
+        $post_id = $post['ID'];
+        go_blog_post($post_id, null,false, true, false, true);
+        //go_user_feedback_container($post_id);
+    }
+
+    die; // here we exit the script and even no wp_reset_query() required!
+}
+
+
+
+add_action('wp_ajax_loadmore', 'misha_loadmore_ajax_handler'); // wp_ajax_{action}
+add_action('wp_ajax_nopriv_loadmore', 'misha_loadmore_ajax_handler'); // wp_ajax_nopriv_{action}
+

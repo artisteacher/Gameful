@@ -53,6 +53,10 @@ jQuery( document ).ready( function() {
         go_daterange_clear();
         go_activate_apply_filters();
     });
+
+
+        //alert("go_num_posts");
+
     //END
 
     //get localstorage data and set fields
@@ -200,8 +204,7 @@ function go_reader_activate_buttons(){
     });
 
     jQuery("#go_mark_all_read").one("click", function(){
-        var post_ids = jQuery('#go_mark_all_read').data('post_ids')
-        go_reader_bulk_read( post_ids );
+        go_reader_bulk_read( );
 
     });
 
@@ -209,10 +212,74 @@ function go_reader_activate_buttons(){
         collapsible: true,
         active: false
     });
+
+    jQuery("#go_num_posts").change(function() {
+        go_num_posts();
+    });
 }
 
-function go_reader_bulk_read(post_ids){
+function go_num_posts(){
+    jQuery('#loader_container').show();
+    jQuery('#go_posts_wrapper').hide();
+    console.log("go_num_posts");
+
+    const limit = jQuery('#go_num_posts').val();
+    const query = jQuery('#go_num_posts').data('query');
+    const where = jQuery('#go_num_posts').data('where');
+    const order = jQuery('#go_num_posts').data('order');
+    //const tQuery = jQuery('#go_num_posts').data('tQuery');
+    //const nonce = GO_EVERY_PAGE_DATA.nonces.go_filter_reader;
+
+    jQuery.ajax({
+        url: MyAjax.ajaxurl,
+        type: 'post',
+        data: {
+           // _ajax_nonce: nonce,
+            action: 'go_num_posts',
+            query: query,
+            query: query,
+            where: where,
+            order: order,
+            //tQuery: tQuery,
+            limit: limit
+        },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            jQuery('#loader_container').hide();
+            jQuery('#go_posts_wrapper').show();
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
+        success: function( res ) {
+            console.log("success: " + res);
+            if (-1 !== res) {
+                jQuery('#go_posts_wrapper').html(res);
+
+
+
+                //document.getElementById("loader_container").style.display = "none";
+                jQuery('#loader_container').hide();
+                jQuery('#go_posts_wrapper').show("fast", function(){
+                    go_reader_activate_buttons();
+                });
+
+
+            }
+        }
+    });
+
+}
+
+function go_reader_bulk_read(){
     var nonce = GO_EVERY_PAGE_DATA.nonces.go_reader_bulk_read;
+
+    const query = jQuery('#go_num_posts').data('query');
+    const where = jQuery('#go_num_posts').data('where');
+    const order = jQuery('#go_num_posts').data('order');
     //console.log("refresh" + nonce);
     //console.log("stats");
     jQuery.ajax({
@@ -221,7 +288,9 @@ function go_reader_bulk_read(post_ids){
         data: {
             _ajax_nonce: nonce,
             action: 'go_reader_bulk_read',
-            post_ids: post_ids
+            query: query,
+            where: where,
+            order: order
         },
         /**
          * A function to be called if the request fails.

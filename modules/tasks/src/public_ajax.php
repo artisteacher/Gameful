@@ -540,6 +540,7 @@ function go_due_date_mods ($custom_fields, $is_logged_in, $task_name ){
  * MESSAGES
  * Determines what stages to print
  * @param $status
+ * @param $custom_fields
  * @param $user_id
  * @param $post_id
  *

@@ -23,12 +23,13 @@ function go_make_reader() {
         $go_fitvids_maxwidth = get_option('options_go_video_width_percent')."%";
     }
     echo "<div id='go_wrapper' data-lightbox='{$go_lightbox_switch}' data-maxwidth='{$go_fitvids_maxwidth}' >";
+
     echo "<div id='loader_container' style='display:none; height: 250px; width: 100%; padding: 10px 30px; '>
                 <div id='loader'>
                 </div>
           </div>
            <div id='go_posts_wrapper'>";
-    go_reader_get_posts();
+                go_reader_get_posts();
     echo "</div></div>";
     //get_sidebar();
 }
@@ -79,23 +80,16 @@ function go_reader_header() {
                         <input type="radio" id="go_reader_order_newest" class="go_reader_input" name="go_reader_order" value="DESC"><label for="go_reader_order_newest"> Newest First</label>
                     </div>
                     <br>
-                    <div>
-                        Number of Posts<br>
-                        <select id="go_posts_num" class="go_posts_num go_reader_input" name="postNum">
-                            <option value="10">10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
-                        </select>
-                    </div>
-    
+
                 </div>
+            </div>
+            <div id="go_leaderboard_update_button" style="padding:20px; display: flex; justify-content: flex-end; width: 100%;">
+                <div style="margin-right: 30px; float:left;"><button class="go_reset_clipboard dt-button ui-button ui-state-default ui-button-text-only buttons-collection"><span class="ui-button-text">Clear Filters <i class="fa fa-undo" aria-hidden="true"></i></span></button></div>
+                <div style="margin-right: 60px;"><button class="go_update_clipboard dt-button ui-button ui-state-default ui-button-text-only buttons-collection"><span class="ui-button-text">Refresh Data <i class="fa fa-refresh" aria-hidden="true"></i></span></button></div>
             </div>
             
         </div>
-    <div id="go_leaderboard_update_button" style="padding:20px; display: flex; justify-content: flex-end">
-        <div style="margin-right: 30px; float:left;"><button class="go_reset_clipboard dt-button ui-button ui-state-default ui-button-text-only buttons-collection"><span class="ui-button-text">Clear Filters <i class="fa fa-undo" aria-hidden="true"></i></span></button></div>
-        <div style="margin-right: 60px;"><button class="go_update_clipboard dt-button ui-button ui-state-default ui-button-text-only buttons-collection"><span class="ui-button-text">Refresh Data <i class="fa fa-refresh" aria-hidden="true"></i></span></button></div>
-    </div>
+
 
         <?php
 

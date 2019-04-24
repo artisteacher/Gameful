@@ -132,6 +132,7 @@ register_activation_hook( __FILE__, 'go_tsk_actv_activate' );
 //register_activation_hook( __FILE__, 'go_store_activate' );
 register_activation_hook( __FILE__, 'go_media_access' );
 register_activation_hook( __FILE__, 'go_flush_rewrites' );
+register_activation_hook( __FILE__, 'go_v5_update_db' );
 
 
 ////////////////////////////

@@ -88,17 +88,18 @@ function go_task_change_stage() {
 
         }
         if ($button_type == 'undo_bonus' || $button_type == 'undo_last_bonus') {
-            global $go_print_next;//the bonus stage to be printed, sometimes they print out of order if posts were trashed
-            $go_print_next = (isset($go_print_next) ?  $go_print_next : $next_bonus - 1);
-            global $go_bonus_count;//the bonus stage to be printed, sometimes they print out of order if posts were trashed
+            global $go_print_next;//the offset for the post search, they print in order of post modified
+            $go_print_next = (isset($go_print_next) ?  $go_print_next : $next_bonus - 2);
+            global $go_bonus_count;//the bonus stage to be printed
             $go_bonus_count = (isset($go_bonus_count) ?  $go_bonus_count : $status );
+
         }
     }
     else{
         $db_status = go_get_status($post_id, $user_id);
     }
 
-
+    //this makes sure the action wasn't done twice (perhaps two windows open) and refreshed page if it appears that is the case.
     if ($status != $db_status && $check_type != 'unlock'){
         echo json_encode(
             array(
@@ -113,8 +114,6 @@ function go_task_change_stage() {
     /**
      * BUTTON TYPE
      */
-
-
 
     /**
      * Button types and loot actions
@@ -290,14 +289,14 @@ function go_task_change_stage() {
         $bonus_status = go_get_bonus_status($post_id, $user_id);
 
         if ($button_type == 'continue_bonus' || $button_type == 'complete_bonus') {
-
-            $check_type = $custom_fields['go_bonus_stage_check'][0];
+            //$check_type = $custom_fields['go_bonus_stage_check'][0];
             //validate the check for understanding and get modifiers
             if ($check_type == 'password'){
                 $result = go_stage_password_validate($result, $custom_fields, $status, true);
             }
             else if ($check_type == 'blog'){
                 $result = go_save_blog_post($post_id, null, $bonus_status, 'unread');
+
             }
 
             //get the rewards and apply modifiers
@@ -335,6 +334,13 @@ function go_task_change_stage() {
             go_print_outro ($user_id, $post_id, $custom_fields, $stage_count, $status, false);
 
         }
+
+        //this isn't elegent, but it will tell the post form to fail and refresh page
+        //there is no easy way to get the right posts on a bonus stage when the stage is changed
+        //when there is mixed v4 and v5 content
+        //this is a stop gap solution for the transition period
+        global $refresh_if_v4_content;
+        $refresh_if_v4_content = true;
     }
     //go_check_messages();
     do_action('go_after_stage_change');

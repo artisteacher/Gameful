@@ -11,18 +11,8 @@ function tinymce_getContentLength() {
 */
 jQuery( document ).ready( function() {
 //jQuery(window).bind("load", function() {
-    go_lightbox_blog_img();
 
-    console.log("jQuery is loaded");
-
-    //add onclick to blog edit buttons
-    //console.log("opener3");
-    jQuery(".go_blog_opener").one("click", function (e) {
-        go_blog_opener(this);
-    });
-    jQuery(".go_blog_trash").one("click", function (e) {
-        go_blog_trash(this);
-    });
+    //console.log("jQuery is loaded");
 
     jQuery("#go_show_private").one("click", function (e) {
         go_show_private(this);
@@ -31,18 +21,24 @@ jQuery( document ).ready( function() {
     jQuery('#go_hidden_mce').remove();
     jQuery('#go_hidden_mce_edit').remove();
 
+    go_blog_new_posts();
+
+    //go_blog_tags_select2();
+
+
+});
+
+function go_blog_new_posts(){
+    go_lightbox_blog_img();
+
+    go_disable_loading();
+
     jQuery( ".feedback_accordion" ).accordion({
         collapsible: true,
         active: false
     });
 
-    jQuery(".go_blog_favorite").click(function() {
-        go_blog_favorite(this);
-    });
-
-    //go_blog_tags_select2();
-
-});
+}
 
 function  go_blog_favorite(target){
     blog_post_id = jQuery( target ).attr( 'data-post_id' );
@@ -179,31 +175,32 @@ function task_stage_check_input( target, on_task) {
     //jQuery('#go_blog_error_msg').text("");
     var error_message = '<ul style=" text-align: left;"> ';
 
-    //var url_toggle = jQuery(target).attr('url_toggle');
-    //var video_toggle = jQuery(target).attr('video_toggle');
-    //var file_toggle = jQuery(target).attr('file_toggle');
-   // var text_toggle = jQuery(target).attr('text_toggle');
     var suffix = jQuery( target ).attr( 'blog_suffix' );
-
-    //var go_result_video = '#go_result_video' + suffix;
-    //var go_result_url = '#go_result_url' + suffix;
-    //var go_result_media = '#go_result_media' + suffix;
     console.log ("suffix: " + suffix);
+
+
 
     ///v4 START VALIDATE FIELD ENTRIES BEFORE SUBMIT
     //if (button_type == 'continue' || button_type == 'complete' || button_type =='continue_bonus' || button_type =='complete_bonus') {
-
+    const required_elements = {};
     if ( check_type == 'blog' || check_type == 'blog_lightbox') { //min words and Video field on blog form validation
-        //jquery to get all the elements
-        //for each element
-            //get the type
-            //get the content
+
+        const text_toggle = jQuery(target).attr('text_toggle');
+        let blog_div = "";
+        if (check_type == 'blog_lightbox' ){
+
+            console.log('lb');
+            blog_div = jQuery(target).parent();
+        }else{
+            blog_div = jQuery(target).parent().prev();
+        }
 
         jQuery('.go_blog_element_error').remove();
+        jQuery(blog_div).find('.go_blog_element_input').each(
 
-        jQuery(target).closest('.go_blog_div').find('.go_blog_element_input').each(
             function(  ) {
                 const type = jQuery(this).attr('data-type');
+                const uniqueID = jQuery(this).attr('data-uniqueID');
 
                 if (type ==='URL'){
                     const required_string = jQuery(this).attr('data-required');
@@ -211,6 +208,7 @@ function task_stage_check_input( target, on_task) {
                     ///
                     //const the_url =jQuery(this).val().replace(/\s+/, '');
                     const the_url =jQuery(this).val();
+                    required_elements[uniqueID] = the_url;
                     console.log("URL" + the_url);
                     if (the_url.length > 0) {
                         if (the_url.match(/^(http:\/\/|https:\/\/).*\..*$/) && !(the_url.lastIndexOf('http://') > 0) && !(the_url.lastIndexOf('https://') > 0)) {
@@ -237,6 +235,7 @@ function task_stage_check_input( target, on_task) {
                 }
                 if (type ==='video'){
                     const the_url =jQuery(this).val().replace(/\s+/, '');
+                    required_elements[uniqueID] = the_url;
                     const video_error = "<span class='go_blog_element_error' style='color: red;'><br>Enter a valid video URL. YouTube and Vimeo are supported.</span>";
                     console.log("videoURL" + the_url);
                     if (the_url.length > 0) {
@@ -260,11 +259,13 @@ function task_stage_check_input( target, on_task) {
                 }
 
                 if (type ==='file'){
-                    const result = jQuery(this).val();
+                    const result = jQuery(this).attr('value');
+                    required_elements[uniqueID] = result;
+                    //alert(result);
                     const file_error = "<br><span class='go_blog_element_error' style='color: red;'><br>Please attach a file.</span>";
 
                     //var result = jQuery("#go_result").attr('value');
-                    if (result == undefined) {
+                    if (result == '') {
                         error_message += "<li>Please attach a file.</li>";
                         fail = true;
                         jQuery(this).after(file_error);
@@ -295,7 +296,7 @@ function task_stage_check_input( target, on_task) {
                 fail = true;
             }
         }
-
+        */
         if(text_toggle  == '1') {
             //Word count validation
             var min_words = jQuery(target).attr('min_words'); //this variable is used in the other functions as well
@@ -310,18 +311,17 @@ function task_stage_check_input( target, on_task) {
             }
 
         }
-        */
+
 
     }
-    if (check_type === 'password' || check_type == 'unlock') {
+    else if (check_type === 'password' || check_type == 'unlock') {
         var pass_entered = jQuery('#go_result').attr('value').length > 0 ? true : false;
         if (!pass_entered) {
             error_message += "Retrieve the password from " + go_task_data.admin_name + ".";
             fail = true;
         }
     }
-
-    if (check_type == 'quiz') {
+    else if (check_type == 'quiz') {
         var test_list = jQuery(target).closest(".go_checks_and_buttons").find(" .go_test_list");
         //console.log("test_list.length: " + test_list.length);
         if (test_list.length >= 1) {
@@ -358,7 +358,6 @@ function task_stage_check_input( target, on_task) {
     error_message += "</ul>";
     if (fail === true){
 
-        alert (error_message);
         //jQuery('.go_error_msg').append(error_message);
         //jQuery('.go_error_msg').show();
         if (on_task == true) {
@@ -401,13 +400,11 @@ function task_stage_check_input( target, on_task) {
         jQuery('#go_blog_stage_error_msg').hide();
         jQuery('#go_blog_error_msg').hide();
     }
-    console.log("end");
-
 
     if (on_task == true) {
-        task_stage_change(target);
+        task_stage_change(target, required_elements);
     }else{ //this was a blog submit button in a lightbox, so just save without changing stage.
-        go_blog_submit( target, true );
+        go_blog_submit( target, true, required_elements );
     }
 
 }
@@ -477,6 +474,10 @@ function go_disable_loading( ) {
 
     //add active class to checks and buttons
     jQuery(".progress").closest(".go_checks_and_buttons").addClass('active');
+
+    jQuery(".go_blog_favorite").off().click(function() {
+        go_blog_favorite(this);
+    });
 
 }
 
@@ -746,7 +747,7 @@ function go_get_blog_required_elements(){
     return required_elements;
 }
 
-function go_blog_submit( el, reload ) {
+function go_blog_submit( el, reload, required_elements = null ) {
 
     //go_enable_loading( el );
 
@@ -788,7 +789,7 @@ function go_blog_submit( el, reload ) {
     console.log("blog_private: " + blog_private);
 
     //make an array of the required elements type and values
-    const required_elements = go_get_blog_required_elements();
+    //const required_elements = go_get_blog_required_elements();
 
     var gotoSend = {
         action:"go_blog_submit",
@@ -823,8 +824,8 @@ function go_blog_submit( el, reload ) {
             }
         },
         success: function (raw) {
-            //console.log('success1');
-            //console.log(raw);
+            console.log('success1');
+            console.log(raw);
             // parse the raw response to get the desired JSON
             if (raw ==='refresh'){
                 go_refresh_page_on_error();
@@ -862,6 +863,7 @@ function go_blog_submit( el, reload ) {
             jQuery( '#go_blog_title' + suffix ).attr( 'data-blog_post_id', res.blog_post_id );
 
 
+
             if (reload == true) {
                 //alert("here");
                 var is_new = jQuery(post_wrapper_class).length;
@@ -877,6 +879,7 @@ function go_blog_submit( el, reload ) {
                     });
                     //go_blog_tags_select2();
                     go_disable_loading();
+                    go_Vids_Fit_and_Box("body");
                 }else{
                     location.reload();
                 }
@@ -1125,3 +1128,4 @@ function go_show_private(target){
 
     //refresh page (or posts)
 }
+

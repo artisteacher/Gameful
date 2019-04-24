@@ -173,7 +173,7 @@ function flash_error_msg( elem ) {
     });
 }
 
-function task_stage_change( target ) {
+function task_stage_change( target, required_elements = null ) {
 
     console.log( "change");
 
@@ -208,7 +208,9 @@ function task_stage_change( target ) {
     let result_title = null;
 
     if( check_type == 'blog' && button_type != 'undo_last_bonus'){
-        result = tinyMCE.activeEditor.getContent();
+        //result = tinyMCE.getContent('go_blog_post');
+
+        result = go_get_tinymce_content_blog('post');
         //result = go_get_tinymce_content_blog('task_stage_change');
         result_title = jQuery( '#go_blog_title' ).html();
         //blog_post_id = jQuery( '#go_blog_title' ).data( 'blog_post_id' );
@@ -216,7 +218,7 @@ function task_stage_change( target ) {
         let result_title = null;
     }
 
-    const required_elements = go_get_blog_required_elements();
+    //const required_elements = go_get_blog_required_elements();
     console.log("required_elements");
     console.log(required_elements);
     const json = JSON.stringify(required_elements );
@@ -386,13 +388,9 @@ function go_append (res){
 
     jQuery( res.html ).appendTo( '#go_wrapper' ).stop().hide().show( 'slow' ).promise().then(function() {
         // Animation complete
-        console.log("here");
         go_Vids_Fit_and_Box("body");
-        console.log("here2");
         go_make_clickable();
-        console.log("here3");
         go_disable_loading();
-        console.log("here4");
         //go_mce();
         // remove existing editor instance, and add new one
         //tinymce.execCommand('mceRemoveEditor', true, 'go_blog_post');

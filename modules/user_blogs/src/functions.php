@@ -8,17 +8,19 @@
 
 //Uses the hidden footer that is in the core of GO.
 
-function go_blog_form($blog_post_id, $suffix, $go_blog_task_id = null, $i = null, $bonus = null, $check_for_understanding = false){
-
+/**
+ * @param $blog_post_id
+ * @param $suffix
+ * @param $go_blog_task_id
+ * @param $i
+ * @param $bonus
+ * @param $check_for_understanding
+ */
+function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $check_for_understanding){
     //save draft button for drafts
     //print saved info for all
-
     ob_start();
-    $file_toggle = false;
-    $url_toggle = false;
-    $video_toggle = false;
     $text_toggle = true;
-    $restrict_mime_types = false;
     $content ='';
     $title ='';
     $custom_fields = null;
@@ -27,26 +29,28 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id = null, $i = null
     $media_content = null;
     $min_words = null;
     $post_status = null;
-    $num_elements = 0;
+
+    global $go_print_next_v4;//for old v4 content
+    $go_print_next_v4++;
+    $go_print_next_v4 = (isset($go_print_next_v4) ?  $go_print_next_v4 : 0);
+
+    //variables for retrieving v4 content not in blog
+    global $wpdb;
+    $go_actions_table_name = "{$wpdb->prefix}go_actions";
+    $user_id = get_current_user_id();
+    //$s = $i + 1;
 
     if (!empty($blog_post_id)) {
         $post = get_post($blog_post_id, OBJECT, 'edit');
         $content = $post->post_content;
         $title = get_the_title($blog_post_id);
         $blog_meta = get_post_custom($blog_post_id);
-        //$url_content = (isset($blog_meta['go_blog_url'][0]) ? $blog_meta['go_blog_url'][0] : null);
-        //$media_content = (isset($blog_meta['go_blog_media'][0]) ? $blog_meta['go_blog_media'][0] : null);
-        //$video_content = (isset($blog_meta['go_blog_video'][0]) ? $blog_meta['go_blog_video'][0] : null);
         $post_status = get_post_status($blog_post_id);
 
-        //$go_blog_task_id = (isset($blog_meta['go_blog_task_id'][0]) ? $blog_meta['go_blog_task_id'][0] : $go_blog_task_id);
-        //$go_blog_task_id = wp_get_post_parent_id($blog_post_id);
-        $go_blog_task_id = (isset($blog_meta['go_blog_task_id'][0]) ? $blog_meta['go_blog_task_id'][0] : null); //for posts created before v4.6
+       $go_blog_task_id = (isset($blog_meta['go_blog_task_id'][0]) ? $blog_meta['go_blog_task_id'][0] : null); //for posts created before v4.6
         if (empty($go_blog_task_id)) {
             $go_blog_task_id = wp_get_post_parent_id($blog_post_id);//for posts created after v4.6
         }
-
-
     }
     if($go_blog_task_id != 0) {
         $custom_fields = get_post_custom($go_blog_task_id);
@@ -69,17 +73,25 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id = null, $i = null
                    $required_string = (isset($custom_fields['go_bonus_stage_blog_options_v5_blog_elements_' . $x . '_requirements_url_validation'][0]) ?  $custom_fields['go_bonus_stage_blog_options_v5_blog_elements_' . $x . '_requirements_url_validation'][0] : 0);
 
                     $url_content = (isset($blog_meta[$uniqueid][0]) ? $blog_meta[$uniqueid][0] : null);
+
+                    //OLD DATA CHECKS: THESE CAN BE REMOVED AT SOMEPOINT IN THE FUTURE
+                    //if nothing found, check for v4 blog post content
                     if ($url_content == null){
-                        $url_content = (isset($blog_meta['go_blog_url'][0]) ? $blog_meta['go_blog_url'][0] : null);//previously saved content v4
+                        $url_content = (isset($blog_meta['go_blog_url'][0]) ? $blog_meta['go_blog_url'][0] : null);
                     }
+                    //if nothing found, check for v4 URL check content
                     if ($url_content == null){
-                        //$url_content = (isset($blog_meta['go_blog_url'][0]) ? $blog_meta['go_blog_url'][0] : null);//previously saved content v3
+                        $url_content = (string)$wpdb->get_var($wpdb->prepare("SELECT result 
+				            FROM {$go_actions_table_name} 
+                            WHERE uid = %d AND source_id = %d AND bonus_status  = %d AND action_type = %s
+                            ORDER BY id DESC LIMIT 1", $user_id, $go_blog_task_id, $go_print_next_v4, 'task'));
+                        //if it finds a url, this page should be refreshed to print out the correct posts.
+                        //it's not elegant, but it will work.
                     }
+                    //END
 
                     echo "<hr><h3>Submit a URL</h3>";
 
-
-                    //go_url_check($custom_fields, $i, $i, $go_actions_table_name, $user_id, $post_id, $bonus, $bonus_status, null, 'Enter URL', 'go_result_url' , $url_content);
                     go_url_check_blog ('Enter URL', 'go_result_url'.$suffix , $url_content, 'URL', $required_string, $uniqueid);
                     if (!empty($required_string)){
                         echo " (url must contain \"".$required_string."\")";
@@ -102,8 +114,35 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id = null, $i = null
                         $mime_types_count = 0;
                     }
                     $media_content = (isset($blog_meta[$uniqueid][0]) ? $blog_meta[$uniqueid][0] : null);
+
+                    //OLD DATA CHECKS: THESE CAN BE REMOVED AT SOMEPOINT IN THE FUTURE
+                    //if nothing found, check for v4 blog post content
                     if ($media_content == null){
-                        $media_content = (isset($blog_meta['go_blog_media'][0]) ? $blog_meta['go_blog_media'][0] : null);//previously saved content v4
+                        $media_content = (isset($blog_meta['go_blog_media'][0]) ? $blog_meta['go_blog_media'][0] : null);
+                    }
+                    //if nothing found, check for v4 Upload check content
+                    if ($media_content == null){
+                        $media_content = (int)$wpdb->get_var($wpdb->prepare("SELECT result 
+                            FROM {$go_actions_table_name} 
+                            WHERE uid = %d AND source_id = %d AND bonus_status  = %d AND action_type = %s
+                            ORDER BY id DESC LIMIT 1", $user_id, $go_blog_task_id, $go_print_next_v4, 'task'));
+                        //if it finds some media, this page should be refreshed to print out the correct posts.
+                        //this is set on a stage change, not on a page load.
+                        //it's not elegant, but it will work.
+                        //see the tasks ajax.php file for more information
+                        global $refresh_if_v4_content;
+                        if($refresh_if_v4_content && $media_content){
+                            ob_end_clean();
+                            echo "refresh";
+                            die( );
+                        }
+
+                    }
+                    //END
+
+                    $post_type = get_post_type($media_content);
+                    if($post_type != 'attachment'){
+                        $media_content = null;
                     }
 
 
@@ -132,7 +171,6 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id = null, $i = null
                         $video_content = (isset($blog_meta['go_blog_video'][0]) ? $blog_meta['go_blog_video'][0] : null);//previously saved content v4
                     }
                     echo "<hr><h3>Submit a Video</h3><div>Video Link:<div>";
-                    //go_url_check($custom_fields, $i, $i, $go_actions_table_name, $user_id, $post_id, $bonus, $bonus_status, null, "URL of Video", 'go_result_video', $video_content);
                     go_url_check_blog ('URL of Video', 'go_result_video'.$suffix, $video_content, 'video', '', $uniqueid);
                     echo "</div> </div>";
                 }
@@ -141,16 +179,11 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id = null, $i = null
                 echo "<hr>";
             }
         }
+        //Not a Bonus stage
         else{
-            $i = (isset($blog_meta['go_blog_task_stage'][0]) ? $blog_meta['go_blog_task_stage'][0] : $i); //set this meta for bonus
             $blog_title = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_title'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_title'][0] : false);
-            //$url_toggle = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_url_toggle'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_url_toggle'][0] : null);
-            //$file_toggle = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_attach_file_toggle'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_attach_file_toggle'][0] : null);
-            //$video_toggle = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_video'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_video'][0] : null);
             $text_toggle = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_blog_text_toggle'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_blog_text_toggle'][0] : true);
-            //$restrict_mime_types = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_attach_file_restrict_file_types'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_attach_file_restrict_file_types'][0] : null);
             $min_words = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_blog_text_minimum_length'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_blog_text_minimum_length'][0] : null);
-            //$required_string = (isset($custom_fields['go_stages_'.$i.'_blog_options_v5_url_url_validation'][0]) ?  $custom_fields['go_stages_'.$i.'_blog_options_url_url_validation'][0] : null);
             $is_private = (isset($custom_fields['go_stages_'.$i.'_blog_options_v5_private'][0]) ?  $custom_fields['go_stages_'.$i.'_blog_options_v5_private'][0] : false);
             $num_elements = (isset($custom_fields['go_stages_'.$i.'_blog_options_v5_blog_elements'][0]) ?  $custom_fields['go_stages_'.$i.'_blog_options_v5_blog_elements'][0] : false);
 
@@ -161,21 +194,27 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id = null, $i = null
                 if ($type[0] =='URL'){
                     //$required_string = get_post_meta($go_blog_task_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $x . '_requirements_url_validation');
                     $required_string = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_blog_elements_' . $x . '_requirements_url_validation'][0]) ?  $custom_fields['go_stages_' . $i . '_blog_options_v5_blog_elements_' . $x . '_requirements_url_validation'][0] : 0);
-
                     $url_content = (isset($blog_meta[$uniqueid][0]) ? $blog_meta[$uniqueid][0] : null);
+
+                    //OLD DATA CHECKS: THESE CAN BE REMOVED AT SOMEPOINT IN THE FUTURE
+                    //if nothing found, check for v4 blog post content
                     if ($url_content == null){
-                        $url_content = (isset($blog_meta['go_blog_url'][0]) ? $blog_meta['go_blog_url'][0] : null);//previously saved content v4
+                        $url_content = (isset($blog_meta['go_blog_url'][0]) ? $blog_meta['go_blog_url'][0] : null);
                     }
+                    //if nothing found, check for v4 URL check content
+                    if ($url_content == null){
+                        $url_content = (string)$wpdb->get_var($wpdb->prepare("SELECT result 
+				            FROM {$go_actions_table_name} 
+                            WHERE uid = %d AND source_id = %d AND stage  = %d AND action_type = %s
+                            ORDER BY id DESC LIMIT 1", $user_id, $go_blog_task_id, $s, 'task'));
+                    }
+                    //END
 
                     echo "<hr><h3>Submit a URL</h3>";
-
-
-                    //go_url_check($custom_fields, $i, $i, $go_actions_table_name, $user_id, $post_id, $bonus, $bonus_status, null, 'Enter URL', 'go_result_url' , $url_content);
                     go_url_check_blog ('Enter URL', 'go_result_url'.$suffix , $url_content, 'URL', $required_string, $uniqueid);
                     if (!empty($required_string)){
                         echo " (url must contain \"".$required_string."\")";
                     }
-
                 }
 
                 if ($type[0] =='File') {
@@ -193,12 +232,19 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id = null, $i = null
                         $mime_types_count = 0;
                     }
                     $media_content = (isset($blog_meta[$uniqueid][0]) ? $blog_meta[$uniqueid][0] : null);
+
+                    //OLD DATA CHECKS: THESE CAN BE REMOVED AT SOMEPOINT IN THE FUTURE
+                    //if nothing found, check for v4 blog post content
                     if ($media_content == null){
                         $media_content = (isset($blog_meta['go_blog_media'][0]) ? $blog_meta['go_blog_media'][0] : null);//previously saved content v4
                     }
-
-
-
+                    //if nothing found, check for v4 Upload check content
+                    if ($media_content == null){
+                        $media_content = (int)$wpdb->get_var($wpdb->prepare("SELECT result 
+                            FROM {$go_actions_table_name} 
+                            WHERE uid = %d AND source_id = %d AND stage  = %d AND action_type = %s
+                            ORDER BY id DESC LIMIT 1", $user_id, $go_blog_task_id, $s, 'task'));
+                    }
 
                     echo "<hr><h3>Add a File</h3><div>";
 
@@ -311,7 +357,7 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id = null, $i = null
     $current_user = get_current_user_id();
     $is_admin = go_user_is_admin();
     if($suffix !='_lightbox') {
-        go_blog_status($blog_post_id, $check_for_understanding, $current_user, $current_user, $is_admin);
+        go_blog_status($blog_post_id, $is_admin);
         $button_class = "right";
     }else {
         $button_class = "left";
@@ -334,21 +380,18 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id = null, $i = null
 
     echo "</div>";
 
-
-
-
-
     //Save Draft Button
     if($suffix =='_lightbox') {
         ?>
-        <script>
-            jQuery(document).ready(function () {
-                jQuery('#go_save_button_lightbox').one("click", function (e) {
-                    go_blog_submit( this, true );
+            <script>
+                jQuery(document).ready(function () {
+                    jQuery('#go_save_button_lightbox').one("click", function (e) {
+                        go_blog_submit( this, true );
+                    });
                 });
-            });
 
-        </script>
+            </script>
+
         <?php
     }
 
@@ -358,87 +401,89 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id = null, $i = null
 
 //add_filter( 'option_page_capability_' . ot_options_id(), function($caps) {return $caps;},999);
 
-
-function go_blog_post($blog_post_id, $check_for_understanding = false, $with_feedback = false, $is_reader = false, $show_edit = false){
-    //$blog_post_id = 10704;
-        $current_user = get_current_user_id();
+/**
+ * @param $blog_post_id
+ * @param bool $check_for_understanding
+ * @param bool $with_feedback
+ * @param bool $is_reader
+ * @param bool $show_edit
+ * @param bool $bonus_status //only needed for old style URL and File print outs (v4)
+ * @param bool $status
+ */
+function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_understanding = false, $with_feedback = false, $is_reader = false, $show_edit = false, $task_stage_num = null, $bonus_stage_num = null)
+{
+    $current_user = get_current_user_id();
     $is_admin = go_user_is_admin();
 
-    $file_toggle = false;
-    $url_toggle = false;
-    $video_toggle = false;
+    global $go_print_next_v4;//for old v4 content
+    $go_print_next_v4 = (isset($go_print_next_v4) ? $go_print_next_v4 : 0);
+
     $text_toggle = true;
     $url_content = null;
     $video_content = null;
     $media_content = null;
     $min_words = null;
-    $num_elements = 0;
 
-    if (empty($blog_post_id)) {
-        return;
-    }
+    //Get post info
+    //get the post object for this post
     $post = get_post($blog_post_id, OBJECT, 'edit');
+    //get content from the object
     $author_id = $post->post_author;
     $content = $post->post_content;
     $post_date = $post->post_date;
     $post_modified = $post->post_modified;
-    $text_content = apply_filters( 'go_awesome_text', $content );
+    //apply the text filters
+    $text_content = apply_filters('go_awesome_text', $content);
+    //get info from the post_id
     $title = get_the_title($blog_post_id);
-    $blog_meta = get_post_custom($blog_post_id);
-
-    $go_blog_task_id = (isset($blog_meta['go_blog_task_id'][0]) ? $blog_meta['go_blog_task_id'][0] : null); //for posts created before v4.6
-    if (empty($go_blog_task_id)) {
-        $go_blog_task_id = wp_get_post_parent_id($blog_post_id);//for posts created after v4.6
+    if (isset($blog_post_id)) {
+        $blog_meta = get_post_custom($blog_post_id);
     }
 
-    if($go_blog_task_id != 0) {//if this post was submitted from a task, then add the task required fields
-        $i = (isset($blog_meta['go_blog_task_stage'][0]) ? $blog_meta['go_blog_task_stage'][0] : null);
-        //if $i (task stage) is not set, then this must be a bonus stage
-        $custom_fields = get_post_custom($go_blog_task_id);
+    //if the task that this post is attached to was not sent, try to get the task_id
+    if (!isset($go_blog_task_id)) {
+        $go_blog_task_id = (isset($blog_meta['go_blog_task_id'][0]) ? $blog_meta['go_blog_task_id'][0] : null); //for posts created before v4.6
+        if (empty($go_blog_task_id)) {
+            $go_blog_task_id = wp_get_post_parent_id($blog_post_id);//for posts created after v4.6
+        }
+    }
+
+    //if the task_id is not 0, get some info about it
+    if ($go_blog_task_id != 0) {
         $task_title = get_the_title($go_blog_task_id);
         $task_url = get_permalink($go_blog_task_id);
-
-        if ($i != null) {//regular stage
-            $num_elements = (isset($custom_fields['go_stages_'.$i.'_blog_options_v5_blog_elements'][0]) ?  $custom_fields['go_stages_'.$i.'_blog_options_v5_blog_elements'][0] : false);
-            $text_toggle = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_blog_text_toggle'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_blog_text_toggle'][0] : true);
-        }
-        else{//bonus stage
-            $num_elements = (isset($custom_fields['go_bonus_stage_blog_options_v5_blog_elements'][0]) ?  $custom_fields['go_bonus_stage_blog_options_v5_blog_elements'][0] : false);
-            $text_toggle = (isset($custom_fields['go_bonus_stage_blog_options_v5_bonus_blog_text_toggle'][0]) ? $custom_fields['go_bonus_stage_blog_options_bonus_blog_text_toggle'][0] : true);
-        }
-
-        if(empty($title)){
+        if (empty($title)) {
             $title = $task_title;
         }
     }
 
+    ob_start();
     echo "<div class=\"go_blog_post_wrapper go_blog_post_wrapper_$blog_post_id\" style=\"padding: 10px;margin: 10px; background-color: white;\">";
-    /*
-    if (!empty($task_title) && $stage > 0) {
-        echo "<div style='font-size: .8em;'>Submitted on <a href='{$task_url}'>{$task_title} stage {$stage}</a>.</div>";
-    }
-    */
+
     $status = get_post_status($blog_post_id);
-    if($status == 'draft'){
+    if ($status == 'draft') {
         echo "<span style='color: red;'>DRAFT</span>";
     }
-    if ($is_reader){
-        $user_data = get_userdata($author_id);
-        $display_name = $user_data->display_name;
-        $blogURL = get_site_url() . "/user/" . $user_data->user_login;
-        echo "<span id='go-name'>Author: {$user_data->first_name} {$user_data->last_name}: <a href='{$blogURL}'>{$user_data->display_name}</a></span>";
-    }
+
 
     echo "<div class='go_post_title'>";
     if (!empty($task_url)) {
         echo "<h2><a href='{$task_url}'>" . $title . "</a></h2>";
-    }else{
+    } else {
         echo "<h2>" . $title . "</a></h2>";
     }
     echo "</div>";
 
-    echo "post date: " . $post_date . "<br> modified date: " . $post_modified;
+    if ($is_reader) {
+        $user_data = get_userdata($author_id);
+        $blogURL = get_site_url() . "/user/" . $user_data->user_login;
+        echo "<span id='go-name'>Author: {$user_data->first_name} {$user_data->last_name} (<a href='{$blogURL}'>{$user_data->display_name}</a>)</span><br>";
+    }
 
+    echo "post date: " . date("M d, Y H:i a", strtotime($post_date));
+    if($post_modified != $post_date){
+        echo "<br> modified date: " . date("M d, Y H:i a", strtotime($post_modified));
+    }
 
     //for each number of elements
         //get the type
@@ -448,46 +493,94 @@ function go_blog_post($blog_post_id, $check_for_understanding = false, $with_fee
         //if no data, get it by actions table
         //verify data
     echo "<div class='go_blog_elements'>";
-    for($x = 0; $x < $num_elements; $x++) {
-        if ($i != null) {//regular stage
-            $type = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_blog_elements_' . $x . '_element'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_blog_elements_' . $x . '_element'][0] : 0);
-            $uniqueid = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_blog_elements_' . $x . '_uniqueid'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_blog_elements_' . $x . '_uniqueid'][0] : 0);
-        }
-        else{//bonus stage
-            $type = (isset($custom_fields['go_bonus_stage_blog_options_v5_blog_elements_' . $x . '_element'][0]) ? $custom_fields['go_bonus_stage_blog_options_v5_blog_elements_' . $x . '_element'][0] : 0);
-            $uniqueid = (isset($custom_fields['go_bonus_stage_blog_options_v5_blog_elements_' . $x . '_uniqueid'][0]) ? $custom_fields['go_bonus_stage_blog_options_v5_blog_elements_' . $x . '_uniqueid'][0] : 0);
+
+    //if this post was submitted from a task, then add the task required fields
+    if($go_blog_task_id != 0) {
+        //$i = (isset($blog_meta['go_blog_task_stage'][0]) ? $blog_meta['go_blog_task_stage'][0] : null);
+        $i = $task_stage_num;
+        //if $i (task stage) is not set, then this must be a bonus stage
+        $custom_fields = get_post_custom($go_blog_task_id);
+        //variables for retrieving v4 content not in blog
+        global $wpdb;
+        $go_actions_table_name = "{$wpdb->prefix}go_actions";
+        $user_id = get_current_user_id();
+
+        if ($i !== null) {//regular stage
+            $num_elements = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_blog_elements'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_blog_elements'][0] : false);
+            $text_toggle = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_blog_text_toggle'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_blog_text_toggle'][0] : true);
+        } else {//bonus stage
+            $num_elements = (isset($custom_fields['go_bonus_stage_blog_options_v5_blog_elements'][0]) ? $custom_fields['go_bonus_stage_blog_options_v5_blog_elements'][0] : false);
+            $text_toggle = (isset($custom_fields['go_bonus_stage_blog_options_v5_bonus_blog_text_toggle'][0]) ? $custom_fields['go_bonus_stage_blog_options_bonus_blog_text_toggle'][0] : true);
         }
 
-        $content = (isset($blog_meta[$uniqueid][0]) ? $blog_meta[$uniqueid][0] : null);
-        if($type == 'URL'){
-            if($content === null){
-                $content = (isset($blog_meta['go_blog_url'][0]) ?  $blog_meta['go_blog_url'][0] : null);//v4 data
+        for ($x = 0; $x < $num_elements; $x++) {
+            if ($i !== null) {//regular stage
+                $bonus = false;
+                $type = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_blog_elements_' . $x . '_element'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_blog_elements_' . $x . '_element'][0] : 0);
+                $uniqueid = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_blog_elements_' . $x . '_uniqueid'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_blog_elements_' . $x . '_uniqueid'][0] : 0);
+            } else {//bonus stage
+                $bonus = true;
+                $type = (isset($custom_fields['go_bonus_stage_blog_options_v5_blog_elements_' . $x . '_element'][0]) ? $custom_fields['go_bonus_stage_blog_options_v5_blog_elements_' . $x . '_element'][0] : 0);
+                $uniqueid = (isset($custom_fields['go_bonus_stage_blog_options_v5_blog_elements_' . $x . '_uniqueid'][0]) ? $custom_fields['go_bonus_stage_blog_options_v5_blog_elements_' . $x . '_uniqueid'][0] : 0);
+                //$task_stage_num = $bonus_stage_num - 1;
             }
-            if (!empty($content)){
-                go_print_URL_check_result($content);
-            }
-        }
-        if($type == 'File'){
-            if($content === null){
-                $content = (isset($blog_meta['go_blog_media'][0]) ?  $blog_meta['go_blog_media'][0] : null);//v4 data
-            }
-            if (!empty($content)){
-                go_print_upload_check_result($content);
-            }
-        }
-        if($type == 'Video'){
-            if($content === null){
-                $content = (isset($blog_meta['go_blog_video'][0]) ?  $blog_meta['go_blog_video'][0] : null);//v4 data
-            }
-            if (!empty($content)){
-                echo "<div class='go_required_blog_content width100'>";
-                $video_content = apply_filters( 'go_awesome_text', $content );
-                echo "$video_content";
-                echo "</div>";
-            }
-        }
+            //get the content by UniqueID
+            $content = (isset($blog_meta[$uniqueid][0]) ? $blog_meta[$uniqueid][0] : null);
+            if ($type == 'URL') {
+                if ($content === null) {
+                    $content = (isset($blog_meta['go_blog_url'][0]) ? $blog_meta['go_blog_url'][0] : null);//v4 data
+                }
+                if (!empty($content )) {
+                    go_print_URL_check_result($content);
 
+                }
+                //TRY: this was submitted as a URL check in v4 and needs to be printed out with that function
+                else if ($check_for_understanding) {
+                        ob_end_clean();
+                        go_url_check($go_print_next_v4, $go_actions_table_name, $user_id, $go_blog_task_id, $bonus);
+                        $go_print_next_v4++;
+                        return;
+
+                }
+
+
+            }
+            else if ($type == 'File') {
+                //if null, check for v4 data
+                if ($content === null) {
+                    $content = (isset($blog_meta['go_blog_media'][0]) ? $blog_meta['go_blog_media'][0] : null);//v4 data
+                }
+                //if v5 or v4 data found, print the result
+                if (!empty($content)) {
+                    go_print_upload_check_result($content);
+                }
+                //TRY: this was submitted as a URL check in v4 and needs to be printed out with that function
+                else if ($check_for_understanding) {
+                    ob_end_clean();
+                    go_upload_check ($go_print_next_v4, $go_actions_table_name, $user_id, $go_blog_task_id, $bonus);
+                    $go_print_next_v4++;
+                    return;
+                }
+            }
+            else if ($type == 'Video') {
+                if ($content === null) {
+                    $content = (isset($blog_meta['go_blog_video'][0]) ? $blog_meta['go_blog_video'][0] : null);//v4 data
+                }
+                if (!empty($content)) {
+                    echo "<div class='go_required_blog_content width100'>";
+                    $video_content = apply_filters('go_awesome_text', $content);
+                    echo "$video_content";
+                    echo "</div>";
+                }
+            }
+
+        }
     }
+
+    $buffer = ob_get_contents();
+    ob_end_clean();
+    echo $buffer;
+
     echo "</div>";
 
     if($text_toggle) {
@@ -495,7 +588,7 @@ function go_blog_post($blog_post_id, $check_for_understanding = false, $with_fee
     }
 
     echo "<div class='go_blog_form_footer' style='background-color: #b3b3b3;'>";
-    go_blog_status($blog_post_id, $check_for_understanding, $current_user, $author_id, $is_admin);
+    go_blog_status($blog_post_id, $is_admin);
     echo "<div class='go_blog_actions'>";
 
 
@@ -526,7 +619,11 @@ function go_blog_post($blog_post_id, $check_for_understanding = false, $with_fee
     echo "</div>";
 }
 
-function go_blog_status($blog_post_id, $check_for_understanding, $current_user, $author_id, $is_admin){
+/**
+ * @param $blog_post_id
+ * @param $is_admin
+ */
+function go_blog_status($blog_post_id, $is_admin){
     $status = go_task_status_icon($blog_post_id);
     $private = go_blog_is_private($blog_post_id);
     if ($is_admin) {
@@ -549,15 +646,15 @@ function go_blog_status($blog_post_id, $check_for_understanding, $current_user, 
             <div class='go_blog_status_icons' style='display: flex; float: left;' >";
 
             echo $status . $private . $favorite;
-        //echo "</div></div><div class='go_blog_status_caption' style='font-size: .8em; '>Status</div></div>";
-        echo "</div></div>";
+            echo "</div></div>";
     }
 
 }
 
-
-
 // Register Custom Taxonomy
+/**
+ *
+ */
 function go_blog_tags() {
 
     $labels = array(
@@ -602,8 +699,10 @@ function go_blog_tags() {
 }
 add_action( 'init', 'go_blog_tags', 0 );
 
-
 // Register Custom Post Type
+/**
+ *
+ */
 function go_blogs() {
 
     $labels = array(
@@ -668,6 +767,9 @@ function go_blogs() {
 add_action( 'init', 'go_blogs', 0 );
 
 // Register custom post status
+/**
+ *
+ */
 function go_custom_post_status(){
     register_post_status( 'unread', array(
         'label'                     => _x( 'Unread', 'post' ),
@@ -707,7 +809,9 @@ function go_custom_post_status(){
 }
 add_action( 'init', 'go_custom_post_status' );
 
-
+/**
+ *
+ */
 function go_custom_rewrite() {
     // we are telling wordpress that if somebody access yoursite.com/all-post/user/username
     // wordpress will do a request on this query var yoursite.com/index.php?query_type=user_blog&uname=username
@@ -718,7 +822,11 @@ function go_custom_rewrite() {
 
 }
 
-function go_custom_query( $vars ) {
+/**
+ * @param $vars
+ * @return array
+ */
+function go_custom_query($vars ) {
     // we will register the two custom query var on wordpress rewrite rule
     $vars[] = 'query_type';
     $vars[] = 'uname';
@@ -729,6 +837,10 @@ function go_custom_query( $vars ) {
 add_action( 'init', 'go_custom_rewrite' );
 add_filter( 'query_vars', 'go_custom_query' );
 
+/**
+ * @param $template
+ * @return string
+ */
 function go_template_loader($template){
 
     // get the custom query var we registered

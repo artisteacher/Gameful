@@ -1326,9 +1326,9 @@
                     "delay": 0
                 },
                 {
-                    "key": "field_5ac134fe12f57",
+                    "key": "field_5cbd31bcaf725",
                     "label": "Check for Understanding",
-                    "name": "check",
+                    "name": "check_v5",
                     "type": "radio",
                     "instructions": "",
                     "required": 0,
@@ -1341,8 +1341,6 @@
                     "choices": {
                         "blog": "Blog",
                         "quiz": "Multiple Choice",
-                        "upload": "Upload File",
-                        "URL": "URL",
                         "password": "Password",
                         "none": "none"
                     },
@@ -1354,314 +1352,6 @@
                     "save_other_choice": 0
                 },
                 {
-                    "key": "field_5c2d29caf9143",
-                    "label": "Blog Post Options_OLD",
-                    "name": "blog_options",
-                    "type": "group",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": [
-                        [
-                            {
-                                "field": "field_5ac134fe12f57",
-                                "operator": "==",
-                                "value": "blog"
-                            }
-                        ]
-                    ],
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "layout": "block",
-                    "sub_fields": [
-                        {
-                            "key": "field_5c9c5547c8a18",
-                            "label": "Title",
-                            "name": "title",
-                            "type": "text",
-                            "instructions": "Leave blank to have the \"quest name-stage #\" set as the titel",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": "",
-                            "placeholder": "stage # by default",
-                            "prepend": "",
-                            "append": "",
-                            "maxlength": 30
-                        },
-                        {
-                            "key": "field_5c2d2ef2e62d2",
-                            "label": "URL",
-                            "name": "url",
-                            "type": "group",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "layout": "row",
-                            "sub_fields": [
-                                {
-                                    "key": "field_5c2d29dff9144",
-                                    "label": "",
-                                    "name": "toggle",
-                                    "type": "true_false",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": 0,
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "message": "",
-                                    "default_value": 0,
-                                    "ui": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": ""
-                                },
-                                {
-                                    "key": "field_5c2d2a31f9145",
-                                    "label": "URL Validation",
-                                    "name": "url_validation",
-                                    "type": "text",
-                                    "instructions": "url must contain this string",
-                                    "required": 0,
-                                    "conditional_logic": [
-                                        [
-                                            {
-                                                "field": "field_5c2d29dff9144",
-                                                "operator": "==",
-                                                "value": "1"
-                                            }
-                                        ]
-                                    ],
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "default_value": "",
-                                    "placeholder": "",
-                                    "prepend": "",
-                                    "append": "",
-                                    "maxlength": ""
-                                }
-                            ]
-                        },
-                        {
-                            "key": "field_5c2d2f35e62d3",
-                            "label": "Attach File",
-                            "name": "attach_file",
-                            "type": "group",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "layout": "block",
-                            "sub_fields": [
-                                {
-                                    "key": "field_5c2d2a64f9146",
-                                    "label": "",
-                                    "name": "toggle",
-                                    "type": "true_false",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": 0,
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "message": "",
-                                    "default_value": 0,
-                                    "ui": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": ""
-                                },
-                                {
-                                    "key": "field_5c2d2a8ff9147",
-                                    "label": "Restrict File Types",
-                                    "name": "restrict_file_types",
-                                    "type": "true_false",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": [
-                                        [
-                                            {
-                                                "field": "field_5c2d2a64f9146",
-                                                "operator": "==",
-                                                "value": "1"
-                                            }
-                                        ]
-                                    ],
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "message": "",
-                                    "default_value": 0,
-                                    "ui": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": ""
-                                },
-                                {
-                                    "key": "field_5c3031c3c3605",
-                                    "label": "Allowed File Types",
-                                    "name": "allowed_types",
-                                    "type": "checkbox",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": [
-                                        [
-                                            {
-                                                "field": "field_5c2d2a8ff9147",
-                                                "operator": "==",
-                                                "value": "1"
-                                            }
-                                        ]
-                                    ],
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "choices": {
-                                        "image": "Images (jpg, png, gif, tiff, ico, bmp)",
-                                        "application": "Application Files (e.g., Office, iWork, Adobe)",
-                                        "text": "Text (e.g., txt, csv, css, html)",
-                                        "audio": "Audio",
-                                        "video": "Video"
-                                    },
-                                    "allow_custom": 0,
-                                    "default_value": [],
-                                    "layout": "vertical",
-                                    "toggle": 1,
-                                    "return_format": "value",
-                                    "save_custom": 0
-                                }
-                            ]
-                        },
-                        {
-                            "key": "field_5c2d2bf4f914b",
-                            "label": "Video URL",
-                            "name": "video",
-                            "type": "true_false",
-                            "instructions": "Links to videos on YouTube and Vimeo can be inserted directly into the blog.",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "message": "",
-                            "default_value": 0,
-                            "ui": 0,
-                            "ui_on_text": "",
-                            "ui_off_text": ""
-                        },
-                        {
-                            "key": "field_5c2d2f88e62d4",
-                            "label": "Show Blog Text Editor",
-                            "name": "blog_text",
-                            "type": "group",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "layout": "row",
-                            "sub_fields": [
-                                {
-                                    "key": "field_5c2d2c49f914c",
-                                    "label": "",
-                                    "name": "toggle",
-                                    "type": "true_false",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": 0,
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "message": "",
-                                    "default_value": 1,
-                                    "ui": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": ""
-                                },
-                                {
-                                    "key": "field_5c2d2cbbf914d",
-                                    "label": "Minimum Words",
-                                    "name": "minimum_length",
-                                    "type": "number",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": [
-                                        [
-                                            {
-                                                "field": "field_5c2d2c49f914c",
-                                                "operator": "==",
-                                                "value": "1"
-                                            }
-                                        ]
-                                    ],
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "default_value": "",
-                                    "placeholder": "minimum words",
-                                    "prepend": "",
-                                    "append": "",
-                                    "min": "",
-                                    "max": "",
-                                    "step": 10
-                                }
-                            ]
-                        },
-                        {
-                            "key": "field_5c6b76a18ae97",
-                            "label": "Private",
-                            "name": "private",
-                            "type": "true_false",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "message": "Private Post",
-                            "default_value": 0,
-                            "ui": 0,
-                            "ui_on_text": "",
-                            "ui_off_text": ""
-                        }
-                    ]
-                },
-                {
                     "key": "field_5cba487b9f57a",
                     "label": "Options",
                     "name": "blog_options_v5",
@@ -1671,7 +1361,7 @@
                     "conditional_logic": [
                         [
                             {
-                                "field": "field_5ac134fe12f57",
+                                "field": "field_5cbd31bcaf725",
                                 "operator": "==",
                                 "value": "blog"
                             }
@@ -1750,7 +1440,7 @@
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
-                                        "width": "",
+                                        "width": "40",
                                         "class": "",
                                         "id": ""
                                     },
@@ -1775,7 +1465,7 @@
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
-                                        "width": "",
+                                        "width": "60",
                                         "class": "",
                                         "id": ""
                                     },
@@ -1885,7 +1575,7 @@
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
-                                        "width": "",
+                                        "width": "0",
                                         "class": "",
                                         "id": ""
                                     }
@@ -1953,7 +1643,7 @@
                                     "append": "",
                                     "min": 0,
                                     "max": "",
-                                    "step": 10
+                                    "step": 1
                                 }
                             ]
                         }
@@ -1969,7 +1659,7 @@
                     "conditional_logic": [
                         [
                             {
-                                "field": "field_5ac134fe12f57",
+                                "field": "field_5cbd31bcaf725",
                                 "operator": "==",
                                 "value": "quiz"
                             }
@@ -1998,7 +1688,7 @@
                     "conditional_logic": [
                         [
                             {
-                                "field": "field_5ac134fe12f57",
+                                "field": "field_5cbd31bcaf725",
                                 "operator": "==",
                                 "value": "quiz"
                             }
@@ -2021,7 +1711,7 @@
                     "conditional_logic": [
                         [
                             {
-                                "field": "field_5ac134fe12f57",
+                                "field": "field_5cbd31bcaf725",
                                 "operator": "==",
                                 "value": "password"
                             }
@@ -2535,9 +2225,9 @@
                     "delay": 0
                 },
                 {
-                    "key": "field_5a8b14a6f32fa",
+                    "key": "field_5cbd3689d1fb5",
                     "label": "Check for Understanding",
-                    "name": "check",
+                    "name": "check_v5",
                     "type": "radio",
                     "instructions": "",
                     "required": 0,
@@ -2549,8 +2239,6 @@
                     },
                     "choices": {
                         "blog": "Blog",
-                        "upload": "Upload File",
-                        "URL": "URL",
                         "password": "Password",
                         "none": "none"
                     },
@@ -2562,295 +2250,6 @@
                     "save_other_choice": 0
                 },
                 {
-                    "key": "field_5c31719e270f0",
-                    "label": "Blog Post Requirements",
-                    "name": "blog_options_bonus",
-                    "type": "group",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": [
-                        [
-                            {
-                                "field": "field_5a8b14a6f32fa",
-                                "operator": "==",
-                                "value": "blog"
-                            }
-                        ]
-                    ],
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "layout": "block",
-                    "sub_fields": [
-                        {
-                            "key": "field_5c31719e270f1",
-                            "label": "URL",
-                            "name": "url",
-                            "type": "group",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "layout": "row",
-                            "sub_fields": [
-                                {
-                                    "key": "field_5c31719e270f2",
-                                    "label": "",
-                                    "name": "toggle",
-                                    "type": "true_false",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": 0,
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "message": "",
-                                    "default_value": 0,
-                                    "ui": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": ""
-                                },
-                                {
-                                    "key": "field_5c31719e270f3",
-                                    "label": "URL Validation",
-                                    "name": "url_validation",
-                                    "type": "text",
-                                    "instructions": "url must contain this string",
-                                    "required": 0,
-                                    "conditional_logic": [
-                                        [
-                                            {
-                                                "field": "field_5c31719e270f2",
-                                                "operator": "==",
-                                                "value": "1"
-                                            }
-                                        ]
-                                    ],
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "default_value": "",
-                                    "placeholder": "",
-                                    "prepend": "",
-                                    "append": "",
-                                    "maxlength": ""
-                                }
-                            ]
-                        },
-                        {
-                            "key": "field_5c31719e270f4",
-                            "label": "Attach File",
-                            "name": "attach_file",
-                            "type": "group",
-                            "instructions": "<a target=\"codex\" href=\"https:\/\/codex.wordpress.org\/Function_Reference\/get_allowed_mime_types\"> See allowed file types.<\/a>",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "layout": "row",
-                            "sub_fields": [
-                                {
-                                    "key": "field_5c31719e270f5",
-                                    "label": "",
-                                    "name": "toggle",
-                                    "type": "true_false",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": 0,
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "message": "",
-                                    "default_value": 0,
-                                    "ui": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": ""
-                                },
-                                {
-                                    "key": "field_5c31719e270f6",
-                                    "label": "Restrict File Types",
-                                    "name": "restrict_file_types",
-                                    "type": "true_false",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": [
-                                        [
-                                            {
-                                                "field": "field_5c31719e270f5",
-                                                "operator": "==",
-                                                "value": "1"
-                                            }
-                                        ]
-                                    ],
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "message": "",
-                                    "default_value": 0,
-                                    "ui": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": ""
-                                },
-                                {
-                                    "key": "field_5c31719e270f7",
-                                    "label": "Allowed File Types",
-                                    "name": "allowed_types",
-                                    "type": "checkbox",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": [
-                                        [
-                                            {
-                                                "field": "field_5c31719e270f6",
-                                                "operator": "==",
-                                                "value": "1"
-                                            }
-                                        ]
-                                    ],
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "choices": {
-                                        "image": "Images (jpg, png, gif, tiff, ico, bmp)",
-                                        "application": "Application Files (e.g., Office, iWork, Adobe)",
-                                        "text": "Text (e.g., txt, csv, css, html)",
-                                        "audio": "Audio",
-                                        "video": "Video"
-                                    },
-                                    "allow_custom": 0,
-                                    "default_value": [],
-                                    "layout": "vertical",
-                                    "toggle": 1,
-                                    "return_format": "value",
-                                    "save_custom": 0
-                                }
-                            ]
-                        },
-                        {
-                            "key": "field_5c31719e270f8",
-                            "label": "Video URL",
-                            "name": "video",
-                            "type": "true_false",
-                            "instructions": "Links to videos on YouTube and Vimeo can be inserted directly into the blog.",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "message": "",
-                            "default_value": 0,
-                            "ui": 0,
-                            "ui_on_text": "",
-                            "ui_off_text": ""
-                        },
-                        {
-                            "key": "field_5c31719e270f9",
-                            "label": "Show Blog Text Editor",
-                            "name": "blog_text",
-                            "type": "group",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "layout": "row",
-                            "sub_fields": [
-                                {
-                                    "key": "field_5c31719e270fa",
-                                    "label": "",
-                                    "name": "toggle",
-                                    "type": "true_false",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": 0,
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "message": "",
-                                    "default_value": 1,
-                                    "ui": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": ""
-                                },
-                                {
-                                    "key": "field_5c31719e270fb",
-                                    "label": "Minimum Words",
-                                    "name": "minimum_length",
-                                    "type": "number",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": [
-                                        [
-                                            {
-                                                "field": "field_5c31719e270fa",
-                                                "operator": "==",
-                                                "value": "1"
-                                            }
-                                        ]
-                                    ],
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "default_value": "",
-                                    "placeholder": "minimum words",
-                                    "prepend": "",
-                                    "append": "",
-                                    "min": "",
-                                    "max": "",
-                                    "step": 10
-                                }
-                            ]
-                        },
-                        {
-                            "key": "field_5c6b76e88ae98",
-                            "label": "Private",
-                            "name": "private",
-                            "type": "true_false",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "message": "Private Post",
-                            "default_value": 0,
-                            "ui": 0,
-                            "ui_on_text": "",
-                            "ui_off_text": ""
-                        }
-                    ]
-                },
-                {
                     "key": "field_5cbad9e8eb50c",
                     "label": "Options",
                     "name": "blog_options_v5",
@@ -2860,7 +2259,7 @@
                     "conditional_logic": [
                         [
                             {
-                                "field": "field_5a8b14a6f32fa",
+                                "field": "field_5cbd3689d1fb5",
                                 "operator": "==",
                                 "value": "blog"
                             }
@@ -3142,40 +2541,11 @@
                                     "append": "",
                                     "min": 0,
                                     "max": "",
-                                    "step": 10
+                                    "step": 1
                                 }
                             ]
                         }
                     ]
-                },
-                {
-                    "key": "field_5afa5a78d25dc",
-                    "label": "Quiz Modifier",
-                    "name": "quiz_modifier",
-                    "type": "number",
-                    "instructions": "% of Stage Loot Lost for Each Wrong Answer",
-                    "required": 0,
-                    "conditional_logic": [
-                        [
-                            {
-                                "field": "field_5a8b14a6f32fa",
-                                "operator": "==",
-                                "value": "quiz"
-                            }
-                        ]
-                    ],
-                    "wrapper": {
-                        "width": "",
-                        "class": "go_call_to_action",
-                        "id": ""
-                    },
-                    "default_value": 0,
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "%",
-                    "min": 0,
-                    "max": 100,
-                    "step": ""
                 },
                 {
                     "key": "field_5a8b14a6f3301",
@@ -3187,7 +2557,7 @@
                     "conditional_logic": [
                         [
                             {
-                                "field": "field_5a8b14a6f32fa",
+                                "field": "field_5cbd3689d1fb5",
                                 "operator": "==",
                                 "value": "password"
                             }
@@ -3311,5 +2681,5 @@
     ],
     "active": 1,
     "description": "",
-    "modified": 1555800974
+    "modified": 1556034922
 }
