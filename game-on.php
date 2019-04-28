@@ -36,18 +36,59 @@ global $go_css_version;
 include( 'includes/wp-frontend-media-master/frontend-media.php' );
 include_once('includes/wp-term-order/wp-term-order.php'); //try to load only on admin pages
 
-// include external js and css resources
-include_once('includes/go_enque_includes.php');//split this into public and admin
+//Include external js and css resources from cdns
+//can these be given local fallbacks
+include_once('includes/go_enqueue_includes.php');
 add_action( 'wp_enqueue_scripts', 'go_includes' );
-add_action( 'admin_enqueue_scripts', 'go_admin_includes' );
+add_action( 'admin_enqueue_scripts', 'go_includes' );
 
 
+
+////////////////////////////
+/// CONDITIONAL INCLUDES
+/////////////////////////////
+
+//INCLUDE CSS AND JS FILES
+if ( !is_admin() ) { //IF PUBLIC FACING PAGE
+
+    include_once('js/go_enque_js.php');
+    add_action( 'wp_enqueue_scripts', 'go_scripts' );
+
+    include_once('styles/go_enque_styles.php');
+    add_action( 'wp_enqueue_scripts', 'go_styles' );
+
+}
+else if ( defined( 'DOING_AJAX' )) { //ELSE THIS IS AN AJAX CALL
+    //there is a way to include in ajax, but I don't know if we need to.
+    //Updates
+
+    //Admin
+
+}
+else {//ELSE THIS IS AN ADMIN PAGE
+    //admin js
+    include_once('js/go_enque_js_admin.php');
+
+    //admin css
+    include_once('styles/go_enque_styles_admin.php');
+
+    add_action( 'admin_enqueue_scripts', 'go_admin_scripts' );
+    add_action( 'admin_enqueue_scripts', 'go_admin_styles' );
+
+
+}
+
+//INCLUDE PHP
 if ( is_admin() ) {
 
     include_once('includes/acf/acf.php');
     include_once('includes/wp-acf-unique_id-master/acf-unique_id.php');
 
     include_once('custom-acf-fields/acf-order-posts/acf-order-posts.php');
+
+    include_once('modules/clipboard/includes.php');
+    include_once('modules/tools/includes.php');
+    include_once('modules/user_profiles/includes.php');
 
     if ($go_debug == true) {
         //add_filter('acf/settings/show_admin', '__return_false');
@@ -90,11 +131,13 @@ if ( is_admin() ) {
     include_once('custom-acf-fields/go_enque_js_acf.php');
     add_action( 'admin_enqueue_scripts', 'go_acf_scripts' );
 
-}else if ( defined( 'DOING_AJAX' )) {
+}
+else if ( defined( 'DOING_AJAX' )) {
 
     add_action( 'wp_ajax_check_if_top_term', 'go_check_if_top_term' ); //for term order //OK
 
-}else{
+}
+else{
     //INCLUDES on Public Pages
     //include_once('includes/acf/acf.php');
 }
@@ -108,16 +151,14 @@ if ( is_admin() ) {
 
 include_once('core/includes.php');
 
+//These have their own conditional includes
 include_once('modules/admin_bar/includes.php');
-include_once('modules/clipboard/includes.php');
 include_once('modules/map/includes.php');
 include_once('modules/messages/includes.php');
 include_once('modules/quiz/includes.php');
 include_once('modules/stats/includes.php');
 include_once('modules/store/includes.php');
 include_once('modules/tasks/includes.php');
-include_once('modules/tools/includes.php');
-include_once('modules/user_profiles/includes.php');
 include_once('modules/user_blogs/includes.php');
 include_once('modules/feedback/includes.php');
 
@@ -135,63 +176,6 @@ register_activation_hook( __FILE__, 'go_flush_rewrites' );
 register_activation_hook( __FILE__, 'go_v5_update_db' );
 
 
-////////////////////////////
-/// CONDITIONAL INCLUDES
-/////////////////////////////
-
-if ( !is_admin() ) { //IF PUBLIC FACING PAGE
-
-    include_once('js/go_enque_js.php');
-    add_action( 'wp_enqueue_scripts', 'go_scripts' );
-
-    include_once('styles/go_enque_styles.php');
-    add_action( 'wp_enqueue_scripts', 'go_styles' );
-
-
-
-} else if ( defined( 'DOING_AJAX' )) { //ELSE THIS IS AN AJAX CALL
-
-    //add_action( 'wp_ajax_go_initial_value', 'go_initial_value' );
-    //add_action( 'wp_ajax_go_clipboard_save_filters', 'go_clipboard_save_filters' ); //OK
-
-    //Updates
-
-
-    //Admin
-
-
-
-
-    //add_action( 'wp_ajax_go_clone_post', 'go_clone_post' );  //OK
-
-} else {//ELSE THIS IS AN ADMIN PAGE
-    //admin js
-    include_once('js/go_enque_js_admin.php');
-
-    //admin css
-    include_once('styles/go_enque_styles_admin.php');
-
-    add_action( 'admin_enqueue_scripts', 'go_admin_scripts' );
-    add_action( 'admin_enqueue_scripts', 'go_admin_styles' );
-
-
-}
-
-/*
-function go_include_tasks()
-{
-    if (is_singular( 'tasks' )) {
-        foreach (glob(plugin_dir_path(__FILE__) . "src/public/tasks/*.php") as $file) {
-            include_once $file;
-        }
-
-        foreach (glob(plugin_dir_path(__FILE__) . "src/public/tasks/ajax_tasks/*.php") as $file) {
-            include_once $file;
-        }
-    }
-}
-*/
-
 
 ////////////////////////////
 /// ALL PAGES & AJAX
@@ -200,8 +184,6 @@ function go_include_tasks()
 //create non-persistent cache group
 //This is used by the transients
 wp_cache_add_non_persistent_groups( 'go_single' );
-
-
 
 /*
  * User Data
@@ -238,7 +220,7 @@ function go_total_query_time(){
     foreach($queries as $query){
         $total_time =  $total_time + $query[1];
     }
-    $total_time = $total_time;
+    $total_time = $total_time;//set a breakpoint here to monitor query times.
 }
 
 //This is the code that puts the login modal on the frontend

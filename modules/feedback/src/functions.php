@@ -23,14 +23,18 @@ function go_reader_template_include($template)
 {
     global $wp_query; //Load $wp_query object
 
+    $is_admin = go_user_is_admin();
 
-    $page_value = ( isset($wp_query->query_vars['reader']) ? $wp_query->query_vars['reader'] : false ); //Check for query var "blah"
+    if ($is_admin) {
 
-    if ($page_value && $page_value == "true") { //Verify "blah" exists and value is "true".
-        return plugin_dir_path(__FILE__).'templates/go_reader_template.php'; //Load your template or file
+        $page_value = (isset($wp_query->query_vars['reader']) ? $wp_query->query_vars['reader'] : false); //Check for query var "blah"
+
+        if ($page_value && $page_value == "true") { //Verify "blah" exists and value is "true".
+            return plugin_dir_path(__FILE__) . 'templates/go_reader_template.php'; //Load your template or file
+        }
+
+        return $template; //Load normal template when $page_value != "true" as a fallback
     }
-
-    return $template; //Load normal template when $page_value != "true" as a fallback
 }
 
 add_action('go_blog_template_after_post', 'go_user_feedback_container', 10, 2);
@@ -92,47 +96,39 @@ function go_user_feedback($post_id){
 function go_feedback_form($post_id){
     ?>
         <div class="go_feedback_form">
-            <div class="go_blog_favorite">
-                <?php
-                go_is_blog_favorite($post_id);
-                ?>
-            </div>
-            <div class="go_feedback_canned">
+            <div class="go_feedback_canned_container">
                 <?php go_feedback_canned(); ?>
             </div>
             <div class="go_feedback_input">
-                <?php go_feedback_input(); ?>
+                <?php go_feedback_input($post_id); ?>
             </div>
-            <div class="go_feedback_loot">
-                <?php //go_feedback_loot(); ?>
-            </div>
-            <div class="go_feedback_flags">
-                <?php //go_feedback_flags(); ?>
-            </div>
+
         </div>
     <?php
 }
 
-function go_task_status_icon($post_id){
+function go_post_status_icon($post_id){
     $status = get_post_status($post_id);
     $is_admin = go_user_is_admin();
     $icon ='';
-    if ($status == 'read'){
-        $icon ='<span class="tooltip" data-tippy-content="This post has been marked as Read."><i class="fa fa-eye fa-2x" aria-hidden="true"></i></span>';
-    }else if ($status == 'reset'){
-        $icon ='<span class="tooltip" data-tippy-content="This post has been reset."><i class="fa fa-times-circle fa-2x" aria-hidden="true"></i></span>';
-    }else if ($status == 'unread' && $is_admin == true){
-        $icon ='<span class="tooltip" data-tippy-content="This post has NOT been read."><i class="fa fa-eye-slash fa-2x" aria-hidden="true"></i></span>';
-    }else if ($status == 'draft'){
-        $icon ='<span class="tooltip" data-tippy-content="This post is a draft."><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></span>';
-    }else if ($status == 'trash'){
-        $icon ='<span class="tooltip" data-tippy-content="This post is in the trash."><i class="fa fa-trash fa-2x" aria-hidden="true"></i></span>';
-    }
+    if ($post_id) {
+        if ($status == 'read') {
+            $icon = '<a href="javascript:;" class="go_status_read_toggle" data-postid="' . $post_id . '"><span class="tooltip"  data-tippy-content="Status is read. Click to mark this post as unread."><i class="far fa-eye fa-2x" aria-hidden="true"></i><i class="fa fa-eye-slash fa-2x" aria-hidden="true" style="display: none;"></i></span></a>';
+        } else if ($status == 'reset') {
+            $icon = '<span class="tooltip" data-tippy-content="This post has been reset."><i class="fas fa-times-circle fa-2x" aria-hidden="true"></i></span>';
+        } else if ($status == 'unread' && $is_admin == true) {
+            $icon = '<a href="javascript:;" class="go_status_read_toggle" data-postid="' . $post_id . '" ><span class="tooltip" data-tippy-content="Status is unread. Click to mark this post as read."><i class="far fa-eye-slash fa-2x" aria-hidden="true"></i><i class="fa fa-eye fa-2x" aria-hidden="true" style="display: none;"></i></span></a>';
+        } else if ($status == 'draft') {
+            $icon = '<span class="tooltip" data-tippy-content="This post is a draft."><i class="fas fa-pencil-alt fa-2x" aria-hidden="true"></i></span>';
+        } else if ($status == 'trash') {
+            $icon = '<span class="tooltip" data-tippy-content="This post is in the trash."><i class="fas fa-trash fa-2x" aria-hidden="true"></i></span>';
+        }
 
-    $user_statuses = array("read", "reset", "draft", "trash");
-    if(!empty($status) ){
-        if ((in_array($status, $user_statuses) || ($is_admin && $status == 'unread'))) {
-            return '<div class="go_status_icon" >' . $icon . '</div>';
+        $user_statuses = array("read", "reset", "draft", "trash");
+        if (!empty($status)) {
+            if ((in_array($status, $user_statuses) || ($is_admin && $status == 'unread'))) {
+                return '<div class="go_status_icon" >' . $icon . '</div>';
+            }
         }
     }
 }
@@ -145,7 +141,7 @@ function go_blog_is_private($post_id){
     if ($status) {
 
         //$status = get_post_status($post_id);
-        return '<div class="go_blog_visibility" ><span class="tooltip" data-tippy-content="This is a private post.  It is only viewable by the author and site administrators."><i class="fa fa-user-secret fa-2x" aria-hidden="true"></i></span></div>';
+        return '<div class="go_blog_visibility" ><span class="tooltip" data-tippy-content="This is a private post.  It is only viewable by the author and site administrators."><i class="fas fa-user-secret fa-2x" aria-hidden="true"></i></span></div>';
     }
 }
 
@@ -223,7 +219,7 @@ function go_blog_post_history_table($post_id){
     );
     $post_title = get_the_title($task_id);
     echo "<div id='go_task_list_single' class='go_datatables'>
-        <div style='float: right;'><a onclick='go_close_single_history()' href='javascript:void(0);'><i class='fa fa-times ab-icon' aria-hidden='true'></i> Show All $tasks_name</a></div>
+        <div style='float: right;'><a onclick='go_close_single_history()' href='javascript:void(0);'><i class='fas fa-times ab-icon' aria-hidden='true'></i> Show All $tasks_name</a></div>
         <h3>Single $task_name History: $post_title</h3>
 
         <table id='go_single_task_datatable' class='pretty display'>
@@ -299,7 +295,7 @@ function go_blog_post_history_table($post_id){
 
         $quiz_mod_int = intval($quiz_mod);
         if (!empty($quiz_mod_int)){
-            $quiz_mod = "<i class=\"fa fa-check-circle-o\" aria-hidden=\"true\"></i> ". $late_mod;
+            $quiz_mod = "<i class=\"fas fa-check-circle-o\" aria-hidden=\"true\"></i> ". $late_mod;
         }
         else{
             $quiz_mod = null;
@@ -307,7 +303,7 @@ function go_blog_post_history_table($post_id){
 
         $late_mod_int = intval($late_mod);
         if (!empty($late_mod_int)){
-            $late_mod = "<i class=\"fa fa-calendar\" aria-hidden=\"true\"></i> ". $late_mod;
+            $late_mod = "<i class=\"fas fa-calendar\" aria-hidden=\"true\"></i> ". $late_mod;
         }
         else{
             $late_mod = null;
@@ -315,7 +311,7 @@ function go_blog_post_history_table($post_id){
 
         $timer_mod_int = intval($timer_mod);
         if (!empty($timer_mod_int)){
-            $timer_mod = "<i class=\"fa fa-hourglass\" aria-hidden=\"true\"></i> ". $timer_mod;
+            $timer_mod = "<i class=\"fas fa-hourglass\" aria-hidden=\"true\"></i> ". $timer_mod;
         }
         else{
             $timer_mod = null;
@@ -352,29 +348,26 @@ function go_blog_post_history_table($post_id){
 
 }
 
-function go_is_blog_favorite($post_id){
-
-}
-
 function go_feedback_canned(){
-    echo "<select>";
+    echo "<select class='go_feedback_canned'>";
     echo "<option>Canned Feedback</option>";
     $num_preset = get_option('options_go_feedback_canned');
     $i = 0;
-    while ($i < 3){
+    while ($i < $num_preset){
         $title = get_option('options_go_feedback_canned_'.$i.'_title');
+        $title = htmlspecialchars($title);
         $message = get_option('options_go_feedback_canned_'.$i.'_message');
-        $xp = get_option('options_go_feedback_canned_'.$i.'_defaults_xp');
-        $gold = get_option('options_go_feedback_canned_'.$i.'_defaults_gold');
-        $health = get_option('options_go_feedback_canned_'.$i.'_defaults_health');
-        echo "<option value='{$i}'>{$title} </option>";
+        $message = htmlspecialchars($message);
+        $toggle = get_option('options_go_feedback_canned_'.$i.'_defaults_toggle');
+        $percent = get_option('options_go_feedback_canned_'.$i.'_defaults_percent');
+        echo "<option class='go_feedback_option' value='{$i}' data-title='{$title}' data-message='{$message}' data-toggle='{$toggle}' data-percent='{$percent}'>{$title} </option>";
         $i++;
     }
     echo "</select>";
-
 }
 
-function go_feedback_input(){
+
+function go_feedback_input($post_id){
 
     ?>
     <div id="go_messages_container">
@@ -386,12 +379,12 @@ function go_feedback_input(){
 
                         <tr valign="top">
                             <th scope="row">Title</th>
-                            <td style="width: 100%;"><input type="text" name="title" value="" style="width: 100%;"/>
+                            <td style="width: 100%;"><input class="go_title_input" type="text" name="title" value="" style="width: 100%;"/>
                             </td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">Message</th>
-                            <td><textarea name="message" class="widefat" cols="50" rows="5"></textarea></td>
+                            <td><textarea name="message" class="widefat go_message_input" cols="50" rows="5"></textarea></td>
                         </tr>
                         <tr>
                             <th scope="row">Loot</th>
@@ -407,15 +400,7 @@ function go_feedback_input(){
                                                         <tr>
                                                             <th>
                                                                 <div class="go-acf-th">
-                                                                    <label>XP</label></div>
-                                                            </th>
-                                                            <th>
-                                                                <div class="go-acf-th">
-                                                                    <label>Gold</label></div>
-                                                            </th>
-                                                            <th>
-                                                                <div class="go-acf-th">
-                                                                    <label>Health</label></div>
+                                                                    <label>Adjust Rewards</label></div>
                                                             </th>
 
                                                         </tr>
@@ -424,14 +409,14 @@ function go_feedback_input(){
                                                         </thead>
                                                         <tbody>
                                                         <tr class="go-acf-row">
-                                                            <td class="go-acf-field go-acf-field-true-false go_reward go_xp"
+                                                            <td class="go-acf-field go-acf-field-true-false go_reward go_feedback_percent_toggle"
                                                                 data-name="xp" data-type="true_false">
                                                                 <div class="go-acf-input">
                                                                     <div class="go-acf-true-false">
                                                                         <input value="0" type="hidden">
                                                                         <label>
                                                                             <input name="xp_toggle" type="checkbox" value="1"
-                                                                                   class="go-acf-switch-input">
+                                                                                   class="go-acf-switch-input go_toggle_input go_feedback_toggle">
                                                                             <div class="go-acf-switch"><span class="go-acf-switch-on"
                                                                                                              style="min-width: 36px;">+</span><span
                                                                                         class="go-acf-switch-off"
@@ -442,70 +427,21 @@ function go_feedback_input(){
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            <td class="go-acf-field go-acf-field-true-false go_reward go_gold"
-                                                                data-name="gold" data-type="true_false">
-                                                                <div class="go-acf-input">
-                                                                    <div class="go-acf-true-false">
-                                                                        <input value="0" type="hidden">
-                                                                        <label>
-                                                                            <input name="gold_toggle" type="checkbox"
-                                                                                   class="go-acf-switch-input">
-                                                                            <div class="go-acf-switch"><span class="go-acf-switch-on"
-                                                                                                             style="min-width: 36px;">+</span><span
-                                                                                        class="go-acf-switch-off"
-                                                                                        style="min-width: 36px;">-</span>
-                                                                                <div class="go-acf-switch-slider"></div>
-                                                                            </div>
-                                                                        </label>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="go-acf-field go-acf-field-true-false go_reward go_health"
-                                                                data-name="health" data-type="true_false">
-                                                                <div class="go-acf-input">
-                                                                    <div class="go-acf-true-false">
-                                                                        <input value="0" type="hidden">
-                                                                        <label>
-                                                                            <input name="health_toggle" type="checkbox"
-                                                                                   value="1" class="go-acf-switch-input">
-                                                                            <div class="go-acf-switch"><span class="go-acf-switch-on"
-                                                                                                             style="min-width: 36px;">+</span><span
-                                                                                        class="go-acf-switch-off"
-                                                                                        style="min-width: 36px;">-</span>
-                                                                                <div class="go-acf-switch-slider"></div>
-                                                                            </div>
-                                                                        </label>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr class="go-acf-row">
-                                                            <td class="go-acf-field go-acf-field-number go_reward go_xp  data-name="
-                                                                xp
+                                                            <td class="go-acf-field go-acf-field-number go_reward go_percent  data-name="
+                                                                %
                                                             " data-type="number">
                                                             <div class="go-acf-input">
-                                                                <div class="go-acf-input-wrap"><input name="xp" type="number"
-                                                                                                      value="0" min="0" step="1" oninput="validity.valid||(value='');">
+                                                                <div class="go-acf-input-wrap"><input class="feedback_percent_input go_percent_input" name="percent" type="number"
+                                                                                                      value="0" min="0" max="100' step="1" oninput="validity.valid||(value='');">%
                                                                 </div>
                                                             </div>
                                                             </td>
-                                                            <td class="go-acf-field go-acf-field-number go_reward go_gold"
-                                                                data-name="gold" data-type="number">
-                                                                <div class="go-acf-input">
-                                                                    <div class="go-acf-input-wrap"><input name="gold" type="number"
-                                                                                                          value="0" min="0"
-                                                                                                          step="1" oninput="validity.valid||(value='');"></div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="go-acf-field go-acf-field-number go_reward go_health "
-                                                                data-name="health" data-type="number">
-                                                                <div class="go-acf-input">
-                                                                    <div class="go-acf-input-wrap"><input name="health"
-                                                                                                          type="number" value="0"
-                                                                                                          min="0" step=".01" oninput="validity.valid||(value='');"></div>
-                                                                </div>
-                                                            </td>
+
+                                                        </tr>
+
+                                                        <tr class="go-acf-row">
+
+
                                                         </tr>
 
                                                         </tbody>
@@ -519,19 +455,7 @@ function go_feedback_input(){
                         </tr>
 
                     </table>
-
-                    <div>
-
-                        <input type="checkbox" class="favorite" name="favorite"
-                               >
-                        <label for="scales">Favorite</label>
-                        <input type="checkbox" class="reset" name="reset"
-                               >
-                        <label for="scales">Reset</label>
-
-                    </div>
-                    <p class="go_message_submit"><input type="button" id="go_message_submit"
-                                                        class="button button-primary" value="Send"></p>
+                    <p><input type="button" class="button button-primary go_send_feedback" value="Send" data-postid="<?php echo $post_id;?>"></p>
                 </div>
 
 

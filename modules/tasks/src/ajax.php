@@ -69,8 +69,6 @@ function go_task_change_stage() {
         );
         die();
     }
-
-
     //Sets the $status variable
     // and checks if the status on the button is the same as the database
     //they should be the same unless a user had two windows open and continued in one and then switch to the other.
@@ -347,9 +345,7 @@ function go_task_change_stage() {
 
     // stores the contents of the buffer and then clears it
     $buffer = ob_get_contents();
-    //$buffer ='';
     ob_end_clean();
-    //$buffer = 'This stuff here.';
     // constructs the JSON response
     echo json_encode(
         array(

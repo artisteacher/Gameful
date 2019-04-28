@@ -137,7 +137,7 @@ function go_admin_bar() {
                 $next_rank = $rank['next_rank'];
                 $next_rank_points = $rank['next_rank_points'];
 
-                $go_option_ranks = get_option('options_go_loot_xp_levels_name_singular');
+                $go_ranks_name = get_option('options_go_loot_xp_levels_name_singular');
                 //$points_array = $go_option_ranks['points'];
 
                 /*
@@ -175,6 +175,9 @@ function go_admin_bar() {
             } else {
                 $progress_bar = '';
                 $go_current_xp = '';
+                $current_rank ='';
+                $rank_num ='';
+                $go_ranks_name ='';
             }
 
             if ($gold_toggle) {
@@ -185,9 +188,9 @@ function go_admin_bar() {
             } else {
                 $gold_total = '';
                 $go_current_gold ='';
-                $current_rank ='';
-                $rank_num ='';
-                $go_option_ranks ='';
+                //$current_rank ='';
+                //$rank_num ='';
+                //$go_option_ranks ='';
             }
 
             if ($health_toggle) {
@@ -225,17 +228,17 @@ function go_admin_bar() {
             );
 
 
-            if ($xp_toggle) {
-                $wp_admin_bar->add_node(array('id' => 'go_rank', 'title' => '<div id="go_admin_bar_rank">' . $go_option_ranks . ' ' . $rank_num . ": " . $current_rank . '</div>', 'href' => '#', 'parent' => 'go_info',));
+            if ($xp_toggle && ($go_current_xp != 0)) {
+                $wp_admin_bar->add_node(array('id' => 'go_rank', 'title' => '<div id="go_admin_bar_rank">' . $go_ranks_name . ' ' . $rank_num . ": " . $current_rank . '</div>', 'href' => '#', 'parent' => 'go_info',));
 
                 $wp_admin_bar->add_node(array('id' => 'go_xp', 'title' => '<div id="go_admin_bar_xp">' . go_display_longhand_currency('xp', $go_current_xp) . '</div>', 'href' => '#', 'parent' => 'go_info',));
             }
 
-            if ($gold_toggle) {
+            if ($gold_toggle && ($go_current_gold != 0)) {
                 $wp_admin_bar->add_node(array('id' => 'go_gold', 'title' => '<div id="go_admin_bar_gold">' . go_display_shorthand_currency('gold', $go_current_gold, false, 'names') . '</div>', 'href' => '#', 'parent' => 'go_info',));
             }
 
-            if ($health_toggle) {
+            if ($health_toggle && $go_current_health) {
                 $wp_admin_bar->add_node(array('id' => 'go_health', 'title' => '<div id="go_admin_bar_health">' . go_display_longhand_currency('health', $go_current_health) . '</div>', 'href' => '#', 'parent' => 'go_info',));
             }
 
@@ -244,7 +247,7 @@ function go_admin_bar() {
                 $stats_name = get_option('options_go_stats_name');
                 $wp_admin_bar->add_node(
 
-                    array('id' => 'go_stats', 'title' => '<i class="fa fa-area-chart ab-icon" aria-hidden="true"></i><div style="float: right;">' . $stats_name . '</div><div id="go_stats_page"></div><script>  jQuery("#wp-admin-bar-go_stats").one("click", function(){ go_admin_bar_stats_page_button()}); </script>', 'href' => '#',));
+                    array('id' => 'go_stats', 'title' => '<i class="fas fa-chart-area ab-icon" aria-hidden="true"></i><div style="float: right;">' . $stats_name . '</div><div id="go_stats_page"></div><script>  jQuery("#wp-admin-bar-go_stats").one("click", function(){ go_admin_bar_stats_page_button()}); </script>', 'href' => '#',));
             };
 
             if ($go_blog_switch) {
@@ -256,7 +259,7 @@ function go_admin_bar() {
                 $user_blog_link = get_site_url(null, '/user/' . $userloginname);
 
                 $wp_admin_bar->add_node(
-                    array('id' => 'go_blog_menu_link', 'title' => '<span class="ab-icon dashicons dashicons-admin-post "></span><div style="float: right;">My Blog</div>', 'href' => $user_blog_link,));
+                    array('id' => 'go_blog_menu_link', 'title' => '<i class="fas fa-thumbtack ab-icon" aria-hidden="true"></i><div style="float: right;">My Blog</div>', 'href' => $user_blog_link,));
             };
         }
 
@@ -269,7 +272,7 @@ function go_admin_bar() {
             $wp_admin_bar->add_node(
                 array(
                     'id' => 'go_map',
-                    'title' => '<i class="fa fa-sitemap ab-icon" aria-hidden="true"></i><div id="go_map_page" class="admin_map" style="float: right;" >' . $name . '</div>',
+                    'title' => '<i class="fas fa-sitemap ab-icon" aria-hidden="true"></i><div id="go_map_page" class="admin_map" style="float: right;" >' . $name . '</div>',
                     'href' => $go_map_link,
                 )
             );
@@ -283,7 +286,7 @@ function go_admin_bar() {
             $wp_admin_bar->add_node(
                 array(
                     'id' => 'go_store',
-                    'title' => '<i class="fa fa-shopping-cart ab-icon" aria-hidden="true"></i><div id="go_store_page" style="float: right;">' . $name . '</div>',
+                    'title' => '<i class="fas fa-shopping-cart ab-icon" aria-hidden="true"></i><div id="go_store_page" style="float: right;">' . $name . '</div>',
                     'href' => $go_store_link,
                 )
             );
@@ -306,7 +309,7 @@ function go_admin_bar() {
         };
 
         if ($is_admin) {
-            $wp_admin_bar->add_node(array('id' => 'go_clipboard', 'title' => '<span class="ab-icon dashicons dashicons-clipboard"></span><div id="go_clipboard_adminbar" style="float: right;">Clipboard</div>', 'href' => get_admin_url() . 'admin.php?page=go_clipboard',));
+            $wp_admin_bar->add_node(array('id' => 'go_clipboard', 'title' => '<i class="fas fa-clipboard-list ab-icon" aria-hidden="true"></i><div id="go_clipboard_adminbar" style="float: right;">Clipboard</div>', 'href' => get_admin_url() . 'admin.php?page=go_clipboard',));
         }
         if ($is_admin) {
             $wp_admin_bar->add_group(

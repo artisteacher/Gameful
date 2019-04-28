@@ -1779,7 +1779,7 @@ if( function_exists('acf_add_local_field_group') ):
                     'class' => '',
                     'id' => '',
                 ),
-                'message' => '<p>Users can be organized into sections and groups.	These are created and managed under the <i class="fa fa-users" aria-hidden="true"></i>"User Groups" menu to the left or by clicking the links below (links open in new tab of window).</p>
+                'message' => '<p>Users can be organized into sections and groups.	These are created and managed under the <i class="fas fa-users" aria-hidden="true"></i>"User Groups" menu to the left or by clicking the links below (links open in new tab of window).</p>
 <ul><li><a href="edit-tags.php?taxonomy=user_go_sections" target="_blank">Sections</a></li><li><a href="edit-tags.php?taxonomy=user_go_groups" target="_blank">Groups</a></li></ul>
 <div class="more_info_accordian">
 <h3> More Information</h3>

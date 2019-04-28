@@ -46,21 +46,21 @@ function go_user_links($user_id, $website = true, $stats = false, $profile = fal
 
     if ($stats){
         if ($stats_lite) {
-            echo "<div class='go_user_link'><a href='javascript:void(0);' class='go_stats_lite' data-UserId='{$user_id}' onclick='go_stats_lite({$user_id});'><i class='fa fa-area-chart ab-icon' aria-hidden='true'></i></a></div>";
+            echo "<div class='go_user_link'><a href='javascript:void(0);' class='go_stats_lite' data-UserId='{$user_id}' onclick='go_stats_lite({$user_id});'><i class='fas fa-area-chart ab-icon' aria-hidden='true'></i></a></div>";
         }else{//regular stats link
-            echo "<div class='go_user_link_stats go_user_link' name='{$user_id}'><a href='javascript:void(0);';'><i class='fa fa-area-chart ab-icon' aria-hidden='true'></i></a></div>";
+            echo "<div class='go_user_link_stats go_user_link' name='{$user_id}'><a href='javascript:void(0);';'><i class='fas fa-area-chart ab-icon' aria-hidden='true'></i></a></div>";
         }
     }
     if ($clipboard){
-        echo "<div class='go_user_link go_user_map' name='{$user_id}'><a onclick='go_user_map({$user_id})' href='javascript:void(0);'><i class='fa fa-sitemap ab-icon' aria-hidden='true'></i></a></div>";
+        echo "<div class='go_user_link go_user_map' name='{$user_id}'><a onclick='go_user_map({$user_id})' href='javascript:void(0);'><i class='fas fa-sitemap ab-icon' aria-hidden='true'></i></a></div>";
 
     }
     if ($profile && $show_all) {
         if($clipboard){
-            echo "<div class='go_user_link'><a onclick='go_user_profile_link({$user_id})' href='javascript:void(0);' target='_blank'><i class='fa fa-user' aria-hidden='true'></i></a></div>";
+            echo "<div class='go_user_link'><a onclick='go_user_profile_link({$user_id})' href='javascript:void(0);' target='_blank'><i class='fas fa-user' aria-hidden='true'></i></a></div>";
         }else {
             $user_edit_link = get_edit_user_link($user_id);
-            echo "<div class='go_user_link'><a href='$user_edit_link' target='_blank'><i class='fa fa-user' aria-hidden='true'></i></a></div>";
+            echo "<div class='go_user_link'><a href='$user_edit_link' target='_blank'><i class='fas fa-user' aria-hidden='true'></i></a></div>";
         }
     }
     if ($blog) {
@@ -88,7 +88,7 @@ function go_user_links($user_id, $website = true, $stats = false, $profile = fal
     }
 
     if($show_messages && ($clipboard || $is_admin)){
-        echo "<div class='go_stats_messages_icon go_user_link ' data-uid='" . $user_id . "' ><a href='javascript:void(0);' ><i class='fa fa-bullhorn' aria-hidden='true'></i></a></div>";
+        echo "<div class='go_stats_messages_icon go_user_link ' data-uid='" . $user_id . "' ><a href='javascript:void(0);' ><i class='fas fa-bullhorn' aria-hidden='true'></i></a></div>";
         //make the messages icon a link to this user
     }
     echo "</div>";

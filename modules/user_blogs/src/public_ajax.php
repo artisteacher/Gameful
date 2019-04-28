@@ -23,11 +23,17 @@ function go_get_blog_posts($user_id = null){
 
     $show_private = get_user_meta($user_id, 'go_show_private', true);
 
-    if(($is_admin || $is_current_user) && $show_private){
-            $query_statuses = array("read", "unread", "reset", "draft", "trash");
-            $private_query = array();
+    if(($is_admin || $is_current_user) && intval($show_private) === 1){
+        $query_statuses = array("read", "unread", "reset", "draft", "trash", "publish");
+        $private_query = array();
+        $private_query_v4=  array();
     }else{
-        $query_statuses = array("read", "unread");
+        $query_statuses = array("read", "unread", "publish");
+        $private_query_v4 = array(//this wasn't used in v4 posts and needs to query for when it doesn't exist
+            'key'     => 'go_blog_private_post',
+            'value'   => '',
+            'compare' => 'NOT EXISTS',
+        );
         $private_query = array(
             'key'     => 'go_blog_private_post',
             'value'   => 1,
@@ -46,11 +52,23 @@ function go_get_blog_posts($user_id = null){
         'author'       => $user_id,
         'paged' => $paged,
         'post_status' => $query_statuses,
-        'meta_query' => array($private_query),
+        'meta_query' => array('relation' => 'OR', $private_query_v4, $private_query),
 
     );
+
+    $arg_localize = array(
+        'post_type'         => 'go_blogs',
+        'posts_per_page'    => 5,
+        'orderby'           => 'publish_date',
+        'order'             => 'DESC',
+        'author'       => $user_id,
+        'post_status' => $query_statuses,
+        'meta_query' => array('relation' => 'OR', $private_query_v4, $private_query),
+
+    );
+    $arg_localize = serialize($arg_localize);
 //build query
-    global $go_query;
+    //global $go_query;
     $go_query = new WP_Query( $arg );
 
 // get query request
@@ -96,7 +114,7 @@ function go_get_blog_posts($user_id = null){
 
                     // don't display the button if there are not enough posts
                     if (  $go_query->max_num_pages > 1 )
-                        echo '<div class="misha_loadmore">More posts</div>'; // you can use <a> as well
+                        echo '<div class="misha_loadmore go_loadmore_blog">More posts</div>'; // you can use <a> as well
 
                     echo paginate_links( array(
                         'base'         => str_replace( 999999999, '%#%', esc_url( get_pagenum_link( 999999999 ) ) ),
@@ -133,7 +151,8 @@ function go_get_blog_posts($user_id = null){
         'ajaxurl' => site_url() . '/wp-admin/admin-ajax.php', // WordPress AJAX
         //'posts' => json_encode( $go_query->query_vars ), // everything about your loop is here
         'current_page' => get_query_var( 'paged' ) ? get_query_var('paged') : 1,
-        'max_page' => $go_query->max_num_pages
+        'max_page' => $go_query->max_num_pages,
+        'myargs' => $arg_localize
     ) );
 
     wp_enqueue_script( 'go_loadmore' );
@@ -145,53 +164,34 @@ function misha_loadmore_ajax_handler(){
 
     // prepare our arguments for the query
     //$args = json_decode( stripslashes( $_POST['query'] ), true );
-    $args['paged'] = $_POST['page'] + 1; // we need next page to be loaded
-
+    $paged = $_POST['page'] + 1; // we need next page to be loaded
+    $myargs = $_POST['myargs'];
+    $myargs = stripslashes($myargs);
+    $myargs = unserialize($myargs);
+    $myargs['paged'] = $paged;
     $current_user_id = get_current_user_id();
-    $user_id = $args['author'];
 
-    if($current_user_id === intval($user_id)){
+
+
+    $show_private = $myargs['meta_query'][1]['value'];
+
+        $author = $myargs['author'];
+
+    //double check for the private query
+    if(intval($current_user_id) === intval($author)){
         $is_current_user = true;
     }else{
         $is_current_user = false;
     }
     $is_admin = go_user_is_admin($current_user_id);
 
-    $show_private = get_user_meta($user_id, 'go_show_private', true);
-
-    if(($is_admin || $is_current_user) && $show_private){
-        $query_statuses = array("read", "unread", "reset", "draft", "trash");
-        $private_query = array();
-    }else{
-        $query_statuses = array("read", "unread");
-        $private_query = array(
-            'key'     => 'go_blog_private_post',
-            'value'   => 1,
-            'compare' => '!=',
-        );
+    if ($show_private && (!$is_admin && !$is_current_user)){
+        echo 'refresh';
+        die();
     }
 
-    $args['post_status'] = $query_statuses;
-    $args['meta_query'] = array($private_query);
+    $go_query = new WP_Query( $myargs );
 
-    // it is always better to use WP_Query but not here
-    $go_query = new WP_Query( $args );
-    /*
-    if( have_posts() ) :
-
-        // run the loop
-        while( have_posts() ): the_post();
-
-            // look into your theme code how the posts are inserted, but you can use your own HTML of course
-            // do you remember? - my example is adapted for Twenty Seventeen theme
-            get_template_part( 'template-parts/post/content', get_post_format() );
-            // for the test purposes comment the line above and uncomment the below one
-            // the_title();
-
-        endwhile;
-
-    endif;
-    */
     $posts = $go_query->get_posts();
     foreach ($posts as $post){
         $post = json_decode(json_encode($post), True);//convert stdclass to array by encoding and decoding

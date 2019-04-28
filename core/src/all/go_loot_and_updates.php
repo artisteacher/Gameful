@@ -1,6 +1,13 @@
 <?php
 
 /**
+ * Created by PhpStorm.
+ * User: mcmurray
+ * Date: 4/29/18
+ * Time: 10:40 PM
+ */
+
+/**
  * Returns an array containing data for the user's current and next rank.
  *
  * Uses the user's "go_rank" meta data value to return the name and point threshold of the current
@@ -221,13 +228,13 @@ function go_display_shorthand_currency ( $currency_type, $amount, $output = fals
             $str = '';
             if ($gold_amount != 0){
 
-                $str = "{$gold_name}({$gold_suffix}):{$gold_amount}&nbsp;&nbsp;&nbsp;";
+                $str = "{$gold_name}({$gold_suffix}):{$gold_amount}   ";
             }
             if ($silver_amount != 0){
-                $str .=  "{$silver_name}({$silver_suffix}):{$silver_amount}&nbsp;&nbsp;&nbsp;";
+                $str .=  "{$silver_name}({$silver_suffix}):{$silver_amount}   ";
             }
             if ($bronze_amount != 0){
-                $str .=  "{$bronze_name}({$bronze_suffix}):{$bronze_amount}&nbsp;&nbsp;&nbsp;";
+                $str .=  "{$bronze_name}({$bronze_suffix}):{$bronze_amount}   ";
             }
             if (empty($str)){
                 $str = false;
@@ -253,13 +260,13 @@ function go_display_shorthand_currency ( $currency_type, $amount, $output = fals
         else {
             if ($gold_amount >0){
 
-                $str = "{$gold_amount}{$divider}{$gold_suffix}&nbsp;&nbsp;";
+                $str = "{$gold_amount}{$divider}{$gold_suffix}  ";
             }
             if ($silver_amount >0){
-                $str .=  "{$silver_amount}{$divider}{$silver_suffix}&nbsp;&nbsp;";
+                $str .=  "{$silver_amount}{$divider}{$silver_suffix}  ";
             }
             if ($bronze_amount >0){
-                $str .=  "{$bronze_amount}{$divider}{$bronze_suffix}&nbsp;&nbsp;";
+                $str .=  "{$bronze_amount}{$divider}{$bronze_suffix}  ";
             }
             if (empty($str)){
                 $str = false;
@@ -288,13 +295,6 @@ function go_return_badge_count( $user_id ) {
     );
     return $badge_count;
 }
-
-/**
- * Created by PhpStorm.
- * User: mcmurray
- * Date: 4/29/18
- * Time: 10:40 PM
- */
 
 function go_get_health_mod ($user_id){
     //set the health mod
@@ -362,9 +362,6 @@ function go_get_user_loot ($user_id, $loot_type){
     return $loot;
 }
 
-
-
-
 /**
  * @param $user_id
  * @param $post_id
@@ -408,7 +405,8 @@ function go_update_stage_table ($user_id, $post_id, $custom_fields, $status, $bo
                         last_time = IFNULL('{$last_time}', last_time) ,
                         timer_time = IFNULL('{$last_time}', last_time)                  
                     WHERE uid= %d AND post_id=%d ", $user_id, $post_id));
-    } else {
+    }
+    else {
         if ($progressing === true) {
             if ($status !== null) {
                 $new_status_task = $status + 1;
@@ -623,7 +621,6 @@ function go_update_stage_table ($user_id, $post_id, $custom_fields, $status, $bo
             $health = go_health_to_add($user_id, $health);
 
             if ($status != 0) {
-
                 $badges = $wpdb->get_var($wpdb->prepare("SELECT badges
 					FROM {$go_actions_table_name} 
 					WHERE uid = %d and source_id  = %d and stage = %d 
@@ -660,8 +657,6 @@ function go_update_stage_table ($user_id, $post_id, $custom_fields, $status, $bo
                 $group_ids = serialize($group_ids);
             }
         }
-
-
     }
 
     $wpdb->query(
@@ -793,7 +788,6 @@ function go_remove_badges ($badge_ids, $user_id, $notify = false) {
         }
     }
 }
-
 
 /**
  * @param $group_ids
@@ -1212,12 +1206,7 @@ function go_update_totals_table($user_id, $xp, $gold, $health, $notify, $debt){
             update_user_option($user_id, "go_rank", $rank_num);
             go_noty_level_down($rank_num, $rank_name );
         }
-
-
-
     }
-
-
 
     if ($notify === true) {
         $up = false;
@@ -1225,39 +1214,42 @@ function go_update_totals_table($user_id, $xp, $gold, $health, $notify, $debt){
 
         if($xp != 0){
             $xp_loot = go_display_shorthand_currency('xp', $xp);
+            if ($xp > 0) {
+                go_noty_loot_success($xp_loot, '');
+                $up = true;
+            }
+            else if ($xp < 0) {
+                go_noty_loot_error($xp_loot, '');
+                $down = true;
+            }
         }
-        if ($xp > 0) {
-            go_noty_loot_success($xp_loot, '');
-            $up = true;
-        }
-        else if ($xp < 0) {
-            go_noty_loot_error($xp_loot, '');
-            $down = true;
-        }
+
 
         if($gold != 0){
             $gold_loot = go_display_shorthand_currency('gold', $gold, false, 'breaks');
-        }
-        if ($gold > 0) {
-            go_noty_loot_success($gold_loot, '');
-            $up = true;
-        }
-        else if ($gold < 0) {
-            go_noty_loot_error($gold_loot, '');
-            $down = true;
+            if ($gold > 0) {
+                go_noty_loot_success($gold_loot, '');
+                $up = true;
+            }
+            else if ($gold < 0) {
+                go_noty_loot_error($gold_loot, '');
+                $down = true;
+            }
         }
 
+
         if ($health!=0){
-            $health_loot = go_display_shorthand_currency('gold', $health);
+            $health_loot = go_display_shorthand_currency('health', $health);
+            if ($health > 0) {
+                go_noty_loot_success($health_loot, '');
+                $up = true;
+            }
+            else if ($health < 0) {
+                go_noty_loot_error($health_loot, '');
+                $down = true;
+            }
         }
-        if ($health > 0) {
-            go_noty_loot_success($health_loot, '');
-            $up = true;
-        }
-        else if ($health < 0) {
-            go_noty_loot_error($health_loot, '');
-            $down = true;
-        }
+
 
         if ($up == true){
             echo "<script>var audio = new Audio( PluginDir.url + 'media/sounds/coins.mp3' ); audio.play();</script>";
@@ -1299,6 +1291,7 @@ function go_update_admin_bar_v4($user_id) {
         $current_rank_points = $rank['current_rank_points'];
         $next_rank = $rank['next_rank'];
         $next_rank_points = $rank['next_rank_points'];
+        $go_ranks_name = get_option('options_go_loot_xp_levels_name_singular');
 
         if ($next_rank_points != false) {
             $rank_threshold_diff = $next_rank_points - $current_rank_points;
@@ -1325,14 +1318,29 @@ function go_update_admin_bar_v4($user_id) {
             '</div>';
 
         echo "jQuery( '#go_admin_bar_progress_bar_border' ).replaceWith( '{$progress_bar}' );";
+
+        $display = go_display_longhand_currency('xp', $go_current_xp) ;
+        echo "jQuery( '#go_admin_bar_xp' ).html( '{$display}' );";
+        echo "jQuery( '#go_admin_bar_rank' ).html( '".$go_ranks_name . " " . $rank_num . ": " . $current_rank."' );";
+
     }
     if (get_option('options_go_loot_gold_toggle')){
         // the user's current amount of currency
         $go_current_gold = $user_loot['gold'];
         //$display = go_display_longhand_currency('gold', $go_current_gold) ;
-        $display_short = go_display_shorthand_currency('gold', $go_current_gold, false, null) ;
+        $display_short = go_display_shorthand_currency('gold', $go_current_gold, false);
+        $display_short = htmlspecialchars($display_short);
         //echo "jQuery( '#go_admin_bar_gold' ).html( '{$display}' );";
-        echo "jQuery( '#go_admin_bar_gold_2' ).html( '{$display_short}' );";
+        //echo "jQuery( '#go_admin_bar_gold_2' ).html( '{$display_short}' );";
+        echo 'jQuery( "#go_admin_bar_gold_2" ).html( "'.$display_short.'" );';
+        $display = go_display_shorthand_currency('gold', $go_current_gold, false, 'names');
+        $display = htmlspecialchars($display);
+        echo 'jQuery( "#go_admin_bar_gold" ).html( "'.$display.'" );';
+        if($go_current_gold == 0){
+            echo 'jQuery( "#wp-admin-bar-go_gold" ).hide();';
+        }else{
+            echo 'jQuery( "#wp-admin-bar-go_gold" ).show();';
+        }
     }
     if (get_option('options_go_loot_health_toggle')){
 
@@ -1343,12 +1351,11 @@ function go_update_admin_bar_v4($user_id) {
         } else if ($health_percentage >= 100) {
             $health_percentage = 100;
         }
-
-        $display = go_display_longhand_currency('health', $go_current_health) ;
-        echo "jQuery( '#go_admin_bar_health' ).html( '{$display}' );";
         echo "jQuery( '#go_admin_bar_health_bar' ).css( {'width': '{$health_percentage}%'} );";
         $health_str = "Health Mod: " . $go_current_health. "%" ;
         echo "jQuery( '#health_bar_percentage_str' ).html( '{$health_str}' );";
+        $display = go_display_longhand_currency('health', $go_current_health) ;
+        echo "jQuery( '#go_admin_bar_health' ).html( '{$display}' );";
     }
 
     echo "

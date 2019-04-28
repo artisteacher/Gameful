@@ -24,84 +24,86 @@ get_header();
 /////////////////////USER HEADER
     $user = get_query_var('uname');
     $user_obj = get_user_by('login',$user);
-    if($user_obj)
-    {
-       $user_id = $user_obj->ID;
-    }else{
-        $user_id = 0;
-    }
-    $current_user_id = get_current_user_id();
+    if($user_obj) {
+        $user_id = $user_obj->ID;
 
-    if($current_user_id ===$user_id){
-        $is_current_user = true;
-    }else{
-        $is_current_user = false;
-    }
-    $is_admin = go_user_is_admin($current_user_id);
+        $current_user_id = get_current_user_id();
 
-    $user_fullname = $user_obj->first_name.' '.$user_obj->last_name;
-    $user_login =  $user_obj->user_login;
-    $user_display_name = $user_obj->display_name;
-    $user_website = $user_obj->user_url;
-    $page_title = $user_display_name . "'s Blog";
+        if ($current_user_id === $user_id) {
+            $is_current_user = true;
+        } else {
+            $is_current_user = false;
+        }
+        $is_admin = go_user_is_admin($current_user_id);
+
+        $user_fullname = $user_obj->first_name . ' ' . $user_obj->last_name;
+        $user_login = $user_obj->user_login;
+        $user_display_name = $user_obj->display_name;
+        $user_website = $user_obj->user_url;
+        $page_title = $user_display_name . "'s Blog";
 
 
-    ?><script>
-    document.title = "<?php echo $page_title; ?>";//set page title
-    </script><?php
-    $use_local_avatars = get_option('options_go_avatars_local');
-    $use_gravatar = get_option('options_go_avatars_gravatars');
-    if ($use_local_avatars){
-        $user_avatar_id = get_user_option( 'go_avatar', $user_id );
-        $user_avatar = wp_get_attachment_image($user_avatar_id);
-    }
-    if (empty($user_avatar) && $use_gravatar) {
-        $user_avatar = get_avatar( $user_id, 150 );
-    }
+        ?>
+        <script>
+            document.title = "<?php echo $page_title; ?>";//set page title
+        </script><?php
+        $use_local_avatars = get_option('options_go_avatars_local');
+        $use_gravatar = get_option('options_go_avatars_gravatars');
+        if ($use_local_avatars) {
+            $user_avatar_id = get_user_option('go_avatar', $user_id);
+            $user_avatar = wp_get_attachment_image($user_avatar_id);
+        }
+        if (empty($user_avatar) && $use_gravatar) {
+            $user_avatar = get_avatar($user_id, 150);
+        }
 
 
-    ?>
-    <div id='go_stats_lite_wrapper'>
-    <div id='go_stats_lay_lite' class='go_datatables'>
-        <div id='go_stats_header_lite'>
-            <div class="go_stats_id_card">
-                <div class='go_stats_gravatar'><?php echo $user_avatar; ?></div>
+        ?>
+        <div id='go_stats_lite_wrapper'>
+            <div id='go_stats_lay_lite' class='go_datatables'>
+                <div id='go_stats_header_lite'>
+                    <div class="go_stats_id_card">
+                        <div class='go_stats_gravatar'><?php echo $user_avatar; ?></div>
 
-                <div class='go_stats_user_info'>
-                    <?php echo "<h2>{$user_fullname}</h2>{$user_display_name}<br>"; ?>
+                        <div class='go_stats_user_info'>
+                            <?php echo "<h2>{$user_fullname}</h2>{$user_display_name}<br>"; ?>
+                            <?php
+                            go_user_links($user_id, true, true, true, false, true, true);
+                            if ($current_user_id === $user_id) {
+                                echo '<button class="go_blog_opener" blog_post_id ="">New Post</button>';
+                            }
+                            ?>
+
+
+                        </div>
+
+
+                    </div>
                     <?php
-                    go_user_links($user_id, true, true, true, false, true, true);
-                    if ($current_user_id === $user_id){
-                        echo '<button class="go_blog_opener" blog_post_id ="">New Post</button>';
-                     }
+
+                    if (($current_user_id === $user_id) || $is_admin) {
+                        $hide_private = get_user_meta($current_user_id, 'go_show_private', true);
+                        $checked = '';
+                        if ($hide_private) {
+                            $checked = 'checked';
+                        };
+
+                        echo "<div style='float:right;'><input id='go_show_private' data-userid='{$user_id}' type='checkbox' {$checked} ><label for='go_show_private'> Show Private, Trashed, and Reset Posts </label></div>";
+                    }
                     ?>
 
-
-
-
                 </div>
-
-
             </div>
-            <?php
-
-            if (($current_user_id === $user_id) || $is_admin){
-                $hide_private = get_user_meta($current_user_id, 'go_show_private', true);
-                $checked = '';
-                if ($hide_private){ $checked = 'checked'; };
-
-                echo "<div style='float:right;'><input id='go_show_private' data-userid='{$user_id}' type='checkbox' {$checked} ><label for='go_show_private'> Show Private, Trashed, and Reset Posts </label></div>";
-            }
-            ?>
-
         </div>
-    </div>
-    </div>
-    <?php
+        <?php
 
-    /// END USER HEADER
+        /// END USER HEADER
 
-go_get_blog_posts($user_id);
+        go_get_blog_posts($user_id);
+    }else{
+    $user_id = 0;
+    echo "<div style='padding:30px;'>This user does not exist.</div>";
+    }
 
     go_hidden_footer();
 ?>

@@ -6,6 +6,20 @@ function go_make_map() {
     if ( ! is_admin() ) {
         $user_id = get_current_user_id();
         $last_map_id = get_user_option('go_last_map', $user_id);
+        if(!$last_map_id){
+            $last_map_id = get_option('options_go_locations_map_default', '');
+        }
+        if(!$last_map_id){
+            $taxonomy = 'task_chains';
+            $term_args0=array(
+                'hide_empty' => false,
+                'order' => 'ASC',
+                'parent' => '0',
+                'number' => 1
+            );
+            $firstmap = get_terms($taxonomy,$term_args0);
+            $last_map_id = $firstmap[0]->term_id;
+        }
         echo "<div id='go_map_container' style='padding:10px 30px; margin: 30px 5%; background-color: white;'>";
         $map_title = get_option( 'options_go_locations_map_title');
         echo "<h1 style='padding:0px 30px 30px 0px;'>{$map_title}</h1>";
@@ -198,11 +212,11 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
                     //$task_is_locked = false;
                     $unlock_message = '';
                     if ($task_is_locked === 'password'){
-                        $unlock_message = '<div><i class="fa fa-unlock"></i> Password</div>';
+                        $unlock_message = '<div><i class="fas fa-unlock"></i> Password</div>';
                         $task_is_locked = false;
                     }
                     else if ($task_is_locked === 'master password') {
-                        $unlock_message = '<div><i class="fa fa-unlock"></i> Master Password</div>';
+                        $unlock_message = '<div><i class="fas fa-unlock"></i> Master Password</div>';
                         $task_is_locked = false;
                     }
 
@@ -439,7 +453,6 @@ function go_make_map_dropdown($user_id = null){
 	$taxonomy = 'task_chains';
 	$term_args0=array(
   		'hide_empty' => false,
-  		'orderby' => 'name',
   		'order' => 'ASC',
   		'parent' => '0'
 	);

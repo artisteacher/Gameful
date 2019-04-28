@@ -1,0 +1,86 @@
+jQuery(document).ready(function(){
+
+    setTimeout(set_height_mce, 1000);
+
+    jQuery("input,select").bind("keydown", function (e) {
+        var keyCode = e.keyCode || e.which;
+        if(keyCode === 13) {
+            e.preventDefault();
+            jQuery('input, select, textarea')
+                [jQuery('input,select,textarea').index(this)+1].focus();
+        }
+    });
+
+});
+
+
+function go_acf_repeater_accordion(){
+    jQuery('.go_acf_header').one('click', function(e) {
+        console.log("collapse repeater");
+        jQuery('.go_acf_header').off();
+        if(jQuery(e.target).is('input')){
+            e.preventDefault();
+        }else {
+            jQuery(this).closest('.acf-row').find('.-collapse').trigger('click');
+        }
+        //jQuery(this).closest('.acf-row').hide();
+        go_acf_repeater_accordion();
+
+    });
+}
+
+
+
+//fix https://stackoverflow.com/questions/9588025/change-tinymce-editors-height-dynamically
+function set_height_mce() {
+    jQuery('.go_call_to_action .mce-edit-area iframe').height( 100 );
+
+}
+
+
+
+/*
+on the create new taxonomy term page,
+this hides the acf stuff until a parent map is selected
+ */
+
+function go_hide_child_tax_acfs() {
+    if(jQuery('.taxonomy-task_chains #parent, .taxonomy-go_badges #parent').val() == -1){
+        //jQuery('#acf-term-fields').hide();
+        //jQuery('.acf-field').hide();
+        jQuery('.go_child_term').hide();
+        jQuery('#go_map_shortcode_id').show();
+    }
+    else{
+        jQuery('.go_child_term').show();
+        //jQuery('#acf-term-fields').show();
+        //jQuery('.acf-field').show();
+        //jQuery('h2').show();
+        jQuery('#go_map_shortcode_id').hide();
+    }
+
+    var map_id = jQuery('[name="tag_ID"]').val();
+    if (map_id == null) {
+        jQuery('#go_map_shortcode_id').hide();
+    }
+
+    //store item shortcode--add item id to bottom
+    var item_id = jQuery('#post_ID').val();
+    jQuery('#go_store_item_id .acf-input').html('[go_store id="' + item_id + '"]');
+
+    //map shortcode message
+    //var map_id = jQuery('[name="tag_ID"]').val();
+    //console.log(map_id);
+    var map_name = jQuery('#name').val();
+    jQuery('#go_map_shortcode_id .acf-input').html('Place this code in a content area to link directly to this map.<br><br>[go_single_map_link map_id="' + map_id + '"]' + map_name + '[/go_single_map_link]');
+    if (map_id == null) {
+        jQuery('#go_map_shortcode_id').hide();
+    }
+
+}
+
+
+
+
+
+

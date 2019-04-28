@@ -14,6 +14,8 @@ if ( !is_admin() ) {
 
     add_action( 'wp_ajax_go_reset_all_users', 'go_reset_all_users' ); //OK
     add_action( 'wp_ajax_go_upgade4', 'go_upgade4' ); //OK
+    add_action( 'wp_ajax_go_update_go_ajax_v5', 'go_update_go_ajax_v5' ); //OK
+    add_action( 'wp_ajax_go_update_go_ajax_v5_check', 'go_update_go_ajax_v5_check' ); //OK
 }else{
     include_once('src/admin.php');
 }

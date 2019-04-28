@@ -2176,12 +2176,164 @@
                     "wrapper": {
                         "width": "",
                         "class": "",
+                        "id": "go_loot_table"
+                    },
+                    "layout": "table",
+                    "sub_fields": [
+                        {
+                            "key": "field_5cc0ba87364bd",
+                            "label": "Adjust Rewards",
+                            "name": "toggle",
+                            "type": "true_false",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "go_reward",
+                                "id": ""
+                            },
+                            "message": "",
+                            "default_value": 0,
+                            "ui": 1,
+                            "ui_on_text": "+",
+                            "ui_off_text": "-"
+                        },
+                        {
+                            "key": "field_5cc0babf364be",
+                            "label": "Percent",
+                            "name": "percent",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "%",
+                            "min": 0,
+                            "max": 100,
+                            "step": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "field_5cc0ba43364b5",
+            "label": "Canned Messages",
+            "name": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 0,
+            "multi_expand": 0,
+            "endpoint": 0
+        },
+        {
+            "key": "field_5cc0ba55364b6",
+            "label": "Messages",
+            "name": "go_messages_canned",
+            "type": "repeater",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "go-loot",
+                "id": "go_loot_table"
+            },
+            "collapsed": "",
+            "min": 1,
+            "max": 0,
+            "layout": "row",
+            "button_label": "",
+            "sub_fields": [
+                {
+                    "key": "field_5cc0ba56364b7",
+                    "label": "Title",
+                    "name": "title",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                },
+                {
+                    "key": "field_5cc0ba56364b8",
+                    "label": "Message",
+                    "name": "message",
+                    "type": "textarea",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "maxlength": "",
+                    "rows": "",
+                    "new_lines": ""
+                },
+                {
+                    "key": "field_5cc1cf5518cba",
+                    "label": "Reward or Penalty",
+                    "name": "toggle",
+                    "type": "true_false",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": "go_acf_loot"
+                    },
+                    "message": "",
+                    "default_value": 0,
+                    "ui": 1,
+                    "ui_on_text": "+",
+                    "ui_off_text": "-"
+                },
+                {
+                    "key": "field_5cc0ba56364b9",
+                    "label": "Loot",
+                    "name": "defaults",
+                    "type": "group",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
                         "id": ""
                     },
                     "layout": "table",
                     "sub_fields": [
                         {
-                            "key": "field_5c434b1b956ba",
+                            "key": "field_5cc0ba56364ba",
                             "label": "XP",
                             "name": "xp",
                             "type": "number",
@@ -2197,12 +2349,12 @@
                             "placeholder": "",
                             "prepend": "",
                             "append": "",
-                            "min": "",
+                            "min": 0,
                             "max": "",
                             "step": ""
                         },
                         {
-                            "key": "field_5c434b1b956bb",
+                            "key": "field_5cc0ba56364bb",
                             "label": "Gold",
                             "name": "gold",
                             "type": "number",
@@ -2218,12 +2370,12 @@
                             "placeholder": "",
                             "prepend": "",
                             "append": "",
-                            "min": "",
+                            "min": 0,
                             "max": "",
                             "step": ""
                         },
                         {
-                            "key": "field_5c434b1b956bc",
+                            "key": "field_5cc0ba56364bc",
                             "label": "Health",
                             "name": "health",
                             "type": "number",
@@ -2239,7 +2391,7 @@
                             "placeholder": "",
                             "prepend": "",
                             "append": "",
-                            "min": "",
+                            "min": 0,
                             "max": "",
                             "step": ".01"
                         }
@@ -2421,5 +2573,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1556028163
+    "modified": 1556373920
 }

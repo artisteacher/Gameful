@@ -7,6 +7,7 @@
  */
 
 function go_make_reader() {
+    wp_localize_script( 'go_frontend', 'IsReader', 'true' );
     if ( ! current_user_can( 'manage_options' ) ) {
         wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
     }

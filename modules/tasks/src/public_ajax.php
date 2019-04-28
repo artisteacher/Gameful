@@ -98,7 +98,7 @@ function go_task_shortcode($atts, $content = null ) {
     $redirect_url = (site_url() . '/' . $redirect_url);
 
     wp_localize_script(
-        'go_tasks',
+        'go_frontend',
         'go_task_data',
         array(
             //'go_taskabandon_nonce'	=>  $task_shortcode_nonces['go_task_abandon'],
@@ -160,10 +160,10 @@ function go_task_shortcode($atts, $content = null ) {
     }
     else if ($is_unlocked){
         if ($is_unlocked_type === 'master password'){
-            echo "<div class='go_checks_and_buttons'><i class='fa fa-unlock fa-2x'></i> Unlocked by the master password.</div>";
+            echo "<div class='go_checks_and_buttons'><i class='fas fa-unlock fa-2x'></i> Unlocked by the master password.</div>";
         }
         else if ($is_unlocked_type === 'password'){
-            echo "<div class='go_checks_and_buttons'><i class='fa fa-unlock fa-2x'></i> Unlocked by the $task_name password.</div>";
+            echo "<div class='go_checks_and_buttons'><i class='fas fa-unlock fa-2x'></i> Unlocked by the $task_name password.</div>";
         }
     }
 

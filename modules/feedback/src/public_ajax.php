@@ -13,7 +13,7 @@ function go_reader_get_posts($sQuery2 = null, $pWhere = null, $order = null)
 
     $uWhere = go_reader_uWhere_values();
 
-    if(!isset($pWhere)) {
+    if (!isset($pWhere)) {
         $pWhere = go_reader_pWhere();
     }
 
@@ -41,7 +41,7 @@ function go_reader_get_posts($sQuery2 = null, $pWhere = null, $order = null)
     $pTable = "{$wpdb->prefix}posts";
 
     //$order = $_POST['order'];
-    if(!isset($order)) {
+    if (!isset($order)) {
         $order = (isset($_POST['order']) ? $_POST['order'] : 'ASC');
     }
 
@@ -76,11 +76,12 @@ function go_reader_get_posts($sQuery2 = null, $pWhere = null, $order = null)
         ";
     }
 
-        //$sQuery3 = $sQuery1 . $sQuery2 . $pWhere . " ORDER BY t4.post_modified " . $order;
+    //$sQuery3 = $sQuery1 . $sQuery2 . $pWhere . " ORDER BY t4.post_modified " . $order;
 
-        $sQuery = $sQuery1 . $sQuery2 . $pWhere . " ORDER BY t4.post_modified " . $order . " LIMIT " . $limit;
+    $sQuery = $sQuery1 . $sQuery2 . $pWhere . " ORDER BY t4.post_modified " . $order . " LIMIT " . $limit;
 
-
+    $localize = $sQuery1 . $sQuery2 . $pWhere . " ORDER BY t4.post_modified " . $order;
+    $localize = htmlspecialchars( $localize, ENT_QUOTES );
 
     //LIMIT $limit
     //ORDER BY OPTIONS, OLDEST/NEWEST
@@ -118,15 +119,15 @@ function go_reader_get_posts($sQuery2 = null, $pWhere = null, $order = null)
 
     //if ($iFilteredTotal < 1000 ) {
     echo "<div id='go_post_found' style='width: 600px;float:left;'>";
-            if ($TotalunRead != $iFilteredTotal){
-                echo "<span>{$iFilteredTotal} posts found. </span>";
-            }
-            if($TotalunRead>0){
-                echo "
+    if ($TotalunRead != $iFilteredTotal) {
+        echo "<span>{$iFilteredTotal} posts found. </span>";
+    }
+    if ($TotalunRead > 0) {
+        echo "
                  <span>{$TotalunRead} unread posts found. </span><span><a  id='go_mark_all_read' >Mark all as read</a>.</span>";//data-post_ids='$posts_serialized
-            }
+    }
 
-        echo "</div>";
+    echo "</div>";
     //$sQuerynoLimit = $totalQuery;
     //$sQuerynoLimit = 5;
     ?>
@@ -134,10 +135,20 @@ function go_reader_get_posts($sQuery2 = null, $pWhere = null, $order = null)
     <br>
     <div style="float: right;clear:both;">
         Posts per page
-        <select id="go_num_posts" class="go_num_posts" name="postNum" data-where="<?php echo $pWhere;?>"  data-order="<?php echo $order;?>" data-query="<?php echo $sQuery2;?>" >
-            <option value="10" <?php if($limit == 10) {echo 'selected';}?>>10</option>
-            <option value="25" <?php if($limit == 25) {echo 'selected';}?>>25</option>
-            <option value="50" <?php if($limit == 50) {echo 'selected';}?>>50</option>
+        <select id="go_num_posts" class="go_num_posts" name="postNum" data-where="<?php echo $pWhere; ?>"
+                data-order="<?php echo $order; ?>" data-query="<?php echo $sQuery2; ?>">
+            <option value="10" <?php if ($limit == 10) {
+                echo 'selected';
+            } ?>>10
+            </option>
+            <option value="25" <?php if ($limit == 25) {
+                echo 'selected';
+            } ?>>25
+            </option>
+            <option value="50" <?php if ($limit == 50) {
+                echo 'selected';
+            } ?>>50
+            </option>
         </select>
     </div>
     <?php
@@ -155,11 +166,10 @@ function go_reader_get_posts($sQuery2 = null, $pWhere = null, $order = null)
     }*/
 
 
-
     $i = 0;
     echo "<div style='clear:both'></div>";
-    foreach ($posts_array as $post){
-        if ($i == $limit){
+    foreach ($posts_array as $post) {
+        if ($i == $limit) {
             break;
         }
         $i++;
@@ -168,12 +178,26 @@ function go_reader_get_posts($sQuery2 = null, $pWhere = null, $order = null)
         go_blog_post($post, null, false, true, true, false);
     }
 
+    echo "<div class='go_reader_footer'><div class='go_read_printed'>
+                <button id='go_read_printed_button'  style='float: right; margin: 20px;'>Mark all unread posts on this page as read.</button>
+            </div>";
+    if ($iFilteredTotal > $limit){
+
+        echo "<div style='clear:both;' class='misha_loadmore go_loadmore_reader' data-offset='1' data-limit='".$limit."' data-query='".$localize."'>More posts</div>";
+
+        $remaining = $iFilteredTotal - $limit;
+        if ($remaining === 1){
+            echo "<div style='width: 100%; text-align: center;' class='go_remaining'>{$remaining} Post remaining</div>";
+        }else {
+            echo "<div style='width: 100%; text-align: center;' class='go_remaining'>{$remaining} Posts remaining</div>";
+        }
+
+    }
+    echo "<div>";
+
 
     wp_localize_script( 'go_loadmore', 'misha_loadmore_params', array(
         'ajaxurl' => site_url() . '/wp-admin/admin-ajax.php', // WordPress AJAX
-        //'posts' => json_encode( $go_query->query_vars ), // everything about your loop is here
-        'current_page' => get_query_var( 'paged' ) ? get_query_var('paged') : 1,
-        //'max_page' => $go_query->max_num_pages
     ) );
 
     wp_enqueue_script( 'go_loadmore' );
@@ -373,3 +397,76 @@ function go_reader_pWhere(){
 
     return $pWhere;
 }
+
+function go_loadmore_reader(){
+
+    // prepare our arguments for the query
+    //$args = json_decode( stripslashes( $_POST['query'] ), true );
+    $limit = $_POST['limit'];
+    $offset = $_POST['offset'];
+    $query = $_POST['query'];
+    $query = htmlspecialchars_decode($query);
+    $query = stripslashes($query);
+    //$query = unserialize($query);
+
+    $slimit = " LIMIT " . intval($limit) ." OFFSET " . intval(($offset * $limit));
+
+    $query .= $slimit;
+    global $wpdb;
+    $posts = $wpdb->get_results($query, ARRAY_A);
+    $posts_array = array_column($posts, 'ID');
+
+    $fQuery = "SELECT FOUND_ROWS()";
+
+    $rResultFilterTotal = $wpdb->get_results($fQuery, ARRAY_N);
+    $iFilteredTotal = $rResultFilterTotal [0][0];
+    $printed  = intval($offset * $limit);
+    $remaining = intval($iFilteredTotal) - intval((($offset + 1) * $limit));
+
+    $i = 0;
+    if ($printed < $iFilteredTotal){
+        foreach ($posts_array as $post) {
+            if ($i == $limit) {
+                break;
+            }
+            $i++;
+            //$post_id = get the_id();
+            //$blog_post_id = $post['ID'];
+            go_blog_post($post, null, false, true, true, false);
+        }
+        if($remaining < 0) {
+            ?>
+            <script>
+                jQuery('.go_loadmore_reader').hide();
+                jQuery('.go_remaining').hide();
+            </script>
+            <?php
+        }else{
+
+            if ($remaining === 1){
+                //echo "<div style='width: 100%; text-align: center;'>{$remaining} Post remaining</div>";
+                ?>
+                <script>
+                    jQuery('.go_remaining').html("<?php echo $remaining;?> Post remaining");
+                </script>
+                <?php
+            }else {
+                //echo "<div style='width: 100%; text-align: center;'>{$remaining} Posts remaining</div>";
+                ?>
+                <script>
+                    jQuery('.go_remaining').html("<?php echo $remaining;?> Posts remaining");
+                </script>
+                <?php
+            }
+
+
+        }
+
+    }
+
+
+
+
+    die;
+}
+

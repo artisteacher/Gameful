@@ -37,11 +37,11 @@ function go_blog_opener(){
     if ($blog_post_id != 0) { //if opening an existing post
         //get the minimum character count to add to the button
         $blog_meta = get_post_custom($blog_post_id);
-        //$go_blog_task_id = (isset($blog_meta['go_blog_task_id'][0]) ? $blog_meta['go_blog_task_id'][0] : null);
-        $go_blog_task_id = wp_get_post_parent_id($blog_post_id);
+        //$go_blog_task_id = wp_get_post_parent_id($blog_post_id);
+
         $stage = (isset($blog_meta['go_blog_task_stage'][0]) ? $blog_meta['go_blog_task_stage'][0] : null);
 
-
+        go_get_task_id($blog_post_id);
         if(!empty($go_blog_task_id)) {
 
 
@@ -81,7 +81,8 @@ function go_blog_opener(){
     <script>
 
         jQuery( document ).ready( function() {
-            jQuery("#go_blog_submit").one("click", function(e){
+            console.log ("go_blog_opener function READY");
+            jQuery("#go_blog_submit").off().one("click", function(e){
                 task_stage_check_input(this, false);
             });
 
@@ -663,6 +664,28 @@ function go_show_private(){
     echo $buffer;
     die();
 
+}
+
+//gets the task id from a Blog post Id
+//works for v4 and v5 blog_posts
+function go_get_task_id($post_id){
+    global $wpdb;
+    $aTable = "{$wpdb->prefix}go_actions";
+    $task_id = wp_get_post_parent_id($post_id);
+
+    if(!$task_id){
+        $task_id = get_post_meta($post_id, 'go_blog_task_id', true);
+        //$go_blog_task_id = (isset($blog_meta['go_blog_task_id'][0]) ? $blog_meta['go_blog_task_id'][0] : null);
+    }
+    if(!$task_id) {
+        $task_id = $wpdb->get_var($wpdb->prepare("SELECT source_id
+				FROM {$aTable} 
+				WHERE result = %d AND  action_type = %s
+				ORDER BY id DESC LIMIT 1",
+            intval($post_id),
+            'task'));
+    }
+    return $task_id;
 }
 
 

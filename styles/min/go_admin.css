@@ -28,6 +28,20 @@
   z-index: 1 !important;
   margin: 0px !important; }
 
+.go_tools_section {
+  display: flex;
+  flex-wrap: wrap; }
+
+#go_tools_wrapper .card {
+  width: 500px;
+  margin: 30px;
+  padding-bottom: 50px; }
+
+#go_tools_wrapper button {
+  position: absolute;
+  bottom: 20px;
+  right: 20px; }
+
 .go_rewards {
   background-color: #c9fbc9; }
 

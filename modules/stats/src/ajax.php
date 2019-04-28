@@ -511,7 +511,7 @@ function go_stats_task_list() {
                    <thead>
 						<tr><th></th>";
     if ($is_admin){
-        echo "<th class='header go_tasks_reset_multiple'  style='color: red;'><a href='#' class='go_tasks_reset_multiple_clipboard'><i class='fa fa-times-circle' aria-hidden='true'></i></a></th>
+        echo "<th class='header go_tasks_reset_multiple'  style='color: red;'><a href='#' class='go_tasks_reset_multiple_clipboard'><i class='fas fa-times-circle' aria-hidden='true'></i></a></th>
     <th class='header go_tasks_reset' ><a href='#'></a></th>";
     }
     echo "    
@@ -530,7 +530,7 @@ function go_stats_task_list() {
             <tfoot>
             <tr><th></th>";
     if ($is_admin){
-        echo "<th class='header go_tasks_reset_multiple'  style='color: red;'><a href='#' class='go_tasks_reset_multiple_clipboard'><i class='fa fa-times-circle' aria-hidden='true'></i></a></th>
+        echo "<th class='header go_tasks_reset_multiple'  style='color: red;'><a href='#' class='go_tasks_reset_multiple_clipboard'><i class='fas fa-times-circle' aria-hidden='true'></i></a></th>
     <th class='header go_tasks_reset' ><a href='#'></a></th>";
     }
     echo "
@@ -759,7 +759,7 @@ function go_tasks_dataloader_ajax(){
         if($is_admin) {
             $row[] = "{$check_box}";//checkbox
 
-            $row[] = '<a><i data-uid="' . $user_id . '" data-task="' . $post_id . '" style="padding: 0px 10px;" class="go_reset_task_clipboard fa fa-times-circle" aria-hidden="true"></a>';
+            $row[] = '<a><i data-uid="' . $user_id . '" data-task="' . $post_id . '" style="padding: 0px 10px;" class="go_reset_task_clipboard fas fa-times-circle" aria-hidden="true"></a>';
         }
         $row[] = "{$time}";
         $row[] = "<a href='{$post_link}' >{$post_name}</a>";
@@ -771,9 +771,9 @@ function go_tasks_dataloader_ajax(){
             $row[] = "{$status} / {$total_stages}";
         }
         $row[] = "{$bonus_status}";
-        $row[] = '<a href="javascript:;" class="go_blog_user_task" data-UserId="'.$user_id.'" onclick="go_blog_user_task('.$user_id.', '.$post_id.');"><i style="padding: 0px 10px;" class="fa fa-eye" aria-hidden="true"></i></a>';//actions
+        $row[] = '<a href="javascript:;" class="go_blog_user_task" data-UserId="'.$user_id.'" onclick="go_blog_user_task('.$user_id.', '.$post_id.');"><i style="padding: 0px 10px;" class="far fa-eye" aria-hidden="true"></i></a>';//actions
 
-        $row[] = " <a href='javascript:;' class='go_stats_body_activity_single_task' data-postID='{$post_id}' onclick='go_stats_single_task_activity_list({$post_id});'><i style=\"padding: 0px 10px;\" class=\"fa fa-table\" aria-hidden=\"true\"></i></a>";
+        $row[] = " <a href='javascript:;' class='go_stats_body_activity_single_task' data-postID='{$post_id}' onclick='go_stats_single_task_activity_list({$post_id});'><i style=\"padding: 0px 10px;\" class=\"fas fa-table\" aria-hidden=\"true\"></i></a>";
 
         $go_loot_columns = go_loot_columns_stats($task);
         $row = array_merge($row, $go_loot_columns);
@@ -850,7 +850,7 @@ function go_stats_single_task_activity_list($post_id) {
     );
     $post_title = get_the_title($post_id);
     echo "<div id='go_task_list_single' class='go_datatables'>
-            <div style='float: right;'><a onclick='go_close_single_history()' href='javascript:void(0);'><i class='fa fa-times ab-icon' aria-hidden='true'></i> Show All $tasks_name</a></div>
+            <div style='float: right;'><a onclick='go_close_single_history()' href='javascript:void(0);'><i class='fas fa-times ab-icon' aria-hidden='true'></i> Show All $tasks_name</a></div>
             <h3>Single $task_name History: $post_title</h3>
 
             <table id='go_single_task_datatable' class='pretty display'>
@@ -926,7 +926,7 @@ function go_stats_single_task_activity_list($post_id) {
 
         $quiz_mod_int = intval($quiz_mod);
         if (!empty($quiz_mod_int)){
-            $quiz_mod = "<i class=\"fa fa-check-circle-o\" aria-hidden=\"true\"></i> ". $late_mod;
+            $quiz_mod = "<i class=\"fas fa-check-circle-o\" aria-hidden=\"true\"></i> ". $late_mod;
         }
         else{
             $quiz_mod = null;
@@ -1459,6 +1459,7 @@ function go_messages_dataloader_ajax(){
     echo json_encode( $output );
     die();
 }
+
 //History table
 /**
  *
@@ -1535,7 +1536,6 @@ function go_stats_activity_list() {
 
     die();
 }
-
 
 /**
  * go_activity_dataloader_ajax
@@ -1708,13 +1708,52 @@ function go_activity_dataloader_ajax(){
         $post_title = get_the_title($source_id);
 
 
-        if ($action_type == 'message' || $action_type == 'reset'){
+
+
+        if ($action_type == 'store'){
+            $store_qnty = $stage;
+            $type = ucfirst( get_option( 'options_go_store_name' ) );
+            $action = "Qnt: " . $store_qnty ;
+        }
+        else if ($action_type == 'task'){
+            $type = ucfirst( get_option( 'options_go_tasks_name_singular' ) );
+            if ($bonus_status == 0) {
+                //$type = strtoupper( get_option( 'options_go_tasks_name_singular' ) );
+                //$type = "Continue";
+                $action = "Stage: " . $stage;
+            }
+            else{
+                //$type = strtoupper( get_option( 'options_go_tasks_name_singular' ) );
+                // $type = "Continue";
+                $action = "Bonus: " . $bonus_status;
+            }
+        }
+        else if ($action_type == 'feedback'){
+            $type = ucfirst( get_option( 'options_go_tasks_name_singular' ) );
+            $type = ucfirst($action_type);
+            $result_array = unserialize($result);
+            $title = $result_array[0];
+            $message = $result_array[1];
+            $message = $title . " <br><br>" . $message;
+            $action = '<a href="javascript:void(0)"><span class="tooltip" data-tippy-content="'. $message .'">Feedback Stage: ' . $stage. '</span></a>';
+           // $action =' <span class="tooltip" data-tippy-content="'. $message .'">See Message</span>';
+        }
+        else if ($action_type == 'undo_task'){
+            $type = ucfirst( get_option( 'options_go_tasks_name_singular' ) );
+            if ($bonus_status == 0) {
+                //$type = strtoupper( get_option( 'options_go_tasks_name_singular' ) ) . " Undo";
+                //$type = "Undo";
+                $action = "Undo Stage: " . $stage;
+            }
+        }
+        else if ($action_type == 'message' || $action_type == 'reset'){
             $type = ucfirst($action_type);
             $result_array = unserialize($result);
             $title = $result_array[0];
             $message = $result_array[1];
             $message = $title . ": <br>" . $message;
-            $action = "<span class='tooltip' ><span class='tooltiptext'>{$message}</span>See Message</span>";
+            //$action = "<span class='tooltip' ><span class='tooltiptext'>{$message}</span>See Message</span>  ";
+            $action =' <span class="tooltip" data-tippy-content="'. $message .'">See Message</span>';
 
             if (!empty($badge_ids)) {
                 $badge_dir = $result_array[2];
@@ -1753,34 +1792,7 @@ function go_activity_dataloader_ajax(){
 
         $badges_names = $badge_dir . $badges_names . $group_dir . $group_names;
 
-        if ($action_type == 'store'){
-            $store_qnty = $stage;
-            $type = ucfirst( get_option( 'options_go_store_name' ) );
-            $action = "Qnt: " . $store_qnty ;
-        }
 
-        if ($action_type == 'task'){
-            $type = ucfirst( get_option( 'options_go_tasks_name_singular' ) );
-            if ($bonus_status == 0) {
-                //$type = strtoupper( get_option( 'options_go_tasks_name_singular' ) );
-                //$type = "Continue";
-                $action = "Stage: " . $stage;
-            }
-            else{
-                //$type = strtoupper( get_option( 'options_go_tasks_name_singular' ) );
-                // $type = "Continue";
-                $action = "Bonus: " . $bonus_status;
-            }
-        }
-
-        if ($action_type == 'undo_task'){
-            $type = ucfirst( get_option( 'options_go_tasks_name_singular' ) );
-            if ($bonus_status == 0) {
-                //$type = strtoupper( get_option( 'options_go_tasks_name_singular' ) ) . " Undo";
-                //$type = "Undo";
-                $action = "Undo Stage: " . $stage;
-            }
-        }
         if ($result == 'undo_bonus'){
             //$type = strtoupper( get_option( 'options_go_tasks_name_singular' ) ) . " Undo Bonus";
             //$type = "Undo Bonus";
@@ -1851,7 +1863,6 @@ function go_activity_dataloader_ajax(){
         $row[] = "{$badges_names}";
         $output['aaData'][] = $row;
     }
-
 
     echo json_encode( $output );
     die();
@@ -2279,7 +2290,9 @@ function go_stats_uWhere_values(){
             $uWhere .= "`" . $sColumn . "` LIKE '%\"" . esc_sql($search_var). "\"%'";
             $uWhere .= ')';
         }
-        $uWhere .= ")";
+        $uWhere .= "AND wp_capabilities NOT LIKE '%administrator%'))";
+    }else{
+        $uWhere .= "HAVING (wp_capabilities NOT LIKE '%administrator%')";
     }
     return $uWhere;
 }
@@ -2373,6 +2386,7 @@ function go_stats_leaderboard_dataloader_ajax(){
               MAX(CASE WHEN t2.meta_key = 'go_section_and_seat_4_user-seat' THEN meta_value END) AS seat_4,
               MAX(CASE WHEN t2.meta_key = 'go_section_and_seat_5_user-section' THEN meta_value END) AS section_5,
               MAX(CASE WHEN t2.meta_key = 'go_section_and_seat_5_user-seat' THEN meta_value END) AS seat_5,
+              MAX(CASE WHEN t2.meta_key = 'wp_capabilities' THEN meta_value END) AS wp_capabilities,
               t3.display_name, t3.user_url, t3.user_login
               FROM $lTable AS t1 
               LEFT JOIN $umTable AS t2 ON t1.uid = t2.user_id
@@ -2397,7 +2411,6 @@ function go_stats_leaderboard_dataloader_ajax(){
     $iFilteredTotal = $rResultFilterTotal [0];
 
     $sQuery = "
-     
      SELECT COUNT(*)
      FROM( 
       SELECT 
@@ -2407,8 +2420,6 @@ function go_stats_leaderboard_dataloader_ajax(){
           GROUP BY t1.id
           HAVING ( capabilities NOT LIKE '%administrator%')
       ) AS t3   
-      
-    
     ";
 
     $rResultTotal = $wpdb->get_results($sQuery, ARRAY_N);

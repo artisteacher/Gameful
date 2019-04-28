@@ -6,8 +6,21 @@
  * Time: 6:04 PM
  */
 
-function go_check_messages(){
+global $go_debug;
+if(!$go_debug) {
+    add_filter('heartbeat_received', 'go_check_messages', 10, 2);
+}
+
+function go_check_messages($response = null , $data = null){
     global $wpdb;
+
+    if ( empty( $data['go_heartbeat'] ) ) {
+        $heartbeat = false;
+    }else{
+        $heartbeat = true;
+    }
+
+    ob_start();
     //on each page load, check if user has new messages
     $user_id =  get_current_user_id();
     $is_logged_in = is_user_logged_in();
@@ -24,12 +37,13 @@ function go_check_messages(){
             $wpdb->prepare(
                 "SELECT *
 			FROM {$go_actions_table_name}
-			WHERE uid = %d and (action_type = %s or action_type = %s or action_type = %s)  and stage = %d
+			WHERE uid = %d and (action_type = %s or action_type = %s or action_type = %s or action_type = %s)  and stage = %d
 			ORDER BY id DESC",
                 $user_id,
                 'message',
                 'reset',
                 'admin_notification',
+                'feedback',
                 1
             )
         );
@@ -250,12 +264,42 @@ function go_check_messages(){
                 '%d'
             )
         );
+        $wpdb->update(
+            $go_actions_table_name,
+            array(
+                'stage' => 0 // integer (number)
+            ),
+            array(
+                'uid' => $user_id,
+                'action_type' => 'feedback',
+                'stage' => 1
+
+            ),
+            array(
+                '%d'	// value2
+            ),
+            array(
+                '%d',
+                '%s',
+                '%d'
+            )
+        );
         update_user_option($user_id, 'go_new_messages', false);
     }
-
+    $buffer = ob_get_contents();
+    ob_end_clean();
+    if ($heartbeat === false ){
+        echo $buffer;
+    }else {
+        //$buffer = 'beat';
+        $response['go_message'] = $buffer;
+        return $response;
+    }
 
 }
 add_action( 'wp_footer', 'go_check_messages' );
 add_action('go_after_stage_change', 'go_check_messages');
+
+
 
 ?>

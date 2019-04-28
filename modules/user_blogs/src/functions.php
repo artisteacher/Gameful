@@ -186,7 +186,7 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
             $min_words = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_blog_text_minimum_length'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_blog_text_minimum_length'][0] : null);
             $is_private = (isset($custom_fields['go_stages_'.$i.'_blog_options_v5_private'][0]) ?  $custom_fields['go_stages_'.$i.'_blog_options_v5_private'][0] : false);
             $num_elements = (isset($custom_fields['go_stages_'.$i.'_blog_options_v5_blog_elements'][0]) ?  $custom_fields['go_stages_'.$i.'_blog_options_v5_blog_elements'][0] : false);
-
+            $s = $i + 1;
             for($x = 0; $x < $num_elements; $x++){//if this post has elements assigned, loop through them
                 $type = get_post_meta($go_blog_task_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $x . '_element');
                 $uniqueid = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_blog_elements_' . $x . '_uniqueid'][0]) ?  $custom_fields['go_stages_' . $i . '_blog_options_v5_blog_elements_' . $x . '_uniqueid'][0] : 0);
@@ -357,7 +357,7 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
     $current_user = get_current_user_id();
     $is_admin = go_user_is_admin();
     if($suffix !='_lightbox') {
-        go_blog_status($blog_post_id, $is_admin);
+        go_blog_status($blog_post_id, $is_admin, true);
         $button_class = "right";
     }else {
         $button_class = "left";
@@ -367,11 +367,11 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
         //show save button if this is a draft, reset, trashed or new post
         $allow_drafts = array("draft", "reset", "trash", null);
         if (in_array($post_status, $allow_drafts)) {
-            echo "<span id='go_save_button{$suffix}' class='go_button_round go_save_button progress {$button_class}'  status='{$i}' data-bonus_status='{$bonus}' check_type='skip' button_type='save{$suffix}'  admin_lock='true' blog_post_id='{$blog_post_id}' blog_suffix='{$suffix}' task_id='{$go_blog_task_id}' data-check_for_understanding ='{$check_for_understanding}'><span class='go_round_inner'><i class='fa fa-save'></i></span></span>";
+            echo "<span id='go_save_button{$suffix}' class='go_button_round go_save_button progress {$button_class}'  status='{$i}' data-bonus_status='{$bonus}' check_type='skip' button_type='save{$suffix}'  admin_lock='true' blog_post_id='{$blog_post_id}' blog_suffix='{$suffix}' task_id='{$go_blog_task_id}' data-check_for_understanding ='{$check_for_understanding}'><span class='go_round_inner'><i class='fas fa-save'></i></span></span>";
 
         }
     }
-    echo "<div class='spacer' style='clear: both;'></div></div>";
+    echo "</div>";
     if($suffix !='_lightbox') {
         if ($blog_post_id) {
             //do_action('go_blog_template_after_post', $blog_post_id, false);
@@ -458,7 +458,7 @@ function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_underst
     }
 
     ob_start();
-    echo "<div class=\"go_blog_post_wrapper go_blog_post_wrapper_$blog_post_id\" style=\"padding: 10px;margin: 10px; background-color: white;\">";
+    echo "<div class=\"go_blog_post_wrapper go_blog_post_wrapper_$blog_post_id\" style=\"padding: 10px;margin: 10px; background-color: white;\" data-postid ='{$blog_post_id}'>";
 
     $status = get_post_status($blog_post_id);
     if ($status == 'draft') {
@@ -587,23 +587,23 @@ function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_underst
         echo "<div class='go_blog_content'>". $text_content . "</div>";
     }
 
-    echo "<div class='go_blog_form_footer' style='background-color: #b3b3b3;'>";
+    echo "<div class='go_blog_form_footer'>";
     go_blog_status($blog_post_id, $is_admin);
-    echo "<div class='go_blog_actions'>";
+    echo "<div><div class='go_blog_actions'>";
 
 
-    if ($current_user == $author_id && $show_edit) {//if current user then show edit and maybe trash
-        echo "<span class='go_blog_opener go_blog_opener_round go_button_round' blog_post_id ='{$blog_post_id}' data-check_for_understanding ='{$check_for_understanding}'><span class='go_round_inner'><i class='fa fa-pencil'></i></span></span>";
+    if (intval($current_user) == intval($author_id) && $show_edit) {//if current user then show edit and maybe trash
+        echo "<div class='go_blog_opener go_blog_opener_round go_button_round' blog_post_id ='{$blog_post_id}' data-check_for_understanding ='{$check_for_understanding}'><span class='go_round_inner'><i class='fas fa-pencil-alt'></i></span></div>";
     }
     if ((($current_user == $author_id || $is_admin) && $check_for_understanding == false && empty($go_blog_task_id))) {
-        echo '<span class="go_blog_trash go_button_round" blog_post_id ="' . $blog_post_id . '"><span class="go_round_inner"><i class="fa fa-trash"></i></span></span>';
+        echo '<div class="go_blog_trash go_button_round" blog_post_id ="' . $blog_post_id . '"><span class="go_round_inner"><i class="fas fa-trash"></i></span></div>';
     }else if ($is_admin ) {
-        echo '<span data-uid="" data-task="' .$blog_post_id. '" class="go_reset_task_clipboard go_button_round go_blog_reset" ><span class="go_round_inner"><i class="fa fa-times-circle"></i></span></span>';
+        echo '<div data-uid="" data-task="' .$blog_post_id. '" class="go_reset_task_clipboard go_button_round go_blog_reset" ><span class="go_round_inner"><i class="fas fa-times-circle"></i></span></div>';
         //echo '<span class="go_blog_trash" blog_post_id ="' . $blog_post_id . '"><i class="fa fa-times-circle fa-2x"></i></span>';
     }
 
 
-    echo "</div><div class='spacer' style='clear: both;'></div></div>";
+    echo "</div></div></div>";
 
 
     if(intval($current_user) === intval($author_id)){
@@ -623,10 +623,10 @@ function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_underst
  * @param $blog_post_id
  * @param $is_admin
  */
-function go_blog_status($blog_post_id, $is_admin){
-    $status = go_task_status_icon($blog_post_id);
+function go_blog_status($blog_post_id, $is_admin, $is_form = false){
+    $status = go_post_status_icon($blog_post_id);
     $private = go_blog_is_private($blog_post_id);
-    if ($is_admin) {
+    if ($is_admin && !$is_form) {
         $favorite = go_blog_favorite($blog_post_id);
     }else{
         $favorite = '';
@@ -635,18 +635,13 @@ function go_blog_status($blog_post_id, $is_admin){
     if (!empty($status) || !empty($private) || !empty($favorite) ) {
 
         echo "
-            <div class='go_blog_status' style='
-    background-color: white;
-    width: auto;
-    padding: 10px;
-    border: 1px solid;
-    border-radius: 3px;
-        margin: 14px;
-        float: left;'>
-            <div class='go_blog_status_icons' style='display: flex; float: left;' >";
+            <div class='go_blog_status'>
+            <div class='go_blog_status_icons'>";
 
             echo $status . $private . $favorite;
             echo "</div></div>";
+    }else{
+        echo "<div></div>";//this is a placeholder for the flexbox
     }
 
 }

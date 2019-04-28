@@ -183,9 +183,10 @@ add_action( 'admin_action_go_new_task_from_template_as_draft', 'go_new_task_from
  */
 function go_duplicate_post_link( $actions, $post ) {
     if (current_user_can('edit_posts')) {
+        $task_name = get_option('options_go_tasks_name_singular');
         $actions['duplicate'] = '<a href="' . wp_nonce_url('admin.php?action=go_duplicate_post_as_draft&post=' . $post->ID, basename(__FILE__), 'duplicate_nonce' ) . '" title="Duplicate this item" rel="permalink">Clone</a>';
         if ($post->post_type == 'tasks_templates') {
-            $actions['new_from_template'] = '<a href="' . wp_nonce_url('admin.php?action=go_new_task_from_template_as_draft&post=' . $post->ID, basename(__FILE__), 'template_nonce' ) . '" title="Duplicate this item" rel="permalink">New From Template</a>';
+            $actions['new_from_template'] = '<a href="' . wp_nonce_url('admin.php?action=go_new_task_from_template_as_draft&post=' . $post->ID, basename(__FILE__), 'template_nonce' ) . '" title="Duplicate this item" rel="permalink">New '.$task_name.' From Template</a>';
 
         }
     }
@@ -196,9 +197,10 @@ add_filter( 'post_row_actions', 'go_duplicate_post_link', 10, 2 );
 
 function go_duplicate_post_button($post ) {
     if (current_user_can('edit_posts')) {
+        $task_name = get_option('options_go_tasks_name_singular');
         echo '<div style="padding: 10px;"><a class="button" href="' . wp_nonce_url('admin.php?action=go_duplicate_post_as_draft&post=' . $post->ID, basename(__FILE__), 'duplicate_nonce' ) . '" title="Duplicate this item" rel="permalink">Clone</a></div>';
         if ($post->post_type == 'tasks_templates'){
-            echo '<div style="padding: 10px;"><a class="button" href="' . wp_nonce_url('admin.php?action=go_new_task_from_template_as_draft&post=' . $post->ID, basename(__FILE__), 'template_nonce' ) . '" title="Duplicate this item" rel="permalink">New From Template</a></div>';
+            echo '<div style="padding: 10px;"><a class="button" href="' . wp_nonce_url('admin.php?action=go_new_task_from_template_as_draft&post=' . $post->ID, basename(__FILE__), 'template_nonce' ) . '" title="Duplicate this item" rel="permalink">New '.$task_name.' From Template</a></div>';
         }
     }
 }
@@ -328,7 +330,7 @@ if( function_exists('acf_add_options_page') ) {
         'manage_options',
         'game-tools',
         'go_admin_tools_menu_content',
-        'dashicons-admin-tools',
+        '',
         4
     );
 }

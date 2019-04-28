@@ -403,7 +403,7 @@ function go_badges_and_groups($badge_ids, $group_ids){
                 $badges_names[] = $badge_name;
             }
             $badges_names = $badges_names_heading . implode(", " , $badges_names);
-            $bg_links = '<i class="fa fa-certificate" aria-hidden="true"></i>';
+            $bg_links = '<i class="fas fa-certificate" aria-hidden="true"></i>';
         }else{
             $badges_names = "";
         }
@@ -421,7 +421,7 @@ function go_badges_and_groups($badge_ids, $group_ids){
             $group_names[] = $group_name;
         }
         $group_names = $group_names_heading . implode(", " , $group_names);
-        $bg_links = ' <i class="fa fa-users" aria-hidden="true"></i>';
+        $bg_links = ' <i class="fas fa-users" aria-hidden="true"></i>';
     }else{
         $group_names = "";
     }
@@ -1208,7 +1208,7 @@ function go_clipboard_messages_dataloader_ajax(){
                 $badges_names = "<b>Remove </b> ". $badges_names;
                 $bg_links .= '-';
             }
-            $bg_links .= '<i class="fa fa-certificate" aria-hidden="true"></i>';
+            $bg_links .= '<i class="fas fa-certificate" aria-hidden="true"></i>';
         }
 
         if (!empty($group_names)){
@@ -1220,7 +1220,7 @@ function go_clipboard_messages_dataloader_ajax(){
                 $group_names = "<b>Remove </b> ". $group_names;
                 $bg_links .= ' -';
             }
-            $bg_links .= '<i class="fa fa-users" aria-hidden="true"></i>';
+            $bg_links .= '<i class="fas fa-users" aria-hidden="true"></i>';
         }
         if (!empty($badges_names) && !empty($group_names) ) {
             $badges_names = $badges_names . "<br>" ;
