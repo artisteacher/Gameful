@@ -147,7 +147,7 @@ function go_get_blog_posts($user_id = null){
     // now the most interesting part
     // we have to pass parameters to myloadmore.js script but we can get the parameters values only in PHP
     // you can define variables directly in your HTML but I decided that the most proper way is wp_localize_script()
-    wp_localize_script( 'go_loadmore', 'misha_loadmore_params', array(
+    wp_localize_script( 'go_frontend', 'misha_loadmore_params', array(
         'ajaxurl' => site_url() . '/wp-admin/admin-ajax.php', // WordPress AJAX
         //'posts' => json_encode( $go_query->query_vars ), // everything about your loop is here
         'current_page' => get_query_var( 'paged' ) ? get_query_var('paged') : 1,

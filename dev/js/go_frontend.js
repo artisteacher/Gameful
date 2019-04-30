@@ -1,6 +1,7 @@
 // @codekit-prepend 'scripts/go_blogs.js'
 // @codekit-prepend 'scripts/go_feedback.js'
 // @codekit-prepend 'scripts/go_tasks.js'
+// @codekit-prepend 'scripts/go_load_more.js'
 //
 // @codekit-prepend 'scripts/go_every_page.js'
 // @codekit-prepend 'scripts/buy_the_item.js'

@@ -1,5 +1,45 @@
 <?php
 
+function go_blog_revision(){
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_blog_revision' ) ) {
+        echo "refresh";
+        die( );
+    }
+
+    $post_id = (isset($_POST['post_id']) ? $_POST['post_id'] : null);
+    go_blog_post($post_id, null, false,false , false,false , null,null ,true);
+
+    die();
+}
+
+function go_restore_revision(){
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_restore_revision' ) ) {
+        echo "refresh";
+        die( );
+    }
+
+    //check that post type is revision
+    //die if not with error
+
+    $post_id = (isset($_POST['post_id']) ? $_POST['post_id'] : null);
+    $parent_id = (isset($_POST['parent_id']) ? $_POST['parent_id'] : null);
+    wp_restore_post_revision($post_id);
+    go_blog_post($parent_id, null, false,true , true,false , null,null ,false);
+
+    die();
+}
+
+
 function go_filter_reader(){
 
     if ( !is_user_logged_in() ) {
@@ -7,7 +47,6 @@ function go_filter_reader(){
         die();
     }
 
-    //check_ajax_referer( 'go_filter_reader' );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_filter_reader' ) ) {
         echo "refresh";
         die( );
@@ -59,7 +98,7 @@ function go_reader_bulk_read(){
             wp_update_post($query, true);
         }
     }
-    return ("Posts were marked as read.");
+    echo ("Posts were marked as read.");
     die();
 }
 
@@ -150,15 +189,15 @@ function go_send_feedback()
     global $wpdb;
     //$go_task_table_name = "{$wpdb->prefix}go_tasks";
 
-    $title = (!empty($_POST['title']) ? $_POST['title'] : "");
+    $feedback_title = (!empty($_POST['title']) ? $_POST['title'] : "");
 
-    $message = (!empty($_POST['message']) ? $_POST['message'] : "");
+    $feedback_message = (!empty($_POST['message']) ? $_POST['message'] : "");
 
     $percent = (!empty($_POST['percent']) ? $_POST['percent'] : "");
 
     $toggle = (!empty($_POST['toggle']) ? $_POST['toggle'] : "");
 
-    $message = '<h3>' . $title . '</h3>' . $message;
+    $message = '<h3>' . $feedback_title . '</h3>' . $feedback_message;
 
     $blog_post_id = (!empty($_POST['post_id']) ? $_POST['post_id'] : "");
 
@@ -208,21 +247,22 @@ function go_send_feedback()
                 //check last feedback, and if it exists, remove it
                 $last_feedback = $wpdb->get_results($wpdb->prepare("SELECT id, xp, gold, health
                 FROM {$aTable} 
-                WHERE check_type = %s AND action_type = %s
+                WHERE source_id = %d AND check_type = %s AND action_type = %s
                 ORDER BY id DESC LIMIT 1",
+                    $blog_post_id,
                     $uniqueid,
                     'feedback'), ARRAY_A);
-                //get original loot assigned on this stage--this is the baseline
+                //get last feedback
                 $last_xp = $last_feedback[0]['xp'];
                 $last_gold = $last_feedback[0]['gold'];
                 $last_health = $last_feedback[0]['health'];
 
                 //compute change and +/-
-                $xp = intval($xp * $percent * .01 * $direction) + $last_xp;
+                $xp = intval($xp * $percent * .01 * $direction) - intval($last_xp);
                 $gold = $gold * $percent * .01 * $direction;
-                $gold = number_format($gold, 2, '.', '') + $last_gold;
+                $gold = number_format($gold, 2, '.', '') - $last_gold;
                 $health = $health * $percent * .01 * $direction;
-                $health = number_format($health, 2, '.', '') + $last_health;
+                $health = number_format($health, 2, '.', '') - $last_health;
 
                 if ($toggle){
                     $loot_message = 'Your original loot was increased by ';
@@ -235,14 +275,20 @@ function go_send_feedback()
                 $message .= $loot_message;
             }
 
+            $feedback_percent = $percent * $direction;
             ////START MESSAGE CONSTRUCTION
             //the results are combined for saving in the database as a serialized array
             $result = array();
             $result[] = $title;
             $result[] = $message;
+            $result[] = $feedback_title;
+            $result[] = $feedback_message;
+            $result[] = $toggle;
+            $result[] = $feedback_percent;
             $result = serialize($result);
             //update actions
-            go_update_actions($user_id, 'feedback', $go_blog_task_id, 1, null, $uniqueid, $result, null, null, null, null, $xp, $gold, $health, null, null, false, false);
+            go_update_actions($user_id, 'feedback', $blog_post_id, 1, null, $uniqueid, $result, null, null, null, null, $xp, $gold, $health, null, null, false, false);
+            add_post_meta($blog_post_id, 'go_feedback_percent', $feedback_percent);
         }
 
         //set new message user option to true so each user gets the message

@@ -32,9 +32,8 @@ function go_reader_template_include($template)
         if ($page_value && $page_value == "true") { //Verify "blah" exists and value is "true".
             return plugin_dir_path(__FILE__) . 'templates/go_reader_template.php'; //Load your template or file
         }
-
-        return $template; //Load normal template when $page_value != "true" as a fallback
     }
+        return $template; //Load normal template when $page_value != "true" as a fallback
 }
 
 add_action('go_blog_template_after_post', 'go_user_feedback_container', 10, 2);
@@ -46,10 +45,10 @@ function go_user_feedback_container($post_id, $show_form = true){
     //go_blog_tags_select($post_id);
     ?>
     <div class="feedback_accordion" style="clear: both;">
-        <h3>Feedback</h3>
-        <div><?php go_user_feedback($post_id); ?></div>
-        <h3>Revision History</h3>
-        <div>Second content panel</div>
+        <?php go_blog_post_feedback_table($post_id); ?>
+        <?php go_blog_post_history_table($post_id); ?>
+
+        <?php go_blog_post_history_table($post_id); ?>
         <?php
         if ($admin_user && $show_form) {
             ?>
@@ -68,28 +67,82 @@ function go_user_feedback_container($post_id, $show_form = true){
 
 
 
+
 }
 
-function go_user_feedback($post_id){
+function go_blog_post_feedback_table($post_id){
+/*
     ?>
-    <div class="go_user_feedback">
+    <div class="go_blog_feedback">
 
-        <div class="go_feedback_table_container">
+        <div class="go_blog_feedback_container">
             <div class="go_feedback_table">
                 <?php
                 go_feedback_table($post_id);
                 ?>
             </div>
         </div>
-        <div class="go_history_table_container">
-            <div class="go_history_table">
-                <?php
-                //go_blog_post_history_table($post_id);
-                ?>
-            </div>
-        </div>
     </div>
     <?php
+
+*/
+
+    global $wpdb;
+    $aTable = "{$wpdb->prefix}go_actions";
+
+
+
+
+    //check last feedback, and if it exists, remove it
+    $all_feedback = $wpdb->get_results($wpdb->prepare("SELECT id, result
+                FROM {$aTable} 
+                WHERE source_id = %d AND action_type = %s
+                ORDER BY id DESC LIMIT 1",
+        $post_id,
+        'feedback'), ARRAY_A);
+
+
+    if (count($all_feedback)>0){
+        ?>
+        <h3>Feedback</h3>
+        <div class="go_blog_feedback">
+            <div class="go_blog_feedback_container">
+                <div class="go_feedback_table"  class='go_datatables'>
+                        <table id='go_single_task_datatable' class='pretty display'>
+                            <thead>
+                            <tr>
+                                <th class='header' id='go_stats_time'><a href=\"#\">Title</a></th>
+                                <th class='header' id='go_stats_mods'><a href=\"#\">Message</a></th>
+                                <th class='header' id='go_stats_mods'><a href=\"#\">Percent</a></th>
+                                <?php
+                                $i=0;
+                                foreach($all_feedback as $feedback){
+                                    $result = $feedback['result'];
+                                    $result = unserialize($result);
+                                    $title = $result[2];
+                                    $message = $result[3];
+                                    $percent = $result[5];
+
+
+                                //$link = get_permalink($id);
+
+                                ?>
+                            <tr>
+                                <td ><?php echo $title;?></td>
+                                <td ><?php echo $message;?></td>
+                                <td ><?php echo $percent;?></td>
+
+                            </tr>
+                            <?php
+                            }
+
+                            ?></tbody></table>
+                </div>
+            </div>
+        </div>
+
+        <?php
+    }
 
 }
 
@@ -113,11 +166,22 @@ function go_post_status_icon($post_id){
     $icon ='';
     if ($post_id) {
         if ($status == 'read') {
-            $icon = '<a href="javascript:;" class="go_status_read_toggle" data-postid="' . $post_id . '"><span class="tooltip"  data-tippy-content="Status is read. Click to mark this post as unread."><i class="far fa-eye fa-2x" aria-hidden="true"></i><i class="fa fa-eye-slash fa-2x" aria-hidden="true" style="display: none;"></i></span></a>';
+            if ($is_admin) {
+                $icon = '<a href="javascript:;" class="go_status_read_toggle" data-postid="' . $post_id . '"><span class="tooltip"  data-tippy-content="Status is read. Click to mark this post as unread."><i class="far fa-eye fa-2x" aria-hidden="true"></i><i class="fa fa-eye-slash fa-2x" aria-hidden="true" style="display: none;"></i></span></a>';
+            }
+            else{
+                $icon = '<span class="tooltip"  data-tippy-content="Status is read. Click to mark this post as unread."><i class="far fa-eye fa-2x" aria-hidden="true"></i><i class="fa fa-eye-slash fa-2x" aria-hidden="true" style="display: none;"></i></span>';
+            }
         } else if ($status == 'reset') {
             $icon = '<span class="tooltip" data-tippy-content="This post has been reset."><i class="fas fa-times-circle fa-2x" aria-hidden="true"></i></span>';
         } else if ($status == 'unread' && $is_admin == true) {
-            $icon = '<a href="javascript:;" class="go_status_read_toggle" data-postid="' . $post_id . '" ><span class="tooltip" data-tippy-content="Status is unread. Click to mark this post as read."><i class="far fa-eye-slash fa-2x" aria-hidden="true"></i><i class="fa fa-eye fa-2x" aria-hidden="true" style="display: none;"></i></span></a>';
+            if ($is_admin) {
+                $icon = '<a href="javascript:;" class="go_status_read_toggle" data-postid="' . $post_id . '" ><span class="tooltip" data-tippy-content="Status is unread. Click to mark this post as read."><i class="far fa-eye-slash fa-2x" aria-hidden="true"></i><i class="fa fa-eye fa-2x" aria-hidden="true" style="display: none;"></i></span></a>';
+            }
+            else{
+                $icon = '<span class="tooltip" data-tippy-content="Status is unread. Click to mark this post as read."><i class="far fa-eye-slash fa-2x" aria-hidden="true"></i><i class="fa fa-eye fa-2x" aria-hidden="true" style="display: none;"></i></span>';
+
+            }
         } else if ($status == 'draft') {
             $icon = '<span class="tooltip" data-tippy-content="This post is a draft."><i class="fas fa-pencil-alt fa-2x" aria-hidden="true"></i></span>';
         } else if ($status == 'trash') {
@@ -194,157 +258,48 @@ function go_feedback_table($post_id){
 }
 
 function go_blog_post_history_table($post_id){
-    global $wpdb;
-    $go_task_table_name = "{$wpdb->prefix}go_actions";
 
-    $custom_fields = get_post_custom( $post_id );
-    //$task_id = (isset($custom_fields['go_blog_task_id'][0]) ?  $custom_fields['go_blog_task_id'][0] : null);
-    $task_id = wp_get_post_parent_id($post_id);
-    $user_id = get_post_field ('post_author', $post_id);
+    $revisions = wp_get_post_revisions($post_id);
 
-    //check_ajax_referer( 'go_blog_post_history_table' );
-    //$post_id = (int) $_POST['postID'];
-
-    $task_name = get_option('options_go_tasks_name_singular');
-    $tasks_name = get_option('options_go_tasks_name_plural');
-
-    $actions = $wpdb->get_results(
-        $wpdb->prepare(
-            "SELECT * 
-        FROM {$go_task_table_name} 
-        WHERE uid = %d and source_id = %d",
-            $user_id,
-            $task_id
-        )
-    );
-    $post_title = get_the_title($task_id);
-    echo "<div id='go_task_list_single' class='go_datatables'>
-        <div style='float: right;'><a onclick='go_close_single_history()' href='javascript:void(0);'><i class='fas fa-times ab-icon' aria-hidden='true'></i> Show All $tasks_name</a></div>
-        <h3>Single $task_name History: $post_title</h3>
-
-        <table id='go_single_task_datatable' class='pretty display'>
-               <thead>
+    if (count($revisions)>1){
+        ?>
+        <h3>Revision History</h3>
+        <div class="go_blog_revisions">
+            <div class="go_blog_revisions_container">
+                <div class="go_history_table"  class='go_datatables'>
+                    <table id='go_single_task_datatable' class='pretty display'>
+                    <thead>
                     <tr>
-                    
-                        <th class='header' id='go_stats_time'><a href=\"#\">Time</a></th>
-                        <th class='header' id='go_stats_action'><a href=\"#\">Action</a></th>
-                        <th class='header' id='go_stats_post_name'><a href=\"#\">Stage</a></th>
-                        <th class='header' id='go_stats_mods'><a href=\"#\">Modifiers</a></th>";
-    go_loot_headers();
-    //go_loot_headers(true);
-    echo"
-                    </tr>
-                    </thead>
-            <tbody>
-                    ";
-    foreach ( $actions as $action ) {
-        $action_type = $action->action_type;
-        $source_id = $action->source_id;
-        $TIMESTAMP = $action->TIMESTAMP;
-        $time  = date("m/d/y g:i A", strtotime($TIMESTAMP));
-        $stage = $action->stage;
-        $bonus_status = $action->bonus_status;
-        $result = $action->result;
-        $quiz_mod = $action->quiz_mod;
-        $late_mod = $action->late_mod;
-        $timer_mod = $action->timer_mod;
-        $health_mod = $action->global_mod;
-        $xp = $action->xp;
-        $gold = $action->gold;
-        $health = $action->health;
-        $xp_total = $action->xp_total;
-        $gold_total = $action->gold_total;
-        $health_total = $action->health_total;
+                        <th class='header' id='go_stats_time'><a href=\"#\">Date and Time</a></th>
+                        <th class='header' id='go_stats_mods'><a href=\"#\">View</a></th>
+                            <?php
+                            $i=0;
+                            foreach($revisions as $revision){
 
-        $post_title = get_the_title($source_id);
+                                if($i == 0){
+                                    $i = 1;
+                                    continue;
+                                }
+                                $id = $revision -> ID ;
+                                //$link = get_permalink($id);
+                                $time = $revision -> post_date ;
+                                $time = go_clipboard_time($time);
+                                ?>
+                                <tr>
+                                    <td ><?php echo $time;?></td>
+                        <td><a class="go_blog_revision" blog_post_id="<?php echo $id; ?>" href="javascript:;">View</a> </td>
 
+                                </tr>
+                                <?php
+                            }
 
-        if ($action_type == 'admin'){
-            $type = "Admin";
-        }
-        if ($action_type == 'reset'){
-            $type = "Reset";
-        }
+                               ?></tbody></table>
+                        </div>
+                    </div>
+                </div>
 
-        if ($action_type == 'store'){
-            $store_qnty = $stage;
-            $type = strtoupper( get_option( 'options_go_store_name' ) );
-            $post_title = "Qnt: " . $store_qnty . " of " . $post_title ;
-        }
-
-        if ($action_type == 'task'){
-            $type = strtoupper( get_option( 'options_go_tasks_name_singular' ) );
-            if ($bonus_status == 0) {
-                //$type = strtoupper( get_option( 'options_go_tasks_name_singular' ) );
-                $type = 'Continue';
-                $post_title = " Stage: " . $stage;
-            }
-        }
-
-        if ($action_type == 'undo_task'){
-            $type = strtoupper( get_option( 'options_go_tasks_name_singular' ) );
-            if ($bonus_status == 0) {
-                $type = "Undo";
-                $post_title = " Stage: " . $stage;
-            }
-        }
-        if ($result == 'undo_bonus'){
-            $type = "Undo Bonus";
-            $post_title = $post_title . " Bonus: " . $bonus_status ;
-        }
-
-        $quiz_mod_int = intval($quiz_mod);
-        if (!empty($quiz_mod_int)){
-            $quiz_mod = "<i class=\"fas fa-check-circle-o\" aria-hidden=\"true\"></i> ". $late_mod;
-        }
-        else{
-            $quiz_mod = null;
-        }
-
-        $late_mod_int = intval($late_mod);
-        if (!empty($late_mod_int)){
-            $late_mod = "<i class=\"fas fa-calendar\" aria-hidden=\"true\"></i> ". $late_mod;
-        }
-        else{
-            $late_mod = null;
-        }
-
-        $timer_mod_int = intval($timer_mod);
-        if (!empty($timer_mod_int)){
-            $timer_mod = "<i class=\"fas fa-hourglass\" aria-hidden=\"true\"></i> ". $timer_mod;
-        }
-        else{
-            $timer_mod = null;
-        }
-
-        $health_mod_int = intval($health_mod);
-        if (!empty($health_mod_int)){
-            $health_abbr = get_option( "options_go_loot_health_abbreviation" );
-            $health_mod_str = $health_abbr . ": ". $health_mod;
-        }
-        else{
-            $health_mod_str = null;
-        }
-
-        echo " 			
-                <tr id='postID_{$source_id}'>
-                    <td data-order='{$TIMESTAMP}'>{$time}</td>
-                    <td>{$type} </td>
-                    <td>{$post_title} </td>
-                    <td>{$health_mod_str}   {$timer_mod}   {$late_mod}   {$quiz_mod}</td>
-                    
-                    <td>{$xp}</td>
-                    <td>{$gold}</td>
-                    <td>{$health}</td>
-                </tr>
-                ";
-
-
+                        <?php
     }
-    echo "</tbody>
-            </table></div>";
-
-    die();
 
 }
 
@@ -365,7 +320,6 @@ function go_feedback_canned(){
     }
     echo "</select>";
 }
-
 
 function go_feedback_input($post_id){
 
@@ -463,23 +417,7 @@ function go_feedback_input($post_id){
         </form>
 
     </div>
-    <script>
-        jQuery( document ).ready( function() {
-            jQuery('.go-acf-switch').click(function () {
-                console.log("click");
-                if (jQuery(this).hasClass('-on') == false) {
-                    jQuery(this).prev('input').prop('checked', true);
-                    jQuery(this).addClass('-on');
-                    jQuery(this).removeClass('-off');
-                } else {
-                    jQuery(this).prev('input').prop('checked', false);
-                    jQuery(this).removeClass('-on');
-                    jQuery(this).addClass('-off');
-                }
-            });
 
-        });
-    </script>
     <?php
 }
 ?>

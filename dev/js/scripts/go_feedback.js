@@ -60,7 +60,11 @@ jQuery( document ).ready( function() {
             go_daterange_clear();
             go_activate_apply_filters();
         });
+
+
     }
+
+
 
         //alert("go_num_posts");
 
@@ -105,6 +109,116 @@ jQuery( document ).ready( function() {
     //go_reader_update(true);
 
 });
+
+function go_blog_revision(target){
+    console.log('function go_blog_revision');
+    let post_id = jQuery(target).attr('blog_post_id');
+    let current_post_id = jQuery(target).closest('.go_blog_post_wrapper').data('postid');
+    let nonce = GO_EVERY_PAGE_DATA.nonces.go_blog_revision;
+    jQuery.ajax({
+        url: MyAjax.ajaxurl,
+        type: 'post',
+        data: {
+            _ajax_nonce: nonce,
+            action: 'go_blog_revision',
+            post_id: post_id
+        },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            jQuery('#loader_container').hide();
+            jQuery('#go_posts_wrapper').show();
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+            jQuery(target).one("click", function () {
+                go_blog_revision(this);
+            });
+        },
+        success: function( res ) {
+            //console.log("success: " + res);
+            let error = go_ajax_error_checker(res);
+            if (error == 'true') return;
+
+            if (-1 !== res) {
+                console.log('success');
+                console.log(res);
+                jQuery.featherlight(res, {afterContent: function(){
+                        jQuery('.go_restore_revision').one("click", function () {
+                            go_restore_revision(this);
+                        });
+                    }});
+
+                jQuery(target).one("click", function () {
+                    go_blog_revision(this);
+                });
+
+            }
+        }
+    });
+
+
+}
+
+function go_restore_revision(target){
+    console.log('function go_restore_revision');
+    let post_id = jQuery(target).data('post_id');
+    let parent_id = jQuery(target).data('parent_id');
+    let nonce = GO_EVERY_PAGE_DATA.nonces.go_restore_revision;
+    jQuery.ajax({
+        url: MyAjax.ajaxurl,
+        type: 'post',
+        data: {
+            _ajax_nonce: nonce,
+            action: 'go_restore_revision',
+            post_id: post_id,
+            parent_id: parent_id
+        },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            jQuery('#loader_container').hide();
+            jQuery('#go_posts_wrapper').show();
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+            jQuery(target).one("click", function () {
+                go_blog_revision(this);
+            });
+        },
+        success: function( res ) {
+            console.log("success: " + res);
+            let error = go_ajax_error_checker(res);
+            if (error == 'true') return;
+
+            if (-1 !== res) {
+                console.log('res');
+                //close featherlight
+                //get the container for previous target and replace it with the result
+                let container = '.go_blog_post_wrapper_' + parent_id;
+                //jQuery(container).hide();
+                jQuery(container).replaceWith(res);
+                go_reader_activate_buttons();
+                jQuery.featherlight.close();
+
+
+                swal.fire({//sw2 OK
+                        text: "Your previous revision has been restored.",
+                        type: 'success'
+                    }
+                );
+
+
+            }
+        }
+    });
+
+
+}
 
 function go_reader_update() {
     //console.log("update reader");
@@ -169,14 +283,21 @@ function go_reader_update() {
             }
         },
         success: function( res ) {
+            let error = go_ajax_error_checker(res);
+            if (error == 'true') return;
+
             //console.log("success: " + res);
             if (-1 !== res) {
 
                 jQuery('#loader_container').hide();
-                jQuery('#go_posts_wrapper').html(res).show("fast", function(){
+                jQuery('#go_posts_wrapper').html(res).promise().done(function(){
+                    //your callback logic / code here
+                    jQuery('#go_posts_wrapper').show();
                     go_reader_activate_buttons();
                     go_loadmore_reader();
                 });
+
+
 
                 //document.getElementById("loader_container").style.display = "none";
 
@@ -190,6 +311,11 @@ function go_reader_update() {
 }
 
 function go_reader_activate_buttons(){
+
+    jQuery('.go_blog_revision').one("click", function () {
+        go_blog_revision(this);
+    });
+
     jQuery(".go_blog_favorite").off().click(function() {
         go_blog_favorite(this);
     });
@@ -235,6 +361,24 @@ function go_reader_activate_buttons(){
         go_send_feedback(this);
     });
 
+
+    jQuery('.go-acf-switch').off().click(function () {
+        console.log("click");
+        if (jQuery(this).hasClass('-on') == false) {
+            jQuery(this).prev('input').prop('checked', true);
+            jQuery(this).addClass('-on');
+            jQuery(this).removeClass('-off');
+        } else {
+            jQuery(this).prev('input').prop('checked', false);
+            jQuery(this).removeClass('-on');
+            jQuery(this).addClass('-off');
+        }
+    });
+
+    jQuery(".go_feedback_canned").off().on('change', function (e) {
+        var optionSelected = jQuery("option:selected", this);
+        go_feedback_canned(optionSelected);
+    });
 }
 
 function go_num_posts(){
@@ -274,18 +418,24 @@ function go_num_posts(){
             }
         },
         success: function( res ) {
+            let error = go_ajax_error_checker(res);
+            if (error == 'true') return;
+
             //console.log("success: " + res);
             if (-1 !== res) {
-                jQuery('#go_posts_wrapper').html(res);
+                jQuery('#go_posts_wrapper').html(res).promise().done(function(){
+                    //your callback logic / code here
+                    jQuery('#loader_container').hide();
+                    jQuery('#go_posts_wrapper').show("fast", function(){
+                        go_reader_activate_buttons();
+                        go_loadmore_reader();
+                    });
+                });;
 
 
 
                 //document.getElementById("loader_container").style.display = "none";
-                jQuery('#loader_container').hide();
-                jQuery('#go_posts_wrapper').show("fast", function(){
-                    go_reader_activate_buttons();
-                    go_loadmore_reader();
-                });
+
             }
         }
     });
@@ -320,6 +470,8 @@ function go_reader_bulk_read(){
             }
         },
         success: function( res ) {
+            let error = go_ajax_error_checker(res);
+            if (error == 'true') return;
 
             go_reader_update();
         }
@@ -355,6 +507,8 @@ function go_reader_read_printed(){
             }
         },
         success: function( res ) {
+            let error = go_ajax_error_checker(res);
+            if (error == 'true') return;
 
             go_reader_update();
         }
@@ -390,11 +544,11 @@ function go_mark_one_read_toggle(target){
         },
         success: function( res ) {
             console.log(res);
-            if (res ==='refresh'){
-                go_refresh_page_on_error();
-                return;
-            }
-            else if ( -1 !== res ) {
+
+            let error = go_ajax_error_checker(res);
+            if (error == 'true') return;
+
+            if ( -1 !== res ) {
                 jQuery(".go_status_read_toggle").off().one("click", function () {
                     go_mark_one_read_toggle(this);
                 });
@@ -450,8 +604,6 @@ function go_send_feedback(target) {
     var percent = jQuery(target).closest('.go_feedback_input').find('.feedback_percent_input').val();
     const post_id = jQuery(target).data('postid');
 
-
-
     // send data
     var nonce = GO_EVERY_PAGE_DATA.nonces.go_send_feedback;
     var gotoSend = {
@@ -480,6 +632,10 @@ function go_send_feedback(target) {
             }
         },
         success: function( results ) {
+
+            let error = go_ajax_error_checker(results);
+            if (error == 'true') return;
+
             // show success or error message
             console.log("send successful");
             Swal.fire(//sw2 OK

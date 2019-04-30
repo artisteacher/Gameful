@@ -184,3 +184,17 @@ function go_make_tax_select ($taxonomy, $location = null, $selector = 'id'){
 
 }
 
+
+/**
+ * Called by the ajax dataloaders.
+ * @param $TIMESTAMP
+ * @return false|string
+ */
+function go_clipboard_time($TIMESTAMP){
+    if ($TIMESTAMP != null) {
+        $time = date("m/d/y g:i A", strtotime($TIMESTAMP));
+    }else{
+        $time = "N/A";
+    }
+    return $time;
+}

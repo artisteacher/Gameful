@@ -616,7 +616,8 @@ function go_upload_check ($i, $go_actions_table_name, $user_id, $post_id, $bonus
  */
 function go_upload_check_blog ($media_id = null, $div_id, $mime_types, $uniqueID = null) {
 
-    if (empty($media_id)) {
+    $attachment_type = get_post_type($media_id);
+    if (empty($media_id) || ($attachment_type !== 'attachment')) {
         echo do_shortcode('[frontend-button div_id="'.$div_id.'" mime_types="'.$mime_types.'" uniqueid="'.$uniqueID.'"]');
     }else{
         echo do_shortcode( '[frontend_submitted_media div_id="'.$div_id.'" id="'.$media_id.'" mime_types="'.$mime_types.'" uniqueid="'.$uniqueID.'" class="go_blog_element_input" ]' );
@@ -749,25 +750,28 @@ function go_test_check ($custom_fields, $i, $status, $go_actions_table_name, $us
             else if ($quiz_mod > 0) {//not 100%
                 echo "<div>On your <a href='#' data-featherlight='#go_first_quiz_attempt_{$i} '>first attempt</a> you got {$score} correct.</div>";
 
-                //Get the most recent attempt
-                $recent = (string)$wpdb->get_var(
-                    $wpdb->prepare(
-                        "SELECT result 
+
+            }
+
+            //Get the most recent attempt
+            $recent = (string)$wpdb->get_var(
+                $wpdb->prepare(
+                    "SELECT result 
 				FROM {$go_actions_table_name} 
 				WHERE uid = %d AND source_id = %d AND {$stage}  = %d AND action_type = %s
 				ORDER BY id DESC LIMIT 1",
-                        $user_id,
-                        $post_id,
-                        $i,
-                        'quiz_result'
-                    )
-                );
-                $recent = stripslashes($recent);
+                    $user_id,
+                    $post_id,
+                    $i,
+                    'quiz_result'
+                )
+            );
+            $recent = stripslashes($recent);
 
-                //print the hidden div for the lightbox
-                echo "<div id='go_first_quiz_attempt_{$i}' class='go_first_quiz_attempt' >{$first}</div>";
-                echo "<div>{$recent}</div>";
-            }
+            //print the hidden div for the lightbox
+            echo "<div id='go_first_quiz_attempt_{$i}' class='go_first_quiz_attempt' >{$first}</div>";
+            echo "<div>{$recent}</div>";
+
         }
         else {//on the clipboard
             echo "<h3>{$score}</h3>";

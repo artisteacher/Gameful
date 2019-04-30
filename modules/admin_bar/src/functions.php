@@ -199,12 +199,13 @@ function go_admin_bar() {
                 //$go_current_health = go_get_user_loot($user_id, 'health');
                 $go_current_health = $user_loot['health'];
                 $health_percentage = intval($go_current_health / 2);
+                $name = get_option("options_go_loot_health_abbreviation");;
                 if ($health_percentage <= 0) {
                     $health_percentage = 0;
                 } else if ($health_percentage >= 100) {
                     $health_percentage = 100;
                 }
-                $health_bar = '<div id="go_admin_health_bar_border" class="progress-bar-border">' . '<div id="go_admin_bar_health_bar" class="progress_bar" ' . 'style="width: ' . $health_percentage . '%; background-color: red ;">' . '</div>' . '<div id="health_bar_percentage_str" class="go_admin_bar_text">' . "Health Mod: " . $go_current_health . "%" . '</div>' . '</div>';
+                $health_bar = '<div id="go_admin_health_bar_border" class="progress-bar-border">' . '<div id="go_admin_bar_health_bar" class="progress_bar" ' . 'style="width: ' . $health_percentage . '%; background-color: red ;">' . '</div>' . '<div id="health_bar_percentage_str" class="go_admin_bar_text">' . $name.": " . $go_current_health . "%" . '</div>' . '</div>';
 
             } else {
                 $health_bar = '';

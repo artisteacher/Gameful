@@ -410,7 +410,7 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
  * @param bool $bonus_status //only needed for old style URL and File print outs (v4)
  * @param bool $status
  */
-function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_understanding = false, $with_feedback = false, $is_reader = false, $show_edit = false, $task_stage_num = null, $bonus_stage_num = null)
+function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_understanding = false, $with_feedback = false, $show_author = false, $show_edit = false, $task_stage_num = null, $bonus_stage_num = null, $is_revision = false)
 {
     $current_user = get_current_user_id();
     $is_admin = go_user_is_admin();
@@ -474,7 +474,7 @@ function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_underst
     }
     echo "</div>";
 
-    if ($is_reader) {
+    if ($show_author) {
         $user_data = get_userdata($author_id);
         $blogURL = get_site_url() . "/user/" . $user_data->user_login;
         echo "<span id='go-name'>Author: {$user_data->first_name} {$user_data->last_name} (<a href='{$blogURL}'>{$user_data->display_name}</a>)</span><br>";
@@ -587,23 +587,31 @@ function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_underst
         echo "<div class='go_blog_content'>". $text_content . "</div>";
     }
 
-    echo "<div class='go_blog_form_footer'>";
-    go_blog_status($blog_post_id, $is_admin);
-    echo "<div><div class='go_blog_actions'>";
+    if(!$is_revision) {
+        echo "<div class='go_blog_form_footer'>";
+        go_blog_status($blog_post_id, $is_admin);
+        echo "<div><div class='go_blog_actions'>";
 
 
-    if (intval($current_user) == intval($author_id) && $show_edit) {//if current user then show edit and maybe trash
-        echo "<div class='go_blog_opener go_blog_opener_round go_button_round' blog_post_id ='{$blog_post_id}' data-check_for_understanding ='{$check_for_understanding}'><span class='go_round_inner'><i class='fas fa-pencil-alt'></i></span></div>";
+        if (intval($current_user) == intval($author_id) && $show_edit) {//if current user then show edit and maybe trash
+            echo "<div class='go_blog_opener go_blog_opener_round go_button_round' blog_post_id ='{$blog_post_id}' data-check_for_understanding ='{$check_for_understanding}'><span class='go_round_inner'><i class='fas fa-pencil-alt'></i></span></div>";
+        }
+        if ((($current_user == $author_id || $is_admin) && $check_for_understanding == false && empty($go_blog_task_id))) {
+            echo '<div class="go_blog_trash go_button_round" blog_post_id ="' . $blog_post_id . '"><span class="go_round_inner"><i class="fas fa-trash"></i></span></div>';
+        } else if ($is_admin) {
+            echo '<div data-uid="" data-task="' . $blog_post_id . '" class="go_reset_task_clipboard go_button_round go_blog_reset" ><span class="go_round_inner"><i class="fas fa-times-circle"></i></span></div>';
+            //echo '<span class="go_blog_trash" blog_post_id ="' . $blog_post_id . '"><i class="fa fa-times-circle fa-2x"></i></span>';
+        }
+
+
+        echo "</div></div></div>";
     }
-    if ((($current_user == $author_id || $is_admin) && $check_for_understanding == false && empty($go_blog_task_id))) {
-        echo '<div class="go_blog_trash go_button_round" blog_post_id ="' . $blog_post_id . '"><span class="go_round_inner"><i class="fas fa-trash"></i></span></div>';
-    }else if ($is_admin ) {
-        echo '<div data-uid="" data-task="' .$blog_post_id. '" class="go_reset_task_clipboard go_button_round go_blog_reset" ><span class="go_round_inner"><i class="fas fa-times-circle"></i></span></div>';
-        //echo '<span class="go_blog_trash" blog_post_id ="' . $blog_post_id . '"><i class="fa fa-times-circle fa-2x"></i></span>';
+    else{
+        $parent= wp_get_post_parent_id($blog_post_id);
+        ?>
+        <div><button class="go_restore_revision" style="float:right;" data-post_id="<?php echo $blog_post_id; ?>" data-parent_id="<?php echo $parent; ?>">Restore this post</button></div>
+<?php
     }
-
-
-    echo "</div></div></div>";
 
 
     if(intval($current_user) === intval($author_id)){

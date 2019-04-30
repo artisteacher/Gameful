@@ -368,19 +368,7 @@ function go_loot_columns_clipboard($action){
     return $row;
 }
 
-/**
- * Called by the ajax dataloaders.
- * @param $TIMESTAMP
- * @return false|string
- */
-function go_clipboard_time($TIMESTAMP){
-    if ($TIMESTAMP != null) {
-        $time = date("m/d/y g:i A", strtotime($TIMESTAMP));
-    }else{
-        $time = "N/A";
-    }
-    return $time;
-}
+
 
 /**
  * @param $badge_ids

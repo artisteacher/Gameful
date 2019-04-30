@@ -184,7 +184,7 @@ function task_stage_check_input( target, on_task) {
     ///v4 START VALIDATE FIELD ENTRIES BEFORE SUBMIT
     //if (button_type == 'continue' || button_type == 'complete' || button_type =='continue_bonus' || button_type =='complete_bonus') {
     const required_elements = {};
-    if ( check_type == 'blog' || check_type == 'blog_lightbox') { //min words and Video field on blog form validation
+    if ( check_type == 'blog' || check_type == 'blog_lightbox') {
 
         const text_toggle = jQuery(target).attr('text_toggle');
         let blog_div = "";
@@ -198,8 +198,8 @@ function task_stage_check_input( target, on_task) {
 
         jQuery('.go_blog_element_error').remove();
         jQuery(blog_div).find('.go_blog_element_input').each(
-
             function(  ) {
+                console.log('check element');
                 const type = jQuery(this).attr('data-type');
                 const uniqueID = jQuery(this).attr('data-uniqueID');
 
@@ -260,13 +260,16 @@ function task_stage_check_input( target, on_task) {
                 }
 
                 if (type ==='file'){
+                    console.log("file result:");
                     const result = jQuery(this).attr('value');
                     required_elements[uniqueID] = result;
                     //alert(result);
+                    console.log(result);
                     const file_error = "<br><span class='go_blog_element_error' style='color: red;'><br>Please attach a file.</span>";
 
                     //var result = jQuery("#go_result").attr('value');
-                    if (result == '') {
+                    if (typeof (result) == 'undefined') {
+                        console.log('undefined');
                         error_message += "<li>Please attach a file.</li>";
                         fail = true;
                         jQuery(this).after(file_error);
@@ -407,7 +410,7 @@ function task_stage_check_input( target, on_task) {
     }else{ //this was a blog submit button in a lightbox, so just save without changing stage.
         go_blog_submit( target, true, required_elements );
     }
-
+    //go_disable_loading();
 }
 
 // disables the target stage button, and adds a loading gif to it
@@ -722,6 +725,7 @@ function go_blog_opener( el ) {
     });
 }
 
+//NOT USED
 function go_get_blog_required_elements(){
     const required_elements = {};
     jQuery('.go_blog_element_input').each(
@@ -732,11 +736,11 @@ function go_get_blog_required_elements(){
             if (type ==='URL'){
 
                 const the_url = jQuery(this).val();
-                required_elements[uniqueID] = the_url;
+                required_elements[uniqueID] = the_url;//sets the url to be returned attached to this element uniqueID
             }
             if (type ==='video'){
                 const the_video =jQuery(this).val();
-                required_elements[uniqueID] = the_video;
+                required_elements[uniqueID] = the_video;//sets the video to be returned attached to this element uniqueID
             }
 
             if (type ==='file'){
@@ -830,10 +834,8 @@ function go_blog_submit( el, reload, required_elements = null ) {
             console.log('success1');
             //console.log(raw);
             // parse the raw response to get the desired JSON
-            if (raw ==='refresh'){
-                go_refresh_page_on_error();
-                return;
-            };
+            let error = go_ajax_error_checker(raw);
+            if (error == 'true') return;
 
             var res = {};
             try {

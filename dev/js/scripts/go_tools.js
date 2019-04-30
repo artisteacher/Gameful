@@ -17,29 +17,10 @@ function go_update_go_ajax_v5_check (){
             loot: true
         },
         success: function( res ) {
-            if (res == 'login'){
-                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
-            };
-            if (res ==='refresh'){
-                Swal.fire({//sw2 OK
-                    title: "Error",
-                    text: "Refresh the page and then try again? You will lose unsaved changes. You can cancel and copy any unsaved changes to a safe location before refresh.",
-                    type: 'warning',
-                    //showCancelButton: true,
-                    confirmButtonText: 'Refresh Now',
-                    //cancelButtonText: 'No, cancel!',
-                    reverseButtons: true,
-                    customClass: {
-                        confirmButton: 'btn btn-success',
-                        cancelButton: 'btn btn-danger'
-                    },
-                })
-                    .then((result) => {
-                        if (result.value) {
-                            location.reload();
-                        }
-                    })
-            };
+            let error = go_ajax_error_checker(res);
+            if (error == 'true') return;
+
+
             if(res == 'run_again'){
                 swal.fire({
                         title: "Warning",
@@ -102,36 +83,15 @@ function go_update_go_ajax_v5 (){
             loot: true
         },
         success: function( raw ) {
-            if (raw == 'login'){
-                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
-            }
-            else if (raw ==='refresh'){
-                Swal.fire({//sw2 OK
-                    title: "Error",
-                    text: "Refresh the page and then try again? You will lose unsaved changes. You can cancel and copy any unsaved changes to a safe location before refresh.",
-                    type: 'warning',
-                    //showCancelButton: true,
-                    confirmButtonText: 'Refresh Now',
-                    //cancelButtonText: 'No, cancel!',
-                    reverseButtons: true,
-                    customClass: {
-                        confirmButton: 'btn btn-success',
-                        cancelButton: 'btn btn-danger'
-                    },
-                })
-                    .then((result) => {
-                        if (result.value) {
-                            location.reload();
-                        }
-                    })
-            }
-            else{
-                swal.fire({
-                        title: "Success"
-                    }
-                );
-                jQuery('#go_tool_update_v5').one("click", function() {go_update_go_ajax_v5_check();});
-            }
+            let error = go_ajax_error_checker(raw);
+            if (error == 'true') return;
+
+            swal.fire({
+                    title: "Success"
+                }
+            );
+            jQuery('#go_tool_update_v5').one("click", function() {go_update_go_ajax_v5_check();});
+
         }
     });
 }

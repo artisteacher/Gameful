@@ -124,7 +124,10 @@ function go_reader_get_posts($sQuery2 = null, $pWhere = null, $order = null)
     }
     if ($TotalunRead > 0) {
         echo "
-                 <span>{$TotalunRead} unread posts found. </span><span><a  id='go_mark_all_read' >Mark all as read</a>.</span>";//data-post_ids='$posts_serialized
+                 <span>{$TotalunRead} unread posts found. </span><span><a  id='go_mark_all_read' >Mark all as read.</a></span>";//data-post_ids='$posts_serialized
+    }
+    if (intval($iFilteredTotal == 0)){
+        echo "<div style='padding: 30px;'>No posts match the filter.</div>";//data-post_ids='$posts_serialized
     }
 
     echo "</div>";
@@ -153,19 +156,6 @@ function go_reader_get_posts($sQuery2 = null, $pWhere = null, $order = null)
     </div>
     <?php
 
-    /*}else {
-        echo "<div>
-            Over 1000 unread posts found ";
-        if ($unread) {
-
-            echo "
-                <br>{$unread} unread posts found in the first 1000 posts returned.  
-                <br><a><span id='go_mark_all_read' data-post_ids='$posts_serialized'>Mark these {$unread} posts as read and reload the reader.</span></a>";
-        }
-        echo "</div>";
-    }*/
-
-
     $i = 0;
     echo "<div style='clear:both'></div>";
     foreach ($posts_array as $post) {
@@ -193,14 +183,14 @@ function go_reader_get_posts($sQuery2 = null, $pWhere = null, $order = null)
         }
 
     }
-    echo "<div>";
+    echo "</div>";
 
 
-    wp_localize_script( 'go_loadmore', 'misha_loadmore_params', array(
+    wp_localize_script( 'go_frontend', 'misha_loadmore_params', array(
         'ajaxurl' => site_url() . '/wp-admin/admin-ajax.php', // WordPress AJAX
     ) );
 
-    wp_enqueue_script( 'go_loadmore' );
+    //wp_enqueue_script( 'go_loadmore' );
 
     //die();
 }

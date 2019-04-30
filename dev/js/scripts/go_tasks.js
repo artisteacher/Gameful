@@ -2,70 +2,72 @@
 //it has the code to verify the blog content
 //and assign the click to the opener
 jQuery( document ).ready( function() {
-    console.log ("go_tasks_submit READY");
-    //add onclick to blog edit buttons
-    //console.log("opener3");
-    //jQuery(".go_blog_opener").one("click", function(e){
-    //    go_blog_opener( this );
-    //});
 
-    jQuery(".go_quiz_checked").prop("checked", true);
+    if (typeof (go_task_data) !== 'undefined') {
+        console.log("go_tasks_submit READY");
+        //add onclick to blog edit buttons
+        //console.log("opener3");
+        //jQuery(".go_blog_opener").one("click", function(e){
+        //    go_blog_opener( this );
+        //});
 
-
-    jQuery.ajaxSetup({
-        url: go_task_data.url += '/wp-admin/admin-ajax.php'
-    });
+        jQuery(".go_quiz_checked").prop("checked", true);
 
 
-    go_make_clickable();
-    jQuery( ".go_stage_message" ).show(  );
-
-    var go_select_admin_view = jQuery('#go_select_admin_view').val();
-    console.log(go_select_admin_view);
-
-    /*
-    if (go_select_admin_view != 'all') {
-
-        //add onclick to continue buttons
-        jQuery('#go_button').off().one("click", function (e) {
-            task_stage_check_input(this, true);
+        jQuery.ajaxSetup({
+            url: go_task_data.url += '/wp-admin/admin-ajax.php'
         });
-        jQuery('#go_back_button').off().one("click", function (e) {
-            task_stage_change(this);
+
+
+        go_make_clickable();
+        jQuery(".go_stage_message").show();
+
+        var go_select_admin_view = jQuery('#go_select_admin_view').val();
+        console.log(go_select_admin_view);
+
+        /*
+        if (go_select_admin_view != 'all') {
+
+            //add onclick to continue buttons
+            jQuery('#go_button').off().one("click", function (e) {
+                task_stage_check_input(this, true);
+            });
+            jQuery('#go_back_button').off().one("click", function (e) {
+                task_stage_change(this);
+            });
+            jQuery('#go_save_button').off().one("click", function (e) {
+                //task_stage_check_input(this, false, false);
+                go_blog_submit( this, false );
+            });
+        }
+        */
+
+        //add onclick to bonus loot buttons
+        jQuery("#go_bonus_button").off().one("click", function (e) {
+            go_update_bonus_loot(this);
         });
-        jQuery('#go_save_button').off().one("click", function (e) {
-            //task_stage_check_input(this, false, false);
-            go_blog_submit( this, false );
+
+        //add active class to checks and buttons
+        jQuery(".progress").closest(".go_checks_and_buttons").addClass('active');
+
+        jQuery('#go_admin_override').appendTo(".go_locks");
+
+        jQuery('#go_admin_override').click(function () {
+            jQuery('.go_password').show();
+            jQuery('.go_password #go_result').focus();
+
+
         });
+
+        // remove existing editor instance
+        //tinymce.execCommand('mceRemoveEditor', true, 'go_blog_post');
+        //tinymce.execCommand('mceRemoveEditor', true, 'go_blog_post_edit');
+
+
+        //tinymce.execCommand('mceRemoveEditor', true, 'go_blog_post');
+        //tinymce.execCommand( 'mceAddEditor', true, 'go_blog_post' );
+
     }
-    */
-
-    //add onclick to bonus loot buttons
-    jQuery( "#go_bonus_button" ).off().one("click", function(e) {
-        go_update_bonus_loot(this);
-    });
-
-    //add active class to checks and buttons
-    jQuery(".progress").closest(".go_checks_and_buttons").addClass('active');
-
-    jQuery('#go_admin_override').appendTo(".go_locks");
-
-    jQuery('#go_admin_override').click( function () {
-        jQuery('.go_password').show();
-        jQuery('.go_password #go_result').focus();
-
-
-    });
-
-    // remove existing editor instance
-    //tinymce.execCommand('mceRemoveEditor', true, 'go_blog_post');
-    //tinymce.execCommand('mceRemoveEditor', true, 'go_blog_post_edit');
-
-
-    //tinymce.execCommand('mceRemoveEditor', true, 'go_blog_post');
-    //tinymce.execCommand( 'mceAddEditor', true, 'go_blog_post' );
-
-
 });
 
 function go_update_bonus_loot(){
@@ -258,29 +260,8 @@ function task_stage_change( target, required_elements = null ) {
         },
         success: function( raw ) {
             //console.log(raw);
-            if (raw == 'login'){
-                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
-            };
-            if (raw ==='refresh'){
-                Swal.fire({//sw2 OK
-                    title: "Error",
-                    text: "Refresh the page and then try again? You will lose unsaved changes. You can cancel and copy any unsaved changes to a safe location before refresh.",
-                    type: 'warning',
-                    //showCancelButton: true,
-                    confirmButtonText: 'Refresh Now',
-                    //cancelButtonText: 'No, cancel!',
-                    reverseButtons: true,
-                    customClass: {
-                        confirmButton: 'btn btn-success',
-                        cancelButton: 'btn btn-danger'
-                    },
-                })
-                    .then((result) => {
-                        if (result.value) {
-                            location.reload();
-                        }
-                    })
-            };
+            var error = go_ajax_error_checker(raw);
+            if (error == 'true') return;
 
             // parse the raw response to get the desired JSON
             var res = {};

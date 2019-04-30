@@ -34,6 +34,7 @@ get_header();
         } else {
             $is_current_user = false;
         }
+
         $is_admin = go_user_is_admin($current_user_id);
 
         $user_fullname = $user_obj->first_name . ' ' . $user_obj->last_name;

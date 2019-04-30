@@ -1346,13 +1346,14 @@ function go_update_admin_bar_v4($user_id) {
 
         $go_current_health = $user_loot['health'];
         $health_percentage = intval($go_current_health / 2);
+        $currency_name = get_option("options_go_loot_health_abbreviation");
         if ($health_percentage <= 0) {
             $health_percentage = 0;
         } else if ($health_percentage >= 100) {
             $health_percentage = 100;
         }
         echo "jQuery( '#go_admin_bar_health_bar' ).css( {'width': '{$health_percentage}%'} );";
-        $health_str = "Health Mod: " . $go_current_health. "%" ;
+        $health_str = $currency_name.": " . $go_current_health. "%" ;
         echo "jQuery( '#health_bar_percentage_str' ).html( '{$health_str}' );";
         $display = go_display_longhand_currency('health', $go_current_health) ;
         echo "jQuery( '#go_admin_bar_health' ).html( '{$display}' );";

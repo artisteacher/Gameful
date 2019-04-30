@@ -1,8 +1,4 @@
 jQuery( document ).ready( function() {
-    jQuery(".go_feedback_canned").on('change', function (e) {
-        var optionSelected = jQuery("option:selected", this);
-        go_feedback_canned(optionSelected);
-    });
 
     let debug = go_debug;
     if (debug != 'true') {
@@ -26,22 +22,34 @@ jQuery( document ).ready( function() {
     }
 });
 
-function go_addslashes(str) {
-    str = str.replace(/\\/g, '\\\\');
-    str = str.replace(/\'/g, '\\\'');
-    str = str.replace(/\"/g, '\\"');
-    str = str.replace(/\0/g, '\\0');
-    return str;
-}
+function go_ajax_error_checker(raw){
+    if (raw == 'login'){
+        jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+        return 'true';
+    };
+    if (raw ==='refresh'){
+        Swal.fire({//sw2 OK
+            title: "Error",
+            text: "Refresh the page and then try again? You will lose unsaved changes. You can cancel and copy any unsaved changes to a safe location before refresh.",
+            type: 'warning',
+            //showCancelButton: true,
+            confirmButtonText: 'Refresh Now',
+            //cancelButtonText: 'No, cancel!',
+            reverseButtons: true,
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger'
+            },
+        })
+            .then((result) => {
+                if (result.value) {
+                    location.reload();
+                }
+            });
 
-function go_stripslashes(str) {
-    str = str.replace(/\\'/g, '\'');
-    str = str.replace(/\\"/g, '"');
-    str = str.replace(/\\0/g, '\0');
-    str = str.replace(/\\\\/g, '\\');
-    return str;
+        return 'true';
+    };
 }
-
 
 function go_user_profile_link(uid){
     jQuery.ajax({
@@ -133,11 +141,10 @@ function go_admin_bar_stats_page_button( id ) {//this is called from the admin b
         },
         success: function( res ) {
             //console.log(res);
-            if (res ==='refresh'){
-                go_refresh_page_on_error();
-                return;
-            }
-            else if ( -1 !== res ) {
+            let error = go_ajax_error_checker(res);
+            if (error == 'true') return;
+
+            if ( -1 !== res ) {
 
                 jQuery.featherlight(res, {variant: 'stats'});
 
@@ -1080,26 +1087,7 @@ function go_daterange_clear(){
 function go_clear_daterange(){
 }
 
-function go_refresh_page_on_error(){
-    Swal.fire({//sw2 OK
-        title: "Error",
-        text: "Refresh the page and then try again? You will lose unsaved changes. You can cancel and copy any unsaved changes to a safe location before refresh.",
-        type: 'warning',
-        //showCancelButton: true,
-        confirmButtonText: 'Refresh Now',
-        //cancelButtonText: 'No, cancel!',
-        reverseButtons: true,
-        customClass: {
-            confirmButton: 'btn btn-success',
-            cancelButton: 'btn btn-danger'
-        },
-    })
-        .then((result) => {
-            if (result.value) {
-                location.reload();
-            }
-        })
-}
+
 
 //this now saves to session data
 function go_save_clipboard_filters(){
