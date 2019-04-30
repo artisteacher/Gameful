@@ -84,7 +84,7 @@ function go_scripts () {
         'GO_EVERY_PAGE_DATA',
         array(
             'nonces' => array(
-                'go_deactivate_plugin'          => wp_create_nonce( 'go_deactivate_plugin' . $user_id ),
+                'go_deactivate_plugin'          => wp_create_nonce( 'go_deactivate_plugin' ),
                 'go_admin_bar_stats'            => wp_create_nonce( 'go_admin_bar_stats' ),
                 'go_stats_about'                => wp_create_nonce( 'go_stats_about' ),
                 'go_stats_task_list'            => wp_create_nonce( 'go_stats_task_list' ),
@@ -134,8 +134,8 @@ function go_scripts () {
         'GO_BUY_ITEM_DATA',
         array(
             'nonces' => array(
-                'go_buy_item'           => wp_create_nonce( 'go_buy_item_' . $user_id ),
-                'go_get_purchase_count' => wp_create_nonce( 'go_get_purchase_count_' . $user_id ),
+                'go_buy_item'           => wp_create_nonce( 'go_buy_item' ),
+                'go_get_purchase_count' => wp_create_nonce( 'go_get_purchase_count' ),
             ),
             'userID'	=>  $user_id
         )

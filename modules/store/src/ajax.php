@@ -1,7 +1,7 @@
 <?php
 
 function go_buy_item() {
-    global $wpdb;
+    //global $wpdb;
     //check_ajax_referer( 'go_buy_item' );
     //$user_id = get_current_user_id();
 
