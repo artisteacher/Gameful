@@ -458,10 +458,6 @@ function go_disable_loading( ) {
         go_update_bonus_loot(this);
     });
 
-    jQuery('.go_str_item').off().one("click", function(e){
-        go_lb_opener( this.id );
-    });
-
     //console.log("opener4");
     jQuery(".go_blog_opener").off().one("click", function(e){
         go_blog_opener( this );
