@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4c52fe7c-a769-413b-9a8a-3effed8b98a6" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/go_enque_js.php" beforeDir="false" afterPath="$PROJECT_DIR$/js/go_enque_js.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/store/src/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/store/src/ajax.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game-on.php" beforeDir="false" afterPath="$PROJECT_DIR$/game-on.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -42,12 +40,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/game-on.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" column="43" lean-forward="true" selection-start-line="3" selection-start-column="43" selection-end-line="3" selection-end-column="43" />
+            <state relative-caret-position="375">
+              <caret line="25" column="21" selection-start-line="25" selection-start-column="21" selection-end-line="25" selection-end-column="21" />
               <folding>
+                <element signature="e#6#232#0#PHP" expanded="true" />
                 <element signature="e#2038#3630#0#PHP" />
                 <element signature="n#go_write_log#0;n#!!top" />
               </folding>
@@ -118,7 +117,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/src/all/go_loot_and_updates.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="205">
@@ -356,10 +355,10 @@
         <option value="$PROJECT_DIR$/dev/js/scripts/go_feedback.js" />
         <option value="$PROJECT_DIR$/modules/feedback/src/ajax.php" />
         <option value="$PROJECT_DIR$/modules/feedback/src/functions.php" />
-        <option value="$PROJECT_DIR$/game-on.php" />
         <option value="$PROJECT_DIR$/dev/js/scripts/go_blogs.js" />
         <option value="$PROJECT_DIR$/modules/store/src/ajax.php" />
         <option value="$PROJECT_DIR$/js/go_enque_js.php" />
+        <option value="$PROJECT_DIR$/game-on.php" />
       </list>
     </option>
   </component>
@@ -739,15 +738,16 @@
       <workItem from="1554503906215" duration="91875000" />
       <workItem from="1554728159418" duration="62062000" />
       <workItem from="1555173137538" duration="22000" />
-      <workItem from="1555173276435" duration="453052000" />
+      <workItem from="1555173276435" duration="453169000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4554266000" />
+    <option name="totallyTimeSpent" value="4554383000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="25" width="1588" height="998" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17335059" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -2025,17 +2025,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/game-on.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="43" lean-forward="true" selection-start-line="3" selection-start-column="43" selection-end-line="3" selection-end-column="43" />
-          <folding>
-            <element signature="e#2038#3630#0#PHP" />
-            <element signature="n#go_write_log#0;n#!!top" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/min/go_frontend-min.js">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -2178,6 +2167,18 @@
             <element signature="n#go_add_user_to_totals_table#0;n#!!top" />
             <element signature="n#go_get_bonus_loot_rows#0;n#!!top" />
             <element signature="n#go_update_bonus_loot#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/game-on.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="25" column="21" selection-start-line="25" selection-start-column="21" selection-end-line="25" selection-end-column="21" />
+          <folding>
+            <element signature="e#6#232#0#PHP" expanded="true" />
+            <element signature="e#2038#3630#0#PHP" />
+            <element signature="n#go_write_log#0;n#!!top" />
           </folding>
         </state>
       </provider>
