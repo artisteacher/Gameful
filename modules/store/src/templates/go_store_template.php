@@ -19,7 +19,12 @@
  */
 
 get_header();
-
+$store_name = get_option( 'options_go_store_store_link');
+?>
+    <script>
+        jQuery(document).prop('title', '<?php echo $store_name; ?>');
+    </script>
+<?php
 
 go_make_store_new();
 

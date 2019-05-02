@@ -1020,6 +1020,7 @@ function go_blog_user_task (user_id, task_id) {
                     //alert(this.$content.hasClass('true')); // alert class of content
                     //jQuery("#go_blog_container").fitVids();
                     go_fit_and_max_only("#go_blog_container");
+                    go_reader_activate_buttons();
                 }
 
             });

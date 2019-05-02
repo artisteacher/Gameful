@@ -208,3 +208,24 @@ function misha_loadmore_ajax_handler(){
 add_action('wp_ajax_loadmore', 'misha_loadmore_ajax_handler'); // wp_ajax_{action}
 add_action('wp_ajax_nopriv_loadmore', 'misha_loadmore_ajax_handler'); // wp_ajax_nopriv_{action}
 
+//gets the task id from a Blog post Id
+//works for v4 and v5 blog_posts
+function go_get_task_id($post_id){
+    global $wpdb;
+    $aTable = "{$wpdb->prefix}go_actions";
+    $task_id = wp_get_post_parent_id($post_id);
+
+    if(!$task_id){
+        $task_id = get_post_meta($post_id, 'go_blog_task_id', true);
+        //$go_blog_task_id = (isset($blog_meta['go_blog_task_id'][0]) ? $blog_meta['go_blog_task_id'][0] : null);
+    }
+    if(!$task_id) {
+        $task_id = $wpdb->get_var($wpdb->prepare("SELECT source_id
+				FROM {$aTable} 
+				WHERE result = %d AND  action_type = %s
+				ORDER BY id DESC LIMIT 1",
+            intval($post_id),
+            'task'));
+    }
+    return $task_id;
+}

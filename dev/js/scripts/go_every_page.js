@@ -20,14 +20,17 @@ jQuery( document ).ready( function() {
     }else{
         console.log('Game On Debug Mode On');
     }
+
 });
 
 function go_ajax_error_checker(raw){
     if (raw == 'login'){
+        console.log('not logged in');
         jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
         return 'true';
     };
     if (raw ==='refresh'){
+        console.log('nonce verify failed');
         Swal.fire({//sw2 OK
             title: "Error",
             text: "Refresh the page and then try again? You will lose unsaved changes. You can cancel and copy any unsaved changes to a safe location before refresh.",

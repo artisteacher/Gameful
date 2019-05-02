@@ -37,13 +37,13 @@ function go_check_messages($response = null , $data = null){
             $wpdb->prepare(
                 "SELECT *
 			FROM {$go_actions_table_name}
-			WHERE uid = %d and (action_type = %s or action_type = %s or action_type = %s or action_type = %s)  and stage = %d
+			WHERE uid = %d and (action_type = %s or action_type = %s or action_type = %s or action_type LIKE %s)  and stage = %d
 			ORDER BY id DESC",
                 $user_id,
                 'message',
                 'reset',
                 'admin_notification',
-                'feedback',
+                '%feedback%',
                 1
             )
         );
@@ -66,9 +66,11 @@ function go_check_messages($response = null , $data = null){
 
             if ($type == 'admin_notification'){
                 go_noty_message_generic('alert', '', $title, '15000');
-            } else if ( $type == 'reset' && $type = 'reset_stage') {
+            }
+            else if ( $type == 'reset' && $type = 'reset_stage') {
                 go_noty_message_generic('warning', $title, $message, '');
-            }else{
+            }
+            else{
 
 
 
@@ -88,7 +90,7 @@ function go_check_messages($response = null , $data = null){
                 $gold_reward = null;
                 $gold_loot = null;
                 if($gold != 0){
-                    $gold_loot = go_display_shorthand_currency('gold', $gold, false, 'breaks');
+                    $gold_loot = go_display_shorthand_currency('gold', $gold, false, true);
                 }
                 if ($gold > 0) {
                     $gold_reward = $gold_loot;
@@ -187,7 +189,7 @@ function go_check_messages($response = null , $data = null){
 
                 if (!empty($xp_penalty) || !empty($gold_penalty) || !empty($health_penalty) || !empty($badge_penalty) || !empty($group_penalty)) {
                     //if (empty($post_id)){
-                    $penalty = "<div class='go_messages_loot go_messages_penalties'><h3>Penalty:</h3>{$xp_penalty}{$gold_penalty}{$health_penalty}{$badge_penalty}{$group_penalty}</div>";
+                    $penalty = "<div class='go_messages_loot go_messages_penalties'><h3>Consequence:</h3>{$xp_penalty}{$gold_penalty}{$health_penalty}{$badge_penalty}{$group_penalty}</div>";
                     //}
                     //else{
                     //    $penalty = "<h4>Additional Penalty:</h4>{$xp_penalty}{$gold_penalty}{$health_penalty}{$badge_penalty}{$group_penalty}";
@@ -202,6 +204,7 @@ function go_check_messages($response = null , $data = null){
             }
 
         }
+        /*
         //set messages flag to read
         $wpdb->update(
             $go_actions_table_name,
@@ -284,6 +287,23 @@ function go_check_messages($response = null , $data = null){
                 '%d'
             )
         );
+        */
+
+        $wpdb->query(
+            $wpdb->prepare(
+                "UPDATE {$go_actions_table_name}
+            SET stage = %d
+			WHERE uid = %d and (action_type = %s or action_type = %s or action_type = %s or action_type LIKE %s)  and stage = %d",
+                0,
+                $user_id,
+                'message',
+                'reset',
+                'admin_notification',
+                '%feedback%',
+                1
+            )
+        );
+
         update_user_option($user_id, 'go_new_messages', false);
     }
     $buffer = ob_get_contents();

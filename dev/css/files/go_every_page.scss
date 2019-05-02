@@ -91,8 +91,8 @@ input[type="checkbox"]:checked + label span.checkbox::after {
 #go_leaderboard_filters {
 	display: flex;
 	flex-wrap: wrap;
-	border: 2px solid black;
-	border-radius: 13px;
+	border: 1px solid black;
+	border-radius: 3px;
 	padding: 15px;
 	background-color: white;
 }
@@ -177,12 +177,15 @@ video.wp-video-shortcode {
  *ACF Loot Color
  */
 #go_loot_table .acf-switch,
-#go_loot_table .go-acf-switch{
+#go_loot_table .go-acf-switch,
+.go_loot_table .go-acf-switch{
 	background: pink !important;
 	border-color: indianred !important;
 }
+
 #go_loot_table .acf-switch.-on,
-#go_loot_table .go-acf-switch.-on{
+#go_loot_table .go-acf-switch.-on,
+.go_loot_table .go-acf-switch.-on{
 	background: forestgreen !important;
 	border-color: darkgreen !important;
 }
@@ -194,7 +197,6 @@ video.wp-video-shortcode {
 	vertical-align: top;
 	text-align: left;
 	padding: 5px 5px 5px 0px;
-	line-height: 1;
 	font-weight: 400;
 	border: none;
 }
@@ -226,7 +228,6 @@ video.wp-video-shortcode {
 	text-align: left;
 	padding: 5px 5px 5px 0px;
 	width: 300px;
-	line-height: 1;
 	font-weight: 400;
 
 }
@@ -1137,7 +1138,8 @@ input#go_pass_lock::-moz-placeholder {
 	.go_buttons,
 	.insert-media,
 	.wp-editor-tabs,
-	#go_bonus_button{
+	#go_bonus_button,
+	.go_frontend-button{
 		opacity: .5;
 		cursor: default;
 		pointer-events:none !important;
@@ -1372,4 +1374,13 @@ input#go_pass_lock::-moz-placeholder {
 
 .go_feedback_percent_toggle{
 	width: 150px;
+}
+
+.go_status_percent.up{
+	color: green;
+	font-size: 1.2em;
+}
+.go_status_percent.down{
+	color: red;
+	font-size: 1.2em;
 }

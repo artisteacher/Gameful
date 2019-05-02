@@ -630,15 +630,15 @@ function go_reset_message($this_message, $message, $penalty, $xp, $gold, $health
     $penalty_message = '';
 //reset stage
     if($xp_task != 0){
-        $xp_message = go_display_shorthand_currency('xp',$xp_task,false, 'breaks');
+        $xp_message = go_display_shorthand_currency('xp',$xp_task,false );
     }
     if($gold_task != 0){
         //$gold_message = "<br>" . go_get_loot_short_name('gold').":".$gold_task;
-        $gold_message = go_display_shorthand_currency('gold',$gold_task,false, 'breaks');
+        $gold_message = go_display_shorthand_currency('gold',$gold_task,false, true);
     }
     if($health_task != 0){
         //$health_message = "<br>" . go_get_loot_short_name('health').":".$health_task;
-        $health_message = go_display_shorthand_currency('health',$health_task,false, 'breaks');
+        $health_message = go_display_shorthand_currency('health',$health_task,false);
     }
     if (count($badge_array_task)){
         //$badge_name = get_option('options_go_badges_name_plural');

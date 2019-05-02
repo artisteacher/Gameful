@@ -102,6 +102,10 @@ function go_admin_scripts ($hook) {
                 'go_blog_favorite_toggle'            => wp_create_nonce('go_blog_favorite_toggle'),
                 'go_update_go_ajax_v5_check'            => wp_create_nonce('go_update_go_ajax_v5_check'),
                 'go_update_go_ajax_v5'            => wp_create_nonce('go_update_go_ajax_v5'),
+                'go_mark_one_read_toggle'       => wp_create_nonce('go_mark_one_read_toggle'),
+                'go_send_feedback'              => wp_create_nonce('go_send_feedback'),
+                'go_blog_revision'              => wp_create_nonce('go_blog_revision'),
+                'go_restore_revision'              => wp_create_nonce('go_restore_revision')
                 //'go_num_posts'                  => wp_create_nonce('go_num_posts'),//reader? isn't this just frontend
                 //'go_mark_one_read'              => wp_create_nonce('go_mark_one_read'),
                // 'go_send_feedback'              => wp_create_nonce('go_send_feedback')
@@ -197,7 +201,7 @@ function go_admin_scripts ($hook) {
 function go_admin_enqueue_scripts_acf() {
 
     global $go_js_version;
-    wp_register_script( 'go_acf_js', plugin_dir_url( __FILE__ ).'min/go_acf_admin.js', array( 'jquery' ), $go_js_version, true);
+    wp_register_script( 'go_acf_js', plugin_dir_url( __FILE__ ).'scripts/go_acf_admin.js', array( 'jquery' ), $go_js_version, true);
     wp_enqueue_script( 'go_acf_js');
 
 }

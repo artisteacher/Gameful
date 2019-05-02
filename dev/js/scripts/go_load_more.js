@@ -82,6 +82,8 @@ function go_loadmore_reader(){
                             go_reader_read_printed();
                         });
 
+                        go_reader_activate_buttons();
+
 
                         // you can also fire the "post-load" event here if you use a plugin that requires it
                         // $( document.body ).trigger( 'post-load' );

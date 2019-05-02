@@ -15,8 +15,9 @@
  * @param $i
  * @param $bonus
  * @param $check_for_understanding
+ * @param $all_content
  */
-function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $check_for_understanding){
+function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $check_for_understanding, $all_content = false){
     //save draft button for drafts
     //print saved info for all
     ob_start();
@@ -51,6 +52,10 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
         if (empty($go_blog_task_id)) {
             $go_blog_task_id = wp_get_post_parent_id($blog_post_id);//for posts created after v4.6
         }
+
+        if($all_content){
+            $content = '';
+        }
     }
     if($go_blog_task_id != 0) {
         $custom_fields = get_post_custom($go_blog_task_id);
@@ -73,6 +78,9 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
                    $required_string = (isset($custom_fields['go_bonus_stage_blog_options_v5_blog_elements_' . $x . '_requirements_url_validation'][0]) ?  $custom_fields['go_bonus_stage_blog_options_v5_blog_elements_' . $x . '_requirements_url_validation'][0] : 0);
 
                     $url_content = (isset($blog_meta[$uniqueid][0]) ? $blog_meta[$uniqueid][0] : null);
+                    if($all_content){
+                        $url_content = '';
+                    }
 
                     //OLD DATA CHECKS: THESE CAN BE REMOVED AT SOMEPOINT IN THE FUTURE
                     //if nothing found, check for v4 blog post content
@@ -80,7 +88,7 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
                         $url_content = (isset($blog_meta['go_blog_url'][0]) ? $blog_meta['go_blog_url'][0] : null);
                     }
                     //if nothing found, check for v4 URL check content
-                    if ($url_content == null){
+                    if ($url_content === null){
                         $url_content = (string)$wpdb->get_var($wpdb->prepare("SELECT result 
 				            FROM {$go_actions_table_name} 
                             WHERE uid = %d AND source_id = %d AND bonus_status  = %d AND action_type = %s
@@ -114,14 +122,17 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
                         $mime_types_count = 0;
                     }
                     $media_content = (isset($blog_meta[$uniqueid][0]) ? $blog_meta[$uniqueid][0] : null);
+                    if($all_content){
+                        $media_content = '';
+                    }
 
                     //OLD DATA CHECKS: THESE CAN BE REMOVED AT SOMEPOINT IN THE FUTURE
                     //if nothing found, check for v4 blog post content
-                    if ($media_content == null){
+                    if ($media_content === null){
                         $media_content = (isset($blog_meta['go_blog_media'][0]) ? $blog_meta['go_blog_media'][0] : null);
                     }
                     //if nothing found, check for v4 Upload check content
-                    if ($media_content == null){
+                    if ($media_content === null){
                         $media_content = (int)$wpdb->get_var($wpdb->prepare("SELECT result 
                             FROM {$go_actions_table_name} 
                             WHERE uid = %d AND source_id = %d AND bonus_status  = %d AND action_type = %s
@@ -167,7 +178,10 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
                 if ($type =='Video'){
 
                     $video_content = (isset($blog_meta[$uniqueid][0]) ? $blog_meta[$uniqueid][0] : null);
-                    if ($video_content == null){
+                    if($all_content){
+                        $video_content = '';
+                    }
+                    if ($video_content === null){
                         $video_content = (isset($blog_meta['go_blog_video'][0]) ? $blog_meta['go_blog_video'][0] : null);//previously saved content v4
                     }
                     echo "<hr><h3>Submit a Video</h3><div>Video Link:<div>";
@@ -195,14 +209,16 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
                     //$required_string = get_post_meta($go_blog_task_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $x . '_requirements_url_validation');
                     $required_string = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_blog_elements_' . $x . '_requirements_url_validation'][0]) ?  $custom_fields['go_stages_' . $i . '_blog_options_v5_blog_elements_' . $x . '_requirements_url_validation'][0] : 0);
                     $url_content = (isset($blog_meta[$uniqueid][0]) ? $blog_meta[$uniqueid][0] : null);
-
+                    if($all_content){
+                        $url_content = '';
+                    }
                     //OLD DATA CHECKS: THESE CAN BE REMOVED AT SOMEPOINT IN THE FUTURE
                     //if nothing found, check for v4 blog post content
-                    if ($url_content == null){
+                    if ($url_content === null){
                         $url_content = (isset($blog_meta['go_blog_url'][0]) ? $blog_meta['go_blog_url'][0] : null);
                     }
                     //if nothing found, check for v4 URL check content
-                    if ($url_content == null){
+                    if ($url_content === null){
                         $url_content = (string)$wpdb->get_var($wpdb->prepare("SELECT result 
 				            FROM {$go_actions_table_name} 
                             WHERE uid = %d AND source_id = %d AND stage  = %d AND action_type = %s
@@ -232,14 +248,17 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
                         $mime_types_count = 0;
                     }
                     $media_content = (isset($blog_meta[$uniqueid][0]) ? $blog_meta[$uniqueid][0] : null);
+                    if($all_content){
+                        $media_content = '';
+                    }
 
                     //OLD DATA CHECKS: THESE CAN BE REMOVED AT SOMEPOINT IN THE FUTURE
                     //if nothing found, check for v4 blog post content
-                    if ($media_content == null){
+                    if ($media_content === null){
                         $media_content = (isset($blog_meta['go_blog_media'][0]) ? $blog_meta['go_blog_media'][0] : null);//previously saved content v4
                     }
                     //if nothing found, check for v4 Upload check content
-                    if ($media_content == null){
+                    if ($media_content === null){
                         $media_content = (int)$wpdb->get_var($wpdb->prepare("SELECT result 
                             FROM {$go_actions_table_name} 
                             WHERE uid = %d AND source_id = %d AND stage  = %d AND action_type = %s
@@ -267,7 +286,10 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
                 if ($type[0] =='Video'){
 
                     $video_content = (isset($blog_meta[$uniqueid][0]) ? $blog_meta[$uniqueid][0] : null);
-                    if ($video_content == null){
+                    if($all_content){
+                        $video_content = '';
+                    }
+                    if ($video_content === null){
                         $video_content = (isset($blog_meta['go_blog_video'][0]) ? $blog_meta['go_blog_video'][0] : null);//previously saved content v4
                     }
                     echo "<hr><h3>Submit a Video</h3><div>Video Link:<div>";
@@ -316,8 +338,6 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
     echo $buffer;
 
 
-
-
     if($text_toggle) {
         $settings = array(//'tinymce'=> array( 'menubar'=> true, 'toolbar1' => 'undo,redo', 'toolbar2' => ''),
             'tinymce'=>true,
@@ -351,32 +371,36 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
 
 
     }
-    echo "<p id='go_blog_stage_error_msg' class='go_error_msg' style='display: none; color: red;'></p>";
+    if ( is_user_logged_in() && !$all_content) {
+        echo "<p id='go_blog_stage_error_msg' class='go_error_msg' style='display: none; color: red;'></p>";
 
-    echo "<div class='go_blog_form_footer' style='background-color: #b3b3b3;'>";
-    $current_user = get_current_user_id();
-    $is_admin = go_user_is_admin();
-    if($suffix !='_lightbox') {
-        go_blog_status($blog_post_id, $is_admin, true);
-        $button_class = "right";
-    }else {
-        $button_class = "left";
-    }
-
-    if($text_toggle) {
-        //show save button if this is a draft, reset, trashed or new post
-        $allow_drafts = array("draft", "reset", "trash", null);
-        if (in_array($post_status, $allow_drafts)) {
-            echo "<span id='go_save_button{$suffix}' class='go_button_round go_save_button progress {$button_class}'  status='{$i}' data-bonus_status='{$bonus}' check_type='skip' button_type='save{$suffix}'  admin_lock='true' blog_post_id='{$blog_post_id}' blog_suffix='{$suffix}' task_id='{$go_blog_task_id}' data-check_for_understanding ='{$check_for_understanding}'><span class='go_round_inner'><i class='fas fa-save'></i></span></span>";
-
+        echo "<div class='go_blog_form_footer' style='background-color: #b3b3b3;'>";
+        $current_user = get_current_user_id();
+        $is_admin = go_user_is_admin();
+        if ($suffix != '_lightbox') {
+            go_blog_status($blog_post_id, $is_admin, true);
+            $button_class = "right";
+        } else {
+            $button_class = "left";
         }
+
+        if ($text_toggle) {
+            //show save button if this is a draft, reset, trashed or new post
+            $allow_drafts = array("draft", "reset", "trash", null);
+            if (in_array($post_status, $allow_drafts)) {
+                echo "<span id='go_save_button{$suffix}' class='go_button_round go_save_button progress {$button_class}'  status='{$i}' data-bonus_status='{$bonus}' check_type='skip' button_type='save{$suffix}'  admin_lock='true' blog_post_id='{$blog_post_id}' blog_suffix='{$suffix}' task_id='{$go_blog_task_id}' data-check_for_understanding ='{$check_for_understanding}'><span class='go_round_inner'><i class='fas fa-save'></i></span></span>";
+
+            }
+        }
+        echo "</div>";
     }
-    echo "</div>";
+    /*
     if($suffix !='_lightbox') {
         if ($blog_post_id) {
             //do_action('go_blog_template_after_post', $blog_post_id, false);
         }
     }
+    */
 
     echo "</div>";
 
@@ -587,41 +611,47 @@ function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_underst
         echo "<div class='go_blog_content'>". $text_content . "</div>";
     }
 
-    if(!$is_revision) {
-        echo "<div class='go_blog_form_footer'>";
-        go_blog_status($blog_post_id, $is_admin);
-        echo "<div><div class='go_blog_actions'>";
+    if ( is_user_logged_in() ) {
+
+        if (!$is_revision) {
+            echo "<div class='go_blog_form_footer'>";
+            go_blog_status($blog_post_id, $is_admin);
+            echo "<div><div class='go_blog_actions'>";
 
 
-        if (intval($current_user) == intval($author_id) && $show_edit) {//if current user then show edit and maybe trash
-            echo "<div class='go_blog_opener go_blog_opener_round go_button_round' blog_post_id ='{$blog_post_id}' data-check_for_understanding ='{$check_for_understanding}'><span class='go_round_inner'><i class='fas fa-pencil-alt'></i></span></div>";
+            if (intval($current_user) == intval($author_id) && $show_edit) {//if current user then show edit and maybe trash
+                echo "<div class='go_blog_opener go_blog_opener_round go_button_round' blog_post_id ='{$blog_post_id}' data-check_for_understanding ='{$check_for_understanding}'><span class='go_round_inner'><i class='fas fa-pencil-alt'></i></span></div>";
+            }
+            if ((($current_user == $author_id || $is_admin) && $check_for_understanding == false && empty($go_blog_task_id))) {
+                echo '<div class="go_blog_trash go_button_round" blog_post_id ="' . $blog_post_id . '"><span class="go_round_inner"><i class="fas fa-trash"></i></span></div>';
+            } else if ($is_admin) {
+                echo '<div data-uid="" data-task="' . $blog_post_id . '" class="go_reset_task_clipboard go_button_round go_blog_reset" ><span class="go_round_inner"><i class="fas fa-times-circle"></i></span></div>';
+                //echo '<span class="go_blog_trash" blog_post_id ="' . $blog_post_id . '"><i class="fa fa-times-circle fa-2x"></i></span>';
+            }
+
+
+            echo "</div></div></div>";
+        } else {
+            $parent = wp_get_post_parent_id($blog_post_id);
+            ?>
+            <div>
+                <button class="go_restore_revision" style="float:right;" data-post_id="<?php echo $blog_post_id; ?>"
+                        data-parent_id="<?php echo $parent; ?>">Restore this post
+                </button>
+            </div>
+            <?php
         }
-        if ((($current_user == $author_id || $is_admin) && $check_for_understanding == false && empty($go_blog_task_id))) {
-            echo '<div class="go_blog_trash go_button_round" blog_post_id ="' . $blog_post_id . '"><span class="go_round_inner"><i class="fas fa-trash"></i></span></div>';
-        } else if ($is_admin) {
-            echo '<div data-uid="" data-task="' . $blog_post_id . '" class="go_reset_task_clipboard go_button_round go_blog_reset" ><span class="go_round_inner"><i class="fas fa-times-circle"></i></span></div>';
-            //echo '<span class="go_blog_trash" blog_post_id ="' . $blog_post_id . '"><i class="fa fa-times-circle fa-2x"></i></span>';
+
+
+        if (intval($current_user) === intval($author_id)) {
+            $is_current_user = true;
+        } else {
+            $is_current_user = false;
         }
 
-
-        echo "</div></div></div>";
-    }
-    else{
-        $parent= wp_get_post_parent_id($blog_post_id);
-        ?>
-        <div><button class="go_restore_revision" style="float:right;" data-post_id="<?php echo $blog_post_id; ?>" data-parent_id="<?php echo $parent; ?>">Restore this post</button></div>
-<?php
-    }
-
-
-    if(intval($current_user) === intval($author_id)){
-        $is_current_user = true;
-    }else{
-        $is_current_user = false;
-    }
-
-    if ($with_feedback && ($is_current_user || $is_admin)){
-        do_action('go_blog_template_after_post', $blog_post_id);
+        if ($with_feedback && ($is_current_user || $is_admin)) {
+            do_action('go_blog_template_after_post', $blog_post_id);
+        }
     }
 
     echo "</div>";
@@ -639,14 +669,20 @@ function go_blog_status($blog_post_id, $is_admin, $is_form = false){
     }else{
         $favorite = '';
     }
+    $percent = get_post_meta( $blog_post_id, 'go_feedback_percent', true );
 
+    $direction = (($percent > 0) ? '+' : '');
+    $class = (($percent > 0) ? 'up' : 'down');
+    if ($percent && $percent != 0) {
+        $percent =  '<div class="go_status_percent '.$class.'" ><strong>'.$direction.$percent.'%</strong></div>';
+    }
     if (!empty($status) || !empty($private) || !empty($favorite) ) {
 
         echo "
             <div class='go_blog_status'>
             <div class='go_blog_status_icons'>";
 
-            echo $status . $private . $favorite;
+            echo $status . $private . $favorite . $percent;
             echo "</div></div>";
     }else{
         echo "<div></div>";//this is a placeholder for the flexbox

@@ -124,7 +124,7 @@ function go_reader_get_posts($sQuery2 = null, $pWhere = null, $order = null)
     }
     if ($TotalunRead > 0) {
         echo "
-                 <span>{$TotalunRead} unread posts found. </span><span><a  id='go_mark_all_read' >Mark all as read.</a></span>";//data-post_ids='$posts_serialized
+                 <span>{$TotalunRead} <i class=\"far fa-eye-slash\"></i> posts found. </span><span><a  id='go_mark_all_read' >Mark all as <i class=\"fas fa-eye\"></i>.</a></span>";//data-post_ids='$posts_serialized
     }
     if (intval($iFilteredTotal == 0)){
         echo "<div style='padding: 30px;'>No posts match the filter.</div>";//data-post_ids='$posts_serialized
@@ -169,7 +169,7 @@ function go_reader_get_posts($sQuery2 = null, $pWhere = null, $order = null)
     }
 
     echo "<div class='go_reader_footer'><div class='go_read_printed'>
-                <button id='go_read_printed_button'  style='float: right; margin: 20px;'>Mark all unread posts on this page as read.</button>
+                <button id='go_read_printed_button'  style='float: right; margin: 20px;'>Mark all <i class=\"far fa-eye-slash\"></i> posts on this page as <i class=\"fas fa-eye\"></i>.</button>
             </div>";
     if ($iFilteredTotal > $limit){
 

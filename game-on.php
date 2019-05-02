@@ -152,6 +152,7 @@ else{
 include_once('core/includes.php');
 
 //These have their own conditional includes
+include_once('modules/feedback/includes.php');
 include_once('modules/admin_bar/includes.php');
 include_once('modules/map/includes.php');
 include_once('modules/messages/includes.php');
@@ -160,7 +161,7 @@ include_once('modules/stats/includes.php');
 include_once('modules/store/includes.php');
 include_once('modules/tasks/includes.php');
 include_once('modules/user_blogs/includes.php');
-include_once('modules/feedback/includes.php');
+
 
 /*
     * Plugin Activation Hooks

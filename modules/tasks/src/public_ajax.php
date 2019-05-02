@@ -362,7 +362,6 @@ function go_display_visitor_content ( $custom_fields, $post_id, $task_name, $bad
                 layout: 'topCenter',
                 text: 'You are viewing this page as a Guest. <br>You can view the content, but gameplay is disabled.',
                 theme: 'relax',
-                timeout: '3000',
                 visibilityControl: true,  
             }).show();
            jQuery('#go_all_content input, #go_all_content textarea').attr('disabled', 'disabled');
@@ -464,7 +463,6 @@ function go_display_all_admin_content( $custom_fields, $is_logged_in, $task_name
                 layout: 'topCenter',
                 text: 'You are in \"All Stage\" view mode. Gameplay is disabled.',
                 theme: 'relax',
-                timeout: '8000',
                 visibilityControl: true,  
             }).show();
            

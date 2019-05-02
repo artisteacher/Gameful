@@ -41,8 +41,6 @@ function go_update_last_map($map_id = false) {
  *
  */
 function go_to_this_map(){
-
-
     //check_ajax_referer( 'go_to_this_map');
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_to_this_map' ) ) {
         echo "refresh";

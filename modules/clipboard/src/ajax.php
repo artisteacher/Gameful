@@ -1460,7 +1460,7 @@ function go_clipboard_activity_dataloader_ajax(){
         //}
 
         $user_id = $action['uid'];
-        $row[] = '<a href="javascript:;" class="go_blog_user_task" data-UserId="'.$user_id.'" onclick="go_blog_user_task('.$user_id.', '.$task_id.');"><i style="padding: 0px 10px;" class="fa fa-eye" aria-hidden="true"></i></a><a><i data-uid="' . $user_id . '" data-task="'. $task_id . '" style="padding: 0px 10px;" class="go_reset_task_clipboard fa fa-times-circle" aria-hidden="true"></a>';//actions
+        $row[] = '<a href="javascript:;" class="go_blog_user_task" data-UserId="'.$user_id.'" onclick="go_blog_user_task('.$user_id.', '.$task_id.');"><i style="padding: 0px 10px;" class="fas fa-search" aria-hidden="true"></i></a><a><i data-uid="' . $user_id . '" data-task="'. $task_id . '" style="padding: 0px 10px;" class="go_reset_task_clipboard fa fa-times-circle" aria-hidden="true"></a>';//actions
 
         $start = $action['start_time'];
         $row[] = go_clipboard_time($start);

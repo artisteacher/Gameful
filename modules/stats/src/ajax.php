@@ -285,6 +285,8 @@ function go_admin_bar_stats() {
     }
     else {
         $progress_bar = '';
+        $go_current_xp = 0;
+        $rank_num = 1;
     }
 
 
@@ -303,15 +305,15 @@ function go_admin_bar_stats() {
     }
     else{
         $health_bar = '';
+        $go_current_health = 0;
     }
 
     if ($gold_toggle) {
         // the user's current amount of currency
         $go_current_gold = go_get_user_loot($user_id, 'gold');
-        $gold_total = '<div  class="go_admin_bar_gold admin_bar_loot">' . go_display_shorthand_currency('gold', $go_current_gold)  . '</div>';
     }
     else{
-        $gold_total = '';
+        $go_current_gold = 0;
     }
 
     //////////////////
@@ -771,7 +773,7 @@ function go_tasks_dataloader_ajax(){
             $row[] = "{$status} / {$total_stages}";
         }
         $row[] = "{$bonus_status}";
-        $row[] = '<a href="javascript:;" class="go_blog_user_task" data-UserId="'.$user_id.'" onclick="go_blog_user_task('.$user_id.', '.$post_id.');"><i style="padding: 0px 10px;" class="far fa-eye" aria-hidden="true"></i></a>';//actions
+        $row[] = '<a href="javascript:;" class="go_blog_user_task" data-UserId="'.$user_id.'" onclick="go_blog_user_task('.$user_id.', '.$post_id.');"><i style="padding: 0px 10px;" class="fas fa-search" aria-hidden="true"></i></a>';//actions
 
         $row[] = " <a href='javascript:;' class='go_stats_body_activity_single_task' data-postID='{$post_id}' onclick='go_stats_single_task_activity_list({$post_id});'><i style=\"padding: 0px 10px;\" class=\"fas fa-table\" aria-hidden=\"true\"></i></a>";
 
@@ -2639,6 +2641,8 @@ function go_stats_lite(){
     }
     else {
         $progress_bar = '';
+        $go_current_xp = 0;
+        $rank_num = 1;
     }
 
 
@@ -2657,15 +2661,16 @@ function go_stats_lite(){
     }
     else{
         $health_bar = '';
+        $go_current_health = 0;
     }
 
     if ($gold_toggle) {
         // the user's current amount of currency
         $go_current_gold = go_get_user_loot($user_id, 'gold');
-        $gold_total = '<div class="go_admin_bar_gold admin_bar_loot">' . go_display_shorthand_currency('gold', $go_current_gold)  . '</div>';
+
     }
     else{
-        $gold_total = '';
+        $go_current_gold = 0;
     }
 
 

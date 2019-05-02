@@ -304,8 +304,8 @@ function go_blog_check ($custom_fields, $i, $status, $go_actions_table_name, $us
         if ($i != $status && !$all_content){//if this is a complete stage, print the result
             go_blog_post($blog_post_id, $post_id, true, true, false, true, $i, null);
         }
-        else{//this is the current stage and print the form
-            go_blog_form($blog_post_id, '', $post_id, $i, $bonus_status, true);
+        else{//this is the current stage and print the form (or all content is on)
+            go_blog_form($blog_post_id, '', $post_id, $i, $bonus_status, true, true);
 
             go_buttons($user_id, $custom_fields, $i, $stage_count, $status, $check_type, $bonus, $bonus_status, $repeat_max, false, $blog_post_id);
 
@@ -359,7 +359,7 @@ function go_blog_check ($custom_fields, $i, $status, $go_actions_table_name, $us
             if($blog_post_id) {
                 wp_trash_post(intval($blog_post_id));
             }
-            go_blog_form($blog_post_id, '', $post_id, $i, $bonus, true);
+            go_blog_form($blog_post_id, '', $post_id, $i, $bonus, true, $all_content);
 
             go_buttons($user_id, $custom_fields, $i, $stage_count, $status, $check_type, $bonus, $bonus_status, $repeat_max, false, $blog_post_id);
             //if($blog_post_id){do_action('go_blog_template_after_post', $blog_post_id, false);}

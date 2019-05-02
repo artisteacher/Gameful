@@ -156,20 +156,22 @@ function go_display_minutes( $minutes ) {
  * @param  NUMBER $amount
  * @param  BOOLEAN $output Optional. TRUE will echo the currency, FALSE will return it (default).
  * @param  BOOLEAN $show_empty
+ * @param  BOOLEAN $show_coins
  * @return STRING/NULL Either echos or returns the currency. Returns FALSE on failure.
  */
-function go_display_longhand_currency ( $currency_type, $amount, $output = false, $show_empty = true ) {
+function go_display_longhand_currency ( $currency_type, $amount, $output = false, $show_empty = true, $show_coins = true ) {
 
     $coins_currency = get_option("options_go_loot_gold_currency");
     $str = false;
 
-    if ( "xp" === $currency_type || ("gold" === $currency_type && $coins_currency != 'coins') || "health" === $currency_type) {
+    if ( "xp" === $currency_type || ("gold" === $currency_type && ($coins_currency != 'coins')) || "health" === $currency_type) {
 
 
         $currency_name = get_option("options_go_loot_{$currency_type}_name");
         $suffix = get_option("options_go_loot_{$currency_type}_abbreviation");
         $str = "{$amount} {$currency_name} ({$suffix})";
-    }else if("gold" === $currency_type && $coins_currency === 'coins') {
+    }
+    else if("gold" === $currency_type && $coins_currency === 'coins') {
         $gold_name = get_option("options_go_loot_gold_coin_names_gold_name");
         $silver_name = get_option("options_go_loot_gold_coin_names_silver_name");
         $bronze_name = get_option("options_go_loot_gold_coin_names_bronze_name");
@@ -181,15 +183,29 @@ function go_display_longhand_currency ( $currency_type, $amount, $output = false
         $bronze_amount = intval(($amount * 100) - ($gold_amount * 100) - ($silver_amount * 10));
 
         $str = '';
-        if ($gold_amount >0 || $show_empty){
+        if($show_coins) {
+            if ($gold_amount > 0 || $show_empty) {
 
-            $str = "<div class='go_amount'>{$gold_amount}×</div><div class='go_coin gold'><p>{$gold_suffix}</p></div>&nbsp;&nbsp;&nbsp;";
+                $str .= "<div class='go_amount'>{$gold_amount}×</div><div class='go_coin gold'><p>{$gold_suffix}</p></div>&nbsp;&nbsp;&nbsp;";
+            }
+            if ($silver_amount > 0 || $show_empty) {
+                $str .= "<div class='go_amount'>{$silver_amount}×</div><div class='go_coin silver'><p>{$silver_suffix}</p></div>&nbsp;&nbsp;&nbsp;";
+            }
+            if ($bronze_amount > 0 || $show_empty) {
+                $str .= "<div class='go_amount'>{$bronze_amount}×</div><div class='go_coin bronze'><p>{$bronze_suffix}</p></div>  ";
+            }
         }
-        if ($silver_amount >0 || $show_empty){
-            $str .= "<div class='go_amount'>{$silver_amount}×</div><div class='go_coin silver'><p>{$silver_suffix}</p></div>&nbsp;&nbsp;&nbsp;";
-        }
-        if ($bronze_amount >0 || $show_empty){
-            $str .= "<div class='go_amount'>{$bronze_amount}×</div><div class='go_coin bronze'><p>{$bronze_suffix}</p></div>  ";
+        else{
+            if ($gold_amount > 0 || $show_empty) {
+
+                $str .= "{$gold_amount} {$gold_name} ({$gold_suffix})&nbsp;&nbsp;&nbsp;";
+            }
+            if ($silver_amount > 0 || $show_empty) {
+                $str .= "{$silver_amount} {$silver_name} ({$silver_suffix})&nbsp;&nbsp;&nbsp;";
+            }
+            if ($bronze_amount > 0 || $show_empty) {
+                $str .= "{$bronze_amount} {$bronze_name} ({$bronze_suffix})&nbsp;&nbsp;&nbsp;";
+            }
         }
         if (empty($str)){
             $str = false;
@@ -198,13 +214,14 @@ function go_display_longhand_currency ( $currency_type, $amount, $output = false
 
     if ($output && $str) {
         echo $str;
-    } else {
+    }
+    else {
         return $str;
     }
 
 }
 
-function go_display_shorthand_currency ( $currency_type, $amount, $output = false, $type = null, $divider ='' ) {
+function go_display_shorthand_currency ( $currency_type, $amount, $output = false, $breaks = false, $divider =' ' ) {
 
     $coins_currency = get_option("options_go_loot_gold_currency");
     $str = false;
@@ -224,55 +241,32 @@ function go_display_shorthand_currency ( $currency_type, $amount, $output = fals
         $silver_amount = intval(intval(($amount * 100) - ($gold_amount * 100))/10);
         $bronze_amount = intval(($amount * 100) - ($gold_amount * 100) - ($silver_amount * 10));
 
-        if ($type === 'names'){
+
             $str = '';
             if ($gold_amount != 0){
 
-                $str = "{$gold_name}({$gold_suffix}):{$gold_amount}   ";
+                $str = "{$gold_amount}{$divider}{$gold_suffix}&nbsp;&nbsp;&nbsp;";
+                if ($breaks) {
+                    $str .= "<br>";
+                }
             }
             if ($silver_amount != 0){
-                $str .=  "{$silver_name}({$silver_suffix}):{$silver_amount}   ";
+                $str .=  "{$silver_amount}{$divider}{$silver_suffix}&nbsp;&nbsp;&nbsp;";
+                if ($breaks) {
+                    $str .= "<br>";
+                }
             }
             if ($bronze_amount != 0){
-                $str .=  "{$bronze_name}({$bronze_suffix}):{$bronze_amount}   ";
+                $str .=  "{$bronze_amount}{$divider}{$bronze_suffix}&nbsp;&nbsp;&nbsp;";
+                if ($breaks) {
+                    $str .= "<br>";
+                }
             }
             if (empty($str)){
                 $str = false;
             }
             //$str = "{$gold_name}({$gold_suffix}):{$gold_amount}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$silver_name}({$silver_suffix}):{$silver_amount}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$bronze_name}({$bronze_suffix}):{$bronze_amount}";
-        }else if ($type === 'breaks'){
-            $str = '';
-            if ($gold_amount != 0){
 
-                $str = "{$gold_amount} {$gold_name}({$gold_suffix})<br>";
-            }
-            if ($silver_amount != 0){
-                $str .=  "{$silver_amount} {$silver_name}({$silver_suffix})<br>";
-            }
-            if ($bronze_amount != 0){
-                $str .=  "{$bronze_amount} {$bronze_name}({$bronze_suffix})<br>";
-            }
-            if (empty($str)){
-                $str = false;
-            }
-            //$str = "{$gold_name}({$gold_suffix}):{$gold_amount}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$silver_name}({$silver_suffix}):{$silver_amount}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$bronze_name}({$bronze_suffix}):{$bronze_amount}";
-        }
-        else {
-            if ($gold_amount >0){
-
-                $str = "{$gold_amount}{$divider}{$gold_suffix}  ";
-            }
-            if ($silver_amount >0){
-                $str .=  "{$silver_amount}{$divider}{$silver_suffix}  ";
-            }
-            if ($bronze_amount >0){
-                $str .=  "{$bronze_amount}{$divider}{$bronze_suffix}  ";
-            }
-            if (empty($str)){
-                $str = false;
-            }
-            //$str = "{$gold_suffix}:{$gold_amount} {$silver_suffix}:{$silver_amount} {$bronze_suffix}:{$bronze_amount}";
-        }
 
     }
     if ($output && $str) {
@@ -1226,7 +1220,7 @@ function go_update_totals_table($user_id, $xp, $gold, $health, $notify, $debt){
 
 
         if($gold != 0){
-            $gold_loot = go_display_shorthand_currency('gold', $gold, false, 'breaks');
+            $gold_loot = go_display_shorthand_currency('gold', $gold, false, true);
             if ($gold > 0) {
                 go_noty_loot_success($gold_loot, '');
                 $up = true;
@@ -1329,12 +1323,12 @@ function go_update_admin_bar_v4($user_id) {
         $go_current_gold = $user_loot['gold'];
         //$display = go_display_longhand_currency('gold', $go_current_gold) ;
         $display_short = go_display_shorthand_currency('gold', $go_current_gold, false);
-        $display_short = htmlspecialchars($display_short);
+        //$display_short = htmlspecialchars($display_short);
         //echo "jQuery( '#go_admin_bar_gold' ).html( '{$display}' );";
         //echo "jQuery( '#go_admin_bar_gold_2' ).html( '{$display_short}' );";
         echo 'jQuery( "#go_admin_bar_gold_2" ).html( "'.$display_short.'" );';
-        $display = go_display_shorthand_currency('gold', $go_current_gold, false, 'names');
-        $display = htmlspecialchars($display);
+        $display = go_display_longhand_currency('gold', $go_current_gold, false, false, false);
+        //$display = htmlspecialchars($display);
         echo 'jQuery( "#go_admin_bar_gold" ).html( "'.$display.'" );';
         if($go_current_gold == 0){
             echo 'jQuery( "#wp-admin-bar-go_gold" ).hide();';
