@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4c52fe7c-a769-413b-9a8a-3effed8b98a6" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/game-on.php" beforeDir="false" afterPath="$PROJECT_DIR$/game-on.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/admin/go_activation.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/admin/go_activation.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/feedback/src/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/feedback/src/functions.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/map/src/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/map/src/functions.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/store/src/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/store/src/functions.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -66,6 +69,42 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modules/feedback/src/functions.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="105">
+              <caret line="7" column="23" selection-start-line="7" selection-start-column="9" selection-end-line="7" selection-end-column="23" />
+              <folding>
+                <element signature="e#2453#2473#0#HTML" expanded="true" />
+                <element signature="n#go_feedback_table#0;n#!!top" />
+                <element signature="n#go_post_status_icon#0;n#!!top" />
+                <element signature="n#style#0;n#i#1;n#span#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#i#1;n#span#0;n#!!top" expanded="true" />
+                <element signature="n#go_blog_is_private#0;n#!!top" />
+                <element signature="n#go_blog_favorite#0;n#!!top" />
+                <element signature="n#go_blog_favorite_toggle#0;n#!!top" />
+                <element signature="n#go_blog_tags_select#0;n#!!top" />
+                <element signature="n#go_blog_post_history_table#0;n#!!top" />
+                <element signature="n#go_feedback_canned#0;n#!!top" />
+                <element signature="n#go_feedback_input#0;n#!!top" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modules/store/src/functions.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="441">
+              <caret line="46" column="7" selection-start-line="46" selection-start-column="7" selection-end-line="46" selection-end-column="7" />
+              <folding>
+                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#h1#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/src/public_ajax/go_checks.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="473">
@@ -93,20 +132,6 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modules/user_blogs/src/ajax.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="113">
-              <caret line="436" column="5" lean-forward="true" selection-start-line="433" selection-start-column="3" selection-end-line="436" selection-end-column="5" />
-              <folding>
-                <element signature="n#style#0;n#button#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
-                <element signature="n#go_blog_submit#0;n#!!top" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/game-on.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="270">
@@ -120,66 +145,23 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/all/go_loot_and_updates.php">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/core/src/admin/go_activation.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="264">
-              <caret line="1325" column="10" selection-start-line="1325" selection-start-column="10" selection-end-line="1325" selection-end-column="10" />
+            <state relative-caret-position="157">
+              <caret line="53" column="21" selection-start-line="53" selection-start-column="21" selection-end-line="53" selection-end-column="21" />
               <folding>
-                <element signature="e#7#91#0#PHP" expanded="true" />
-                <element signature="n#go_get_rank#0;n#!!top" />
-                <element signature="n#go_return_currency#0;n#!!top" />
-                <element signature="n#go_return_points#0;n#!!top" />
-                <element signature="n#go_return_health#0;n#!!top" />
-                <element signature="n#go_get_loot_toggle#0;n#!!top" />
-                <element signature="n#go_get_loot_short_name#0;n#!!top" />
-                <element signature="n#go_display_points#0;n#!!top" />
-                <element signature="n#go_display_currency#0;n#!!top" />
-                <element signature="n#go_display_bonus_currency#0;n#!!top" />
-                <element signature="n#go_display_penalty#0;n#!!top" />
-                <element signature="n#go_display_minutes#0;n#!!top" />
-                <element signature="e#103#109#0" expanded="true" />
-                <element signature="e#109#115#0" expanded="true" />
-                <element signature="e#115#121#0" expanded="true" />
-                <element signature="e#109#115#0" expanded="true" />
-                <element signature="e#115#121#0" expanded="true" />
-                <element signature="e#121#127#0" expanded="true" />
-                <element signature="n#go_return_badge_count#0;n#!!top" />
-                <element signature="n#go_get_health_mod#0;n#!!top" />
-                <element signature="n#go_get_quiz_mod#0;n#!!top" />
-                <element signature="n#go_get_quiz_result#0;n#!!top" />
-                <element signature="n#go_get_user_loot#0;n#!!top" />
-                <element signature="e#13374#25660#0#PHP" />
-                <element signature="e#13889#25660#0#PHP" />
-                <element signature="n#go_add_badges#0;n#!!top" />
-                <element signature="n#go_remove_badges#0;n#!!top" />
-                <element signature="e#31965#32063#0#PHP" />
-                <element signature="e#33980#34067#0#PHP" />
-                <element signature="n#go_remove_groups#0;n#!!top" />
-                <element signature="e#35895#36022#0#PHP" />
-                <element signature="n#go_mod_loot#0;n#!!top" />
-                <element signature="e#36216#36287#0#PHP" />
-                <element signature="n#go_health_to_add#0;n#!!top" />
-                <element signature="e#36584#36936#0#PHP" />
-                <element signature="e#39455#39499#0#PHP" />
-                <element signature="e#40099#40143#0#PHP" />
-                <element signature="n#go_noty_level_up#0;n#!!top" />
-                <element signature="e#40751#40795#0#PHP" />
-                <element signature="n#go_noty_level_down#0;n#!!top" />
-                <element signature="e#41406#41450#0#PHP" />
-                <element signature="n#go_noty_loot_error#0;n#!!top" />
-                <element signature="e#42057#42123#0#PHP" />
-                <element signature="n#go_noty_message_generic#0;n#!!top" />
-                <element signature="e#42890#42957#0#PHP" />
-                <element signature="n#go_update_totals_table_Badges#0;n#!!top" />
-                <element signature="e#43518#43562#0#PHP" />
-                <element signature="n#go_update_totals_table_Groups#0;n#!!top" />
-                <element signature="e#44056#44227#0#PHP" />
-                <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#go_add_user_to_totals_table#0;n#!!top" />
-                <element signature="n#go_get_bonus_loot_rows#0;n#!!top" />
-                <element signature="n#go_update_bonus_loot#0;n#!!top" />
+                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modules/map/src/functions.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="446">
+              <caret line="47" column="6" selection-start-line="47" selection-start-column="6" selection-end-line="47" selection-end-column="6" />
             </state>
           </provider>
         </entry>
@@ -226,38 +208,6 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/includes.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="249">
-              <caret line="56" column="9" selection-start-line="56" selection-start-column="9" selection-end-line="56" selection-end-column="9" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modules/messages/src/ajax.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="262">
-              <caret line="632" column="22" selection-start-line="632" selection-start-column="22" selection-end-line="632" selection-end-column="22" />
-              <folding>
-                <element signature="n#go_get_task_names#0;n#!!top" />
-                <element signature="n#go_get_user_names#0;n#!!top" />
-                <element signature="n#go_get_reset_mixed#0;n#!!top" />
-                <element signature="n#style#0;n#ul#0;n#!!top" expanded="true" />
-                <element signature="n#go_create_admin_message#0;n#!!top" />
-                <element signature="e#4535#6543#0#PHP" />
-                <element signature="n#style#0;n#th#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#th#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#th#0;n#!!top" expanded="true" />
-                <element signature="e#6572#14560#0#HTML" />
-                <element signature="e#17330#34055#0#HTML" />
-                <element signature="n#go_send_message#0;n#!!top" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -271,9 +221,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Percentage Adjustment</find>
-      <find>canned</find>
-      <find>go_feedback_toggle</find>
       <find>go_feedback_input</find>
       <find>go-acf-switch</find>
       <find>actions</find>
@@ -300,7 +247,10 @@
       <find>go_blog_form_footer</find>
       <find>$all_content</find>
       <find>#go_all_content</find>
+      <find>go_map_page</find>
+      <find>go_store_page</find>
       <find>content</find>
+      <find>reader</find>
     </findStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/js/front/scripts</dir>
@@ -334,7 +284,6 @@
         <option value="$PROJECT_DIR$/core/src/admin/go_admin.php" />
         <option value="$PROJECT_DIR$/dev/css/files/go_clipboard_sass.scss" />
         <option value="$PROJECT_DIR$/modules/tools/src/admin.php" />
-        <option value="$PROJECT_DIR$/core/src/admin/go_activation.php" />
         <option value="$PROJECT_DIR$/dev/js/scripts/go_clipboard.js" />
         <option value="$PROJECT_DIR$/modules/tools/includes.php" />
         <option value="$PROJECT_DIR$/modules/tools/src/ajax.php" />
@@ -352,10 +301,8 @@
         <option value="$PROJECT_DIR$/modules/store/src/ajax.php" />
         <option value="$PROJECT_DIR$/js/go_enque_js.php" />
         <option value="$PROJECT_DIR$/modules/map/src/ajax.php" />
-        <option value="$PROJECT_DIR$/modules/map/src/functions.php" />
         <option value="$PROJECT_DIR$/modules/feedback/src/public.php" />
         <option value="$PROJECT_DIR$/modules/feedback/src/templates/go_reader_template.php" />
-        <option value="$PROJECT_DIR$/modules/store/src/functions.php" />
         <option value="$PROJECT_DIR$/modules/store/src/templates/go_store_template.php" />
         <option value="$PROJECT_DIR$/modules/map/src/templates/go_map_template.php" />
         <option value="$PROJECT_DIR$/modules/feedback/src/public_ajax.php" />
@@ -369,7 +316,6 @@
         <option value="$PROJECT_DIR$/styles/min/go_styles.css" />
         <option value="$PROJECT_DIR$/dev/js/scripts/go_every_page.js" />
         <option value="$PROJECT_DIR$/modules/feedback/src/ajax.php" />
-        <option value="$PROJECT_DIR$/modules/feedback/src/functions.php" />
         <option value="$PROJECT_DIR$/dev/js/scripts/go_feedback.js" />
         <option value="$PROJECT_DIR$/modules/stats/src/ajax.php" />
         <option value="$PROJECT_DIR$/modules/messages/src/functions.php" />
@@ -380,6 +326,10 @@
         <option value="$PROJECT_DIR$/core/src/public_ajax/go_checks.php" />
         <option value="$PROJECT_DIR$/dev/css/files/go_every_page.scss" />
         <option value="$PROJECT_DIR$/game-on.php" />
+        <option value="$PROJECT_DIR$/modules/map/src/functions.php" />
+        <option value="$PROJECT_DIR$/modules/store/src/functions.php" />
+        <option value="$PROJECT_DIR$/modules/feedback/src/functions.php" />
+        <option value="$PROJECT_DIR$/core/src/admin/go_activation.php" />
       </list>
     </option>
   </component>
@@ -426,48 +376,30 @@
             <path>
               <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
               <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
-              <item name="dev" type="462c0819:PsiDirectoryNode" />
+              <item name="core" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
+              <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
+              <item name="core" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
+              <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
+              <item name="core" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="admin" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
               <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
               <item name="dev" type="462c0819:PsiDirectoryNode" />
-              <item name="js" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
-              <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
-              <item name="dev" type="462c0819:PsiDirectoryNode" />
-              <item name="js" type="462c0819:PsiDirectoryNode" />
-              <item name="scripts" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
-              <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
-              <item name="js" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
-              <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
-              <item name="js" type="462c0819:PsiDirectoryNode" />
-              <item name="min" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
-              <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
-              <item name="js" type="462c0819:PsiDirectoryNode" />
-              <item name="scripts" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
               <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
               <item name="modules" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
-              <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
-              <item name="modules" type="462c0819:PsiDirectoryNode" />
-              <item name="clipboard" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
@@ -479,32 +411,7 @@
               <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
               <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
               <item name="modules" type="462c0819:PsiDirectoryNode" />
-              <item name="map" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
-              <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
-              <item name="modules" type="462c0819:PsiDirectoryNode" />
-              <item name="messages" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
-              <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
-              <item name="modules" type="462c0819:PsiDirectoryNode" />
-              <item name="messages" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
-              <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
-              <item name="modules" type="462c0819:PsiDirectoryNode" />
-              <item name="user_blogs" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
-              <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
-              <item name="modules" type="462c0819:PsiDirectoryNode" />
-              <item name="user_blogs" type="462c0819:PsiDirectoryNode" />
+              <item name="feedback" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -736,12 +643,12 @@
       <workItem from="1554503906215" duration="91875000" />
       <workItem from="1554728159418" duration="62062000" />
       <workItem from="1555173137538" duration="22000" />
-      <workItem from="1555173276435" duration="498233000" />
+      <workItem from="1555173276435" duration="499039000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4599447000" />
+    <option name="totallyTimeSpent" value="4600253000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="25" width="1588" height="998" extended-state="0" />
@@ -1085,7 +992,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/feedback/src/functions.php</url>
-          <line>255</line>
+          <line>254</line>
           <option name="timeStamp" value="2086" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1405,7 +1312,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/feedback/src/functions.php</url>
-          <line>39</line>
+          <line>40</line>
           <option name="timeStamp" value="2849" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1597,9 +1504,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/modules/user_blogs/includes.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/modules/store/includes.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
@@ -1706,17 +1610,6 @@
     <entry file="file://$PROJECT_DIR$/modules/map/includes.php">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/store/src/functions.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="413">
-          <caret line="35" column="4" lean-forward="true" selection-start-line="35" selection-start-column="4" selection-end-line="35" selection-end-column="61" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h1#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/modules/store/src/templates/go_store_template.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
@@ -1728,16 +1621,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
           <caret line="24" column="65" selection-start-line="24" selection-start-column="65" selection-end-line="24" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/map/src/functions.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="38" selection-start-line="38" selection-end-line="38" selection-end-column="65" />
-          <folding>
-            <element signature="e#414#945#0#PHP" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1878,37 +1761,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="2302" column="40" selection-start-line="2302" selection-start-column="40" selection-end-line="2302" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/feedback/src/functions.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="114" lean-forward="true" selection-start-line="114" selection-end-line="114" />
-          <folding>
-            <element signature="n#filter_pagetitle#0;n#!!top" />
-            <element signature="n#go_reader_template_include#0;n#!!top" />
-            <element signature="n#go_feedback_table#0;n#!!top" />
-            <element signature="n#go_post_status_icon#0;n#!!top" />
-            <element signature="n#style#0;n#i#1;n#span#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#i#1;n#span#0;n#!!top" expanded="true" />
-            <element signature="n#go_blog_is_private#0;n#!!top" />
-            <element signature="n#go_blog_favorite#0;n#!!top" />
-            <element signature="n#go_blog_favorite_toggle#0;n#!!top" />
-            <element signature="n#go_blog_tags_select#0;n#!!top" />
-            <element signature="n#go_blog_post_history_table#0;n#!!top" />
-            <element signature="n#go_feedback_canned#0;n#!!top" />
-            <element signature="n#go_feedback_input#0;n#!!top" />
-            <element signature="e#13021#13042#0#HTML" expanded="true" />
-            <element signature="e#13159#13435#0#HTML" />
-            <element signature="e#13460#13690#0#HTML" />
-            <element signature="e#13712#13942#0#HTML" />
-            <element signature="e#17988#17994#0#HTML" expanded="true" />
-            <element signature="e#17995#18001#0#HTML" expanded="true" />
-            <element signature="e#18318#18340#0#HTML" expanded="true" />
-            <element signature="e#19010#22844#0#HTML" />
-            <element signature="e#23204#23226#0#HTML" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2266,6 +2118,55 @@
             <element signature="e#6#232#0#PHP" expanded="true" />
             <element signature="e#2038#3630#0#PHP" />
             <element signature="n#go_write_log#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/map/src/functions.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="446">
+          <caret line="47" column="6" selection-start-line="47" selection-start-column="6" selection-end-line="47" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/store/src/functions.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="441">
+          <caret line="46" column="7" selection-start-line="46" selection-start-column="7" selection-end-line="46" selection-end-column="7" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#h1#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/feedback/src/functions.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="23" selection-start-line="7" selection-start-column="9" selection-end-line="7" selection-end-column="23" />
+          <folding>
+            <element signature="e#2453#2473#0#HTML" expanded="true" />
+            <element signature="n#go_feedback_table#0;n#!!top" />
+            <element signature="n#go_post_status_icon#0;n#!!top" />
+            <element signature="n#style#0;n#i#1;n#span#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#i#1;n#span#0;n#!!top" expanded="true" />
+            <element signature="n#go_blog_is_private#0;n#!!top" />
+            <element signature="n#go_blog_favorite#0;n#!!top" />
+            <element signature="n#go_blog_favorite_toggle#0;n#!!top" />
+            <element signature="n#go_blog_tags_select#0;n#!!top" />
+            <element signature="n#go_blog_post_history_table#0;n#!!top" />
+            <element signature="n#go_feedback_canned#0;n#!!top" />
+            <element signature="n#go_feedback_input#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/admin/go_activation.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="157">
+          <caret line="53" column="21" selection-start-line="53" selection-start-column="21" selection-end-line="53" selection-end-column="21" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -10,7 +10,7 @@ Creation Date: 05/09/13
 
 //include('includes/lightbox/backend-lightbox.php');
 
-/*
+
 //https://stackoverflow.com/questions/25310665/wordpress-how-to-create-a-rewrite-rule-for-a-file-in-a-custom-plugin
 add_action('init', 'go_store_page');
 function go_store_page(){
@@ -26,7 +26,7 @@ function go_store_register_query_var( $vars ) {
     $vars[] = $store_name;
     return $vars;
 }
-*/
+
 
 /* Template Include */
 add_filter('template_include', 'go_store_template_include', 1, 1);
@@ -35,15 +35,16 @@ function go_store_template_include($template)
     global $wp_query; //Load $wp_query object
     $store_name = get_option( 'options_go_store_store_link');
 
-    /*$page_value = ( isset($wp_query->query_vars[$store_name]) ? $wp_query->query_vars[$store_name] : false ); //Check for query var "blah"
+    $page_value = ( isset($wp_query->query_vars[$store_name]) ? $wp_query->query_vars[$store_name] : false ); //Check for query var "blah"
     if ($page_value && $page_value == "true") { //Verify "blah" exists and value is "true".
         return plugin_dir_path(__FILE__).'templates/go_store_template.php'; //Load your template or file
-    }*/
+    }
 
+    /*
     $page_name = (isset($wp_query->query_vars['pagename']) ? $wp_query->query_vars['pagename'] : false);
     if ($page_name == $store_name) { //Verify "blah" exists and value is "true".
         return plugin_dir_path(__FILE__) . 'templates/go_store_template.php'; //Load your template or file
-    }
+    }*/
 
     return $template; //Load normal template when $page_value != "true" as a fallback
 }

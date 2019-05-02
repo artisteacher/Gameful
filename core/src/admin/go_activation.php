@@ -51,6 +51,7 @@ function go_flush_rewrites() {
     //go_reader_page();
     go_map_page();
     go_store_page();
+    go_reader_page();
 
 }
 

@@ -2,29 +2,30 @@
 
 // Included on every load of this module
 
-/*
+
 //https://stackoverflow.com/questions/25310665/wordpress-how-to-create-a-rewrite-rule-for-a-file-in-a-custom-plugin
 add_action('init', 'go_reader_page');
 function go_reader_page(){
-    $reader_name = 'reader22';
+    $reader_name = 'reader';
     //add_rewrite_rule( "store", 'index.php?query_type=user_blog&uname=$matches[1]', "top");
     //add_rewrite_rule( "reader", 'index.php?reader=true', "top");
     add_rewrite_rule( $reader_name, 'index.php?' . $reader_name . '=true', "top");
 }
 
 // Query Vars
-//add_filter( 'query_vars', 'go_reader_register_query_var' );
+add_filter( 'query_vars', 'go_reader_register_query_var' );
 function go_reader_register_query_var( $vars ) {
-    $reader = 'reader22';
+    $reader = 'reader';
     $vars[] = $reader;
     return $vars;
 }
-*/
+/*
 function filter_pagetitle($title) {
     //$title = get_bloginfo('name');
     $title = 'yup';
     return $title;
 }
+*/
 
 /* Template Include */
 add_filter('template_include', 'go_reader_template_include', 1, 1);
@@ -35,13 +36,13 @@ function go_reader_template_include($template){
     $is_admin = go_user_is_admin();
 
     if ($is_admin) {
-        /*
+
         $page_value = (isset($wp_query->query_vars[$reader]) ? $wp_query->query_vars[$reader] : false); //Check for query var "blah"
         if ($page_value && $page_value == "true") { //Verify "blah" exists and value is "true".
             return plugin_dir_path(__FILE__) . 'templates/go_reader_template.php'; //Load your template or file
         }
-        */
 
+        /*
         $page_name = (isset($wp_query->query_vars['pagename']) ? $wp_query->query_vars['pagename'] : false);
         if ($page_name == $reader) { //Verify "blah" exists and value is "true".
             return plugin_dir_path(__FILE__) . 'templates/go_reader_template.php'; //Load your template or file
@@ -49,58 +50,56 @@ function go_reader_template_include($template){
             add_filter('wp_title', 'filter_pagetitle');
 
         }
-
-
-
-    }
-        return $template; //Load normal template when $page_value != "true" as a fallback
-}
-
-
-add_action('go_blog_template_after_post', 'go_user_feedback_container', 10, 2);
-
-function go_user_feedback_container($post_id, $show_form = true){
-    $admin_user = go_user_is_admin();
-
-
-    //go_blog_tags_select($post_id);
-    ?>
-    <div class="feedback_accordion" style="clear: both;">
-        <?php go_blog_post_feedback_table($post_id); ?>
-        <?php go_blog_post_history_table($post_id); ?>
-        <?php
-        if ($admin_user && $show_form) {
-            ?>
-            <h3>Feedback Form</h3>
-            <div class="go_feedback_form_container">
-            <?php
-            go_feedback_form($post_id);
-            ?>
-            </div>
-            <?php
-
+        */
+            }
+                return $template; //Load normal template when $page_value != "true" as a fallback
         }
-        ?>
-    </div>
-    <?php
-}
 
-function go_blog_post_feedback_table($post_id){
-/*
-    ?>
-    <div class="go_blog_feedback">
 
-        <div class="go_blog_feedback_container">
-            <div class="go_feedback_table">
+        add_action('go_blog_template_after_post', 'go_user_feedback_container', 10, 2);
+
+        function go_user_feedback_container($post_id, $show_form = true){
+            $admin_user = go_user_is_admin();
+
+
+            //go_blog_tags_select($post_id);
+            ?>
+            <div class="feedback_accordion" style="clear: both;">
+                <?php go_blog_post_feedback_table($post_id); ?>
+                <?php go_blog_post_history_table($post_id); ?>
                 <?php
-                go_feedback_table($post_id);
+                if ($admin_user && $show_form) {
+                    ?>
+                    <h3>Feedback Form</h3>
+                    <div class="go_feedback_form_container">
+                    <?php
+                    go_feedback_form($post_id);
+                    ?>
+                    </div>
+                    <?php
+
+                }
                 ?>
             </div>
-        </div>
-    </div>
-    <?php
+            <?php
+        }
 
-*/
+        function go_blog_post_feedback_table($post_id){
+        /*
+            ?>
+            <div class="go_blog_feedback">
+
+                <div class="go_blog_feedback_container">
+                    <div class="go_feedback_table">
+                        <?php
+                        go_feedback_table($post_id);
+                        ?>
+                    </div>
+                </div>
+            </div>
+            <?php
+
+        */
 
     global $wpdb;
     $aTable = "{$wpdb->prefix}go_actions";
