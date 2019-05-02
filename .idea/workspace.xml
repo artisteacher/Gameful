@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4c52fe7c-a769-413b-9a8a-3effed8b98a6" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/admin/go_activation.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/admin/go_activation.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/js/scripts/go_every_page.js" beforeDir="false" afterPath="$PROJECT_DIR$/dev/js/scripts/go_every_page.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/go_enque_js_admin.php" beforeDir="false" afterPath="$PROJECT_DIR$/js/go_enque_js_admin.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -148,8 +145,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/dev/js/scripts/go_every_page.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="179">
-              <caret line="951" column="32" selection-start-line="951" selection-start-column="32" selection-end-line="951" selection-end-column="32" />
+            <state relative-caret-position="239">
+              <caret line="1001" column="31" selection-start-line="1001" selection-start-column="31" selection-end-line="1001" selection-end-column="31" />
               <folding>
                 <element signature="n#!!block;n#go_user_profile_link#0" />
                 <element signature="n#!!block;n#go_lightbox_blog_img#0" />
@@ -168,7 +165,6 @@
                 <element signature="n#!!block;n#go_activate_apply_filters#0" />
                 <element signature="n#!!block;n#go_date_loader#0" />
                 <element signature="n#!!block;n#go_load_daterangepicker_empty#0" />
-                <element signature="n#!!block;n#go_make_select2_cpt#0" />
                 <element signature="n#!!block;n#go_setup_reset_filter_button#0" />
                 <element signature="n#style#0;n#i#0;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#!!block;n#go_save_clipboard_filters#0" />
@@ -211,8 +207,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>NOty</find>
-      <find>go_noty</find>
       <find>feedb</find>
       <find>feedback</find>
       <find>You are in</find>
@@ -241,6 +235,8 @@
       <find>de</find>
       <find>go_make_select2_filter</find>
       <find>ajaxurl</find>
+      <find>wp-auth-check</find>
+      <find>go_make_select2_cpt</find>
     </findStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/js/front/scripts</dir>
@@ -625,12 +621,12 @@
       <workItem from="1554503906215" duration="91875000" />
       <workItem from="1554728159418" duration="62062000" />
       <workItem from="1555173137538" duration="22000" />
-      <workItem from="1555173276435" duration="501353000" />
+      <workItem from="1555173276435" duration="501672000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4602567000" />
+    <option name="totallyTimeSpent" value="4602886000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="25" width="1588" height="998" extended-state="0" />
@@ -2114,8 +2110,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/dev/js/scripts/go_every_page.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
-          <caret line="951" column="32" selection-start-line="951" selection-start-column="32" selection-end-line="951" selection-end-column="32" />
+        <state relative-caret-position="239">
+          <caret line="1001" column="31" selection-start-line="1001" selection-start-column="31" selection-end-line="1001" selection-end-column="31" />
           <folding>
             <element signature="n#!!block;n#go_user_profile_link#0" />
             <element signature="n#!!block;n#go_lightbox_blog_img#0" />
@@ -2134,7 +2130,6 @@
             <element signature="n#!!block;n#go_activate_apply_filters#0" />
             <element signature="n#!!block;n#go_date_loader#0" />
             <element signature="n#!!block;n#go_load_daterangepicker_empty#0" />
-            <element signature="n#!!block;n#go_make_select2_cpt#0" />
             <element signature="n#!!block;n#go_setup_reset_filter_button#0" />
             <element signature="n#style#0;n#i#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#!!block;n#go_save_clipboard_filters#0" />

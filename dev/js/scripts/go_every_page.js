@@ -999,7 +999,7 @@ function go_make_select2_cpt( my_div, cpt) {
 
     jQuery(my_div).select2({
         ajax: {
-            url: ajaxurl, // AJAX URL is predefined in WordPress admin
+            url: MyAjax.ajaxurl, // AJAX URL is predefined in WordPress admin
             dataType: 'json',
             delay: 400, // delay in ms while typing when to perform a AJAX search
             data: function (params) {
