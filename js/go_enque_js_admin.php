@@ -115,9 +115,11 @@ function go_admin_scripts ($hook) {
             'go_fitvids_maxwidth'           => $go_fitvids_maxwidth
         )
     );
-
+    
     if($go_debug) {
-        wp_localize_script( 'go_admin_user', 'go_debug', 'true' );
+        wp_localize_script( 'go_frontend', 'go_debug', 'true' );
+    }else{
+        wp_localize_script( 'go_frontend', 'go_debug', 'false' );
     }
 
     $is_admin_user = go_user_is_admin();
