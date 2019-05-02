@@ -78,6 +78,8 @@ function go_scripts () {
     wp_localize_script( 'go_frontend', 'PluginDir', array( 'url' => plugin_dir_url( dirname(__FILE__)) ) );
     if($go_debug) {
         wp_localize_script( 'go_frontend', 'go_debug', 'true' );
+    }else{
+        wp_localize_script( 'go_frontend', 'go_debug', 'false' );
     }
     wp_localize_script(
         'go_frontend',

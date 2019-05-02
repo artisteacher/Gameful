@@ -51,9 +51,9 @@ function go_reader_template_include($template){
 
         }
         */
-            }
-                return $template; //Load normal template when $page_value != "true" as a fallback
-        }
+    }
+    return $template; //Load normal template when $page_value != "true" as a fallback
+}
 
 
         add_action('go_blog_template_after_post', 'go_user_feedback_container', 10, 2);

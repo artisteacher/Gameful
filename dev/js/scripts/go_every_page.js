@@ -1,7 +1,7 @@
 jQuery( document ).ready( function() {
 
     let debug = go_debug;
-    if (debug != 'true') {
+    if (debug === 'false') {
         jQuery(document).on('heartbeat-tick', function (event, data) {
 
             // Check for our data, and use it.

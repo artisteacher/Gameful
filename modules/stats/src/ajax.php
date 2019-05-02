@@ -2493,9 +2493,6 @@ function go_stats_leaderboard_dataloader_ajax(){
 
     //$output['iTotalDisplayRecords'] =  count($output['aaData']);
     global $go_debug;
-    if($go_debug) {
-        //go_total_query_time();
-    }
 
     echo json_encode( $output );
     die();

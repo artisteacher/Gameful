@@ -20,6 +20,7 @@ add_filter('plupload_default_settings', function ($settings) {
     return $settings;
 });
 
+//$go_debug = true;
 $go_debug = false;//set to true when coding
 global $go_debug;
 
@@ -90,7 +91,7 @@ if ( is_admin() ) {
     include_once('modules/tools/includes.php');
     include_once('modules/user_profiles/includes.php');
 
-    if ($go_debug == true) {
+    if ($go_debug) {
         //add_filter('acf/settings/show_admin', '__return_false');
         add_filter('acf/settings/save_json', 'go_acf_json_save_point');
     }
