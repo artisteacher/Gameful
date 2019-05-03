@@ -479,6 +479,10 @@ function go_disable_loading( ) {
         go_blog_favorite(this);
     });
 
+    jQuery('.go_str_item').off().one("click", function(e){
+        go_lb_opener( this.id );
+    });
+
 }
 
 function tinymce_getContentLength_new(source) {

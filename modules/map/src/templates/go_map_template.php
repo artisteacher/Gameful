@@ -20,12 +20,6 @@
 
 get_header();
 $map_name = get_option( 'options_go_locations_map_map_link');
-?>
-    <script>
-        jQuery(document).prop('title', '<?php echo $map_name; ?>');
-    </script>
-<?php
-
 go_make_map();
 
 

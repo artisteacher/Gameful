@@ -19,11 +19,6 @@
  */
 
 get_header();
-?>
-    <script>
-        jQuery(document).prop('title', 'Reader');
-    </script>
-<?php
 
 echo "<h2 style='padding-top:10px;'>Reader</h2>";
 go_make_reader();
