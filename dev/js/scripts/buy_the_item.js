@@ -1,6 +1,6 @@
 //Add an on click to all store items
 jQuery(document).ready(function(){
-    jQuery('.go_str_item').one("click", function(e){
+    jQuery('.go_str_item').off().one("click", function(e){
         go_lb_opener( this.id );
     });
 });
@@ -85,7 +85,7 @@ function go_lb_opener( id ) {
                     window.location = res.location;
 
                 }
-                jQuery('.go_str_item').one("click", function(e){
+                jQuery('.go_str_item').off().one("click", function(e){
                     go_lb_opener( this.id );
                 });
 
