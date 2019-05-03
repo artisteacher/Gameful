@@ -238,7 +238,7 @@ function go_admin_bar() {
             }
 
             if ($gold_toggle && ($go_current_gold != 0)) {
-                $wp_admin_bar->add_node(array('id' => 'go_gold', 'title' => '<div id="go_admin_bar_gold">' . go_display_shorthand_currency('gold', $go_current_gold, false, 'names') . '</div>', 'href' => '#', 'parent' => 'go_info',));
+                $wp_admin_bar->add_node(array('id' => 'go_gold', 'title' => '<div id="go_admin_bar_gold">' . go_display_longhand_currency('gold', $go_current_gold, false, true,false) . '</div>', 'href' => '#', 'parent' => 'go_info',));
             }
 
             if ($health_toggle && $go_current_health) {
@@ -601,7 +601,7 @@ function go_player_bar_v5() {
                 // the user's current amount of currency
                 //$go_current_gold = go_get_user_loot($user_id, 'gold');
                 $go_current_gold = $user_loot['gold'];
-                echo '<div id="go_admin_bar_gold_2" class="admin_bar_loot">' . go_display_shorthand_currency('gold', $go_current_gold, false) . '</div>';
+                echo '<div id="go_admin_bar_gold_2" class="admin_bar_loot">' . go_display_longhand_currency('gold', $go_current_gold, false, false, true) . '</div>';
             }
 
             if ($health_toggle) {

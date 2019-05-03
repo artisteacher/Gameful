@@ -33,7 +33,6 @@ function go_checks_for_understanding ($custom_fields, $i, $status, $user_id, $po
         $check_type = 'go_stages_' . $i . '_check_v5'; //which type of check to print
         //$check_type = $custom_fields[$check_type][0];
         $check_type = (isset($custom_fields[$check_type][0]) ?  $custom_fields[$check_type][0] : null);
-
     }
 
     if (isset($custom_fields['go_stages_' . $i . '_instructions'][0]) && (!$bonus)) {

@@ -471,6 +471,7 @@ function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_underst
             $go_blog_task_id = wp_get_post_parent_id($blog_post_id);//for posts created after v4.6
         }
     }
+    echo "<script>console.log('task id: {$go_blog_task_id}')</script>";
 
     //if the task_id is not 0, get some info about it
     if ($go_blog_task_id != 0) {
@@ -537,6 +538,7 @@ function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_underst
             $text_toggle = (isset($custom_fields['go_bonus_stage_blog_options_v5_bonus_blog_text_toggle'][0]) ? $custom_fields['go_bonus_stage_blog_options_bonus_blog_text_toggle'][0] : true);
         }
 
+        echo "<script>console.log('#: {$num_elements}')</script>";
         for ($x = 0; $x < $num_elements; $x++) {
             if ($i !== null) {//regular stage
                 $bonus = false;
@@ -548,11 +550,14 @@ function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_underst
                 $uniqueid = (isset($custom_fields['go_bonus_stage_blog_options_v5_blog_elements_' . $x . '_uniqueid'][0]) ? $custom_fields['go_bonus_stage_blog_options_v5_blog_elements_' . $x . '_uniqueid'][0] : 0);
                 //$task_stage_num = $bonus_stage_num - 1;
             }
+            echo "<script>console.log('type: {$type}')</script>";
             //get the content by UniqueID
             $content = (isset($blog_meta[$uniqueid][0]) ? $blog_meta[$uniqueid][0] : null);
             if ($type == 'URL') {
+                echo "<script>console.log('1: {$content}')</script>";
                 if ($content === null) {
                     $content = (isset($blog_meta['go_blog_url'][0]) ? $blog_meta['go_blog_url'][0] : null);//v4 data
+                    echo "<script>console.log('2: {$content}')</script>";
                 }
                 if (!empty($content )) {
                     go_print_URL_check_result($content);
