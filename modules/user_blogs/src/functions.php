@@ -673,9 +673,13 @@ function go_blog_status($blog_post_id, $is_admin, $is_form = false){
 
     $direction = (($percent > 0) ? '+' : '');
     $class = (($percent > 0) ? 'up' : 'down');
-    if ($percent && $percent != 0) {
-        $percent =  '<div class="go_status_percent '.$class.'" ><strong>'.$direction.$percent.'%</strong></div>';
+    if ($percent == '' || empty($percent)) {
+        $percent_hide = " style='display:none;' ";
+    }else{
+        $percent_hide = '';
     }
+        $percent =  '<div class="go_status_percent '.$class.'"'.$percent_hide.' ><strong>'.$direction.$percent.'%</strong></div>';
+
     if (!empty($status) || !empty($private) || !empty($favorite) ) {
 
         echo "
@@ -685,7 +689,7 @@ function go_blog_status($blog_post_id, $is_admin, $is_form = false){
             echo $status . $private . $favorite . $percent;
             echo "</div></div>";
     }else{
-        echo "<div></div>";//this is a placeholder for the flexbox
+        echo "<div></div>";
     }
 
 }

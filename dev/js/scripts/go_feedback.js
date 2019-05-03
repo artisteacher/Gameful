@@ -715,10 +715,11 @@ function go_send_feedback(target) {
                 if (radio == 'percent') {
                     if (toggle_percent === 1) {
                         let mypercent = "<strong>+" + percent + "%</strong>";
-                        jQuery(target).closest('.go_blog_post_wrapper').find('.go_status_percent').addClass('up').removeClass('down').html(mypercent);
+                        jQuery(target).closest('.go_blog_post_wrapper').find('.go_status_percent').addClass('up').removeClass('down').html(mypercent).show();
                     } else {
                         let mypercent = "<strong>-" + percent + "%</strong>";
-                        jQuery(target).closest('.go_blog_post_wrapper').find('.go_status_percent').addClass('down').removeClass('up').html(mypercent);
+
+                        jQuery(target).closest('.go_blog_post_wrapper').find('.go_status_percent').addClass('down').removeClass('up').html(mypercent).show();
                     }
                 }
                 //jQuery(target).closest('.go_blog_post_wrapper').find('.go_status_percent').html(percent);

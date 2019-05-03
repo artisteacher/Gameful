@@ -71,7 +71,7 @@ jQuery( document ).ready( function() {
 });
 
 function go_update_bonus_loot(){
-    jQuery('#go_bonus_loot').html('<span class="go_loading"></span>');
+    jQuery('#go_bonus_loot_mysterybox').html("<i class='fas fa-spinner fa-pulse fa-4x'></i>");
     var nonce = GO_EVERY_PAGE_DATA.nonces.go_update_bonus_loot;
     var post_id = go_task_data.ID;
     //alert (post_id);

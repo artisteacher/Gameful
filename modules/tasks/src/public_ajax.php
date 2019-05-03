@@ -594,7 +594,7 @@ function go_bonus_loot ($custom_fields, $user_id) {
     $url = plugin_dir_url((dirname(dirname(dirname(__FILE__)))));
     $url = $url . "media/mysterybox_inner_glow_sm.gif";
     echo "<div id='go_bonus_loot_container' style='display:flex;'>
-            <div id='go_bonus_loot_mysterybox'>
+            <div id='go_bonus_loot_mysterybox' style='width: 150px; text-align: center;'>
                 <link href='http://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
                 <img id='go_bonus_button' class='go_bonus_button'src=" . $url . " > 
 		    </div>
@@ -704,7 +704,7 @@ function go_print_outro ($user_id, $post_id, $custom_fields, $stage_count, $stat
     echo "    
         <h3>" . ucwords($task_name) . " Complete!</h3>";
      if (!empty($outro_message)){
-        echo '<p>" . $outro_message . "</p>';
+        echo '<p>' . $outro_message . '</p>';
      }
 
     echo "You earned:";
