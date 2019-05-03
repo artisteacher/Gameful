@@ -78,10 +78,6 @@ function go_loadmore_reader(){
 
                         jQuery('.go_loadmore_reader').data('offset', ++offset);
 
-                        jQuery('#go_read_printed_button').off().on("click", function () {
-                            go_reader_read_printed();
-                        });
-
                         go_reader_activate_buttons();
 
 

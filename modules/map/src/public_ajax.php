@@ -81,6 +81,7 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
     if ($reload == false) {echo "<div id='mapwrapper' style='overflow: auto; '>";}
     echo "<div id='loader_container' style='display:none; height: 250px; width: 100%; padding: 10px 30px; '>
                 <div id='loader'>
+                <i class='fas fa-spinner fa-pulse fa-4x'></i>
                 </div>
           </div>
             <div id='maps' data-mapid='$last_map_id' style='overflow: auto;'>";
@@ -182,10 +183,11 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
                     if ($key !== false) {
                         $this_task = $user_tasks[$key];
                         $status = $this_task['status'];
+                        $class = $this_task['class'];
                     }else{
                         $status = 0;
                         $this_task = array();
-
+                        $class = '';
                     }
                     //add status to cache
                     $cache_key = 'go_get_status_' . $post_id;
@@ -243,9 +245,9 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
                     }
 
                     if ($task_links === true) {
-                        echo "<li class='$task_color $optional '><a href='$task_link'><div class='$finished'></div><span style='font-size: .8em;'>$bonus_task $task_name <br>$unlock_message</span>";
+                        echo "<li class='$task_color $optional $class'><a href='$task_link'><div class='$finished'></div><span style='font-size: .8em;'>$bonus_task $task_name <br>$unlock_message</span>";
                     }else{
-                        echo "<li class='$task_color $optional '><a href='javascript:;' class='go_blog_user_task' data-UserId='".$user_id."' onclick='go_blog_user_task(".$user_id.", ".$post_id.");'><div class='$finished'></div><span style='font-size: .8em;'>$bonus_task $task_name <br>$unlock_message</span>";
+                        echo "<li class='$task_color $optional $class'><a href='javascript:;' class='go_blog_user_task' data-UserId='".$user_id."' onclick='go_blog_user_task(".$user_id.", ".$post_id.");'><div class='$finished'></div><span style='font-size: .8em;'>$bonus_task $task_name <br>$unlock_message</span>";
                         //echo "<li class='$task_color $optional '><a href='$task_link'><div class='$finished'></div><span style='font-size: .8em;'>$bonus_task $task_name <br>$unlock_message</span>";
                         }
                     //<a href="javascript:;" class="go_blog_user_task" data-UserId="'.$user_id.'" onclick="go_blog_user_task('.$user_id.', '.$post_id.');">

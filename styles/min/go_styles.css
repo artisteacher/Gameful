@@ -1643,18 +1643,7 @@ store lightbox styles
 #loader {
   position: relative;
   left: 50%;
-  z-index: 1;
-  width: 150px;
-  height: 150px;
-  margin: 40px 0 0 -75px;
-  border: 16px solid #f3f3f3;
-  border-radius: 50%;
-  border-top: 16px solid #3498db;
-  width: 120px;
-  height: 120px;
-  -webkit-animation: spin 2s linear infinite;
-  animation: spin 2s linear infinite;
-  overflow: auto; }
+  z-index: 1; }
 
 #maps {
   visibility: hidden;
@@ -1826,7 +1815,6 @@ store lightbox styles
     text-align: center;
     color: black;
     background: #c3eafb;
-    border: 2px solid #b5d9ea;
     -webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
     -moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
     /* FF 3.5+ */ }
@@ -1866,6 +1854,14 @@ store lightbox styles
     background-color: #cccccc;
     border-color: #000;
     color: #555; }
+  #maps .primaryNav .up a {
+    -webkit-box-shadow: #37b6ec 0 0 7px 1px;
+    -moz-box-shadow: #37b6ec 0 0 7px 1px;
+    /* FF 3.5+ */ }
+  #maps .primaryNav .down a {
+    -webkit-box-shadow: #ec3761 0 0 7px 1px;
+    -moz-box-shadow: #ec3761 0 0 7px 1px;
+    /* FF 3.5+ */ }
   #maps .primaryNav li .available a {
     background-color: #fff7aa;
     border-color: #e3ca4b; }

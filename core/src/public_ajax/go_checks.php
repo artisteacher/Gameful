@@ -305,7 +305,7 @@ function go_blog_check ($custom_fields, $i, $status, $go_actions_table_name, $us
             go_blog_post($blog_post_id, $post_id, true, true, false, true, $i, null);
         }
         else{//this is the current stage and print the form (or all content is on)
-            go_blog_form($blog_post_id, '', $post_id, $i, $bonus_status, true, true);
+            go_blog_form($blog_post_id, '', $post_id, $i, $bonus_status, true, $all_content);
 
             go_buttons($user_id, $custom_fields, $i, $stage_count, $status, $check_type, $bonus, $bonus_status, $repeat_max, false, $blog_post_id);
 

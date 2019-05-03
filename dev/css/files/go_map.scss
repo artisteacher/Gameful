@@ -14,17 +14,6 @@
 	position: relative;
 	left: 50%;
 	z-index: 1;
-	width: 150px;
-	height: 150px;
-	margin: 40px 0 0 -75px;
-	border: 16px solid #f3f3f3;
-	border-radius: 50%;
-	border-top: 16px solid #3498db;
-	width: 120px;
-	height: 120px;
-	-webkit-animation: spin 2s linear infinite;
-	animation: spin 2s linear infinite;
-	overflow: auto;
 }
 
 #maps {
@@ -228,7 +217,7 @@
 		text-align: center;
 		color: black;
 		background: #c3eafb;
-		border: 2px solid #b5d9ea;
+		//border: 2px solid #b5d9ea;
 		//-moz-border-radius: 5px;
 		//-webkit-border-radius: 5px;
 		-webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
@@ -297,6 +286,16 @@
 	}
 
 	/* --------	available tasks colors --------- */
+	.primaryNav .up a{
+		-webkit-box-shadow: rgba(55, 182, 236, 1) 0 0 7px 1px;
+		-moz-box-shadow: rgba(55, 182, 236, 1) 0 0 7px 1px; /* FF 3.5+ */
+	}
+
+	.primaryNav .down a{
+		-webkit-box-shadow: rgba(236, 55, 97, 1) 0 0 7px 1px;
+		-moz-box-shadow: rgba(236, 55, 97, 1) 0 0 7px 1px; /* FF 3.5+ */
+	}
+
 	.primaryNav li .available a {
 		background-color: #fff7aa;
 		border-color: #e3ca4b;
@@ -313,6 +312,8 @@
 	.primaryNav li li:last-child {
 		background: url('../../media/map/vertical-line.png') center bottom repeat-y;
 	}
+
+
 
 	/* --------	Third Level --------- */
 
@@ -346,6 +347,8 @@
 	.primaryNav li li li:last-child {
 		background: url('../../media/map/L3-bottom.png') left center no-repeat;
 	}
+
+
 
 
 	/* ------------------------------------------------------------

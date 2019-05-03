@@ -90,7 +90,9 @@ function go_update_go_ajax_v5 (){
                     title: "Success"
                 }
             );
-            jQuery('#go_tool_update_v5').one("click", function() {go_update_go_ajax_v5_check();});
+            //jQuery('#go_tool_update_v5').one("click", function() {go_update_go_ajax_v5_check();});
+
+            location.reload();
 
         }
     });

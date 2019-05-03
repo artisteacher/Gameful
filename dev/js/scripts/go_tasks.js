@@ -305,6 +305,7 @@ function task_stage_change( target, required_elements = null ) {
                     flash_error_msg( '#go_stage_error_msg' );
                 }
                 go_disable_loading();
+                go_reader_activate_buttons();
             }else {
 
                 if ( res.button_type == 'undo' ){
@@ -351,6 +352,7 @@ function task_stage_change( target, required_elements = null ) {
                         heightStyle: "content"
                     });
                 });
+                go_reader_activate_buttons();
             }
         }
     });

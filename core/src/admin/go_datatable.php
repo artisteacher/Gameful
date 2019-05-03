@@ -3,7 +3,7 @@
 global $wpdb;
 
 function go_update_db_check() {
-    $go_db_version = 5;
+    $go_db_version = 5.01;
     if ( get_site_option( 'go_db_version' ) != $go_db_version ) {
         update_option('go_db_version', $go_db_version);
         go_update_db();
@@ -38,6 +38,7 @@ function go_table_tasks() {
 			start_time datetime,
 			last_time datetime,
 			timer_time datetime,
+			class VARCHAR (4096),
 			PRIMARY KEY  (id),
             KEY uid (uid),
             KEY post_id (post_id),
@@ -234,8 +235,8 @@ function go_install_data ($reset = false) {
         'options_go_loot_gold_coin_names_gold_abbreviation' => 'G',
         'options_go_loot_gold_coin_names_silver_name' => 'Silver',
         'options_go_loot_gold_coin_names_silver_abbreviation' => 'S',
-        'options_go_loot_gold_coin_names_bronze_name' => 'Bronze',
-        'options_go_loot_gold_coin_names_bronze_abbreviation' => 'B',
+        'options_go_loot_gold_coin_names_bronze_name' => 'Copper',
+        'options_go_loot_gold_coin_names_bronze_abbreviation' => 'C',
 
 
 

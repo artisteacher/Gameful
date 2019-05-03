@@ -16,10 +16,7 @@ jQuery( document ).ready( function() {
             go_activate_apply_filters();
         });
 
-        jQuery('#go_read_printed_button').on("click", function () {
-            console.log("clicked");
-            go_reader_read_printed();
-        });
+
 
 
         jQuery('#go_clipboard_user_go_sections_select, #go_clipboard_user_go_groups_select, #go_clipboard_go_badges_select, #go_task_select, #go_store_item_select').on('select2:select', function (e) {
@@ -45,8 +42,6 @@ jQuery( document ).ready( function() {
         jQuery('.go_update_clipboard').one("click", function () {
             go_reader_update();
         });
-
-        go_reader_activate_buttons();
 
         //set the datepicker to clear
         jQuery('#go_datepicker_container').html('<div id="go_datepicker_clipboard"><i class="fas fa-calendar" style="float: left;"></i><span id="go_datepicker"></span> <i id="go_reset_datepicker" class=""select2-selection__clear><b> × </b></i><i class="fa fa-caret-down"></i></div>');
@@ -314,6 +309,11 @@ function go_reader_update() {
 
 function go_reader_activate_buttons(){
 
+    jQuery('#go_read_printed_button').off().on("click", function () {
+        console.log("clicked");
+        go_reader_read_printed();
+    });
+
     jQuery('input[type=radio][name=loot_option]').on('change', function() {
         switch (jQuery(this).val()) {
             case 'none':
@@ -358,7 +358,7 @@ function go_reader_activate_buttons(){
     });
 
     jQuery("#go_mark_all_read").off().one("click", function(){
-        go_reader_bulk_read( );
+        go_reader_bulk_read(this);
 
     });
 
@@ -398,6 +398,8 @@ function go_reader_activate_buttons(){
         var optionSelected = jQuery("option:selected", this);
         go_feedback_canned(optionSelected);
     });
+
+    jQuery('.feedback_accordion').show('slow');
 }
 
 function go_num_posts(){
@@ -461,12 +463,14 @@ function go_num_posts(){
 
 }
 
-function go_reader_bulk_read(){
+function go_reader_bulk_read(target){
     var nonce = GO_EVERY_PAGE_DATA.nonces.go_reader_bulk_read;
 
     const query = jQuery('#go_num_posts').data('query');
     const where = jQuery('#go_num_posts').data('where');
     const order = jQuery('#go_num_posts').data('order');
+    //jQuery(target).parent().append("<i class='fas fa-spinner fa-pulse'></i>");
+    jQuery('#loader_container').show();
     //console.log("refresh" + nonce);
     //console.log("stats");
     jQuery.ajax({
@@ -491,7 +495,7 @@ function go_reader_bulk_read(){
         success: function( res ) {
             let error = go_ajax_error_checker(res);
             if (error == 'true') return;
-
+            //jQuery(target).parent().append("<i class='fas fa-spinner fa-pulse'></i>");
             go_reader_update();
         }
     });
@@ -501,10 +505,10 @@ function go_reader_read_printed(){
     console.log('go_reader_read_printed');
     var nonce = GO_EVERY_PAGE_DATA.nonces.go_reader_read_printed;
     var postids = new Array();
-    const posts = jQuery('.go_blog_post_wrapper').each(function( index ) {
+    jQuery('.go_blog_post_wrapper').each(function( index ) {
         var post_id = jQuery( this ).data('postid') ;
         postids.push(post_id);
-    });;
+    });
     //console.log("refresh" + nonce);
     console.log("postids");
     console.log(postids);
@@ -647,7 +651,7 @@ function go_send_feedback(target) {
     var message = jQuery(target).closest('.go_feedback_input').find('.go_message_input').val();
     //message = go_stripslashes(message);
     // var radio =  jQuery('input[type=radio][name=loot_option]').val();
-    var radio = jQuery('input[name=loot_option]:checked').val();
+    var radio = jQuery(target).closest('.go_feedback_input').find('input[name=loot_option]:checked').val();
     var toggle_assign = (jQuery(target).closest('.go_feedback_input').find('.go_messages_toggle_input').siblings().hasClass("-on")) ? 1 : 0;
     var xp = jQuery(target).closest('.go_feedback_input').find('.go_messages_xp_input').val();
     var gold = jQuery(target).closest('.go_feedback_input').find('.go_messages_gold_input').val();
@@ -708,13 +712,14 @@ function go_send_feedback(target) {
                 let table = response.table;
                 let form = response.form;
                 console.log(toggle_percent);
-                if (toggle_percent === 1){
-                    let mypercent = "<strong>+" + percent + "%</strong>";
-                    jQuery(target).closest('.go_blog_post_wrapper').find('.go_status_percent').addClass('up').removeClass('down').html(mypercent);
-                }
-                else{
-                    let mypercent = "<strong>-" + percent + "%</strong>";
-                    jQuery(target).closest('.go_blog_post_wrapper').find('.go_status_percent').addClass('down').removeClass('up').html(mypercent);
+                if (radio == 'percent') {
+                    if (toggle_percent === 1) {
+                        let mypercent = "<strong>+" + percent + "%</strong>";
+                        jQuery(target).closest('.go_blog_post_wrapper').find('.go_status_percent').addClass('up').removeClass('down').html(mypercent);
+                    } else {
+                        let mypercent = "<strong>-" + percent + "%</strong>";
+                        jQuery(target).closest('.go_blog_post_wrapper').find('.go_status_percent').addClass('down').removeClass('up').html(mypercent);
+                    }
                 }
                 //jQuery(target).closest('.go_blog_post_wrapper').find('.go_status_percent').html(percent);
                 jQuery(target).closest('.feedback_accordion').find('.go_feedback_table_container').html(table);

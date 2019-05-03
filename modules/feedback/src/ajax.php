@@ -68,8 +68,8 @@ function go_reader_bulk_read(){
     }
 
     global $wpdb;
-    $sQuery1 = "SELECT SQL_CALC_FOUND_ROWS
-            t4.ID, t4.post_status";
+    $sQuery1 = "SELECT
+            t4.ID";
 
     $where = (isset($_POST['where']) ? $_POST['where'] : null);
     $pWhere = stripslashes($where);
@@ -78,13 +78,24 @@ function go_reader_bulk_read(){
     $squery = (isset($_POST['query']) ? $_POST['query'] : null);
     $sQuery2 = stripslashes($squery);
 
-    $sQuery = $sQuery1 . $sQuery2 . $pWhere . " ORDER BY t4.post_modified " . $order ;
-
+    //$sQuery = $sQuery1 . $sQuery2 . $pWhere . " ORDER BY t4.post_modified " . $order ;
+    $sQuery = $sQuery1 . $sQuery2 . $pWhere ;
 
     $posts = $wpdb->get_results($sQuery, ARRAY_A);
-    //$task_ids = array_column($posts, 'ID');
+    //$posts = array_column($posts, 'ID');
+
+    $task_ids = array_column($posts, 'ID');
     //$task_ids = json_decode($task_ids);
 
+    $comma_separated = "(".implode(",", $task_ids).")";
+
+
+    $posts_table_name = "{$wpdb->prefix}posts";
+    $wpdb->query(
+            "UPDATE {$posts_table_name} SET post_status = 'read' WHERE ID IN {$comma_separated};"
+
+    );
+/*
     foreach($posts as $post){
         //$status = get_post_status($task_id);
         $task_id = $post['ID'];
@@ -97,6 +108,7 @@ function go_reader_bulk_read(){
             wp_update_post($query, true);
         }
     }
+    */
     echo ("Posts were marked as read.");
     die();
 }
@@ -230,6 +242,7 @@ function go_send_feedback()
     $message = '<h3>' . $feedback_title . '</h3>' . $feedback_message;
 
     $blog_post_id = (!empty($_POST['post_id']) ? $_POST['post_id'] : "");
+    $class = null;
 
     //$user_id = $vars['uid'];
     $user_id = get_post_field('post_author', $blog_post_id);
@@ -270,11 +283,16 @@ function go_send_feedback()
                 $gold = $result[0]['gold'];
                 $health = $result[0]['health'];
 
-
-                if ($percent_toggle) {
+                if ($percent !=0) {
+                    if ($percent_toggle) {
+                        $direction = 1;
+                        $class = 'up';
+                    } else {
+                        $direction = -1;
+                        $class = 'down';
+                    }
+                }else{
                     $direction = 1;
-                } else {
-                    $direction = -1;
                 }
 
                 //if % is not 0
@@ -314,6 +332,7 @@ function go_send_feedback()
                 $feedback_percent = $percent * $direction;
                 //go_update_actions($user_id, 'feedback', $blog_post_id, 1, null, $uniqueid, $result, null, null, null, null, $xp, $gold, $health, null, null, false, false);
                 update_post_meta($blog_post_id, 'go_feedback_percent', $feedback_percent);
+
             }
         }
         else if ($radio == 'assign') {
@@ -329,10 +348,14 @@ function go_send_feedback()
                 $message = $feedback_message;
             }
 
-            if ($assign_toggle != '1' ){
+            if ($assign_toggle){
+                $class = 'up';
+            }
+            else{
                 $xp = $xp * (-1);
                 $gold = $gold * (-1);
                 $health = $health * (-1);
+                $class = 'down';
             }
 
 
@@ -364,6 +387,21 @@ function go_send_feedback()
         //set new message user option to true so each user gets the message
         $user_id = intval($user_id);
         update_user_option($user_id, 'go_new_messages', true);
+
+        if ($class != null) {
+            $go_task_table_name = "{$wpdb->prefix}go_tasks";
+            $wpdb->query(
+                $wpdb->prepare(
+                    "UPDATE {$go_task_table_name} 
+                    SET 
+                        class = %s        
+                    WHERE uid= %d AND post_id=%d ",
+                    $class,
+                    $user_id,
+                    $go_blog_task_id
+                )
+            );
+        }
 
         ob_start();
         go_feedback_form($blog_post_id);

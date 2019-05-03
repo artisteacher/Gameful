@@ -64,7 +64,7 @@ function go_reader_template_include($template){
 
             //go_blog_tags_select($post_id);
             ?>
-            <div class="feedback_accordion" style="clear: both;">
+            <div class="feedback_accordion" style="clear: both; display: none;">
                 <?php go_blog_post_feedback_table($post_id); ?>
                 <?php go_blog_post_history_table($post_id); ?>
                 <?php
@@ -104,7 +104,7 @@ function go_reader_template_include($template){
     global $wpdb;
     $aTable = "{$wpdb->prefix}go_actions";
     //check last feedback, and if it exists, remove it
-    $all_feedback = $wpdb->get_results($wpdb->prepare("SELECT id, result
+    $all_feedback = $wpdb->get_results($wpdb->prepare("SELECT id, result, xp, gold, health
                 FROM {$aTable} 
                 WHERE source_id = %d AND action_type LIKE %s
                 ORDER BY id DESC",
@@ -127,6 +127,13 @@ function go_reader_template_include($template){
 }
 
 function go_feedback_table($all_feedback){
+    $xp_name = get_option('options_go_loot_xp_name');
+    $gold_name = get_option('options_go_loot_gold_name');
+    $health_name = get_option('options_go_loot_health_name');
+
+    $gold_name = get_option("options_go_loot_gold_coin_names_gold_name");
+    $silver_name = get_option("options_go_loot_gold_coin_names_silver_name");
+    $bronze_name = get_option("options_go_loot_gold_coin_names_bronze_name");
     ?>
      <div class="go_feedback_table"  class='go_datatables'>
                         <table id='go_single_task_datatable' class='pretty display'>
@@ -135,14 +142,20 @@ function go_feedback_table($all_feedback){
                                 <th class='header' id='go_stats_time'><a href=\"#\">Title</a></th>
                                 <th class='header' id='go_stats_mods'><a href=\"#\">Message</a></th>
                                 <th class='header' id='go_stats_mods'><a href=\"#\">Percent</a></th>
+                                <th class='header' id='go_stats_mods'><a href=\"#\"><?php echo $xp_name; ?></a></th>
+                                <th class='header' id='go_stats_mods'><a href=\"#\"><?php echo $gold_name; ?></a></th>
+                                <th class='header' id='go_stats_mods'><a href=\"#\"><?php echo $health_name; ?></a></th>
                                 <?php
-                                $i=0;
                                 foreach($all_feedback as $feedback){
                                     $result = $feedback['result'];
                                     $result = unserialize($result);
                                     $title = $result[2];
                                     $message = $result[3];
                                     $percent = $result[5];
+                                $xp = $feedback['xp'];
+                                $gold = $feedback['gold'];
+                                $health = $feedback['health'];
+
 
 
                                 //$link = get_permalink($id);
@@ -152,6 +165,9 @@ function go_feedback_table($all_feedback){
                                 <td ><?php echo $title;?></td>
                                 <td ><?php echo $message;?></td>
                                 <td ><?php echo $percent;?></td>
+                                <td ><?php echo $xp;?></td>
+                                <td ><?php echo $gold;?></td>
+                                <td ><?php echo $health;?></td>
 
                             </tr>
                             <?php
@@ -360,6 +376,16 @@ function go_feedback_input($post_id){
                             <th scope="row">Message</th>
                             <td><textarea name="message" class="widefat go_message_input" cols="50" rows="5"></textarea></td>
                         </tr>
+                        <?php
+                        //get the current % and the latest loot awarded.
+                        $percent = get_post_meta( $post_id, 'go_feedback_percent', true );
+
+                        global $wpdb;
+                        $aTable = "{$wpdb->prefix}go_actions";
+
+                        $go_blog_task_id = go_get_task_id($post_id);
+                        if ($go_blog_task_id != null) {
+                        ?>
                         <tr valign="top">
                             <th scope="row" colspan="2">Current Awards</th>
 
@@ -367,55 +393,49 @@ function go_feedback_input($post_id){
                         <tr>
                             <td colspan="2">
                                 <?php
-                                //get the current % and the latest loot awarded.
-                                $percent = get_post_meta( $post_id, 'go_feedback_percent', true );
 
-                                global $wpdb;
-                                $aTable = "{$wpdb->prefix}go_actions";
-
-                                $go_blog_task_id = go_get_task_id($post_id);
-                                $result = $wpdb->get_results($wpdb->prepare("SELECT id, uid, xp, gold, health
+                                    $result = $wpdb->get_results($wpdb->prepare("SELECT id, uid, xp, gold, health
                                     FROM {$aTable} 
                                     WHERE result = %d AND source_id = %d AND action_type = %s
                                     ORDER BY id DESC LIMIT 1",
-                                    $post_id,
-                                    $go_blog_task_id,
-                                    'task'), ARRAY_A);
+                                        $post_id,
+                                        $go_blog_task_id,
+                                        'task'), ARRAY_A);
 
-                                //get original loot assigned on this stage--this is the baseline
-                                $xp = $result[0]['xp'];
-                                $gold = $result[0]['gold'];
-                                $health = $result[0]['health'];
+                                    //get original loot assigned on this stage--this is the baseline
+                                    $xp = $result[0]['xp'];
+                                    $gold = $result[0]['gold'];
+                                    $health = $result[0]['health'];
 
-                                if (($xp && $xp != 0)||($gold && $gold != 0)||($health && $health != 0)) {
-                                    echo "Awards: ";
-                                }
-                                if ($xp && $xp != 0) {
-                                    go_display_shorthand_currency('xp', $xp, true);
-                                    echo " &nbsp; &nbsp;";
-                                }
-                                if ($gold && $gold != 0) {
-                                    go_display_shorthand_currency('gold', $gold, true);
-                                    echo " &nbsp; &nbsp;";
-                                }
-                                if ($health && $health != 0) {
-                                    go_display_shorthand_currency('health', $health, true);
-                                    echo " &nbsp; &nbsp;";
-                                }
-                                if ($percent && $percent != 0) {
-                                    if ($percent > 0){
-                                        $class = 'up';
-                                        $direction = "+";
-                                    }else{
-                                        $class = 'down';
-                                        $direction = "";
+                                    if (($xp && $xp != 0) || ($gold && $gold != 0) || ($health && $health != 0)) {
+                                        echo "Awards: ";
+                                    }
+                                    if ($xp && $xp != 0) {
+                                        go_display_shorthand_currency('xp', $xp, true);
+                                        echo " &nbsp; &nbsp;";
+                                    }
+                                    if ($gold && $gold != 0) {
+                                        go_display_shorthand_currency('gold', $gold, true);
+                                        echo " &nbsp; &nbsp;";
+                                    }
+                                    if ($health && $health != 0) {
+                                        go_display_shorthand_currency('health', $health, true);
+                                        echo " &nbsp; &nbsp;";
+                                    }
+                                    if ($percent && $percent != 0) {
+                                        if ($percent > 0) {
+                                            $class = 'up';
+                                            $direction = "+";
+                                        } else {
+                                            $class = 'down';
+                                            $direction = "";
+                                        }
+
+                                        echo "<br>Adjusted: <span class='go_status_percent " . $class . "'> " . $direction . $percent . '%</span>';
+                                        echo " &nbsp; &nbsp;";
                                     }
 
-                                    echo "<br>Adjusted: <span class='go_status_percent ".$class."'> ".$direction.$percent . '%</span>';
-                                    echo " &nbsp; &nbsp;";
                                 }
-
-
                                 ?>
                             </td>
                         </tr>
@@ -426,9 +446,19 @@ function go_feedback_input($post_id){
                         <tr valign="top">
 
                             <td colspan="2">
-                                <input id="loot_option_none_<?php echo $post_id;?>" class="loot_option_none" type="radio" name="loot_option" value="none" checked> <label for="loot_option_none_<?php echo $post_id;?>"> None </label> &nbsp; &nbsp;
-                                <input id="loot_option_percent_<?php echo $post_id;?>" class="loot_option_percent" type="radio" name="loot_option" value="percent"><label for="loot_option_percent_<?php echo $post_id;?>"> Percentage Adjustment </label> &nbsp; &nbsp;
-                                <input id="loot_option_assign_<?php echo $post_id;?>" class="loot_option_assign" type="radio" name="loot_option" value="assign"><label for="loot_option_assign_<?php echo $post_id;?>"> Assign Loot </label>
+                                <input id="loot_option_none_<?php echo $post_id;?>" class="loot_option_none" type="radio" name="loot_option" value="none" checked> <label for="loot_option_none_<?php echo $post_id;?>"> None </label>
+                                <?php
+                                if ($go_blog_task_id != null) {
+                                    ?>
+                                    <input id="loot_option_percent_<?php echo $post_id; ?>" class="loot_option_percent"
+                                           type="radio" name="loot_option" value="percent"><label
+                                            for="loot_option_percent_<?php echo $post_id; ?>"> Percentage
+                                        Adjustment </label> &nbsp; &nbsp;
+                                    <?php
+                                }
+                                        ?>
+
+                                    <input id="loot_option_assign_<?php echo $post_id;?>" class="loot_option_assign" type="radio" name="loot_option" value="assign"><label for="loot_option_assign_<?php echo $post_id;?>"> Assign Loot </label>
                             </td>
                         </tr>
                         <tr class="go_feedback_percent_loot" style="display: none;">

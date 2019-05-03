@@ -20,8 +20,8 @@ add_filter('plupload_default_settings', function ($settings) {
     return $settings;
 });
 
-//$go_debug = true;
-$go_debug = false;//set to true when coding
+//$go_debug = true;//set to true when coding
+$go_debug = false;
 global $go_debug;
 
 $go_js_version = 4.71;
