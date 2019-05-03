@@ -21,7 +21,3 @@ if ( !is_admin() ) {
 //always include
 include_once('src/functions.php');
 
-/*
- * Admin Menu & Admin Bar
- */
-add_action( 'admin_bar_init', 'go_admin_bar' );

@@ -1288,7 +1288,7 @@
                         },
                         {
                             "key": "field_5cb931738af70",
-                            "label": "Bronze",
+                            "label": "Copper",
                             "name": "Bronze",
                             "type": "group",
                             "instructions": "",
@@ -2730,5 +2730,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1556758791
+    "modified": 1556892815
 }

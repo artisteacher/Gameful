@@ -39,6 +39,10 @@ function go_display_admin_bar() {
 }
 add_filter( 'show_admin_bar', 'go_display_admin_bar' );
 
+/*
+ * Admin Menu & Admin Bar
+ */
+add_action( 'admin_bar_init', 'go_admin_bar' );
 function go_admin_bar() {
 	global $wp_admin_bar;
 
@@ -516,9 +520,9 @@ function go_admin_bar() {
 }
 
 
-//add_action('wp_head', 'go_admin_bar_v5');
-function go_admin_bar_v5() {
-
+//add_action('wp_head', 'go_player_bar_v5');
+function go_player_bar_v5() {
+    echo '<div id="go_user_bar" >';
     //get options for what to show
     $go_search_switch = get_option( 'options_go_search_toggle' );
     $go_map_switch = get_option( 'options_go_locations_map_toggle' );
@@ -530,58 +534,9 @@ function go_admin_bar_v5() {
     $user_id = get_current_user_id();
     $is_admin = go_user_is_admin($user_id);
 
-
-
         //Add link to frontpage user editor and login/logout
 
         if (is_user_logged_in()) {
-
-            /**
-             * If is admin, show the dropdown for view type
-             */
-            if ($is_admin) {
-                $post_type = get_post_type();
-                $admin_view = get_user_option('go_admin_view', $user_id);
-                if (!empty ($admin_view)) {
-                    if ($admin_view == 'all') {
-                        $all_selected = 'selected = "selected"';
-                    } else {
-                        $all_selected = null;
-                    }
-                    if ($admin_view == 'player') {
-                        $player_selected = 'selected = "selected"';
-                    } else {
-                        $player_selected = null;
-                    }
-                    if ($admin_view == 'user') {
-                        $user_selected = 'selected = "selected"';
-                    } else {
-                        $user_selected = null;
-                    }
-                    if ($admin_view == 'guest') {
-                        $guest_selected = 'selected = "selected"';
-                    } else {
-                        $guest_selected = null;
-                    }
-
-                } else {
-                    $all_selected = null;
-                    $player_selected = null;
-                    $user_selected = null;
-                    $guest_selected = null;
-                }
-                $content = '<form>
-                            View: <select id="go_select_admin_view" onchange="go_update_admin_view(this.value)">
-                                <option value="user" ' . $user_selected . '>Player Mode: Locks On</option>
-                                <option value="player" ' . $player_selected . '>Admin Mode: No Locks</option>
-                                <option value="all" ' . $all_selected . ' >All Stages</option>
-                                <option value="guest" ' . $guest_selected . '>Guest</option>
-                            </select>
-                        </form>';
-                if ($post_type == 'tasks') {
-                   echo $content;
-                }
-            }
 
             /**
              * Get the percentage for the XP Bar/health Bar and the Loot for the totals
@@ -633,32 +588,20 @@ function go_admin_bar_v5() {
                 } else if ($percentage >= 100) {
                     $percentage = 100;
                 }
-                $progress_bar = '<div id="go_admin_bar_progress_bar_border" class="progress-bar-border">' . '<div id="go_admin_bar_progress_bar" class="progress_bar" ' .
+                echo '<div id="go_admin_bar_progress_bar_border" class="progress-bar-border">' . '<div id="go_admin_bar_progress_bar" class="progress_bar" ' .
                     'style="width: ' . $percentage . '%; background-color: ' . $color . ' ;">' .
                     '</div>' .
                     '<div id="points_needed_to_level_up" class="go_admin_bar_text">' .
                     $pts_to_rank_up_str .
                     '</div>' .
                     '</div>';
-            } else {
-                $progress_bar = '';
-                $go_current_xp = '';
-                $current_rank = '';
-                $rank_num = '';
-                $go_ranks_name = '';
             }
 
             if ($gold_toggle) {
                 // the user's current amount of currency
                 //$go_current_gold = go_get_user_loot($user_id, 'gold');
                 $go_current_gold = $user_loot['gold'];
-                $gold_total = '<div id="go_admin_bar_gold_2" class="admin_bar_loot">' . go_display_shorthand_currency('gold', $go_current_gold, false) . '</div>';
-            } else {
-                $gold_total = '';
-                $go_current_gold = '';
-                //$current_rank ='';
-                //$rank_num ='';
-                //$go_option_ranks ='';
+                echo '<div id="go_admin_bar_gold_2" class="admin_bar_loot">' . go_display_shorthand_currency('gold', $go_current_gold, false) . '</div>';
             }
 
             if ($health_toggle) {
@@ -673,19 +616,9 @@ function go_admin_bar_v5() {
                 } else if ($health_percentage >= 100) {
                     $health_percentage = 100;
                 }
-                $health_bar = '<div id="go_admin_health_bar_border" class="progress-bar-border">' . '<div id="go_admin_bar_health_bar" class="progress_bar" ' . 'style="width: ' . $health_percentage . '%; background-color: red ;">' . '</div>' . '<div id="health_bar_percentage_str" class="go_admin_bar_text">' . $name . ": " . $go_current_health . "%" . '</div>' . '</div>';
+                echo '<div id="go_admin_health_bar_border" class="progress-bar-border">' . '<div id="go_admin_bar_health_bar" class="progress_bar" ' . 'style="width: ' . $health_percentage . '%; background-color: red ;">' . '</div>' . '<div id="health_bar_percentage_str" class="go_admin_bar_text">' . $name . ": " . $go_current_health . "%" . '</div>' . '</div>';
 
-            } else {
-                $health_bar = '';
-                $go_current_health = '';
             }
-
-
-            echo'<div style="padding-top:5px;">' .
-                        $progress_bar .
-                        $gold_total .
-                        $health_bar .
-                        '</div>';
 
             $dropdown_content = "";
             if ($xp_toggle && ($go_current_xp != 0)) {
@@ -706,7 +639,7 @@ function go_admin_bar_v5() {
             if ($go_stats_switch) {
                 //acf_form_head();
                 $stats_name = get_option('options_go_stats_name');
-                echo '<i class="fas fa-chart-area ab-icon" aria-hidden="true"></i><div>' . $stats_name . '</div><div id="go_stats_page"></div><script>  jQuery("#wp-admin-bar-go_stats").one("click", function(){ go_admin_bar_stats_page_button()}); </script>';
+                echo '<div class="go_user_bar_icon"><i class="fas fa-chart-area ab-icon" aria-hidden="true"></i><br><div class="go_player_bar_text">' . $stats_name . '</div><div id="go_stats_page"></div><script>  jQuery("#wp-admin-bar-go_stats").one("click", function(){ go_admin_bar_stats_page_button()}); </script></div>';
             }
 
             if ($go_blog_switch) {
@@ -717,7 +650,7 @@ function go_admin_bar_v5() {
                 $userloginname = $user_info->user_login;
                 $user_blog_link = get_site_url(null, '/user/' . $userloginname);
 
-               echo '<i class="fas fa-thumbtack ab-icon" aria-hidden="true"></i><div>My Blog</div>';
+               echo '<div class="go_user_bar_icon"><i class="fas fa-thumbtack ab-icon" aria-hidden="true"></i><br><div class="go_player_bar_text">My Blog</div></div>';
             }
         }
 
@@ -727,7 +660,7 @@ function go_admin_bar_v5() {
             //$go_map_link = get_permalink(get_page_by_path($go_map_link));
             $go_map_link = get_site_url(null, $go_map_link);
             $name = get_option('options_go_locations_map_name');
-            echo '<i class="fas fa-sitemap ab-icon" aria-hidden="true"></i><div id="go_map_page" class="admin_map">' . $name . '</div>';
+            echo '<div class="go_user_bar_icon"><i class="fas fa-sitemap ab-icon" aria-hidden="true"></i><br><div id="go_map_page" class="admin_map   go_player_bar_text">' . $name . '</div></div>';
         }
 
     if ($go_store_switch) {
@@ -735,15 +668,17 @@ function go_admin_bar_v5() {
         //$go_store_link = get_permalink(get_page_by_path($go_store_link));
         $go_store_link = get_site_url(null, $go_store_link);
         $name = get_option('options_go_store_name');
-        echo '<i class="fas fa-shopping-cart ab-icon" aria-hidden="true"></i><div id="go_store_page">' . $name . '</div>';
+        echo '<div class="go_user_bar_icon"><i class="fas fa-shopping-cart ab-icon" aria-hidden="true"></i><br><div class="go_player_bar_text" id="go_store_page">' . $name . '</div></div>';
     }
 
+    /*
     if ($is_admin) {
 
         //$go_store_link = get_permalink(get_page_by_path($go_store_link));
         $reader_link = get_site_url(null, 'reader');
         echo '<i class="fas fa-book-reader ab-icon" aria-hidden="true"></i><div id="go_reader_link">Reader</div>';
     }
+    */
 
     if ($go_search_switch) {
         echo'
@@ -757,9 +692,11 @@ function go_admin_bar_v5() {
 
     }
 
+    /*
     if ($is_admin) {
         echo'<i class="fas fa-clipboard-list ab-icon" aria-hidden="true"></i><div id="go_clipboard_adminbar">Clipboard</div>';
     }
+    */
 
         /*
         if ($is_admin) {
@@ -931,12 +868,12 @@ function go_admin_bar_v5() {
             $id = $atts['id'];
             $custom_fields = get_post_custom($id); // Just gathering some data about this task with its post id
 
-            echo '<div id="go_timer"><i class="fa fa-clock-o ab-icon" aria-hidden="true"></i><div><span class="days"></span>d : </div><div><span class="hours"></span>h : </div><div><span class="minutes"></span>m : </div><div><span class="seconds"></span>s</div></div>';
+            echo '<div id="go_timer"><i class="fa fa-clock-o ab-icon" aria-hidden="true"></i><div><span class="days"></span>d : </div><div><span class="hours"></span>h : </div><div><span class="minutes"></span>m : </div><div><span class="seconds"></span>s</div>';
 
         }
     }
 
-
+    echo "</div>";
 }
 
 
