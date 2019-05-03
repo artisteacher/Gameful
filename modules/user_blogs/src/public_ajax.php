@@ -102,7 +102,7 @@ function go_get_blog_posts($user_id = null){
                 foreach ($posts as $post){
                     $post = json_decode(json_encode($post), True);//convert stdclass to array by encoding and decoding
                     $post_id = $post['ID'];
-                    go_blog_post($post_id, null,false, true, false, true);
+                    go_blog_post($post_id, null,false, true, false, true, null);
                     //go_user_feedback_container($post_id);
                 }
                 ?>

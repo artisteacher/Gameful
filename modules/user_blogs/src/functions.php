@@ -471,6 +471,7 @@ function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_underst
             $go_blog_task_id = wp_get_post_parent_id($blog_post_id);//for posts created after v4.6
         }
     }
+
     echo "<script>console.log('task id: {$go_blog_task_id}')</script>";
 
     //if the task_id is not 0, get some info about it
@@ -521,7 +522,11 @@ function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_underst
 
     //if this post was submitted from a task, then add the task required fields
     if($go_blog_task_id != 0) {
-        //$i = (isset($blog_meta['go_blog_task_stage'][0]) ? $blog_meta['go_blog_task_stage'][0] : null);
+        if (!isset($task_stage_num)) {
+            //get the stage number from actions or in meta--
+            $task_stage_num = (isset($blog_meta['go_blog_task_stage'][0]) ? $blog_meta['go_blog_task_stage'][0] : null);
+        }
+
         echo "<script>console.log('tsn: {$task_stage_num}')</script>";
         $i = $task_stage_num;
         echo "<script>console.log('i: {$i}')</script>";
