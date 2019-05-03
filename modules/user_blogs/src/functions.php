@@ -522,7 +522,9 @@ function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_underst
     //if this post was submitted from a task, then add the task required fields
     if($go_blog_task_id != 0) {
         //$i = (isset($blog_meta['go_blog_task_stage'][0]) ? $blog_meta['go_blog_task_stage'][0] : null);
+        echo "<script>console.log('tsn: {$task_stage_num}')</script>";
         $i = $task_stage_num;
+        echo "<script>console.log('i: {$i}')</script>";
         //if $i (task stage) is not set, then this must be a bonus stage
         $custom_fields = get_post_custom($go_blog_task_id);
         //variables for retrieving v4 content not in blog
