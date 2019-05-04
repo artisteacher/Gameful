@@ -351,6 +351,17 @@ function go_save_blog_post($post_id = null, $stage = null, $bonus_status = null,
         //stage uniqueid
         $uniqueid = get_post_meta($post_id, 'go_stages_' . $stage . '_uniqueid', true);
 
+        //check if there is an existing post from this quest and stage
+
+        $args = array('meta_key' => 'go_stage_uniqueid', 'meta_value' => $uniqueid, 'post_type' => 'go_blogs', 'post_parent' => $post_id, 'author' => $user_id, 'post_status' => 'read, unread, reset, draft, trash');
+        $go_blog_post_ids = get_posts($args);
+        if(!empty($go_blog_post_ids)){
+            $post = $go_blog_post_ids[0];
+            $db_id = $post->ID;
+            if (is_int($db_id)){
+                $blog_post_id = $db_id;
+            }
+        }
         if ($bonus_status !== null) {//if this is a bonus stage blog post, set variables
             $bonus_status = $bonus_status + 1;
             $stage = null;

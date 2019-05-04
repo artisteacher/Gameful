@@ -96,6 +96,11 @@ get_header();
                 </div>
             </div>
         </div>
+        <div id='loader_container' style='display:none; height: 250px; width: 100%; padding: 10px 30px; '>
+            <div id='loader'>
+                <i class='fas fa-spinner fa-pulse fa-4x'></i>
+            </div>
+        </div>
         <?php
 
         /// END USER HEADER

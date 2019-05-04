@@ -386,7 +386,7 @@ function go_get_blog_post_id($post_id, $user_id, $key, $uniqueid, $stage_num ){
             'posts_per_page' => 1,
             'meta_key' => $key,
             'orderby' => 'meta_value_num',
-            'order' => 'ASC',
+            'order' => 'DESC',
             'meta_query' => array(
                 array(
                     'key' => $key,

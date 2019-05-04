@@ -141,9 +141,13 @@ function go_tsk_actv_activate() {
 function go_admin_head_notification() {
     if ( get_option( 'go_display_admin_explanation' ) && current_user_can( 'manage_options' ) ) {
         $nonce = wp_create_nonce( 'go_admin_remove_notification' );
-        echo "<div id='go_activation_message' class='update-nag' style='font-size: 16px; padding-right: 50px;'>This is a fresh installation of <a href='https://github.com/mcmick/game-on-v4/releases' target='_blank'>Game On</a>.
+        echo "<div id='go_activation_message' class='update-nag' style='font-size: 16px; padding-right: 20px;'>
 
-			<div style='position: relative; left: 20px;'>
+      <div style='float:right;' <a href='javascript:;' onclick='go_remove_admin_notification()'><i class=\"far fa-times-circle\"></i></a></div>
+
+			<div style='position: relative; padding: 10px 30px; clear:both;'>
+			 This is a fresh installation of <a href='https://github.com/mcmick/game-on-v4/releases' target='_blank'>Game On</a>.
+				<br>
 				<br>
 				Visit the <a href='http://maclab.guhsd.net/game-on' target='_blank'>documentation page</a>.
 				<br>
@@ -151,7 +155,7 @@ function go_admin_head_notification() {
 				Visit our <a href='https://www.youtube.com/channel/UC1G3josozpubdzaINcFjk0g' >YouTube Channel</a> for the most recent updates.
 				<br>
 			</div>
-			<a href='javascript:;' onclick='go_remove_admin_notification()'>Dismiss messsage</a>
+			
 		</div>
 		<script>
 			function go_remove_admin_notification() {

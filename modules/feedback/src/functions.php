@@ -402,10 +402,16 @@ function go_feedback_input($post_id){
                                         $go_blog_task_id,
                                         'task'), ARRAY_A);
 
-                                    //get original loot assigned on this stage--this is the baseline
-                                    $xp = $result[0]['xp'];
-                                    $gold = $result[0]['gold'];
-                                    $health = $result[0]['health'];
+                                    if (!empty($result)) {
+                                        //get original loot assigned on this stage--this is the baseline
+                                        $xp = $result[0]['xp'];
+                                        $gold = $result[0]['gold'];
+                                        $health = $result[0]['health'];
+                                    }else{
+                                        $xp = 0;
+                                        $gold = 0;
+                                        $health = 0;
+                                    }
 
                                     if (($xp && $xp != 0) || ($gold && $gold != 0) || ($health && $health != 0)) {
                                         echo "Awards: ";

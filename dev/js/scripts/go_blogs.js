@@ -1102,6 +1102,10 @@ function go_show_private(target){
     //send ajax to set variable
     const nonce = GO_EVERY_PAGE_DATA.nonces.go_show_private;
     const userid = jQuery(target).data('userid');
+
+    jQuery("#go_wrapper").hide();
+    jQuery("#loader_container").show();
+
     const gotoSend = {
         action:"go_show_private",
         _ajax_nonce: nonce,
@@ -1130,7 +1134,10 @@ function go_show_private(target){
             //enable checkbox
             jQuery("#go_show_private").one("click", function (e) {
                 go_show_private(this);
-            });
+            })
+
+            jQuery("#go_wrapper").show();
+            jQuery("#loader_container").hide();
         }
     });
 
