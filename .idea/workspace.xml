@@ -5,66 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4c52fe7c-a769-413b-9a8a-3effed8b98a6" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/dev/css/files/login.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dev/js/scripts/leaderboard.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dev/js/scripts/user_bar.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/admin_bar/src/public.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/admin_bar/src/public_ajax.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/admin_bar/src/templates/leaderboard.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/login/src/admin.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/login/src/templates/disabled/change_password_template.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/login/src/templates/profile_template.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/login/src/templates/register_template.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/login/src/templates/reset_password_template.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acf-json/group_5a8fb5fbe075d.json" beforeDir="false" afterPath="$PROJECT_DIR$/acf-json/group_5a8fb5fbe075d.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acf-json/group_5abc5718c2c1b.json" beforeDir="false" afterPath="$PROJECT_DIR$/acf-json/group_5abc5718c2c1b.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.codekit3" beforeDir="false" afterPath="$PROJECT_DIR$/config.codekit3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/includes.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/includes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/admin/go_activation.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/admin/go_activation.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/admin/go_admin.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/admin/go_admin.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/admin/go_datatable.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/admin/go_datatable.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/all/go_links.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/all/go_links.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/all/go_loot_and_updates.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/all/go_loot_and_updates.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/all/go_users.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/all/go_users.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/css/files/go_clipboard_sass.scss" beforeDir="false" afterPath="$PROJECT_DIR$/dev/css/files/go_clipboard_sass.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/css/files/go_every_page.scss" beforeDir="false" afterPath="$PROJECT_DIR$/dev/css/files/go_every_page.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/css/go_frontend.scss" beforeDir="false" afterPath="$PROJECT_DIR$/dev/css/go_frontend.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/js/go_frontend.js" beforeDir="false" afterPath="$PROJECT_DIR$/dev/js/go_frontend.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/js/scripts/go_clipboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/dev/js/scripts/go_clipboard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/js/scripts/go_every_page.js" beforeDir="false" afterPath="$PROJECT_DIR$/dev/js/scripts/go_every_page.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/js/scripts/go_feedback.js" beforeDir="false" afterPath="$PROJECT_DIR$/dev/js/scripts/go_feedback.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game-on.php" beforeDir="false" afterPath="$PROJECT_DIR$/game-on.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go_acf_groups.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/go_enqueue_includes.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/go_enqueue_includes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/go_enque_js.php" beforeDir="false" afterPath="$PROJECT_DIR$/js/go_enque_js.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/go_enque_js_admin.php" beforeDir="false" afterPath="$PROJECT_DIR$/js/go_enque_js_admin.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/min/go_admin_user-min.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/min/go_admin_user-min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/min/go_frontend-min.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/min/go_frontend-min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/admin_bar/includes.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/admin_bar/includes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/admin_bar/src/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/admin_bar/src/ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/admin_bar/src/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/admin_bar/src/functions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/feedback/src/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/feedback/src/ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/feedback/src/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/feedback/src/functions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/feedback/src/public.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/feedback/src/public.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/feedback/src/templates/go_reader_template.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/feedback/src/templates/go_reader_template.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/stats/includes.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/stats/includes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/stats/src/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/stats/src/ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/store/src/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/store/src/functions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/tasks/src/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/tasks/src/ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/tasks/src/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/tasks/src/functions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/tasks/src/public_ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/tasks/src/public_ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/user_blogs/src/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/user_blogs/src/ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/user_blogs/src/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/user_blogs/src/functions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/user_blogs/src/public_ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/user_blogs/src/public_ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/user_blogs/src/templates/go_user_blog_template.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/user_blogs/src/templates/go_user_blog_template.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/user_profiles/includes.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/user_profiles/src/admin.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/go_enque_styles.php" beforeDir="false" afterPath="$PROJECT_DIR$/styles/go_enque_styles.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/go_enque_styles_admin.php" beforeDir="false" afterPath="$PROJECT_DIR$/styles/go_enque_styles_admin.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/min/go_admin.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/min/go_admin.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/min/go_frontend.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/min/go_frontend.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/min/go_styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/min/go_styles.css" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -131,14 +73,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/game-on.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="93">
-              <caret line="83" selection-start-line="83" selection-end-line="83" />
-              <folding>
-                <element signature="e#6#232#0#PHP" expanded="true" />
-              </folding>
+            <state relative-caret-position="105">
+              <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -172,7 +111,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/src/all/go_loot_and_updates.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="365">
@@ -280,8 +219,8 @@
       <find>go_admin_bar_gold</find>
       <find>link</find>
       <find>$refresh_if_v4_content</find>
-      <find>actions_ta</find>
       <find>$go_actions_table_name</find>
+      <find>actions_ta</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -340,7 +279,6 @@
         <option value="$PROJECT_DIR$/dev/js/go_frontend.js" />
         <option value="$PROJECT_DIR$/dev/js/scripts/leaderboard.js" />
         <option value="$PROJECT_DIR$/dev/js/scripts/go_clipboard.js" />
-        <option value="$PROJECT_DIR$/game-on.php" />
         <option value="$PROJECT_DIR$/modules/user_blogs/src/functions.php" />
         <option value="$PROJECT_DIR$/modules/feedback/src/templates/go_reader_template.php" />
         <option value="$PROJECT_DIR$/modules/feedback/src/public.php" />
@@ -364,6 +302,7 @@
         <option value="$PROJECT_DIR$/modules/admin_bar/src/public.php" />
         <option value="$PROJECT_DIR$/modules/tasks/src/public_ajax.php" />
         <option value="$PROJECT_DIR$/core/src/all/go_loot_and_updates.php" />
+        <option value="$PROJECT_DIR$/game-on.php" />
       </list>
     </option>
   </component>
@@ -716,24 +655,24 @@
       <workItem from="1555173276435" duration="625505000" />
       <workItem from="1557353088777" duration="118160000" />
       <workItem from="1557805409825" duration="11029000" />
-      <workItem from="1557868201011" duration="15364000" />
+      <workItem from="1557868201011" duration="15818000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4871272000" />
+    <option name="totallyTimeSpent" value="4871726000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="25" width="1588" height="998" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17723157" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17723157" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Command Line Tools Console" order="0" sideWeight="0.49939686" visible="true" weight="0.3268817" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.6785252" weight="0.307947" />
       <window_info anchor="bottom" id="Message" order="2" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.6927555" visible="true" weight="0.29359823" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.6927555" visible="true" weight="0.29359823" />
       <window_info anchor="bottom" id="Run" order="4" weight="0.3289183" />
       <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -1979,16 +1918,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/game-on.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="93">
-          <caret line="83" selection-start-line="83" selection-end-line="83" />
-          <folding>
-            <element signature="e#6#232#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/modules/feedback/src/functions.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="348">
@@ -2194,6 +2123,13 @@
             <element signature="n#go_get_bonus_loot_rows#0;n#!!top" />
             <element signature="n#go_update_bonus_loot#0;n#!!top" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/game-on.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
         </state>
       </provider>
     </entry>
