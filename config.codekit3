@@ -185,6 +185,46 @@
 		"oO": 0,
 		"oS": 1
 		},
+	"/acf-json/group_5cd502fa18282.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5cd502fa18282-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/acf-json/group_5cd8a9e1010ad.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5cd8a9e1010ad-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/acf-json/group_5cd8aba98de2c.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5cd8aba98de2c-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/acf-json/group_5cd8abc03abce.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5cd8abc03abce-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/acf-json/group_5cd8b11c8b6ec.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5cd8b11c8b6ec-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
 	"/core/includes.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -1051,6 +1091,29 @@
 		"oS": 0,
 		"uL": 1
 		},
+	"/dev/css/files/login.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/dev/css/files/login-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/dev/css/files/login.scss": {
+		"aP": 0,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "/dev/css/files/login.css",
+		"oF": 0,
+		"oS": 0,
+		"uL": 1
+		},
 	"/dev/css/files/normalize.scss": {
 		"aP": 0,
 		"bl": 0,
@@ -1519,20 +1582,45 @@
 		"sC": 3,
 		"tS": 0
 		},
+	"/dev/js/scripts/leaderboard-min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/dev/js/scripts/leaderboard-min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/scripts/leaderboard.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/js/scripts/leaderboard-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/scripts/user_bar.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/js/scripts/user_bar-min.js",
+		"oF": 1,
+		"sC": 3,
+		"tS": 0
+		},
 	"/game-on.php": {
 		"cB": 0,
 		"ft": 8192,
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/game-on.php",
-		"oF": 0
-		},
-	"/go_acf_groups.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/go_acf_groups.php",
 		"oF": 0
 		},
 	"/includes/acf/acf.php": {
@@ -4319,6 +4407,30 @@
 		"oAP": "/modules/admin_bar/src/functions.php",
 		"oF": 0
 		},
+	"/modules/admin_bar/src/public.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/admin_bar/src/public.php",
+		"oF": 0
+		},
+	"/modules/admin_bar/src/public_ajax.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/admin_bar/src/public_ajax.php",
+		"oF": 0
+		},
+	"/modules/admin_bar/src/templates/leaderboard.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/admin_bar/src/templates/leaderboard.php",
+		"oF": 0
+		},
 	"/modules/clipboard/includes.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -4389,6 +4501,78 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/modules/feedback/src/templates/go_reader_template.php",
+		"oF": 0
+		},
+	"/modules/login/includes.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/login/includes.php",
+		"oF": 0
+		},
+	"/modules/login/src/admin.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/login/src/admin.php",
+		"oF": 0
+		},
+	"/modules/login/src/ajax.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/login/src/ajax.php",
+		"oF": 0
+		},
+	"/modules/login/src/functions.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/login/src/functions.php",
+		"oF": 0
+		},
+	"/modules/login/src/templates/disabled/change_password_template.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/login/src/templates/disabled/change_password_template.php",
+		"oF": 0
+		},
+	"/modules/login/src/templates/profile_template.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/login/src/templates/profile_template.php",
+		"oF": 0
+		},
+	"/modules/login/src/templates/register_template.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/login/src/templates/register_template.php",
+		"oF": 0
+		},
+	"/modules/login/src/templates/reset_password_template.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/login/src/templates/reset_password_template.php",
+		"oF": 0
+		},
+	"/modules/login/src/templates/template.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/login/src/templates/template.php",
 		"oF": 0
 		},
 	"/modules/map/includes.php": {
@@ -4669,22 +4853,6 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/modules/user_blogs/src/templates/go_user_blog_template.php",
-		"oF": 0
-		},
-	"/modules/user_profiles/includes.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/modules/user_profiles/includes.php",
-		"oF": 0
-		},
-	"/modules/user_profiles/src/admin.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/modules/user_profiles/src/admin.php",
 		"oF": 0
 		},
 	"/README.html": {

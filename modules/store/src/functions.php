@@ -40,12 +40,6 @@ function go_store_template_include($template)
         return plugin_dir_path(__FILE__).'templates/go_store_template.php'; //Load your template or file
     }
 
-    /*
-    $page_name = (isset($wp_query->query_vars['pagename']) ? $wp_query->query_vars['pagename'] : false);
-    if ($page_name == $store_name) { //Verify "blah" exists and value is "true".
-        return plugin_dir_path(__FILE__) . 'templates/go_store_template.php'; //Load your template or file
-    }*/
-
     return $template; //Load normal template when $page_value != "true" as a fallback
 }
 
@@ -141,7 +135,7 @@ function go_register_store_tax_and_cpt() {
 		'show_ui' => true,
 		'show_in_menu' => true,
 		'menu_position' => 20,
-		'menu_icon' => 'dashicons-cart',
+		'menu_icon' => '',
 		'show_in_nav_menus' => true,
 		'exclude_from_search' => false,
 		'has_archive' => true,

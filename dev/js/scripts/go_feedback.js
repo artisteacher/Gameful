@@ -7,9 +7,9 @@ jQuery( document ).ready( function() {
         go_load_daterangepicker('reader');
 
 
-        go_make_select2_filter('user_go_sections', 'section', false);
-        go_make_select2_filter('user_go_groups', 'group', false);
-        go_make_select2_filter('go_badges', 'badge', false);
+        go_make_select2_filter('user_go_sections', 'section', false, false);
+        go_make_select2_filter('user_go_groups', 'group', false, true);
+        go_make_select2_filter('go_badges', 'badge', false, true);
 
         jQuery(".go_reader_input").change(function () {
             //console.log("go_activate_apply_filters1");
@@ -188,7 +188,7 @@ function go_restore_revision(target){
             });
         },
         success: function( res ) {
-            console.log("success: " + res);
+            console.log("success:" + res);
             let error = go_ajax_error_checker(res);
             if (error == 'true') return;
 
@@ -692,7 +692,9 @@ function go_send_feedback(target) {
             }
         },
         success: function( res ) {
-            console.log('success');
+            console.log('success_test');
+            console.log(res);
+
             let error = go_ajax_error_checker(res);
             if (error == 'true') return;
 

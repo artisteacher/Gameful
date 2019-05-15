@@ -30,7 +30,7 @@ function go_make_reader() {
                 <i class='fas fa-spinner fa-pulse fa-4x'></i>
                 </div>
           </div>
-           <div id='go_posts_wrapper'>";
+           <div id='go_posts_wrapper' >";
                 go_reader_get_posts();
     echo "</div></div>";
     //get_sidebar();

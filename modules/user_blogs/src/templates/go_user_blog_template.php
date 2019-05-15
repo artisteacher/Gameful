@@ -49,14 +49,8 @@ get_header();
             document.title = "<?php echo $page_title; ?>";//set page title
         </script><?php
         $use_local_avatars = get_option('options_go_avatars_local');
-        $use_gravatar = get_option('options_go_avatars_gravatars');
-        if ($use_local_avatars) {
-            $user_avatar_id = get_user_option('go_avatar', $user_id);
-            $user_avatar = wp_get_attachment_image($user_avatar_id);
-        }
-        if (empty($user_avatar) && $use_gravatar) {
-            $user_avatar = get_avatar($user_id, 150);
-        }
+        $user_avatar_id = get_user_option('go_avatar', $user_id);
+        $user_avatar = wp_get_attachment_image($user_avatar_id);
 
 
         ?>

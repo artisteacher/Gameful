@@ -212,7 +212,6 @@ function go_num_posts()
 
 function go_send_feedback()
 {
-
     if (!is_user_logged_in()) {
         echo "login";
         die();

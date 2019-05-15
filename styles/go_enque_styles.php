@@ -33,4 +33,3 @@ function go_styles () {
 
         wp_enqueue_style( 'go_dependencies' );
 }
-?>

@@ -223,8 +223,7 @@ function go_task_change_stage() {
     }
     else if ($button_type == 'abandon') {
         //remove entry loot
-        $redirect_url = get_option('options_go_landing_page_on_login', '');
-        $redirect_url = (site_url() . '/' . $redirect_url);
+        $redirect_url = go_get_user_redirect($user_id);
         go_update_stage_table ($user_id, $post_id, $custom_fields, $status, null, false, 'abandon', null, null, null );
         if($blog_post_id) {
             wp_trash_post(intval($blog_post_id));
@@ -244,6 +243,20 @@ function go_task_change_stage() {
                 $badge_ids = array_unique(array_merge($badge_ids, $badge_ids_terms));
                 $badge_ids = serialize($badge_ids);
             }
+            global $wpdb;
+            $go_actions_table_name = "{$wpdb->prefix}go_actions";
+            //Undo Bonus Loot Goes Here
+            $row = $wpdb->get_row($wpdb->prepare("SELECT *
+					FROM {$go_actions_table_name} 
+					WHERE uid = %d and source_id  = %d and action_type = %s 
+					ORDER BY id DESC LIMIT 1", $user_id, $post_id, 'bonus_loot'));
+            $xp = ($row->xp) * -1;
+            $gold = ($row->gold) * -1;
+            $health = ($row->health) * -1;
+            //make sure we don't go over 200 health
+            go_update_actions( $user_id, 'undo_bonus_loot',  $post_id, null, null, null, $result, null, null, null, null,  $xp, $gold, $health, null, null, true, true);
+
+            ///////
         }
 
         //Get previous stage#
@@ -257,6 +270,8 @@ function go_task_change_stage() {
             'post_type' => 'go_blogs', //you can use also 'any'
         );
 
+
+        //Set status to trash for the blog post sent from this stage
         $the_query = new WP_Query( $args );
         // The Loop
         if ( $the_query->have_posts() ) :
@@ -270,7 +285,6 @@ function go_task_change_stage() {
         endif;
 // Reset Post Data
         wp_reset_postdata();
-
 
 
         go_update_stage_table ($user_id, $post_id, $custom_fields, $status, null, false, 'undo', null, $badge_ids, $group_ids );

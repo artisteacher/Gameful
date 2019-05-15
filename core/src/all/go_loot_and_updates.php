@@ -599,6 +599,7 @@ function go_update_stage_table ($user_id, $post_id, $custom_fields, $status, $bo
                 $new_bonus_status_actions = 'null';
             }
             /// get last action loot
+            /*
             $xp = $wpdb->get_var($wpdb->prepare("SELECT xp 
 					FROM {$go_actions_table_name} 
 					WHERE uid = %d and source_id  = %d and stage = %d 
@@ -611,6 +612,17 @@ function go_update_stage_table ($user_id, $post_id, $custom_fields, $status, $bo
 					FROM {$go_actions_table_name} 
 					WHERE uid = %d and source_id  = %d and stage = %d 
 					ORDER BY id DESC LIMIT 1", $user_id, $post_id, $status)) * -1;
+            */
+
+
+
+            $row = $wpdb->get_row($wpdb->prepare("SELECT *
+					FROM {$go_actions_table_name} 
+					WHERE uid = %d and source_id  = %d and stage = %d 
+					ORDER BY id DESC LIMIT 1", $user_id, $post_id, $status));
+            $xp = ($row->xp) * -1;
+            $gold = ($row->gold) * -1;
+            $health = ($row->health) * -1;
             //make sure we don't go over 200 health
             $health = go_health_to_add($user_id, $health);
 
@@ -672,6 +684,7 @@ function go_update_stage_table ($user_id, $post_id, $custom_fields, $status, $bo
     );
 
     go_update_actions( $user_id, $action_type,  $post_id, $new_status_actions, $new_bonus_status_actions, $check_type, $result, $quiz_mod, $due_date_mod, $timer_mod, $health_mod,  $xp, $gold, $health, $badge_ids, $group_ids, true, true);
+
 }
 
 /**
@@ -944,6 +957,12 @@ function go_update_actions($user_id, $type, $source_id, $status, $bonus_status, 
     // the user's current amount of currency
     $go_current_gold = $user_loot['gold'];
     $new_gold_total = $go_current_gold + $gold;
+    //penalty for bankruptcy
+    if($new_gold_total < 0){
+        $health_penalty = get_option('options_go_loot_health_bankruptcy_penalty');
+        $health = $health - $health_penalty;
+        //put message here about bankruptcy
+    }
 
     // the user's current amount of bonus currency,
     // also used for coloring the admin bar
@@ -1327,7 +1346,8 @@ function go_update_admin_bar_v4($user_id) {
         //echo "jQuery( '#go_admin_bar_gold' ).html( '{$display}' );";
         //echo "jQuery( '#go_admin_bar_gold_2' ).html( '{$display_short}' );";
         echo 'jQuery( "#go_admin_bar_gold_2" ).html( "'.$display_short.'" );';
-        $display = go_display_longhand_currency('gold', $go_current_gold, false, false, false);
+        $display = go_display_longhand_currency('gold', $go_current_gold, false, false, true);
+
         //$display = htmlspecialchars($display);
         echo 'jQuery( "#go_admin_bar_gold" ).html( "'.$display.'" );';
         if($go_current_gold == 0){
@@ -1408,7 +1428,7 @@ function go_get_bonus_loot_rows($custom_fields, $health_mod = false, $user_id = 
     $bonus_radio =(isset($custom_fields['bonus_loot_toggle'][0]) ? $custom_fields['bonus_loot_toggle'][0] : null);//is bonus set default, custom or off
 
 
-
+    //1=custom bonus loot
     if ($bonus_radio == "1" || $bonus_radio == "default") {
         if ($bonus_radio == "1") {
             $key_prefix = 'bonus_loot_go_bonus_loot_';

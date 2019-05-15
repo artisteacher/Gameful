@@ -43,16 +43,15 @@ function go_flush_rewrites() {
     go_blog_tags();
     go_blogs();
     go_custom_rewrite();
-    //go_reader_page();
-    go_map_page();
-    go_store_page();
-    go_custom_rewrite();
-    //go_reader_page();
     go_map_page();
     go_store_page();
     go_reader_page();
+    go_login_rewrite();
+    go_reset_password_rewrite();
+    go_profile_rewrite();
+    go_registration_rewrite();
+    go_leaderboard_rewrite();
     flush_rewrite_rules();
-
 }
 
 

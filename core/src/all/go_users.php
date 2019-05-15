@@ -6,59 +6,49 @@
  * Time: 8:06 PM
  */
 
-
+add_action( 'login_redirect', 'go_user_redirect', 10, 3 );
 function go_user_redirect( $redirect_to, $request, $user )
 {
-    //if (is_user_logged_in()) {
-    //$redirect_on = get_option( 'options_go_landing_page_on_login', true );
     if (isset($user) && ($user instanceof WP_User)) {
-        $redirect_url = get_option('options_go_landing_page_on_login', '');
-        $default_map = get_option('options_go_locations_map_default', '');
-        $user_id = $user->ID;
-        if ($redirect_url == 'map') {
-            if ($default_map !== '') {
-                update_user_option($user_id, 'go_last_map', $default_map);
-            }
-        }
-        if (!empty ($redirect_url)) {
-            return (site_url() . '/' . $redirect_url);
-        } else {
-            return site_url();
-        }
 
-        /*
-        if (isset($user->roles) && is_array($user->roles)) {
-            $roles = $user->roles;
-            if (is_array($roles)) {
-                if (in_array('administrator', $roles)) {
-                    return admin_url();
-                } else {
-                    if (!empty ($redirect_url)) {
-                        return (site_url() . '/' . $redirect_url);
-                    } else {
-                        return site_url();
-                    }
-                }
-            } else {
-                if ($roles == 'administrator') {
-                    return admin_url();
-                } else {
-                    if (!empty ($redirect_url)) {
-                        return (site_url() . '/' . $redirect_url);
-                    } else {
-                        return site_url();
-                    }
-                }
-            }
+        $user_id = $user->ID;
+        $redirect_url = go_get_user_redirect($user_id);
+        if (!empty ($redirect_url)) {
+            return  $redirect_url;
+        } else {
+            return;
         }
-    } else {
-        return $redirect_to;
-    }
-        */
 
     }
 }
-add_action( 'login_redirect', 'go_user_redirect', 10, 3 );
+
+
+function go_get_user_redirect($user_id = null){
+
+    $redirect_to = get_option('options_go_landing_page_radio', 'home');
+    $page = get_option('options_go_landing_page_on_login', '');
+
+    if ($redirect_to == 'store'){
+        $page = get_option('options_go_store_store_link', 'store');
+    }
+    else if ($redirect_to == 'map'){
+        $page = get_option('options_go_locations_map_map_link', 'map');
+    }
+    else if ($redirect_to == 'custom'){
+        $page = get_option('options_go_landing_page_on_login', '');
+    }
+
+    if ($user_id != null) {
+        //this sets the default map on login--this can be moved, but it needs to run before this function
+        $default_map = get_option('options_go_locations_map_default', '');
+        if ($default_map !== '') {
+            update_user_option($user_id, 'go_last_map', $default_map);
+
+        }
+    }
+
+    return home_url($page);
+}
 
 
 

@@ -1,9 +1,119 @@
 {
     "key": "group_5a8fb5fbe075d",
-    "title": "User Options",
+    "title": "Registration and Profile Page",
     "fields": [
         {
-            "key": "field_5abdde7c5ad28",
+            "key": "field_5cd4fa743159f",
+            "label": "User Name",
+            "name": "user_name",
+            "type": "text",
+            "instructions": "",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        },
+        {
+            "key": "field_5cd4be08e7077",
+            "label": "Email",
+            "name": "user_email",
+            "type": "email",
+            "instructions": "",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_5cd1d1de5491b",
+            "label": "First Name",
+            "name": "first_name",
+            "type": "text",
+            "instructions": "",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        },
+        {
+            "key": "field_5cd1d21168754",
+            "label": "Last Name",
+            "name": "last_name",
+            "type": "text",
+            "instructions": "",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        },
+        {
+            "key": "field_5cd1d13769aa9",
+            "label": "Display Name",
+            "name": "nickname",
+            "type": "text",
+            "instructions": "",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        },
+        {
+            "key": "field_5cd4f996c0d86",
+            "label": "Website",
+            "name": "website",
+            "type": "url",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": ""
+        },
+        {
+            "key": "field_5cd4f7b4366c6",
             "label": "Avatar",
             "name": "go_avatar",
             "type": "image",
@@ -27,12 +137,12 @@
             "mime_types": ""
         },
         {
-            "key": "field_5b45cc3faddbb",
+            "key": "field_5cd4f7b43672b",
             "label": "Section and Seat",
             "name": "go_section_and_seat",
             "type": "repeater",
             "instructions": "",
-            "required": 0,
+            "required": 1,
             "conditional_logic": 0,
             "wrapper": {
                 "width": "",
@@ -46,7 +156,7 @@
             "button_label": "",
             "sub_fields": [
                 {
-                    "key": "field_5b45cc3faddbc",
+                    "key": "field_5cd4f7b4498dd",
                     "label": "Section",
                     "name": "user-section",
                     "type": "taxonomy",
@@ -68,7 +178,7 @@
                     "multiple": 0
                 },
                 {
-                    "key": "field_5b45cc3faddbd",
+                    "key": "field_5cd4f7b449909",
                     "label": "Seat",
                     "name": "user-seat",
                     "type": "select",
@@ -82,46 +192,46 @@
                     },
                     "choices": {
                         "": "Select",
-                        "Seat 1": "Seat 1",
-                        "Seat 2": "Seat 2",
-                        "Seat 3": "Seat 3",
-                        "Seat 4": "Seat 4",
-                        "Seat 5": "Seat 5",
-                        "Seat 6": "Seat 6",
-                        "Seat 7": "Seat 7",
-                        "Seat 8": "Seat 8",
-                        "Seat 9": "Seat 9",
-                        "Seat 10": "Seat 10",
-                        "Seat 11": "Seat 11",
-                        "Seat 12": "Seat 12",
-                        "Seat 13": "Seat 13",
-                        "Seat 14": "Seat 14",
-                        "Seat 15": "Seat 15",
-                        "Seat 16": "Seat 16",
-                        "Seat 17": "Seat 17",
-                        "Seat 18": "Seat 18",
-                        "Seat 19": "Seat 19",
-                        "Seat 20": "Seat 20",
-                        "Seat 21": "Seat 21",
-                        "Seat 22": "Seat 22",
-                        "Seat 23": "Seat 23",
-                        "Seat 24": "Seat 24",
-                        "Seat 25": "Seat 25",
-                        "Seat 26": "Seat 26",
-                        "Seat 27": "Seat 27",
-                        "Seat 28": "Seat 28",
-                        "Seat 29": "Seat 29",
-                        "Seat 30": "Seat 30",
-                        "Seat 31": "Seat 31",
-                        "Seat 32": "Seat 32",
-                        "Seat 33": "Seat 33",
-                        "Seat 34": "Seat 34",
-                        "Seat 35": "Seat 35",
-                        "Seat 36": "Seat 36",
-                        "Seat 37": "Seat 37",
-                        "Seat 38": "Seat 38",
-                        "Seat 39": "Seat 39",
-                        "Seat 40": "Seat 40"
+                        "computer 1": "computer 1",
+                        "computer 2": "computer 2",
+                        "computer 3": "computer 3",
+                        "computer 4": "computer 4",
+                        "computer 5": "computer 5",
+                        "computer 6": "computer 6",
+                        "computer 7": "computer 7",
+                        "computer 8": "computer 8",
+                        "computer 9": "computer 9",
+                        "computer 10": "computer 10",
+                        "computer 11": "computer 11",
+                        "computer 12": "computer 12",
+                        "computer 13": "computer 13",
+                        "computer 14": "computer 14",
+                        "computer 15": "computer 15",
+                        "computer 16": "computer 16",
+                        "computer 17": "computer 17",
+                        "computer 18": "computer 18",
+                        "computer 19": "computer 19",
+                        "computer 20": "computer 20",
+                        "computer 21": "computer 21",
+                        "computer 22": "computer 22",
+                        "computer 23": "computer 23",
+                        "computer 24": "computer 24",
+                        "computer 25": "computer 25",
+                        "computer 26": "computer 26",
+                        "computer 27": "computer 27",
+                        "computer 28": "computer 28",
+                        "computer 29": "computer 29",
+                        "computer 30": "computer 30",
+                        "computer 31": "computer 31",
+                        "computer 32": "computer 32",
+                        "computer 33": "computer 33",
+                        "computer 34": "computer 34",
+                        "computer 35": "computer 35",
+                        "computer 36": "computer 36",
+                        "computer 37": "computer 37",
+                        "computer 38": "computer 38",
+                        "computer 39": "computer 39",
+                        "computer 40": "computer 40"
                     },
                     "default_value": [],
                     "allow_null": 0,
@@ -132,6 +242,93 @@
                     "placeholder": "Select"
                 }
             ]
+        },
+        {
+            "key": "field_5cd3640730f19",
+            "label": "Current Password",
+            "name": "currentpassword",
+            "type": "password",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "currentpassword",
+                "id": "currentpassword"
+            },
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_5cd3638830f17",
+            "label": "New Password",
+            "name": "newpassword",
+            "type": "password",
+            "instructions": "",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "newpassword",
+                "id": "newpassword"
+            },
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_5cd363d130f18",
+            "label": "Confirm Password",
+            "name": "confirmpassword",
+            "type": "password",
+            "instructions": "",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "confirmpassword",
+                "id": "confirmpassword"
+            },
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_5cd52c8f46296",
+            "label": "Password Strength",
+            "name": "",
+            "type": "message",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "<span class=\"password-strength\"><\/span>",
+            "new_lines": "",
+            "esc_html": 0
+        },
+        {
+            "key": "field_5cd9f85e5f788",
+            "label": "Membership Code",
+            "name": "membership_code",
+            "type": "text",
+            "instructions": "Enter the code provided by the instructor to join this site.",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
         }
     ],
     "location": [
@@ -143,13 +340,13 @@
             }
         ]
     ],
-    "menu_order": 0,
+    "menu_order": 5,
     "position": "normal",
     "style": "default",
     "label_placement": "left",
     "instruction_placement": "label",
     "hide_on_screen": "",
-    "active": 1,
+    "active": 0,
     "description": "",
-    "modified": 1555927095
+    "modified": 1557788816
 }

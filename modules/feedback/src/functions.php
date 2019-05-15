@@ -19,6 +19,7 @@ function go_reader_register_query_var( $vars ) {
     $vars[] = $reader;
     return $vars;
 }
+
 /*
 function filter_pagetitle($title) {
     //$title = get_bloginfo('name');
@@ -42,15 +43,6 @@ function go_reader_template_include($template){
             return plugin_dir_path(__FILE__) . 'templates/go_reader_template.php'; //Load your template or file
         }
 
-        /*
-        $page_name = (isset($wp_query->query_vars['pagename']) ? $wp_query->query_vars['pagename'] : false);
-        if ($page_name == $reader) { //Verify "blah" exists and value is "true".
-            return plugin_dir_path(__FILE__) . 'templates/go_reader_template.php'; //Load your template or file
-            remove_all_filters( 'wp_title' );
-            add_filter('wp_title', 'filter_pagetitle');
-
-        }
-        */
     }
     return $template; //Load normal template when $page_value != "true" as a fallback
 }
@@ -203,7 +195,7 @@ function go_post_status_icon($post_id){
                 $icon = '<a href="javascript:;" class="go_status_read_toggle" data-postid="' . $post_id . '"><span class="tooltip"  data-tippy-content="Status is read. Click to mark this post as unread."><i class="far fa-eye fa-2x" aria-hidden="true"></i><i class="fa fa-eye-slash fa-2x" aria-hidden="true" style="display: none;"></i></span></a>';
             }
             else{
-                $icon = '<span class="tooltip"  data-tippy-content="Status is read. Click to mark this post as unread."><i class="far fa-eye fa-2x" aria-hidden="true"></i><i class="fa fa-eye-slash fa-2x" aria-hidden="true" style="display: none;"></i></span>';
+                $icon = '<span class="tooltip"  data-tippy-content="Status is read."><i class="far fa-eye fa-2x" aria-hidden="true"></i><i class="fa fa-eye-slash fa-2x" aria-hidden="true" style="display: none;"></i></span>';
             }
         } else if ($status == 'reset') {
             $icon = '<span class="tooltip" data-tippy-content="This post has been reset."><i class="fas fa-times-circle fa-2x" aria-hidden="true"></i></span>';
@@ -212,7 +204,7 @@ function go_post_status_icon($post_id){
                 $icon = '<a href="javascript:;" class="go_status_read_toggle" data-postid="' . $post_id . '" ><span class="tooltip" data-tippy-content="Status is unread. Click to mark this post as read."><i class="far fa-eye-slash fa-2x" aria-hidden="true"></i><i class="fa fa-eye fa-2x" aria-hidden="true" style="display: none;"></i></span></a>';
             }
             else{
-                $icon = '<span class="tooltip" data-tippy-content="Status is unread. Click to mark this post as read."><i class="far fa-eye-slash fa-2x" aria-hidden="true"></i><i class="fa fa-eye fa-2x" aria-hidden="true" style="display: none;"></i></span>';
+                $icon = '<span class="tooltip" data-tippy-content="Status is unread."><i class="far fa-eye-slash fa-2x" aria-hidden="true"></i><i class="fa fa-eye fa-2x" aria-hidden="true" style="display: none;"></i></span>';
 
             }
         } else if ($status == 'draft') {

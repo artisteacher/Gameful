@@ -94,8 +94,8 @@ function go_task_shortcode($atts, $content = null ) {
         'go_task_change_stage' => wp_create_nonce( 'go_task_change_stage' ),
     );
 
-    $redirect_url = get_option('options_go_landing_page_on_login', '');
-    $redirect_url = (site_url() . '/' . $redirect_url);
+    $redirect_url = go_get_user_redirect($user_id);
+
 
     wp_localize_script(
         'go_frontend',
@@ -772,10 +772,7 @@ function go_print_outro ($user_id, $post_id, $custom_fields, $stage_count, $stat
         if(empty($previous_bonus_attempt)) {
             go_bonus_loot($custom_fields, $user_id);
         }
-
     }
-
-
 
     $bonus_status = go_get_bonus_status($post_id, $user_id);
     if ($bonus_status <= 0){
@@ -797,11 +794,13 @@ function go_print_bonus_loot_possibilities($custom_fields, $user_id){
             $title = (isset($row['title']) ? $row['title'] : null);
             echo "<li>";
             echo $title . " : ";
+            $prev = false;
             //$message = (isset($row['title']) ? $row['title'] : null);
             if (go_get_loot_toggle( 'xp')){
-                $loot = (isset($row['$xp']) ? $row['$xp'] : null);
+                $loot = (isset($row['xp']) ? $row['xp'] : null);
                 if ($loot > 0) {
                     go_display_shorthand_currency ( 'xp', $loot, true );
+                    $prev = true;
                     //$name = go_get_loot_short_name('xp');
                    // echo " " . $loot . " " . $name;
                 }
@@ -809,7 +808,11 @@ function go_print_bonus_loot_possibilities($custom_fields, $user_id){
             if (go_get_loot_toggle( 'gold')){
                 $loot = (isset($row['gold']) ? $row['gold'] : null);
                 if ($loot > 0) {
+                    if ($prev){
+                        echo ", ";
+                    }
                     go_display_shorthand_currency ( 'gold', $loot,  true );
+                    $prev = true;
                     //$name = go_get_loot_short_name('gold');
                    //echo " " . $loot . " " . $name;
                 }
@@ -817,6 +820,9 @@ function go_print_bonus_loot_possibilities($custom_fields, $user_id){
             if (go_get_loot_toggle( 'health')){
                 $loot = (isset($row['health']) ? $row['health'] : null);
                 if ($loot > 0) {
+                    if ($prev){
+                        echo ", ";
+                    }
                     go_display_shorthand_currency ( 'health', $loot,  true );
                     //$name = go_get_loot_short_name('health');
                     //echo " " . $loot . " " . $name;

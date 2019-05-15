@@ -22,7 +22,7 @@
 function go_user_links($user_id, $website = true, $stats = false, $profile = false, $blog = false, $show_messages = false, $stats_lite = false , $clipboard = false, $website_link = null, $login = null ) {
     //if current user is admin, set all to true
     global $wpdb;
-
+    $is_admin = false;
     if ($clipboard) { //if this is the clipboard
         $show_all = true;
 
@@ -46,16 +46,16 @@ function go_user_links($user_id, $website = true, $stats = false, $profile = fal
 
     if ($stats){
         if ($stats_lite) {
-            echo "<div class='go_user_link'><a href='javascript:void(0);' class='go_stats_lite' data-UserId='{$user_id}' onclick='go_stats_lite({$user_id});'><i class='fas fa-area-chart ab-icon' aria-hidden='true'></i></a></div>";
+            echo "<div class='go_user_link'><a href='javascript:void(0);' class='go_stats_lite' data-UserId='{$user_id}' onclick='go_stats_lite({$user_id});'><i class='fas fa-chart-area' aria-hidden='true'></i></a></div>";
         }else{//regular stats link
-            echo "<div class='go_user_link_stats go_user_link' name='{$user_id}'><a href='javascript:void(0);';'><i class='fas fa-area-chart ab-icon' aria-hidden='true'></i></a></div>";
+            echo "<div class='go_user_link_stats go_user_link' name='{$user_id}'><a href='javascript:void(0);';'><i class='fas fa-chart-area ' aria-hidden='true'></i></a></div>";
         }
     }
     if ($clipboard){
-        echo "<div class='go_user_link go_user_map' name='{$user_id}'><a onclick='go_user_map({$user_id})' href='javascript:void(0);'><i class='fas fa-sitemap ab-icon' aria-hidden='true'></i></a></div>";
+        echo "<div class='go_user_link go_user_map' name='{$user_id}'><a onclick='go_user_map({$user_id})' href='javascript:void(0);'><i class='fas fa-sitemap' aria-hidden='true'></i></a></div>";
 
     }
-    if ($profile && $show_all) {
+    if ($profile && $show_all && ($is_admin || $clipboard)) {
         if($clipboard){
             echo "<div class='go_user_link'><a onclick='go_user_profile_link({$user_id})' href='javascript:void(0);' target='_blank'><i class='fas fa-user' aria-hidden='true'></i></a></div>";
         }else {
@@ -178,9 +178,16 @@ function go_bonus_result_link($check_type, $result, $stage, $time, $bonus = true
 }
 
 //this then uses select2 and ajax to make dropdown
-function go_make_tax_select ($taxonomy, $location = null, $selector = 'id'){
+function go_make_tax_select ($taxonomy, $location = null, $selector = 'id', $value = false, $value_name = false){
 
-    echo "<select ".$selector."='go_". $location . $taxonomy . "_select'></select>";
+    echo "<select ".$selector."='go_". $location . $taxonomy . "_select' ";
+    if ($value) {
+        echo " data-value='".$value."' ";
+    }
+    if($value_name){
+        echo " data-value_name='".$value_name."' ";
+    }
+    echo "></select>";
 
 }
 

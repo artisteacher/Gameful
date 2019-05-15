@@ -211,5 +211,3 @@ function go_admin_enqueue_scripts_acf() {
 add_action('acf/input/admin_enqueue_scripts', 'go_admin_enqueue_scripts_acf');
 
 
-
-?>

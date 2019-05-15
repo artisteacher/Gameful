@@ -29,6 +29,3 @@ function go_admin_styles () {
 
 
 }
-
-
-?>

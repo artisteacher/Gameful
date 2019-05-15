@@ -660,14 +660,14 @@ function go_show_private(){
     }
     $user_id = (isset($_POST['userid']) ?  $_POST['userid'] : 0);
     $checked = (isset($_POST['checked']) ?  $_POST['checked'] : 0);
-
+    $current_uid = get_current_user_id();
     if($checked === 'checked'){
         $checked = 1;
     }else{
         $checked = 0;
     }
 
-    update_user_meta( $user_id, 'go_show_private', $checked );
+    update_user_option( $current_uid, 'go_show_private', $checked );
     ob_start();
     go_get_blog_posts($user_id);
     $buffer = ob_get_contents();

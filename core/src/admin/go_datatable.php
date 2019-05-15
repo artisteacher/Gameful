@@ -175,8 +175,7 @@ function go_set_options_autoload(){
 
         'options_go_slugs_toggle',
 
-        'options_go_avatars_local',
-        'options_go_avatars_gravatars',
+        'options_go_avatars_local'
     );
 
     foreach ( $options_array as $option ) {//autoload must be set on creation of option
@@ -267,8 +266,7 @@ function go_install_data ($reset = false) {
 
         'options_go_slugs_toggle' => 1,
 
-        'options_go_avatars_local' => 1,
-        'options_go_avatars_gravatars' => 1,
+        'options_go_avatars_local' => 1
     );
     foreach ( $options_array as $key => $value ) {
         add_option( $key, $value, '', 'yes' );

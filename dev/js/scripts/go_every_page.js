@@ -1,5 +1,11 @@
 jQuery( document ).ready( function() {
 
+
+    //jQuery('#go_user_link').on("click", function(e){
+    //    go_login_lightbox();
+   // });
+
+
     let debug = go_debug;
     if (debug === 'false') {
         jQuery(document).on('heartbeat-tick', function (event, data) {
@@ -21,7 +27,247 @@ jQuery( document ).ready( function() {
         console.log('Game On Debug Mode On');
     }
 
+
+
+
+
+    jQuery(".go_password_change_modal").on("click", function(e){
+        go_update_password_lightbox();
+    });
+
+    //if this page has the password set fields (password, confirmation, strength)
+    if (typeof (hasPassword) !== 'undefined') {
+        go_activate_password_checker();
+        jQuery('#footer-widgets').hide();
+    }
+    if (typeof (hideFooterWidgets) !== 'undefined') {
+        jQuery('#footer-widgets').hide();
+    }
+
 });
+
+function go_activate_password_checker(){
+    jQuery( 'body' ).on( 'keyup', '.newpassword, .confirmpassword', function( event ) {
+        console.log('wdmChkPwdStrength');
+        wdmChkPwdStrength(
+            // password field   2
+            jQuery('#newpassword input'),
+            // confirm password field
+            jQuery('#confirmpassword input'),
+            // strength status
+            jQuery('.password-strength'),
+            // Submit button
+            jQuery('.acf-form-submit .acf-button'),
+            // blacklisted words which should not be a part of the password
+            ['admin', 'happy', 'hello', '1234']
+        );
+    });
+}
+
+function go_update_password_lightbox(){//this is only needed on the frontend
+    console.log('go_update_password_lightbox');
+    jQuery.ajax({
+        type: "post",
+        url: MyAjax.ajaxurl,
+        data: {
+            //_ajax_nonce: nonce,
+            action: 'go_update_password_lightbox'
+        },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+            jQuery(".featherlight-content #go_password_change").off().one("click", function(e){
+                go_update_password();
+            });
+        },
+        success: function( res ) {
+            //console.log(res);
+            let error = go_ajax_error_checker(res);
+            if (error == 'true') return;
+
+            if ( -1 !== res ) {
+
+                if (res){
+                    //add the returned form to the existing div on page that stores it temporarily
+                    jQuery('#go_password_change_lightbox').html(res);
+                    console.log('open lightbox');
+
+                    //open form in a lightbox
+                    jQuery.featherlight(jQuery(".go_password_change_container"), {
+                        afterContent: function() {
+                            //delete the form content that was stored before opening it in a lightbox.  The lightbox has a copy.
+                            jQuery('#go_password_change_lightbox').empty();
+
+                            //make it so you can tab through the form.
+                            jQuery('.featherlight-content').find('a, input[type!="hidden"], select, textarea, iframe, button:not(.featherlight-close), iframe, [contentEditable=true]').each(function (index) {
+                                if (index === 0) {
+                                    jQuery(this).prop('autofocus', true);
+                                }
+                                jQuery(this).prop('tabindex', 0);
+                            });
+
+                            // trigger the wdmChkPwdStrength
+                            go_activate_password_checker();
+                            /*
+                            jQuery( 'body' ).on( 'keyup', '.featherlight-content .newpassword input, .featherlight-content .confirmpassword input', function( event ) {
+                                console.log('wdmChkPwdStrength');
+                                wdmChkPwdStrength(
+                                    // password field   2
+                                    jQuery('.featherlight-content .newpassword input'),
+                                    // confirm password field
+                                    jQuery('.featherlight-content .confirmpassword input'),
+                                    // strength status
+                                    jQuery('.featherlight-content .password-strength'),
+                                    // Submit button
+                                    jQuery('.featherlight-content .acf-button'),
+                                    // blacklisted words which should not be a part of the password
+                                    ['admin', 'happy', 'hello', '1234']
+                                );
+                            });
+                            */
+                        },
+                        afterClose: function() {
+                            jQuery('.acf-form-submit .acf-button').removeAttr( 'disabled' );
+                        },
+                    } );
+
+                    //////////////////
+
+                }
+
+
+            }
+
+        }
+    });
+}
+
+
+//https://stackoverflow.com/questions/24602343/wordpress-custom-change-password-page
+//
+// https://wisdmlabs.com/blog/how-to-add-a-password-strength-meter-in-wordpress/
+
+function wdmChkPwdStrength( $pwd,  $confirmPwd, $strengthStatus, $submitBtn, blacklistedWords ) {
+    var pwd = $pwd.val();
+    var confirmPwd = $confirmPwd.val();
+
+    // extend the blacklisted words array with those from the site data
+    blacklistedWords = blacklistedWords.concat( wp.passwordStrength.userInputBlacklist() )
+
+    // every time a letter is typed, reset the submit button and the strength meter status
+    // disable the submit button
+    $submitBtn.attr( 'disabled', 'disabled' );
+    console.log('disabled');
+    $strengthStatus.removeClass( 'short bad good strong' );
+    $submitBtn.css( 'cursor', 'default' );
+    $submitBtn.css('opacity', '.5');
+
+
+    // calculate the password strength
+    var pwdStrength = wp.passwordStrength.meter( pwd, blacklistedWords, confirmPwd );
+    let requiredStrength = minPassword;
+
+    // check the password strength
+    switch ( pwdStrength ) {
+
+        case 2:
+            $strengthStatus.addClass( 'bad' ).html( pwsL10n.bad );
+            break;
+
+        case 3:
+            $strengthStatus.addClass( 'good' ).html( pwsL10n.good );
+            break;
+
+        case 4:
+            $strengthStatus.addClass( 'strong' ).html( pwsL10n.strong );
+            break;
+
+        case 5:
+            $strengthStatus.addClass( 'short' ).html( pwsL10n.mismatch );
+            break;
+
+        default:
+            $strengthStatus.addClass( 'short' ).html( pwsL10n.short );
+
+    }
+// set the status of the submit button
+    //if ( 4 === pwdStrength && '' !== confirmPwd.trim() ) {
+        console.log("pws: " + pwdStrength);
+    if ( (pwdStrength >= requiredStrength) && (pwdStrength < 5) && ('' !== confirmPwd.trim() )) {
+        console.log('enable');
+        $submitBtn.removeAttr( 'disabled' );
+        $submitBtn.css( 'cursor', 'pointer' );;
+        $submitBtn.css('opacity', '1');
+    }
+
+    return pwdStrength;
+}
+
+function go_update_password(){//this is only needed on the frontend
+    console.log('go_update_password');
+    //var nonce = GO_EVERY_PAGE_DATA.nonces.go_admin_bar_stats;
+    //nonce = 'fail';
+    var current_password = jQuery(".featherlight-content input[name=currentpassword]").val();
+    var new_password = jQuery(".featherlight-content input[name=newpassword]").val();
+    var confirm_password = jQuery(".featherlight-content input[name=confirmpassword]").val();
+    jQuery.ajax({
+        type: "post",
+        url: MyAjax.ajaxurl,
+        data: {
+            //_ajax_nonce: nonce,
+            action: 'go_update_password',
+            current_password: current_password,
+            new_password: new_password,
+            confirm_password: confirm_password,
+        },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+            jQuery(".featherlight-content #go_password_change").off().one("click", function(e){
+                go_update_password();
+            });
+        },
+        success: function( res ) {
+            console.log(res);
+            let error = go_ajax_error_checker(res);
+            if (error == 'true') return;
+
+            if ( -1 !== res ) {
+
+            if (res == 'success'){
+                console.log('password changed')
+                jQuery.featherlight.close();
+                swal.fire({//sw2 OK
+                    text: "Your password was changed."
+                });
+
+            }else if (res == 'current_password_invalid') {
+                swal.fire({//sw2 OK
+                        text: 'The current password entered is invalid.',
+                        type: 'error'
+                    }
+                );
+                jQuery(".featherlight-content #go_password_change").off().one("click", function(e){
+                    go_update_password();
+                });
+            }
+
+
+            }
+
+        }
+    });
+}
 
 function go_ajax_error_checker(raw){
     if (raw == 'login'){
@@ -122,7 +368,7 @@ function go_lightbox_blog_img(){
     });
 }
 
-function go_admin_bar_stats_page_button( id ) {//this is called from the admin bar and is hard coded in the php code
+function go_admin_bar_stats_page_button( id ) {//this is called from the admin bar
     var nonce = GO_EVERY_PAGE_DATA.nonces.go_admin_bar_stats;
     //nonce = 'fail';
     jQuery.ajax({
@@ -149,7 +395,13 @@ function go_admin_bar_stats_page_button( id ) {//this is called from the admin b
 
             if ( -1 !== res ) {
 
-                jQuery.featherlight(res, {variant: 'stats'});
+                jQuery.featherlight(res, {
+                    variant: 'stats',
+                    afterClose: function(event){
+                        jQuery('.go_user_bar_stats').blur();
+                        jQuery(body).focus();
+                    }
+                });
 
                 go_stats_task_list();
 
@@ -185,7 +437,6 @@ function go_admin_bar_stats_page_button( id ) {//this is called from the admin b
                     }
                 });
 
-
             }
 
         }
@@ -202,85 +453,104 @@ function go_stats_links(){
     });
 }
 
-function go_leaderboard_menus_select2(){
+function go_make_select2_filter(taxonomy, my_value, is_clipboard, is_hier) {
 
-    if (jQuery("#select2-go_user_go_sections_select-container").length == 0) {
-        jQuery('#go_user_go_sections_select').select2({
-            ajax: {
-                url: MyAjax.ajaxurl, // this is localized on the frontend
-                dataType: 'json',
-                delay: 400, // delay in ms while typing when to perform a AJAX search
-                data: function (params) {
-
-                    return {
-                        q: params.term, // search query
-                        action: 'go_make_taxonomy_dropdown_ajax', // AJAX action for admin-ajax.php
-                        taxonomy: 'user_go_sections',
-                        is_hier: false
-                    };
-
-
-                },
-                processResults: function (data) {
-                    jQuery("#go_user_go_sections_select").select2("destroy");
-                    jQuery('#go_user_go_sections_select').children().remove();
-                    jQuery("#go_user_go_sections_select").select2({
-                        data: data,
-                        placeholder: "Show All",
-                        allowClear: true}).val(group).trigger("change");
-                    jQuery("#go_user_go_sections_select").select2("open");
-                    return {
-                        results: data
-                    };
-
-                },
-                cache: true
-            },
-            minimumInputLength: 0, // the minimum of symbols to input before perform a search
-            multiple: false,
-            placeholder: "Show All",
-            allowClear: true
-        });
+    if (is_clipboard) {
+        // Get saved data from sessionStorage
+        var value = localStorage.getItem('go_clipboard_' + my_value);
+        var value_name = localStorage.getItem('go_clipboard_' + my_value + '_name');
+    }else{
+        value = jQuery('#go_clipboard_' + taxonomy + '_select').data('value');
+        value_name = jQuery('#go_clipboard_' + taxonomy + '_select').data('value_name');
     }
 
-    if (jQuery("#select2-go_user_go_groups_select-container").length == 0) {
-        jQuery('#go_user_go_groups_select').select2({
-            ajax: {
-                url: MyAjax.ajaxurl, // this is localized on the frontend
-                dataType: 'json',
-                delay: 400, // delay in ms while typing when to perform a AJAX search
-                data: function (params) {
-                    return {
-                        q: params.term, // search query
-                        action: 'go_make_taxonomy_dropdown_ajax', // AJAX action for admin-ajax.php
-                        taxonomy: 'user_go_groups',
-                        is_hier: false
-                    };
-                },
-                processResults: function (data) {
-                    jQuery("#go_user_go_groups_select").select2("destroy");
-                    jQuery('#go_user_go_groups_select').children().remove();
-                    jQuery("#go_user_go_groups_select").select2({
-                        data: data,
-                        placeholder: "Show All",
-                        allowClear: true}).val(group).trigger("change");
-                    jQuery("#go_user_go_groups_select").select2("open");
-                    return {
-                        results: data
-                    };
-                },
-                minimumInputLength: 0, // the minimum of symbols to input before perform a search
-                multiple: false,
-                placeholder: "Show All",
-                allowClear: true
+
+    jQuery('#go_clipboard_' + taxonomy + '_select').select2({
+        ajax: {
+            url: MyAjax.ajaxurl, // AJAX URL is predefined in WordPress admin
+            dataType: 'json',
+            delay: 400, // delay in ms while typing when to perform a AJAX search
+            data: function (params) {
+
+                return {
+                    q: params.term, // search query
+                    action: 'go_make_taxonomy_dropdown_ajax', // AJAX action for admin-ajax.php
+                    taxonomy: taxonomy,
+                    is_hier: is_hier
+                };
+
+
             },
-            minimumInputLength: 0, // the minimum of symbols to input before perform a search
-            multiple: false,
-            placeholder: "Show All",
-            allowClear: true
-        });
+            processResults: function( data ) {
+
+                jQuery("#go_clipboard_" + taxonomy + "_select").select2("destroy");
+                jQuery("#go_clipboard_" + taxonomy + "_select").children().remove();
+                jQuery("#go_clipboard_" + taxonomy + "_select").select2({
+                    data: data,
+                    placeholder: "Show All",
+                    allowClear: true}).val(value).trigger("change");
+                jQuery("#go_clipboard_" + taxonomy + "_select").select2("open");
+                return {
+                    results: data
+                };
+
+            },
+            cache: true
+        },
+        minimumInputLength: 0, // the minimum of symbols to input before perform a search
+        multiple: false,
+        placeholder: "Show All",
+        allowClear: true
+    });
+
+    if( value != null && value != 'null') {
+        // Fetch the preselected item, and add to the control
+        var valueSelect = jQuery('#go_clipboard_' + taxonomy + '_select');
+        // create the option and append to Select2
+        var option = new Option(value_name, value, true, true);
+        valueSelect.append(option).trigger('change');
     }
+
 }
+
+function go_make_select2_cpt( my_div, cpt) {
+
+    jQuery(my_div).select2({
+        ajax: {
+            url: MyAjax.ajaxurl, // AJAX URL is predefined in WordPress admin
+            dataType: 'json',
+            delay: 400, // delay in ms while typing when to perform a AJAX search
+            data: function (params) {
+                return {
+                    q: params.term, // search query
+                    action: 'go_make_cpt_select2_ajax', // AJAX action for admin-ajax.php
+                    cpt: cpt
+                };
+            },
+            processResults: function( data ) {
+                //console.log("search results: " + data);
+                var options = [];
+                if ( data ) {
+
+                    // data is the array of arrays, and each of them contains ID and the Label of the option
+                    jQuery.each( data, function( index, text ) { // do not forget that "index" is just auto incremented value
+                        options.push( { id: text[0], text: text[1]  } );
+                    });
+
+                }
+                return {
+                    results: options
+                };
+            },
+            cache: false
+        },
+        minimumInputLength: 1, // the minimum of symbols to input before perform a search
+        multiple: true,
+        placeholder: "Show All"
+    });
+
+}
+
 
 function go_stats_about(user_id) {
     //console.log("about");
@@ -349,6 +619,7 @@ function go_blog_lightbox_opener(post_id){
 */
 
 function go_stats_task_list() {
+    jQuery("#stats_tasks").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px 30px;'><div id='loader' <i class='fas fa-spinner fa-pulse fa-4x'></i></div></div>");
     var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_task_list;
     if (jQuery("#go_tasks_datatable").length == 0) {
         jQuery.ajax({
@@ -454,6 +725,7 @@ function go_close_single_history(){
 
 function go_stats_single_task_activity_list (postID) {
     var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_single_task_activity_list;
+
     jQuery.ajax({
         type: 'post',
         url: MyAjax.ajaxurl,
@@ -494,6 +766,8 @@ function go_stats_single_task_activity_list (postID) {
 function go_stats_item_list() {
     //console.log("store");
     //jQuery(".go_datatables").hide();
+    jQuery("#stats_store").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px 30px;'><div id='loader' <i class='fas fa-spinner fa-pulse fa-4x'></i></div></div>");
+
     var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_item_list;
     if (jQuery("#go_store_datatable").length == 0 ) {
         jQuery.ajax({
@@ -540,6 +814,8 @@ function go_stats_item_list() {
 
 //the SSP v4 one
 function go_stats_activity_list() {
+    jQuery("#stats_history").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px 30px;'><div id='loader' <i class='fas fa-spinner fa-pulse fa-4x'></i></div></div>");
+
     var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_activity_list;
     if (jQuery("#go_activity_datatable").length == 0) {
         jQuery.ajax({
@@ -600,6 +876,8 @@ function go_stats_activity_list() {
 }
 
 function go_stats_messages() {
+    jQuery("#stats_messages").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px 30px;'><div id='loader' <i class='fas fa-spinner fa-pulse fa-4x'></i></div></div>");
+
     var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_messages;
     if (jQuery("#go_messages_datatable").length == 0) {
         jQuery.ajax({
@@ -645,6 +923,7 @@ function go_stats_messages() {
 }
 
 function go_stats_badges_list() {
+    jQuery("#stats_badges").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px 30px;'><div id='loader' <i class='fas fa-spinner fa-pulse fa-4x'></i></div></div>");
     var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_badges_list;
     if (jQuery("#go_badges_list").length == 0) {
 
@@ -676,6 +955,8 @@ function go_stats_badges_list() {
 }
 
 function go_stats_groups_list() {
+    jQuery("#stats_groups").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px 30px;'><div id='loader' <i class='fas fa-spinner fa-pulse fa-4x'></i></div></div>");
+
     var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_groups_list;
 
     if (jQuery("#go_groups_list").length == 0) {
@@ -700,120 +981,6 @@ function go_stats_groups_list() {
                 if (-1 !== res) {
                     jQuery('#stats_groups').html(res);
                 }
-            }
-        });
-    }
-}
-
-function go_stats_leaderboard() {
-    var nonce_leaderboard = GO_EVERY_PAGE_DATA.nonces.go_stats_leaderboard;
-    var is_admin = GO_EVERY_PAGE_DATA.go_is_admin;
-    var initial_sort = 3;
-    if (is_admin == true){
-        initial_sort = 4;
-    }
-    if (jQuery("#go_leaderboard_wrapper").length == 0) {
-        jQuery(".go_leaderboard_wrapper").show();
-        jQuery.ajax({
-            type: 'post',
-            url: MyAjax.ajaxurl,
-            data: {
-                _ajax_nonce: nonce_leaderboard,
-                action: 'go_stats_leaderboard',
-                user_id: jQuery('#go_stats_hidden_input').val()
-            },
-            /**
-             * A function to be called if the request fails.
-             * Assumes they are not logged in and shows the login message in lightbox
-             */
-            error: function(jqXHR, textStatus, errorThrown) {
-                if (jqXHR.status === 400){
-                    jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
-                }
-            },
-            success: function( raw ) {
-                //console.log(raw);
-                //console.log('success');
-
-                jQuery('#stats_leaderboard').html(raw);
-
-
-                    //XP////////////////////////////
-                    //go_sort_leaders("go_xp_leaders_datatable", 4);
-                    var table = jQuery('#go_leaders_datatable').DataTable({
-                        "processing": true,
-                        "serverSide": true,
-                        "ajax": {
-                            "url": MyAjax.ajaxurl + '?action=go_stats_leaderboard_dataloader_ajax',
-                            "data": function(d){
-                                //d.user_id = jQuery('#go_stats_hidden_input').val();
-                                //d.date = jQuery( '.datepicker' ).val();
-                                d.section = jQuery('#go_user_go_sections_select').val();
-                                d.group = jQuery('#go_user_go_groups_select').val();
-                                //d.badge = jQuery('#go_clipboard_go_badges_select').val();
-                            }
-                        },
-                        //"orderFixed": [[4, "desc"]],
-                        //"destroy": true,
-                        responsive: false,
-                        "autoWidth": false,
-                        "paging": true,
-                        "order": [[initial_sort, "desc"]],
-                        "drawCallback": function( settings ) {
-                            go_stats_links();
-                            go_leaderboard_menus_select2();
-                        },
-                        "searching": false,
-                        "columnDefs": [
-                            { type: 'natural', targets: '_all'},
-                            {
-                                "targets": [0],
-                                sortable: false
-                            },
-                            {
-                                "targets": [1],
-                                sortable: false
-                            },
-                            {
-                                "targets": [2],
-                                sortable: false
-                            },
-                            {
-                                "targets": [3],
-                                sortable: false,
-                            },
-                            {
-                                "targets": [4],
-                                sortable: true,
-                                "orderSequence": [ "desc" ]
-                            },
-                            {
-                                "targets": [5],
-                                sortable: true,
-                                "orderSequence": [ "desc" ]
-                            },
-                            {
-                                "targets": [6],
-                                sortable: true,
-                                "orderSequence": [ "desc" ]
-                            },
-                        ],
-                    });
-
-
-
-
-                // Event listener to the range filtering inputs to redraw on input
-                jQuery('#go_user_go_sections_select, #go_user_go_groups_select').change( function() {
-                    var section = jQuery('#go_user_go_sections_select').val();
-                    //console.log(section);
-                    if (jQuery("#go_leaders_datatable").length) {
-                        table.draw();
-                    }
-                } );
-
-                //});
-
             }
         });
     }
@@ -855,11 +1022,7 @@ function go_stats_lite (user_id) {
                         go_stats_links();
                     },
                     "searching": false
-
-
                 });
-
-
             }
         }
     });
@@ -937,101 +1100,6 @@ function go_load_daterangepicker_empty(){
 
 }
 
-function go_make_select2_filter(taxonomy, my_value, is_clipboard) {
-
-    if (is_clipboard) {
-
-        // Get saved data from sessionStorage
-        var value = localStorage.getItem('go_clipboard_' + my_value);
-        var value_name = localStorage.getItem('go_clipboard_' + my_value + '_name');
-    }
-
-
-    jQuery('#go_clipboard_' + taxonomy + '_select').select2({
-        ajax: {
-            url: MyAjax.ajaxurl, // AJAX URL is predefined in WordPress admin
-            dataType: 'json',
-            delay: 400, // delay in ms while typing when to perform a AJAX search
-            data: function (params) {
-
-                return {
-                    q: params.term, // search query
-                    action: 'go_make_taxonomy_dropdown_ajax', // AJAX action for admin-ajax.php
-                    taxonomy: taxonomy,
-                    is_hier: false
-                };
-
-
-            },
-            processResults: function( data ) {
-
-                jQuery("#go_clipboard_" + taxonomy + "_select").select2("destroy");
-                jQuery("#go_clipboard_" + taxonomy + "_select").children().remove();
-                jQuery("#go_clipboard_" + taxonomy + "_select").select2({
-                    data: data,
-                    placeholder: "Show All",
-                    allowClear: true}).val(value).trigger("change");
-                jQuery("#go_clipboard_" + taxonomy + "_select").select2("open");
-                return {
-                    results: data
-                };
-
-            },
-            cache: true
-        },
-        minimumInputLength: 0, // the minimum of symbols to input before perform a search
-        multiple: false,
-        placeholder: "Show All",
-        allowClear: true
-    });
-
-    if( value != null && value != 'null') {
-        // Fetch the preselected item, and add to the control
-        var valueSelect = jQuery('#go_clipboard_' + taxonomy + '_select');
-        // create the option and append to Select2
-        var option = new Option(value_name, value, true, true);
-        valueSelect.append(option).trigger('change');
-    }
-
-}
-
-function go_make_select2_cpt( my_div, cpt) {
-
-    jQuery(my_div).select2({
-        ajax: {
-            url: MyAjax.ajaxurl, // AJAX URL is predefined in WordPress admin
-            dataType: 'json',
-            delay: 400, // delay in ms while typing when to perform a AJAX search
-            data: function (params) {
-                return {
-                    q: params.term, // search query
-                    action: 'go_make_cpt_select2_ajax', // AJAX action for admin-ajax.php
-                    cpt: cpt
-                };
-            },
-            processResults: function( data ) {
-                //console.log("search results: " + data);
-                var options = [];
-                if ( data ) {
-
-                    // data is the array of arrays, and each of them contains ID and the Label of the option
-                    jQuery.each( data, function( index, text ) { // do not forget that "index" is just auto incremented value
-                        options.push( { id: text[0], text: text[1]  } );
-                    });
-
-                }
-                return {
-                    results: options
-                };
-            },
-            cache: false
-        },
-        minimumInputLength: 1, // the minimum of symbols to input before perform a search
-        multiple: true,
-        placeholder: "Show All"
-    });
-
-}
 
 function go_setup_reset_filter_button(is_reader){
     jQuery('#go_clipboard_user_go_sections_select, #go_clipboard_user_go_groups_select, #go_clipboard_go_badges_select, #go_task_select, #go_store_item_select').on('select2:select', function (e) {

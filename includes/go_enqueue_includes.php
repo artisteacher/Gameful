@@ -38,6 +38,9 @@ function go_includes ($hook) {
     wp_enqueue_style('go_font-awesome');
 
 
+    //on change password page
+    wp_enqueue_script( 'password-strength-meter' );
+
 
 
     /**

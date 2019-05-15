@@ -21,7 +21,7 @@ function go_get_blog_posts($user_id = null){
     }
     $is_admin = go_user_is_admin($current_user_id);
 
-    $show_private = get_user_meta($user_id, 'go_show_private', true);
+    $show_private = get_user_meta($current_user_id, 'go_show_private', true);
 
     if(($is_admin || $is_current_user) && intval($show_private) === 1){
         $query_statuses = array("read", "unread", "reset", "draft", "trash", "publish");

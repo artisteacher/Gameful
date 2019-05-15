@@ -484,7 +484,7 @@ function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_underst
     }
 
     ob_start();
-    echo "<div class=\"go_blog_post_wrapper go_blog_post_wrapper_$blog_post_id\" style=\"padding: 10px;margin: 10px; background-color: white;\" data-postid ='{$blog_post_id}'>";
+    echo "<div class='go_blog_post_wrapper go_blog_post_wrapper_$blog_post_id' style='padding: 20px;margin: 10px; background-color: white; border: 1px solid;' data-postid ='{$blog_post_id}'>";
 
     $status = get_post_status($blog_post_id);
     if ($status == 'draft') {
@@ -500,6 +500,7 @@ function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_underst
     }
     echo "</div>";
 
+    echo "<div class='go_blog_meta' style='font-size: .8em;'>";
     if ($show_author) {
         $user_data = get_userdata($author_id);
         $blogURL = get_site_url() . "/user/" . $user_data->user_login;
@@ -510,7 +511,7 @@ function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_underst
     if($post_modified != $post_date){
         echo "<br> modified date: " . date("M d, Y H:i a", strtotime($post_modified));
     }
-
+    echo "</div>";
     //for each number of elements
         //get the type
         //get the uniqueID

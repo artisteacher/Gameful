@@ -519,10 +519,11 @@ input[type='text'].go_error_red {
 .fas {font-family: 'Font Awesome 5 Free' !important; font-weight: 900;}
 
 @media screen and (max-width: 782px){
-  	#wp-admin-bar-go_map, #wp-admin-bar-go_stats, #wp-admin-bar-go_store {
+  	#wp-admin-bar-go_map, #wp-admin-bar-go_clipboard, #wp-admin-bar-go_store, #wp-admin-bar-go_reader, #go_section_pipe {
  		display:block !important;
  		width: 52px; height: 46px;
  		overflow: hidden;
+		top: -5px;
 	}
  }
 
@@ -653,6 +654,7 @@ ul#wp-admin-bar-go_add-default.ab-submenu {
 	padding: 0 0 0 10px !important;
 }
 
+/*
 #go_admin_bar_task_search_input {
 	height: 24px;
 	font-size: 13px;
@@ -668,7 +670,7 @@ ul#wp-admin-bar-go_add-default.ab-submenu {
 	line-height: 24px;
 	width: 50px;
 	display: inline-block;
-}
+}*/
 
 input[name="go_admin_bar_submit"] {
 	height: 40px !important;
@@ -1210,8 +1212,6 @@ input#go_pass_lock::-moz-placeholder {
 ********************/
 
 .go_coin p{
-
-	font-style: italic;
 	position: absolute;
 	font-size: 1em;
 	z-index: 700;
@@ -1392,14 +1392,50 @@ input#go_pass_lock::-moz-placeholder {
 /********************
 *	User Bar
 ********************/
+
+/* Here's the new CSS to add... */
+.admin-bar #go_user_bar {
+	top: 32px;
+}
+
+body{
+	margin-top: 55px;
+}
+
+body.wp-admin {
+	margin-top: unset;
+}
+
+
 #go_user_bar {
 	display: flex;
 	justify-content: center;
+	background-color: #2d2d2d;
+	position: fixed;
+	top: 0px;
+	width: 100%;
+	z-index: 10000;
+	height: 55px;
+	font-family: sans-serif;
+	font-size: 13pt;
+	color: #f3f3f3;
+
+	a, a:visited, a:link{
+		color: #f3f3f3;
+	}
+
+	#go_user_bar_inner{
+		display: flex;
+		white-space: nowrap;
+		padding: 0 40px;
+	}
+
+
 
 	.go_user_bar_icon {
 		text-align: center;
 		line-height: .8em;
-		margin: 5px 10px;
+		padding: 5px 10px;
 
 		.ab-icon {
 			font-size: 1.7em;
@@ -1409,4 +1445,96 @@ input#go_pass_lock::-moz-placeholder {
 			font-size: .8em;
 		}
 	}
+
+	#go_user_bar_loot .wide_content{
+		margin: 4px 15px 0px 0px;
+		font-size: .9em;
+
+		.go_coin {
+			font-size: .7em;
+		}
+
+		.go_amount {
+			bottom: 0px;
+		}
+
+		p {margin: 0;}
+	}
+
+	.userbar_dropbtn {
+		display: flex;
+	}
+
+	.userbar_dropdown {
+		position: relative;
+		display: inline-block;
+	}
+
+	.userbar_dropdown-content {
+		display: none;
+		position: absolute;
+		background-color: #2d2d2d;
+		//min-width: 300px;
+		box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+		z-index: 1;
+		padding: 30px;
+		color: #f3f3f3;
+		top: 50px;
+	}
+
+	.userbar_dropdown-content.search {
+		left:-300px;
+	}
+
+	.userbar_dropdown:hover .userbar_dropdown-content {
+		display: block;
+	}
+
+	.narrow_content {
+		display: none;
+	}
+
+
 }
+
+
+@media screen and (max-width: 782px) {
+	//move the payerbar down when the admin bar is shown
+	.admin-bar #go_user_bar { top: 46px;}
+
+	/*
+	body.blog{margin-top: 39px !important;}
+	html #go_user_bar {
+		.narrow_content {
+			display: block;
+		}
+		.wide_content {
+			display: none;
+		}
+		.go_player_bar_text{
+			display: none;
+		}
+	}*/
+}
+
+
+
+//used on registration and password reset
+
+
+.password-strength {
+	padding: 10px;
+	border-radius: 30px;
+}
+
+.password-strength.short, .password-strength.bad{
+		background: pink;
+	}
+
+.password-strength.good{
+		background: gold;
+	}
+
+.password-strength.strong{
+		background-color: lightgreen;
+	}

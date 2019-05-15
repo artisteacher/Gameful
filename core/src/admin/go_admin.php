@@ -214,7 +214,7 @@ add_action( 'post_submitbox_misc_actions', 'go_duplicate_post_button' );
 function go_reorder_admin_menu( ) {
     return array(
         'game-on', //GO heading
-        'go_options', //GO options
+        'game-on-options', //GO options
         'go_clipboard', //GO clipboard
         'edit.php?post_type=tasks', // Quests
         'edit-tags.php?taxonomy=task_chains', //Maps
@@ -253,37 +253,62 @@ function go_add_toplevel_menu() {
      */
 // add sub page
 
-if( function_exists('acf_add_options_page') ) {
-    acf_add_options_page(array('page_title' => 'Options', 'menu_slug' => 'go_options', 'autoload' => true, 'capability' => 'edit_posts', 'icon_url' => 'dashicons-admin-settings',
-        //'parent_slug' 	=> 'game-on',
-    ));
 
-    acf_add_options_page(array('page_title' => 'Canned Feedback', 'menu_slug' => 'go_feedback', 'autoload' => true, 'capability' => 'edit_posts', 'icon_url' => 'dashicons-admin-settings',
-        //'parent_slug' 	=> 'edit.php?post_type=go_blogs',
-    ));
-
-
-}
 
     /* add a new menu item */
     add_menu_page(
-        'Game On',
-        'About Game On',
-        'manage_options',
-        'game-on',
-        'go_admin_game_on_menu_content',
-        'dashicons-admin-home',
-        ''
+        'Game On', // page title
+        'About Game On', // menu title
+        'manage_options', // capability
+        'game-on', // menu slug
+        'go_admin_game_on_menu_content', // callback function
+        'dashicons-admin-home',// icon
+        1
     );
 
+    /* add a new menu item */
+    add_menu_page(
+        'Game On Options', // page title
+        'Options', // menu title
+        'manage_options', // capability
+        'game-on-options', // menu slug
+        'go_options_menu_content', // callback function
+        'dashicons-admin-home', // icon
+        2
+    );
+
+    if( function_exists('acf_add_options_page') ) {
+        acf_add_options_page(array('page_title' => 'Game Set-up Options', 'menu_slug' => 'go_options', 'autoload' => true, 'capability' => 'edit_posts', 'icon_url' => 'dashicons-admin-settings',
+            'parent_slug' 	=> 'game-on-options',
+        ));
+
+        acf_add_options_page(array('page_title' => 'Login and Registration', 'menu_slug' => 'go_login_options', 'autoload' => true, 'capability' => 'edit_posts', 'icon_url' => 'dashicons-admin-settings',
+            'parent_slug' 	=> 'game-on-options',
+        ));
+
+        acf_add_options_page(array('page_title' => 'Canned Feedback', 'menu_slug' => 'go_feedback', 'autoload' => true, 'capability' => 'edit_posts', 'icon_url' => 'dashicons-admin-settings',
+            'parent_slug' 	=> 'game-on-options',
+        ));
+
+        acf_add_options_page(array('page_title' => 'Canned Messages', 'menu_slug' => 'go_messages', 'autoload' => true, 'capability' => 'edit_posts', 'icon_url' => 'dashicons-admin-settings',
+            'parent_slug' 	=> 'game-on-options',
+        ));
+
+        acf_add_options_page(array('page_title' => 'Bonus Loot Default', 'menu_slug' => 'go_bonus_loot', 'autoload' => true, 'capability' => 'edit_posts', 'icon_url' => 'dashicons-admin-settings',
+            'parent_slug' 	=> 'game-on-options',
+        ));
+
+
+    }
+
 
     /* add a new menu item */
     add_menu_page(
-        'Clipboard',
-        'Clipboard',
-        'manage_options',
-        'go_clipboard',
-        'go_clipboard_menu',
+        'Clipboard', // page title
+        'Clipboard', // menu title
+        'manage_options', // capability
+        'go_clipboard', // menu slug
+        'go_clipboard_menu', // callback function
         'dashicons-clipboard', // icon
         4
     );
@@ -638,6 +663,55 @@ if ($mytaxonomy) {
 
 }
 
+
+function go_options_menu_content() {
+
+    $task_name = get_option('options_go_tasks_name_singular');
+    ?>
+
+    <div id="go_tools_wrapper" class="wrap">
+        <h2>Options and Set Up</h2>
+        <div class="go_tools_section">
+
+        <div class="go_tools_section">
+            <div class="card">
+                <h2><a href="<?php menu_page_url('go_options'); ?>">Set Up Options</a></h2>
+                <p>Here you can set your Loot Options, Map and Store Options, User Options, and Appearance</p>
+            </div>
+        </div>
+
+        <div class="go_tools_section">
+            <div class="card">
+                <h2><a href="<?php menu_page_url('go_login_options'); ?>">Login and Registration</a></h2>
+                <p>Here you can set up how students will register and login to your site.</p>
+            </div>
+        </div>
+        <div class="go_tools_section">
+            <div class="card">
+                <h2><a href="<?php menu_page_url('go_feedback'); ?>">Feedback Presets</a></h2>
+                <p>Find yourself leaving the same feedback over and over again? Create a preset and save yourself time.</p>
+            </div>
+        </div>
+        <div class="go_tools_section">
+            <div class="card">
+                <h2><a href="<?php menu_page_url('go_messages'); ?>">Message Presets</a></h2>
+                <p>Messages can be used to reward or provide consequences for behavior.  Set or modify the presets here for common behaviors.</p>
+            </div>
+        </div>
+        <div class="go_tools_section">
+            <div class="card">
+                <h2><a href="<?php menu_page_url('go_bonus_loot'); ?>">Bonus Loot Defaults</a></h2>
+                <p>Create a default set of bonus loot that you can apply to any <?php echo $task_name; ?>.  Students have a chance to win bonus loot upon completion of a <?php echo $task_name; ?>. </p>
+            </div>
+        </div>
+        </div>
+    </div>
+
+
+
+    <?php
+
+}
 
 
 

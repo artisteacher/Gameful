@@ -9,11 +9,15 @@
 //conditional includes
 
 if ( !is_admin() ) {
-    //include_once('public/public.php');
+    include_once('src/public.php');
+    include_once('src/public_ajax.php');
 }else if ( defined( 'DOING_AJAX' )) {
+    include_once('src/public_ajax.php');
     include_once('src/ajax.php');
 
     add_action( 'wp_ajax_go_update_admin_view', 'go_update_admin_view' ); //OK
+
+    add_action( 'wp_ajax_go_stats_leaderboard_dataloader_ajax', 'go_stats_leaderboard_dataloader_ajax');
 }else{
     //include_once('admin/admin.php');
 }
@@ -21,3 +25,7 @@ if ( !is_admin() ) {
 //always include
 include_once('src/functions.php');
 
+/*
+ * Admin Menu & Admin Bar
+ */
+//add_action( 'admin_bar_init', 'go_admin_bar' );

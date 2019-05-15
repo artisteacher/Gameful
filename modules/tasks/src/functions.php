@@ -254,5 +254,41 @@ function go_tasks_filter_content() {
 }
 
 
+//TESTING THIS TO FILTER THE MAPS
+//https://wordpress.stackexchange.com/questions/268495/is-it-possible-to-add-extra-table-nav-to-edit-tags-php-screens
+// @see https://developer.wordpress.org/reference/hooks/get_terms_args/
+add_filter( 'get_terms_args', 'go_taxonomy_filter', 10, 2 );
+
+function go_taxonomy_filter( $args, $taxonomies ) {
+	global $pagenow;
+	if ( 'edit-tags.php' !== $pagenow || ! in_array( 'task_chains', $taxonomies, true ) ) {
+		return $args;
+	}
+
+	// Sort by most recently added terms, instead of alphabetically
+	//$args['orderby'] = 'term_id';
+	//$args['order'] = 'desc';
+
+	// Filter by term meta
+	$meta_key = ( isset( $_GET['meta_key'] ) ) ? sanitize_text_field( $_GET['meta_key'] ) : null;
+	$meta_value = ( isset( $_GET['meta_value'] ) ) ? sanitize_text_field( $_GET['meta_value'] ) : null;
+
+	if ( 'pod_achievement' === $meta_key && $meta_value ) {
+		$args['meta_key'] = $meta_key;
+		$args['meta_value'] = $meta_value;
+	}
+
+	$parent = ( isset( $_GET['parent'] ) ) ? sanitize_text_field( $_GET['parent'] ) : false;
+
+	//$parent = '24';
+	if ($parent){
+		$args['include'] ='35,36';
+	}
+
+	// Note: for more complex filtering, use the $args['meta_query'] array.
+
+	return $args;
+}
+
 
 ?>

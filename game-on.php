@@ -16,13 +16,25 @@ add_filter('plupload_default_settings', function ($settings) {
         'quality' => 80,
         'preserve_headers' => false
     );
-
     return $settings;
 });
 
-//$go_debug = true;//set to true when coding
-$go_debug = false;
+$go_debug = true;//set to true when coding
+//$go_debug = false;
 global $go_debug;
+
+
+add_action( 'init', 'stop_heartbeat', 1 );
+function stop_heartbeat() {
+    global $go_debug;
+    if ($go_debug){
+        wp_deregister_script('heartbeat');
+    }
+}
+
+
+$is_error = false;
+global $is_error;
 
 $go_js_version = 4.71;
 global $go_js_version;
@@ -67,6 +79,7 @@ else if ( defined( 'DOING_AJAX' )) { //ELSE THIS IS AN AJAX CALL
 
 }
 else {//ELSE THIS IS AN ADMIN PAGE
+
     //admin js
     include_once('js/go_enque_js_admin.php');
 
@@ -75,12 +88,24 @@ else {//ELSE THIS IS AN ADMIN PAGE
 
     add_action( 'admin_enqueue_scripts', 'go_admin_scripts' );
     add_action( 'admin_enqueue_scripts', 'go_admin_styles' );
-
-
 }
 
 //INCLUDE PHP
-if ( is_admin() ) {
+
+
+if ( defined( 'DOING_AJAX' )) {
+
+    add_action('wp_ajax_check_if_top_term', 'go_check_if_top_term'); //for term order //OK
+    include_once('modules/clipboard/includes.php');
+    $action  = (isset($_POST['action']) ?  $_POST['action'] : null);
+    $action = substr($action, 0 , 3);
+    if ($action==='acf') {
+        $acf_location = dirname(__FILE__) . '/includes/acf/acf.php';
+        include($acf_location);
+    }
+
+}
+else if ( is_admin() ) {
 
     include_once('includes/acf/acf.php');
     include_once('includes/wp-acf-unique_id-master/acf-unique_id.php');
@@ -89,7 +114,7 @@ if ( is_admin() ) {
 
     include_once('modules/clipboard/includes.php');
     include_once('modules/tools/includes.php');
-    include_once('modules/user_profiles/includes.php');
+    include_once('custom-acf-fields/go-acf-functions.php');//not needed on ajax
 
     if ($go_debug) {
         //add_filter('acf/settings/show_admin', '__return_false');
@@ -127,20 +152,16 @@ if ( is_admin() ) {
     include_once('custom-acf-fields/acf-level2-taxonomy/acf-level2-taxonomy.php');
     include_once('custom-acf-fields/acf-quiz/acf-quiz.php');
 
-    include_once('custom-acf-fields/go-acf-functions.php');
+
 
     include_once('custom-acf-fields/go_enque_js_acf.php');
     add_action( 'admin_enqueue_scripts', 'go_acf_scripts' );
 
 }
-else if ( defined( 'DOING_AJAX' )) {
-
-    add_action( 'wp_ajax_check_if_top_term', 'go_check_if_top_term' ); //for term order //OK
-
-}
 else{
     //INCLUDES on Public Pages
     //include_once('includes/acf/acf.php');
+    include_once('custom-acf-fields/go-acf-functions.php');
 }
 
 
@@ -148,11 +169,12 @@ else{
 //INCLUDE ON ALL PAGES
 /////////////////////////
 //main directory
-//include_once('go_acf_groups.php'); //the ACF fields for the admin pages
 
 include_once('core/includes.php');
 
+
 //These have their own conditional includes
+include_once('modules/login/includes.php');
 include_once('modules/feedback/includes.php');
 include_once('modules/admin_bar/includes.php');
 include_once('modules/map/includes.php');
@@ -231,9 +253,8 @@ function go_total_query_time(){
 //and the JS https://wordpress.stackexchange.com/questions/163292/how-can-i-test-the-login-for-an-expired-session
 //and the heavylifting below: //https://stackoverflow.com/questions/48698142/ajax-overlay-if-user-session-expires-wordpress-frontend
 function go_login_session_expired() {
-// we only care to add scripts and styles if the user is logged in.
-    if ( is_user_logged_in() ) {
 
+    if ( is_user_logged_in() ) {//if user is logged in load the heartbeat and modal
         // add javascript file
         wp_register_script( 'wp_auth_check', '/wp-includes/js/wp-auth-check.js' , array('heartbeat'), false, 1);
         wp_localize_script( 'wp_auth_check', 'authcheckL10n', array(
@@ -247,16 +268,16 @@ function go_login_session_expired() {
         // add the login html to the page
         add_action( 'wp_print_footer_scripts', 'wp_auth_check_html', 5 );
     }
+    else{//if user isn't logged in, just load the modal and not the heartbeat.
+        wp_register_script( 'wp_auth_check', '/wp-includes/js/wp-auth-check.js' , array(), true, 1);
+        //wp_enqueue_script ('wp_auth_check');
+
+        // add css file
+        wp_enqueue_style( 'wp_auth_check','/wp-includes/css/wp-auth-check.css', array( 'dashicons' ), NULL, 'all' );
+
+        add_action( 'wp_print_footer_scripts', 'wp_auth_check_html', 5 );
+    }
 }
 add_action( 'wp_enqueue_scripts', 'go_login_session_expired' );
 
-// make sure the stylesheet appears on the lightboxed login iframe
-function go_login_session_expired_styles() {
-    wp_enqueue_style( 'wp_auth_check','/wp-includes/css/wp-auth-check.css', array( 'dashicons' ), NULL, 'all' );
-}
-add_action( 'login_enqueue_scripts', 'go_login_session_expired_styles' );
 
-
-
-
-?>
