@@ -908,7 +908,7 @@ input#go_pass_lock::-moz-placeholder {
 
 #adminmenu #menu-posts-go_store .wp-menu-image:before {
   font-family: 'Font Awesome 5 Free' !important;
-  content: '\f07a';
+  content: '\f362';
   font-weight: 900; }
 
 #adminmenu #toplevel_page_go_clipboard .wp-menu-image:before {
@@ -918,7 +918,7 @@ input#go_pass_lock::-moz-placeholder {
 
 #adminmenu #toplevel_page_game-on .wp-menu-image:before {
   font-family: 'Font Awesome 5 Free' !important;
-  content: '\f015';
+  content: '\f059';
   font-weight: 900; }
 
 #adminmenu #toplevel_page_go_options .wp-menu-image:before {
@@ -1023,11 +1023,11 @@ input#go_pass_lock::-moz-placeholder {
   display: inline-block;
   position: relative;
   margin: 0 0 .25em;
-  top: 6px;
   border-radius: 50px;
   z-index: 500;
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1);
-  line-height: 1.5em; }
+  line-height: 1em;
+  font-size: .7em; }
 
 .go_coin:after {
   content: "";
@@ -1164,6 +1164,9 @@ body {
 body.wp-admin {
   margin-top: unset; }
 
+#wpadminbar {
+  z-index: 101000; }
+
 #go_user_bar {
   display: flex;
   justify-content: center;
@@ -1171,11 +1174,20 @@ body.wp-admin {
   position: fixed;
   top: 0px;
   width: 100%;
-  z-index: 10000;
+  z-index: 100000;
   height: 55px;
   font-family: sans-serif;
   font-size: 13pt;
   color: #f3f3f3; }
+  #go_user_bar #go_admin_bar_gold {
+    margin-top: -4px; }
+    #go_user_bar #go_admin_bar_gold .coin_wrapper {
+      line-height: .5em; }
+    #go_user_bar #go_admin_bar_gold .go_coin {
+      font-size: .5em;
+      top: 5px; }
+    #go_user_bar #go_admin_bar_gold .go_amount {
+      bottom: 0px; }
   #go_user_bar a, #go_user_bar a:visited, #go_user_bar a:link {
     color: #f3f3f3; }
   #go_user_bar #go_user_bar_inner {
@@ -1192,11 +1204,7 @@ body.wp-admin {
       font-size: .8em; }
   #go_user_bar #go_user_bar_loot .wide_content {
     margin: 4px 15px 0px 0px;
-    font-size: .9em; }
-    #go_user_bar #go_user_bar_loot .wide_content .go_coin {
-      font-size: .7em; }
-    #go_user_bar #go_user_bar_loot .wide_content .go_amount {
-      bottom: 0px; }
+    font-size: .8em; }
     #go_user_bar #go_user_bar_loot .wide_content p {
       margin: 0; }
   #go_user_bar .userbar_dropbtn {
@@ -1212,7 +1220,7 @@ body.wp-admin {
     z-index: 1;
     padding: 30px;
     color: #f3f3f3;
-    top: 50px; }
+    top: 55px; }
   #go_user_bar .userbar_dropdown-content.search {
     left: -300px; }
   #go_user_bar .userbar_dropdown:hover .userbar_dropdown-content {
@@ -1236,6 +1244,13 @@ body.wp-admin {
 			display: none;
 		}
 	}*/ }
+
+@media screen and (max-width: 600px) {
+  #go_user_bar {
+    position: absolute;
+    top: 0px; }
+  body {
+    margin-top: 0px; } }
 
 .password-strength {
   padding: 10px;

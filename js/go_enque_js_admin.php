@@ -105,7 +105,8 @@ function go_admin_scripts ($hook) {
                 'go_mark_one_read_toggle'       => wp_create_nonce('go_mark_one_read_toggle'),
                 'go_send_feedback'              => wp_create_nonce('go_send_feedback'),
                 'go_blog_revision'              => wp_create_nonce('go_blog_revision'),
-                'go_restore_revision'              => wp_create_nonce('go_restore_revision')
+                'go_restore_revision'              => wp_create_nonce('go_restore_revision'),
+                'go_clone_post_new_menu_bar'    => wp_create_nonce('go_clone_post_new_menu_bar'),
                 //'go_num_posts'                  => wp_create_nonce('go_num_posts'),//reader? isn't this just frontend
                 //'go_mark_one_read'              => wp_create_nonce('go_mark_one_read'),
                // 'go_send_feedback'              => wp_create_nonce('go_send_feedback')

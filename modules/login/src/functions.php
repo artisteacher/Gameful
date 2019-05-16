@@ -474,6 +474,7 @@ function go_update_password_lightbox(){
 }
 
 //Load blank password fields
+
 add_filter('acf/load_field/type=password', 'go_acf_load_password');
 function go_acf_load_password( $field ) {
     $field['value'] = '';
@@ -612,20 +613,30 @@ function acf_save_user( $post_id ) {
 
 
 //this changes the logo on the default wordpress login
-function go_login_logo() {
+function go_login_logo()
+{
     $logo = get_option('options_login_appearance_logo');
 
-    $url = wp_get_attachment_image_src($logo, '250, 250');
-    $url = $url[0];
-        ?>
-    <style type="text/css">
-        #login h1 a, .login h1 a {
-            background-image: url(<?php echo $url; ?>);
-            width: 100%; height: 150px; margin: 0 auto; background-size: unset; background-size: auto 150px;;
-        }
-    </style>
+    if ($logo) {
 
-<?php }
+        $url = wp_get_attachment_image_src($logo, '250, 250');
+        $url = $url[0];
+        ?>
+        <style type="text/css">
+            #login h1 a, .login h1 a {
+                background-image: url(<?php echo $url; ?>);
+                width: 100%;
+                height: 150px;
+                margin: 0 auto;
+                background-size: unset;
+                background-size: auto 150px;;
+            }
+        </style>
+
+        <?php
+
+    }
+}
 add_action( 'login_enqueue_scripts', 'go_login_logo' );
 
 

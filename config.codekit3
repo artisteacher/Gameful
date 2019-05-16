@@ -225,6 +225,14 @@
 		"oO": 0,
 		"oS": 1
 		},
+	"/acf-json/group_5cdd928042205.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5cdd928042205-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
 	"/core/includes.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -263,6 +271,14 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/core/src/ajax/ajax.php",
+		"oF": 0
+		},
+	"/core/src/all/go_core_functions.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/core/src/all/go_core_functions.php",
 		"oF": 0
 		},
 	"/core/src/all/go_links.php": {
@@ -4431,6 +4447,14 @@
 		"oAP": "/modules/admin_bar/src/templates/leaderboard.php",
 		"oF": 0
 		},
+	"/modules/admin_bar/src/templates/new_task_from_template.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/admin_bar/src/templates/new_task_from_template.php",
+		"oF": 0
+		},
 	"/modules/clipboard/includes.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -4549,14 +4573,6 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/modules/login/src/templates/profile_template.php",
-		"oF": 0
-		},
-	"/modules/login/src/templates/register_template.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/modules/login/src/templates/register_template.php",
 		"oF": 0
 		},
 	"/modules/login/src/templates/reset_password_template.php": {

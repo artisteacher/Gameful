@@ -6,6 +6,24 @@
  * Time: 11:28 PM
  */
 
+function go_clone_post_new_menu_bar(){
+    //add nonce check here
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
+    //check_ajax_referer( 'go_admin_remove_notification_' . get_current_user_id() );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_clone_post_new_menu_bar' ) ) {
+        echo "refresh";
+        die( );
+    }
+
+    //if nonce checks, then do the clone
+    go_clone_post_new(true, true);
+    die();
+}
+
 function go_admin_remove_notification() {
     if ( ! current_user_can( 'manage_options' ) ) {
         die( -1 );

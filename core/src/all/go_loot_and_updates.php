@@ -184,15 +184,16 @@ function go_display_longhand_currency ( $currency_type, $amount, $output = false
 
         $str = '';
         if($show_coins) {
+
             if ($gold_amount > 0 || $show_empty) {
 
-                $str .= "<div class='go_amount'>{$gold_amount}×</div><div class='go_coin gold'><p>{$gold_suffix}</p></div>&nbsp;&nbsp;&nbsp;";
+                $str .= "<div class='coin_wrapper'><div class='go_coin gold'><p>{$gold_suffix}</p></div>&nbsp;<div class='go_amount'>{$gold_amount}</div>&nbsp;</div>";
             }
             if ($silver_amount > 0 || $show_empty) {
-                $str .= "<div class='go_amount'>{$silver_amount}×</div><div class='go_coin silver'><p>{$silver_suffix}</p></div>&nbsp;&nbsp;&nbsp;";
+                $str .= "<div class='coin_wrapper'><div class='go_coin silver'><p>{$silver_suffix}</p></div>&nbsp;<div class='go_amount'>{$silver_amount}</div>&nbsp;</div>";
             }
             if ($bronze_amount > 0 || $show_empty) {
-                $str .= "<div class='go_amount'>{$bronze_amount}×</div><div class='go_coin bronze'><p>{$bronze_suffix}</p></div>  ";
+                $str .= "<div class='coin_wrapper'><div class='go_coin bronze'><p>{$bronze_suffix}</p></div>&nbsp;<div class='go_amount'>{$bronze_amount}</div>&nbsp;</div>  ";
             }
         }
         else{

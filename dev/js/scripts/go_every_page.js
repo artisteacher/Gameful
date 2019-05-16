@@ -28,7 +28,9 @@ jQuery( document ).ready( function() {
     }
 
 
-
+    jQuery('#wp-admin-bar-go_add_quest_from_template').on("click", function(e){
+        go_new_task_from_template();
+    });
 
 
     jQuery(".go_password_change_modal").on("click", function(e){
@@ -45,6 +47,97 @@ jQuery( document ).ready( function() {
     }
 
 });
+
+function go_new_task_from_template(){
+    console.log('go_new_task_from_template');
+    jQuery.ajax({
+        type: "post",
+        url: MyAjax.ajaxurl,
+        data: {
+            //_ajax_nonce: nonce,
+            action: 'go_new_task_from_template'
+        },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+
+        },
+        success: function( res ) {
+            //console.log(res);
+            let error = go_ajax_error_checker(res);
+            if (error == 'true') return;
+
+            if ( -1 !== res ) {
+
+                if (res){
+                    console.log(res);
+                    jQuery.featherlight.close();
+                    jQuery.featherlight(res);
+
+                    jQuery('.go_new_task_from_template_button').one('click', function(){
+                        go_clone_post_new_menu_bar();
+
+
+                    })
+                }
+
+            }
+
+        }
+    });
+}
+
+//sends the selected post_id to the clone function
+//there should be no return--just a redirect
+function go_clone_post_new_menu_bar() {
+console.log('go_clone_post_new_menu_bar');
+    let post_id = jQuery('.go_new_task_from_template').val();
+
+    var nonce = GO_EVERY_PAGE_DATA.nonces.go_clone_post_new_menu_bar;
+
+    jQuery.ajax({
+        type: "GET",
+        url: MyAjax.ajaxurl,
+        data: {
+            _ajax_nonce: nonce,
+            action: 'go_clone_post_new_menu_bar',
+            post: post_id
+
+        },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function (jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400) {
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [{'wp-auth-check': false}]);
+            }
+
+        },
+        success: function (res) {
+            console.log(res);
+            let error = go_ajax_error_checker(res);
+            if (error == 'true') return;
+
+            if (-1 !== res) {
+
+                if (res) {
+                    //console.log
+                    window.location.href = res;
+                }
+
+            }
+
+        }
+    });
+}
+
+
 
 function go_activate_password_checker(){
     jQuery( 'body' ).on( 'keyup', '.newpassword, .confirmpassword', function( event ) {

@@ -123,7 +123,8 @@ function go_scripts () {
                 'go_mark_one_read_toggle'       => wp_create_nonce('go_mark_one_read_toggle'),
                 'go_send_feedback'              => wp_create_nonce('go_send_feedback'),
                 'go_blog_revision'              => wp_create_nonce('go_blog_revision'),
-                'go_restore_revision'              => wp_create_nonce('go_restore_revision')
+                'go_restore_revision'              => wp_create_nonce('go_restore_revision'),
+                'go_clone_post_new_menu_bar'    => wp_create_nonce('go_clone_post_new_menu_bar'),
 
             ),
             'go_is_admin'                   => $is_admin,

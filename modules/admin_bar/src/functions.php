@@ -299,7 +299,7 @@ function go_admin_bar() {
             $wp_admin_bar->add_node(
                 array(
                     'id' => 'go_store',
-                    'title' => '<i class="fas fa-store ab-icon" aria-hidden="true"></i><div id="go_store_page" style="float: right;">' . $name . '</div>',
+                    'title' => '<i class="fas fa-exchange-alt ab-icon" aria-hidden="true"></i><div id="go_store_page" style="float: right;">' . $name . '</div>',
                     'href' => $go_store_link,
                 )
             );
@@ -538,7 +538,7 @@ function go_admin_bar_v5() {
 
     if(is_admin_bar_showing()) {
 
-        if (!is_user_logged_in()) {
+       /* if (!is_user_logged_in()) {
             $wp_admin_bar->add_node(
                 array(
                     'id' => 'go_toolbar_login',
@@ -546,119 +546,34 @@ function go_admin_bar_v5() {
                     'href' => wp_login_url()
                 )
             );
-        }
-
-        if (is_user_logged_in()) {
-           // $wp_admin_bar->remove_menu('wp-logo');
-
-            /**
-             * If is admin, show the dropdown for view type
-             */
-            if ($is_admin) {
-                $post_type = get_post_type();
-                $admin_view = get_user_option('go_admin_view', $user_id);
-                if (!empty ($admin_view)) {
-                    if ($admin_view == 'all') {
-                        $all_selected = 'selected = "selected"';
-                    } else {
-                        $all_selected = null;
-                    }
-                    if ($admin_view == 'player') {
-                        $player_selected = 'selected = "selected"';
-                    } else {
-                        $player_selected = null;
-                    }
-                    if ($admin_view == 'user') {
-                        $user_selected = 'selected = "selected"';
-                    } else {
-                        $user_selected = null;
-                    }
-                    if ($admin_view == 'guest') {
-                        $guest_selected = 'selected = "selected"';
-                    } else {
-                        $guest_selected = null;
-                    }
-
-                } else {
-                    $all_selected = null;
-                    $player_selected = null;
-                    $user_selected = null;
-                    $guest_selected = null;
-                }
-                $content = '<form>
-                            View: <select id="go_select_admin_view" onchange="go_update_admin_view(this.value)">
-                                <option value="user" ' . $user_selected . '>Player Mode: Locks On</option>
-                                <option value="player" ' . $player_selected . '>Admin Mode: No Locks</option>
-                                <option value="all" ' . $all_selected . ' >All Stages</option>
-                                <option value="guest" ' . $guest_selected . '>Guest</option>
-                            </select>
-                        </form>';
-                if ($post_type == 'tasks') {
-                    $wp_admin_bar->add_menu(array('id' => 'go_admin_view_form', 'parent' => 'top-secondary', 'title' => $content));
-                }
-            }
-        }
+        }*/
 
 
-        if ($is_admin) {
-            $wp_admin_bar->add_node(array('id' => 'go_section_pipe', 'title' => ' | ', 'href' => 'javascript:void(0)',));
+        $wp_admin_bar->add_node(array('id' => 'go_section_pipe', 'title' => ' | ', 'href' => 'javascript:void(0)',));
 
-            //$go_store_link = get_permalink(get_page_by_path($go_store_link));
-            $reader_link = get_site_url(null, 'reader');
+
+        ///
+        /// add the Game On menu (options and shortcuts to admin pages) ///
+        ///
+        ///
+        if ($is_admin ) {//only show to admin
             $wp_admin_bar->add_node(
                 array(
-                    'id' => 'go_reader',
-                    'title' => '<i class="fas fa-book-reader ab-icon" aria-hidden="true"></i><div id="go_reader_link" style="float: right;"></div>',
-                    'href' => $reader_link,
+                    'id' => 'go_options',
+                   'title' => 'Game On',
+                    'href' => get_admin_url() . 'admin.php?page=game-on'
                 )
             );
 
-            $wp_admin_bar->add_node(array('id' => 'go_clipboard', 'title' => '<i class="fas fa-clipboard-list ab-icon" aria-hidden="true"></i><div id="go_clipboard_adminbar" style="float: right;"></div>', 'href' => get_admin_url() . 'admin.php?page=go_clipboard',));
-        }
 
-        if (is_admin()){
-            $go_map_switch = get_option( 'options_go_locations_map_toggle' );
-            $go_store_switch = get_option( 'options_go_store_toggle' );
-            if ($go_map_switch) {
-                $map_url = get_option('options_go_locations_map_map_link');
-                $go_map_link = (string)$map_url;
-                //$go_map_link = get_permalink(get_page_by_path($go_map_link));
-                $go_map_link = get_site_url(null, $go_map_link);
-                $name = get_option('options_go_locations_map_name');
-                $wp_admin_bar->add_node(
-                    array(
-                        'id' => 'go_map',
-                        //'title' => '<i class="fas fa-sitemap ab-icon" aria-hidden="true"></i><div id="go_map_page" class="admin_map" style="float: right;" >' . $name . '</div>',
-                        'title' => '<i class="fas fa-sitemap ab-icon" aria-hidden="true"></i><div id="go_map_page" class="admin_map" style="float: right;" ></div>',
-                        'href' => $go_map_link,
-                    )
-                );
-            };
 
-            if ($go_store_switch) {
-                $go_store_link = get_option('options_go_store_store_link');
-                //$go_store_link = get_permalink(get_page_by_path($go_store_link));
-                $go_store_link = get_site_url(null, $go_store_link);
-                $name = get_option('options_go_store_name');
-                $wp_admin_bar->add_node(
-                    array(
-                        'id' => 'go_store',
-                        //'title' => '<i class="fas fa-store ab-icon" aria-hidden="true"></i><div id="go_store_page" style="float: right;">' . $name . '</div>',
-                        'title' => '<i class="fas fa-store ab-icon" aria-hidden="true"></i><div id="go_store_page" style="float: right;"></div>',
-                        'href' => $go_store_link,
-                    )
-                );
-            };
-        }
-
-        if ($is_admin && !is_admin()) {
-            $wp_admin_bar->add_group(
+            /*$wp_admin_bar->add_group(
                 array(
                     'id' => 'go_site_name_menu',
                     'parent' => 'site-name',
                     'meta' => array('class' => 'go_site_name_menu')
                 )
-            );
+            );*/
 
             /*
              * Game On Links
@@ -668,22 +583,11 @@ function go_admin_bar_v5() {
                 array(
                     'id' => 'go_nav_options',
                     'title' => 'Game-On Options',
-                    'href' => get_admin_url() . 'admin.php?page=go_options',
-                    'parent' => 'go_site_name_menu',
+                    'href' => get_admin_url() . 'admin.php?page=game-on-options',
+                    'parent' => 'go_options',
                     'meta' => array('class' => 'go_site_name_menu_item')
                 )
             );
-
-            // displays Clipboard link
-            /*$wp_admin_bar->add_node(
-                array(
-                    'id' => 'go_nav_clipboard',
-                    'title' => 'Clipboard',
-                    'href' => get_admin_url() . 'admin.php?page=go_clipboard',
-                    'parent' => 'go_site_name_menu',
-                    'meta' => array('class' => 'go_site_name_menu_item')
-                )
-            );*/
 
             // displays Task edit page link
             $wp_admin_bar->add_node(
@@ -691,7 +595,7 @@ function go_admin_bar_v5() {
                     'id' => 'go_nav_tasks',
                     'title' => get_option('options_go_tasks_name_plural'),
                     'href' => get_admin_url() . 'edit.php?post_type=tasks',
-                    'parent' => 'go_site_name_menu',
+                    'parent' => 'go_options',
                     'meta' => array('class' => 'go_site_name_menu_item')
                 )
             );
@@ -702,7 +606,7 @@ function go_admin_bar_v5() {
                     'id' => 'go_nav_chains',
                     'title' => get_option('options_go_tasks_name_plural') . ' Maps',
                     'href' => esc_url(get_admin_url()) . 'edit-tags.php?taxonomy=task_chains&post_type=tasks',
-                    'parent' => 'go_site_name_menu',
+                    'parent' => 'go_options',
                     'meta' => array('class' => 'go_site_name_menu_item')
                 )
             );
@@ -713,7 +617,7 @@ function go_admin_bar_v5() {
                     'id' => 'go_nav_store',
                     'title' => get_option('options_go_store_name') . ' Items',
                     'href' => get_admin_url() . 'edit.php?post_type=go_store',
-                    'parent' => 'go_site_name_menu',
+                    'parent' => 'go_options',
                     'meta' => array('class' => 'go_site_name_menu_item')
                 )
             );
@@ -724,15 +628,15 @@ function go_admin_bar_v5() {
                     'id' => 'go_nav_store_types',
                     'title' => get_option('options_go_store_name') . ' Categories',
                     'href' => esc_url(get_admin_url()) . 'edit-tags.php?taxonomy=store_types&post_type=go_store',
-                    'parent' => 'go_site_name_menu',
-                    'meta' => array('class' => 'go_site_name_menu_item')
+                    'parent' => 'go_options',
+                    'meta' => array('class' => 'go_options')
                 )
             );
 
             // displays Badges
             $badges_toggle = get_option('options_go_badges_toggle');
             if ($badges_toggle) {
-                $wp_admin_bar->add_node(array('id' => 'go_nav_badges', 'title' => get_option('options_go_badges_name_plural'), 'href' => esc_url(get_admin_url()) . 'edit-tags.php?taxonomy=go_badges', 'parent' => 'go_site_name_menu', 'meta' => array('class' => 'go_site_name_menu_item')));
+                $wp_admin_bar->add_node(array('id' => 'go_nav_badges', 'title' => get_option('options_go_badges_name_plural'), 'href' => esc_url(get_admin_url()) . 'edit-tags.php?taxonomy=go_badges', 'parent' => 'go_options', 'meta' => array('class' => 'go_site_name_menu_item')));
             }
 
             // displays Store Categories page link
@@ -741,8 +645,8 @@ function go_admin_bar_v5() {
                     'id' => 'go_nav_users',
                     'title' => 'Users',
                     'href' => esc_url(get_admin_url()) . 'users.php',
-                    'parent' => 'go_site_name_menu',
-                    'meta' => array('class' => 'go_site_name_menu_item')
+                    'parent' => 'go_options',
+                    'meta' => array('class' => 'go_options')
                 )
             );
 
@@ -752,11 +656,10 @@ function go_admin_bar_v5() {
                     'id' => 'go_nav_user_types',
                     'title' => 'User Groups',
                     'href' => esc_url(get_admin_url()) . 'edit-tags.php?taxonomy=user_go_groups',
-                    'parent' => 'go_site_name_menu',
-                    'meta' => array('class' => 'go_site_name_menu_item')
+                    'parent' => 'go_options',
+                    'meta' => array('class' => 'go_options')
                 )
             );
-
 
             /*
              * Default WP Links
@@ -814,10 +717,171 @@ function go_admin_bar_v5() {
             );
             */
         }
+        ////////////END GAME ON MENU//////
+
+
+        ///
+        /// ADD ITEM MENU ///
+        ///
+        if ($is_admin ) {//only show to admin
+            $wp_admin_bar->add_node(
+                array(
+                    'id' => 'go_add_content',
+                    'title' => '<i class="fas fa-plus-circle ab-icon" aria-hidden="true"></i>',
+                    'href' => ''
+                )
+            );
+
+            // Add Quest
+            /*$wp_admin_bar->add_node(
+                array(
+                    'id' => 'go_add_quest',
+                    'title' => 'Add ' . get_option('options_go_tasks_name_singular') ,
+                    'href' => '',
+                    'parent' => 'go_add_content',
+                    'meta' => array('class' => 'go_options')
+                )
+            );*/
+
+            // Add Quest
+            $wp_admin_bar->add_node(
+                array(
+                    'id' => 'go_add_quest_from_template',
+                    'title' => 'Add ' . get_option('options_go_tasks_name_singular') ,
+                    'href' => '',
+                    'parent' => 'go_add_content',
+                    'meta' => array('class' => 'go_options')
+                )
+            );
+
+            // Add store Item
+            $wp_admin_bar->add_node(
+                array(
+                    'id' => 'go_add_store_item',
+                    //'title' => 'Add ' . get_option('options_go_store_name') ,
+                    'title' => 'Add Store Item',
+                    'href' => get_admin_url(null, 'post-new.php?post_type=go_store'),
+                    'parent' => 'go_add_content',
+                    'meta' => array('class' => 'go_options')
+                )
+            );
+
+        }
+
+
+
+
+        //VIEW TYPE ON QUESTS
+        if (is_user_logged_in()) {
+           // $wp_admin_bar->remove_menu('wp-logo');
+            /**
+             * If is admin, show the dropdown for view type
+             */
+            if ($is_admin) {
+                $post_type = get_post_type();
+                $admin_view = get_user_option('go_admin_view', $user_id);
+                if (!empty ($admin_view)) {
+                    if ($admin_view == 'all') {
+                        $all_selected = 'selected = "selected"';
+                    } else {
+                        $all_selected = null;
+                    }
+                    if ($admin_view == 'player') {
+                        $player_selected = 'selected = "selected"';
+                    } else {
+                        $player_selected = null;
+                    }
+                    if ($admin_view == 'user') {
+                        $user_selected = 'selected = "selected"';
+                    } else {
+                        $user_selected = null;
+                    }
+                    if ($admin_view == 'guest') {
+                        $guest_selected = 'selected = "selected"';
+                    } else {
+                        $guest_selected = null;
+                    }
+
+                } else {
+                    $all_selected = null;
+                    $player_selected = null;
+                    $user_selected = null;
+                    $guest_selected = null;
+                }
+                $content = '<form>
+                            View: <select id="go_select_admin_view" onchange="go_update_admin_view(this.value)">
+                                <option value="user" ' . $user_selected . '>Player Mode: Locks On</option>
+                                <option value="player" ' . $player_selected . '>Admin Mode: No Locks</option>
+                                <option value="all" ' . $all_selected . ' >All Stages</option>
+                                <option value="guest" ' . $guest_selected . '>Guest</option>
+                            </select>
+                        </form>';
+                if ($post_type == 'tasks') {
+                    $wp_admin_bar->add_menu(array('id' => 'go_admin_view_form', 'parent' => 'top-secondary', 'title' => $content));
+                }
+            }
+        }
+
+        //READER AND CLIPBOARD FOR ADMINS ONLY
+        if ($is_admin) {
+            //$go_store_link = get_permalink(get_page_by_path($go_store_link));
+            $reader_link = get_site_url(null, 'reader');
+            $wp_admin_bar->add_node(
+                array(
+                    'id' => 'go_reader',
+                    'title' => '<i class="fas fa-book-reader ab-icon" aria-hidden="true"></i><div id="go_reader_link" style="float: right;"></div>',
+                    'href' => $reader_link,
+                )
+            );
+
+            $wp_admin_bar->add_node(array('id' => 'go_clipboard', 'title' => '<i class="fas fa-clipboard-list ab-icon" aria-hidden="true"></i><div id="go_clipboard_adminbar" style="float: right;"></div>', 'href' => get_admin_url() . 'admin.php?page=go_clipboard',));
+        }
+
+        //MAP AND STORE LINKS IF YOU ARE ON THE BACKEND
+        if (is_admin()){
+            $go_map_switch = get_option( 'options_go_locations_map_toggle' );
+            $go_store_switch = get_option( 'options_go_store_toggle' );
+            if ($go_map_switch) {
+                $map_url = get_option('options_go_locations_map_map_link');
+                $go_map_link = (string)$map_url;
+                //$go_map_link = get_permalink(get_page_by_path($go_map_link));
+                $go_map_link = get_site_url(null, $go_map_link);
+                $name = get_option('options_go_locations_map_name');
+                $wp_admin_bar->add_node(
+                    array(
+                        'id' => 'go_map',
+                        //'title' => '<i class="fas fa-sitemap ab-icon" aria-hidden="true"></i><div id="go_map_page" class="admin_map" style="float: right;" >' . $name . '</div>',
+                        'title' => '<i class="fas fa-sitemap ab-icon" aria-hidden="true"></i><div id="go_map_page" class="admin_map" style="float: right;" ></div>',
+                        'href' => $go_map_link,
+                    )
+                );
+            };
+
+            if ($go_store_switch) {
+                $go_store_link = get_option('options_go_store_store_link');
+                //$go_store_link = get_permalink(get_page_by_path($go_store_link));
+                $go_store_link = get_site_url(null, $go_store_link);
+                $name = get_option('options_go_store_name');
+                $wp_admin_bar->add_node(
+                    array(
+                        'id' => 'go_store',
+                        //'title' => '<i class="fas fa-store ab-icon" aria-hidden="true"></i><div id="go_store_page" style="float: right;">' . $name . '</div>',
+                        'title' => '<i class="fas fa-exchange-alt ab-icon" aria-hidden="true"></i><div id="go_store_page" style="float: right;"></div>',
+                        'href' => $go_store_link,
+                    )
+                );
+            };
+
+
+        }
+
+
 
     }
 
 }
+
+
 
 
 /**
@@ -838,7 +902,7 @@ function go_leaderboard_query_var( $vars ) {
     return $vars;
 }
 
-/* Template Include */
+/* LEADERBOARD Include Template*/
 add_filter('template_include', 'go_leaderboard_template_include', 1, 1);
 function go_leaderboard_template_include($template){
     $page_name = 'leaderboard';
@@ -853,6 +917,5 @@ function go_leaderboard_template_include($template){
 
     return $template; //Load normal template when $page_value != "true" as a fallback
 }
-
 
 

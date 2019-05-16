@@ -51,6 +51,7 @@ function go_flush_rewrites() {
     go_profile_rewrite();
     go_registration_rewrite();
     go_leaderboard_rewrite();
+    go_new_task_rewrite();
     flush_rewrite_rules();
 }
 

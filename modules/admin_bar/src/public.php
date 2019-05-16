@@ -8,8 +8,30 @@
 
 if ( !in_array($request_uri, ['/login/','/?login=failed', '/?login=empty', '/lostpassword/', '/?lostpassword=invalid', '/?login=checkemail'], true ) ) {
     add_action('wp_head', 'go_player_bar_v5');
+
+    function go_user_bar_dynamic_styles() {
+
+        $bkg_color = get_option('options_go_user_bar_background_color');
+        $link_color = get_option('options_go_user_bar_link_color');
+        $hover_color = get_option('options_go_user_bar_hover_color');
+
+        ?>
+        <style type="text/css" media="screen">
+            #go_user_bar { background-color:<?php echo $bkg_color; ?>; }
+            #go_user_bar a:link { color:<?php echo $link_color; ?>; text-decoration: none; }
+            #go_user_bar a:visited { color:<?php echo $link_color; ?>; text-decoration: none; }
+            #go_user_bar a:hover { color:<?php echo $hover_color; ?>; text-decoration: none; }
+            #go_user_bar a:active { color:<?php echo $hover_color; ?>; text-decoration: underline; }
+        </style>
+        <?php
+
+    }
+    add_action( 'wp_head', 'go_user_bar_dynamic_styles', 99 );
+
+
     function go_player_bar_v5() {
-        echo '<div id="go_user_bar" ><div id="go_user_bar_inner" style="display: none;">';
+
+        echo '<div id="go_user_bar"><div id="go_user_bar_inner" style="display: none;">';
         //get options for what to show
         $go_home_switch = get_option( 'options_go_home_toggle' );
         $go_search_switch = get_option( 'options_go_search_toggle' );
@@ -212,7 +234,7 @@ if ( !in_array($request_uri, ['/login/','/?login=failed', '/?login=empty', '/los
             //$go_store_link = get_permalink(get_page_by_path($go_store_link));
             $go_store_link = get_site_url(null, $go_store_link);
             $name = get_option('options_go_store_name');
-            echo '<div class="go_user_bar_icon"><a href="'.$go_store_link.'"><i class="fas fa-store ab-icon" aria-hidden="true"></i><br><div class="go_player_bar_text" id="go_store_page">' . $name . '</div></a></div>';
+            echo '<div class="go_user_bar_icon"><a href="'.$go_store_link.'"><i class="fas fa-exchange-alt ab-icon" aria-hidden="true"></i><br><div class="go_player_bar_text" id="go_store_page">' . $name . '</div></a></div>';
         }
 
         /*if ($is_admin) {

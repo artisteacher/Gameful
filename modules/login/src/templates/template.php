@@ -31,7 +31,9 @@ if ( ! is_user_logged_in() ) { // Display WordPress login form:
     $url = wp_get_attachment_image_src($logo, 'medium');
     $url = $url[0];
 
-    echo "<div><div style=' width: 200px; margin: 0 auto;'><img src='$url' width='100%'</div></div>";
+    if ($url) {
+        echo "<div><div style=' width: 200px; margin: 0 auto;'><img src='$url' width='100%'</div></div>";
+    }
 
     $login  = (isset($_GET['login']) ) ? $_GET['login'] : 0;
     if ($login === "failed") {

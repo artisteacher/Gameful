@@ -1105,7 +1105,7 @@ input#go_pass_lock::-moz-placeholder {
 
 #adminmenu #menu-posts-go_store .wp-menu-image:before {
 	font-family: 'Font Awesome 5 Free' !important;
-	content: '\f07a';
+	content: '\f362';
 	font-weight: 900;
 }
 
@@ -1117,7 +1117,7 @@ input#go_pass_lock::-moz-placeholder {
 
 #adminmenu #toplevel_page_game-on .wp-menu-image:before {
 	font-family: 'Font Awesome 5 Free' !important;
-	content: '\f015';
+	content: '\f059';
 	font-weight: 900;
 }
 
@@ -1230,11 +1230,11 @@ input#go_pass_lock::-moz-placeholder {
 	display: inline-block;
 	position: relative;
 	margin: 0 0 .25em;
-	top: 6px;
 	border-radius: 50px;
 	z-index: 500;
 	box-shadow:  2px 2px 2px 1px rgba(0, 0, 0, .1);
-	line-height: 1.5em;
+	line-height: 1em;
+	font-size: .7em;
 }
 
 .go_coin:after{
@@ -1405,7 +1405,9 @@ body{
 body.wp-admin {
 	margin-top: unset;
 }
-
+#wpadminbar{
+	z-index: 101000;
+}
 
 #go_user_bar {
 	display: flex;
@@ -1414,11 +1416,28 @@ body.wp-admin {
 	position: fixed;
 	top: 0px;
 	width: 100%;
-	z-index: 10000;
+	z-index: 100000;
 	height: 55px;
 	font-family: sans-serif;
 	font-size: 13pt;
 	color: #f3f3f3;
+
+	#go_admin_bar_gold{
+		margin-top: -4px;
+
+		.coin_wrapper{
+			line-height: .5em;
+		}
+
+		.go_coin {
+			font-size: .5em;
+			top:5px;
+		}
+
+		.go_amount {
+			bottom: 0px;
+		}
+	}
 
 	a, a:visited, a:link{
 		color: #f3f3f3;
@@ -1448,15 +1467,7 @@ body.wp-admin {
 
 	#go_user_bar_loot .wide_content{
 		margin: 4px 15px 0px 0px;
-		font-size: .9em;
-
-		.go_coin {
-			font-size: .7em;
-		}
-
-		.go_amount {
-			bottom: 0px;
-		}
+		font-size: .8em;
 
 		p {margin: 0;}
 	}
@@ -1479,7 +1490,7 @@ body.wp-admin {
 		z-index: 1;
 		padding: 30px;
 		color: #f3f3f3;
-		top: 50px;
+		top: 55px;
 	}
 
 	.userbar_dropdown-content.search {
@@ -1517,7 +1528,16 @@ body.wp-admin {
 	}*/
 }
 
+@media screen and (max-width: 600px)
+{
+	#go_user_bar {
+	position: absolute;
+	top: 0px;
+	}
 
+	body { margin-top:0px;}
+
+}
 
 //used on registration and password reset
 

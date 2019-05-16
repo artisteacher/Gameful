@@ -23,6 +23,7 @@ if ( !is_admin() ) {
     add_action( 'wp_ajax_go_deactivate_plugin', 'go_deactivate_plugin' );
     add_action( 'wp_ajax_go_admin_remove_notification', 'go_admin_remove_notification' ); //OK
     add_action( 'wp_ajax_go_update_bonus_loot', 'go_update_bonus_loot' );//OK
+    add_action( 'wp_ajax_go_clone_post_new_menu_bar', 'go_clone_post_new_menu_bar' );//OK
 }else{
     //include_once('admin/admin.php');
     //include_once('admin/ajax/admin_ajax.php');
@@ -39,6 +40,7 @@ include_once('src/all/go_transients.php');
 include_once('src/all/go_mce.php');
 include_once('src/all/go_loot_and_updates.php');
 include_once('src/all/go_users.php');
+include_once('src/all/go_core_functions.php');
 
 /**
  * This places the mce in in hidden footer to be used later.

@@ -41,10 +41,8 @@ function go_blog_opener(){
 
         $stage = (isset($blog_meta['go_blog_task_stage'][0]) ? $blog_meta['go_blog_task_stage'][0] : null);
 
-        go_get_task_id($blog_post_id);
+        $go_blog_task_id = go_get_task_id($blog_post_id);
         if(!empty($go_blog_task_id)) {
-
-
             $custom_fields = get_post_custom($go_blog_task_id);
             $task_is_locked = go_task_locks($go_blog_task_id, null, false, $custom_fields, $is_logged_in, true);
             if ( $task_is_locked === true ) {

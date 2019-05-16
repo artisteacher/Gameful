@@ -176,6 +176,7 @@ function go_set_options_autoload(){
         'options_go_slugs_toggle',
 
         'options_go_avatars_local'
+
     );
 
     foreach ( $options_array as $option ) {//autoload must be set on creation of option
@@ -266,7 +267,14 @@ function go_install_data ($reset = false) {
 
         'options_go_slugs_toggle' => 1,
 
-        'options_go_avatars_local' => 1
+        'options_go_avatars_local' => 1,
+
+        'options_go_user_bar_background_color' => '#268FBB',
+        'options_go_user_bar_link_color' => '#FFFFFF',
+        'options_go_user_bar_hover_color' => '#a0a5aa',
+        'options_go_home_toggle' => 1,
+
+
     );
     foreach ( $options_array as $key => $value ) {
         add_option( $key, $value, '', 'yes' );

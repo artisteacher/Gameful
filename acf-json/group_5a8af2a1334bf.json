@@ -967,7 +967,7 @@
                                         "0": "Level1 -  : 0 PP",
                                         "50": "Level2 -  : 50 PP",
                                         "105": "Level3 -  : 105 PP",
-                                        "170": "Level4 -  : 170 PP"
+                                        "20000": "Level4 -  : 20000 PP"
                                     },
                                     "default_value": [],
                                     "allow_null": 0,
@@ -1705,7 +1705,7 @@
                     "key": "field_5ac134fe12f5a",
                     "label": "Password",
                     "name": "password",
-                    "type": "password",
+                    "type": "text",
                     "instructions": "Optional password in addition to master password.",
                     "required": 0,
                     "conditional_logic": [
@@ -1722,9 +1722,11 @@
                         "class": "go_call_to_action",
                         "id": ""
                     },
+                    "default_value": "",
                     "placeholder": "",
                     "prepend": "",
-                    "append": ""
+                    "append": "",
+                    "maxlength": ""
                 },
                 {
                     "key": "field_5ac134fe12f53",
@@ -2551,7 +2553,7 @@
                     "key": "field_5a8b14a6f3301",
                     "label": "Password",
                     "name": "password",
-                    "type": "password",
+                    "type": "text",
                     "instructions": "Users will need a password to proceed. The master password that is set on the options page will work. You can set an additional password that only applies to this stage.",
                     "required": 0,
                     "conditional_logic": [
@@ -2568,9 +2570,11 @@
                         "class": "go_call_to_action",
                         "id": ""
                     },
+                    "default_value": "",
                     "placeholder": "",
                     "prepend": "",
-                    "append": ""
+                    "append": "",
+                    "maxlength": ""
                 },
                 {
                     "key": "field_5a8b14a6f32f6",
@@ -2681,5 +2685,5 @@
     ],
     "active": 1,
     "description": "",
-    "modified": 1556034922
+    "modified": 1558031529
 }

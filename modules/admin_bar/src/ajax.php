@@ -36,3 +36,38 @@ function go_update_admin_view (){
     }
 
 }
+
+
+function go_new_task_from_template(){
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+    $task_name = get_option('options_go_tasks_name_singular');
+    $templates = get_posts([
+        'post_type' => 'tasks_templates',
+        'post_status' => 'any',
+        'numberposts' => -1
+        // 'order'    => 'ASC'
+    ]);
+    if ($templates) {
+        //create a select dropdown
+        echo '<h3>Choose a Template:</h3><select class="go_new_task_from_template" name="new_task">';
+        echo '<option value="0">New Empty '.$task_name.'</option>';
+        foreach ($templates as $template){
+            $post_id = $template->ID;
+            $title = $template->post_title;
+            echo '<option value="' .$post_id.'">' .$title.'</option>';
+        }
+        echo '</select>';
+        echo '<br><button class="submit-button button go_new_task_from_template_button" type="submit" style="float: right;">Create '.$task_name.'</button>';
+
+       // $url_new_task = get_admin_url(null, 'post-new.php?post_type=tasks');
+       // echo '<br><br>-or-<br><br><p style="float:right;"><a href="'. $url_new_task .'">Create New Empty '.$task_name.'</a></p>';
+    }
+
+
+
+
+    die();
+}
