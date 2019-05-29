@@ -158,23 +158,6 @@ else if ( is_admin() ) {
 
     }
 
-    add_filter('acf/settings/load_json', 'go_acf_json_load_point');
-
-    function go_acf_json_load_point( $paths ) {
-
-        // remove original path (optional)
-        unset($paths[0]);
-
-        // append path
-        $paths[] = (plugin_dir_path(__FILE__) . 'acf-json');
-
-
-        // return
-        return $paths;
-
-    }
-
-
     include_once('custom-acf-fields/acf-level2-taxonomy/acf-level2-taxonomy.php');
     include_once('custom-acf-fields/acf-quiz/acf-quiz.php');
 

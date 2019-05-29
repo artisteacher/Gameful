@@ -30,19 +30,15 @@ function go_includes ($hook) {
     // Bring variables from beginning of file into function scope
     global $js_in_footer;
     global $go_pdfmake_js_url, $go_pdfmake_fonts_js_url, $font_awesome_url;
-
-    wp_register_style( 'go_font_awesome', plugin_dir_url( __FILE__ ).'fontawesome/css/all.min.css', null, 5 );
-    wp_enqueue_style( 'go_font_awesome' );
-    //wp_register_style( 'go_styles', plugin_dir_url( __FILE__ ).'min/go_styles.css', null, $go_css_version );
-
-
-
+    
     /**
      * Font Awesome
      * https://fontawesome.com
      */
-    wp_register_style ('go_font-awesome', $font_awesome_url );
-    wp_enqueue_style('go_font-awesome');
+    //wp_register_style ('go_font-awesome', $font_awesome_url );
+    //wp_enqueue_style('go_font-awesome');
+    wp_register_style( 'go_font_awesome', plugin_dir_url( __FILE__ ).'fontawesome/css/all.min.css', null, 5 );
+    wp_enqueue_style( 'go_font_awesome' );
 
 
     //on change password page
