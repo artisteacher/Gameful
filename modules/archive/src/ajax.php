@@ -140,8 +140,8 @@ function generate_archive_list($is_private = false){
     <script>
         document.title = "<?php echo $page_title; ?>";//set page title
     </script><?php
-    $user_avatar_id = get_user_option('go_avatar', $current_user_id);
-    $user_avatar = wp_get_attachment_image($user_avatar_id);
+    //$user_avatar_id = get_user_option('go_avatar', $current_user_id);
+    //$user_avatar = wp_get_attachment_image($user_avatar_id);
 
 
 

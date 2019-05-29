@@ -1,4 +1,8 @@
 @charset "UTF-8";
+img {
+  max-width: 100%;
+  height: auto; }
+
 .go_favorite_container label {
   cursor: pointer; }
   .go_favorite_container label input[type="checkbox"] {
