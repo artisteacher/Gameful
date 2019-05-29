@@ -158,7 +158,7 @@ function go_stats_leaderboard_dataloader_ajax(){
               MAX(CASE WHEN t2.meta_key = 'go_section_and_seat_3_user-section' THEN meta_value END) AS section_3,
               MAX(CASE WHEN t2.meta_key = 'go_section_and_seat_4_user-section' THEN meta_value END) AS section_4,
               MAX(CASE WHEN t2.meta_key = 'go_section_and_seat_5_user-section' THEN meta_value END) AS section_5,
-              MAX(CASE WHEN t2.meta_key = 'wp_capabilities' THEN meta_value END) AS wp_capabilities,
+              MAX(CASE WHEN t2.meta_key = '$sColumn' THEN meta_value END) AS wp_capabilities,
               t3.display_name, t3.user_url, t3.user_login
               FROM $lTable AS t1 
               LEFT JOIN $umTable AS t2 ON t1.uid = t2.user_id
