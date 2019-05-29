@@ -750,7 +750,7 @@ function go_admin_bar_v5() {
                     'title' => 'Add ' . get_option('options_go_tasks_name_singular') ,
                     'href' => '',
                     'parent' => 'go_add_content',
-                    'meta' => array('class' => 'go_options')
+                    'meta' => array('class' => 'go_options go_add_quest_from_template')
                 )
             );
 

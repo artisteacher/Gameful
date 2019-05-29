@@ -28,7 +28,7 @@ jQuery( document ).ready( function() {
     }
 
 
-    jQuery('#wp-admin-bar-go_add_quest_from_template').on("click", function(e){
+    jQuery('#wp-admin-bar-go_add_quest_from_template, .go_add_quest_from_template').on("click", function(e){
         go_new_task_from_template();
     });
 
@@ -81,9 +81,7 @@ function go_new_task_from_template(){
 
                     jQuery('.go_new_task_from_template_button').one('click', function(){
                         go_clone_post_new_menu_bar();
-
-
-                    })
+                    });
                 }
 
             }
@@ -492,7 +490,7 @@ function go_admin_bar_stats_page_button( id ) {//this is called from the admin b
                     variant: 'stats',
                     afterClose: function(event){
                         jQuery('.go_user_bar_stats').blur();
-                        jQuery(body).focus();
+                        jQuery('body').focus();
                     }
                 });
 

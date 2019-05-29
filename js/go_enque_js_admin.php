@@ -164,7 +164,7 @@ function go_admin_scripts ($hook) {
         }
 
         // Enqueue and Localization for options page
-        if ( 'toplevel_page_go_options' === $hook ) {
+        if ( 'options_page_go_options' === $hook ) {
 
 
             wp_localize_script('go_admin_user', 'levelGrowth', get_option('options_go_loot_xp_levels_growth'));

@@ -11,6 +11,9 @@ jQuery(document).ready(function(){
         }
     });
 
+    jQuery('.go_new_task_from_template_button').one('click', function(){
+        go_clone_post_new_menu_bar();
+    });
 });
 
 

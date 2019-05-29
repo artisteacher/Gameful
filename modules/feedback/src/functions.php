@@ -48,30 +48,33 @@ function go_reader_template_include($template){
 }
 
 
-        add_action('go_blog_template_after_post', 'go_user_feedback_container', 10, 2);
+        add_action('go_blog_template_after_post', 'go_user_feedback_container', 10, 3);
 
-        function go_user_feedback_container($post_id, $show_form = true){
+        function go_user_feedback_container($post_id, $show_form = true, $is_archive = false){
             $admin_user = go_user_is_admin();
 
 
             //go_blog_tags_select($post_id);
             ?>
             <div class="feedback_accordion" style="clear: both; display: none;">
-                <?php go_blog_post_feedback_table($post_id); ?>
-                <?php go_blog_post_history_table($post_id); ?>
                 <?php
-                if ($admin_user && $show_form) {
-                    ?>
-                    <h3>Feedback Form</h3>
-                    <div class="go_feedback_form_container">
-                    <?php
-                    go_feedback_form($post_id);
-                    ?>
-                    </div>
-                    <?php
+                go_blog_post_feedback_table($post_id);
+                if (!$is_archive) {
+                    go_blog_post_history_table($post_id);
+                    if ($admin_user && $show_form) {
+                        ?>
+                        <h3>Feedback Form</h3>
+                        <div class="go_feedback_form_container">
+                            <?php
+                            go_feedback_form($post_id);
+                            ?>
+                        </div>
+                        <?php
 
+                    }
                 }
                 ?>
+
             </div>
             <?php
         }
@@ -127,16 +130,16 @@ function go_feedback_table($all_feedback){
     $silver_name = get_option("options_go_loot_gold_coin_names_silver_name");
     $bronze_name = get_option("options_go_loot_gold_coin_names_bronze_name");
     ?>
-     <div class="go_feedback_table"  class='go_datatables'>
-                        <table id='go_single_task_datatable' class='pretty display'>
+     <div class="go_feedback_table_container">
+                        <table class='go_feedback_table go_blog_footer_table' class='pretty display'>
                             <thead>
                             <tr>
-                                <th class='header' id='go_stats_time'><a href=\"#\">Title</a></th>
-                                <th class='header' id='go_stats_mods'><a href=\"#\">Message</a></th>
-                                <th class='header' id='go_stats_mods'><a href=\"#\">Percent</a></th>
-                                <th class='header' id='go_stats_mods'><a href=\"#\"><?php echo $xp_name; ?></a></th>
-                                <th class='header' id='go_stats_mods'><a href=\"#\"><?php echo $gold_name; ?></a></th>
-                                <th class='header' id='go_stats_mods'><a href=\"#\"><?php echo $health_name; ?></a></th>
+                                <th class='header' id='go_stats_time'>Title</th>
+                                <th class='header' id='go_stats_mods'>Message</th>
+                                <th class='header' id='go_stats_mods'>Percent</th>
+                                <th class='header' id='go_stats_mods'><?php echo $xp_name; ?></th>
+                                <th class='header' id='go_stats_mods'><?php echo $gold_name; ?></th>
+                                <th class='header' id='go_stats_mods'><?php echo $health_name; ?></th>
                                 <?php
                                 foreach($all_feedback as $feedback){
                                     $result = $feedback['result'];
@@ -185,12 +188,12 @@ function go_feedback_form($post_id){
     <?php
 }
 
-function go_post_status_icon($post_id){
+function go_post_status_icon($post_id, $is_archive = false){
     $status = get_post_status($post_id);
     $is_admin = go_user_is_admin();
-    $icon ='';
+    $icon =false;
     if ($post_id) {
-        if ($status == 'read') {
+        if ($status == 'read' && !$is_archive ) {
             if ($is_admin) {
                 $icon = '<a href="javascript:;" class="go_status_read_toggle" data-postid="' . $post_id . '"><span class="tooltip"  data-tippy-content="Status is read. Click to mark this post as unread."><i class="far fa-eye fa-2x" aria-hidden="true"></i><i class="fa fa-eye-slash fa-2x" aria-hidden="true" style="display: none;"></i></span></a>';
             }
@@ -199,7 +202,7 @@ function go_post_status_icon($post_id){
             }
         } else if ($status == 'reset') {
             $icon = '<span class="tooltip" data-tippy-content="This post has been reset."><i class="fas fa-times-circle fa-2x" aria-hidden="true"></i></span>';
-        } else if ($status == 'unread' && $is_admin == true) {
+        } else if ($status == 'unread' && $is_admin == true && !$is_archive) {
             if ($is_admin) {
                 $icon = '<a href="javascript:;" class="go_status_read_toggle" data-postid="' . $post_id . '" ><span class="tooltip" data-tippy-content="Status is unread. Click to mark this post as read."><i class="far fa-eye-slash fa-2x" aria-hidden="true"></i><i class="fa fa-eye fa-2x" aria-hidden="true" style="display: none;"></i></span></a>';
             }
@@ -214,7 +217,7 @@ function go_post_status_icon($post_id){
         }
 
         $user_statuses = array("read", "reset", "draft", "trash");
-        if (!empty($status)) {
+        if (!empty($status) && $icon ) {
             if ((in_array($status, $user_statuses) || ($is_admin && $status == 'unread'))) {
                 return '<div class="go_status_icon" >' . $icon . '</div>';
             }
@@ -234,7 +237,7 @@ function go_blog_is_private($post_id){
     }
 }
 
-function go_blog_favorite($post_id){
+function go_blog_favorite($post_id, $is_admin, $is_archive){
 
         $status = get_post_meta($post_id, 'go_blog_favorite', true );
         if ($status == 'true'){
@@ -245,9 +248,12 @@ function go_blog_favorite($post_id){
         //echo "<div style=''><input type='checkbox' class='go_blog_favorite ' value='go_blog_favorite' data-post_id='{$post_id}' {$checked}> Favorite</div>";
 
 
+        if($is_admin && !$is_archive) {
+            return "<div class='go_favorite_container'><label><input type='checkbox' class='go_blog_favorite ' value='go_blog_favorite' data-post_id='" . $post_id . "' " . $checked . "> <span class='go_favorite_label'></span></label></div>";
+        }else if ($checked){
+            return "<div class='go_is_favorite_container'><label><span class='go_is_favorite_label'></span></label></div>";
 
-        return "<div class='go_favorite_container'><label><input type='checkbox' class='go_blog_favorite ' value='go_blog_favorite' data-post_id='".$post_id."' ".$checked."> <span class='go_favorite_label'></span></label></div>";
-
+        }
 }
 
 function go_blog_favorite_toggle(){
@@ -287,12 +293,12 @@ function go_blog_post_history_table($post_id){
         <h3>Revision History</h3>
         <div class="go_blog_revisions">
             <div class="go_blog_revisions_container">
-                <div class="go_history_table"  class='go_datatables'>
-                    <table id='go_single_task_datatable' class='pretty display'>
+                <div class="go_revisions_table_container">
+                    <table class='go_revisions_table go_blog_footer_table'>
                     <thead>
                     <tr>
-                        <th class='header' id='go_stats_time'><a href=\"#\">Date and Time</a></th>
-                        <th class='header' id='go_stats_mods'><a href=\"#\">View</a></th>
+                        <th class='header' id='go_stats_time'>Date and Time</th>
+                        <th class='header' id='go_stats_mods'>View</th>
                             <?php
                             $i=0;
                             foreach($revisions as $revision){

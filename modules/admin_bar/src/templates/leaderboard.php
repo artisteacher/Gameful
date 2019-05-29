@@ -10,7 +10,7 @@
 
 get_header();
 
-echo "<h2 style='padding-top:10px;'>Leaderboard</h2>";
+
 
 if ( is_user_logged_in() ) {
 

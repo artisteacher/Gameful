@@ -73,7 +73,6 @@ function go_blog_opener(){
     }
 
     go_blog_form($blog_post_id, '_lightbox', $go_blog_task_id, $i, $bonus, $check_for_understanding );
-    echo "<button id='go_blog_submit' style='display:block;' check_type='blog_lightbox' button_type='submit' blog_post_id ={$blog_post_id} blog_suffix ='_lightbox'  task_id='{$go_blog_task_id}' min_words='{$min_words}' blog_suffix ='' text_toggle='{$text_toggle}' data-check_for_understanding ='{$check_for_understanding}'>Submit</button>";
     echo "<p id='go_blog_error_msg' class='go_error_msg' style='display: none; color: red;'></p>";
     ?>
     <script>
@@ -259,7 +258,16 @@ function go_blog_trash(){
             go_update_actions( $uid, 'reset',  $go_blog_task_id, $new_status_task, $new_bonus_status_task, null, null, null, null, null, null,  $xp, $gold, $health, $badge_ids, $group_ids, false, true);
 
             update_user_option(intval($uid), 'go_new_messages', true);
+
+
         }
+        ob_start();
+        go_blog_post($blog_post_id, '', false, true, false, true);
+        $wrapper = ob_get_contents();
+
+        ob_end_clean();
+        echo $wrapper;
+        die();
     }
 }
 

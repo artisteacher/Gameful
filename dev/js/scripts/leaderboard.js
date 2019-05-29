@@ -58,7 +58,8 @@ function go_stats_leaderboard_page() {
             },
             {
                 "targets": [3],
-                sortable: false,
+                sortable: true,
+                "orderSequence": [ "desc" ]
             },
             {
                 "targets": [4],

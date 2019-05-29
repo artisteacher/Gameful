@@ -6,7 +6,9 @@
  * Time: 09:07
  */
 
-if ( !in_array($request_uri, ['/login/','/?login=failed', '/?login=empty', '/lostpassword/', '/?lostpassword=invalid', '/?login=checkemail'], true ) ) {
+
+if ( !in_array($request_uri, ['/login/','/?login=failed', '/?login=empty', '/lostpassword/', '/?lostpassword=invalid', '/?login=checkemail'], true )
+    && strpos($request_uri, 'user_archive') != true) {
     add_action('wp_head', 'go_player_bar_v5');
 
     function go_user_bar_dynamic_styles() {
@@ -22,6 +24,8 @@ if ( !in_array($request_uri, ['/login/','/?login=failed', '/?login=empty', '/los
             #go_user_bar a:visited { color:<?php echo $link_color; ?>; text-decoration: none; }
             #go_user_bar a:hover { color:<?php echo $hover_color; ?>; text-decoration: none; }
             #go_user_bar a:active { color:<?php echo $hover_color; ?>; text-decoration: underline; }
+            #go_admin_bar_gold { color:<?php echo $link_color; ?>; }
+            .progress-bar-border { border-color:<?php echo $link_color; ?>; }
         </style>
         <?php
 
@@ -272,12 +276,12 @@ if ( !in_array($request_uri, ['/login/','/?login=failed', '/?login=empty', '/los
         echo "</div>";
 
         if ($go_search_switch) {
-            echo '<div class="go_user_bar_icon userbar_dropdown"><a href="javascript:void(0)"><i class="fas fa-search ab-icon"></i></a>';
-
+            echo '<div id="userbar_search"  class="go_user_bar_icon"><div class="userbar_dropdown_toggle search"><a href="javascript:void(0)"><i class="fas fa-search ab-icon"></i></a></div>';
             //start of dropdown content
             $dropdown_content = "<div class='userbar_dropdown-content search '>";
+            //$dropdown_content .= '<div style="float:right;"><a href="javascript:;" onclick="go_toggle_search()"><i class="far fa-times-circle"></i></a></div>';
             $dropdown_content .= '
-                <form role="search" method="get" id="go_admin_bar_task_search_form" class="searchform" action="' . home_url('/') . '">
+                <form role="search" method="get" id="go_admin_bar_task_search_form" class="searchform" action="' . home_url('/') . '" style="clear:both;">
                     <div><label class="screen-reader-text" for="s">' . __('Search for:') . '</label>
                         <input type="text" value="' . get_search_query() . '" name="s" id="go_admin_bar_task_search_input" placeholder="Search for ' . strtolower(get_option("go_tasks_plural_name")) . '..."/>
                         <input type="hidden" name="post_type[]" value="tasks"/>
@@ -360,6 +364,7 @@ function go_stats_leaderboard() {
     ?>
 
     <div id="go_leaderboard_wrapper" class="go_datatables">
+        <h2 style='padding-top:10px;'>Leaderboard</h2>
         <div id="go_leaderboard_filters">
             <span>Section:<?php go_make_tax_select('user_go_sections', 'clipboard_', 'id', $section, $section_name); ?></span>
             <span>Group:<?php go_make_tax_select('user_go_groups', 'clipboard_', 'id', $group, $group_name); ?></span>

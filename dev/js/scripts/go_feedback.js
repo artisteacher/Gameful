@@ -1,7 +1,7 @@
 
 //jQuery(window).bind("load", function() {
 jQuery( document ).ready( function() {
-
+    console.log("go_feedback is Ready.")
     if (typeof (IsReader) !== 'undefined') {
         //console.log("jQuery is loaded2");
         go_load_daterangepicker('reader');
@@ -56,6 +56,8 @@ jQuery( document ).ready( function() {
         });
 
     }
+
+
 
 
 
@@ -308,6 +310,7 @@ function go_reader_update() {
 }
 
 function go_reader_activate_buttons(){
+    console.log("go_reader_activate_buttons");
 
     jQuery('#go_read_printed_button').off().on("click", function () {
         console.log("clicked");

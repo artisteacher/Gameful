@@ -280,11 +280,9 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
                         }
                     }
                     echo "</div>";
-
                 }
 
                 if ($type[0] =='Video'){
-
                     $video_content = (isset($blog_meta[$uniqueid][0]) ? $blog_meta[$uniqueid][0] : null);
                     if($all_content){
                         $video_content = '';
@@ -298,8 +296,6 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
                     echo "</div> </div>";
 
                 }
-
-
             }
             if ($num_elements > 0){
                 echo "<hr>";
@@ -309,16 +305,11 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
                 $blog_title = "Stage ". (intval($i) +1) ;
             }
         }
-
         //set the title on blog post forms attached to quests
         $title = get_the_title($go_blog_task_id);
         $title = $title . " - " . $blog_title;
-
-
-
     }else{
         $is_private = get_post_meta($blog_post_id, 'go_blog_private_post', true) ? get_post_meta($blog_post_id, 'go_blog_private_post', true) : false;
-
     }
 
     $buffer = ob_get_contents();
@@ -368,13 +359,11 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
         if ($min_words > 0) {
             echo "<div id='go_blog_min' style='text-align:right'><span class='char_count'>" . $min_words . "</span> Words Required</div>";
         }
-
-
     }
     if ( is_user_logged_in() && !$all_content) {
         echo "<p id='go_blog_stage_error_msg' class='go_error_msg' style='display: none; color: red;'></p>";
 
-        echo "<div class='go_blog_form_footer' style='background-color: #b3b3b3;'>";
+        echo "<div class='go_blog_form_footer {$suffix}' style='background-color: #b3b3b3;'>";
         $current_user = get_current_user_id();
         $is_admin = go_user_is_admin();
         if ($suffix != '_lightbox') {
@@ -389,6 +378,10 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
             $allow_drafts = array("draft", "reset", "trash", null);
             if (in_array($post_status, $allow_drafts)) {
                 echo "<span id='go_save_button{$suffix}' class='go_button_round go_save_button progress {$button_class}'  status='{$i}' data-bonus_status='{$bonus}' check_type='skip' button_type='save{$suffix}'  admin_lock='true' blog_post_id='{$blog_post_id}' blog_suffix='{$suffix}' task_id='{$go_blog_task_id}' data-check_for_understanding ='{$check_for_understanding}'><span class='go_round_inner'><i class='fas fa-save'></i></span></span>";
+
+            }
+            if ($suffix == '_lightbox'){
+                echo "<button id='go_blog_submit' style='display:block;' check_type='blog_lightbox' button_type='submit' blog_post_id ={$blog_post_id} blog_suffix ='_lightbox'  task_id='{$go_blog_task_id}' min_words='{$min_words}' blog_suffix ='' text_toggle='{$text_toggle}' data-check_for_understanding ='{$check_for_understanding}'>Submit</button>";
 
             }
         }
@@ -434,7 +427,7 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
  * @param bool $bonus_status //only needed for old style URL and File print outs (v4)
  * @param bool $status
  */
-function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_understanding = false, $with_feedback = false, $show_author = false, $show_edit = false, $task_stage_num = null, $bonus_stage_num = null, $is_revision = false)
+function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_understanding = false, $with_feedback = false, $show_author = false, $show_edit = false, $task_stage_num = null, $bonus_stage_num = null, $is_revision = false, $is_archive  = false)
 {
     $current_user = get_current_user_id();
     $is_admin = go_user_is_admin();
@@ -453,6 +446,11 @@ function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_underst
     $post = get_post($blog_post_id, OBJECT, 'edit');
     //get content from the object
     $author_id = $post->post_author;
+    if (intval($current_user) === intval($author_id)) {
+        $is_current_user = true;
+    } else {
+        $is_current_user = false;
+    }
     $content = $post->post_content;
     $post_date = $post->post_date;
     $post_modified = $post->post_modified;
@@ -491,9 +489,8 @@ function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_underst
         echo "<span style='color: red;'>DRAFT</span>";
     }
 
-
     echo "<div class='go_post_title'>";
-    if (!empty($task_url)) {
+    if (!empty($task_url) && !$is_archive) {
         echo "<h2><a href='{$task_url}'>" . $title . "</a></h2>";
     } else {
         echo "<h2>" . $title . "</a></h2>";
@@ -624,61 +621,57 @@ function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_underst
         echo "<div class='go_blog_content'>". $text_content . "</div>";
     }
 
-    if ( is_user_logged_in() ) {
+    if ( $is_current_user || $is_admin ) {
 
         if (!$is_revision) {
             echo "<div class='go_blog_form_footer'>";
-            go_blog_status($blog_post_id, $is_admin);
+            go_blog_status($blog_post_id, $is_admin, false, $is_archive);
             echo "<div><div class='go_blog_actions'>";
 
-
-            if (intval($current_user) == intval($author_id) && $show_edit) {//if current user then show edit and maybe trash
-                echo "<div class='go_blog_opener go_blog_opener_round go_button_round' blog_post_id ='{$blog_post_id}' data-check_for_understanding ='{$check_for_understanding}'><span class='go_round_inner'><i class='fas fa-pencil-alt'></i></span></div>";
+            if(!$is_archive) {
+                if (intval($current_user) == intval($author_id) && $show_edit) {//if current user then show edit and maybe trash
+                    echo "<div class='go_blog_opener go_blog_opener_round go_button_round' blog_post_id ='{$blog_post_id}' data-check_for_understanding ='{$check_for_understanding}'><span class='go_round_inner'><i class='fas fa-pencil-alt'></i></span></div>";
+                }
+                if (($current_user == $author_id || $is_admin) && $check_for_understanding == false && empty($go_blog_task_id) && ($status !='trash')) {
+                    echo '<div class="go_blog_trash go_button_round" blog_post_id ="' . $blog_post_id . '"><span class="go_round_inner"><i class="fas fa-trash"></i></span></div>';
+                } else if ($is_admin) {
+                    echo '<div data-uid="" data-task="' . $blog_post_id . '" class="go_reset_task_clipboard go_button_round go_blog_reset" ><span class="go_round_inner"><i class="fas fa-times-circle"></i></span></div>';
+                    //echo '<span class="go_blog_trash" blog_post_id ="' . $blog_post_id . '"><i class="fa fa-times-circle fa-2x"></i></span>';
+                }
             }
-            if ((($current_user == $author_id || $is_admin) && $check_for_understanding == false && empty($go_blog_task_id))) {
-                echo '<div class="go_blog_trash go_button_round" blog_post_id ="' . $blog_post_id . '"><span class="go_round_inner"><i class="fas fa-trash"></i></span></div>';
-            } else if ($is_admin) {
-                echo '<div data-uid="" data-task="' . $blog_post_id . '" class="go_reset_task_clipboard go_button_round go_blog_reset" ><span class="go_round_inner"><i class="fas fa-times-circle"></i></span></div>';
-                //echo '<span class="go_blog_trash" blog_post_id ="' . $blog_post_id . '"><i class="fa fa-times-circle fa-2x"></i></span>';
-            }
-
 
             echo "</div></div></div>";
-        } else {
-            $parent = wp_get_post_parent_id($blog_post_id);
-            ?>
-            <div>
-                <button class="go_restore_revision" style="float:right;" data-post_id="<?php echo $blog_post_id; ?>"
-                        data-parent_id="<?php echo $parent; ?>">Restore this post
-                </button>
-            </div>
-            <?php
-        }
-
-
-        if (intval($current_user) === intval($author_id)) {
-            $is_current_user = true;
-        } else {
-            $is_current_user = false;
         }
 
         if ($with_feedback && ($is_current_user || $is_admin)) {
-            do_action('go_blog_template_after_post', $blog_post_id);
+            do_action('go_blog_template_after_post', $blog_post_id, true, $is_archive);
         }
     }
 
     echo "</div>";
+
+    if($is_revision){
+        $parent = wp_get_post_parent_id($blog_post_id);
+        ?>
+        <div>
+            <button class="go_restore_revision" style="float:right;" data-post_id="<?php echo $blog_post_id; ?>"
+                    data-parent_id="<?php echo $parent; ?>">Restore this post
+            </button>
+        </div>
+        <?php
+
+    }
 }
 
 /**
  * @param $blog_post_id
  * @param $is_admin
  */
-function go_blog_status($blog_post_id, $is_admin, $is_form = false){
-    $status = go_post_status_icon($blog_post_id);
+function go_blog_status($blog_post_id, $is_admin, $is_form = false, $is_archive = false){
+    $status = go_post_status_icon($blog_post_id, $is_archive);
     $private = go_blog_is_private($blog_post_id);
-    if ($is_admin && !$is_form) {
-        $favorite = go_blog_favorite($blog_post_id);
+    if (!$is_form) {
+        $favorite = go_blog_favorite($blog_post_id, $is_admin, $is_archive);
     }else{
         $favorite = '';
     }
@@ -905,9 +898,8 @@ function go_template_loader($template){
     // load the custom template if ?query_type=all_post is  found on wordpress url/request
     if( $query_var == 'user_blog' ){
         $directory = plugin_dir_path( __FILE__ ) . '/templates/go_user_blog_template.php';
-        //return get_stylesheet_directory_uri() . 'go_user_blog.php';
+        //$directory = plugin_dir_path( __FILE__ ) . '/templates/go_save_blog.php';
         return $directory;
-
     }
     return $template;
 }

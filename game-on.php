@@ -5,8 +5,13 @@ Plugin URI: http://maclab.guhsd.net/game-on
 Description: Gamification tools for teachers.
 Author: Valhalla Mac Lab
 Author URI: https://github.com/TheMacLab/game-on/blob/master/README.md
-Version: 5.02b
+Version: 5.03b
 */
+
+
+//move these
+
+
 
 add_filter('plupload_default_settings', function ($settings) {
     $settings['resize'] = array(
@@ -18,6 +23,9 @@ add_filter('plupload_default_settings', function ($settings) {
     );
     return $settings;
 });
+//end move these
+
+
 
 //$go_debug = true;//set to true when coding
 $go_debug = false;
@@ -36,18 +44,20 @@ function stop_heartbeat() {
 $is_error = false;
 global $is_error;
 
-$go_js_version = 5.02;
+$go_js_version = 5.03;
 global $go_js_version;
 
-$go_css_version = 5.02;
+$go_css_version = 5.03;
 global $go_css_version;
 
 ///////////////////////////////
 //INCLUDE RESOURCES BEFORE GO
 ///////////////////////////////
+
 //include_once('includes/acf/acf.php');
 include( 'includes/wp-frontend-media-master/frontend-media.php' );
 include_once('includes/wp-term-order/wp-term-order.php'); //try to load only on admin pages
+//include( 'includes/simply-static/simply-static.php' );
 
 //Include external js and css resources from cdns
 //can these be given local fallbacks
@@ -72,6 +82,8 @@ if ( !is_admin() ) { //IF PUBLIC FACING PAGE
 
 }
 else if ( defined( 'DOING_AJAX' )) { //ELSE THIS IS AN AJAX CALL
+
+
     //there is a way to include in ajax, but I don't know if we need to.
     //Updates
 
@@ -172,7 +184,6 @@ else{
 
 include_once('core/includes.php');
 
-
 //These have their own conditional includes
 include_once('modules/login/includes.php');
 include_once('modules/feedback/includes.php');
@@ -184,6 +195,7 @@ include_once('modules/stats/includes.php');
 include_once('modules/store/includes.php');
 include_once('modules/tasks/includes.php');
 include_once('modules/user_blogs/includes.php');
+include_once('modules/archive/includes.php');
 
 
 /*

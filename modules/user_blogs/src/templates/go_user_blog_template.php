@@ -29,11 +29,6 @@ get_header();
 
         $current_user_id = get_current_user_id();
 
-        if ($current_user_id === $user_id) {
-            $is_current_user = true;
-        } else {
-            $is_current_user = false;
-        }
 
         $is_admin = go_user_is_admin($current_user_id);
 
@@ -55,40 +50,10 @@ get_header();
 
         ?>
         <div id='go_stats_lite_wrapper'>
-            <div id='go_stats_lay_lite' class='go_datatables'>
-                <div id='go_stats_header_lite'>
-                    <div class="go_stats_id_card">
-                        <div class='go_stats_gravatar'><?php echo $user_avatar; ?></div>
 
-                        <div class='go_stats_user_info'>
-                            <?php echo "<h2>{$user_fullname}</h2>{$user_display_name}<br>"; ?>
-                            <?php
-                            go_user_links($user_id, true, true, true, false, true, true);
-                            if ($current_user_id === $user_id) {
-                                echo '<button class="go_blog_opener" blog_post_id ="">New Post</button>';
-                            }
-                            ?>
-
-
-                        </div>
-
-
-                    </div>
-                    <?php
-
-                    if (($current_user_id === $user_id) || $is_admin) {
-                        $hide_private = get_user_meta($current_user_id, 'go_show_private', true);
-                        $checked = '';
-                        if ($hide_private) {
-                            $checked = 'checked';
-                        };
-
-                        echo "<div style='float:right;'><input id='go_show_private' data-userid='{$user_id}' type='checkbox' {$checked} ><label for='go_show_private'> Show Private, Trashed, and Reset Posts </label></div>";
-                    }
-                    ?>
-
-                </div>
-            </div>
+            <?php
+            go_stats_header($user_id, true, true, true, false, true, false, true);
+            ?>
         </div>
         <div id='loader_container' style='display:none; height: 250px; width: 100%; padding: 10px 30px; '>
             <div id='loader'>
@@ -127,3 +92,4 @@ get_header();
 <?php
 
 get_footer();
+

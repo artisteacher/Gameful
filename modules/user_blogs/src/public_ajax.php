@@ -9,8 +9,9 @@
 //add_filter( 'wp_default_editor', create_function('', 'return "tinymce";'));
 add_filter( 'wp_default_editor', function() {return 'tinymce';});
 
-function go_get_blog_posts($user_id = null){
+function go_get_blog_posts($user_id = null, $is_archive = false, $private_archive = true){
     // get the username based from uname value in query var request.
+
 
     $current_user_id = get_current_user_id();
 
@@ -21,9 +22,23 @@ function go_get_blog_posts($user_id = null){
     }
     $is_admin = go_user_is_admin($current_user_id);
 
-    $show_private = get_user_meta($current_user_id, 'go_show_private', true);
 
-    if(($is_admin || $is_current_user) && intval($show_private) === 1){
+
+
+    if($is_archive) {
+        if ($private_archive) {
+            $show_private = true;
+            $with_feedback = true;
+        } else {
+            $show_private = false;
+            $with_feedback = false;
+        }
+    }else{
+        $show_private = get_user_option('go_show_private');
+        $with_feedback = true;
+    }
+
+    if(($is_admin || $is_current_user) && intval($show_private) === 1 ){
         $query_statuses = array("read", "unread", "reset", "draft", "trash", "publish");
         $private_query = array();
         $private_query_v4=  array();
@@ -41,13 +56,20 @@ function go_get_blog_posts($user_id = null){
         );
     }
 
-    $paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
+    if (!$is_archive) {//only 5 posts unless it is an archive
+        $posts_per_page = 5;
+        $paged = (get_query_var('paged')) ? absint(get_query_var('paged')) : 1;
+    }
+    else{
+        $posts_per_page = -1;
+        $paged = (get_query_var('paged')) ? absint(get_query_var('paged')) : 1;
+    }
 //$paged = get_query_var('paged');
 // Query param
     $arg = array(
         'post_type'         => 'go_blogs',
-        'posts_per_page'    => 5,
-        'orderby'           => 'publish_date',
+        'posts_per_page'    => $posts_per_page,
+        'orderby'           => 'post_date',
         'order'             => 'DESC',
         'author'       => $user_id,
         'paged' => $paged,
@@ -59,7 +81,7 @@ function go_get_blog_posts($user_id = null){
     $arg_localize = array(
         'post_type'         => 'go_blogs',
         'posts_per_page'    => 5,
-        'orderby'           => 'publish_date',
+        'orderby'           => 'post_date',
         'order'             => 'DESC',
         'author'       => $user_id,
         'post_status' => $query_statuses,
@@ -98,11 +120,12 @@ function go_get_blog_posts($user_id = null){
     flex-direction: column;
     padding: 20px;
     flex-grow: 1;
-    max-width: 800px;"><?php
+    max-width: 800px;    font-family: sans-serif;
+    font-size: 17px;"><?php
                 foreach ($posts as $post){
                     $post = json_decode(json_encode($post), True);//convert stdclass to array by encoding and decoding
                     $post_id = $post['ID'];
-                    go_blog_post($post_id, null,false, true, false, true, null);
+                    go_blog_post($post_id, null,false, $with_feedback, false, true, null, null, false, $is_archive);
                     //go_user_feedback_container($post_id);
                 }
                 ?>

@@ -155,215 +155,18 @@ function go_admin_bar_stats() {
         $user_id = $current_user->ID;
     }
 
-    //is the current user an admin
-    $current_user_id = get_current_user_id();
-    $is_admin = go_user_is_admin($current_user_id);
-
-
-    ?>
-    <input type="hidden" id="go_stats_hidden_input" value="<?php echo $user_id; ?>"/>
-    <?php
-    $full_name_toggle = get_option('options_go_full-names_toggle');
-    $user_fullname = $current_user->first_name.' '.$current_user->last_name;
-    //$user_login =  $current_user->user_login;
-    $user_display_name = $current_user->display_name;
-    //$user_website = $current_user->user_url;
-
-
-
-    //$leaderboard_toggle = get_option('options_go_stats_leaderboard_toggle');
-
-
-    $user_avatar_id = get_user_option( 'go_avatar', $user_id );
-    $user_avatar = wp_get_attachment_image($user_avatar_id);
-
-
-
-    //$user_focuses = go_display_user_focuses( $user_id );
-
-
-
-    $current_points = go_return_points( $user_id );
-
-
-    $go_option_ranks = get_option( 'go_ranks' );
-    $points_array = $go_option_ranks['points'];
-
-    $max_rank_index = count( $points_array ) - 1;
-    $max_rank_points = (int) $points_array[ $max_rank_index ];
-
-    $percentage_of_level = 1;
-
-    // user pnc
-    $rank = go_get_rank( $user_id );
-    $current_rank = $rank['current_rank'];
-    /*
-    $current_rank_points = $rank['current_rank_points'];
-    $next_rank = $rank['next_rank'];
-    $next_rank_points = $rank['next_rank_points'];
-
-    if ( null !== $next_rank_points ) {
-        $rank_threshold_diff = ( $next_rank_points - $current_rank_points );
-    } else {
-        $rank_threshold_diff = 1;
-    }
-    $pts_to_rank_threshold = ( $current_points - $current_rank_points );
-
-    if ( $max_rank_points === $current_rank_points ) {
-        $prestige_name = get_option( 'go_prestige_name' );
-        $pts_to_rank_up_str = $prestige_name;
-    } else {
-        $pts_to_rank_up_str = "{$pts_to_rank_threshold} / {$rank_threshold_diff}";
-    }
-
-    $percentage_of_level = ( $pts_to_rank_threshold / $rank_threshold_diff ) * 100;
-    if ( $percentage_of_level <= 0 ) {
-        $percentage_of_level = 0;
-    } else if ( $percentage_of_level >= 100 ) {
-        $percentage_of_level = 100;
-    }
-    */
-
-
-    /////////////////////////
-    ///
-    $xp_toggle = get_option('options_go_loot_xp_toggle');
-    $gold_toggle = get_option('options_go_loot_gold_toggle');
-    $health_toggle = get_option( 'options_go_loot_health_toggle' );
-
-    if ($xp_toggle) {
-        // the user's current amount of experience (points)
-        $go_current_xp = go_get_user_loot($user_id, 'xp');
-
-        $rank = go_get_rank($user_id);
-        $rank_num = $rank['rank_num'];
-        $current_rank = $rank['current_rank'];
-        $current_rank_points = $rank['current_rank_points'];
-        $next_rank = $rank['next_rank'];
-        $next_rank_points = $rank['next_rank_points'];
-
-        $go_option_ranks = get_option('options_go_loot_xp_levels_name_singular');
-        //$points_array = $go_option_ranks['points'];
-
-        /*
-         * Here we are referring to last element manually,
-         * since we don't want to modifiy
-         * the arrays with the array_pop function.
-         */
-        //$max_rank_index = count( $points_array ) - 1;
-        //$max_rank_points = (int) $points_array[ $max_rank_index ];
-
-        if ($next_rank_points != false) {
-            $rank_threshold_diff = $next_rank_points - $current_rank_points;
-            $pts_to_rank_threshold = $go_current_xp - $current_rank_points;
-            $pts_to_rank_up_str = "L{$rank_num}: {$pts_to_rank_threshold} / {$rank_threshold_diff}";
-            $percentage = $pts_to_rank_threshold / $rank_threshold_diff * 100;
-            //$color = barColor( $go_current_health, 0 );
-            $color = "#39b54a";
-        } else {
-            $pts_to_rank_up_str = $current_rank;
-            $percentage = 100;
-            $color = "gold";
-        }
-        if ( $percentage <= 0 ) {
-            $percentage = 0;
-        } else if ( $percentage >= 100 ) {
-            $percentage = 100;
-        }
-        $progress_bar = '<div class="go_admin_bar_progress_bar_border progress-bar-border">'.'<div class="go_admin_bar_progress_bar stats_progress_bar" '.
-            'style="width: '.$percentage.'%; background-color: '.$color.' ;">'.
-            '</div>'.
-            '<div class="points_needed_to_level_up ">'.
-            $pts_to_rank_up_str.
-            '</div>'.
-            '</div>';
-    }
-    else {
-        $progress_bar = '';
-        $go_current_xp = 0;
-        $rank_num = 1;
-    }
-
-
-    if($health_toggle) {
-        // the user's current amount of bonus currency,
-        // also used for coloring the admin bar
-        $go_current_health = go_get_user_loot($user_id, 'health');
-        $health_percentage = intval($go_current_health / 2);
-        if ($health_percentage <= 0) {
-            $health_percentage = 0;
-        } else if ($health_percentage >= 100) {
-            $health_percentage = 100;
-        }
-        $health_bar = '<div class="go_admin_health_bar_border progress-bar-border">' . '<div class="go_admin_bar_health_bar stats_progress_bar" ' . 'style="width: ' . $health_percentage . '%; background-color: red ;">' . '</div>' . '<div class="health_bar_percentage_str">' . "Health Mod: " . $go_current_health . "%" . '</div>' . '</div>';
-
-    }
-    else{
-        $health_bar = '';
-        $go_current_health = 0;
-    }
-
-    if ($gold_toggle) {
-        // the user's current amount of currency
-        $go_current_gold = go_get_user_loot($user_id, 'gold');
-    }
-    else{
-        $go_current_gold = 0;
-    }
-
-    //////////////////
-
-
 
     ?>
     <script>
-        go_stats_links();
-        jQuery("#wp-admin-bar-go_stats").off().one("click", function(){ go_admin_bar_stats_page_button()});
+        //jQuery("#wp-admin-bar-go_stats").off().one("click", function(){ go_admin_bar_stats_page_button()});
         jQuery(".go_user_bar_stats").off().one("click", function(){ go_admin_bar_stats_page_button()});
     </script>
-    <div id='go_stats_lay'>
-        <div id='go_stats_header'>
-            <div class="go_stats_id_card">
-                <div class='go_stats_gravatar'><?php echo $user_avatar; ?></div>
 
-                <div class='go_stats_user_info'>
-                    <?php
-                    if ($full_name_toggle || $is_admin){
-                        echo "<h2>{$user_fullname}</h2>{$user_display_name}<br>";
-                    }else{
-                        echo "<h2>{$user_display_name}</h2>";
-                    }
-                    go_user_links($user_id, true, false, true, true, true, false);
-                    ?>
 
-                </div>
-            </div>
-            <div class="go_stats_bars">
-                <?php
-                if ($xp_toggle) {
-                    echo '<div class="go_stats_rank"><h3>' . $go_option_ranks . ' ' . $rank_num . ": " . $current_rank . '</h3></div>';
-                }
-                echo $progress_bar;
-                //echo "<div id='go_stats_user_points'><span id='go_stats_user_points_value'>{$current_points}</span> {$points_name}</div><div id='go_stats_user_currency'><span id='go_stats_user_currency_value'>{$current_currency}</span> {$currency_name}</div><div id='go_stats_user_bonus_currency'><span id='go_stats_user_bonus_currency_value'>{$current_bonus_currency}</span> {$bonus_currency_name}</div>{$current_penalty} {$penalty_name}<br>{$current_minutes} {$minutes_name}";
-                echo $health_bar;
-                ?>
-            </div>
-            <div class='go_stats_user_loot'>
+    <?php
+    go_stats_header($user_id, true, false, true, true, true, false, false);
+    ?>
 
-                <?php
-
-                if ($xp_toggle) {
-                    echo '<div class="go_stats_xp">' . go_display_longhand_currency('xp', $go_current_xp) . '</div>';
-                }
-                if ($gold_toggle) {
-                    echo '<div class="go_stats_gold">' . go_display_longhand_currency('gold', $go_current_gold) . '</div>';
-                }
-                if ($health_toggle) {
-                    echo '<div class="go_stats_health">' . go_display_longhand_currency('health', $go_current_health) . '</div>';
-                }
-                ?>
-            </div>
-        </div>
 
         <div id="stats_tabs">
             <ul>
@@ -425,7 +228,7 @@ function go_admin_bar_stats() {
         </div>
 
 
-    </div>
+
     <?php
     die();
 }
@@ -2131,6 +1934,7 @@ function go_stats_groups_list($user_id) {
 /**
  *
  */
+/*
 function go_stats_lite(){
     if ( !is_user_logged_in() ) {
         echo "login";
@@ -2143,157 +1947,20 @@ function go_stats_lite(){
     }
     if ( ! empty( $_POST['uid'] ) ) {
         $user_id = (int) $_POST['uid'];
-        $current_user = get_userdata( $user_id );
+        //$current_user = get_userdata( $user_id );
     } else {
         $current_user = wp_get_current_user();
         $user_id = $current_user->ID;
     }
 
 
-    ?>
-    <input type="hidden" id="go_stats_hidden_input" value="<?php echo $user_id; ?>"/>
-    <?php
-    $user_fullname = $current_user->first_name.' '.$current_user->last_name;
-    $user_login =  $current_user->user_login;
-    $user_display_name = $current_user->display_name;
-    $user_website = $current_user->user_url;
 
-
-    $user_avatar_id = get_user_option( 'go_avatar', $user_id );
-    $user_avatar = wp_get_attachment_image($user_avatar_id);
 
 
 //$user_focuses = go_display_user_focuses( $user_id );
 
 
 
-    $current_points = go_return_points( $user_id );
-
-
-    $go_option_ranks = get_option( 'go_ranks' );
-    $points_array = $go_option_ranks['points'];
-
-    $max_rank_index = count( $points_array ) - 1;
-    $max_rank_points = (int) $points_array[ $max_rank_index ];
-
-    $percentage_of_level = 1;
-
-// user pnc
-    $rank = go_get_rank( $user_id );
-    $current_rank = $rank['current_rank'];
-    $current_rank_points = $rank['current_rank_points'];
-    $next_rank = $rank['next_rank'];
-    $next_rank_points = $rank['next_rank_points'];
-
-    if ( null !== $next_rank_points ) {
-        $rank_threshold_diff = ( $next_rank_points - $current_rank_points );
-    } else {
-        $rank_threshold_diff = 1;
-    }
-    $pts_to_rank_threshold = ( $current_points - $current_rank_points );
-
-    if ( $max_rank_points === $current_rank_points ) {
-        $prestige_name = get_option( 'go_prestige_name' );
-        $pts_to_rank_up_str = $prestige_name;
-    } else {
-        $pts_to_rank_up_str = "{$pts_to_rank_threshold} / {$rank_threshold_diff}";
-    }
-
-    $percentage_of_level = ( $pts_to_rank_threshold / $rank_threshold_diff ) * 100;
-    if ( $percentage_of_level <= 0 ) {
-        $percentage_of_level = 0;
-    } else if ( $percentage_of_level >= 100 ) {
-        $percentage_of_level = 100;
-    }
-
-
-
-/////////////////////////
-///
-    $xp_toggle = get_option('options_go_loot_xp_toggle');
-    $gold_toggle = get_option('options_go_loot_gold_toggle');
-    $health_toggle = get_option( 'options_go_loot_health_toggle' );
-
-    if ($xp_toggle) {
-        // the user's current amount of experience (points)
-        $go_current_xp = go_get_user_loot($user_id, 'xp');
-
-        $rank = go_get_rank($user_id);
-        $rank_num = $rank['rank_num'];
-        $current_rank = $rank['current_rank'];
-        $current_rank_points = $rank['current_rank_points'];
-        $next_rank = $rank['next_rank'];
-        $next_rank_points = $rank['next_rank_points'];
-
-        $go_option_ranks = get_option('options_go_loot_xp_levels_name_singular');
-        //$points_array = $go_option_ranks['points'];
-
-        /*
-         * Here we are referring to last element manually,
-         * since we don't want to modifiy
-         * the arrays with the array_pop function.
-         */
-        //$max_rank_index = count( $points_array ) - 1;
-        //$max_rank_points = (int) $points_array[ $max_rank_index ];
-
-        if ($next_rank_points != false) {
-            $rank_threshold_diff = $next_rank_points - $current_rank_points;
-            $pts_to_rank_threshold = $go_current_xp - $current_rank_points;
-            $pts_to_rank_up_str = "L{$rank_num}: {$pts_to_rank_threshold} / {$rank_threshold_diff}";
-            $percentage = $pts_to_rank_threshold / $rank_threshold_diff * 100;
-            //$color = barColor( $go_current_health, 0 );
-            $color = "#39b54a";
-        } else {
-            $pts_to_rank_up_str = $current_rank;
-            $percentage = 100;
-            $color = "gold";
-        }
-        if ( $percentage <= 0 ) {
-            $percentage = 0;
-        } else if ( $percentage >= 100 ) {
-            $percentage = 100;
-        }
-        $progress_bar = '<div class="go_admin_bar_progress_bar_border progress-bar-border">'.'<div class="go_admin_bar_progress_bar stats_progress_bar" '.
-            'style="width: '.$percentage.'%; background-color: '.$color.' ;">'.
-            '</div>'.
-            '<div class="points_needed_to_level_up">'.
-            $pts_to_rank_up_str.
-            '</div>'.
-            '</div>';
-    }
-    else {
-        $progress_bar = '';
-        $go_current_xp = 0;
-        $rank_num = 1;
-    }
-
-
-    if($health_toggle) {
-        // the user's current amount of bonus currency,
-        // also used for coloring the admin bar
-        $go_current_health = go_get_user_loot($user_id, 'health');
-        $health_percentage = intval($go_current_health / 2);
-        if ($health_percentage <= 0) {
-            $health_percentage = 0;
-        } else if ($health_percentage >= 100) {
-            $health_percentage = 100;
-        }
-        $health_bar = '<div class="go_admin_health_bar_border progress-bar-border">' . '<div class="go_admin_bar_health_bar stats_progress_bar" ' . 'style="width: ' . $health_percentage . '%; background-color: red ;">' . '</div>' . '<div class="health_bar_percentage_str ">' . "Health Mod: " . $go_current_health . "%" . '</div>' . '</div>';
-
-    }
-    else{
-        $health_bar = '';
-        $go_current_health = 0;
-    }
-
-    if ($gold_toggle) {
-        // the user's current amount of currency
-        $go_current_gold = go_get_user_loot($user_id, 'gold');
-
-    }
-    else{
-        $go_current_gold = 0;
-    }
 
 
 //////////////////
@@ -2302,56 +1969,10 @@ function go_stats_lite(){
 
     ?>
     <div id='go_stats_lite_wrapper'>
-    <div id='go_stats_lay_lite' class='go_datatables'>
-        <div id='go_stats_header_lite'>
-            <div class="go_stats_id_card">
-                <div class='go_stats_gravatar'><?php echo $user_avatar; ?></div>
 
-                <div class='go_stats_user_info'>
-                    <?php
-                    $current_user_id = get_current_user_id();
-                    $is_admin = go_user_is_admin($current_user_id);
-                    $full_name_toggle = get_option('options_go_full-names_toggle');
-                    if ($full_name_toggle || $is_admin){
-                        echo "<h2>{$user_fullname}</h2>{$user_display_name}<br>";
-                    }else{
-                        echo "<h2>{$user_display_name}</h2>";
-                    }?>
-                    <?php
-                    go_user_links($user_id, true, false, true, true, true, false);
-                    ?>
-
-                </div>
-
-            </div>
-            <div class="go_stats_bars">
-                <?php
-                if ($xp_toggle) {
-                    echo '<div class="go_stats_rank"><h3>' . $go_option_ranks . ' ' . $rank_num . ": " . $current_rank . '</h3></div>';
-                }
-                echo $progress_bar;
-                //echo "<div id='go_stats_user_points'><span id='go_stats_user_points_value'>{$current_points}</span> {$points_name}</div><div id='go_stats_user_currency'><span id='go_stats_user_currency_value'>{$current_currency}</span> {$currency_name}</div><div id='go_stats_user_bonus_currency'><span id='go_stats_user_bonus_currency_value'>{$current_bonus_currency}</span> {$bonus_currency_name}</div>{$current_penalty} {$penalty_name}<br/>{$current_minutes} {$minutes_name}";
-                echo $health_bar;
-                ?>
-            </div>
-            <div class='go_stats_user_loot'>
-
-                <?php
-
-                if ($xp_toggle) {
-                    echo '<div class="go_stats_xp">' . go_display_longhand_currency('xp', $go_current_xp) . '</div>';
-                }
-                if ($gold_toggle) {
-                    echo '<div class="go_stats_gold">' . go_display_longhand_currency('gold', $go_current_gold) . '</div>';
-                }
-                if ($health_toggle) {
-                    echo '<div class="go_stats_health">' . go_display_longhand_currency('health', $go_current_health) . '</div>';
-                }
-                ?>
-            </div>
-        </div>
-    </div>
     <?php
+    go_stats_header($user_id, true, true, true, true, true, true);
+
 //////////////////////////////
 /// /////////////////////////
 /// Table
@@ -2492,7 +2113,7 @@ function go_stats_lite(){
 
     die();
 }
-
+*/
 
 
 

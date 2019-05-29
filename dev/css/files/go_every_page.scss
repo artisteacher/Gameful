@@ -38,6 +38,22 @@
 
 }
 
+.go_is_favorite_container {
+	.go_is_favorite_label:before{
+		font-family: 'Font Awesome 5 Free' !important;
+		content: '\f004';
+		speak: none;
+		font-style: normal;
+		font-weight: 900;
+		font-variant: normal;
+		text-transform: none;
+		line-height: 1;
+		-webkit-font-smoothing: antialiased;
+		font-size: 2em;
+		color: #8B0000;
+	}
+}
+
 .go_favorite_container span.checkbox::before {
 	width: 27px;
 	height: 27px;
@@ -317,7 +333,7 @@ video.wp-video-shortcode {
 	height: 40px;
 	line-height: 40px;
 	vertical-align: middle;
-	margin: 0 5px;
+	margin: 0px 5px 15px;
 	top: 8px;
 	border-radius: 50%;
 	font-size: 25px;
@@ -341,8 +357,8 @@ video.wp-video-shortcode {
 
 .go_save_button.left {
 	margin: 10px;
-	left: 55px;
-	top: -5px;}
+	left: 10px;
+	top: 0px;}
 
 .go_save_button.right {
 	float: right;
@@ -355,25 +371,29 @@ video.wp-video-shortcode {
 #go_blog_submit{
 	display: block;
 	float: right;
-	margin-top: -53px;
-	margin-right: 10px;
+	margin: 15px;
 }
 
 
 .go_blog_form_footer {
 	background-color: #b3b3b3;
 	width: 100%;
-	height: 60px;
+	//height: 60px;
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
+}
+
+.go_blog_form_footer._lightbox {
+	justify-content: flex-end;
 }
 
 .go_blog_status {
 	background-color: white;
 	width: auto;
-	padding: 10px;
+	padding: 5px;
 	border-radius: 3px;
-	margin: 9px;
+	margin: 5px;
 	float: left;
 	font-size: .8em;
 	text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.66);
@@ -384,7 +404,6 @@ video.wp-video-shortcode {
 .go_blog_status_icons {
 	display: flex;
 	float: left;
-	margin-top: -2px;
 }
 
 .go_blog_status_icons div {
@@ -515,7 +534,7 @@ input[type='text'].go_error_red {
 /********************
 *	Admin-Bar Styles
 ********************/
-.fas.ab-icon:before {font-family: 'Font Awesome 5 Free' !important; font-weight: 900;font-size: .8em;}
+.fas.ab-icon:before {font-family: 'Font Awesome 5 Free' !important; font-weight: 900;}
 .fas {font-family: 'Font Awesome 5 Free' !important; font-weight: 900;}
 
 @media screen and (max-width: 782px){
@@ -542,23 +561,18 @@ input[type='text'].go_error_red {
 	height: 16px;
 	display: flex;}
 
-#go_admin_bar_progress_bar_border {
+.progress-bar-border {
 	height: 16px;
 	width: 120px;
 	border: thin white solid;
-	margin-top: 2px;
+	margin: 4px;
 	position: relative;
 	background-color: black;
-	font-size: 14px;}
+	font-size: 14px;
+	box-sizing: unset;
+}
 
-#go_admin_health_bar_border {
-	height: 16px;
-	width: 120px;
-	border: thin white solid;
-	margin-top: 2px;
-	position: relative;
-	background-color: black;
-	font-size: 14px;}
+
 
 .admin_bar_loot {
 	line-height: 24px !important;
@@ -590,7 +604,7 @@ input[type='text'].go_error_red {
 }
 
 #go_admin_bar_rank {
-	font-size: 1.2em;
+	//font-size: 1.2em;
 	color: #eee;
 }
 
@@ -1362,6 +1376,66 @@ input#go_pass_lock::-moz-placeholder {
 ********************/
 .feedback_accordion{
 	font-size: .9em !important;
+
+	a {
+		color: #00b9eb;
+	}
+
+	.go_feedback_form_container{
+		text-align: left;
+	}
+
+	table.go_blog_footer_table{
+		text-align: right;
+	}
+
+	table.go_blog_footer_table {
+		border: 2px solid #515151;
+		width: 100%;
+		text-align: left;
+		border-collapse: collapse;
+	}
+	table.go_blog_footer_table td, table.go_blog_footer_table th {
+		border: 1px solid #AAAAAA;
+		padding: 3px 2px;
+	}
+	table.go_blog_footer_table tbody td {
+		font-size: 13px;
+		color: #333333;
+	}
+	table.go_blog_footer_table tr:nth-child(even) {
+		background: #FFFFFF;
+	}
+	table.go_blog_footer_table thead {
+		background: #E5E5E5;
+		background: -moz-linear-gradient(top, #ebebeb 0%, #e7e7e7 66%, #E5E5E5 100%);
+		background: -webkit-linear-gradient(top, #ebebeb 0%, #e7e7e7 66%, #E5E5E5 100%);
+		background: linear-gradient(to bottom, #ebebeb 0%, #e7e7e7 66%, #E5E5E5 100%);
+		border-bottom: 2px solid #444444;
+	}
+	table.go_blog_footer_table thead th {
+		font-size: 15px;
+		font-weight: bold;
+		color: #000000;
+		border-left: 1px solid #000000;
+	}
+	table.go_blog_footer_table thead th:first-child {
+		border-left: none;
+	}
+
+	table.go_blog_footer_table tfoot {
+		font-weight: bold;
+	}
+	table.go_blog_footer_table tfoot .links {
+		text-align: right;
+	}
+	table.go_blog_footer_table tfoot .links a{
+		display: inline-block;
+		background: #1C6EA4;
+		color: #FFFFFF;
+		padding: 2px 8px;
+		border-radius: 5px;
+	}
 }
 
 .go_post_title h2{
@@ -1404,9 +1478,10 @@ body{
 
 body.wp-admin {
 	margin-top: unset;
+
 }
 #wpadminbar{
-	z-index: 101000;
+	z-index: 101000 !important;
 }
 
 #go_user_bar {
@@ -1419,7 +1494,7 @@ body.wp-admin {
 	z-index: 100000;
 	height: 55px;
 	font-family: sans-serif;
-	font-size: 13pt;
+	font-size: 14px ;
 	color: #f3f3f3;
 
 	#go_admin_bar_gold{
@@ -1436,6 +1511,7 @@ body.wp-admin {
 
 		.go_amount {
 			bottom: 0px;
+			//font-size: 13px ;
 		}
 	}
 
@@ -1456,18 +1532,25 @@ body.wp-admin {
 		line-height: .8em;
 		padding: 5px 10px;
 
-		.ab-icon {
-			font-size: 1.7em;
+		.ab-icon, img{
+			font-size: 23px;
+			margin: 3px 0px 8px 0px;
 		}
 
+		img{
+			margin-top: 0px;
+			margin-bottom: 4px;
+		}
+
+
 		.go_player_bar_text {
-			font-size: .8em;
+			font-size: 14px;
 		}
 	}
 
 	#go_user_bar_loot .wide_content{
 		margin: 4px 15px 0px 0px;
-		font-size: .8em;
+		//font-size: .8em;
 
 		p {margin: 0;}
 	}
@@ -1476,12 +1559,13 @@ body.wp-admin {
 		display: flex;
 	}
 
-	.userbar_dropdown {
+	.userbar_dropdown,
+	.userbar_dropdown_toggle{
 		position: relative;
 		display: inline-block;
 	}
 
-	.userbar_dropdown-content {
+	.userbar_dropdown-content{
 		display: none;
 		position: absolute;
 		background-color: #2d2d2d;
@@ -1494,11 +1578,13 @@ body.wp-admin {
 	}
 
 	.userbar_dropdown-content.search {
-		left:-300px;
+		margin-left: -300px;
 	}
 
 	.userbar_dropdown:hover .userbar_dropdown-content {
 		display: block;
+		z-index: 100001;
+
 	}
 
 	.narrow_content {

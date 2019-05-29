@@ -340,9 +340,9 @@ function go_create_admin_message (){
                 <form method="post">
                     <div id="go_messages" style="display:flex;">
 
-                        <div id="messages_form">
+                        <div id="messages_form" style="width: 100%">
                             <div style="float:left; padding: 20px 0;"><?php go_messages_canned(); ?></div>
-                            <table class="form-table">
+                            <table class="form-table" style="clear:both;">
                                 <tr valign="top">
                                     <th scope="row">To</th>
                                     <td style="width: 100%;">
@@ -372,7 +372,7 @@ function go_create_admin_message (){
                                 </tr>
                                 <tr valign="top">
                                     <th scope="row">Message</th>
-                                    <td><textarea class="go_messages_message_input" name="message" class="widefat" cols="50" rows="5"></textarea></td>
+                                    <td><textarea class="go_messages_message_input" name="message" class="widefat" cols="50" rows="5" style="width: 100%"></textarea></td>
                                 </tr>
 
                             </table>

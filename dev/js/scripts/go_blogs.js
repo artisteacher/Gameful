@@ -23,10 +23,135 @@ jQuery( document ).ready( function() {
 
     go_blog_new_posts();
 
+    jQuery('#go_save_archive').one("click", function (e) {
+        go_save_archive(this);
+    });
+
     //go_blog_tags_select2();
 
 
 });
+
+function go_save_archive(){
+    console.log("go_save_archive");
+
+    Swal.fire({//sw2 OK
+        title: "Create Archive",
+        text: "Choose an option below",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Create Archive',
+        cancelButtonText: 'No, cancel!',
+        reverseButtons: true,
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+        },
+
+    })
+        .then((result) => {
+            if (result.value) {
+                Swal.fire({//sw2 OK
+                    title: "What type of archive would you like to create?",
+                    text: "A public archive will only have blog posts that are publicly available. A private archive includes all posts, including private posts, as well as the feedback.Choose an option below.",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Public Archive',
+                    cancelButtonText: 'Private Archive',
+                    focusConfirm: false,
+                    //reverseButtons: true,
+                    buttonsStyling: false,
+                    customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-success'
+                    },
+
+                })
+                    .then((result) => {
+                        if (result.value) {
+                            var archive_type = 'public';
+                        } else if (result.dismiss === Swal.DismissReason.cancel){
+                            var archive_type = 'private';
+                        }
+                        //send the ajax with the input from the alert
+                        //var nonce = GO_EVERY_PAGE_DATA.nonces.go_blog_favorite_toggle;
+                        var gotoSend = {
+                            action:"go_make_user_archive_zip",
+                            archive_type: archive_type,
+                            // _ajax_nonce: nonce,
+                            // blog_post_id: blog_post_id,
+                            // checked: checked
+                        };
+                        //jQuery.ajaxSetup({ cache: true });
+
+                        jQuery.ajax({
+                            url: MyAjax.ajaxurl,
+                            type: 'POST',
+                            data: gotoSend,
+                            /**
+                             * A function to be called if the request fails.
+                             * Assumes they are not logged in and shows the login message in lightbox
+                             */
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                if (jqXHR.status === 400){
+                                    jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+                                }
+                            },
+                            success: function (raw) {
+                                console.log(raw);
+                                if (raw == 0 || raw == '0'){
+                                    Swal.fire({//sw2 OK
+                                        title: "Error",
+                                        text: "There was a problem creating your archive.",
+                                        type: 'error',
+                                        showCancelButton: false,
+                                    })
+                                }else {
+
+                                    window.location = raw;
+                                    Swal.fire({//sw2 OK
+                                        title: "Success",
+                                        text: "Your archive was created.  It should be in your download folder. To view the archive, unzip it and open the index file.",
+                                        type: 'success',
+                                        showCancelButton: false,
+                                    })
+                                    go_delete_temp_archive();
+                                }
+                            }
+                        });
+                    })
+            }
+        });
+}
+
+function go_delete_temp_archive(){
+   // var nonce = GO_EVERY_PAGE_DATA.nonces.go_blog_favorite_toggle;
+
+    console.log("go_delete_temp_archive ");
+    var gotoSend = {
+        action:"go_delete_temp_archive",
+        //_ajax_nonce: nonce,
+    };
+    //jQuery.ajaxSetup({ cache: true });
+    jQuery.ajax({
+        url: MyAjax.ajaxurl,
+        type: 'POST',
+        data: gotoSend,
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
+        success: function (raw) {
+            console.log('temp directory removed');
+        }
+    });
+}
+
 
 function go_blog_new_posts(){
     console.log('go_blog_new_posts');
@@ -941,11 +1066,20 @@ function go_blog_trash( el ) {
                         if (jqXHR.status === 400){
                             jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
                         }
+                        go_disable_loading( el );
                     },
                     success: function (raw) {
                         jQuery("body").append(raw);
                         var post_wrapper_class = ".go_blog_post_wrapper_" + blog_post_id;
-                        jQuery(post_wrapper_class).hide();
+                        const checked = jQuery('#go_show_private').attr('checked');
+                        if(checked == 'checked'){
+                            jQuery(post_wrapper_class).replaceWith(raw);
+                        }else{
+                            jQuery(post_wrapper_class).hide();
+                        }
+
+
+
                         //location.reload();
                         jQuery(".go_blog_trash").off().one("click", function(e){
                             go_blog_trash( this );
@@ -955,9 +1089,9 @@ function go_blog_trash( el ) {
                                 type: 'success'
                             }
                         );
+                        go_disable_loading( el );
                     }
                 });
-                go_disable_loading( el );
 
 
             } else {
@@ -1134,10 +1268,12 @@ function go_show_private(target){
             //enable checkbox
             jQuery("#go_show_private").one("click", function (e) {
                 go_show_private(this);
-            })
+            });
 
-            jQuery("#go_wrapper").show();
             jQuery("#loader_container").hide();
+            jQuery("#go_wrapper").show();
+            go_reader_activate_buttons();
+            go_disable_loading( );
         }
     });
 

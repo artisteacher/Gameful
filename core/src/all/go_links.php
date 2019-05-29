@@ -44,7 +44,7 @@ function go_user_links($user_id, $website = true, $stats = false, $profile = fal
 
 
 
-    if ($stats){
+    if ($stats && $is_admin){
         if ($stats_lite) {
             echo "<div class='go_user_link'><a href='javascript:void(0);' class='go_stats_lite' data-UserId='{$user_id}' onclick='go_stats_lite({$user_id});'><i class='fas fa-chart-area' aria-hidden='true'></i></a></div>";
         }else{//regular stats link

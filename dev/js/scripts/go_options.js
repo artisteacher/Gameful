@@ -7,11 +7,13 @@
 jQuery(document).ready(function(){
     //get the growth level from options
     //var growth = levelGrowth*1;
+    console.log('is_options_page');
     if(typeof go_is_options_page !== 'undefined') {
         var is_options_page = go_is_options_page.is_options_page;
+        console.log(is_options_page);
     }
     if (is_options_page) {
-        //console.log(is_options_page);
+        console.log('is_options_page2');
         Go_orgGrowth = jQuery('#go_levels_growth').find('input').val();
 
         //run the limit function once on load
@@ -28,6 +30,7 @@ jQuery(document).ready(function(){
         acf.add_action('append', function ($el) { //run limit function when new row is added and attach it to the input in the new field
             // $el will be equivalent to the new element being appended $('tr.row')
             //limit to the levels table
+            console.log('new row');
             if (jQuery($el).closest("#go_levels_repeater").length) {//if there is a previous field
                 var $input_num = $el.find('input').first(); // find the first input field
 

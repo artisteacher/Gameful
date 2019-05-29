@@ -8,6 +8,7 @@
 
 //conditional includes
 
+
 if ( !is_admin() ) {
     include_once('src/public.php');
     include_once('src/public_ajax.php');

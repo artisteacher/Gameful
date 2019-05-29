@@ -24,7 +24,7 @@ if ( !is_admin() ) {
     add_action( 'wp_ajax_go_stats_groups_list', 'go_stats_groups_list' ); //OK
     //add_action( 'wp_ajax_go_stats_leaderboard', 'go_stats_leaderboard' ); //OK
     //add_action( 'wp_ajax_go_stats_leaderboard_dataloader_ajax', 'go_stats_leaderboard_dataloader_ajax');
-    add_action( 'wp_ajax_go_stats_lite', 'go_stats_lite' ); //OK
+    //add_action( 'wp_ajax_go_stats_lite', 'go_stats_lite' ); //OK
     add_action( 'wp_ajax_go_stats_about', 'go_stats_about' ); //OK
     add_action( 'wp_ajax_go_activity_dataloader_ajax', 'go_activity_dataloader_ajax');
     add_action( 'wp_ajax_go_messages_dataloader_ajax', 'go_messages_dataloader_ajax');
@@ -36,4 +36,4 @@ if ( !is_admin() ) {
 }
 
 //always include
-//include_once('functions.php');
+include_once('src/functions.php');
