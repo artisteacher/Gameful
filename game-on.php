@@ -65,6 +65,20 @@ include_once('includes/go_enqueue_includes.php');
 add_action( 'wp_enqueue_scripts', 'go_includes' );
 add_action( 'admin_enqueue_scripts', 'go_includes' );
 
+add_filter('acf/settings/load_json', 'go_acf_json_load_point');
+function go_acf_json_load_point( $paths ) {
+
+    // remove original path (optional)
+    unset($paths[0]);
+
+    // append path
+    $paths[] = (plugin_dir_path(__FILE__) . 'acf-json');
+
+
+    // return
+    return $paths;
+
+}
 
 
 ////////////////////////////
