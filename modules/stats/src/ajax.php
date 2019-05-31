@@ -237,6 +237,7 @@ function go_admin_bar_stats() {
  * @param null $user_id
  * @param bool $not_ajax
  */
+//THIS CAN BE REMOVED FOR v5
 function go_stats_about($user_id = null, $not_ajax = false) {
 
     if ( ! empty( $_POST['user_id'] ) && empty($user_id) ) {

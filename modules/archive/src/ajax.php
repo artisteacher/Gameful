@@ -7,7 +7,9 @@
  */
 
 function go_make_user_archive_zip(){
-    //nonce and login user test
+
+    //remove the auth check script
+    remove_action( 'wp_enqueue_scripts', 'go_login_session_expired' );
 
 
     //create folder
@@ -107,8 +109,19 @@ die();
 
 }
 
+function go_add_utf8_archive(){
+    ?>
+    <meta charset="utf-8" />
+    <?php
+};
 
 function generate_archive_list($is_private = false){
+
+    /* Describe what the code snippet does so you can remember later on */
+    add_action('wp_head', 'go_add_utf8_archive');
+
+
+
     wp_head();
 
     ?>
@@ -140,12 +153,6 @@ function generate_archive_list($is_private = false){
     <script>
         document.title = "<?php echo $page_title; ?>";//set page title
     </script><?php
-    //$user_avatar_id = get_user_option('go_avatar', $current_user_id);
-    //$user_avatar = wp_get_attachment_image($user_avatar_id);
-
-
-
-
         go_stats_header($current_user_id, true, false, false, false, false, false, true, true, $is_private);
 
     ?>
@@ -195,9 +202,25 @@ function convert_urls($content, $destination){
     //$destination_url = '/media';
     $home_path = get_home_path();
 
+    //files to exclude
+    $login = $home_url . 'wp-login.php';
+    $wp_includes = $home_url . 'wp-includes';
+    $wp_admin = $home_url . 'wp-admin';
+
     //copy all the files linked to the temp folder
     if(preg_match_all('/(https?:)?\/\/' . addcslashes( $home_url, '/' ) . '.+?(?=\"|\')' . '/is', $content, $matches)) {
         foreach ($matches[0] as $match){
+
+
+            if(preg_match('/(https?:)?\/\/' . addcslashes( $login, '/' ) . '/i', $match, $exclude)){
+                continue;
+            }
+            if(preg_match('/(https?:)?\/\/' . addcslashes( $wp_includes, '/' ) . '/i', $match, $exclude)){
+                continue;
+            }
+            if(preg_match('/(https?:)?\/\/' . addcslashes( $wp_admin, '/' ) . '/i', $match, $exclude)){
+                continue;
+            }
             $origin_file_path =  preg_replace( '/(https?:)?\/\/' . addcslashes( $home_url, '/' ) . '/i', $home_path, $match );
             $destination_file_path = preg_replace( '/(https?:)?\/\/' . addcslashes( $home_url, '/' ) . '/i', $destination, $match );
 

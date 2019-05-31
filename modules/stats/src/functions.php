@@ -6,6 +6,20 @@
  * Time: 19:30
  */
 
+function go_get_avatar($user_id = false){
+    if(!$user_id){
+        $user_id =  get_current_user_id();
+    }
+    $user_avatar_id = get_user_option( 'go_avatar', $user_id );
+    if (wp_attachment_is_image($user_avatar_id)  ) {
+        $user_avatar = wp_get_attachment_image($user_avatar_id);
+    }else{
+        $user_avatar = get_avatar($user_id);
+    }
+    return $user_avatar;
+
+
+}
 function go_stats_header($user_id, $website = true, $stats = true, $profile = true, $blog = true, $show_messages = true, $stats_lite = true, $is_blog = false, $is_archive = false, $is_private = false ){
 
     ?>
@@ -25,8 +39,10 @@ function go_stats_header($user_id, $website = true, $stats = true, $profile = tr
     $user_website = $user_data->user_url;
 
 
-    $user_avatar_id = get_user_option( 'go_avatar', $user_id );
-    $user_avatar = wp_get_attachment_image($user_avatar_id);
+    //$user_avatar_id = get_user_option( 'go_avatar', $user_id );
+    //$user_avatar = wp_get_attachment_image($user_avatar_id);
+
+    $user_avatar = go_get_avatar($user_id);
 
 /////////////////////////
 ///

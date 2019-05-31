@@ -53,18 +53,16 @@ function go_save_archive(){
             if (result.value) {
                 Swal.fire({//sw2 OK
                     title: "What type of archive would you like to create?",
-                    text: "A public archive will only have blog posts that are publicly available. A private archive includes all posts, including private posts, as well as the feedback.Choose an option below.",
+                    text: "A public archive will only have blog posts that are publicly available. A private archive includes all posts, including private posts, as well as the feedback.",
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Public Archive',
                     cancelButtonText: 'Private Archive',
-                    focusConfirm: false,
-                    //reverseButtons: true,
-                    buttonsStyling: false,
-                    customClass: {
-                        confirmButton: 'btn btn-success',
-                        cancelButton: 'btn btn-success'
-                    },
+                    focusConfirm: true,
+                    focusCancel: false,
+                    reverseButtons: true,
+                    //buttonsStyling: false,
+                    cancelButtonColor: '#3085d6'
 
                 })
                     .then((result) => {
@@ -73,6 +71,16 @@ function go_save_archive(){
                         } else if (result.dismiss === Swal.DismissReason.cancel){
                             var archive_type = 'private';
                         }
+                        //loader
+                        Swal.fire({//sw2 OK
+                            title: "Generating Archive . . .",
+                            text: "",
+                            onBeforeOpen: () => {
+                                Swal.showLoading()
+                            }
+
+                        })
+
                         //send the ajax with the input from the alert
                         //var nonce = GO_EVERY_PAGE_DATA.nonces.go_blog_favorite_toggle;
                         var gotoSend = {
@@ -678,7 +686,7 @@ function go_blog_opener( el ) {
                 var title = jQuery(el).closest(".go_blog_post_wrapper").find('.go_post_title').html();
                 swal.fire({//sw2 OK
                     title: "Locked",
-                    html: title + ' is locked. It must be unlocked before this blog post can be edited. Click on the blog post title to go to the ',
+                    html: 'This post is locked. It must be unlocked before this blog post can be edited. Click on the blog post title to go to view the lock.',
                     type: 'warning',
                 });
                 go_disable_loading();
