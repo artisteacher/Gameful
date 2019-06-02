@@ -4616,6 +4616,14 @@
 		"oAP": "/modules/archive/includes.php",
 		"oF": 0
 		},
+	"/modules/archive/src/admin.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/archive/src/admin.php",
+		"oF": 0
+		},
 	"/modules/archive/src/admin_ajax.php": {
 		"cB": 0,
 		"ft": 8192,

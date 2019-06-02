@@ -44,7 +44,7 @@ if (!is_admin()) {//is the frontend
         add_action('wp_ajax_go_archive_progress', 'go_archive_progress');
     }
 } else {//is an admin page
-
+    include_once('src/admin.php');
     $page = (isset($_REQUEST['page']) ?  $_REQUEST['page'] : null);
     //
     //only load nonces on pages where needed

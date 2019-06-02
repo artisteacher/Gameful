@@ -59,11 +59,9 @@ function go_admin_tools_menu_content() {
                 <p>Reset tasks, history, and loot for all users. Blog posts and media will remain.</p>
                 <button id="go_reset_all_users">Reset All Users</button>
             </div>
-            <div class="card">
-                <h2>User Blog Archive</h2>
-                <p>Create an archive of blog posts for selected users.  This is useful for record keeping if you are going to delete users from the site at the end of a course.</p>
-                <a href="<?php  menu_page_url( 'tool_blog_archive', true ); ?>"><button id="go_blog_archive_button">Create Archive</button></a>
-            </div>
+            <?php
+            do_action('go_user_management_card');
+            ?>
         </div>
         <div class="go_tools_section">
             <div class="">

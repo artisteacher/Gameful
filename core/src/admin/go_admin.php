@@ -275,15 +275,6 @@ function go_add_toplevel_menu() {
         4 // menu position
     );
 
-    /* add a new menu item */
-    add_submenu_page(
-        'game-tools',  // parent slug
-        'Create User Blog Archive', // page_title
-        'Create User Blog Archive', // menu_title
-        'manage_options', // capability
-        'tool_blog_archive', // menu_slug
-        'go_create_user_blog_archive' //callable
-    );
 
 
 }
