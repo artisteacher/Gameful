@@ -219,7 +219,7 @@ function go_admin_bar() {
                 } else if ($health_percentage >= 100) {
                     $health_percentage = 100;
                 }
-                $health_bar = '<div id="go_admin_health_bar_border" class="progress-bar-border">' . '<div id="go_admin_bar_health_bar" class="progress_bar" ' . 'style="width: ' . $health_percentage . '%; background-color: red ;">' . '</div>' . '<div id="health_bar_percentage_str" class="go_admin_bar_text">' . $name . ": " . $go_current_health . "%" . '</div>' . '</div>';
+                $health_bar = '<div id="go_admin_health_bar_border" class="progress-bar-border"><div id="go_admin_bar_health_bar" class="progress_bar" ' . 'style="width: ' . $health_percentage . '%; background-color: red ;"></div><div id="health_bar_percentage_str" class="go_admin_bar_text">' . $name . ": " . $go_current_health . "%</div></div>";
 
             } else {
                 $health_bar = '';
@@ -636,7 +636,7 @@ function go_admin_bar_v5() {
             // displays Badges
             $badges_toggle = get_option('options_go_badges_toggle');
             if ($badges_toggle) {
-                $wp_admin_bar->add_node(array('id' => 'go_nav_badges', 'title' => get_option('options_go_badges_name_plural'), 'href' => esc_url(get_admin_url()) . 'edit-tags.php?taxonomy=go_badges', 'parent' => 'go_options', 'meta' => array('class' => 'go_site_name_menu_item')));
+                $wp_admin_bar->add_node(array('id' => 'go_nav_badges', 'title' => ucfirst(get_option('options_go_badges_name_plural')), 'href' => esc_url(get_admin_url()) . 'edit-tags.php?taxonomy=go_badges', 'parent' => 'go_options', 'meta' => array('class' => 'go_site_name_menu_item')));
             }
 
             // displays Store Categories page link

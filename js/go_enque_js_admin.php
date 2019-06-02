@@ -142,12 +142,6 @@ function go_admin_scripts ($hook) {
             /*
              * Clipboard Scripts
              */
-
-            //COMBINED
-            //wp_enqueue_script( 'go_clipboard' );
-
-            // Localization
-            //wp_localize_script( 'go_admin_user', 'Minutes_limit', array( 'limit' => get_option( 'go_minutes_color_limit' ) ) );
             wp_localize_script(
                 'go_admin_user',
                 'GO_CLIPBOARD_DATA',

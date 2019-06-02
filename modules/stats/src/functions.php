@@ -46,7 +46,7 @@ function go_stats_header($user_id, $website = true, $stats = true, $profile = tr
 
 /////////////////////////
 ///
-    if(!$is_private) {
+    if($is_private) {
         $xp_toggle = get_option('options_go_loot_xp_toggle');
         $gold_toggle = get_option('options_go_loot_gold_toggle');
         $health_toggle = get_option('options_go_loot_health_toggle');
@@ -150,7 +150,7 @@ function go_stats_header($user_id, $website = true, $stats = true, $profile = tr
 
 
             <?php
-           if(!$is_private) {
+           if($is_private) {
                ?>
                <div class="go_stats_bars">
                    <?php

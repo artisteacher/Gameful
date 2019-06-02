@@ -449,7 +449,7 @@ function go_clipboard_stats() {
     $badges_toggle = get_option('options_go_badges_toggle');
 
     // prepares tab titles
-    $badges_name = get_option('options_go_badges_name_plural');
+    $badges_name = ucfirst(get_option('options_go_badges_name_plural'));
 
     $xp_abbr = get_option("options_go_loot_xp_abbreviation");
     $gold_abbr = get_option("options_go_loot_gold_abbreviation");
@@ -1141,7 +1141,7 @@ function go_clipboard_messages_dataloader_ajax(){
         if ($badges_toggle) {
             $badges_names = array();
             $badge_ids = unserialize($badge_ids);
-            $badges_name_sing = get_option('options_go_badges_name_singular');
+            $badges_name_sing = ucfirst(get_option('options_go_badges_name_singular'));
 
             if (!empty($badge_ids)) {
                 if(!is_array($badge_ids)){

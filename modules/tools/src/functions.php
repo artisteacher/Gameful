@@ -1,32 +1,20 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: mmcmurray
- * Date: 10/13/18
- * Time: 8:41 PM
+ * User: mcmurray
+ * Date: 2019-06-01
+ * Time: 05:48
  */
-
-
-
-
 
 
 /**
  *
  */
-//add_action( 'init', 'go_custom_rewrite_archive' );
+
 /**
  *
  */
-function go_custom_rewrite_archive() {
-    // we are telling wordpress that if somebody access yoursite.com/all-post/user/username
-    // wordpress will do a request on this query var yoursite.com/index.php?query_type=user_blog&uname=username
-    //flush_rewrite_rules();
 
-    //add_rewrite_rule( "^user/([^/]*)/page/(.*)/?", 'index.php?query_type=user_blog&uname=$matches[1]&paged=$matches[2]', "top");
-    add_rewrite_rule( "^user_archive/(.*)", 'index.php?query_type=user_archive&uname=$matches[1]', "top");
-
-}
 
 /**
  * @param $vars

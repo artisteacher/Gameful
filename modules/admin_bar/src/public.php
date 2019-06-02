@@ -7,6 +7,7 @@
  */
 
 
+$request_uri = (isset($_SERVER['REQUEST_URI']) ?  $_SERVER['REQUEST_URI'] : null);
 if ( !in_array($request_uri, ['/login/','/?login=failed', '/?login=empty', '/lostpassword/', '/?lostpassword=invalid', '/?login=checkemail'], true )
     && strpos($request_uri, 'user_archive') != true) {
     add_action('wp_head', 'go_player_bar_v5');

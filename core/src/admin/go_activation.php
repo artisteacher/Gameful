@@ -52,7 +52,6 @@ function go_flush_rewrites() {
     go_registration_rewrite();
     go_leaderboard_rewrite();
     go_leaderboard_rewrite();
-    go_custom_rewrite_archive();
 }
 
 

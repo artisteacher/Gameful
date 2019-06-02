@@ -28,7 +28,7 @@ add_filter('plupload_default_settings', function ($settings) {
 
 
 //$go_debug = true;//set to true when coding
-$go_debug = false;
+$go_debug = true;
 global $go_debug;
 
 
@@ -122,13 +122,13 @@ else {//ELSE THIS IS AN ADMIN PAGE
 if ( defined( 'DOING_AJAX' )) {
 
     add_action('wp_ajax_check_if_top_term', 'go_check_if_top_term'); //for term order //OK
-    include_once('modules/clipboard/includes.php');
     $action  = (isset($_POST['action']) ?  $_POST['action'] : null);
     $action = substr($action, 0 , 3);
     if ($action==='acf') {
         $acf_location = dirname(__FILE__) . '/includes/acf/acf.php';
         include($acf_location);
     }
+
 
 }
 else if ( is_admin() ) {
@@ -138,8 +138,7 @@ else if ( is_admin() ) {
 
     include_once('custom-acf-fields/acf-order-posts/acf-order-posts.php');
 
-    include_once('modules/clipboard/includes.php');
-    include_once('modules/tools/includes.php');
+
     include_once('custom-acf-fields/go-acf-functions.php');//not needed on ajax
 
     if ($go_debug) {
@@ -182,17 +181,21 @@ else{
 include_once('core/includes.php');
 
 //These have their own conditional includes
-include_once('modules/login/includes.php');
-include_once('modules/feedback/includes.php');
+
 include_once('modules/admin_bar/includes.php');
+include_once('modules/archive/includes.php');
+include_once('modules/clipboard/includes.php');
+include_once('modules/feedback/includes.php');
+include_once('modules/login/includes.php');
 include_once('modules/map/includes.php');
 include_once('modules/messages/includes.php');
 include_once('modules/quiz/includes.php');
 include_once('modules/stats/includes.php');
 include_once('modules/store/includes.php');
 include_once('modules/tasks/includes.php');
+include_once('modules/tools/includes.php');
 include_once('modules/user_blogs/includes.php');
-include_once('modules/archive/includes.php');
+
 
 
 /*

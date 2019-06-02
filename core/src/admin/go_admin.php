@@ -256,7 +256,7 @@ function go_add_toplevel_menu() {
     /* add a new menu item */
     add_menu_page(
         'User Groups', // page title
-        'User Groups', // menu title
+        'User Groups', // page title
         'edit_posts', // capability
         'groups', // menu slug
         '', // callback function
@@ -266,19 +266,30 @@ function go_add_toplevel_menu() {
 
     /* add a new menu item */
     add_menu_page(
-        'Tools',
-        'Tools',
-        'manage_options',
-        'game-tools',
-        'go_admin_tools_menu_content',
-        '',
-        4
+        'Tools',// page title
+        'Tools',// page title
+        'manage_options',// capability
+        'game-tools',// menu slug
+        'go_admin_tools_menu_content',// callback function
+        '',// icon
+        4 // menu position
     );
+
+    /* add a new menu item */
+    add_submenu_page(
+        'game-tools',  // parent slug
+        'Create User Blog Archive', // page_title
+        'Create User Blog Archive', // menu_title
+        'manage_options', // capability
+        'tool_blog_archive', // menu_slug
+        'go_create_user_blog_archive' //callable
+    );
+
+
 }
-add_action( 'admin_menu', 'go_add_toplevel_menu' );
+add_action( 'admin_menu', 'go_add_toplevel_menu');
 
-function go_add_templates_as_submenu() {
-
+function go_add_submenus() {
     /* add the sub menu under content for posts */
     add_submenu_page(
         'edit.php?post_type=tasks', // parent slug
@@ -287,12 +298,6 @@ function go_add_templates_as_submenu() {
         'edit_posts', // capability,
         'edit.php?post_type=tasks_templates' // menu_slug,
     );
-
-}
-add_action( 'admin_menu', 'go_add_templates_as_submenu', 9 );
-
-
-function go_add_mapmenu_as_submenu() {
 
     /* add the sub menu under content for posts */
     add_submenu_page(
@@ -303,13 +308,8 @@ function go_add_mapmenu_as_submenu() {
         'maps_menus' // menu_slug,
     );
 
-}
-add_action( 'admin_menu', 'go_add_mapmenu_as_submenu', 9 );
-
-function go_add_badges_sub_menus() {
-    $badges_name = get_option('options_go_badges_name_singular');
-
     // add the sub menu under content for posts */
+    $badges_name = get_option('options_go_badges_name_singular');
     add_submenu_page(
         'badges', // parent slug
         'Manage ' . $badges_name, // page_title,
@@ -317,10 +317,6 @@ function go_add_badges_sub_menus() {
         'edit_posts', // capability,
         'edit-tags.php?taxonomy=go_badges' // menu_slug,
     );
-}
-add_action( 'admin_menu', 'go_add_badges_sub_menus', 9 );
-
-function go_add_groups_as_submenu() {
 
     /* add the sub menu under content for posts */
     add_submenu_page(
@@ -331,11 +327,6 @@ function go_add_groups_as_submenu() {
         'edit-tags.php?taxonomy=user_go_groups' // menu_slug,
     );
 
-}
-add_action( 'admin_menu', 'go_add_groups_as_submenu', 9 );
-
-function go_add_sections_sub_menus() {
-
     // add the sub menu under content for posts */
     add_submenu_page(
         'groups', // parent slug
@@ -344,10 +335,6 @@ function go_add_sections_sub_menus() {
         'edit_posts', // capability,
         'edit-tags.php?taxonomy=user_go_sections' // menu_slug,
     );
-}
-add_action( 'admin_menu', 'go_add_sections_sub_menus', 9 );
-
-function go_add_chains_as_submenu() {
 
     /* add the sub menu under content for posts */
     add_submenu_page(
@@ -358,8 +345,12 @@ function go_add_chains_as_submenu() {
         'edit-tags.php?taxonomy=task_chains' // menu_slug,
     );
 
+
+
 }
-add_action( 'admin_menu', 'go_add_chains_as_submenu', 9 );
+add_action( 'admin_menu', 'go_add_submenus', 9 );
+
+
 
 
 

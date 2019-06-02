@@ -68,10 +68,10 @@ jQuery( document ).ready( function() {
 
         go_make_select2_filter('user_go_sections', 'section', true, false);
 
-        go_make_select2_filter('user_go_groups', 'group', true, true)
+        go_make_select2_filter('user_go_groups', 'group', true, true);
 
 
-        go_make_select2_filter('go_badges', 'badge', true, true)
+        go_make_select2_filter('go_badges', 'badge', true, true);
 
 
         //jQuery('#go_clipboard_user_go_sections_select').val(section).trigger('change');;

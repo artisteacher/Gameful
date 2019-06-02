@@ -21,4 +21,4 @@ if ( !is_admin() ) {
 }
 
 //always include
-//include_once('functions.php');
+//include_once('src/functions.php');

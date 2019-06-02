@@ -272,7 +272,6 @@ function go_reset_all_users(){
 
 }
 
-
 function go_update_go_ajax_v5_check()
 {
     if ( !is_user_logged_in() ) {
@@ -299,6 +298,7 @@ function go_update_go_ajax_v5_check()
     }
 
 }
+
 function go_update_go_ajax_v5(){
 
     if ( !is_user_logged_in() ) {

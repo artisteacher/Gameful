@@ -1433,6 +1433,34 @@
 		"sC": 3,
 		"tS": 0
 		},
+	"/dev/js/scripts": {
+		"ft": 65536,
+		"oA": 1,
+		"oAP": "/build/dev/js/scripts",
+		"oF": 0
+		},
+	"/dev/js/scripts/archive_admin.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/js/scripts/archive_admin-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/scripts/archive_frontend.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/js/scripts/archive_frontend-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"/dev/js/scripts/buy_the_item.js": {
 		"bF": 0,
 		"ft": 64,
@@ -1451,7 +1479,7 @@
 		"mi": 1,
 		"oA": 1,
 		"oAP": "/dev/js/scripts/go_admin_page_admin_user-min.js",
-		"oF": 1,
+		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},
@@ -1472,8 +1500,8 @@
 		"ma": 0,
 		"mi": 1,
 		"oA": 1,
-		"oAP": "/js/dev/scripts/go_clipboard-min.js",
-		"oF": 3,
+		"oAP": "/dev/js/scripts/go_clipboard-min.js",
+		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},
@@ -1506,7 +1534,7 @@
 		"mi": 1,
 		"oA": 1,
 		"oAP": "/dev/js/scripts/go_feedback-min.js",
-		"oF": 1,
+		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},
@@ -1528,7 +1556,7 @@
 		"mi": 1,
 		"oA": 1,
 		"oAP": "/dev/js/scripts/go_load_more-min.js",
-		"oF": 1,
+		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},
@@ -1571,8 +1599,8 @@
 		"ma": 0,
 		"mi": 1,
 		"oA": 1,
-		"oAP": "/js/dev/scripts/go_tasks-min.js",
-		"oF": 2,
+		"oAP": "/dev/js/scripts/go_tasks-min.js",
+		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},
@@ -1616,7 +1644,7 @@
 		"mi": 1,
 		"oA": 1,
 		"oAP": "/dev/js/scripts/user_bar-min.js",
-		"oF": 1,
+		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},
@@ -4588,6 +4616,14 @@
 		"oAP": "/modules/archive/includes.php",
 		"oF": 0
 		},
+	"/modules/archive/src/admin_ajax.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/archive/src/admin_ajax.php",
+		"oF": 0
+		},
 	"/modules/archive/src/ajax.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -4596,28 +4632,10 @@
 		"oAP": "/modules/archive/src/ajax.php",
 		"oF": 0
 		},
-	"/modules/archive/src/functions.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/modules/archive/src/functions.php",
-		"oF": 0
-		},
-	"/modules/archive/src/public_ajax.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/modules/archive/src/public_ajax.php",
-		"oF": 0
-		},
-	"/modules/archive/src/templates/go_save_blog.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/modules/archive/src/templates/go_save_blog.php",
+	"/modules/archive/src/archive_temp": {
+		"ft": 65536,
+		"oA": 1,
+		"oAP": "/build/modules/archive/src/archive_temp",
 		"oF": 0
 		},
 	"/modules/clipboard/includes.php": {
@@ -4994,6 +5012,14 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/modules/tools/src/ajax.php",
+		"oF": 0
+		},
+	"/modules/tools/src/functions.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/tools/src/functions.php",
 		"oF": 0
 		},
 	"/modules/user_blogs/includes.php": {
@@ -7180,7 +7206,7 @@
 		],
 	"overrideExternalServerCSS": 0,
 	"previewPathAddition": "/wordpress_new/wp-admin/admin.php?page=game-on-options.php",
-	"skippedFoldersString": "log, _logs, logs, _cache, cache, /storage/framework/sessions, node_modules",
+	"skippedFoldersString": "log, _logs, logs, _cache, cache, /storage/framework/sessions, node_modules, /modules/archive/src/archive_temp, /dev/js/scripts",
 	"sourceFolderName": "source",
 	"susyVersion": 3,
 	"tsAllowSyntheticDefaultImports": 0,
