@@ -190,7 +190,7 @@ function go_make_user_archive_zip(){
                 update_user_option($current_user_id, 'archive_done_num', $num_done);
                 $next_update = $next_update + $five_percent;
             }
-            //sleep(1);
+            sleep(1);
         }
         update_user_option($current_user_id, 'archive_done_num', 'done');
     }

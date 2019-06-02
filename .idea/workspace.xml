@@ -5,12 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4c52fe7c-a769-413b-9a8a-3effed8b98a6" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/modules/archive/src/admin.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.codekit3" beforeDir="false" afterPath="$PROJECT_DIR$/config.codekit3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/admin/go_admin.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/admin/go_admin.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/archive/src/admin_ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/archive/src/admin_ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/tools/src/admin.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/tools/src/admin.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/archive/src/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/archive/src/ajax.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/archive/src/archive_temp/1/temp/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/modules/archive/src/archive_temp/1/temp/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/archive/src/archive_temp/1/zip/MyBlogArchive.zip" beforeDir="false" afterPath="$PROJECT_DIR$/modules/archive/src/archive_temp/1/zip/MyBlogArchive.zip" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -48,8 +46,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/archive/src/ajax.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="112" column="14" lean-forward="true" selection-start-line="112" selection-start-column="14" selection-end-line="112" selection-end-column="14" />
+            <state relative-caret-position="209">
+              <caret line="162" column="33" lean-forward="true" selection-start-line="162" selection-start-column="33" selection-end-line="162" selection-end-column="33" />
               <folding>
                 <element signature="e#93#3453#0#PHP" />
                 <element signature="n#go_archive_progress#0;n#!!top" />
@@ -66,8 +64,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/archive/includes.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="338">
-              <caret line="57" selection-start-line="57" selection-end-line="57" />
+            <state relative-caret-position="262">
+              <caret line="46" column="27" selection-start-line="46" selection-start-column="27" selection-end-line="46" selection-end-column="27" />
               <folding>
                 <element signature="e#6#91#0#PHP" expanded="true" />
               </folding>
@@ -87,31 +85,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/archive/src/admin_ajax.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="415">
-              <caret line="62" column="168" selection-start-line="62" selection-start-column="168" selection-end-line="62" selection-end-column="168" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/modules/archive/src/admin.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="19" column="1" lean-forward="true" selection-start-line="19" selection-start-column="1" selection-end-line="19" selection-end-column="1" />
+            <state relative-caret-position="703">
+              <caret line="55" column="1" selection-start-line="55" selection-start-column="1" selection-end-line="55" selection-end-column="1" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/admin/go_admin.php">
+        <entry file="file://$PROJECT_DIR$/modules/archive/src/admin.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="212">
-              <caret line="276" selection-start-line="276" selection-end-line="276" />
-              <folding>
-                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-              </folding>
+            <state relative-caret-position="390">
+              <caret line="31" column="1" selection-start-line="31" selection-start-column="1" selection-end-line="31" selection-end-column="1" />
             </state>
           </provider>
         </entry>
@@ -146,11 +130,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/dev/js/scripts/go_every_page.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="353">
-              <caret line="1325" column="24" selection-start-line="1325" selection-start-column="24" selection-end-line="1325" selection-end-column="24" />
+            <state relative-caret-position="197">
+              <caret line="21" column="24" selection-start-line="21" selection-start-column="24" selection-end-line="21" selection-end-column="24" />
               <folding>
                 <element signature="n#!!block;n#go_ajax_error_checker#0" />
                 <element signature="n#!!block;n#go_user_profile_link#0" />
@@ -197,12 +181,25 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dev/js/scripts/archive_admin.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="294">
-              <caret line="143" column="24" selection-start-line="143" selection-start-column="24" selection-end-line="143" selection-end-column="24" />
+            <state relative-caret-position="188">
+              <caret line="108" column="30" selection-start-line="108" selection-start-column="26" selection-end-line="108" selection-end-column="30" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#!!block;n#go_archive_progress#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/src/admin/go_admin.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="272">
+              <caret line="280" selection-start-line="280" selection-end-line="280" selection-end-column="50" />
+              <folding>
+                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -221,8 +218,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>section</find>
-      <find>go_sections</find>
       <find>go_badges</find>
       <find>do no</find>
       <find>update_user_</find>
@@ -247,10 +242,12 @@
       <find>tool_blog_archive_data</find>
       <find>$page</find>
       <find>go_delete_temp_archive</find>
-      <find>then</find>
       <find>nonce</find>
-      <find>go_archive_progress</find>
       <find>add_action</find>
+      <find>then</find>
+      <find>go_archive_progress</find>
+      <find>'send'</find>
+      <find>send</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -327,13 +324,13 @@
         <option value="$PROJECT_DIR$/dev/js/scripts/archive_admin.js" />
         <option value="$PROJECT_DIR$/modules/login/includes.php" />
         <option value="$PROJECT_DIR$/dev/js/scripts/archive_frontend.js" />
-        <option value="$PROJECT_DIR$/modules/archive/includes.php" />
-        <option value="$PROJECT_DIR$/modules/archive/src/ajax.php" />
         <option value="$PROJECT_DIR$/game-on.php" />
         <option value="$PROJECT_DIR$/modules/tools/src/admin.php" />
-        <option value="$PROJECT_DIR$/modules/archive/src/admin_ajax.php" />
         <option value="$PROJECT_DIR$/core/src/admin/go_admin.php" />
+        <option value="$PROJECT_DIR$/modules/archive/includes.php" />
+        <option value="$PROJECT_DIR$/modules/archive/src/admin_ajax.php" />
         <option value="$PROJECT_DIR$/modules/archive/src/admin.php" />
+        <option value="$PROJECT_DIR$/modules/archive/src/ajax.php" />
       </list>
     </option>
   </component>
@@ -824,12 +821,12 @@
       <workItem from="1558664657594" duration="12004000" />
       <workItem from="1558823386102" duration="317000" />
       <workItem from="1558824418350" duration="28635000" />
-      <workItem from="1558930965928" duration="116093000" />
+      <workItem from="1558930965928" duration="116972000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5090609000" />
+    <option name="totallyTimeSpent" value="5091488000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="106" y="23" width="1588" height="998" extended-state="0" />
@@ -2183,55 +2180,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dev/js/scripts/go_every_page.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="353">
-          <caret line="1325" column="24" selection-start-line="1325" selection-start-column="24" selection-end-line="1325" selection-end-column="24" />
-          <folding>
-            <element signature="n#!!block;n#go_ajax_error_checker#0" />
-            <element signature="n#!!block;n#go_user_profile_link#0" />
-            <element signature="n#!!block;n#go_noty_close_oldest#0" />
-            <element signature="n#!!block;n#go_admin_bar_stats_page_button#0" />
-            <element signature="n#!!block;n#go_make_select2_filter#0" />
-            <element signature="n#!!block;n#go_stats_about#0" />
-            <element signature="n#!!block;n#go_stats_task_list#0" />
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#!!block;n#go_enable_reset_buttons#0" />
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#!!block;n#go_stats_activity_list#0" />
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#!!block;n#go_stats_messages#0" />
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#!!block;n#go_stats_badges_list#0" />
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#!!block;n#go_stats_groups_list#0" />
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#!!block;n#go_stats_lite#0" />
-            <element signature="n#!!block;n#go_activate_apply_filters#0" />
-            <element signature="n#!!block;n#go_date_loader#0" />
-            <element signature="n#!!block;n#go_load_daterangepicker#0" />
-            <element signature="n#!!block;n#go_load_daterangepicker_empty#0" />
-            <element signature="n#!!block;n#go_setup_reset_filter_button#0" />
-            <element signature="n#!!block;n#go_daterange_clear#0" />
-            <element signature="n#style#0;n#i#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#!!block;n#go_clear_daterange#0" />
-            <element signature="n#!!block;n#go_save_clipboard_filters#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dev/js/scripts/archive_admin.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
-          <caret line="143" column="24" selection-start-line="143" selection-start-column="24" selection-end-line="143" selection-end-column="24" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#!!block;n#go_archive_progress#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/modules/clipboard/src/ajax.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="64">
@@ -2276,8 +2224,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/src/admin/go_admin.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="212">
-          <caret line="276" selection-start-line="276" selection-end-line="276" />
+        <state relative-caret-position="272">
+          <caret line="280" selection-start-line="280" selection-end-line="280" selection-end-column="50" />
           <folding>
             <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
@@ -2288,18 +2236,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/modules/archive/includes.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="338">
-          <caret line="57" selection-start-line="57" selection-end-line="57" />
+        <state relative-caret-position="262">
+          <caret line="46" column="27" selection-start-line="46" selection-start-column="27" selection-end-line="46" selection-end-column="27" />
           <folding>
             <element signature="e#6#91#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/modules/archive/src/admin.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="31" column="1" selection-start-line="31" selection-start-column="1" selection-end-line="31" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/archive/src/admin_ajax.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="703">
+          <caret line="55" column="1" selection-start-line="55" selection-start-column="1" selection-end-line="55" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/modules/archive/src/ajax.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="112" column="14" lean-forward="true" selection-start-line="112" selection-start-column="14" selection-end-line="112" selection-end-column="14" />
+        <state relative-caret-position="209">
+          <caret line="162" column="33" lean-forward="true" selection-start-line="162" selection-start-column="33" selection-end-line="162" selection-end-column="33" />
           <folding>
             <element signature="e#93#3453#0#PHP" />
             <element signature="n#go_archive_progress#0;n#!!top" />
@@ -2312,17 +2274,51 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/archive/src/admin_ajax.php">
+    <entry file="file://$PROJECT_DIR$/dev/js/scripts/archive_admin.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="415">
-          <caret line="62" column="168" selection-start-line="62" selection-start-column="168" selection-end-line="62" selection-end-column="168" />
+        <state relative-caret-position="188">
+          <caret line="108" column="30" selection-start-line="108" selection-start-column="26" selection-end-line="108" selection-end-column="30" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/archive/src/admin.php">
+    <entry file="file://$PROJECT_DIR$/dev/js/scripts/go_every_page.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="19" column="1" lean-forward="true" selection-start-line="19" selection-start-column="1" selection-end-line="19" selection-end-column="1" />
+        <state relative-caret-position="197">
+          <caret line="21" column="24" selection-start-line="21" selection-start-column="24" selection-end-line="21" selection-end-column="24" />
+          <folding>
+            <element signature="n#!!block;n#go_ajax_error_checker#0" />
+            <element signature="n#!!block;n#go_user_profile_link#0" />
+            <element signature="n#!!block;n#go_noty_close_oldest#0" />
+            <element signature="n#!!block;n#go_admin_bar_stats_page_button#0" />
+            <element signature="n#!!block;n#go_make_select2_filter#0" />
+            <element signature="n#!!block;n#go_stats_about#0" />
+            <element signature="n#!!block;n#go_stats_task_list#0" />
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#!!block;n#go_enable_reset_buttons#0" />
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#!!block;n#go_stats_activity_list#0" />
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#!!block;n#go_stats_messages#0" />
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#!!block;n#go_stats_badges_list#0" />
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#!!block;n#go_stats_groups_list#0" />
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#!!block;n#go_stats_lite#0" />
+            <element signature="n#!!block;n#go_activate_apply_filters#0" />
+            <element signature="n#!!block;n#go_date_loader#0" />
+            <element signature="n#!!block;n#go_load_daterangepicker#0" />
+            <element signature="n#!!block;n#go_load_daterangepicker_empty#0" />
+            <element signature="n#!!block;n#go_setup_reset_filter_button#0" />
+            <element signature="n#!!block;n#go_daterange_clear#0" />
+            <element signature="n#style#0;n#i#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#!!block;n#go_clear_daterange#0" />
+            <element signature="n#!!block;n#go_save_clipboard_filters#0" />
+          </folding>
         </state>
       </provider>
     </entry>
