@@ -144,7 +144,7 @@ function go_make_user_archive_zip(){
 
     ob_start();
     //PUT CODE HERE TO GET USER_ID
-    if ($is_admin_archive) {
+    if ($is_admin_archive === 'true') {
         $user_id = (isset($_POST['user_id']) ? $_POST['user_id'] : null);
         $user_info = get_userdata($user_id);
         $username = $user_info->user_login;
@@ -163,7 +163,7 @@ function go_make_user_archive_zip(){
         go_copy_scripts_and_styles($destination);
         $user_id = $current_user_id;
     }
-    generate_single_archive($is_private, $user_id);
+    generate_single_archive($is_private, $user_id, $is_admin_archive);
     $content = ob_get_contents();
     ob_end_clean();
     $content = convert_urls($content, $destination);
@@ -264,18 +264,17 @@ function go_add_utf8_archive(){
 };
 
 //generate the code for the single user archive
-function generate_single_archive($is_private = false, $user_id = false){
+function generate_single_archive($is_private = false, $user_id,  $is_admin_archive = 'false'){
 
-    if(!$user_id) {
-        $user_obj = wp_get_current_user();
-        $user_id = get_current_user_id();
+    if ($is_admin_archive === 'true') {
+        $admin_archive_dir = '../../';
+        $is_admin_archive = true;
+
+    }else{
         $admin_archive_dir = '';
         $is_admin_archive = false;
-    }else{
-        $admin_archive_dir = '../../';
-        $user_obj = get_userdata($user_id);
-        $is_admin_archive = true;
     }
+    $user_obj = get_userdata($user_id);
 
     /* Describe what the code snippet does so you can remember later on */
     add_action('wp_head', 'go_add_utf8_archive');
@@ -607,4 +606,6 @@ function convert_urls($content, $destination){
 
     return $content;
 }
+
+
 

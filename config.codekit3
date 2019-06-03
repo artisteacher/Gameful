@@ -4657,6 +4657,14 @@
 		"oAP": "/build/modules/archive/src/archive_temp",
 		"oF": 0
 		},
+	"/modules/archive/src/functions.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/archive/src/functions.php",
+		"oF": 0
+		},
 	"/modules/clipboard/includes.php": {
 		"cB": 0,
 		"ft": 8192,

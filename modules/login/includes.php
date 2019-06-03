@@ -23,8 +23,8 @@ if ( !is_admin() ) {
         function go_login_scripts($hook){
             //wp_localize_script( 'go_admin_user', 'go_make_user_archive_zip_nonce', wp_create_nonce( 'go_make_user_archive_zip' ) );
             wp_localize_script( 'go_frontend', 'is_login_page', 'true');//used to run on DOM ready JS
+            go_include_password_checker();
         }
-
     }
 }else if ( defined( 'DOING_AJAX' )) {
     //include_once('src/ajax.php');

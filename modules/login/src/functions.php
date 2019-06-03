@@ -461,6 +461,7 @@ function go_validate_password($valid, $value, $field, $input){
 
 //prints the form for changing the password
 function go_update_password_lightbox(){
+
     echo "<div style='display: none;'><div class='go_password_change_container'>";
 
     $groups = array();

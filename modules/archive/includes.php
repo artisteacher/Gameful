@@ -24,9 +24,15 @@ if (!is_admin()) {//is the frontend
     $request_uri = (isset($_SERVER['REQUEST_URI']) ?  $_SERVER['REQUEST_URI'] : null);
     $request_uri = str_replace('?updated=true', '', $request_uri);
     if ($request_uri == '/profile/') {
+        //always include
+        include_once('src/functions.php');
         add_action( 'wp_enqueue_scripts', 'go_archive_frontend_scripts' );
         function go_archive_frontend_scripts($hook){
             wp_localize_script( 'go_frontend', 'go_make_user_archive_zip_nonce', wp_create_nonce( 'go_make_user_archive_zip' ));
+
+            wp_localize_script( 'go_frontend', 'go_delete_temp_archive_nonce', wp_create_nonce( 'go_delete_temp_archive' ) );
+
+            wp_localize_script( 'go_frontend', 'go_zip_archive_nonce', wp_create_nonce( 'go_zip_archive' ) );
         }
     }
     //include_once('src/public_ajax.php');
@@ -34,6 +40,8 @@ if (!is_admin()) {//is the frontend
 } else if (defined('DOING_AJAX')) {
     $ajax_action  = (isset($_POST['action']) ?  $_POST['action'] : null);
     if($ajax_action === 'go_make_user_archive_zip' || $ajax_action === 'go_create_user_list' || $ajax_action === 'go_delete_temp_archive' || $ajax_action === 'go_zip_archive') {
+        //always include
+        include_once('src/functions.php');
         include_once('src/ajax.php');
         //include_once('src/public_ajax.php');
         include_once('src/admin_ajax.php');
@@ -51,6 +59,8 @@ if (!is_admin()) {//is the frontend
     //
     //only load nonces on pages where needed
     if($page = 'tool_blog_archive'){
+        //always include
+        include_once('src/functions.php');
         include_once('src/admin_ajax.php');
         go_clean_up_archive_temp_folder();//clean up old files in the archive_temp_folder
         add_action( 'admin_enqueue_scripts', 'go_archive_admin_scripts' );
@@ -67,6 +77,5 @@ if (!is_admin()) {//is the frontend
     }
 }
 
-//always include
-//include_once('src/functions.php');
+
 

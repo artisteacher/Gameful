@@ -21,7 +21,7 @@
 
 //https://codex.wordpress.org/Customizing_the_Login_Form#Make_a_Custom_Login_Page
 if ( ! is_user_logged_in() ) { // Display WordPress login form:
-    go_include_password_checker();
+    //go_include_password_checker();
     wp_head();
     ///////////
     echo "<div id ='go_login_center'><div id='go_login_container'>";

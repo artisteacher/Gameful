@@ -82,11 +82,18 @@ function go_save_archive(){
                                     text: "There was a problem creating your archive.",
                                     type: 'error',
                                     showCancelButton: false,
-                                })
+                                });
+                                console.log('errors');
+                                console.log(jqXHR);
+                                console.log(textStatus);
+                                console.log(errorThrown);
+                                jQuery('#go_save_archive').one("click", function (e) {
+                                    go_save_archive(this);
+                                });
+
                             },
                             success: function (raw) {
-                                console.log(raw);
-                                if (raw == 0 || raw == '0'){
+                                if (raw === 0 || raw === '0'){
                                     Swal.fire({//sw2 OK
                                         title: "Error",
                                         text: "There was a problem creating your archive.",
@@ -95,15 +102,13 @@ function go_save_archive(){
                                     })
                                 }else {
 
-                                    window.location = raw;
-                                    Swal.fire({//sw2 OK
-                                        title: "Success",
-                                        text: "Your archive was created.  It should be in your download folder. To view the archive, unzip it and open the index file.",
-                                        type: 'success',
-                                        showCancelButton: false,
-                                    })
-                                    go_delete_temp_archive();
+                                    go_zip_archive();
+                                    jQuery('#go_save_archive').one("click", function (e) {
+                                        go_save_archive(this);
+                                    });
+
                                 }
+
                             }
                         });
                     })
