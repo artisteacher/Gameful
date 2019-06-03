@@ -12,6 +12,10 @@ jQuery(document).ready(function(){
         go_make_select2_filter('user_go_groups', 'group', true, true);
 
         go_make_select2_filter('go_badges', 'badge', true, true);
+
+        jQuery(".go_save_icon_multiple_clipboard").parent().off().one("click", function(e){
+            go_save_admin_archive();
+        });
     }
 
 });
@@ -24,12 +28,8 @@ function go_save_admin_archive(){
     var archive_vars = [];
     for(var i = 0; i < inputs.length; i++){
         if (inputs[i]['checked'] === true ){
-            //console.log('checked');
             var uid = (inputs[i]).getAttribute('data-uid');
-            //console.log(uid);
             archive_vars.push({uid:uid});
-            //console.log('archive_vars');
-            //console.log(archive_vars);
         }
     }
     let num_users = archive_vars.length;
@@ -41,7 +41,7 @@ function go_save_admin_archive(){
             type: 'error',
             showCancelButton: false,
         });
-        jQuery(".go_save_icon_multiple_clipboard").parent().one("click", function(e){
+        jQuery(".go_save_icon_multiple_clipboard").parent().off().one("click", function(e){
             go_save_admin_archive();
         });
         return;
@@ -70,7 +70,7 @@ function go_save_admin_archive(){
             }
             //loader
             Swal.fire({//sw2 OK
-                title: "Generating Archive . . .",
+                title: "Generating Archives . . .",
                 showCloseButton: false,
                 showCancelButton: false,
                 showConfirmButton: false,
@@ -79,81 +79,267 @@ function go_save_admin_archive(){
                 html: '<div id="go_archive_bar_border" class="progress-bar-border-swal" style="width: 100%"><div id="go_archive_bar_progress" class="archive_progress_bar" style="width: 0%;"></div></div><div><h3 id="archive_status_text"></h3></div>',
                 onBeforeOpen: () => {
                     //Swal.showLoading();
-                    go_archive_progress(num_users, true);
+                    //go_archive_progress(num_users, true);
                 }
 
             })
 
-            //send the ajax with the input from the alert
-            var nonce = go_make_user_archive_zip_nonce;
-            let section = jQuery('#go_clipboard_user_go_sections_select').val();
-            let group = jQuery('#go_clipboard_user_go_groups_select').val();
-            let badge = jQuery('#go_clipboard_go_badges_select').val();
-            var gotoSend = {
-                action:"go_make_user_archive_zip",
-                archive_type: archive_type,
-                is_admin_archive: true,
-                archive_vars: archive_vars,
-                section: section,
-                group: group,
-                badge: badge,
-                _ajax_nonce: nonce,
-                // blog_post_id: blog_post_id,
-                // checked: checked
-            };
-            //jQuery.ajaxSetup({ cache: true });
-
-            jQuery.ajax({
-                url: MyAjax.ajaxurl,
-                type: 'POST',
-                data: gotoSend,
-                /**
-                 * A function to be called if the request fails.
-                 * Assumes they are not logged in and shows the login message in lightbox
-                 */
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log('error');
-                    jQuery(".go_save_icon_multiple_clipboard").parent().one("click", function(e){
-                        go_save_admin_archive();
-                    });
-                    Swal.fire({//sw2 OK
-                        title: "Error",
-                        text: "There was a problem creating your archive.",
-                        type: 'error',
-                        showCancelButton: false,
-                    });
-                },
-                success: function (raw) {
-                    console.log(raw);
-                    if (raw == 0 || raw == '0'){
-                        Swal.fire({//sw2 OK
-                            title: "Error",
-                            text: "There was a problem creating your archive.",
-                            type: 'error',
-                            showCancelButton: false,
-                        })
-                    }else {
-
-                        window.location = raw;
-                        Swal.fire({//sw2 OK
-                            title: "Success",
-                            text: "Your archive was created.  It should be in your download folder. To view the archive, unzip it and open the index file.",
-                            type: 'success',
-                            showCancelButton: false,
-                        })
-                        go_delete_temp_archive();
-                    }
-                    jQuery(".go_save_icon_multiple_clipboard").parent().one("click", function(e){
-                        go_save_admin_archive();
-                    });
-                }
-            });
+            go_create_user_list(archive_type, archive_vars);
         })
+}
+
+function go_zip_archive(){
+    console.log('go_zip_archive');
+    var nonce = go_zip_archive_nonce;
+    //generate_user_list($user_list, $is_private)
+    var gotoSend = {
+        action:"go_zip_archive",
+        _ajax_nonce: nonce,
+
+    };
+
+    jQuery.ajax({
+        url: MyAjax.ajaxurl,
+        type: 'POST',
+        data: gotoSend,
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log('go_zip_archive_error');
+            return 'error';
+        },
+        success: function (raw) {
+            console.log(raw);
+            if (raw == 0 || raw == '0'){
+                Swal.fire({//sw2 OK
+                    title: "Error",
+                    text: "There was a problem creating your archive. Error during the compression process.",
+                    type: 'error',
+                    showCancelButton: false,
+                })
+            }else {
+                window.location = raw;
+                Swal.fire({//sw2 OK
+                    title: "Success",
+                    text: "Your archive was created.  It should be in your download folder. To view the archive, unzip it and open the index file.",
+                    type: 'success',
+                    showCancelButton: false,
+                });
 
 
+
+                //delete archive folder
+                go_delete_temp_archive();
+                return 'success';
+            }
+        }
+    });
+}
+
+function go_create_user_list(archive_type, archive_vars){
+    console.log('go_create_user_list');
+    //send the ajax with the input from the alert
+    var nonce = go_create_user_list_nonce;
+    let section = jQuery('#go_clipboard_user_go_sections_select').val();
+    let group = jQuery('#go_clipboard_user_go_groups_select').val();
+    let badge = jQuery('#go_clipboard_go_badges_select').val();
+    //generate_user_list($user_list, $is_private)
+    var gotoSend = {
+        action:"go_create_user_list",
+        archive_type: archive_type,
+        is_admin_archive: true,
+        archive_vars: archive_vars,
+        section: section,
+        group: group,
+        badge: badge,
+        _ajax_nonce: nonce,
+        // blog_post_id: blog_post_id,
+        // checked: checked
+    };
+    //jQuery.ajaxSetup({ cache: true });
+
+    jQuery.ajax({
+        url: MyAjax.ajaxurl,
+        type: 'POST',
+        data: gotoSend,
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log('error');
+            jQuery(".go_save_icon_multiple_clipboard").parent().off().one("click", function(e){
+                go_save_admin_archive();
+            });
+            Swal.fire({//sw2 OK
+                title: "Error",
+                text: "There was a problem creating your archive.",
+                type: 'error',
+                showCancelButton: false,
+            });
+            console.log('error1');
+            //return 'error1';
+        },
+        success: function (raw) {
+            console.log(raw);
+            if (raw == 0 || raw == '0'){
+                Swal.fire({//sw2 OK
+                    title: "Error",
+                    text: "There was a problem creating your archive.",
+                    type: 'error',
+                    showCancelButton: false,
+                });
+                console.log('error2');
+                //return 'error2';
+            }else {
+                console.log('3');
+
+                console.log("archive_vars");
+                console.log(archive_vars);
+                let error_count = 0;
+                var counter = 0;
+                var total_users = archive_vars.length;
+                go_generate_user_archive(archive_type, archive_vars, 0, total_users, 0 );
+
+            }
+        }
+    });
 
 }
 
+function go_generate_user_archive(archive_type, archive_vars, i, total_users, error_count){
+    //add error log--which users failed
+    console.log('go_generate_multi_user_archives');
+
+    console.log("total_users: " + total_users);
+    console.log('users_done:' + i)
+
+    //update the progress bar and message
+    let percent = (i / total_users) * 100;
+    percent = percent + '%';
+    jQuery('#go_archive_bar_progress').css('width', percent);
+    let message = i + ' of ' + total_users + ' archives created.'
+    jQuery("#archive_status_text").html(message);
+
+
+    var user_id = (archive_vars[i]['uid']);
+
+    //send the ajax with the input from the alert
+    var nonce = go_make_user_archive_zip_nonce;
+    let section = jQuery('#go_clipboard_user_go_sections_select').val();
+    let group = jQuery('#go_clipboard_user_go_groups_select').val();
+    let badge = jQuery('#go_clipboard_go_badges_select').val();
+    //generate_user_list($user_list, $is_private)
+    var gotoSend = {
+        action:"go_make_user_archive_zip",
+        archive_type: archive_type,
+        is_admin_archive: true,
+        user_id: user_id,
+        section: section,
+        group: group,
+        badge: badge,
+        _ajax_nonce: nonce,
+        // blog_post_id: blog_post_id,
+        // checked: checked
+    };
+    //jQuery.ajaxSetup({ cache: true });
+
+    jQuery.ajax({
+        url: MyAjax.ajaxurl,
+        type: 'POST',
+        data: gotoSend,
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log('error');
+
+            error_count++;
+            //console.log(raw);
+            i++;
+            if (i < total_users) {
+                go_generate_user_archive(archive_type, archive_vars, i, total_users)
+            }else{
+                go_zip_archive();
+
+                //reactivate button
+                jQuery(".go_save_icon_multiple_clipboard").parent().off().one("click", function(e){
+                    go_save_admin_archive();
+                });
+            }
+        },
+        success: function (raw) {
+            if (raw == 0 || raw == '0'){
+                error_count++;
+            }
+            i++;
+            if (i < total_users) {
+                go_generate_user_archive(archive_type, archive_vars, i, total_users)
+            }else{
+                jQuery("#archive_status_text").html('Preparing files for download.');
+                go_zip_archive();
+
+                //reactivate button
+                jQuery(".go_save_icon_multiple_clipboard").parent().off().one("click", function(e){
+                    go_save_admin_archive();
+                });
+            }
+
+        }
+    });
+}
+
+/*
+function go_generate_user_archive2(archive_type, user_id){
+    console.log('go_generate_user_archive');
+    //send the ajax with the input from the alert
+    var nonce = go_make_user_archive_zip_nonce;
+    let section = jQuery('#go_clipboard_user_go_sections_select').val();
+    let group = jQuery('#go_clipboard_user_go_groups_select').val();
+    let badge = jQuery('#go_clipboard_go_badges_select').val();
+    //generate_user_list($user_list, $is_private)
+    var gotoSend = {
+        action:"go_make_user_archive_zip",
+        archive_type: archive_type,
+        is_admin_archive: true,
+        user_id: user_id,
+        section: section,
+        group: group,
+        badge: badge,
+        _ajax_nonce: nonce,
+        // blog_post_id: blog_post_id,
+        // checked: checked
+    };
+    //jQuery.ajaxSetup({ cache: true });
+
+    jQuery.ajax({
+        url: MyAjax.ajaxurl,
+        type: 'POST',
+        data: gotoSend,
+
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log('error');
+            jQuery(".go_save_icon_multiple_clipboard").parent().off().one("click", function(e){
+                go_save_admin_archive();
+            });
+            return 1;
+        },
+        success: function (raw) {
+            console.log(raw);
+            if (raw == 0 || raw == '0'){
+                return 1;
+            }else {
+
+                return 0;
+            }
+        }
+    });
+}
+*/
+/*
 function go_archive_progress(num_users, first = true, last_time_out = 0){
 
     console.log('go_archive_progress');
@@ -167,10 +353,7 @@ function go_archive_progress(num_users, first = true, last_time_out = 0){
             first: first
             //refresh: refresh,
         },
-        /**
-         * A function to be called if the request fails.
-         * Assumes they are not logged in and shows the login message in lightbox
-         */
+
         error: function(jqXHR, textStatus, errorThrown) {
             echo ('error');
             echo (jqXHR);
@@ -205,6 +388,7 @@ function go_archive_progress(num_users, first = true, last_time_out = 0){
         }
     });
 }
+*/
 
 function go_blog_archive_datatable(refresh) {
     if (jQuery("#go_clipboard_stats_datatable").length == 0  || refresh == true) {

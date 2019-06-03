@@ -1,4 +1,5 @@
 // @codekit-prepend 'scripts/archive_admin.js'
+// @codekit-prepend 'scripts/archive_all.js'
 
 // @codekit-prepend 'scripts/go_admin_page_admin_user.js'
 // @codekit-prepend 'scripts/go_options.js'

@@ -28,7 +28,7 @@ add_filter('plupload_default_settings', function ($settings) {
 
 
 //$go_debug = true;//set to true when coding
-$go_debug = false;
+$go_debug = true;
 global $go_debug;
 
 

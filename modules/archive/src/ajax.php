@@ -106,7 +106,9 @@ function go_make_admin_archive(){
 }
 */
 
-
+//creates a single user archive
+//also does the zip if just a single user
+//called from JS for each user on a multiple user archive
 function go_make_user_archive_zip(){
     if ( !is_user_logged_in() ) {
         echo "login";
@@ -120,7 +122,6 @@ function go_make_user_archive_zip(){
     }
     //remove the auth check script
     remove_action( 'wp_enqueue_scripts', 'go_login_session_expired' );
-    go_clean_up_archive_temp_folder();//clean up old files in the archive_temp_folder
 
     //create folder
     //put html file in it
@@ -137,84 +138,54 @@ function go_make_user_archive_zip(){
     }else{
         $is_private = false;
     }
-    //mkdir(plugin_dir_path( __FILE__ ) . 'temp/media', 0777);
+
+    $current_user_id = get_current_user_id();
+    $destination = plugin_dir_path( __FILE__ )  . 'archive_temp/' . $current_user_id .'/temp/';
+
     ob_start();
-
-    //PUT CODE HERE TO GENERATE USER LIST IF THIS IS ADMIN ARCHIVE
+    //PUT CODE HERE TO GET USER_ID
     if ($is_admin_archive) {
+        $user_id = (isset($_POST['user_id']) ? $_POST['user_id'] : null);
+        $user_info = get_userdata($user_id);
+        $username = $user_info->user_login;
         $is_admin = go_user_is_admin();
-
         //if this is an admin archive, bail if this user is not an admin
         if (!$is_admin) {
             return;
         }
-
-        $user_list = (isset($_POST['archive_vars']) ? $_POST['archive_vars'] : null);
-        generate_user_list($user_list, $is_private);
-
+        $destination = $destination . 'users/' . $username .'/';
+        mkdir($destination, 0777, 1);
     }else {
-        generate_single_archive($is_private);
+        go_clean_up_archive_temp_folder();//clean up old files in the archive_temp_folder
+
+        //make temp directory if it doesn't already exist
+        mkdir($destination, 0777, 1);
+        go_copy_scripts_and_styles($destination);
+        $user_id = $current_user_id;
     }
+    generate_single_archive($is_private, $user_id);
     $content = ob_get_contents();
     ob_end_clean();
+    $content = convert_urls($content, $destination);
+    file_put_contents($destination . 'index.html',$content);
+die();
+}
+
+//zips the archive folder and returns the URL
+function go_zip_archive(){
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
+    //check_ajax_referer( 'go_clipboard_activity_' . get_current_user_id() );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_zip_archive' ) ) {
+        echo "refresh";
+        die( );
+    }
 
     $current_user_id = get_current_user_id();
     $destination = plugin_dir_path( __FILE__ )  . 'archive_temp/' . $current_user_id .'/temp/';
-    mkdir($destination, 0777, 1);
-
-
-    $content = convert_urls($content, $destination);
-    //put the html in the index file
-    file_put_contents($destination . 'index.html',$content);
-
-    $num_done = 0;
-    if ($is_admin_archive) {
-        $user_count = count($user_list);
-        $five_percent = intval($user_count/20);
-        $next_update = $five_percent;
-        foreach ($user_list as $user) {
-            $user_id = $user['uid'];
-
-            $user_info = get_userdata($user_id);
-            $username = $user_info->user_login;
-            ob_start();
-            generate_single_archive($is_private, $user_id);
-            $content = ob_get_contents();
-            ob_end_clean();
-            $user_destination = $destination . 'users/' . $username .'/';
-            mkdir($user_destination, 0777, 1);
-            $content = convert_urls($content, $user_destination);
-            file_put_contents($user_destination .'/index.html',$content);
-            $num_done++;
-            if ($num_done >= $next_update) {
-                update_user_option($current_user_id, 'archive_done_num', $num_done);
-                $next_update = $next_update + $five_percent;
-            }
-            sleep(1);
-        }
-        update_user_option($current_user_id, 'archive_done_num', 'done');
-    }
-
-
-    //Copy JS and CSS files
-    mkdir($destination . 'styles/min/',0777,1  );
-    mkdir($destination . 'js/min/',0777,1  );
-
-
-    //$origin_file_path = plugin_dir_path( __FILE__ ) ;
-    $go_frontend = dirname(__DIR__, 3) . '/js/min/go_frontend-min.js';
-    $go_combine_dependencies = dirname(__DIR__, 3) . '/js/min/go_combine_dependencies-min.js';
-    $go_combine_dependencies_css = dirname(__DIR__, 3) . '/styles/min/go_combine_dependencies.css';
-    $go_frontend_css = dirname(__DIR__, 3) . '/styles/min/go_frontend.css';
-    $go_styles = dirname(__DIR__, 3) . '/styles/min/go_styles.css';
-    //$destination_file_path = preg_replace( '/(https?:)?\/\/' . addcslashes( $home_url, '/' ) . '/i', $destination, $match );
-
-    copy( $go_frontend, $destination . 'js/min/go_frontend-min.js' );
-    copy( $go_combine_dependencies, $destination . 'js/min/go_combine_dependencies-min.js' );
-
-    copy( $go_combine_dependencies_css, $destination . 'styles/min/go_combine_dependencies.css' );
-    copy( $go_frontend_css, $destination . 'styles/min/go_frontend.css' );
-    copy( $go_styles, $destination . 'styles/min/go_styles.css' );
 
     ////////////
     $zip_dir = plugin_dir_path( __FILE__ )  . 'archive_temp/' . $current_user_id . "/zip/";
@@ -258,39 +229,41 @@ function go_make_user_archive_zip(){
     }else{
         echo 0;
     }
-die();
-
-}
-
-function go_archive_progress(){
-    //add nonce check
-    if ( !is_user_logged_in() ) {
-        echo "login";
-        die();
-    }
-    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_archive_progress' ) ) {
-        echo "refresh";
-        die( );
-    }
-
-    $current_user_id = get_current_user_id();
-    $first = (isset($_POST['first']) ? $_POST['first'] : false);
-    if ($first === 'true') {
-        update_user_option($current_user_id, 'archive_done_num', 0);
-        $done = 0;
-    }else {
-        $done = get_user_option('archive_done_num');
-    }
-    echo $done;
     die();
 }
 
+//copies the scripts and styles to the destination folder
+function go_copy_scripts_and_styles($destination){
+    //Copy JS and CSS files
+    mkdir($destination . 'styles/min/',0777,1  );
+    mkdir($destination . 'js/min/',0777,1  );
+
+
+    //$origin_file_path = plugin_dir_path( __FILE__ ) ;
+    $go_frontend = dirname(__DIR__, 3) . '/js/min/go_frontend-min.js';
+    $go_combine_dependencies = dirname(__DIR__, 3) . '/js/min/go_combine_dependencies-min.js';
+    $go_combine_dependencies_css = dirname(__DIR__, 3) . '/styles/min/go_combine_dependencies.css';
+    $go_frontend_css = dirname(__DIR__, 3) . '/styles/min/go_frontend.css';
+    $go_styles = dirname(__DIR__, 3) . '/styles/min/go_styles.css';
+    //$destination_file_path = preg_replace( '/(https?:)?\/\/' . addcslashes( $home_url, '/' ) . '/i', $destination, $match );
+
+    copy( $go_frontend, $destination . 'js/min/go_frontend-min.js' );
+    copy( $go_combine_dependencies, $destination . 'js/min/go_combine_dependencies-min.js' );
+
+    copy( $go_combine_dependencies_css, $destination . 'styles/min/go_combine_dependencies.css' );
+    copy( $go_frontend_css, $destination . 'styles/min/go_frontend.css' );
+    copy( $go_styles, $destination . 'styles/min/go_styles.css' );
+}
+
+//adds the correct text encoding to the html head
+//Safari needs this code becuase it doesn't use utf8 by default
 function go_add_utf8_archive(){
     ?>
     <meta charset="utf-8" />
     <?php
 };
 
+//generate the code for the single user archive
 function generate_single_archive($is_private = false, $user_id = false){
 
     if(!$user_id) {
@@ -382,8 +355,49 @@ function generate_single_archive($is_private = false, $user_id = false){
     //do_action( 'wp_print_footer_scripts' );
 }
 
-function generate_user_list($user_list, $is_private){
+//creates the list of users for the multiple archive index page
+function go_create_user_list(){
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
 
+    //check_ajax_referer( 'go_clipboard_activity_' . get_current_user_id() );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_create_user_list' ) ) {
+        echo "refresh";
+        die( );
+    }
+
+    $current_user_id = get_current_user_id();
+    $destination = plugin_dir_path( __FILE__ )  . 'archive_temp/' . $current_user_id .'/temp/';
+
+    ob_start();
+    go_generate_user_list();
+    $content = ob_get_contents();
+    ob_end_clean();
+
+    $content = convert_urls($content, $destination);
+    file_put_contents($destination . 'index.html',$content);
+    go_copy_scripts_and_styles($destination);
+    echo "success";
+    die();
+
+}
+
+//helper function for the create user list
+function go_generate_user_list(){
+
+
+    $user_list = (isset($_POST['archive_vars']) ? $_POST['archive_vars'] : null);
+    $archive_type = (isset($_POST['archive_type']) ? $_POST['archive_type'] : null);
+
+    if ($archive_type == 'private'){
+        $is_private = true;
+    }else{
+        $is_private = false;
+    }
+
+    remove_action( 'wp_enqueue_scripts', 'go_login_session_expired' );
     /* Describe what the code snippet does so you can remember later on */
     add_action('wp_head', 'go_add_utf8_archive');
 
@@ -499,6 +513,7 @@ function generate_user_list($user_list, $is_private){
     //do_action( 'wp_print_footer_scripts' );
 }
 
+//converts the urls and moves local files to the destination folder
 function convert_urls($content, $destination){
     $home_url = home_url();
     $pattern = '/^(https?:)?\/\//';
