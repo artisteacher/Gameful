@@ -5,20 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4c52fe7c-a769-413b-9a8a-3effed8b98a6" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/modules/archive/src/functions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.codekit3" beforeDir="false" afterPath="$PROJECT_DIR$/config.codekit3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/js/scripts/archive_admin.js" beforeDir="false" afterPath="$PROJECT_DIR$/dev/js/scripts/archive_admin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/js/scripts/archive_all.js" beforeDir="false" afterPath="$PROJECT_DIR$/dev/js/scripts/archive_all.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/js/scripts/archive_frontend.js" beforeDir="false" afterPath="$PROJECT_DIR$/dev/js/scripts/archive_frontend.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/min/go_admin_user-min.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/min/go_admin_user-min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/min/go_frontend-min.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/min/go_frontend-min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/archive/includes.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/archive/includes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/archive/src/admin_ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/archive/src/admin_ajax.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/archive/src/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/archive/src/ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/login/includes.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/login/includes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/login/src/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/login/src/functions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/login/src/templates/reset_password_template.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/login/src/templates/reset_password_template.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -57,7 +44,7 @@
         <entry file="file://$PROJECT_DIR$/modules/archive/src/ajax.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="184">
-              <caret line="266" column="64" selection-start-line="266" selection-start-column="64" selection-end-line="266" selection-end-column="64" />
+              <caret line="311" column="48" selection-start-line="311" selection-start-column="48" selection-end-line="311" selection-end-column="48" />
               <folding>
                 <element signature="e#93#3453#0#PHP" />
                 <element signature="n#go_add_utf8_archive#0;n#!!top" />
@@ -174,7 +161,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>go_reset_all_users</find>
       <find>Reset tasks, history, and loot f</find>
       <find>badge</find>
       <find>Create an archive of blog posts for selected users</find>
@@ -204,6 +190,7 @@
       <find>generating</find>
       <find>remove</find>
       <find>add_action</find>
+      <find>back to use</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -763,12 +750,12 @@
       <workItem from="1558664657594" duration="12004000" />
       <workItem from="1558823386102" duration="317000" />
       <workItem from="1558824418350" duration="28635000" />
-      <workItem from="1558930965928" duration="132006000" />
+      <workItem from="1558930965928" duration="132571000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5106522000" />
+    <option name="totallyTimeSpent" value="5107087000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="106" y="23" width="1588" height="998" extended-state="0" />
@@ -2292,7 +2279,7 @@
     <entry file="file://$PROJECT_DIR$/modules/archive/src/ajax.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="184">
-          <caret line="266" column="64" selection-start-line="266" selection-start-column="64" selection-end-line="266" selection-end-column="64" />
+          <caret line="311" column="48" selection-start-line="311" selection-start-column="48" selection-end-line="311" selection-end-column="48" />
           <folding>
             <element signature="e#93#3453#0#PHP" />
             <element signature="n#go_add_utf8_archive#0;n#!!top" />

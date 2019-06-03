@@ -309,7 +309,7 @@ function generate_single_archive($is_private = false, $user_id,  $is_admin_archi
     if($is_admin_archive){
         ?>
 
-        <div><a href="../../index.html"><button>"Back to User List</button></a></div>
+        <div><a href="../../index.html"><button>Back to User List</button></a></div>
        <?php
     }
         go_stats_header($user_id, true, false, false, false, false, false, true, true, $is_private);
