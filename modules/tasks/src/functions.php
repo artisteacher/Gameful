@@ -257,8 +257,8 @@ function go_tasks_filter_content() {
 //TESTING THIS TO FILTER THE MAPS
 //https://wordpress.stackexchange.com/questions/268495/is-it-possible-to-add-extra-table-nav-to-edit-tags-php-screens
 // @see https://developer.wordpress.org/reference/hooks/get_terms_args/
-add_filter( 'get_terms_args', 'go_taxonomy_filter', 10, 2 );
 
+add_filter( 'get_terms_args', 'go_taxonomy_filter', 10, 2 );
 function go_taxonomy_filter( $args, $taxonomies ) {
 	global $pagenow;
 	if ( 'edit-tags.php' !== $pagenow || ! in_array( 'task_chains', $taxonomies, true ) ) {

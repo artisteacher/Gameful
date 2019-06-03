@@ -58,7 +58,7 @@ if (!is_admin()) {//is the frontend
     $page = (isset($_REQUEST['page']) ?  $_REQUEST['page'] : null);
     //
     //only load nonces on pages where needed
-    if($page = 'tool_blog_archive'){
+    if($page === 'tool_blog_archive'){
         //always include
         include_once('src/functions.php');
         include_once('src/admin_ajax.php');
