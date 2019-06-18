@@ -208,16 +208,16 @@ function go_blog_trash(){
 
             if (!empty($badge_array)) {//else if badges toggle is false and badges exist
                 //$result[] = "badges-";
+                go_remove_badges($badge_array, $uid, false);//remove badges
                 $badge_ids = serialize($badge_array);
-                go_remove_badges($badge_ids, $uid, false);//remove badges
             }else{
                 $badge_ids = "";
             }
 
             if (!empty($group_array)) {//else if groups toggle is false and groups exist
                 //$result[] = "groups-";
+                go_remove_groups($group_array, $uid, false);//remove groups
                 $group_ids = serialize($group_array);
-                go_remove_groups($group_ids, $uid, false);//remove groups
             }else{
                 $group_ids = "";
             }
@@ -447,22 +447,26 @@ function go_save_blog_post($post_id = null, $stage = null, $bonus_status = null,
 /**
  * Prints content for the clipboard tasks table and user map viewer
  */
-function go_blog_user_task(){
-    if ( !is_user_logged_in() ) {
-        echo "login";
-        die();
-    }
+function go_blog_user_task($not_ajax = false, $user_id = null, $post_id = null){
+    if (!$not_ajax) {
+        if (!is_user_logged_in()) {
+            echo "login";
+            die();
+        }
 
-    //check_ajax_referer( 'go_blog_user_task' );
-    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_blog_user_task' ) ) {
-        echo "refresh";
-        die( );
+        //check_ajax_referer( 'go_blog_user_task' );
+        if (!wp_verify_nonce($_REQUEST['_ajax_nonce'], 'go_blog_user_task')) {
+            echo "refresh";
+            die();
+        }
+
+        $user_id = intval($_POST['uid']);
+        $post_id = intval($_POST['task_id']);
     }
 
     global $wpdb;
 
-    $user_id = intval($_POST['uid']);
-    $post_id = intval($_POST['task_id']);
+
 
     $go_activity_table_name = "{$wpdb->prefix}go_actions";
     //get all blog posts from a particular task
@@ -593,15 +597,6 @@ function go_blog_user_task(){
             //set the time for the next loop
             $current_time = $TIMESTAMP;
 
-            //$current_stage = $stage;
-            //if (blog, url, quiz,
-            /*
-            $content_post = get_post($result);
-            $post_title = $content_post->post_title;
-            $content = $content_post->post_content;
-            $content = apply_filters('the_content', $content);
-            $content = str_replace(']]>', ']]&gt;', $content);
-            */
             ob_start();
             $stage_name = ucfirst($stage_name);
             echo  "<div class='go_blog_stage'><h3>". $stage_name . " " . $current_stage .": ";

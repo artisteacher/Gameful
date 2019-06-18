@@ -11,13 +11,14 @@ function go_make_map() {
         }
         if(!$last_map_id){
             $taxonomy = 'task_chains';
-            $term_args0=array(
+            /*$term_args0=array(
                 'hide_empty' => false,
                 'order' => 'ASC',
                 'parent' => '0',
                 'number' => 1
             );
-            $firstmap = get_terms($taxonomy,$term_args0);
+            $firstmap = get_terms($taxonomy,$term_args0);*/
+            $firstmap = go_get_terms_ordered($taxonomy, '0', 1);
             $last_map_id = $firstmap[0]->term_id;
         }
         echo "<div id='go_map_container' style='padding:10px 30px; margin: 30px 5%; background-color: white;'>";
@@ -51,7 +52,7 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
     </script>
         <?php
     global $wpdb;
-    $go_loot_table_name = "{$wpdb->prefix}go_loot";
+    //$go_loot_table_name = "{$wpdb->prefix}go_loot";
     $go_task_table_name = "{$wpdb->prefix}go_tasks";
     //wp_nonce_field( 'go_update_last_map');
     $last_map_object = get_term_by( 'id' , $last_map_id, 'task_chains');//Query 1 - get the map
@@ -68,7 +69,8 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
     $is_logged_in = ! empty( $user_id ) && $user_id > 0 ? true : false;
     //$taxonomy_name = 'task_chains';
 
-    $user_badges =  $wpdb->get_var ("SELECT badges FROM {$go_loot_table_name} WHERE uid = {$user_id}");
+    $key = go_prefix_key('go_badge');
+    $user_badges = get_user_meta($user_id, $key, false);
     if(empty($user_badges)){ //if there were no badges then create empty array
         $user_badges = array();
     }
@@ -417,9 +419,11 @@ function go_map_quest_badge($badge, $user_badges){
         $badge_obj = get_term( $badge);
         $badge_name = $badge_obj->name;
         //$badge_img_id =(isset($custom_fields['my_image'][0]) ?  $custom_fields['my_image'][0] : null);
-        $badge_img = wp_get_attachment_image($badge_img_id[0], array( 50, 50 ));
-        if (!$badge_img){
-            $badge_img = "<div style='width:50px; height: 50px;'></div>";
+
+        if (isset($badge_img_id[0]) && !empty($badge_img_id[0])){
+            $badge_img = wp_get_attachment_image($badge_img_id[0], array( 100, 100 ));
+        }else{
+            $badge_img = '<i class="fas fa-award fa-4x"></i>';
         }
 
         //$badge_attachment = wp_get_attachment_image( $badge_img_id, array( 100, 100 ) );
@@ -453,12 +457,14 @@ function go_map_quest_badge($badge, $user_badges){
 function go_make_map_dropdown($user_id = null){
 /* Get all task chains with no parents--these are the top level on the map.  They are chains of chains (realms). */
 	$taxonomy = 'task_chains';
-	$term_args0=array(
+	/*$term_args0=array(
   		'hide_empty' => false,
   		'order' => 'ASC',
   		'parent' => '0'
-	);
-	$tax_terms_maps = get_terms($taxonomy,$term_args0);
+	);*/
+	//$tax_terms_maps = get_terms($taxonomy,$term_args0);
+
+    $tax_terms_maps = go_get_terms_ordered($taxonomy, '0');
 
 	if($user_id != null){
 	    $user_data = get_userdata($user_id );
@@ -480,7 +486,7 @@ function go_make_map_dropdown($user_id = null){
                     echo "
                 <div id='mapLink_$term_id' >
                 <a onclick=go_show_map($term_id)>$tax_term_map->name</a></div>";
-                }
+               }
             }
         echo"</div></div></div> ";
 }

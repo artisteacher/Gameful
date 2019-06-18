@@ -1,3 +1,4 @@
+
 jQuery( document ).ready( function() {
 
 
@@ -33,7 +34,7 @@ jQuery( document ).ready( function() {
     });
 
 
-    jQuery(".go_password_change_modal").on("click", function(e){
+    jQuery(".go_password_change_modal").one("click", function(e){
         go_update_password_lightbox();
     });
 
@@ -135,8 +136,6 @@ console.log('go_clone_post_new_menu_bar');
     });
 }
 
-
-
 function go_activate_password_checker(){
     jQuery( 'body' ).on( 'keyup', '.newpassword, .confirmpassword', function( event ) {
         console.log('wdmChkPwdStrength');
@@ -230,7 +229,9 @@ function go_update_password_lightbox(){//this is only needed on the frontend
                     //////////////////
 
                 }
-
+                jQuery(".go_password_change_modal").one("click", function(e){
+                    go_update_password_lightbox();
+                });
 
             }
 
@@ -301,7 +302,7 @@ function wdmChkPwdStrength( $pwd,  $confirmPwd, $strengthStatus, $submitBtn, bla
 
 function go_update_password(){//this is only needed on the frontend
     console.log('go_update_password');
-    //var nonce = GO_EVERY_PAGE_DATA.nonces.go_admin_bar_stats;
+    //var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_lightbox;
     //nonce = 'fail';
     var current_password = jQuery(".featherlight-content input[name=currentpassword]").val();
     var new_password = jQuery(".featherlight-content input[name=newpassword]").val();
@@ -459,16 +460,17 @@ function go_lightbox_blog_img(){
     });
 }
 
-function go_admin_bar_stats_page_button( id ) {//this is called from the admin bar
-    var nonce = GO_EVERY_PAGE_DATA.nonces.go_admin_bar_stats;
+function go_stats_lightbox_page_button( uid ) {//this is called from the admin bar
+    console.log("go_stats_lightbox_page_button");
+    var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_lightbox;
     //nonce = 'fail';
     jQuery.ajax({
         type: "post",
         url: MyAjax.ajaxurl,
         data: {
             _ajax_nonce: nonce,
-            action: 'go_admin_bar_stats',
-            uid: id
+            action: 'go_stats_lightbox',
+            uid: uid
         },
         /**
          * A function to be called if the request fails.
@@ -480,7 +482,7 @@ function go_admin_bar_stats_page_button( id ) {//this is called from the admin b
             }
         },
         success: function( res ) {
-            //console.log(res);
+            console.log("go_stats_lightbox_page_button SUCCESS");
             let error = go_ajax_error_checker(res);
             if (error == 'true') return;
 
@@ -494,21 +496,21 @@ function go_admin_bar_stats_page_button( id ) {//this is called from the admin b
                     }
                 });
 
-                go_stats_task_list();
+                //go_stats_task_list();
 
                 jQuery('#stats_tabs').tabs();
                 jQuery( '.stats_tabs' ).click( function() {
-                    //console.log("tabs");
+                    console.log("tabs");
                     tab = jQuery(this).attr('tab');
                     switch (tab) {
                         case 'about':
-                            go_stats_about();
+                            //go_stats_about();
                             break;
                         case 'tasks':
                             go_stats_task_list();
                             break;
                         case 'store':
-                            go_stats_item_list();
+                            go_stats_store_list();
                             break;
                         case 'history':
                             go_stats_activity_list();
@@ -522,11 +524,20 @@ function go_admin_bar_stats_page_button( id ) {//this is called from the admin b
                         case 'groups':
                             go_stats_groups_list();
                             break;
-                        case 'leaderboard':
-                            go_stats_leaderboard();
-                            break;
                     }
                 });
+
+                go_stats_links(); //links for the header
+                go_reader_activate_buttons();//activate buttons on about me blog post
+
+
+                //if there is no about tab, and there is a task tab, load the task table
+                if(!jQuery('#stats_about').length){
+                    if(jQuery('#stats_tasks').length) {
+                        go_stats_task_list();
+                    }
+                }
+
 
             }
 
@@ -534,56 +545,128 @@ function go_admin_bar_stats_page_button( id ) {//this is called from the admin b
     });
 }
 
+//Applies the stats and messages links to the icons on tables on clipboard and leaderboard
 function go_stats_links(){
-    jQuery('.go_user_link_stats').prop('onclick',null).off('click');
-    jQuery('.go_user_link_stats').one('click', function(){  var user_id = jQuery(this).attr('name'); go_admin_bar_stats_page_button(user_id)});
-    jQuery('.go_stats_messages_icon').prop('onclick',null).off('click');
-    jQuery(".go_stats_messages_icon").one("click", function(e){
+    //jQuery('.go_user_link_stats').prop('onclick',null).off('click');
+    jQuery('.go_user_link_stats').off().one('click', function(){
+        let user_id = jQuery(this).attr('uid');
+        go_stats_lightbox_page_button(user_id)
+    });
+
+    jQuery(".go_stats_messages_icon").off().one("click", function(e){
         var user_id = this.getAttribute('data-uid');
         go_messages_opener(user_id, null, "single_message", this);
     });
 }
 
-function go_make_select2_filter(taxonomy, my_value, is_clipboard, is_hier) {
+function go_make_select2_filter(taxonomy, is_lightbox, use_saved_value = false, parents_only = false) {
+    console.log("go_make_select2_filter");
 
-    if (is_clipboard) {
+    if (is_lightbox){
+        var location = 'lightbox';
+        console.log('lightbox');
+    }
+    else{
+
+        var location = 'page';
+        console.log('page');
+    }
+
+    if (use_saved_value) {
         // Get saved data from sessionStorage
-        var value = localStorage.getItem('go_clipboard_' + my_value);
-        var value_name = localStorage.getItem('go_clipboard_' + my_value + '_name');
+        var value = localStorage.getItem(taxonomy);
+        var value_name = localStorage.getItem(taxonomy + '_name');
+        console.log(value);
+        console.log(value_name);
     }else{
-        value = jQuery('#go_clipboard_' + taxonomy + '_select').data('value');
-        value_name = jQuery('#go_clipboard_' + taxonomy + '_select').data('value_name');
+        value = jQuery('#go_' + location + '_' + taxonomy + '_select').data('value');
+        value_name = jQuery('#go_' + location + '_' + taxonomy + '_select').data('value_name');
     }
 
 
-    jQuery('#go_clipboard_' + taxonomy + '_select').select2({
+    if( value != null && value != 'null') {
+        // Fetch the preselected item, and add to the control
+        var valueSelect = jQuery('#go_' + location + '_' + taxonomy + '_select');
+        var option = new Option(value_name, value, true, true);
+        //valueSelect.append(option);
+        valueSelect.append(option).trigger('change.select2');
+    }
+
+    //if clear is pressed, remove all options before continueing with ajax
+    jQuery('#go_' + location + '_' + taxonomy + '_select').on("select2:unselecting", function(e) {
+        console.log("unselecting");
+        jQuery('#go_' + location + '_' + taxonomy + '_select').val(null).trigger('change');
+        jQuery('#go_' + location + '_' + taxonomy + '_select').empty();
+        if(jQuery('#go_' + location + '_' + taxonomy + '_select').hasClass("go_activate_filter")) {
+            go_activate_apply_filters();
+        }
+    });
+
+
+    jQuery('#go_' + location + '_' + taxonomy + '_select').select2({
         ajax: {
             url: MyAjax.ajaxurl, // AJAX URL is predefined in WordPress admin
             dataType: 'json',
             delay: 400, // delay in ms while typing when to perform a AJAX search
+
             data: function (params) {
 
                 return {
                     q: params.term, // search query
                     action: 'go_make_taxonomy_dropdown_ajax', // AJAX action for admin-ajax.php
                     taxonomy: taxonomy,
-                    is_hier: is_hier
+                    parents_only: parents_only,
                 };
-
-
             },
             processResults: function( data ) {
-
-                jQuery("#go_clipboard_" + taxonomy + "_select").select2("destroy");
-                jQuery("#go_clipboard_" + taxonomy + "_select").children().remove();
-                jQuery("#go_clipboard_" + taxonomy + "_select").select2({
+                console.log("processing");
+                jQuery('#go_' + location + '_' + taxonomy + '_select').off();
+                var myvar = jQuery('#go_' + location + '_' + taxonomy + '_select').val();//get the current value
+                console.log(myvar);
+                jQuery('#go_' + location + '_' + taxonomy + '_select').select2("destroy");
+                jQuery('#go_' + location + '_' + taxonomy + '_select').empty();
+                jQuery('#go_' + location + '_' + taxonomy + '_select').select2({
                     data: data,
                     placeholder: "Show All",
-                    allowClear: true}).val(value).trigger("change");
-                jQuery("#go_clipboard_" + taxonomy + "_select").select2("open");
+                    allowClear: true});
+                jQuery('#go_' + location + '_' + taxonomy + '_select').val(myvar).trigger('change');
+                jQuery('#go_' + location + '_' + taxonomy + '_select').select2("open");
+
+                if(jQuery('#go_' + location + '_' + taxonomy + '_select').hasClass("go_activate_filter")) {
+                    jQuery('#go_' + location + '_' + taxonomy + '_select').on('select2:select', function (e) {
+                        // Do something
+                        console.log("apply_filters");
+                        go_activate_apply_filters();
+                    });
+
+                    jQuery('#go_' + location + '_' + taxonomy + '_select').on('select2:unselect', function (e) {
+                        go_activate_apply_filters();
+                    });
+
+
+                }
+
+                // Event listener to the range filtering inputs to redraw on input
+                if (jQuery("#go_leaders_datatable").length) {
+                    console.log("On the Leaderboard");
+                    jQuery('#go_page_user_go_sections_select, #go_page_user_go_groups_select').change(function () {
+                        //var section = jQuery('#go_user_go_sections_select').val();
+                        console.log('redraw');
+                        leaderboard.draw();
+
+                    });
+                }
+
                 return {
                     results: data
                 };
+
+            },
+            success: function( data ) {
+
+                console.log("success_select2");
+
+
 
             },
             cache: true
@@ -591,18 +674,13 @@ function go_make_select2_filter(taxonomy, my_value, is_clipboard, is_hier) {
         minimumInputLength: 0, // the minimum of symbols to input before perform a search
         multiple: false,
         placeholder: "Show All",
-        allowClear: true
+        allowClear: true,
     });
 
-    if( value != null && value != 'null') {
-        // Fetch the preselected item, and add to the control
-        var valueSelect = jQuery('#go_clipboard_' + taxonomy + '_select');
-        // create the option and append to Select2
-        var option = new Option(value_name, value, true, true);
-        valueSelect.append(option).trigger('change');
-    }
 
 }
+
+
 
 function go_make_select2_cpt( my_div, cpt) {
 
@@ -642,77 +720,11 @@ function go_make_select2_cpt( my_div, cpt) {
 
 }
 
-
-function go_stats_about(user_id) {
-    //console.log("about");
-    //jQuery(".go_datatables").hide();
-    var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_about;
-    if ( jQuery( "#go_stats_about" ).length == 0 ) {
-        jQuery.ajax({
-            type: 'post',
-            url: MyAjax.ajaxurl,
-            data: {
-                _ajax_nonce: nonce,
-                action: 'go_stats_about',
-                user_id: jQuery('#go_stats_hidden_input').val()
-            },
-            /**
-             * A function to be called if the request fails.
-             * Assumes they are not logged in and shows the login message in lightbox
-             */
-            error: function(jqXHR, textStatus, errorThrown) {
-                if (jqXHR.status === 400){
-                    jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
-                }
-            },
-            success: function (res) {
-                if (-1 !== res) {
-                    //console.log(res);
-                    //console.log("about me");
-                    //jQuery( '#go_stats_body' ).html( '' );
-                    //var oTable = jQuery('#go_tasks_datatable').dataTable();
-                    //oTable.fnDestroy();
-
-                    jQuery('#stats_about').html(res);
-
-
-                }
-            }
-        });
-    }
-}
-
-/*
-function go_blog_lightbox_opener(post_id){
-    console.log("go_blog_lightbox_opener");
-    var nonce = GO_EVERY_PAGE_DATA.nonces.go_blog_lightbox_opener;
-    jQuery.ajax({
-        type: 'post',
-        url: MyAjax.ajaxurl,
-        data: {
-            _ajax_nonce: nonce,
-            action: 'go_blog_lightbox_opener',
-            blog_post_id: post_id
-        },
-        success: function (res) {
-            if (-1 !== res) {
-                jQuery.featherlight(res, {variant: 'blog_post'});
-
-                jQuery(".go_blog_lightbox").off().one("click", function(){
-                    go_blog_lightbox_opener(this.id);
-                });
-
-            }
-
-        }
-    });
-}
-*/
-
 function go_stats_task_list() {
-    jQuery("#stats_tasks").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px 30px;'><div id='loader' <i class='fas fa-spinner fa-pulse fa-4x'></i></div></div>");
-    var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_task_list;
+
     if (jQuery("#go_tasks_datatable").length == 0) {
+        jQuery("#stats_tasks").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px 30px;'><div id='loader' <i class='fas fa-spinner fa-pulse fa-4x'></i></div></div>");
+        var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_task_list;
         jQuery.ajax({
             type: 'post',
             url: MyAjax.ajaxurl,
@@ -854,19 +866,20 @@ function go_stats_single_task_activity_list (postID) {
     });
 }
 
-function go_stats_item_list() {
+function go_stats_store_list() {
     //console.log("store");
     //jQuery(".go_datatables").hide();
-    jQuery("#stats_store").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px 30px;'><div id='loader' <i class='fas fa-spinner fa-pulse fa-4x'></i></div></div>");
 
-    var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_item_list;
     if (jQuery("#go_store_datatable").length == 0 ) {
+        jQuery("#stats_store").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px 30px;'><div id='loader' <i class='fas fa-spinner fa-pulse fa-4x'></i></div></div>");
+
+        var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_store_list;
         jQuery.ajax({
             type: 'post',
             url: MyAjax.ajaxurl,
             data: {
                 _ajax_nonce: nonce,
-                action: 'go_stats_item_list',
+                action: 'go_stats_store_list',
                 user_id: jQuery('#go_stats_hidden_input').val()
             },
             /**
@@ -903,19 +916,19 @@ function go_stats_item_list() {
     }
 }
 
-//the SSP v4 one
 function go_stats_activity_list() {
-    jQuery("#stats_history").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px 30px;'><div id='loader' <i class='fas fa-spinner fa-pulse fa-4x'></i></div></div>");
-
-    var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_activity_list;
+    console.log("go_stats_activity_list");
     if (jQuery("#go_activity_datatable").length == 0) {
+        jQuery("#stats_history").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px 30px;'><div id='loader' <i class='fas fa-spinner fa-pulse fa-4x'></i></div></div>");
+
+        var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_activity_list;
         jQuery.ajax({
             type: 'post',
             url: MyAjax.ajaxurl,
             data: {
                 _ajax_nonce: nonce,
                 action: 'go_stats_activity_list',
-                user_id: jQuery('#go_stats_hidden_input').val()
+                user_id: jQuery('#go_stats_hidden_input').val(),
             },
             /**
              * A function to be called if the request fails.
@@ -967,17 +980,18 @@ function go_stats_activity_list() {
 }
 
 function go_stats_messages() {
-    jQuery("#stats_messages").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px 30px;'><div id='loader' <i class='fas fa-spinner fa-pulse fa-4x'></i></div></div>");
 
-    var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_messages;
     if (jQuery("#go_messages_datatable").length == 0) {
+        jQuery("#stats_messages").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px 30px;'><div id='loader' <i class='fas fa-spinner fa-pulse fa-4x'></i></div></div>");
+
+        var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_messages;
         jQuery.ajax({
             type: 'post',
             url: MyAjax.ajaxurl,
             data: {
                 _ajax_nonce: nonce,
                 action: 'go_stats_messages',
-                user_id: jQuery('#go_stats_hidden_input').val()
+                user_id: jQuery('#go_stats_hidden_input').val(),
             },
             /**
              * A function to be called if the request fails.
@@ -1014,17 +1028,19 @@ function go_stats_messages() {
 }
 
 function go_stats_badges_list() {
-    jQuery("#stats_badges").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px 30px;'><div id='loader' <i class='fas fa-spinner fa-pulse fa-4x'></i></div></div>");
-    var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_badges_list;
-    if (jQuery("#go_badges_list").length == 0) {
 
+    if (jQuery("#go_badges_list").length === 0) {
+        var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_badges_list;
+        jQuery("#stats_badges").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px 30px;'><div id='loader' <i class='fas fa-spinner fa-pulse fa-4x'></i></div></div>");
+
+        console.log("go_stats_badges_list");
         jQuery.ajax({
             type: 'post',
             url: MyAjax.ajaxurl,
             data: {
                 _ajax_nonce: nonce,
                 action: 'go_stats_badges_list',
-                user_id: jQuery('#go_stats_hidden_input').val()
+                user_id: jQuery('#go_stats_hidden_input').val(),
             },
             /**
              * A function to be called if the request fails.
@@ -1046,18 +1062,18 @@ function go_stats_badges_list() {
 }
 
 function go_stats_groups_list() {
-    jQuery("#stats_groups").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px 30px;'><div id='loader' <i class='fas fa-spinner fa-pulse fa-4x'></i></div></div>");
-
-    var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_groups_list;
-
+    console.log("go_stats_groups_list");
     if (jQuery("#go_groups_list").length == 0) {
+        var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_groups_list;
+        jQuery("#stats_groups").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px 30px;'><div id='loader' <i class='fas fa-spinner fa-pulse fa-4x'></i></div></div>");
+
         jQuery.ajax({
             type: 'post',
             url: MyAjax.ajaxurl,
             data: {
                 _ajax_nonce: nonce,
                 action: 'go_stats_groups_list',
-                user_id: jQuery('#go_stats_hidden_input').val()
+                user_id: jQuery('#go_stats_hidden_input').val(),
             },
             /**
              * A function to be called if the request fails.
@@ -1069,6 +1085,7 @@ function go_stats_groups_list() {
                 }
             },
             success: function (res) {
+                //console.log(res);
                 if (-1 !== res) {
                     jQuery('#stats_groups').html(res);
                 }
@@ -1077,52 +1094,9 @@ function go_stats_groups_list() {
     }
 }
 
-function go_stats_lite (user_id) {
-    //jQuery(".go_datatables").hide();
-    var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_lite;
-    jQuery.ajax({
-        type: 'post',
-        url: MyAjax.ajaxurl,
-        data:{
-            _ajax_nonce: nonce,
-            action: 'go_stats_lite',
-            uid: user_id
-        },
-        /**
-         * A function to be called if the request fails.
-         * Assumes they are not logged in and shows the login message in lightbox
-         */
-        error: function(jqXHR, textStatus, errorThrown) {
-            if (jqXHR.status === 400){
-                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
-            }
-        },
-        success: function( res ) {
-
-            jQuery.featherlight(res, {variant: 'stats_lite'});
-
-            if ( -1 !== res ) {
-                //jQuery( '#go_stats_lite_wrapper' ).remove();
-                //jQuery( '#stats_leaderboard' ).append( res );
-                //jQuery("#go_leaderboard_wrapper").hide();
-                jQuery('#go_tasks_datatable_lite').dataTable({
-                    "destroy": true,
-                    responsive: true,
-                    "autoWidth": false,
-                    "drawCallback": function( settings ) {
-                        go_stats_links();
-                    },
-                    "searching": false
-                });
-            }
-        }
-    });
-}
-
 function go_activate_apply_filters() {
-    console.log("go_activate_apply_filters");
-    jQuery('.go_update_clipboard').addClass("bluepulse");
-    jQuery('.go_update_clipboard').html('<span class="ui-button-text">Apply Filters<i class="fas fa-filter" aria-hidden="true"></i></span>');
+    jQuery('.go_apply_filters').addClass("bluepulse");
+    jQuery('.go_apply_filters').html('<span class="ui-button-text">Apply Filter<i class="fas fa-filter" aria-hidden="true"></i></span>');
 }
 
 function go_date_loader(start, end, is_default) {
@@ -1130,7 +1104,7 @@ function go_date_loader(start, end, is_default) {
         start = moment();
         end = moment();
     }else{
-        go_activate_apply_filters();
+        go_activate_apply_filters();//on date change
     }
 
     jQuery('#go_datepicker').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
@@ -1167,8 +1141,6 @@ function go_load_daterangepicker(page){
     });
 
         go_date_loader(null, null, true);
-
-
 }
 
 //NOT USED
@@ -1191,20 +1163,19 @@ function go_load_daterangepicker_empty(){
 
 }
 
-
 function go_setup_reset_filter_button(is_reader){
-    jQuery('#go_clipboard_user_go_sections_select, #go_clipboard_user_go_groups_select, #go_clipboard_go_badges_select, #go_task_select, #go_store_item_select').on('select2:select', function (e) {
+    jQuery('#go_task_select, #go_store_item_select').on('select2:select', function (e) {
         // Do something
         go_activate_apply_filters();
     });
-    jQuery('#go_clipboard_user_go_sections_select, #go_clipboard_user_go_groups_select, #go_clipboard_go_badges_select, #go_task_select, #go_store_item_select').on('select2:unselect', function (e) {
+    jQuery('#go_task_select, #go_store_item_select').on('select2:unselect', function (e) {
         // Do something
-        go_activate_apply_filters();
+       go_activate_apply_filters();
     });
 
     jQuery('.go_reset_clipboard').on("click", function () {
         jQuery('#go_datepicker').html("");
-        jQuery('#go_clipboard_user_go_sections_select, #go_clipboard_user_go_groups_select, #go_clipboard_go_badges_select, #go_task_select, #go_store_item_select').val(null).trigger('change');
+        jQuery('#go_page_user_go_sections_select, #go_page_user_go_groups_select, #go_page_go_badges_select, #go_task_select, #go_store_item_select').val(null).trigger('change');
 
 
         if(is_reader){
@@ -1216,7 +1187,7 @@ function go_setup_reset_filter_button(is_reader){
         }else{
             jQuery('#go_unmatched_toggle').prop('checked', false); // Uncheck
         }
-        go_activate_apply_filters();
+        go_activate_apply_filters();//on reset of the filter
 
     });
 
@@ -1239,7 +1210,7 @@ function go_daterange_clear(){
             jQuery('#go_reset_datepicker').show();
             go_daterange_clear();
         });
-        go_activate_apply_filters();
+        go_activate_apply_filters();//on clear of daterange
 
         //go_load_daterangepicker_empty();
 
@@ -1249,76 +1220,3 @@ function go_daterange_clear(){
 function go_clear_daterange(){
 }
 
-
-
-//this now saves to session data
-function go_save_clipboard_filters(){
-    console.log("go_save_clipboard_filters");
-    //SESSION STORAGE
-    var section = jQuery( '#go_clipboard_user_go_sections_select' ).val();
-    var section_name = jQuery("#go_clipboard_user_go_sections_select option:selected").text();
-    var group = jQuery( '#go_clipboard_user_go_groups_select' ).val();
-    var group_name = jQuery("#go_clipboard_user_go_groups_select option:selected").text();
-    var badge = jQuery( '#go_clipboard_go_badges_select' ).val();
-    var badge_name = jQuery("#go_clipboard_go_badges_select option:selected").text();
-
-    var unmatched = document.getElementById("go_unmatched_toggle").checked;
-
-    localStorage.setItem('go_clipboard_section', section);
-    localStorage.setItem('go_clipboard_badge', badge);
-    localStorage.setItem('go_clipboard_group', group);
-    localStorage.setItem('go_clipboard_section_name', section_name);
-    localStorage.setItem('go_clipboard_badge_name', badge_name);
-    localStorage.setItem('go_clipboard_group_name', group_name);
-    localStorage.setItem('go_clipboard_unmatched', unmatched);
-
-    /*
-    if(is_reader){
-        var date = jQuery('#go_datepicker_clipboard span').html();
-        var tasks = jQuery("#go_task_select").val();
-        var unread = jQuery('#go_reader_unread').prop('checked');
-        var read = jQuery('#go_reader_read').prop('checked');
-        var reset = jQuery('#go_reader_reset').prop('checked');
-        var trash = jQuery('#go_reader_trash').prop('checked');
-        var draft = jQuery('#go_reader_draft').prop('checked');
-        var order = jQuery("input[name='go_reader_order']:checked").val();
-        var limit = jQuery('#go_posts_num').val();
-        localStorage.setItem('go_reader_date', date);
-        localStorage.setItem('go_reader_tasks', tasks);
-        localStorage.setItem('go_reader_unread', unread);
-        localStorage.setItem('go_reader_read', read);
-        localStorage.setItem('go_reader_reset', reset);
-        localStorage.setItem('go_reader_trash', trash);
-        localStorage.setItem('go_reader_draft', draft);
-        localStorage.setItem('go_reader_order', order);
-        localStorage.setItem('go_reader_limit', limit);
-    }
-    */
-
-    /*
-    //THIS IS FOR SAVING AS OPTION IN DB WITH AJAX
-    //ajax to save the values
-    var nonce = GO_CLIPBOARD_DATA.nonces.go_clipboard_save_filters;
-    var section = jQuery( '#go_clipboard_user_go_sections_select' ).val();
-    var group = jQuery( '#go_clipboard_user_go_groups_select' ).val();
-    var badge = jQuery( '#go_clipboard_go_badges_select' ).val();
-    var unmatched = document.getElementById("go_unmatched_toggle").checked;
-    //alert ("badge " + badge);
-    //console.log(jQuery( '#go_clipboard_user_go_sections_select' ).val());
-    jQuery.ajax({
-        type: "post",
-        url: MyAjax.ajaxurl,
-        data: {
-            _ajax_nonce: nonce,
-            action: 'go_clipboard_save_filters',
-            section: section,
-            badge: badge,
-            group: group,
-            unmatched: unmatched
-        },
-        success: function( res ) {
-            console.log("values saved");
-        }
-    });
-    */
-}

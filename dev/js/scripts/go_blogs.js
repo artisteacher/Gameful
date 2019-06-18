@@ -24,7 +24,6 @@ jQuery( document ).ready( function() {
     go_blog_new_posts();
 
 
-    //go_blog_tags_select2();
 
 
 });
@@ -80,46 +79,6 @@ function  go_blog_favorite(target){
         success: function (raw) {
 
         }
-    });
-}
-
-function go_blog_tags_select2(){
-    jQuery('.go_feedback_go_blog_tags_select').select2({
-        ajax: {
-            url: MyAjax.ajaxurl, // AJAX URL is predefined in WordPress admin
-            dataType: 'json',
-            delay: 400, // delay in ms while typing when to perform a AJAX search
-            data: function (params) {
-
-                return {
-                    q: params.term, // search query
-                    action: 'go_make_taxonomy_dropdown_ajax', // AJAX action for admin-ajax.php
-                    taxonomy: 'go_blog_tags',
-                    is_hier: false
-                };
-
-
-            },
-            processResults: function( data ) {
-
-                jQuery(".go_feedback_go_blog_tags_select").select2("destroy");
-                jQuery('.go_feedback_go_blog_tags_select').children().remove();
-                jQuery(".go_feedback_go_blog_tags_select").select2({
-                    data: data,
-                    placeholder: "Show All",
-                    allowClear: true}).trigger("change");
-                jQuery(".go_feedback_go_blog_tags_select").select2("open");
-                return {
-                    results: data
-                };
-
-            },
-            cache: true
-        },
-        minimumInputLength: 0, // the minimum of symbols to input before perform a search
-        multiple: true,
-        placeholder: "Show All",
-        allowClear: true
     });
 }
 
@@ -885,7 +844,6 @@ function go_blog_submit( el, reload, required_elements = null ) {
                         active: false,
                         heightStyle: "content"
                     });
-                    //go_blog_tags_select2();
                     go_disable_loading();
                     go_Vids_Fit_and_Box("body");
                 }else{

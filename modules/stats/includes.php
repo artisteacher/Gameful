@@ -14,9 +14,9 @@ if ( !is_admin() ) {
     include_once('src/ajax.php');
 
     //Stats
-    add_action( 'wp_ajax_go_admin_bar_stats', 'go_admin_bar_stats' ); //OK
+    add_action( 'wp_ajax_go_stats_lightbox', 'go_stats_lightbox' ); //OK
     add_action( 'wp_ajax_go_stats_task_list', 'go_stats_task_list' ); //OK
-    add_action( 'wp_ajax_go_stats_item_list', 'go_stats_item_list' ); //OK
+    add_action( 'wp_ajax_go_stats_store_list', 'go_stats_store_list' ); //OK
     add_action( 'wp_ajax_go_stats_activity_list', 'go_stats_activity_list' ); //OK
     add_action( 'wp_ajax_go_stats_messages', 'go_stats_messages' ); //OK
     add_action( 'wp_ajax_go_stats_single_task_activity_list', 'go_stats_single_task_activity_list' ); //OK

@@ -38,7 +38,7 @@ if ( is_user_logged_in() ) {
     $groups = array();
     $fields = array('field_5cd4be08e7077', 'field_5cd1d1de5491b', 'field_5cd1d21168754', 'field_5cd1d13769aa9', 'field_5cd4f996c0d86', 'field_5cd4f7b4366c6', 'field_5cd4f7b43672b' );
 
-    $form =  my_acf_user_form_func($groups, $fields);
+    $form =  go_acf_user_form_func($groups, $fields);
 
     echo $form;
 

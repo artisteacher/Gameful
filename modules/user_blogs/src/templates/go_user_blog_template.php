@@ -52,7 +52,7 @@ get_header();
         <div id='go_stats_lite_wrapper'>
 
             <?php
-            go_stats_header($user_id, true, true, true, false, true, false, true);
+            go_stats_header($user_id, true, true, false, true, true);
             ?>
         </div>
         <div id='loader_container' style='display:none; height: 250px; width: 100%; padding: 10px 30px; '>

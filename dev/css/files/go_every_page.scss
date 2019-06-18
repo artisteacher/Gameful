@@ -265,6 +265,10 @@ video.wp-video-shortcode {
 
 .go_messages_loot {
 	padding: 10px;
+
+	.go_badge_wrap {
+		float: unset;
+	}
 }
 .go_messages_rewards{
 	background-color: lightgreen;
@@ -566,32 +570,31 @@ input[type='text'].go_error_red {
 
 .progress-bar-border {
 	height: 16px;
-	width: 120px;
 	border: thin white solid;
-	margin: 4px;
 	position: relative;
 	background-color: black;
 	font-size: 14px;
 	box-sizing: unset;
 }
 
-
-
 .admin_bar_loot {
 	line-height: 24px !important;
 }
 
 .progress-bar-border, .admin_bar_loot {
-	margin-left: 10px !important;}
+	//margin-left: 10px !important;
+}
 
 
-#go_admin_bar_progress_bar {
+.go_admin_bar_progress_bar {
 	position: absolute;
 	top: 0;
 	left: 0;
 	height: 100% !important; }
 
-#go_admin_bar_health_bar {
+
+
+.go_admin_bar_health_bar {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -606,11 +609,6 @@ input[type='text'].go_error_red {
 	width: 250px;
 }
 
-#go_admin_bar_rank {
-	//font-size: 1.2em;
-	color: #eee;
-}
-
 .go_admin_bar_add_input {
 	width: 50px !important;
 }
@@ -623,7 +621,7 @@ ul#wp-admin-bar-go_add-default.ab-submenu {
 	height: 380px;
 }
 
-#points_needed_to_level_up, #health_bar_percentage_str {
+.points_needed_to_level_up, .health_bar_percentage_str {
 	position: absolute;
 	width: 100% !important;
 	height: 100% !important;
@@ -631,7 +629,7 @@ ul#wp-admin-bar-go_add-default.ab-submenu {
 	overflow: hidden;
 }
 
-#points_needed_to_level_up:hover {
+.points_needed_to_level_up:hover {
 	color: white;
 }
 
@@ -1175,7 +1173,11 @@ input#go_pass_lock::-moz-placeholder {
 
 #go_task_rewards {
 	display: flex;
-	justify-content: space-between;
+	justify-content: flex-start;
+
+	.coin_wrapper {
+		margin-top: 10px;
+	}
 }
 #go_task_rewards > *{
 	padding: 20px;
@@ -1236,7 +1238,7 @@ input#go_pass_lock::-moz-placeholder {
 	left: .6em;
 }
 
-.go_coin.bronze p{  color: rgba(223,182,103,1);}
+.go_coin.copper p{  color: rgba(223,182,103,1);}
 .go_coin.silver p{  color: rgba(160,160,160,1);}
 .go_coin.gold p{  color: #b19b18;}
 
@@ -1280,16 +1282,16 @@ input#go_pass_lock::-moz-placeholder {
 
 
 
-.bronze{
+.copper{
 	background: linear-gradient(45deg,  rgba(223,182,103,1) 0%,rgba(249,243,232,1) 56%,rgba(231,192,116,1) 96%);
 }
 
-.bronze:before{
+.copper:before{
 	background: linear-gradient(135deg,  #d19c35 0%,#f7e6c5 50%,#e8b558 100%);
 	border: 1px solid #e6b86a;
 }
 
-.bronze:after{
+.copper:after{
 	background: linear-gradient(45deg,  rgba(223,182,103,1) 0%,rgba(249,243,232,1) 56%,rgba(231,192,116,1) 96%);
 	border-top: 1px solid rgba(255,255,255,0.3);
 	border-left: 1px solid rgba(255,255,255,0.3);
@@ -1476,7 +1478,7 @@ input#go_pass_lock::-moz-placeholder {
 }
 
 body{
-	margin-top: 55px;
+	margin-top: 91px;
 }
 
 body.wp-admin {
@@ -1488,20 +1490,26 @@ body.wp-admin {
 }
 
 #go_user_bar {
-	display: flex;
-	justify-content: center;
-	background-color: #2d2d2d;
 	position: fixed;
 	top: 0px;
 	width: 100%;
 	z-index: 100000;
-	height: 55px;
+	height: 91px;
 	font-family: sans-serif;
 	font-size: 14px ;
-	color: #f3f3f3;
+
+	.progress-bar-border {
+		width: 100%;
+		margin-top: -1px;
+	}
+
+	#go_user_bar_top {
+		display: flex;
+		justify-content: center;
+		background-color: #2d2d2d;
+	}
 
 	#go_admin_bar_gold{
-		margin-top: -4px;
 
 		.coin_wrapper{
 			line-height: .5em;
@@ -1516,10 +1524,6 @@ body.wp-admin {
 			bottom: 0px;
 			//font-size: 13px ;
 		}
-	}
-
-	a, a:visited, a:link{
-		color: #f3f3f3;
 	}
 
 	#go_user_bar_inner{
@@ -1552,10 +1556,14 @@ body.wp-admin {
 	}
 
 	#go_user_bar_loot .wide_content{
-		margin: 4px 15px 0px 0px;
+		margin: 0px 15px 0px 0px;
 		//font-size: .8em;
 
 		p {margin: 0;}
+	}
+
+	#go_user_bar_loot .narrow_content{
+		font-size: .8em;
 	}
 
 	.userbar_dropbtn {
@@ -1576,12 +1584,11 @@ body.wp-admin {
 		box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
 		z-index: 1;
 		padding: 30px;
-		color: #f3f3f3;
 		top: 55px;
 	}
 
 	.userbar_dropdown-content.search {
-		margin-left: -300px;
+		margin-left: -250px;
 	}
 
 	.userbar_dropdown:hover .userbar_dropdown-content {

@@ -7,17 +7,16 @@ jQuery(document).ready(function(){
         }
         go_blog_archive_datatable();//draw the stats tab on load
 
-        go_make_select2_filter('user_go_sections', 'section', true, false);
+        go_make_select2_filter('user_go_sections', false, true);
 
-        go_make_select2_filter('user_go_groups', 'group', true, true);
+        go_make_select2_filter('user_go_groups',false, true);
 
-        go_make_select2_filter('go_badges', 'badge', true, true);
+        go_make_select2_filter('go_badges',false, true);
 
         jQuery(".go_save_icon_multiple_clipboard").parent().off().one("click", function(e){
             go_save_admin_archive();
         });
     }
-
 });
 
 
@@ -93,9 +92,9 @@ function go_create_user_list(archive_type, archive_vars){
     console.log('go_create_user_list');
     //send the ajax with the input from the alert
     var nonce = go_create_user_list_nonce;
-    let section = jQuery('#go_clipboard_user_go_sections_select').val();
-    let group = jQuery('#go_clipboard_user_go_groups_select').val();
-    let badge = jQuery('#go_clipboard_go_badges_select').val();
+    let section = jQuery('#go_page_user_go_sections_select').val();
+    let group = jQuery('#go_page_user_go_groups_select').val();
+    let badge = jQuery('#go_page_go_badges_select').val();
     //generate_user_list($user_list, $is_private)
     var gotoSend = {
         action:"go_create_user_list",
@@ -179,9 +178,9 @@ function go_generate_user_archive(archive_type, archive_vars, i, total_users, er
 
     //send the ajax with the input from the alert
     var nonce = go_make_user_archive_zip_nonce;
-    let section = jQuery('#go_clipboard_user_go_sections_select').val();
-    let group = jQuery('#go_clipboard_user_go_groups_select').val();
-    let badge = jQuery('#go_clipboard_go_badges_select').val();
+    let section = jQuery('#go_page_user_go_sections_select').val();
+    let group = jQuery('#go_page_user_go_groups_select').val();
+    let badge = jQuery('#go_page_go_badges_select').val();
     //generate_user_list($user_list, $is_private)
     var gotoSend = {
         action:"go_make_user_archive_zip",
@@ -248,9 +247,9 @@ function go_generate_user_archive2(archive_type, user_id){
     console.log('go_generate_user_archive');
     //send the ajax with the input from the alert
     var nonce = go_make_user_archive_zip_nonce;
-    let section = jQuery('#go_clipboard_user_go_sections_select').val();
-    let group = jQuery('#go_clipboard_user_go_groups_select').val();
-    let badge = jQuery('#go_clipboard_go_badges_select').val();
+    let section = jQuery('#go_page_user_go_sections_select').val();
+    let group = jQuery('#go_page_user_go_groups_select').val();
+    let badge = jQuery('#go_page_go_badges_select').val();
     //generate_user_list($user_list, $is_private)
     var gotoSend = {
         action:"go_make_user_archive_zip",
@@ -377,9 +376,9 @@ function go_blog_archive_datatable(refresh) {
                             "data": function(d){
                                 //d.user_id = jQuery('#go_stats_hidden_input').val();
                                 //d.user_id = jQuery('#go_stats_hidden_input').val();
-                                d.section = jQuery('#go_clipboard_user_go_sections_select').val();
-                                d.group = jQuery('#go_clipboard_user_go_groups_select').val();
-                                d.badge = jQuery('#go_clipboard_go_badges_select').val();
+                                d.section = jQuery('#go_page_user_go_sections_select').val();
+                                d.group = jQuery('#go_page_user_go_groups_select').val();
+                                d.badge = jQuery('#go_page_go_badges_select').val();
                             }
                         },
                         "bPaginate": true,

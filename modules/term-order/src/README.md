@@ -1,4 +1,7 @@
-# WP Term Order
+# GAME ON - WP Term Order
+
+This is a modified version on the WP Term Order Plugin.
+
 
 Sort taxonomy terms, your way.
 

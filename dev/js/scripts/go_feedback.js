@@ -7,29 +7,26 @@ jQuery( document ).ready( function() {
         go_load_daterangepicker('reader');
 
 
-        go_make_select2_filter('user_go_sections', 'section', false, false);
-        go_make_select2_filter('user_go_groups', 'group', false, true);
-        go_make_select2_filter('go_badges', 'badge', false, true);
+        go_make_select2_filter('user_go_sections',false, false);
+        go_make_select2_filter('user_go_groups',false, false);
+        go_make_select2_filter('go_badges',false, false);
 
         jQuery(".go_reader_input").change(function () {
-            //console.log("go_activate_apply_filters1");
-            go_activate_apply_filters();
+            go_activate_apply_filters();//on reader checkbox change
         });
 
 
 
 
-        jQuery('#go_clipboard_user_go_sections_select, #go_clipboard_user_go_groups_select, #go_clipboard_go_badges_select, #go_task_select, #go_store_item_select').on('select2:select', function (e) {
+        jQuery('#go_task_select, #go_store_item_select').on('select2:select', function (e) {
             // Do something
-            jQuery('.go_update_clipboard').addClass("bluepulse");
-            jQuery('.go_update_clipboard').html('<span class="ui-button-text">Apply Filters<i class="fas fa-filter" aria-hidden="true"></i></span>');
+            go_activate_apply_filters();
         });
 
         jQuery('.go_reset_clipboard').on("click", function () {
             jQuery('#datepicker_clipboard span').html("");
-            jQuery('#go_clipboard_user_go_sections_select, #go_clipboard_user_go_groups_select, #go_clipboard_go_badges_select, #go_task_select, #go_store_item_select').val(null).trigger('change');
-            jQuery('.go_update_clipboard').addClass("bluepulse");
-            jQuery('.go_update_clipboard').html('<span class="ui-button-text">Apply Filters<i class="fas fa-filter" aria-hidden="true"></i></span>');
+            jQuery('#go_page_user_go_sections_select, #go_page_user_go_groups_select, #go_page_go_badges_select, #go_task_select, #go_store_item_select').val(null).trigger('change');
+            go_activate_apply_filters();
         });
 
         go_setup_reset_filter_button(true);
@@ -38,8 +35,8 @@ jQuery( document ).ready( function() {
         go_make_select2_cpt('#go_task_select', 'tasks');
 
         //update button--set this table to update
-        jQuery('.go_update_clipboard').prop('onclick', null).off('click');//unbind click
-        jQuery('.go_update_clipboard').one("click", function () {
+        jQuery('.go_apply_filters').prop('onclick', null).off('click');//unbind click
+        jQuery('.go_apply_filters').one("click", function () {
             go_reader_update();
         });
 
@@ -52,7 +49,7 @@ jQuery( document ).ready( function() {
             go_load_daterangepicker('clear');
             jQuery('#go_reset_datepicker').show();
             go_daterange_clear();
-            go_activate_apply_filters();
+            go_activate_apply_filters();//datapicker
         });
 
     }
@@ -227,17 +224,17 @@ function go_reader_update() {
     //if(!first) {
     //    go_save_clipboard_filters();
     //}
-    jQuery('.go_update_clipboard').removeClass("bluepulse");
-    jQuery('.go_update_clipboard').html('<span class="ui-button-text">Refresh Data <span class="dashicons dashicons-update" style="vertical-align: center;"></span></span>');
-    jQuery('.go_update_clipboard').prop('onclick',null).off('click');//unbind click
-    jQuery('.go_update_clipboard').one("click", function () {
+    jQuery('.go_apply_filters').removeClass("bluepulse");
+    jQuery('.go_apply_filters').html('<span class="ui-button-text">Refresh Data <span class="dashicons dashicons-update" style="vertical-align: center;"></span></span>');
+    jQuery('.go_apply_filters').prop('onclick',null).off('click');//unbind click
+    jQuery('.go_apply_filters').one("click", function () {
         go_reader_update();
     });
 
     var date = jQuery('#go_datepicker_clipboard span').html();
-    var section = jQuery('#go_clipboard_user_go_sections_select').val();
-    var group = jQuery('#go_clipboard_user_go_groups_select').val();
-    var badge = jQuery('#go_clipboard_go_badges_select').val();
+    var section = jQuery('#go_page_user_go_sections_select').val();
+    var group = jQuery('#go_page_user_go_groups_select').val();
+    var badge = jQuery('#go_page_go_badges_select').val();
     var tasks = jQuery("#go_task_select").val();
     var unread = jQuery('#go_reader_unread').prop('checked');
     var read = jQuery('#go_reader_read').prop('checked');
@@ -311,6 +308,10 @@ function go_reader_update() {
 
 function go_reader_activate_buttons(){
     console.log("go_reader_activate_buttons");
+
+    jQuery(".go_blog_opener").off().one("click", function(e){
+        go_blog_opener( this );
+    });
 
     jQuery('#go_read_printed_button').off().on("click", function () {
         console.log("clicked");
@@ -728,7 +729,16 @@ function go_send_feedback(target) {
                     }
                 }
                 //jQuery(target).closest('.go_blog_post_wrapper').find('.go_status_percent').html(percent);
-                jQuery(target).closest('.feedback_accordion').find('.go_feedback_table_container').html(table);
+                if (jQuery(target).closest('.feedback_accordion').find('.go_feedback_table_container').length) {
+                    jQuery(target).closest('.feedback_accordion').find('.go_feedback_table_container').html(table);
+                }
+                else{
+                    var newDiv = '<h3>Feedback</h3><div class="go_blog_feedback"><div class="go_feedback_table_container"></div></div>'
+                    //var newDiv = "<div><h3>Q4 New Question</h3><div>New Content</div></div>";
+                    jQuery(target).closest('.feedback_accordion').prepend(newDiv)
+                    jQuery('.feedback_accordion').accordion("refresh");
+                    jQuery(target).closest('.feedback_accordion').find('.go_feedback_table_container').html(table);
+                }
                 jQuery(target).closest('.go_feedback_form_container').html(form);
                 go_reader_activate_buttons();
             }

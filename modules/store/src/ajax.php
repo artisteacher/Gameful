@@ -110,16 +110,14 @@ function go_buy_item() {
     //BADGES
     $badge_ids = (isset($custom_fields['go_purch_reward_badges'][0]) ?  $custom_fields['go_purch_reward_badges'][0] : null);
     if (!empty($badge_ids)) {
-        $new_badges = go_add_badges ($badge_ids, $user_id, true);
-        //$badge_count = count($new_badges);
-        $badge_ids = serialize($new_badges);
+        go_add_badges ($badge_ids, $user_id, true);
+        $badge_ids = serialize($badge_ids);
     }
     //GROUPS
     $group_ids = (isset($custom_fields['go_purch_reward_groups'][0]) ?  $custom_fields['go_purch_reward_groups'][0] : null);
     if (!empty($group_ids)) {
-        $new_groups = go_add_groups ($group_ids, $user_id, true);
-        $group_ids = serialize($new_groups);
-
+        go_add_groups ($group_ids, $user_id, true);
+        $group_ids = serialize($badge_ids);
     }
 
 

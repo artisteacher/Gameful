@@ -25,8 +25,7 @@
                     return {
                         q: params.term, // search query
                         action: 'go_make_taxonomy_dropdown_ajax', // AJAX action for admin-ajax.php
-                        taxonomy: taxonomy,
-                    is_hier: true
+                        taxonomy: taxonomy
                 };
                 },
                 processResults: function( data ) {

@@ -66,24 +66,21 @@ jQuery( document ).ready( function() {
             jQuery('#go_unmatched_toggle').prop('checked', true);
         }
 
-        go_make_select2_filter('user_go_sections', 'section', true, false);
+        go_make_select2_filter('user_go_sections',false, true);
 
-        go_make_select2_filter('user_go_groups', 'group', true, true);
+        go_make_select2_filter('user_go_groups',false, true);
 
+        go_make_select2_filter('go_badges',false, true);
 
-        go_make_select2_filter('go_badges', 'badge', true, true);
+        jQuery('#go_unmatched_toggle').change(function () {
+            go_activate_apply_filters();//unmetched toggle
+            //jQuery('.go_apply_filters').addClass("bluepulse");
+            //jQuery('.go_apply_filters').html('<span class="ui-button-text">Apply Filters<i class="fas fa-filter" aria-hidden="true"></i></span>');
+        });
 
-
-        //jQuery('#go_clipboard_user_go_sections_select').val(section).trigger('change');;
-        //jQuery('#go_clipboard_user_go_groups_select').val(group);
-        //jQuery('#go_clipboard_go_badges_select').val(badge);
         go_clipboard_stats_datatable();//draw the stats tab on load
 
         //ADD Blue background and glow to filter button if unmatch toggle is clicked
-        jQuery('#go_unmatched_toggle').change(function () {
-            jQuery('.go_update_clipboard').addClass("bluepulse");
-            jQuery('.go_update_clipboard').html('<span class="ui-button-text">Apply Filters<i class="fas fa-filter" aria-hidden="true"></i></span>');
-        });
 
         go_setup_reset_filter_button(false);
     }
@@ -172,11 +169,11 @@ function go_clipboard_callback() {
             jQuery('#go_action_filters').hide();
 
             //update button--set this table to update
-            jQuery('.go_update_clipboard').prop('onclick',null).off('click');//unbind click
-            jQuery('.go_update_clipboard').one("click", function () {
+            jQuery('.go_apply_filters').prop('onclick',null).off('click');//unbind click
+            jQuery('.go_apply_filters').one("click", function () {
                 Clipboard.draw();
                     //go_clipboard_stats_datatable(true);
-                    go_clipboard_update();
+                go_clipboard_update();
             });
 
             //search
@@ -198,8 +195,8 @@ function go_clipboard_callback() {
             jQuery('#go_task_filters').hide();
 
             //update button--set this table to update
-            jQuery('.go_update_clipboard').prop('onclick',null).off('click');//unbind click
-            jQuery('.go_update_clipboard').one("click", function () {
+            jQuery('.go_apply_filters').prop('onclick',null).off('click');//unbind click
+            jQuery('.go_apply_filters').one("click", function () {
                 //go_clipboard_store_datatable(true);
                 Store.draw();
                 go_clipboard_update();
@@ -223,24 +220,13 @@ function go_clipboard_callback() {
             jQuery('#go_task_filters').hide();
 
             //update button--set this table to update
-            jQuery('.go_update_clipboard').prop('onclick',null).off('click');//unbind click
-            jQuery('.go_update_clipboard').one("click", function () {
+            jQuery('.go_apply_filters').prop('onclick',null).off('click');//unbind click
+            jQuery('.go_apply_filters').one("click", function () {
                 Messages.draw();
                 go_clipboard_update();
             });
 
-            /*
-            //if filters are changed, redraw the table
-            jQuery('#go_clipboard_user_go_sections_select, #go_clipboard_user_go_groups_select, #go_clipboard_go_badges_select, #datepicker_clipboard').unbind("change");
-            jQuery('#go_clipboard_user_go_sections_select, #go_clipboard_user_go_groups_select, #go_clipboard_go_badges_select, #datepicker_clipboard').change(function () {
-                Messages.draw();
-                go_save_clipboard_filters();
-                //Clear other tabs
-                jQuery('#go_clipboard_stats_datatable').remove();
-                jQuery('#go_clipboard_store_datatable').remove();
-                //jQuery('#go_clipboard_messages_datatable').remove();
-            });
-            */
+
 
             //search
             jQuery("div.dataTables_filter input").unbind();
@@ -260,8 +246,8 @@ function go_clipboard_callback() {
             jQuery('#go_task_filters').show();
 
             //update button--set this table to update
-            jQuery('.go_update_clipboard').prop('onclick',null).off('click');//unbind click
-            jQuery('.go_update_clipboard').one("click", function () {
+            jQuery('.go_apply_filters').prop('onclick',null).off('click');//unbind click
+            jQuery('.go_apply_filters').one("click", function () {
                 Activity.draw();
                 go_clipboard_update();
             });
@@ -286,9 +272,9 @@ function go_clipboard_callback() {
 
 function go_clipboard_update() {
     console.log("go_clipboard_update");
-    go_save_clipboard_filters();
-    jQuery('.go_update_clipboard').removeClass("bluepulse");
-    jQuery('.go_update_clipboard').html('<span class="ui-button-text">Refresh Data <span class="dashicons dashicons-update" style="vertical-align: center;"></span></span>');
+    go_save_filters();
+    jQuery('.go_apply_filters').removeClass("bluepulse");
+    jQuery('.go_apply_filters').html('<span class="ui-button-text">Refresh Data <span class="dashicons dashicons-update" style="vertical-align: center;"></span></span>');
 
 
 
@@ -320,6 +306,78 @@ function go_clipboard_update() {
     }
 }
 
+//this now saves to session data
+function go_save_filters(){
+    console.log("go_save_clipboard_filters");
+    //SESSION STORAGE
+    var section = jQuery( '#go_page_user_go_sections_select' ).val();
+    var section_name = jQuery("#go_page_user_go_sections_select option:selected").text();
+    var group = jQuery( '#go_page_user_go_groups_select' ).val();
+    var group_name = jQuery("#go_page_user_go_groups_select option:selected").text();
+    var badge = jQuery( '#go_page_go_badges_select' ).val();
+    var badge_name = jQuery("#go_page_go_badges_select option:selected").text();
+
+    var unmatched = document.getElementById("go_unmatched_toggle").checked;
+
+    localStorage.setItem('user_go_sections', section);
+    localStorage.setItem('go_badges', badge);
+    localStorage.setItem('user_go_groups', group);
+    localStorage.setItem('user_go_sections_name', section_name);
+    localStorage.setItem('go_badges_name', badge_name);
+    localStorage.setItem('user_go_groups_name', group_name);
+    localStorage.setItem('go_unmatched', unmatched);
+
+    /*
+    if(is_reader){
+        var date = jQuery('#go_datepicker_clipboard span').html();
+        var tasks = jQuery("#go_task_select").val();
+        var unread = jQuery('#go_reader_unread').prop('checked');
+        var read = jQuery('#go_reader_read').prop('checked');
+        var reset = jQuery('#go_reader_reset').prop('checked');
+        var trash = jQuery('#go_reader_trash').prop('checked');
+        var draft = jQuery('#go_reader_draft').prop('checked');
+        var order = jQuery("input[name='go_reader_order']:checked").val();
+        var limit = jQuery('#go_posts_num').val();
+        localStorage.setItem('go_reader_date', date);
+        localStorage.setItem('go_reader_tasks', tasks);
+        localStorage.setItem('go_reader_unread', unread);
+        localStorage.setItem('go_reader_read', read);
+        localStorage.setItem('go_reader_reset', reset);
+        localStorage.setItem('go_reader_trash', trash);
+        localStorage.setItem('go_reader_draft', draft);
+        localStorage.setItem('go_reader_order', order);
+        localStorage.setItem('go_reader_limit', limit);
+    }
+    */
+
+    /*
+    //THIS IS FOR SAVING AS OPTION IN DB WITH AJAX
+    //ajax to save the values
+    var nonce = GO_CLIPBOARD_DATA.nonces.go_clipboard_save_filters;
+    var section = jQuery( '#go_page_user_go_sections_select' ).val();
+    var group = jQuery( '#go_page_user_go_groups_select' ).val();
+    var badge = jQuery( '#go_page_go_badges_select' ).val();
+    var unmatched = document.getElementById("go_unmatched_toggle").checked;
+    //alert ("badge " + badge);
+    jQuery.ajax({
+        type: "post",
+        url: MyAjax.ajaxurl,
+        data: {
+            _ajax_nonce: nonce,
+            action: 'go_clipboard_save_filters',
+            section: section,
+            badge: badge,
+            group: group,
+            unmatched: unmatched
+        },
+        success: function( res ) {
+            console.log("values saved");
+        }
+    });
+    */
+}
+
+
 
 
 /*
@@ -328,9 +386,9 @@ function go_filter_clipboard_datatables(filter_badges) { //function that filters
         function( settings, data, dataIndex ) {
             var mytable = settings.sTableId;
             //if (mytable == "go_clipboard_stats_datatable" || mytable == "go_clipboard_messages_datatable" || mytable == "go_clipboard_activity_datatable") {
-                var section = jQuery('#go_clipboard_user_go_sections_select').val();
-                var group = jQuery('#go_clipboard_user_go_groups_select').val();
-                var badge = jQuery('#go_clipboard_go_badges_select').val();
+                var section = jQuery('#go_page_user_go_sections_select').val();
+                var group = jQuery('#go_page_user_go_groups_select').val();
+                var badge = jQuery('#go_page_go_badges_select').val();
                 var badges =  data[4] ;
                 var groups =  data[3] ; // use data for the filter by column
                 var sections = data[2]; // use data for the filter by column
@@ -403,7 +461,8 @@ function go_clipboard_stats_datatable(refresh) {
                 }
             },
             success: function( res ) {
-                //console.log("success");
+                console.log("success");
+                //console.log(res);
                 if (-1 !== res) {
                     jQuery('#clipboard_stats_datatable_container').html(res);
 
@@ -415,9 +474,9 @@ function go_clipboard_stats_datatable(refresh) {
                             "data": function(d){
                                 //d.user_id = jQuery('#go_stats_hidden_input').val();
                                 //d.user_id = jQuery('#go_stats_hidden_input').val();
-                                d.section = jQuery('#go_clipboard_user_go_sections_select').val();
-                                d.group = jQuery('#go_clipboard_user_go_groups_select').val();
-                                d.badge = jQuery('#go_clipboard_go_badges_select').val();
+                                d.section = jQuery('#go_page_user_go_sections_select').val();
+                                d.group = jQuery('#go_page_user_go_groups_select').val();
+                                d.badge = jQuery('#go_page_go_badges_select').val();
                             }
                         },
                         "bPaginate": true,
@@ -434,7 +493,7 @@ function go_clipboard_stats_datatable(refresh) {
                         "stateDuration": 31557600,
                         searchDelay: 1000,
                         dom: 'lBfrtip',
-                        "drawCallback": function( settings ) {
+                        "drawCallback": function(settings ) {
                             go_clipboard_callback();
                         },
                         "columnDefs": [
@@ -456,16 +515,6 @@ function go_clipboard_stats_datatable(refresh) {
                                 //className: 'noVis',
                                 sortable: false
                             },
-                            {
-                                "targets": [8],
-                                //className: 'noVis',
-                                //sortable: false
-                            },
-                            {
-                                "targets": [13],
-                                //className: 'noVis',
-                                //sortable: false
-                            }
                         ],
                         buttons: [
                             {
@@ -506,10 +555,9 @@ function go_clipboard_stats_datatable(refresh) {
                                 postfixButtons: ['colvisRestore'],
                                 text: 'Column Visibility'
                             }
-
-
                         ]
                     });
+
                     //Filter the table
                     //go_filter_clipboard_datatables(true);
                     //redraw table
@@ -543,6 +591,7 @@ function go_clipboard_store_datatable(refresh) {
                 if (jqXHR.status === 400){
                     jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
                 }
+                go_clipboard_callback();
             },
             success: function( res ) {
                 //console.log("success");
@@ -558,9 +607,9 @@ function go_clipboard_store_datatable(refresh) {
 
                                 //d.user_id = jQuery('#go_stats_hidden_input').val();
                                 d.date = jQuery('#go_datepicker').html();
-                                d.section = jQuery('#go_clipboard_user_go_sections_select').val();
-                                d.group = jQuery('#go_clipboard_user_go_groups_select').val();
-                                d.badge = jQuery('#go_clipboard_go_badges_select').val();
+                                d.section = jQuery('#go_page_user_go_sections_select').val();
+                                d.group = jQuery('#go_page_user_go_groups_select').val();
+                                d.badge = jQuery('#go_page_go_badges_select').val();
                                 d.unmatched = document.getElementById("go_unmatched_toggle").checked;
                                 d.store_item = jQuery("#go_store_item_select").val();
                             }
@@ -603,10 +652,6 @@ function go_clipboard_store_datatable(refresh) {
                             {
                                 "targets": [9],
                                 sortable: true
-                            },
-                            {
-                                "targets": [13],
-                                sortable: false
                             }
                         ],
                         buttons: [
@@ -656,8 +701,6 @@ function go_clipboard_store_datatable(refresh) {
     }
 }
 
-
-
 function go_clipboard_messages_datatable(refresh) {
     if ( jQuery( "#go_clipboard_messages_datatable" ).length == 0  || refresh == true) {
         jQuery("#clipboard_messages_datatable_container").html("<h2>Loading . . .</h2>");
@@ -674,7 +717,7 @@ function go_clipboard_messages_datatable(refresh) {
             },
             /**
              * A function to be called if the request fails.
-             * Assumes they are not logged in and shows the login message in lightbox
+             * Assumes they are not logged in and shows the login lightbox
              */
             error: function(jqXHR, textStatus, errorThrown) {
                 if (jqXHR.status === 400){
@@ -694,9 +737,9 @@ function go_clipboard_messages_datatable(refresh) {
                             "data": function(d){
                                 //d.user_id = jQuery('#go_stats_hidden_input').val();
                                 d.date = jQuery('#go_datepicker').html();
-                                d.section = jQuery('#go_clipboard_user_go_sections_select').val();
-                                d.group = jQuery('#go_clipboard_user_go_groups_select').val();
-                                d.badge = jQuery('#go_clipboard_go_badges_select').val();
+                                d.section = jQuery('#go_page_user_go_sections_select').val();
+                                d.group = jQuery('#go_page_user_go_groups_select').val();
+                                d.badge = jQuery('#go_page_go_badges_select').val();
                                 d.unmatched = document.getElementById("go_unmatched_toggle").checked;
                             }
                         },
@@ -738,10 +781,6 @@ function go_clipboard_messages_datatable(refresh) {
                             {
                                 "targets": [9],
                                 sortable: false
-                            },
-                            {
-                                "targets": [13],
-                                sortable: false
                             }
                         ],
                         buttons: [
@@ -782,10 +821,11 @@ function go_clipboard_messages_datatable(refresh) {
                             }
                         ]
                     });
+
                     //search only on enter key
                     jQuery("div.dataTables_filter input").unbind();
                     jQuery("div.dataTables_filter input").keyup( function (e) {
-                        if (e.keyCode == 13) {
+                        if (e.key === 13) {
                             Messages.search( this.value ).draw();
                         }
                     });
@@ -805,9 +845,9 @@ function go_clipboard_activity_datatable(refresh) {
         var nonce = GO_CLIPBOARD_DATA.nonces.go_clipboard_activity;
 
         console.log("date: " + jQuery('#go_datepicker').html());
-        console.log("section: " + jQuery('#go_clipboard_user_go_sections_select').val());
-        console.log("group: " + jQuery('#go_clipboard_user_go_groups_select').val());
-        console.log("badges: " + jQuery('#go_clipboard_go_badges_select').val());
+        console.log("section: " + jQuery('#go_page_user_go_sections_select').val());
+        console.log("group: " + jQuery('#go_page_user_go_groups_select').val());
+        console.log("badges: " + jQuery('#go_page_go_badges_select').val());
         console.log("unmatched: " + document.getElementById("go_unmatched_toggle").checked);
         console.log("tasks: " + jQuery("#go_task_select").val());
 
@@ -842,9 +882,9 @@ function go_clipboard_activity_datatable(refresh) {
                             "data": function(d){
                                 //d.user_id = jQuery('#go_stats_hidden_input').val();
                                 d.date = jQuery('#go_datepicker').html();
-                                d.section = jQuery('#go_clipboard_user_go_sections_select').val();
-                                d.group = jQuery('#go_clipboard_user_go_groups_select').val();
-                                d.badge = jQuery('#go_clipboard_go_badges_select').val();
+                                d.section = jQuery('#go_page_user_go_sections_select').val();
+                                d.group = jQuery('#go_page_user_go_groups_select').val();
+                                d.badge = jQuery('#go_page_go_badges_select').val();
                                 d.unmatched = document.getElementById("go_unmatched_toggle").checked;
                                 d.tasks = jQuery("#go_task_select").val();
                                 for (var i = 0, len = d.columns.length; i < len; i++) {

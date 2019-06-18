@@ -1,6 +1,6 @@
 {
     "key": "group_5cd502fa18282",
-    "title": "Profile Page",
+    "title": "Profile Page--backend",
     "fields": [
         {
             "key": "field_5cd5030feb290",
@@ -51,7 +51,7 @@
                     "name": "user-section",
                     "type": "taxonomy",
                     "instructions": "",
-                    "required": 0,
+                    "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
@@ -151,5 +151,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1557464013
+    "modified": 1560188714
 }

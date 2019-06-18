@@ -7,92 +7,34 @@
  */
 
 
+function go_make_leaderboard_filter(){
+    $current_id = get_current_user_id();
 
-function go_stats_uWhere_values(){
-    //CREATE THE QUERY
-    //CREATE THE USER WHERE STATEMENT
-    //check the drop down filters only
-    //Query 1:
-    //WHERE (uWhere)
-    //User_meta by section_id from the drop down filter
-    //loot table by badge_id from drop down filter
-    //and group_id from the drop down filter.
-
-    $section = $_GET['section'];
-    $badge = $_GET['badge'];
-    $group = $_GET['group'];
-
-
-    $uWhere = "";
-    if ((isset($section) && $section != "" ) || (isset($badge) && $badge != "") || (isset($group) && $group != "") )
-    {
-        $uWhere = "HAVING ";
-        $uWhere .= " (";
-        $first = true;
-
-        //add search for section number
-        if  (isset($section) && $section != "") {
-            //search for badge IDs
-            $sColumns = array('section_0', 'section_1', 'section_2', 'section_3', 'section_4', 'section_5', );
-            $uWhere .= " (";
-            $first = false;
-
-            /*
-            $search_array = $section;
-
-            if ( isset($search_array) && !empty($search_array) )
-            {
-                for ( $i=0 ; $i<count($search_array) ; $i++ )
-                {
-                    for ($i2 = 0; $i2 < count($sColumns); $i2++) {
-                        $uWhere .= "`" . $sColumns[$i2] . "` = " . intval($search_array[$i]) . " OR ";
-                    }
-                }
-            }
-            */
-            for ($i = 0; $i < count($sColumns); $i++) {
-                $uWhere .= "`" . $sColumns[$i] . "` = " . intval($section) . " OR ";
-            }
-            $uWhere = substr_replace( $uWhere, "", -3 );
-            $uWhere .= ")";
+    //set the last searched leaderboard as an user option
+    if(is_user_logged_in()) {
+        $return = array();
+        $taxonomy = $_POST['taxonomy'];
+        $term_id = intval(get_user_option('go_leaderboard_' . $taxonomy, $current_id));
+        $obj = get_term($term_id);
+        $term_name = (mb_strlen($obj->name) > 50) ? mb_substr($obj->name, 0, 49) . '...' : $obj->name;
+        //$return = array($term_id, $term_name);
+        $term_id = intval($term_id);
+        if ($term_id < 1){
+            $term_id = '';
+            $term_name = '';
         }
-
-        if  (isset($badge) && $badge != "") {
-            //search for badge IDs
-            $sColumn = 'badges';
-            if ($first == false) {
-                $uWhere .= " AND (";
-            }else {
-                $uWhere .= " (";
-                $first = false;
-            }
-            $search_var = $badge;
-            $uWhere .= "`" . $sColumn . "` LIKE '%\"" . esc_sql($search_var). "\"%'";
-            $uWhere .= ')';
-        }
-
-        if  (isset($group)  && $group != "") {
-            //search for group IDs
-            $sColumn = 'groups';
-            if ($first == false) {
-                $uWhere .= " AND (";
-            }else {
-                $uWhere .= " (";
-                $first = false;
-            }
-            $search_var = $group;
-            $uWhere .= "`" . $sColumn . "` LIKE '%\"" . esc_sql($search_var). "\"%'";
-            $uWhere .= ')';
-        }
-        $uWhere .= "AND wp_capabilities NOT LIKE '%administrator%')";
-    }else{
-        $uWhere .= "HAVING (wp_capabilities NOT LIKE '%administrator%')";
+        $return['term_id'] = $term_id;
+        $return['term_name'] = $term_name;
+        echo json_encode( $return );
     }
-    return $uWhere;
+
+    die();
+
 }
 
-
+//ajax only?
 function go_stats_leaderboard_dataloader_ajax(){
+    //needs nonce
     global $wpdb;
     $current_id = get_current_user_id();
     $is_admin = go_user_is_admin($current_id);
@@ -100,15 +42,34 @@ function go_stats_leaderboard_dataloader_ajax(){
     //set the last searched leaderboard as an user option
     if(is_user_logged_in()) {
         $section = $_GET['section'];
-        //$badge = $_GET['badge'];
         $group = $_GET['group'];
-        update_user_option( $current_id, 'go_leaderboard_section', $section );
 
-        update_user_option( $current_id, 'go_leaderboard_group', $group );
+        if ($section === 'loading'){
+            $section = intval(get_user_option('go_leaderboard_user_go_sections', $current_id));
+            if ($section === 0){
+                $section = '';
+            }
+        }else{
+            update_user_option( $current_id, 'go_leaderboard_user_go_sections', $section );
+        }
+
+
+        if ($group === 'loading'){
+            $group = intval(get_user_option('go_leaderboard_user_go_groups', $current_id));
+            if ($group === 0){
+                $group = '';
+            }
+        }else{
+            update_user_option( $current_id, 'go_leaderboard_user_go_groups', $group );
+        }
+
+    }else{
+        $section = $_GET['section'];
+        $group = $_GET['group'];
+
     }
 
     //$section = go_section();
-    $uWhere = go_stats_uWhere_values();
     $sLimit = '';
     if (isset($_GET['start']) && $_GET['length'] != '-1') {
         $sLimit = "LIMIT " . intval($_GET['start']) . ", " . intval($_GET['length']);
@@ -142,34 +103,48 @@ function go_stats_leaderboard_dataloader_ajax(){
     $uTable = "{$wpdb->prefix}users";
     $sColumn = "{$wpdb->prefix}capabilities";
 
-    $sQuery = "
-          
-      SELECT SQL_CALC_FOUND_ROWS
-        t5.*
-      FROM (
-              SELECT
-              t1.*,
-              MAX(CASE WHEN t2.meta_key = 'first_name' THEN meta_value END) AS first_name,
-              MAX(CASE WHEN t2.meta_key = 'last_name' THEN meta_value END) AS last_name,
-              MAX(CASE WHEN t2.meta_key = 'go_section_and_seat' THEN meta_value END) AS num_section,
-              MAX(CASE WHEN t2.meta_key = 'go_section_and_seat_0_user-section' THEN meta_value END)  AS section_0,
-              MAX(CASE WHEN t2.meta_key = 'go_section_and_seat_1_user-section' THEN meta_value END) AS section_1,
-              MAX(CASE WHEN t2.meta_key = 'go_section_and_seat_2_user-section' THEN meta_value END) AS section_2,
-              MAX(CASE WHEN t2.meta_key = 'go_section_and_seat_3_user-section' THEN meta_value END) AS section_3,
-              MAX(CASE WHEN t2.meta_key = 'go_section_and_seat_4_user-section' THEN meta_value END) AS section_4,
-              MAX(CASE WHEN t2.meta_key = 'go_section_and_seat_5_user-section' THEN meta_value END) AS section_5,
-              MAX(CASE WHEN t2.meta_key = '$sColumn' THEN meta_value END) AS wp_capabilities,
-              t3.display_name, t3.user_url, t3.user_login
-              FROM $lTable AS t1 
-              LEFT JOIN $umTable AS t2 ON t1.uid = t2.user_id
-              LEFT JOIN $uTable AS t3 ON t2.user_id = t3.ID
-              GROUP BY t1.id
-              $uWhere
-          ) AS t5
-          $sOrder
-          $sLimit
-          
-    ";
+    $sectionQuery = go_sectionQuery($section);
+    //$badgeQuery = go_badgeQuery();
+    $groupQuery = go_groupQuery($group);
+    $badgeQuery = '';
+
+    $sQuery = "    
+                    SELECT
+                      t1.*,
+                      t3.display_name, t3.user_url, t3.user_login,
+                      MAX(CASE WHEN t2.meta_key = 'first_name' THEN meta_value END) AS first_name,
+                      MAX(CASE WHEN t2.meta_key = 'last_name' THEN meta_value END) AS last_name,
+                      MAX(CASE WHEN t2.meta_key = '$sColumn' THEN meta_value END) AS wp_capabilities
+                    FROM
+                          (
+                          SELECT t6.user_id
+                          FROM
+                            (
+                            SELECT t4.user_id
+                            FROM
+                                (
+                                SELECT t2.*
+                                FROM
+                                  (
+                                  SELECT t1.uid AS user_id
+                                  FROM $lTable AS t1
+                                  ) AS t2
+                                  $sectionQuery
+                                ) AS t4
+                            $badgeQuery
+                            ) AS t6
+                          $groupQuery
+                          )AS t8
+                      LEFT JOIN $lTable AS t1 ON t8.user_id = t1.uid
+                      LEFT JOIN $umTable AS t2 ON t8.user_id = t2.user_id
+                      LEFT JOIN $uTable AS t3 ON t8.user_id = t3.ID
+                      GROUP BY t1.id
+                      HAVING (wp_capabilities NOT LIKE '%administrator%')
+                      $sOrder
+                      $sLimit       
+        ";
+
+
     //Add Badge and Group names from the action item?,
     //can't do because they might have multiple saved in a serialized array so it can't be joined.
 
@@ -231,7 +206,7 @@ function go_stats_leaderboard_dataloader_ajax(){
         $num++;
 
         ob_start();
-        go_user_links($user_id, true, true, true, true, true, true);
+        go_user_links($user_id, true, true, true);
         $links = ob_get_clean();
 
         $row[] = "{$num}";
@@ -246,7 +221,13 @@ function go_stats_leaderboard_dataloader_ajax(){
         $health_toggle = get_option('options_go_loot_health_toggle');
 
         if ($xp_toggle){
-            $row[] = "{$xp}";
+
+            $rank = go_get_rank ( $user_id, $xp );
+            $rank_num = $rank['rank_num'];
+            $current_rank = $rank['current_rank'];
+            $pts_to_rank_up_str = "Level $rank_num: $current_rank &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; XP:$xp ";
+
+            $row[] = "{$pts_to_rank_up_str}";
         }
         if ($gold_toggle){
             $row[] = "{$gold}";
@@ -262,7 +243,7 @@ function go_stats_leaderboard_dataloader_ajax(){
     }
 
     //$output['iTotalDisplayRecords'] =  count($output['aaData']);
-    global $go_debug;
+    //global $go_debug;
 
     echo json_encode( $output );
     die();

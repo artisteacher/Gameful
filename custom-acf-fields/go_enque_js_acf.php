@@ -1,5 +1,7 @@
 <?php
 
+
+
 function go_acf_scripts ($hook) {
 
 	global $post;

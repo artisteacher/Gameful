@@ -84,7 +84,7 @@
                             "conditional_logic": 0,
                             "wrapper": {
                                 "width": "",
-                                "class": "",
+                                "class": "go_xp",
                                 "id": ""
                             },
                             "default_value": 0,
@@ -105,7 +105,7 @@
                             "conditional_logic": 0,
                             "wrapper": {
                                 "width": "",
-                                "class": "",
+                                "class": "go_gold",
                                 "id": ""
                             },
                             "default_value": 0,
@@ -126,7 +126,7 @@
                             "conditional_logic": 0,
                             "wrapper": {
                                 "width": "",
-                                "class": "",
+                                "class": "go_health",
                                 "id": ""
                             },
                             "default_value": 0,
@@ -180,5 +180,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1557704422
+    "modified": 1559804647
 }

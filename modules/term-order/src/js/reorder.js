@@ -30,6 +30,94 @@ jQuery.fn.extend({
     }
 });
 
+
+
+/**
+ * Param helpers
+ */
+
+// Get params in a JS object
+var params = {};
+window.location.search.substr(1).split( '&' ).forEach(function(item) {
+	params[ item.split( '=' )[0] ] = item.split( '=' )[1];
+});
+
+// Return param string based on the params object
+function setParams() {
+	var string = '?';
+
+	for ( key in params ) {
+		var value = params[ key ];
+		string += key + '=' + value + '&';
+	}
+
+	console.log("string: "+ string);
+	return string.slice(0, -1); // Remove trailing &
+}
+
+/**
+ * Add dropdown filters + functionality to term tables
+ * Modified from:https://wordpress.stackexchange.com/questions/268495/is-it-possible-to-add-extra-table-nav-to-edit-tags-php-screens
+ */
+
+var filtered_terms = ['store_types', 'task_chains', 'user_go_groups', 'go_badges'];
+if (  filtered_terms.includes(params.taxonomy) ) {
+
+	var taxonomy = params.taxonomy;
+	// Create the dropdown menu & HTML
+
+	var parent = params.parent;
+
+	if(parent){
+		var parent_data = 'data-value="' + parent + '"';
+		var parentName = params.parentName;
+		if(parentName){
+			parentName = parentName.replace(/\+/g, "&nbsp;");
+			parentName = decodeURIComponent(parentName);
+			var parentName_data = 'data-value_name="' + parentName + '"';
+
+		}
+		// var option = "<option value='" + parent + "'>" + parentName + "</option>";
+		//option = '';
+	}
+
+
+	console.log(parentName);
+
+	jQuery( document.querySelector( '.tablenav .bulkactions' ) ).after( '<select id="go_page_' + taxonomy + '_select" ' + parent_data + parentName_data +' class="go_activate_filter"></select> <button id="js-filter" class="button go_apply_filters" type="button">Filter</button> ' );
+	go_make_select2_filter(taxonomy,false, false, true);
+
+
+	// If we're already filtering the view, have the dropdown reflect that
+	var value = decodeURIComponent( params.meta_value ).replace(/\+/g, ' ');
+	jQuery( '#js-filter-dropdown' ).find( 'option[value="' + value + '"]' ).prop( 'selected', true );
+
+	// Set up the button action - see taxonomy_filter() for server-side filtering
+	jQuery( '#js-filter' ).click(function() {
+		var value = jQuery( '#go_page_' + taxonomy + '_select' ).val();
+		var value_name = jQuery( '#go_page_' + taxonomy + '_select option:selected' ).text();
+
+
+		if ( value ) {
+			params.parent = encodeURIComponent( value );
+			params.parentName = encodeURIComponent( value_name );
+			//console.log("encodeURIComponent: " + parentName);
+			//alert(params.parentName);
+		} else {
+			delete params.parent;
+			delete params.parentName;
+		}
+
+		window.location.search = setParams();
+	});
+}
+
+
+
+
+
+
+
 /**
  * Enable the checkall box.
  * Changing table to list breaks it.
@@ -61,13 +149,14 @@ jQuery(document).ready(function(){
     });
 
 	termDivIDs = (idArray);
-	//alert (termDivIDs);
+	console.log("termDivIDs");
+	console.log(termDivIDs);
 	jQuery.ajax({
 	type: "POST",
 	//dataType: 'json',
 	url : ajax_url,
 	data: {
-		'action':'check_if_top_term',
+		'action':'check_if_parent_term',
 		'goTermDivIDs' : termDivIDs,
 	},
 	success:function(status) {
@@ -404,7 +493,5 @@ jQuery(document).ready(function(){
 
 
 });
-
-
 
 

@@ -48,7 +48,7 @@ this hides the acf stuff until a parent map is selected
  */
 
 function go_hide_child_tax_acfs() {
-    if(jQuery('.taxonomy-task_chains #parent, .taxonomy-go_badges #parent').val() == -1){
+    if(jQuery('.taxonomy-task_chains #parent, .taxonomy-go_badges #parent, .taxonomy-user_go_groups #parent').val() == -1){
         //jQuery('#acf-term-fields').hide();
         //jQuery('.acf-field').hide();
         jQuery('.go_child_term').hide();
@@ -61,6 +61,8 @@ function go_hide_child_tax_acfs() {
         //jQuery('h2').show();
         jQuery('#go_map_shortcode_id').hide();
     }
+
+
 
     var map_id = jQuery('[name="tag_ID"]').val();
     if (map_id == null) {

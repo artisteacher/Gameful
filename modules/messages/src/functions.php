@@ -26,10 +26,6 @@ function go_check_messages($response = null , $data = null){
     $is_logged_in = is_user_logged_in();
     $is_new_messages = get_user_option('go_new_messages');
 
-    $xp_abbr = get_option( "options_go_loot_xp_abbreviation" );
-    $gold_abbr = get_option( "options_go_loot_gold_abbreviation" );
-    $health_abbr = get_option( "options_go_loot_health_abbreviation" );
-
     if ($is_logged_in && $is_new_messages ){
         //get unread messages
         $go_actions_table_name = "{$wpdb->prefix}go_actions";
@@ -37,13 +33,15 @@ function go_check_messages($response = null , $data = null){
             $wpdb->prepare(
                 "SELECT *
 			FROM {$go_actions_table_name}
-			WHERE uid = %d and (action_type = %s or action_type = %s or action_type = %s or action_type LIKE %s)  and stage = %d
+			WHERE uid = %d and (action_type = %s or action_type = %s or action_type = %s or action_type = %s or action_type = %s OR action_type = %s)  and stage = %d
 			ORDER BY id DESC",
                 $user_id,
                 'message',
                 'reset',
                 'admin_notification',
-                '%feedback%',
+                'feedback',
+                'feedback_percent',
+                'feedback_loot',
                 1
             )
         );
@@ -59,13 +57,32 @@ function go_check_messages($response = null , $data = null){
             $xp = $action->xp;
             $gold = $action->gold;
             $health = $action->health;
+
             $badges = $action->badges;
+            $badges_ids = array();
             $badges = unserialize($badges);
+            if(is_array($badges)){
+                $badges_ids =  $badges;
+            }else if(is_numeric($badges)){
+                $badges_ids[] = $badges;
+            }else{
+                $badges_ids = array();
+            }
+
             $groups = $action->groups;
             $groups = unserialize($groups);
+            $group_ids = array();
+            if(is_array($groups)){
+            $group_ids =  $groups;
+            }
+            else if(is_numeric($groups)){
+                $group_ids[] = $groups;
+            }else{
+                $group_ids = array();
+            }
 
             if ($type == 'admin_notification'){
-                go_noty_message_generic('alert', '', $title, '15000');
+                go_noty_message_generic('warning', '', $title, '15000');
             }
             else if ( $type == 'reset' && $type = 'reset_stage') {
                 go_noty_message_generic('warning', $title, $message, '');
@@ -90,13 +107,13 @@ function go_check_messages($response = null , $data = null){
                 $gold_reward = null;
                 $gold_loot = null;
                 if($gold != 0){
-                    $gold_loot = go_display_shorthand_currency('gold', $gold, false, true);
+                    $gold_loot = go_display_longhand_currency('gold', $gold, false, false, false);
                 }
                 if ($gold > 0) {
-                    $gold_reward = $gold_loot;
+                    $gold_reward = $gold_loot.'<br>';
                 }
                 else if ($gold < 0) {
-                    $gold_penalty = $gold_loot;
+                    $gold_penalty = $gold_loot.'<br>';
                 }
 
 
@@ -115,19 +132,16 @@ function go_check_messages($response = null , $data = null){
 
 
                 $badges_toggle = get_option('options_go_badges_toggle');
-                if ($badges_toggle && !empty($badges)) {
+                if ($badges_toggle && !empty($badges_ids)) {
                     $badge_dir = $result[2];
 
                     $badges_name = get_option('options_go_badges_name_plural');
 
                     $badges_names = array();
                     $badges_names[] = "<br><b>" . $badges_name . ":</b>";
-                    foreach ($badges as $badge) {
-                        $term = get_term($badge, "go_badges");
-                        if (!empty($term)) {
-                            $badge_name = $term->name;
-                            $badges_names[] = $badge_name;
-                        }
+                    foreach ($badges_ids as $badge_id) {
+
+                        $badges_names[] = go_print_single_badge( $badge_id, 'badge', false);
                     }
 
                     if ($badge_dir == "badges+") {
@@ -150,16 +164,12 @@ function go_check_messages($response = null , $data = null){
                     $badge_award = null;
                 }
 
-                if (!empty($groups)) {
+                if (!empty($group_ids)) {
                     $groups_dir = $result[3];
                     $groups_names = array();
                     $groups_names[] = "<br><b>Groups:</b>";
-                    foreach ($groups as $group) {
-                        $term = get_term($group, "user_go_groups");
-                        if (!empty($term)) {
-                            $group_name = $term->name;
-                            $groups_names[] = $group_name;
-                        }
+                    foreach ($group_ids as $group_id) {
+                        $groups_names[] = go_print_single_badge( $group_id, 'group', false);
                     }
 
                     if ($groups_dir == "groups+") {
@@ -182,14 +192,14 @@ function go_check_messages($response = null , $data = null){
 
 
                 if (!empty($xp_reward) || !empty($gold_reward) || !empty($health_reward) || !empty($badge_award) || !empty($group_award)) {
-                    $reward = "<div class='go_messages_loot go_messages_rewards'><h3>Reward:</h3>{$xp_reward}{$gold_reward}{$health_reward}{$badge_award}{$group_award}</div>";
+                    $reward = "<div class='go_messages_loot go_messages_rewards'><h3>Reward:</h3>$xp_reward $gold_reward $health_reward $badge_award $group_award</div>";
                 } else {
                     $reward = '';
                 }
 
                 if (!empty($xp_penalty) || !empty($gold_penalty) || !empty($health_penalty) || !empty($badge_penalty) || !empty($group_penalty)) {
                     //if (empty($post_id)){
-                    $penalty = "<div class='go_messages_loot go_messages_penalties'><h3>Consequence:</h3>{$xp_penalty}{$gold_penalty}{$health_penalty}{$badge_penalty}{$group_penalty}</div>";
+                    $penalty = "<div class='go_messages_loot go_messages_penalties'><h3>Consequence:</h3>$xp_penalty $gold_penalty $health_penalty $badge_penalty $group_penalty</div>";
                     //}
                     //else{
                     //    $penalty = "<h4>Additional Penalty:</h4>{$xp_penalty}{$gold_penalty}{$health_penalty}{$badge_penalty}{$group_penalty}";
@@ -198,108 +208,27 @@ function go_check_messages($response = null , $data = null){
                     $penalty = '';
                 }
 
-                $message = "<div> {$message}</div><div>{$reward}{$penalty}</div>";
+                $message = "<div>$message</div><div>$reward<br>$penalty</div>";
 
-                go_noty_message_generic('alert', $title, $message, '');
+                go_noty_message_generic('warning', $title, $message, '');
             }
 
         }
-        /*
-        //set messages flag to read
-        $wpdb->update(
-            $go_actions_table_name,
-            array(
-                'stage' => 0 // integer (number)
-            ),
-            array(
-                'uid' => $user_id,
-                'action_type' => 'message',
-                'stage' => 1
 
-            ),
-            array(
-                '%d'	// value2
-            ),
-            array(
-                '%d',
-                '%s',
-                '%d'
-            )
-        );
-
-        $wpdb->update(
-            $go_actions_table_name,
-            array(
-                'stage' => 0 // integer (number)
-            ),
-            array(
-                'uid' => $user_id,
-                'action_type' => 'reset',
-                'stage' => 1
-
-            ),
-            array(
-                '%d'	// value2
-            ),
-            array(
-                '%d',
-                '%s',
-                '%d'
-            )
-        );
-        $wpdb->update(
-            $go_actions_table_name,
-            array(
-                'stage' => 0 // integer (number)
-            ),
-            array(
-                'uid' => $user_id,
-                'action_type' => 'admin_notification',
-                'stage' => 1
-
-            ),
-            array(
-                '%d'	// value2
-            ),
-            array(
-                '%d',
-                '%s',
-                '%d'
-            )
-        );
-        $wpdb->update(
-            $go_actions_table_name,
-            array(
-                'stage' => 0 // integer (number)
-            ),
-            array(
-                'uid' => $user_id,
-                'action_type' => 'feedback',
-                'stage' => 1
-
-            ),
-            array(
-                '%d'	// value2
-            ),
-            array(
-                '%d',
-                '%s',
-                '%d'
-            )
-        );
-        */
 
         $wpdb->query(
             $wpdb->prepare(
                 "UPDATE {$go_actions_table_name}
             SET stage = %d
-			WHERE uid = %d and (action_type = %s or action_type = %s or action_type = %s or action_type LIKE %s)  and stage = %d",
+			WHERE uid = %d and (action_type = %s or action_type = %s or action_type = %s or action_type = %s or action_type = %s OR action_type = %s)  and stage = %d",
                 0,
                 $user_id,
                 'message',
                 'reset',
                 'admin_notification',
-                '%feedback%',
+                'feedback',
+                'feedback_percent',
+                'feedback_loot',
                 1
             )
         );

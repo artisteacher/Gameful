@@ -40,7 +40,6 @@ function go_flush_rewrites() {
     // call your CPT registration function here (it should also be hooked into 'init')
     go_register_task_tax_and_cpt();
     go_register_store_tax_and_cpt();
-    go_blog_tags();
     go_blogs();
     go_custom_rewrite();
     go_map_page();

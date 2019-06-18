@@ -173,9 +173,13 @@ function go_messages_opener( user_id, post_id, message_type, target ) {
                 }
             });
 
-            jQuery('#go_messages_go_badges_select').select2({
+            go_make_select2_filter('go_badges', true, false);
+            go_make_select2_filter('user_go_groups', true, false);
+
+            /*
+            jQuery('#go_lightbox_go_badges_select').select2({
                 ajax: {
-                    url: ajaxurl, // AJAX URL is predefined in WordPress admin
+                    url: MyAjax.ajaxurl, // AJAX URL is predefined in WordPress admin
                     dataType: 'json',
                     delay: 400, // delay in ms while typing when to perform a AJAX search
                     data: function (params) {
@@ -200,9 +204,9 @@ function go_messages_opener( user_id, post_id, message_type, target ) {
                 allowClear: true
             });
 
-            jQuery('#go_messages_user_go_groups_select').select2({
+            jQuery('#go_lightbox_user_go_groups_select').select2({
                 ajax: {
-                    url: ajaxurl, // AJAX URL is predefined in WordPress admin
+                    url: MyAjax.ajaxurl, // AJAX URL is predefined in WordPress admin
                     dataType: 'json',
                     delay: 400, // delay in ms while typing when to perform a AJAX search
                     data: function (params) {
@@ -225,6 +229,7 @@ function go_messages_opener( user_id, post_id, message_type, target ) {
                 placeholder: "Show All",
                 allowClear: true
             });
+            */
 
             tippy('.tooltip', {
                 delay: 0,
@@ -309,8 +314,10 @@ function go_send_message(reset_vars, message_type, post_id) {
         var gold = jQuery('.gold_messages').val() * gold_toggle;
         var health = jQuery('.health_messages').val() * health_toggle;
 
-        var badges = jQuery('#go_messages_go_badges_select').val();
-        var groups = jQuery('#go_messages_user_go_groups_select').val();
+        var badges = jQuery('#go_lightbox_go_badges_select').val();
+        var groups = jQuery('#go_lightbox_user_go_groups_select').val();
+        console.log("badges:");
+        console.log(badges);
     }
     else if ((message_type == "reset" || message_type == "reset_stage") && additional_penalty_toggle == false ){
         var badges_toggle = false;
@@ -364,10 +371,26 @@ function go_send_message(reset_vars, message_type, post_id) {
             );
 
 
+            //if this is was a reset message from the stats task tab, then redraw the table
+            if(jQuery('#go_tasks_datatable').length && message_type === 'reset') {
+                var stTable = jQuery('#go_tasks_datatable').DataTable();
+                stTable.ajax.reload();
+            }
 
-            jQuery( "#go_tasks_datatable" ).remove();
-            go_stats_task_list();
+            if(jQuery('#go_messages_datatable').length && message_type === 'message') {
+                var smTable = jQuery('#go_messages_datatable').DataTable();
+                smTable.ajax.reload();
+            }
 
+            if(jQuery('#go_clipboard_messages_datatable').length && message_type === 'message') {
+                var mTable = jQuery('#go_clipboard_messages_datatable').DataTable();
+                mTable.ajax.reload();
+            }
+
+            if(jQuery('#go_clipboard_activity_datatable').length && message_type === 'reset') {
+                var caTable = jQuery('#go_clipboard_activity_datatable').DataTable();
+                caTable.ajax.reload();
+            }
 
 
             if(message_type == 'reset_stage'){

@@ -29,11 +29,11 @@ function acf_load_seat_choices( $field ) {
             $i++;
 
             // vars
-            $value = $name . " " . $i;
+            $text = $name . " " . $i;
 
 
             // append to choices
-            $field['choices'][ $value ] = $value;
+            $field['choices'][ $i ] = $text;
 
         }
     }
@@ -82,6 +82,8 @@ add_filter('acf/load_field/key=field_5b52731ddd4f7', 'acf_load_xp_levels');
  * @return string
  * Modified From : https://wordpress.stackexchange.com/questions/182798/flush-rewrite-rules-on-save-post-does-not-work-on-first-post-save
  * Modified From: https://support.advancedcustomfields.com/forums/topic/when-using-save_post-action-how-do-you-identify-which-options-page/
+ *
+ * This is needed because the options page can change some rewrite rules
  */
 function acf_flush_rewrite_rules( $post_id ) {
 
@@ -113,13 +115,9 @@ function go_late_init_flush() {
 
 add_action( 'init', 'go_late_init_flush', 999999 );
 
-
-
-
 /**
  *Loads the default options in bonus loot
  * Default is set in options and loaded on tasks
- * both the next two functions are needed
  */
 function default_value_field_5b526d2e7957e($value, $post_id, $field) {
     if ($value === false) {

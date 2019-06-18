@@ -100,8 +100,6 @@ function go_table_totals() {
 			xp INT unsigned DEFAULT 0,
 			gold DECIMAL (10,2) DEFAULT 0,
 			health DECIMAL (10,2) unsigned DEFAULT 100,
-			badges VARCHAR (4096),
-			groups VARCHAR (4096),
 			badge_count INT DEFAULT 0,
 			PRIMARY KEY  (id),
             CONSTRAINT user_id UNIQUE (uid)                
@@ -128,6 +126,9 @@ function go_set_options_autoload(){
         'options_go_badges_toggle',
         'options_go_badges_name_singular',
         'options_go_badges_name_plural',
+        'options_go_groups_toggle',
+        'options_go_groups_name_singular',
+        'options_go_groups_name_plural',
         'options_go_stats_toggle',
         'options_go_blogs_toggle',
         'options_go_stats_name',
@@ -209,6 +210,9 @@ function go_install_data ($reset = false) {
         'options_go_badges_toggle' => 1,
         'options_go_badges_name_singular' => 'Badge',
         'options_go_badges_name_plural' => 'Badges',
+        'options_go_groups_toggle' => 1,
+        'options_go_groups_name_singular' => 'Group',
+        'options_go_groups_name_plural' => 'Groups',
         'options_go_stats_toggle' => 1,
         'options_go_blogs_toggle' => 1,
         'options_go_stats_name' => 'Stats',
@@ -231,12 +235,12 @@ function go_install_data ($reset = false) {
         'options_go_loot_health_abbreviation' => 'HP',
 
         'options_go_loot_gold_currency' => 'currency',
-        'options_go_loot_gold_coin_names_gold_name' => 'Gold',
-        'options_go_loot_gold_coin_names_gold_abbreviation' => 'G',
+        'options_go_loot_gold_coin_names_gold_coin_name' => 'Gold',
+        'options_go_loot_gold_coin_names_gold_coin_abbreviation' => 'G',
         'options_go_loot_gold_coin_names_silver_name' => 'Silver',
         'options_go_loot_gold_coin_names_silver_abbreviation' => 'S',
-        'options_go_loot_gold_coin_names_bronze_name' => 'Copper',
-        'options_go_loot_gold_coin_names_bronze_abbreviation' => 'C',
+        'options_go_loot_gold_coin_names_copper_name' => 'Copper',
+        'options_go_loot_gold_coin_names_copper_abbreviation' => 'C',
 
 
 
@@ -255,8 +259,7 @@ function go_install_data ($reset = false) {
         'options_go_video_width_pixels' => '500',
         'options_go_video_lightbox' => '1',
 
-        //'options_go_images_resize_toggle' => 1,
-        //'options_go_images_resize_longest_side' => '1920',
+        'options_go_images_resize_toggle' => 1,
 
         'options_go_guest_global' => 'regular',
         'options_go_full-names_toggle' => 0,

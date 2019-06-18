@@ -40,6 +40,50 @@
             "endpoint": 0
         },
         {
+            "key": "field_5abc817c3c007",
+            "label": "Stats Panel",
+            "name": "go_stats",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_5abc8e474b1ad",
+                    "label": "Name",
+                    "name": "name",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5b0f93c92e512",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "Stats",
+                    "placeholder": "Stats",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                }
+            ]
+        },
+        {
             "key": "field_5cd91b8a996e1",
             "label": "Show Home Link in Player Bar",
             "name": "go_home_toggle",
@@ -563,9 +607,9 @@
             ]
         },
         {
-            "key": "field_5abc817c3c007",
-            "label": "Stats Panel",
-            "name": "go_stats",
+            "key": "field_5cf92495be560",
+            "label": "Groups",
+            "name": "go_groups",
             "type": "group",
             "instructions": "",
             "required": 0,
@@ -575,10 +619,10 @@
                 "class": "",
                 "id": ""
             },
-            "layout": "block",
+            "layout": "row",
             "sub_fields": [
                 {
-                    "key": "field_5b0f93c92e512",
+                    "key": "field_5cf92495be561",
                     "label": "",
                     "name": "toggle",
                     "type": "true_false",
@@ -597,16 +641,16 @@
                     "ui_off_text": "Off"
                 },
                 {
-                    "key": "field_5abc8e474b1ad",
+                    "key": "field_5cf92495be562",
                     "label": "Name",
                     "name": "name",
-                    "type": "text",
+                    "type": "group",
                     "instructions": "",
                     "required": 0,
                     "conditional_logic": [
                         [
                             {
-                                "field": "field_5b0f93c92e512",
+                                "field": "field_5cf92495be561",
                                 "operator": "==",
                                 "value": "1"
                             }
@@ -617,11 +661,47 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "Stats",
-                    "placeholder": "Stats",
-                    "prepend": "",
-                    "append": "",
-                    "maxlength": ""
+                    "layout": "table",
+                    "sub_fields": [
+                        {
+                            "key": "field_5cf92495be563",
+                            "label": "Singular",
+                            "name": "singular",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "Group",
+                            "placeholder": "Group",
+                            "prepend": "",
+                            "append": "",
+                            "maxlength": ""
+                        },
+                        {
+                            "key": "field_5cf92495be564",
+                            "label": "Plural",
+                            "name": "plural",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "Groups",
+                            "placeholder": "Groups",
+                            "prepend": "",
+                            "append": "",
+                            "maxlength": ""
+                        }
+                    ]
                 }
             ]
         },
@@ -1092,7 +1172,15 @@
                     "type": "radio",
                     "instructions": "",
                     "required": 0,
-                    "conditional_logic": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5ad673ebab9b1",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
                     "wrapper": {
                         "width": "",
                         "class": "",
@@ -1100,7 +1188,7 @@
                     },
                     "choices": {
                         "currency": "Currency ($)",
-                        "coins": "Coins (Gold, Silver, and Bronze)"
+                        "coins": "Coins (Gold, Silver, and Copper)"
                     },
                     "allow_null": 0,
                     "other_choice": 0,
@@ -1173,6 +1261,11 @@
                     "conditional_logic": [
                         [
                             {
+                                "field": "field_5ad673ebab9b1",
+                                "operator": "==",
+                                "value": "1"
+                            },
+                            {
                                 "field": "field_5cb92fed8af66",
                                 "operator": "==",
                                 "value": "coins"
@@ -1189,7 +1282,7 @@
                         {
                             "key": "field_5cb930de8af6b",
                             "label": "Gold",
-                            "name": "gold",
+                            "name": "gold_coin",
                             "type": "group",
                             "instructions": "",
                             "required": 0,
@@ -1230,7 +1323,7 @@
                                     "conditional_logic": 0,
                                     "wrapper": {
                                         "width": "",
-                                        "class": "",
+                                        "class": "go_gold_show",
                                         "id": ""
                                     },
                                     "default_value": "G",
@@ -1299,7 +1392,7 @@
                         {
                             "key": "field_5cb931738af70",
                             "label": "Copper",
-                            "name": "Bronze",
+                            "name": "copper",
                             "type": "group",
                             "instructions": "",
                             "required": 0,
@@ -1450,7 +1543,15 @@
                     "type": "number",
                     "instructions": "Health lost if a player does not have enough gold to cover an undo or penalty (they spent the gold received already).",
                     "required": 0,
-                    "conditional_logic": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5ad67502ceed3",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
                     "wrapper": {
                         "width": "",
                         "class": "",
@@ -1594,6 +1695,99 @@
             "ui": 0,
             "ui_on_text": "",
             "ui_off_text": ""
+        },
+        {
+            "key": "field_5cfc749f28626",
+            "label": "About Me Quest",
+            "name": "about_me",
+            "type": "group",
+            "instructions": "Set a quest where students answers will be output on a tab in the stats panel.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_5cfc753b28627",
+                    "label": "Toggle",
+                    "name": "toggle",
+                    "type": "true_false",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 0,
+                    "ui": 1,
+                    "ui_on_text": "On",
+                    "ui_off_text": "Off"
+                },
+                {
+                    "key": "field_5cfc756028628",
+                    "label": "About Me Quest",
+                    "name": "quest",
+                    "type": "post_object",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5cfc753b28627",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "post_type": [
+                        "tasks"
+                    ],
+                    "taxonomy": "",
+                    "allow_null": 0,
+                    "multiple": 0,
+                    "return_format": "id",
+                    "ui": 1
+                },
+                {
+                    "key": "field_5cfc75c528629",
+                    "label": "Public",
+                    "name": "public",
+                    "type": "true_false",
+                    "instructions": "Show tab to all users.",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5cfc753b28627",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 0,
+                    "ui": 1,
+                    "ui_on_text": "Show",
+                    "ui_off_text": "Hide"
+                }
+            ]
         },
         {
             "key": "field_5abc7f77f4812",
@@ -1767,7 +1961,7 @@
                     "label": "Resize",
                     "name": "resize",
                     "type": "group",
-                    "instructions": "",
+                    "instructions": "This will resize all images to HD quality (1920w x 1080h) before uploading to the server.  This improves server performance because it works with a smaller original file when resizing for display and can improve user performance on upload particularly on slow connections and mobile devices.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1795,35 +1989,6 @@
                             "ui": 1,
                             "ui_on_text": "On",
                             "ui_off_text": "Off"
-                        },
-                        {
-                            "key": "field_5abda7a8ad33c",
-                            "label": "Resize Longest Side",
-                            "name": "longest_side",
-                            "type": "number",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": [
-                                [
-                                    {
-                                        "field": "field_5abda782ad33b",
-                                        "operator": "==",
-                                        "value": "1"
-                                    }
-                                ]
-                            ],
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": 1920,
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": "px",
-                            "min": 1000,
-                            "max": 3840,
-                            "step": 10
                         }
                     ]
                 }
@@ -1927,5 +2092,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1558024689
+    "modified": 1560268628
 }

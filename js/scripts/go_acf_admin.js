@@ -9,7 +9,7 @@ jQuery(document).ready(function(){
     });
 
     go_hide_child_tax_acfs();
-    jQuery('.taxonomy-task_chains #parent, .taxonomy-go_badges #parent').change(function(){
+    jQuery('.taxonomy-task_chains #parent, .taxonomy-go_badges #parent, .taxonomy-user_go_groups #parent').change(function(){
         go_hide_child_tax_acfs();
     });
 
@@ -18,3 +18,4 @@ jQuery(document).ready(function(){
 
 
 });
+

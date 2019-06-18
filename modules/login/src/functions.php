@@ -222,6 +222,7 @@ function go_registration_template_include($template){
  */
 
 /**
+ * THIS CHANGES THE DEFAULT WORDPRESS USER REGISTRATION--DO I NEED THIS
  * @param $email
  * @param $first_name
  * @param $last_name
@@ -260,6 +261,7 @@ function register_user( $email, $first_name, $last_name ) {
     return $user_id;
 }
 
+//THIS CHANGES THE DEFAULT WORDPRESS USER REGISTRATION--DO I NEED THIS
 add_action( 'login_form_register', 'do_register_user'  );
 function do_register_user() {
     if ( 'POST' == $_SERVER['REQUEST_METHOD'] ) {
@@ -325,11 +327,8 @@ function get_error_message( $error_code ) {
     return __( 'An unknown error occurred. Please try again later.', 'personalize-login' );
 }
 
-
-
-
 //prints a afc form on the front end
-function my_acf_user_form_func( $groups = array(), $fields = array(), $post_id = false, $return = '' ) {
+function go_acf_user_form_func( $groups = array(), $fields = array(), $post_id = false, $return = '' ) {
 
     if (!$post_id){
         $uid = get_current_user_id();
@@ -386,7 +385,6 @@ function my_acf_user_form_func( $groups = array(), $fields = array(), $post_id =
 
 
 }
-
 
 //Loads the email from the User table to the email field on the profile page
 add_filter('acf/load_field/name=user_email', 'go_acf_load_email');
@@ -466,7 +464,7 @@ function go_update_password_lightbox(){
 
     $groups = array();
     $fields = array('field_5cd3640730f19', 'field_5cd3638830f17', 'field_5cd363d130f18', 'field_5cd52c8f46296');
-    $form =  my_acf_user_form_func($groups, $fields, 'password_reset', get_site_url(null, '/profile'));
+    $form =  go_acf_user_form_func($groups, $fields, 'password_reset', get_site_url(null, '/profile'));
     echo $form;
     //echo '<span class="password-strength"></span>';
 
@@ -520,19 +518,50 @@ function acf_save_user( $post_id ) {
         wp_set_auth_cookie  ( $user_id );
     }
 
+    //UPDATE A PROFILE
+    if (substr($post_id, 0 , 5) === 'user_') {
+
+        $wp_user_id = str_replace("user_", "", $post_id);
+
+        $emailField = $_POST['acf']['field_5cd4be08e7077'];
+        //$emailField = (isset($_POST['acf']['field_5cd4be08e7077']) ?  $_POST['acf']['field_5cd4be08e7077'] : '');
+        if (isset($emailField)) {
+
+            $args = array(
+                'ID'         => $wp_user_id,
+                'user_email' => esc_attr( $emailField )
+            );
+            wp_update_user( $args );
+        }
+
+        $website =(isset($_POST['acf']['field_5cd4f996c0d86']) ?  $_POST['acf']['field_5cd4f996c0d86'] : null);
+        //$website = (isset($_POST['acf']['field_5cd4f996c0d86']) ?  $_POST['acf']['field_5cd4f996c0d86'] : null);
+        if (isset($website)) {
+
+            $args = array(
+                'ID'         => $wp_user_id,
+                'user_url' => esc_attr( $website )
+            );
+            wp_update_user( $args );
+        }
+
+    }
+
+
     //REGISTER A NEW USER
     if ($post_id === 'register'){
         //add a check for if user is already logged in and redirect
+        if (is_user_logged_in()){
+            $redirect_url = get_home_url();
+
+        }
 
         //get the fields and then clear their values--the values don't need to save outside of this function
 
         $_POST['acf']['field_5cd9f85e5f788'] = '';//membership code
 
-
         $user_name = sanitize_text_field($_POST['acf']['field_5cd4fa743159f']);
         $_POST['acf']['field_5cd4fa743159f'] = '';
-
-
 
         $email = sanitize_email($_POST['acf']['field_5cd4be08e7077']);
         $_POST['acf']['field_5cd4be08e7077'] = '';
@@ -550,8 +579,8 @@ function acf_save_user( $post_id ) {
         $_POST['acf']['field_5cd3638830f17'] = '';
         $_POST['acf']['field_5cd363d130f18'] = '';//clear the confirm password field
 
-        $sections_seats = $_POST['acf']['field_5cd4f7b43672b'];//this one is a bit of a challenge to sage
-        $_POST['acf']['field_5cd4f7b43672b'] = array();
+        //$sections_seats = $_POST['acf']['field_5cd4f7b43672b'];//sections and seats saved with own function
+        //$_POST['acf']['field_5cd4f7b43672b'] = array();//clear the field
 
         $user_id = wp_insert_user(
             array(
@@ -566,8 +595,10 @@ function acf_save_user( $post_id ) {
             )
         );
 
-        $this_post = "user_".$user_id;
-        update_field( 'field_5cd4f7b43672b', $sections_seats, $this_post );
+        //save sections and seats on registration
+        $post_id = "user_".$user_id;
+        //update_field( 'field_5cd4f7b43672b', $sections_seats, $this_post );
+
 
         $creds = array();
         $creds['user_login'] = $user_name;
@@ -578,39 +609,71 @@ function acf_save_user( $post_id ) {
             echo $user->get_error_message();
     }
 
-    //UPDATE A PROFILE
+    /*
     if (substr($post_id, 0 , 5) === 'user_') {
 
-        $wp_user_id = str_replace("user_", "", $post_id);
+        $user_id = str_replace("user_", "", $post_id);
+        go_remove_sections_and_seats($user_id);
 
-        $emailField = $_POST['acf']['field_5cd4be08e7077'];
-        //$emailField = (isset($_POST['acf']['field_5cd4be08e7077']) ?  $_POST['acf']['field_5cd4be08e7077'] : '');
-        if (isset($emailField)) {
-
-            $args = array(
-                'ID'         => $wp_user_id,
-                'user_email' => esc_attr( $emailField )
-            );
-            wp_update_user( $args );
-        }
-
-        $website =$_POST['acf']['field_5cd4f996c0d86'];
-        //$website = (isset($_POST['acf']['field_5cd4f996c0d86']) ?  $_POST['acf']['field_5cd4f996c0d86'] : null);
-        if (isset($website)) {
-
-            $args = array(
-                'ID'         => $wp_user_id,
-                'user_url' => esc_attr( $website )
-            );
-            wp_update_user( $args );
-        }
-
-    }
+    }*/
 
 
 
     return $post_id;
 }
+
+//removes sections and seats from metadata before resaving them
+function go_remove_sections_and_seats( $user_id) {
+    global $wpdb;
+    $key = 'go_section';
+    $prefix = $wpdb->prefix;
+    if($prefix){
+        $key = $prefix . $key;
+    }
+    delete_user_meta($user_id, $key);
+    $key = 'go_seat';
+    $prefix = $wpdb->prefix;
+    if($prefix){
+        $key = $prefix . $key;
+    }
+    delete_user_meta($user_id, $key);
+}
+add_filter('acf/update_value/key=field_5cd4f7b43672b', 'go_remove_sections_and_seats', 10, 3);
+add_filter('acf/update_value/key=field_5cd5031deb291', 'go_remove_sections_and_seats', 10, 3);
+
+
+
+function go_update_sections( $value, $post_id, $field  ) {
+    global $wpdb;
+    if (substr($post_id, 0 , 5) === 'user_') {
+        $user_id = str_replace("user_", "", $post_id);
+        $key = go_prefix_key('go_section');
+        add_user_meta( $user_id, $key, $value, false );
+    }
+    $GLOBALS['section'] = $value;
+    return $value;
+
+}
+add_filter('acf/update_value/key=field_5cd4f7b4498dd', 'go_update_sections', 10, 3);
+add_filter('acf/update_value/key=field_5cd5031deb292', 'go_update_sections', 10, 3);
+
+
+function go_update_seats( $value, $post_id, $field  ) {
+    global $wpdb;
+    if (substr($post_id, 0 , 5) === 'user_') {
+        $user_id = str_replace("user_", "", $post_id);
+        $key = go_prefix_key('go_seat');
+        $section = $GLOBALS['section'];
+        $myvalue = $value . "_" . $section;
+        //update_user_option($user_id, 'go_seat', $value);
+        add_user_meta( $user_id, $key, $myvalue, false );
+    }
+    return $value;
+}
+add_filter('acf/update_value/key=field_5cd4f7b449909', 'go_update_seats', 10, 3);
+add_filter('acf/update_value/key=field_5cd5031deb293', 'go_update_seats', 10, 3);
+
+
 
 
 //this changes the logo on the default wordpress login

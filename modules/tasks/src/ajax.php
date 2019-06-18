@@ -182,20 +182,19 @@ function go_task_change_stage() {
         ///
         //if task is complete, award badges and groups
         if ($button_type == 'complete') {
-            $badge_ids = (isset($custom_fields['go_badges'][0]) ?  $custom_fields['go_badges'][0] : null);//badges awarded on this task
-
             $group_ids = (isset($custom_fields['go_groups'][0]) ?  $custom_fields['go_groups'][0] : null);
-            $badge_ids_terms = go_badges_task_chains($post_id, $user_id, $custom_fields);//badges awarded on this term
-            if (!empty($badge_ids_terms)){//combine the term and task badges before adding them
-                $badge_ids = unserialize($badge_ids);
-                if (!is_array($badge_ids)){
-                    $badge_ids = array();
-                }
-                $badge_ids = array_unique(array_merge($badge_ids, $badge_ids_terms));
-                $badge_ids = serialize($badge_ids);
+
+            $task_badge_id = (isset($custom_fields['go_badges'][0]) ?  $custom_fields['go_badges'][0] : null);//badge awarded on this task
+            $term_badge_ids = go_badges_task_chains($post_id, $user_id, $custom_fields);//badges awarded on this term
+            if (!empty($term_badge_ids) && is_numeric($task_badge_id)){//combine the term and task badges before adding them
+                $term_badge_ids[] = intval($task_badge_id);
+                $badge_ids = $term_badge_ids;
+            }
+            else if (is_numeric($task_badge_id)){
+                $badge_ids[] = $task_badge_id;
             }
         }
-
+        //this is the update for continue and complete
         go_update_stage_table ($user_id, $post_id, $custom_fields, $status, null, true, $result, $check_type, $badge_ids, $group_ids );
         $status = $status + 1;
 
@@ -209,7 +208,8 @@ function go_task_change_stage() {
             //print new stage check for understanding
             go_checks_for_understanding($custom_fields, $status, $status, $user_id, $post_id, null, null, null, false);
             //$complete = false;
-        }else{//Complete
+        }
+        else{//Complete
 
             //print new check for understanding based on last stage check type
             go_checks_for_understanding($custom_fields, $status - 1, $status, $user_id, $post_id, null, null, null, false);
@@ -231,18 +231,38 @@ function go_task_change_stage() {
     }
     else if ($button_type == 'undo' || $button_type == 'undo_last') {
         if ($button_type == 'undo_last') {
-            $badge_ids = (isset($custom_fields['go_badges'][0]) ?  $custom_fields['go_badges'][0] : null);
+
+            //Get badges awarded on this task and send to the go_update_stage_table
+            //These can be found in the task table
+            /*
+            $badge_id = (isset($custom_fields['go_badges'][0]) ?  $custom_fields['go_badges'][0] : null);
             $group_ids = (isset($custom_fields['go_groups'][0]) ?  $custom_fields['go_groups'][0] : null);
             $badge_ids_terms = go_badges_task_chain_undo($post_id, $custom_fields, $user_id);
 
             if (!empty($badge_ids_terms)){//combine the term and task badges before removing them
-                $badge_ids = unserialize($badge_ids);
-                if (!is_array($badge_ids)){
-                    $badge_ids = array();
-                }
-                $badge_ids = array_unique(array_merge($badge_ids, $badge_ids_terms));
-                $badge_ids = serialize($badge_ids);
-            }
+                //$badge_ids = unserialize($badge_ids);
+                //if (!is_array($badge_ids)){
+                //    $badge_ids = array();
+               // }
+                $badge_ids = $badge_ids_terms;
+                $badge_ids[] = $badge_id;
+                //$badge_ids = serialize($badge_ids_terms);
+            }*/
+            global $wpdb;
+            $go_tasks_table_name = "{$wpdb->prefix}go_tasks";
+            //Undo Bonus Loot Goes Here
+            $row = $wpdb->get_row($wpdb->prepare("SELECT badges, groups
+					FROM {$go_tasks_table_name} 
+					WHERE uid = %d and post_id  = %d 
+					ORDER BY id DESC LIMIT 1", $user_id, $post_id));
+
+            $badge_ids = $row->badges;
+            $badge_ids = unserialize($badge_ids);
+
+            $group_ids = $row->groups;
+            $group_ids = unserialize($group_ids);
+
+            //See if bonus loot was awarded and remove it.
             global $wpdb;
             $go_actions_table_name = "{$wpdb->prefix}go_actions";
             //Undo Bonus Loot Goes Here
@@ -253,7 +273,6 @@ function go_task_change_stage() {
             $xp = ($row->xp) * -1;
             $gold = ($row->gold) * -1;
             $health = ($row->health) * -1;
-            //make sure we don't go over 200 health
             go_update_actions( $user_id, 'undo_bonus_loot',  $post_id, null, null, null, $result, null, null, null, null,  $xp, $gold, $health, null, null, true, true);
 
             ///////
@@ -285,8 +304,6 @@ function go_task_change_stage() {
         endif;
 // Reset Post Data
         wp_reset_postdata();
-
-
         go_update_stage_table ($user_id, $post_id, $custom_fields, $status, null, false, 'undo', null, $badge_ids, $group_ids );
         go_checks_for_understanding ($custom_fields, $status -1 , $status - 1 , $user_id, $post_id, null, null, null, false);
     }
@@ -445,8 +462,6 @@ function go_badges_task_chains ($post_id, $user_id, $custom_fields ) {
             $term = get_term($chain_id, 'task_chains');
             $termParent = ($term->parent == 0) ? $term : get_term($term->parent, 'task_chains');
             $termParentID = $termParent->term_id;                                   //get the id of the map
-
-
 
             //if ($termParentID == $chain_id) {
 

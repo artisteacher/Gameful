@@ -10,6 +10,10 @@
 
 //clone a post
 //if it's a template clone it as a task
+/**
+ * @param bool $is_template
+ * @param bool $print
+ */
 function go_clone_post_new($is_template = false, $print = false){
     global $wpdb;
     /*
@@ -107,4 +111,132 @@ function go_clone_post_new($is_template = false, $print = false){
     } else {
         wp_die('Post creation failed, could not find original post: ' . $post_id);
     }
+}
+
+
+
+/**
+ * Called by the ajax dataloaders.
+ * @param $TIMESTAMP
+ * @return false|string
+ */
+function go_clipboard_time($TIMESTAMP){
+    if ($TIMESTAMP != null) {
+        $time = date("m/d/y g:i A", strtotime($TIMESTAMP));
+    }else{
+        $time = "N/A";
+    }
+    return $time;
+}
+
+
+//this then uses select2 and ajax to make dropdown
+//if is ca
+/**
+ * @param $taxonomy
+ * @param null $is_lightbox (location is needed in case there are multiple dropdowns for the same taxonomy ie: messages on the clipboard)
+ * @param bool $value //optional: the value of the term
+ * @param bool $value_name //optional: the title of the term
+ * @param bool $activate_filter
+ */
+function go_make_tax_select ($taxonomy, $is_lightbox = false, $value = false, $value_name = false, $activate_filter = false){
+    if ($is_lightbox){
+        $location = 'lightbox';
+    }
+    else{
+        $location = 'page';
+    }
+
+    if($activate_filter){
+        $class = 'go_activate_filter';
+    }else{
+        $class = '';
+    }
+
+    echo "<select id='go_". $location . "_" . $taxonomy . "_select' ";
+    if ($value) {
+        echo " data-value='$value' ";
+    }
+    if($value_name){
+        echo "data-value_name='$value_name' ";
+    }
+    echo " class='$class'></select>";
+}
+
+
+
+/**
+ * @param $term_ids
+ * @return array|string|null
+ */
+function go_print_term_list($term_ids){
+    if (is_serialized($term_ids)) {
+        $term_ids = unserialize($term_ids);
+    }
+
+    if (!is_array($term_ids)){
+            $term_ids = explode(',', $term_ids);
+    }
+    if (is_array($term_ids)){
+        $list = array();
+        foreach ($term_ids as $term_id){
+            $term_id = intval($term_id);
+            if (!empty($term_id)) {
+                $term = get_term($term_id);
+                if (!empty($term)) {
+                    $name = $term->name;
+                    $list[] = $name;
+                }
+            }
+        }
+        $list = implode("<br>", $list);
+        //$list = '<span class="tooltip" data-tippy-content="'. $list .'">'. $list . '</span>';
+        $list = '<span>'. $list . '</span>';
+
+    }
+    else{
+        $list = null;
+
+    }
+    return $list;
+}
+
+
+/**
+ * @param $key
+ * @return string
+ */
+function go_prefix_key($key){
+
+    global $wpdb;
+    $prefix = $wpdb->prefix;
+    if ($prefix) {
+        $key = $prefix . $key;
+    }
+    return $key;
+}
+
+function go_get_terms_ordered($taxonomy, $parent = '', $number = ''){
+    $args = array(
+        'number' => $number,
+        'parent' => $parent,
+        'orderby' => 'meta_value_num',
+        'order' => 'ASC',
+        'meta_query' => array(
+            'relation' => 'OR',
+            array(
+                'key' => 'go_order',
+                'compare' => 'NOT EXISTS'
+            ),
+            array(
+                'key' => 'go_order',
+                'value' => 0,
+                'compare' => '>='
+            )
+        ),
+        'hide_empty' => false
+    );
+    $terms = get_terms($taxonomy, $args);//the rows
+
+    return $terms;
 }

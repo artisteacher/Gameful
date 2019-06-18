@@ -407,15 +407,18 @@ function go_send_feedback()
         $form = ob_get_contents();
         ob_end_clean();
 
+        //make a new feedback table to load on the page
         global $wpdb;
         $aTable = "{$wpdb->prefix}go_actions";
         //check last feedback, and if it exists, remove it
         $all_feedback = $wpdb->get_results($wpdb->prepare("SELECT id, result
                 FROM {$aTable} 
-                WHERE source_id = %d AND action_type LIKE %s
+                WHERE source_id = %d AND (action_type = %s OR action_type = %s OR action_type = %s)
                 ORDER BY id DESC",
             $blog_post_id,
-            '%feedback%'), ARRAY_A);
+            'feedback',
+            'feedback_percent',
+            'feedback_loot'), ARRAY_A);
         ob_start();
         go_feedback_table($all_feedback);
         $feedback_table = ob_get_contents();

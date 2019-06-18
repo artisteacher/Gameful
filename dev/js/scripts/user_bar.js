@@ -9,14 +9,14 @@ jQuery( document ).ready( function() {
     document.querySelector('style').textContent +=
         "@media screen and (max-width:" + user_bar_width_1 + "px) { #go_user_bar .narrow_content  { display: block !important; } " +
         "#go_user_bar .wide_content {display: none !important;} " +
-        "#go_user_bar {height: 45px !important;} " +
+        "#go_user_bar {height: 78px !important;} " +
         "#go_user_bar .go_player_bar_text {display: none !important;}" +
         ".admin-bar #go_user_bar { top: 46px;}  " +
-        "body{margin-top: 45px !important;} " +
-        ".userbar_dropdown-content {top: 45px !important;}}";
+        "body{margin-top: 81px !important;} " +
+        ".userbar_dropdown-content {top: 43px !important;}}";
 
     document.querySelector('style').textContent +=
-        "@media screen and (min-width:" + user_bar_width + "px) { body{margin-top: 55px !important;}}";
+        "@media screen and (min-width:" + user_bar_width + "px) { body{margin-top: 91px !important;}}";
 
     jQuery('.userbar_dropdown_toggle.search').on('click', function(){
         console.log('show search');

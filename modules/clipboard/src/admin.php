@@ -54,9 +54,9 @@ function go_clipboard_filters(){
         <div style="padding: 0 20px 20px 20px;">
             <h3>User Filter</h3>
 
-            <span><label for="go_clipboard_user_go_sections_select">Section </label><?php go_make_tax_select('user_go_sections' , "clipboard_"); ?></span>
-            <br><span><label for="go_clipboard_user_go_groups_select">Group </label><?php go_make_tax_select('user_go_groups', "clipboard_"); ?></span>
-            <br><span><label for="go_clipboard_go_badges_select"><?php echo $badges_name; ?> </label><?php go_make_tax_select('go_badges', "clipboard_"); ?></span>
+            <span><label for="go_page_user_go_sections_select">Section </label><?php go_make_tax_select('user_go_sections' , false, false, false, true); ?></span>
+            <br><span><label for="go_page_user_go_groups_select">Group </label><?php go_make_tax_select('user_go_groups', false, false, false, true); ?></span>
+            <br><span><label for="go_page_go_badges_select"><?php echo $badges_name; ?> </label><?php go_make_tax_select('go_badges', false, false, false, true); ?></span>
             <br>
         </div>
         <div id="go_action_filters" style="padding: 0 20px 20px 20px; display:none;">
@@ -75,7 +75,7 @@ function go_clipboard_filters(){
         <div id="go_leaderboard_update_button" style="padding:20px; align-self: flex-end;">
             <div style="margin-right: 60px;"><button class="go_reset_clipboard dt-button ui-button ui-state-default ui-button-text-only buttons-collection"><span class="ui-button-text">Clear Filters <i class="fa fa-undo" aria-hidden="true"></i></span></button></div>
             <br>
-            <div style="margin-right: 60px;"><button class="go_update_clipboard dt-button ui-button ui-state-default ui-button-text-only buttons-collection"><span class="ui-button-text">Refresh Data <i class="fa fa-refresh" aria-hidden="true"></i></span></button></div>
+            <div style="margin-right: 60px;"><button class="go_apply_filters dt-button ui-button ui-state-default ui-button-text-only buttons-collection"><span class="ui-button-text">Refresh Data <i class="fa fa-refresh" aria-hidden="true"></i></span></button></div>
         </div>
     </div>
 <?php

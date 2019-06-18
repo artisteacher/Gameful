@@ -8,35 +8,23 @@
 
 /**
  * @param $user_id
- * @param $on_stats
- * @param bool $website
- * @param bool $stats
- * @param bool $profile
- * @param bool $blog
- * @param bool $show_messages
- * @param bool $stats_lite
- * @param bool $clipboard
+ * @param bool $show_stats_link
+ * @param bool $show_internal_links
+ * @param bool $show_blog_link
+ * @param bool $is_clipboard
  * @param $website_link
  * @param $login
  */
-function go_user_links($user_id, $website = true, $stats = false, $profile = false, $blog = false, $show_messages = false, $stats_lite = false , $clipboard = false, $website_link = null, $login = null ) {
+function go_user_links($user_id, $show_stats_link = false, $show_internal_links = false, $show_blog_link = false, $is_clipboard = false, $website_link = null, $login = null ) {
     //if current user is admin, set all to true
     global $wpdb;
     $is_admin = false;
-    if ($clipboard) { //if this is the clipboard
-        $show_all = true;
-
-    }else{
+    if (!$is_clipboard) { //if this is NOT the clipboard
         $current_id = get_current_user_id();
         $is_admin = go_user_is_admin($current_id);
         //if this is an admin
-        if ($is_admin){
-            $show_all = true;
-        }
-        else if ($current_id == $user_id) {//if this is the current user
-            $show_all = true;
-        } else {
-            $show_all = false;
+       if ($current_id == $user_id) {//if this is the current user
+           $is_current_user = true;
         }
     }
 
@@ -44,29 +32,30 @@ function go_user_links($user_id, $website = true, $stats = false, $profile = fal
 
 
 
-    if ($stats && $is_admin){
-        if ($stats_lite) {
-            echo "<div class='go_user_link'><a href='javascript:void(0);' class='go_stats_lite' data-UserId='{$user_id}' onclick='go_stats_lite({$user_id});'><i class='fas fa-chart-area' aria-hidden='true'></i></a></div>";
-        }else{//regular stats link
-            echo "<div class='go_user_link_stats go_user_link' name='{$user_id}'><a href='javascript:void(0);';'><i class='fas fa-chart-area ' aria-hidden='true'></i></a></div>";
-        }
+    if (($show_stats_link) || $is_clipboard){//show the stats link
+            echo "<div class='go_user_link_stats go_user_link' uid='{$user_id}'><a href='javascript:void(0);';'><i class='fas fa-chart-area ' aria-hidden='true'></i></a></div>";
     }
-    if ($clipboard){
-        echo "<div class='go_user_link go_user_map' name='{$user_id}'><a onclick='go_user_map({$user_id})' href='javascript:void(0);'><i class='fas fa-sitemap' aria-hidden='true'></i></a></div>";
 
+    //show the map on the clipboard
+    if ($is_clipboard){
+        echo "<div class='go_user_link go_user_map' name='{$user_id}'><a onclick='go_user_map({$user_id})' href='javascript:void(0);'><i class='fas fa-sitemap' aria-hidden='true'></i></a></div>";
     }
-    if ($profile && $show_all && ($is_admin || $clipboard)) {
-        if($clipboard){
+
+    //show profile link to admin unless it is an archive
+    if ($show_internal_links && ($is_admin || $is_clipboard)) {
+        if($is_clipboard){
             echo "<div class='go_user_link'><a onclick='go_user_profile_link({$user_id})' href='javascript:void(0);' target='_blank'><i class='fas fa-user' aria-hidden='true'></i></a></div>";
         }else {
             $user_edit_link = get_edit_user_link($user_id);
             echo "<div class='go_user_link'><a href='$user_edit_link' target='_blank'><i class='fas fa-user' aria-hidden='true'></i></a></div>";
         }
     }
-    if ($blog) {
+
+    //show blog link unless it is the blog page
+    if ($show_blog_link) {
         $blog_toggle = get_option('options_go_blogs_toggle');
         if ($blog_toggle) {
-            if ($clipboard) {
+            if ($is_clipboard) {
                 $info_login = $login;
             } else {
                 $user_info = get_userdata($user_id);
@@ -74,23 +63,26 @@ function go_user_links($user_id, $website = true, $stats = false, $profile = fal
             }
             $user_blog_link = get_site_url(null, '/user/' . $info_login);
             echo " <div class='go_user_link'><a href='$user_blog_link' target='_blank'><span class='dashicons dashicons-admin-post'></span></a></div>";
-
-        }
-    }
-    if ($website){
-        if (!$clipboard) {
-            $user_obj = get_userdata($user_id);
-            $website_link = $user_obj->user_url;//user website
-        }
-        if (!empty($website_link)) {
-            echo " <div class='go_user_link'><a href='$website_link' target='_blank'><span class='dashicons dashicons-admin-site'></span></a></div>";
         }
     }
 
-    if($show_messages && ($clipboard || $is_admin)){
+    //show messages to admin
+    if($show_internal_links && ($is_clipboard || $is_admin)){
         echo "<div class='go_stats_messages_icon go_user_link ' data-uid='" . $user_id . "' ><a href='javascript:void(0);' ><i class='fas fa-bullhorn' aria-hidden='true'></i></a></div>";
         //make the messages icon a link to this user
     }
+
+
+    //show the website link
+    if (is_null($website_link)) {
+        $user_obj = get_userdata($user_id);
+        $website_link = $user_obj->user_url;//user website
+    }
+    if (!empty($website_link)) {
+        echo " <div class='go_user_link'><a href='$website_link' target='_blank'><span class='dashicons dashicons-admin-site'></span></a></div>";
+    }
+
+
     echo "</div>";
 
 }
@@ -177,31 +169,3 @@ function go_bonus_result_link($check_type, $result, $stage, $time, $bonus = true
 
 }
 
-//this then uses select2 and ajax to make dropdown
-function go_make_tax_select ($taxonomy, $location = null, $selector = 'id', $value = false, $value_name = false){
-
-    echo "<select ".$selector."='go_". $location . $taxonomy . "_select' ";
-    if ($value) {
-        echo " data-value='".$value."' ";
-    }
-    if($value_name){
-        echo " data-value_name='".$value_name."' ";
-    }
-    echo "></select>";
-
-}
-
-
-/**
- * Called by the ajax dataloaders.
- * @param $TIMESTAMP
- * @return false|string
- */
-function go_clipboard_time($TIMESTAMP){
-    if ($TIMESTAMP != null) {
-        $time = date("m/d/y g:i A", strtotime($TIMESTAMP));
-    }else{
-        $time = "N/A";
-    }
-    return $time;
-}

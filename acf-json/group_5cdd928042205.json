@@ -61,6 +61,21 @@
                         "id": ""
                     },
                     "default_value": "#b7d3e5"
+                },
+                {
+                    "key": "field_5cfc4936dcf58",
+                    "label": "Dropdown Menu Background Color",
+                    "name": "dropdown_bkg",
+                    "type": "color_picker",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "#CCCCCC"
                 }
             ]
         }
@@ -82,5 +97,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1558029848
+    "modified": 1560037890
 }

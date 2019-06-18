@@ -9,40 +9,18 @@ Version: 5.04b
 */
 
 
-//move these
-
-
-
-add_filter('plupload_default_settings', function ($settings) {
-    $settings['resize'] = array(
-        'enabled' => true,
-        'width' => 1920,
-        'height' => 1920,
-        'quality' => 80,
-        'preserve_headers' => false
-    );
-    return $settings;
-});
-//end move these
-
-
 
 //$go_debug = true;//set to true when coding
-$go_debug = false;
+$go_debug = true;
 global $go_debug;
 
-
-add_action( 'init', 'stop_heartbeat', 1 );
-function stop_heartbeat() {
-    global $go_debug;
-    if ($go_debug){
-        wp_deregister_script('heartbeat');
+//stop the heartbeat when testing
+if ($go_debug){
+    add_action( 'init', 'stop_heartbeat', 1 );
+    function stop_heartbeat() {
+            wp_deregister_script('heartbeat');
     }
 }
-
-
-$is_error = false;
-global $is_error;
 
 $go_js_version = 5.04;
 global $go_js_version;
@@ -50,21 +28,19 @@ global $go_js_version;
 $go_css_version = 5.04;
 global $go_css_version;
 
-///////////////////////////////
-//INCLUDE RESOURCES BEFORE GO
-///////////////////////////////
-
-//include_once('includes/acf/acf.php');
-include( 'includes/wp-frontend-media-master/frontend-media.php' );
-include_once('includes/wp-term-order/wp-term-order.php'); //try to load only on admin pages
-//include( 'includes/simply-static/simply-static.php' );
-
+/**
+ * INCLUDE DEPENDENCIES
+ */
+//ACF is loaded conditionally below
 //Include external js and css resources from cdns
 //can these be given local fallbacks
 include_once('includes/go_enqueue_includes.php');
 add_action( 'wp_enqueue_scripts', 'go_includes' );
 add_action( 'admin_enqueue_scripts', 'go_includes' );
 
+
+//https://www.advancedcustomfields.com/resources/local-json/
+//Loads ACF fields from JSON file as needed
 add_filter('acf/settings/load_json', 'go_acf_json_load_point');
 function go_acf_json_load_point( $paths ) {
 
@@ -74,20 +50,16 @@ function go_acf_json_load_point( $paths ) {
     // append path
     $paths[] = (plugin_dir_path(__FILE__) . 'acf-json');
 
-
     // return
     return $paths;
-
 }
 
 
 ////////////////////////////
 /// CONDITIONAL INCLUDES
 /////////////////////////////
-
 //INCLUDE CSS AND JS FILES
 if ( !is_admin() ) { //IF PUBLIC FACING PAGE
-
     include_once('js/go_enque_js.php');
     add_action( 'wp_enqueue_scripts', 'go_scripts' );
 
@@ -121,7 +93,7 @@ else {//ELSE THIS IS AN ADMIN PAGE
 
 if ( defined( 'DOING_AJAX' )) {
 
-    add_action('wp_ajax_check_if_top_term', 'go_check_if_top_term'); //for term order //OK
+    //add_action('wp_ajax_check_if_parent_term', 'check_if_parent_term'); //for term order //OK
     $action  = (isset($_POST['action']) ?  $_POST['action'] : null);
     $action = substr($action, 0 , 3);
     if ($action==='acf') {
@@ -129,39 +101,39 @@ if ( defined( 'DOING_AJAX' )) {
         include($acf_location);
     }
 
+    //INCLUDE ACF and ACF custom fields --this might only be needed on ajax from admin pages (is there a conditional for that?)
+    include_once('includes/acf/acf.php');
+    include_once('includes/wp-acf-unique_id-master/acf-unique_id.php');
+    include_once('custom-acf-fields/acf-order-posts/acf-order-posts.php');
+    include_once('custom-acf-fields/go-acf-functions.php');
+    include_once('custom-acf-fields/acf-level2-taxonomy/acf-level2-taxonomy.php');
+    include_once('custom-acf-fields/acf-quiz/acf-quiz.php');
 
 }
 else if ( is_admin() ) {
 
+    //INCLUDE ACF and ACF custom fields
     include_once('includes/acf/acf.php');
     include_once('includes/wp-acf-unique_id-master/acf-unique_id.php');
-
     include_once('custom-acf-fields/acf-order-posts/acf-order-posts.php');
-
-
-    include_once('custom-acf-fields/go-acf-functions.php');//not needed on ajax
-
-    if ($go_debug) {
-        //add_filter('acf/settings/show_admin', '__return_false');
-        add_filter('acf/settings/save_json', 'go_acf_json_save_point');
-    }
-
-    function go_acf_json_save_point( $path ) {
-
-        // update path
-        $path = (plugin_dir_path(__FILE__) . 'acf-json');
-
-
-        // return
-        return $path;
-
-    }
-
+    include_once('custom-acf-fields/go-acf-functions.php');
     include_once('custom-acf-fields/acf-level2-taxonomy/acf-level2-taxonomy.php');
     include_once('custom-acf-fields/acf-quiz/acf-quiz.php');
 
+    //currently coding, set the ACF save point
+    //if should be off for releases to stop accidental changing of the ACF data
+    if ($go_debug) {
+        //add_filter('acf/settings/show_admin', '__return_false');
+        add_filter('acf/settings/save_json', 'go_acf_json_save_point');
+        function go_acf_json_save_point( $path ) {
+            // update path
+            $path = (plugin_dir_path(__FILE__) . 'acf-json');
+            // return
+            return $path;
+        }
+    }
 
-
+    //These can be moved to a regular js file--they don't need to be separate.
     include_once('custom-acf-fields/go_enque_js_acf.php');
     add_action( 'admin_enqueue_scripts', 'go_acf_scripts' );
 
@@ -170,18 +142,21 @@ else{
     //INCLUDES on Public Pages
     //include_once('includes/acf/acf.php');
     include_once('custom-acf-fields/go-acf-functions.php');
+
+    //DEPENDENCY
+    //Allows uploading on frontend
+    include( 'includes/wp-frontend-media-master/frontend-media.php' );
 }
 
 
 ////////////////////////
 //INCLUDE ON ALL PAGES
 /////////////////////////
-//main directory
-
+//these core files include the functions that are used across several modules
+//the core/includes.php file has conditionals to load the functions as needed.
 include_once('core/includes.php');
 
-//These have their own conditional includes
-
+//Modules have their own conditional includes
 include_once('modules/admin_bar/includes.php');
 include_once('modules/archive/includes.php');
 include_once('modules/clipboard/includes.php');
@@ -195,12 +170,15 @@ include_once('modules/store/includes.php');
 include_once('modules/tasks/includes.php');
 include_once('modules/tools/includes.php');
 include_once('modules/user_blogs/includes.php');
+include_once('modules/term-order/includes.php'); //try to load only on admin pages
 
 
 
-/*
-    * Plugin Activation Hooks
-    */
+
+
+/**
+ * Plugin Activation Hooks
+ */
 register_activation_hook( __FILE__, 'go_update_db_ms' );
 register_activation_hook( __FILE__, 'go_open_comments' );
 register_activation_hook( __FILE__, 'go_tsk_actv_activate' );
@@ -213,17 +191,14 @@ register_activation_hook( __FILE__, 'go_v5_update_db' );
 
 
 
-////////////////////////////
-/// ALL PAGES & AJAX
-////////////////////////////
-
+/**
+ * ALL PAGES & AJAX
+ */
 //create non-persistent cache group
 //This is used by the transients
 wp_cache_add_non_persistent_groups( 'go_single' );
 
-/*
- * User Data
- */
+//User Data
 add_action( 'delete_user', 'go_user_delete' ); //this should change for Multisite
 add_action( 'user_register', 'go_user_registration' ); //this should change for Multisite
 
@@ -249,6 +224,9 @@ function go_write_log($log) {
     }
 }
 
+//this function is used for debugging only
+//it is only called when debug is set to true
+//you must set a breakpoint below to get the total query time--it is not output
 function go_total_query_time(){
     global $wpdb;
     $queries = $wpdb->queries;
@@ -291,5 +269,6 @@ function go_login_session_expired() {
     }
 }
 add_action( 'wp_enqueue_scripts', 'go_login_session_expired' );
+
 
 

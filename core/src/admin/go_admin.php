@@ -253,17 +253,23 @@ function go_add_toplevel_menu() {
         // 4 // menu position
         );
     }
-    /* add a new menu item */
-    add_menu_page(
-        'User Groups', // page title
-        'User Groups', // page title
-        'edit_posts', // capability
-        'groups', // menu slug
-        '', // callback function
-        '', // icon
-        4 // menu position
-    );
 
+    $groups_toggle = get_option('options_go_groups_toggle');
+    if($groups_toggle) {
+
+        $groups_name = get_option('options_go_groups_name_plural');
+        /* add a new menu item */
+        add_menu_page(
+            $groups_name, // page title
+            $groups_name, // Menu title
+            'edit_posts', // capability
+            'groups', // menu slug
+            '', // callback function
+            '', // icon
+            4 // menu position
+        );
+
+    }
     /* add a new menu item */
     add_menu_page(
         'Tools',// page title
@@ -340,10 +346,6 @@ function go_add_submenus() {
 
 }
 add_action( 'admin_menu', 'go_add_submenus', 9 );
-
-
-
-
 
 /**
  * Add content to submenus
@@ -549,16 +551,13 @@ function action_after_taxonomy_table( $taxonomy ) {
 };
 
 $mytaxonomy = (isset($_GET['taxonomy']) ?  $_GET['taxonomy'] : null);
-
 if ($mytaxonomy) {
     $taxonomy = $mytaxonomy;
-
 // add the action
     add_action("after-{$taxonomy}-table", 'action_after_taxonomy_table', 10, 1);
 
 // run the action
     do_action('after-{$taxonomy}-table', $taxonomy);
-
 }
 
 
@@ -586,13 +585,13 @@ function go_options_menu_content() {
         </div>
         <div class="go_tools_section">
             <div class="card">
-                <h2><a href="<?php menu_page_url('go_feedback'); ?>">Feedback Presets</a></h2>
+                <h2><a href="<?php menu_page_url('go_feedback'); ?>">Canned Feedback</a></h2>
                 <p>Find yourself leaving the same feedback over and over again? Create a preset and save yourself time.</p>
             </div>
         </div>
         <div class="go_tools_section">
             <div class="card">
-                <h2><a href="<?php menu_page_url('go_messages'); ?>">Message Presets</a></h2>
+                <h2><a href="<?php menu_page_url('go_messages'); ?>">Canned Messages</a></h2>
                 <p>Messages can be used to reward or provide consequences for behavior.  Set or modify the presets here for common behaviors.</p>
             </div>
         </div>
@@ -616,6 +615,9 @@ function go_options_menu_content() {
     <?php
 
 }
+
+
+
 
 
 

@@ -87,10 +87,10 @@ function go_scripts () {
         array(
             'nonces' => array(
                 'go_deactivate_plugin'          => wp_create_nonce( 'go_deactivate_plugin' ),
-                'go_admin_bar_stats'            => wp_create_nonce( 'go_admin_bar_stats' ),
+                'go_stats_lightbox'            => wp_create_nonce( 'go_stats_lightbox' ),
                 'go_stats_about'                => wp_create_nonce( 'go_stats_about' ),
                 'go_stats_task_list'            => wp_create_nonce( 'go_stats_task_list' ),
-                'go_stats_item_list'            => wp_create_nonce( 'go_stats_item_list' ),
+                'go_stats_store_list'            => wp_create_nonce( 'go_stats_store_list' ),
                 'go_stats_activity_list'        => wp_create_nonce( 'go_stats_activity_list' ),
                 'go_stats_messages'             => wp_create_nonce( 'go_stats_messages' ),
                 'go_stats_single_task_activity_list'       => wp_create_nonce( 'go_stats_single_task_activity_list' ),

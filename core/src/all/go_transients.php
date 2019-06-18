@@ -16,7 +16,7 @@
  */
 function go_get_loot($user_id){
     global $wpdb;
-        $key = 'go_get_loot_' . $user_id;
+    $key = 'go_get_loot_' . $user_id;
     $data = wp_cache_get( $key, 'go_single' );
     if ($data === false){
         $data = get_transient($key);
@@ -55,7 +55,7 @@ function go_get_loot($user_id){
 function go_get_map_chain_term_ids($term_id) {
     //global $wpdb;
 
-    $taxonomy_name = 'task_chains';
+    $taxonomy = 'task_chains';
     $key = 'go_get_map_chain_term_ids_' . $term_id;
 
 
@@ -63,14 +63,36 @@ function go_get_map_chain_term_ids($term_id) {
 
     if ($data === false) {
 
-        $args=array(
+        /*$args=array(
             'hide_empty' => false,
             'orderby' => 'order',
             'order' => 'ASC',
             'parent' => $term_id,
-        );
+        );*/
 
-        $data = get_terms($taxonomy_name,$args); //query 1 --get the chains
+        /*
+        $args = array(
+            'parent' => $term_id,
+            'orderby' => 'meta_value_num',
+            'order' => 'ASC',
+            'meta_query' => array(
+                'relation' => 'OR',
+                array(
+                    'key' => 'go_order',
+                    'compare' => 'NOT EXISTS'
+                ),
+                array(
+                    'key' => 'go_order',
+                    'value' => 0,
+                    'compare' => '>='
+                )
+            ),
+            'hide_empty' => false,
+        );*/
+       // $includes = get_terms( $taxonomy, $query );
+
+        $data = go_get_terms_ordered($taxonomy, $term_id);
+        //$data = get_terms($taxonomy,$args); //query 1 --get the chains
         $data = wp_list_pluck( $data, 'term_id' );
 
         set_transient($key, $data, 3600 * 24);
@@ -97,11 +119,9 @@ function go_reset_map_transient($term_id){
  * Delete on save or update of term OK
  */
 function go_get_parent_map_id($term_id){
-
     $key = 'go_get_parent_map_id_' . $term_id;
-
     $data = get_transient($key);
-    $data = false;
+    //$data = false;
     if ($data === false) {
         //find if term is a map
         //if not a map, get map_id
@@ -127,12 +147,13 @@ function go_get_maps_term_ids(){
     $key = 'go_get_maps_term_ids';
 
     $data = get_transient($key);
-    $data = false;
+    //$data = false;
     if ($data === false) {
-        $args = array('hide_empty' => false, 'orderby' => 'order', 'order' => 'ASC', 'parent' => 0, 'fields' => 'ids');
+        //$args = array('hide_empty' => false, 'orderby' => 'order', 'order' => 'ASC', 'parent' => 0, 'fields' => 'ids');
         //get all parent maps (chains with no parents)
-
-        $data = get_terms('task_chains', $args);
+        //$data = get_terms('task_chains', $args);
+        $taxonomy = 'task_chains';
+        $data = go_get_terms_ordered($taxonomy, '0');
 
         set_transient($key, $data, 3600 * 24);
     }
@@ -152,7 +173,7 @@ function go_get_maps_term_ids(){
 function go_term_data($term_id){
     $key = 'go_term_data_' . $term_id;
     $data = get_transient($key);
-    $data = false;
+    //$data = false;
     if ($data !== false){
         $term_data = $data;
 
@@ -188,7 +209,7 @@ function go_get_chain_posts($term_id, $is_map = false ){
     $key = 'go_get_chain_posts_' . $term_id;
 
     $data = get_transient($key);
-    $data = false;
+    //$data = false;
     if ($data !== false){
         $data_ids = $data;
 

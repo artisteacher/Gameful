@@ -134,9 +134,9 @@ function go_make_user_archive_zip(){
 
 
     if ($archive_type == 'private'){
-        $is_private = true;
+        $show_loot = true;
     }else{
-        $is_private = false;
+        $show_loot = false;
     }
 
     $current_user_id = get_current_user_id();
@@ -163,7 +163,7 @@ function go_make_user_archive_zip(){
         go_copy_scripts_and_styles($destination);
         $user_id = $current_user_id;
     }
-    generate_single_archive($is_private, $user_id, $is_admin_archive);
+    generate_single_archive($show_loot, $user_id, $is_admin_archive);
     $content = ob_get_contents();
     ob_end_clean();
     $content = convert_urls($content, $destination);
@@ -264,7 +264,7 @@ function go_add_utf8_archive(){
 };
 
 //generate the code for the single user archive
-function generate_single_archive($is_private = false, $user_id,  $is_admin_archive = 'false'){
+function generate_single_archive($show_loot = false, $user_id,  $is_admin_archive = 'false'){
 
     if ($is_admin_archive === 'true') {
         $admin_archive_dir = '../../';
@@ -312,7 +312,7 @@ function generate_single_archive($is_private = false, $user_id,  $is_admin_archi
         <div><a href="../../index.html"><button>Back to User List</button></a></div>
        <?php
     }
-        go_stats_header($user_id, true, false, false, false, false, false, true, true, $is_private);
+        go_stats_header($user_id, false, false, false, true, $show_loot);
 
     ?>
     <div id='loader_container' style='display:none; height: 250px; width: 100%; padding: 10px 30px; '>
@@ -323,7 +323,7 @@ function generate_single_archive($is_private = false, $user_id,  $is_admin_archi
     <?php
 
 
-    go_get_blog_posts($user_id, true, $is_private);
+    go_get_blog_posts($user_id, true, $show_loot);
 
     ?>
     <script>

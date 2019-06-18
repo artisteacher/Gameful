@@ -165,9 +165,8 @@ END TOOLTIP
 	font-family: verdana;
 	display: flex;
 	flex-wrap: wrap;
-
 	padding: 10px;
-	max-width: 1200px;
+	max-width: 850px;
 	margin: auto;
 
 }
@@ -234,8 +233,7 @@ END TOOLTIP
 	filter: alpha(opacity=30); /* msie */
 }
 
-.go_badge_needed img,
-.go_badge_needed figcaption {
+.go_badge_needed{
 	opacity: 0.3;
 	filter: alpha(opacity=30); /* msie */
 }

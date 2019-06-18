@@ -17,6 +17,10 @@ if ( !is_admin() ) {
     if ($request_uri == '/profile/' || $request_uri == '/registration/') {
         $acf_location = dirname(__DIR__) . '/../includes/acf/acf.php';
         include($acf_location);
+
+        $acf_location = dirname(__DIR__) . '/../custom-acf-fields/acf-level2-taxonomy/acf-level2-taxonomy.php';
+        include_once($acf_location);
+        //include_once('custom-acf-fields/acf-level2-taxonomy/acf-level2-taxonomy.php');
         //include_once('public/public.php');
 
         add_action( 'wp_enqueue_scripts', 'go_login_scripts' );

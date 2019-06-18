@@ -1,101 +1,164 @@
 <?php
 
-//has ajax call
-function go_make_taxonomy_dropdown_ajax(){
-    // we will pass post IDs and titles to this array
-    $return = array();
+/**
+ *
+ */
+function go_stats_lightbox() {
 
-    $results = array();
-
-    $is_acf = (isset($_GET['taxonomy2acf']) ?  $_GET['taxonomy2acf'] : false);
-
-    if($is_acf){
-
-        $field = acf_get_field( $_GET['field_key']);
-        if( !$field ) return false;
-        // bail early if taxonomy does not exist
-        if( !taxonomy_exists($field['taxonomy']) ) return false;
-        $taxonomy = $field['taxonomy'];
-
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
     }
-    else {
 
 
-        $taxonomy = $_GET['taxonomy']; // taxonomy
+    //check_ajax_referer( 'go_stats_lightbox_' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_lightbox' ) ) {
+        echo "refresh";
+        die( );
     }
-    $is_hier = $_GET['is_hier']; // is it hierarchical
-    ////////////////
-    if ($is_hier === true || $is_hier === "true") {
-        $args = array('hide_empty' => false, 'orderby' => 'order', 'order' => 'ASC', 'parent' => '0');
 
-        //parent terms
-        $parents = get_terms($taxonomy, $args);
+    //$user_id = 0;
+    //Get the user_id for the stats
+    if ( ! empty( $_POST['uid'] ) ) {
+        $user_id = (int) $_POST['uid'];
+    } else {
+        $current_user = wp_get_current_user();
+        $user_id = $current_user->ID;
+    }
 
-        foreach ( $parents as $parent ) {
-            $title = ( mb_strlen( $parent->name ) > 50 ) ? mb_substr( $parent->name, 0, 49 ) . '...' : $parent->name;
-            $return[] = array( $parent->term_id, $title, true ); // array( Post ID, Post Title )
+    $show_about_me = get_option( 'options_about_me_toggle' );
+    $about_me_is_public = get_option( 'options_about_me_public' );
 
-            $args = array('hide_empty' => false, 'orderby' => 'order', 'order' => 'ASC', 'parent' => $parent->term_id);
-            //children terms
-            $children = get_terms($taxonomy, $args);
-            foreach ( $children as $child ) {
-                $title = ( mb_strlen( $child->name ) > 50 ) ? mb_substr( $child->name, 0, 49 ) . '...' : $child->name;
-                $return[] = array( $child->term_id, $title, false ); // array( Post ID, Post Title )
+    $current_user_id = get_current_user_id();
+    $is_admin = go_user_is_admin($current_user_id);
+    $is_current_user = false;
+    if($current_user_id === $user_id){
+        $is_current_user = true;
+        //reactivate the stats icon in admin bar if this is the current user
+        ?>
+        <script>
+            //jQuery("#wp-admin-bar-go_stats").off().one("click", function(){ go_stats_lightbox_page_button()});
+            jQuery(".go_user_bar_stats").off().one("click", function(){ go_stats_lightbox_page_button(<?php echo $user_id; ?>)});
+        </script>
+        <?php
+    }
+
+
+
+
+    go_stats_header($user_id, false, true, true, false, true);
+    ?>
+
+
+    <div id="stats_tabs">
+        <ul>
+            <?php
+
+
+            if ($show_about_me && ($is_admin || $about_me_is_public)) {
+                    echo '<li class="stats_tabs" tab="about"><a href="#stats_about">ABOUT</a></li>';
+                }
+
+
+
+            $badges_toggle = get_option('options_go_badges_toggle');
+            $groups_toggle = get_option('options_go_groups_toggle');
+            $store_toggle = get_option('options_go_store_toggle');
+
+            // prepares tab titles
+            $badges_name = ucfirst(get_option('options_go_badges_name_plural'));
+            $groups_name = ucfirst(get_option('options_go_groups_name_plural'));
+
+            if($is_admin || $is_current_user) {
+                ?>
+
+
+                <li class="stats_tabs" tab="tasks"><a
+                            href="#stats_tasks"><?php echo strtoupper(get_option('options_go_tasks_name_plural')); ?></a>
+                </li>
+                <?php
+
+                if ($store_toggle) {
+                    ?>
+                    <li class="stats_tabs" tab="store"><a
+                                href="#stats_store"><?php echo strtoupper(get_option('options_go_store_name')); ?></a>
+                    </li>
+                    <?php
+                }
+                ?>
+                <li class="stats_tabs" tab="messages"><a href="#stats_messages">MESSAGES</a></li>
+                <li class="stats_tabs" tab="history"><a href="#stats_history">HISTORY</a></li>
+                <?php
             }
-        }
-        $terms = $return;
-        $i = -1;
-        $c = 0;
-        foreach ($terms as $term){
-            if ($term[2] == true){
-                $i++;
-                $results[$i]['text'] = $term[1];
-                $c = 0;
+            if($badges_toggle) {
+                ?>
+                <li class="stats_tabs" tab="badges"><a
+                            href="#stats_badges"><?php echo strtoupper($badges_name); ?></a></li>
+                <?php
             }
-            else {
-                $results[$i]['children'][$c]['id'] = $term[0];
-                $results[$i]['children'][$c]['text'] = $term[1];
-                $c++;
+            if($groups_toggle) {
+                ?>
+                <li class="stats_tabs" tab="groups"><a
+                            href="#stats_groups"><?php echo strtoupper($groups_name); ?></a></li>
+                <?php
             }
+        echo '</ul>';
+
+
+        //output containers for the tab content
+            //include the content that is loaded on lightbox open (
+        if ($show_about_me && ($is_admin || $about_me_is_public )){
+            echo '<div id="stats_about">';
+
+            go_stats_about($user_id,  true);
+            echo "</div>";
         }
-    }else{
-        $args = array('hide_empty' => false, 'orderby' => 'order', 'order' => 'ASC');
-        //children terms
-        $children = get_terms($taxonomy, $args);
-        foreach ( $children as $child ) {
-            $title = ( mb_strlen( $child->name ) > 50 ) ? mb_substr( $child->name, 0, 49 ) . '...' : $child->name;
-            $results[] = array(
-                'id' => $child->term_id,
-                'text' => $title ); // array( Post ID, Post Title )
+        else if ($is_current_user){
+            ?>
+            <script>
+                go_stats_task_list();
+            </script>
+            <?php
         }
 
-    }
+        if (!$is_current_user) {
 
+            echo '<div id="stats_badges">';
 
-    /*
-    ////////////////////////
-    $args = array(
-        'hide_empty' => false,
-        'orderby' => 'order',
-        'order' => 'ASC',
-        'search'=> $_GET['q'], // the search query)
-        'posts_per_page' => 50, // how much to show at once\
-    );
+                go_stats_badges_list(true, $user_id);
 
-    $search_results = get_terms($taxonomy, $args);
-
-    if( count($search_results) > 0 ){
-        foreach ($search_results as $search_result){
-            $title = ( mb_strlen( $search_result->name ) > 50 ) ? mb_substr( $search_result->name, 0, 49 ) . '...' : $search_result->name;
-            //$return[] = array( $search_result->term_id, $title ); // array( Post ID, Post Title )
+            echo '  
+                    </div>
+                    <div id="stats_groups"></div>';
         }
-    }
-    */
+
+        if ($is_current_user || $is_admin){//is current user
+            ?>
+            <div id="stats_tasks"></div>
+            <div id="stats_store"></div>
+            <div id="stats_messages"></div>
+            <div id="stats_history"></div>
+            <div id="stats_badges"></div>
+            <div id="stats_groups"></div>
+
+        <?php
+        }
+        ?>
 
 
-    echo json_encode( $results );
-    die;
+
+
+
+
+    </div>
+
+
+
+    <?php
+    die();
 }
+
+
 
 function go_loot_headers($totals = null){
     $xp_abbr = get_option( "options_go_loot_xp_abbreviation" );
@@ -105,6 +168,14 @@ function go_loot_headers($totals = null){
     $xp_toggle = get_option('options_go_loot_xp_toggle');
     $gold_toggle = get_option('options_go_loot_gold_toggle');
     $health_toggle = get_option('options_go_loot_health_toggle');
+
+    $badges_toggle = get_option('options_go_badges_toggle');
+    $groups_toggle = get_option('options_go_groups_toggle');
+
+    // prepares tab titles
+    $badges_name = ucfirst(get_option('options_go_badges_name_plural'));
+    $groups_name = ucfirst(get_option('options_go_groups_name_plural'));
+
     if ($totals == true){
         $total = "Total ";
 
@@ -114,137 +185,38 @@ function go_loot_headers($totals = null){
 
     if ($xp_toggle){
         ?>
-        <th class='header'><a href="#"><?php echo "$total" . "$xp_abbr"; ?></a></th>
+        <th class='header'><?php echo "$total" . "$xp_abbr"; ?></th>
         <?php
     }
     if ($gold_toggle){
         ?>
-        <th class='header'><a href="#"><?php echo "$total" . "$gold_abbr"; ?></a></th>
+        <th class='header'><?php echo "$total" . "$gold_abbr"; ?></th>
         <?php
     }
     if ($health_toggle){
         ?>
-        <th class='header'><a href="#"><?php echo "$total" . "$health_abbr"; ?></a></th>
+        <th class='header'><?php echo "$total" . "$health_abbr"; ?></th>
         <?php
     }
-}
-/**
- *
- */
-function go_admin_bar_stats() {
-
-    if ( !is_user_logged_in() ) {
-        echo "login";
-        die();
+    if ($badges_toggle && !$totals) {
+        ?>
+        <th class='header'><?php echo "$badges_name"; ?></th>
+        <?php
     }
 
-
-    //check_ajax_referer( 'go_admin_bar_stats_' );
-    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_admin_bar_stats' ) ) {
-        echo "refresh";
-        die( );
+    if ($groups_toggle && !$totals) {
+        ?>
+        <th class='header'><?php echo "$groups_name"; ?></th>
+        <?php
     }
-
-    //$user_id = 0;
-    //Get the user_id for the stats
-    if ( ! empty( $_POST['uid'] ) ) {
-        $user_id = (int) $_POST['uid'];
-        $current_user = get_userdata( $user_id );
-    } else {
-        $current_user = wp_get_current_user();
-        $user_id = $current_user->ID;
-    }
-
-
-    ?>
-    <script>
-        //jQuery("#wp-admin-bar-go_stats").off().one("click", function(){ go_admin_bar_stats_page_button()});
-        jQuery(".go_user_bar_stats").off().one("click", function(){ go_admin_bar_stats_page_button()});
-    </script>
-
-
-    <?php
-    go_stats_header($user_id, true, false, true, true, true, false, false);
-    ?>
-
-
-        <div id="stats_tabs">
-            <ul>
-                <?php
-                $current_user_id = get_current_user_id();
-                $is_admin = go_user_is_admin($current_user_id);
-                if ($is_admin){
-                    echo '<li class="stats_tabs" tab="about"><a href="#stats_about">ABOUT</a></li>';
-                }
-                ?>
-
-
-                <li class="stats_tabs" tab="tasks"><a href="#stats_tasks"><?php echo strtoupper( get_option( 'options_go_tasks_name_plural' ) ); ?></a></li>
-                <li class="stats_tabs" tab="store"><a href="#stats_store"><?php echo strtoupper( get_option( 'options_go_store_name' ) ); ?></a></li>
-                <li class="stats_tabs" tab="messages"><a href="#stats_messages">MESSAGES</a></li>
-                <li class="stats_tabs" tab="history"><a href="#stats_history">HISTORY</a></li>
-                <li class="stats_tabs" tab="badges"><a href="#stats_badges"><?php echo strtoupper( get_option( 'options_go_badges_name_plural' ) ); ?></a></li>
-                <li class="stats_tabs" tab="groups"><a href="#stats_groups">GROUPS</a></li>
-
-                <?php
-                /*if ($leaderboard_toggle){
-                    ?>
-                    <li class="stats_tabs" tab="leaderboard"><a href="#stats_leaderboard"><?php echo strtoupper(get_option('options_go_stats_leaderboard_name')); ?></a></li>
-
-                    <?php
-                }*/
-                if (!$is_admin){
-                    echo '<li class="stats_tabs" tab="about"><a href="#stats_about">ABOUT</a></li>';
-                }
-                ?>
-
-            </ul>
-            <?php
-            if($is_admin){
-                echo '<div id="stats_about">';
-
-                go_stats_about($user_id,  true);
-                echo "</div>";
-            }
-            ?>
-
-            <div id="stats_tasks"></div>
-            <div id="stats_store"></div>
-            <div id="stats_messages"></div>
-            <div id="stats_history"></div>
-            <div id="stats_badges"></div>
-            <div id="stats_groups"></div>
-            <?php
-            /*if ($leaderboard_toggle){
-                ?>
-                <div id="stats_leaderboard"></div>
-                <?php
-            }*/
-            if(!$is_admin){
-                echo '<div id="stats_about"></div>';
-            }
-            ?>
-
-        </div>
-
-
-
-    <?php
-    die();
 }
 
 /**
  * @param null $user_id
  * @param bool $not_ajax
  */
-//THIS CAN BE REMOVED FOR v5
-function go_stats_about($user_id = null, $not_ajax = false) {
-
-    if ( ! empty( $_POST['user_id'] ) && empty($user_id) ) {
-        $user_id = (int) $_POST['user_id'];
-    }
-
-
+//THIS CAN BE REMOVED FOR v5--or changed to show about blog post?
+function go_stats_about($user_id, $not_ajax = false) {
 
     if (!$not_ajax){
 
@@ -258,62 +230,41 @@ function go_stats_about($user_id = null, $not_ajax = false) {
             echo "refresh";
             die( );
         }
+
+        $user_id = (int) $_POST['user_id'];
     }
 
     echo "<div id='go_stats_about' class='go_datatables'>";
-    $headshot_id = get_user_option('go_headshot', $user_id ) ;
-    $headshot = wp_get_attachment_image($headshot_id);
-    ?>
-    <div class='go_stats_gravatar'><?php echo $headshot; ?></div>
-    <?php
-
-    $num_of_qs = get_option('options_go_user_profile_questions');
-
-    for ($i = 0; $i < $num_of_qs; $i++) {
-        $q_title = get_option('options_go_user_profile_questions_' . $i . '_title');
-        $q_answer = get_user_option('question_' . $i, $user_id);
-
-        echo "<h4>{$q_title}</h4>";
-        echo "<p>{$q_answer}</p>";
-    }
+    $about_me_quest = get_option( 'options_about_me_quest' );
+    go_blog_user_task(true, $user_id, $about_me_quest);
 
     echo "</div>";
 
     //die();
 }
 
-/**Tasks with Sever Side Processing--in case the tables get too large*/
+function go_stats_task_list($skip_ajax_checks = false) {
+    if(!$skip_ajax_checks) {
+        if (!is_user_logged_in()) {
+            echo "login";
+            die();
+        }
 
-function go_stats_task_list() {
-
-    if ( !is_user_logged_in() ) {
-        echo "login";
-        die();
-    }
-
-    //check_ajax_referer( 'go_stats_task_list_' );
-    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_task_list' ) ) {
-        echo "refresh";
-        die( );
+        //check_ajax_referer( 'go_stats_task_list_' );
+        if (!wp_verify_nonce($_REQUEST['_ajax_nonce'], 'go_stats_task_list')) {
+            echo "refresh";
+            die();
+        }
     }
     $current_user = get_current_user_id();
     $is_admin = go_user_is_admin($current_user);
-
-    $xp_abbr = get_option( "options_go_loot_xp_abbreviation" );
-    $gold_abbr = get_option( "options_go_loot_gold_abbreviation" );
-    $health_abbr = get_option( "options_go_loot_health_abbreviation" );
-
-    $xp_toggle = get_option('options_go_loot_xp_toggle');
-    $gold_toggle = get_option('options_go_loot_gold_toggle');
-    $health_toggle = get_option('options_go_loot_health_toggle');
-
 
     echo "<div id='go_task_list' class='go_datatables'><table id='go_tasks_datatable' class='pretty display'>
                    <thead>
 						<tr><th></th>";
     if ($is_admin){
         echo "<th class='header go_tasks_reset_multiple'  style='color: red;'><a href='#' class='go_tasks_reset_multiple_clipboard'><i class='fas fa-times-circle' aria-hidden='true'></i></a></th>
-    <th class='header go_tasks_reset' ><a href='#'></a></th>";
+        <th class='header go_tasks_reset' ><a href='#'></a></th>";
     }
     echo "    
         <th class='header' id='go_stats_last_time'><a href=\"#\">Time</a></th>
@@ -362,14 +313,6 @@ function go_tasks_dataloader_ajax(){
     $current_user = get_current_user_id();
     $is_admin = go_user_is_admin($current_user);
 
-    /*
-    $sLimit = "";
-    if ( isset( $_REQUEST['iDisplayStart'] ) && $_REQUEST['iDisplayLength'] != '-1' )
-    {
-        $sLimit = "LIMIT ".intval( $_REQUEST['iDisplayStart'] ).", ".
-            intval( $_REQUEST['iDisplayLength'] );
-    }
-    */
 
     $sLimit = '';
     if ( isset( $_GET['start'] ) && $_GET['length'] != '-1' )
@@ -379,12 +322,7 @@ function go_tasks_dataloader_ajax(){
     }
 
     $sOrder = "ORDER BY last_time desc"; //always in reverse order
-    ///////////
-    /// ////
-    ///
-    ///OLD
-    ///
-    ///
+
     $sWhere = "";
     if ( isset($_REQUEST['sSearch']) && $_REQUEST['sSearch'] != "" )
     {
@@ -413,33 +351,8 @@ function go_tasks_dataloader_ajax(){
         }
     }
 
-    $sQuery = "
-  SELECT SQL_CALC_FOUND_ROWS `".str_replace(" , ", " ", implode("`, `", $aColumns))."`
-  FROM   $sTable
-  $sWhere
-  $sOrder
-  $sLimit
-  ";
-    $rResult = $wpdb->get_results($sQuery, ARRAY_A);
 
-    $sQuery = "
-  SELECT FOUND_ROWS()
- ";
-    $rResultFilterTotal = $wpdb->get_results($sQuery, ARRAY_N);
-    $iFilteredTotal = $rResultFilterTotal [0];
 
-    $sQuery = "
-  SELECT COUNT(`".$sIndexColumn."`)
-  FROM   $sTable
- ";
-    $rResultTotal = $wpdb->get_results($sQuery, ARRAY_N);
-    $iTotal = $rResultTotal [0];
-
-    $output = array(
-        "iTotalRecords" => $iTotal,
-        "iTotalDisplayRecords" => $iFilteredTotal,
-        "aaData" => array()
-    );
 
     /////////////
     /// START
@@ -465,22 +378,6 @@ function go_tasks_dataloader_ajax(){
 
     $totalWhere = " WHERE uid = ".$user_id;
 
-    $pTable = "{$wpdb->prefix}posts";
-    /*
-    $sQuery = "
-    SELECT SQL_CALC_FOUND_ROWS
-      t1.*, t2.post_title
-    FROM
-        (
-          SELECT `".str_replace(" , ", " ", implode("`, `", $aColumns))."`
-          FROM   $sTable
-          $sWhere
-          $sOrder
-          $sLimit
-        ) AS t1
-      INNER JOIN $pTable AS t2 ON t1.post_id = t2.ID
-      ";
-    */
     $sQuery = "
           SELECT `".str_replace(" , ", " ", implode("`, `", $aColumns))."`
           FROM   $sTable
@@ -514,12 +411,10 @@ function go_tasks_dataloader_ajax(){
         "aaData" => array()
     );
 
-    //////////////////
     ///
     ///END
     ///
-    ///
-    ///
+
     foreach($rResult as $task){//output a row for each task
         $row = array();
         ///////////
@@ -541,21 +436,10 @@ function go_tasks_dataloader_ajax(){
             $total_bonus_stages = (isset($custom_fields['go_bonus_limit'][0]) ? $custom_fields['go_bonus_limit'][0] : null);
             $bonus_status = $bonus_status ."/". $total_bonus_stages;
         }
-        //$xp = $task['xp'];
-        //$gold = $task['gold'];
-        //$health = $task['health'];
-        //$start_time = $task->start_time;
         $last_time = $task['last_time'];
         $time  = date("m/d/y g:i A", strtotime($last_time));
-        //$unix_time = strtotime($last_time);
-
-
         $next_bonus_stage = null;
 
-        $links = array();
-
-        $links = array_reverse($links);
-        $links = $comma_separated = implode(" ", $links);
         $check_box = "<input class='go_checkbox' type='checkbox' name='go_selected' data-uid='" . $user_id . "' data-task='". $post_id . "'/>";
         $row[] = "";//empty
         if($is_admin) {
@@ -597,20 +481,44 @@ function go_loot_columns_stats($action){
     $xp = $action['xp'];
     $gold = $action['gold'];
     $health = $action['health'];
+    $badge_ids = $action['badges'];
+    $group_ids = $action['groups'];
+
+    $result_serialized = $action['result'];
+    $result_array = unserialize($result_serialized);
 
     $xp_toggle = get_option('options_go_loot_xp_toggle');
     $gold_toggle = get_option('options_go_loot_gold_toggle');
     $health_toggle = get_option('options_go_loot_health_toggle');
+
+    $badges_toggle = get_option('options_go_badges_toggle');
+    $groups_toggle = get_option('options_go_groups_toggle');
+
+
+
     $row = array();
     if ($xp_toggle){
-        $row[] = "{$xp}";
+        $row[] = $xp;
     }
     if ($gold_toggle){
-        $row[] = "{$gold}";
+        $row[] = $gold;
     }
     if ($health_toggle){
-        $row[] = "{$health}";
+        $row[] = $health;
     }
+    if ($badges_toggle){
+        $dir = $result_array[2];
+
+        $badges = go_badges_list($badge_ids, $dir);
+        $row[] = $badges;
+    }
+
+    if($groups_toggle){
+        $dir = $result_array[3];
+        $groups = go_groups_list($group_ids, $dir);
+        $row[] = $groups;
+    }
+
     return $row;
 }
 
@@ -685,9 +593,15 @@ function go_stats_single_task_activity_list($post_id) {
         $xp = $action->xp;
         $gold = $action->gold;
         $health = $action->health;
-        $xp_total = $action->xp_total;
-        $gold_total = $action->gold_total;
-        $health_total = $action->health_total;
+        $badges =$action->badges;
+        $groups =$action->groups;
+
+
+        $xp_toggle = get_option('options_go_loot_xp_toggle');
+        $gold_toggle = get_option('options_go_loot_gold_toggle');
+        $health_toggle = get_option('options_go_loot_health_toggle');
+        $badges_toggle = get_option('options_go_badges_toggle');
+        $groups_toggle = get_option('options_go_groups_toggle');
 
         $post_title = get_the_title($source_id);
 
@@ -764,13 +678,25 @@ function go_stats_single_task_activity_list($post_id) {
 			            <td data-order='{$TIMESTAMP}'>{$time}</td>
 					    <td>{$type} </td>
 					    <td>{$post_title} </td>
-					    <td>{$health_mod_str}   {$timer_mod}   {$late_mod}   {$quiz_mod}</td>
-					    
-					    <td>{$xp}</td>
-					    <td>{$gold}</td>
-					    <td>{$health}</td>
-					</tr>
-					";
+					    <td>{$health_mod_str}   {$timer_mod}   {$late_mod}   {$quiz_mod}</td>";
+        if($xp_toggle){
+            echo "<td>$xp</td>";
+        }
+        if($gold_toggle){
+            echo "<td>$gold</td>";
+        }
+        if($health_toggle){
+            echo "<td>$health</td>";
+        }
+        if($badges_toggle){
+            $badges_list = go_badges_list($badges);
+            echo "<td>$badges_list</td>";
+        }
+        if($groups_toggle){
+            $groups_list = go_groups_list($groups);
+            echo "<td>$groups_list</td>";
+        }
+		echo "</tr>";
 
 
     }
@@ -783,14 +709,14 @@ function go_stats_single_task_activity_list($post_id) {
 /**
  *
  */
-function go_stats_item_list() {
+function go_stats_store_list() {
     if ( !is_user_logged_in() ) {
         echo "login";
         die();
     }
 
     //check_ajax_referer( 'go_stats_item_list_' );
-    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_item_list' ) ) {
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_store_list' ) ) {
         echo "refresh";
         die( );
     }
@@ -803,33 +729,21 @@ function go_stats_item_list() {
     $gold_toggle = get_option('options_go_loot_gold_toggle');
     $health_toggle = get_option('options_go_loot_health_toggle');
 
-    echo "<div id='go_item_list' class='go_datatables'><table id='go_store_datatable' class='pretty display'>
+    echo "<div id='go_store_list' class='go_datatables'><table id='go_store_datatable' class='pretty display'>
                    <thead>
 						<tr>
 						
 							<th class='header'><a href=\"#\">Time</a></th>
 							<th class='header'><a href=\"#\">Item</a></th>					
 							<th class='header'><a href=\"#\">QTY</a></th>";
-    if ($xp_toggle){
-        ?>
-        <th class='header'><a href=\"#\"><?php echo "$xp_abbr"; ?></a></th>
-        <?php
-    }
-    if ($gold_toggle){
-        ?>
-        <th class='header'><a href=\"#\"><?php echo "$gold_abbr"; ?></a></th>
-        <?php
-    }
-    if ($health_toggle){
-        ?>
-        <th class='header'><a href=\"#\"><?php echo "$health_abbr"; ?></a></th>
-        <?php
-    }
-    echo "<th class='header'><a href='#'>Other</a></th>
+
+    go_loot_headers();
+    ?>
 					</tr>
 						</thead>
 
-				</table></div>";
+				</table></div>
+    <?php
 
     die();
 }
@@ -926,82 +840,20 @@ function go_stats_store_item_dataloader(){
         $row = array();
         ///////////
         ///
-        $action_type = $action['action_type'];
         $TIMESTAMP = $action['TIMESTAMP'];
-        $result = $action['result'];
-        $health_mod = $action['global_mod'];
-        $xp = $action['xp'];
-        $gold = $action['gold'];
-        $health = $action['health'];
-        $badge_ids = $action['badges'];
-        $group_ids = $action['groups'];
         $title = $action['post_title'];
         $qnt = $action['stage'];
-
-        $badges_names = array();
-        $badges_toggle = get_option('options_go_badges_toggle');
-
-        if ($badges_toggle) {
-            $badge_ids = unserialize($badge_ids);
-            $badges_name_sing = get_option('options_go_badges_name_singular');
-
-            if (!empty($badge_ids)) {
-                $badges_names[] = "<b>" . $badges_name_sing . ":</b>";
-                foreach ($badge_ids as $badge_id) {
-                    $term = get_term($badge_id, "go_badges");
-                    $badge_name = $term->name;
-                    $badges_names[] = $badge_name;
-                }
-            }
-        }
-
-
-        $group_names = array();
-        $group_ids = unserialize($group_ids);
-        if (!empty($group_ids)){
-            if (!empty($badge_ids)) {
-                $badges_names[] = "<br>";
-            }
-            $group_names[] = "<b>Group:</b>";
-            foreach ($group_ids as $group_id) {
-                $term = get_term($group_id, "user_go_groups");
-                $group_name = $term->name;
-                $group_names[] = $group_name;
-            }
-        }
-        $badges_names = implode("<br>" , $badges_names);
-        $group_names = implode("<br>" , $group_names);
-
-
-        //$message = $title . ": <br>" . $message;
-        //$action = "<span class='tooltip' ><span class='tooltiptext'>{$message}</span>See Message</span>";
-
-
-
-        $badges_names =  $badges_names . $group_names;
 
         //$unix_time = strtotime($TIMESTAMP);
         $row[] = "{$TIMESTAMP}";
         $row[] = "{$title}";
         $row[] = "{$qnt}";
 
-        $xp_toggle = get_option('options_go_loot_xp_toggle');
-        $gold_toggle = get_option('options_go_loot_gold_toggle');
-        $health_toggle = get_option('options_go_loot_health_toggle');
+        $go_loot_columns = go_loot_columns_stats($action);
+        $row = array_merge($row, $go_loot_columns);
 
-        if ($xp_toggle){
-            $row[] = "{$xp}";
-        }
-        if ($gold_toggle){
-            $row[] = "{$gold}";
-        }
-        if ($health_toggle){
-            $row[] = "{$health}";
-        }
-        $row[] = "{$badges_names}";
         $output['aaData'][] = $row;
     }
-
 
     echo json_encode( $output );
     die();
@@ -1040,29 +892,13 @@ function go_stats_messages() {
 							<th class='header'><a href=\"#\">Message</a></th>";
 
 
-    if ($xp_toggle){
-        ?>
-        <th class='header'><a href=\"#\"><?php echo "$xp_abbr"; ?></a></th>
-        <?php
-    }
-    if ($gold_toggle){
-        ?>
-        <th class='header'><a href=\"#\"><?php echo "$gold_abbr"; ?></a></th>
-        <?php
-    }
-    if ($health_toggle){
-        ?>
-        <th class='header'><a href=\"#\"><?php echo "$health_abbr"; ?></a></th>
-        <?php
-    }
-
-
-
-    echo "<th class='header'><a href='#'>Other</a></th>
+    go_loot_headers();
+    ?>
 					</tr>
 						</thead>
 
-				</table></div>";
+				</table></div>
+    <?php
 
     die();
 }
@@ -1154,109 +990,19 @@ function go_messages_dataloader_ajax(){
         $action_type = $action['action_type'];
         $TIMESTAMP = $action['TIMESTAMP'];
         $result = $action['result'];
-        $xp = $action['xp'];
-        $gold = $action['gold'];
-        $health = $action['health'];
-        $badge_ids = $action['badges'];
-        $group_ids = $action['groups'];
-
-        $badges_names = array();
-        $badges_toggle = get_option('options_go_badges_toggle');
-
-        if ($badges_toggle) {
-            $badge_ids = unserialize($badge_ids);
-            $badges_name_sing = get_option('options_go_badges_name_singular');
-
-            if (!empty($badge_ids)) {
-                $badges_names[] = "<b>" . $badges_name_sing . ":</b>";
-                foreach ($badge_ids as $badge_id) {
-                    $term = get_term($badge_id, "go_badges");
-                    $badge_name = $term->name;
-                    $badges_names[] = $badge_name;
-                }
-            }
-        }
-
-
-        $group_names = array();
-        $group_ids = unserialize($group_ids);
-        if (!empty($group_ids)){
-            if (!empty($badge_ids)) {
-                $badges_names[] = "<br>";
-            }
-            $group_names[] = "<b>Group:</b>";
-            foreach ($group_ids as $group_id) {
-                $term = get_term($group_id, "user_go_groups");
-                $group_name = $term->name;
-                $group_names[] = $group_name;
-            }
-        }
-        $badges_names = implode("<br>" , $badges_names);
-        $group_names = implode("<br>" , $group_names);
-
-
-        $type = ucfirst($action_type);
         $result_array = unserialize($result);
         $title = $result_array[0];
         $message = $result_array[1];
-        //$message = $title . ": <br>" . $message;
-        //$action = "<span class='tooltip' ><span class='tooltiptext'>{$message}</span>See Message</span>";
-
-        if (!empty($badge_ids)) {
-            $badge_dir = $result_array[2];
-
-            //$badges_name = get_option('options_go_badges_name_plural');
-
-            if ($badge_dir == "badges+"){
-                $badge_dir = "<b>Add </b> ";
-            }else if ($badge_dir == "badges-"){
-                $badge_dir = "<b>Remove </b> ";
-            }else{
-                $badge_dir = "";
-            }
-        }
-        else{
-            $badge_dir = "";
-        }
-
-        if (!empty($group_ids)){
-            $groups_dir = $result_array[3];
-            if ($groups_dir == "groups+"){
-                $group_dir = "<b>Add </b> ";
-            }else if ($groups_dir == "groups-") {
-                $group_dir = "<b>Remove </b> ";
-            }else{
-                $group_dir = "";
-            }
-        }else{
-            $group_dir = "";
-        }
-
-        $badges_names = $badge_dir . $badges_names . $group_dir . $group_names;
-
 
         //$unix_time = strtotime($TIMESTAMP);
         $row[] = "{$TIMESTAMP}";
         $row[] = "{$title}";
         $row[] = "{$message}";
 
-        $xp_toggle = get_option('options_go_loot_xp_toggle');
-        $gold_toggle = get_option('options_go_loot_gold_toggle');
-        $health_toggle = get_option('options_go_loot_health_toggle');
-
-        if ($xp_toggle){
-            $row[] = "{$xp}";
-        }
-        if ($gold_toggle){
-            $row[] = "{$gold}";
-        }
-        if ($health_toggle){
-            $row[] = "{$health}";
-        }
-        $row[] = "{$badges_names}";
+        $go_loot_columns = go_loot_columns_stats($action);
+        $row = array_merge($row, $go_loot_columns);
         $output['aaData'][] = $row;
     }
-
 
     echo json_encode( $output );
     die();
@@ -1298,42 +1044,12 @@ function go_stats_activity_list() {
 							<th class='header'><a href=\"#\">Modifiers</a></th>";
 
 
-    if ($xp_toggle){
-        ?>
-        <th class='header'><a href=\"#\"><?php echo "$xp_abbr"; ?></a></th>
-        <?php
-    }
-    if ($gold_toggle){
-        ?>
-        <th class='header'><a href=\"#\"><?php echo "$gold_abbr"; ?></a></th>
-        <?php
-    }
-    if ($health_toggle){
-        ?>
-        <th class='header'><a href=\"#\"><?php echo "$health_abbr"; ?></a></th>
-        <?php
-    }
-    if ($xp_toggle){
-        ?>
-        <th class='header'><a href=\"#\">Total<br><?php echo "$xp_abbr"; ?></a></th>
-        <?php
-    }
-    if ($gold_toggle){
-        ?>
-        <th class='header'><a href=\"#\">Total<br><?php echo "$gold_abbr"; ?></a></th>
-        <?php
-    }
-    if ($health_toggle){
-        ?>
-        <th class='header'><a href=\"#\">Total<br><?php echo "$health_abbr"; ?></a></th>
-        <?php
-    }
+    go_loot_headers();
+    go_loot_headers(true);
 
 
-    echo "<th class='header'><a href='#'>Other</a></th>
-					</tr>
-						</thead>
-
+    echo "</tr>
+        </thead>
 				</table></div>";
 
     die();
@@ -1450,13 +1166,10 @@ function go_activity_dataloader_ajax(){
 
     foreach($rResult as $action){//output a row for each task
         $row = array();
-        ///////////
-        ///
+
         $action_type = $action['action_type'];
         $source_id = $action['source_id'];
         $TIMESTAMP = $action['TIMESTAMP'];
-        //$time  = date("m/d/y g:i A", strtotime($TIMESTAMP));
-        $time = $TIMESTAMP;
         $stage = $action['stage'];
         $bonus_status = $action['bonus_status'];
         $result = $action['result'];
@@ -1464,80 +1177,39 @@ function go_activity_dataloader_ajax(){
         $late_mod = $action['late_mod'];
         $timer_mod = $action['timer_mod'];
         $health_mod = $action['global_mod'];
-        $xp = $action['xp'];
-        $gold = $action['gold'];
-        $health = $action['health'];
+
         $xp_total = $action['xp_total'];
         $gold_total = $action['gold_total'];
         $health_total = $action['health_total'];
-        $badge_ids = $action['badges'];
-        $group_ids = $action['groups'];
-
-        $badges_names = array();
-
-        $badges_toggle = get_option('options_go_badges_toggle');
-        if ($badges_toggle) {
-            $badge_ids = unserialize($badge_ids);
-            $badges_name_sing = get_option('options_go_badges_name_singular');
-
-            if (!empty($badge_ids)) {
-                $badges_names[] = "<b>" . $badges_name_sing . ":</b>";
-                foreach ($badge_ids as $badge_id) {
-                    $term = get_term($badge_id, "go_badges");
-                    $badge_name = $term->name;
-                    $badges_names[] = $badge_name;
-                }
-            }
-        }
-
-
-        $group_names = array();
-        $group_ids = unserialize($group_ids);
-        if (!empty($group_ids)){
-            if (!empty($badge_ids)) {
-                $badges_names[] = "<br>";
-            }
-            $group_names[] = "<b>Group:</b>";
-            foreach ($group_ids as $group_id) {
-                $term = get_term($group_id, "user_go_groups");
-                $group_name = $term->name;
-                $group_names[] = $group_name;
-            }
-        }
-        $badges_names = implode("<br>" , $badges_names);
-        $group_names = implode("<br>" , $group_names);
 
         $post_title = get_the_title($source_id);
 
-
-
+        $type="";
+        $action_title="";
 
         if ($action_type == 'store'){
             $store_qnty = $stage;
             $type = ucfirst( get_option( 'options_go_store_name' ) );
-            $action = "Qnt: " . $store_qnty ;
+            $action_title = "Qnt: " . $store_qnty ;
         }
         else if ($action_type == 'task'){
             $type = ucfirst( get_option( 'options_go_tasks_name_singular' ) );
             if ($bonus_status == 0) {
                 //$type = strtoupper( get_option( 'options_go_tasks_name_singular' ) );
                 //$type = "Continue";
-                $action = "Stage: " . $stage;
+                $action_title = "Stage: " . $stage;
             }
             else{
-                //$type = strtoupper( get_option( 'options_go_tasks_name_singular' ) );
-                // $type = "Continue";
-                $action = "Bonus: " . $bonus_status;
+                $action_title = "Bonus: " . $bonus_status;
             }
         }
         else if ($action_type == 'feedback'){
-            $type = ucfirst( get_option( 'options_go_tasks_name_singular' ) );
             $type = ucfirst($action_type);
             $result_array = unserialize($result);
             $title = $result_array[0];
             $message = $result_array[1];
             $message = $title . " <br><br>" . $message;
-            $action = '<a href="javascript:void(0)"><span class="tooltip" data-tippy-content="'. $message .'">Feedback Stage: ' . $stage. '</span></a>';
+            $action_title = '<a href="javascript:void(0)"><span class="tooltip" data-tippy-content="'. $message .'">Feedback Stage: ' . $stage. '</span></a>';
            // $action =' <span class="tooltip" data-tippy-content="'. $message .'">See Message</span>';
         }
         else if ($action_type == 'undo_task'){
@@ -1545,7 +1217,7 @@ function go_activity_dataloader_ajax(){
             if ($bonus_status == 0) {
                 //$type = strtoupper( get_option( 'options_go_tasks_name_singular' ) ) . " Undo";
                 //$type = "Undo";
-                $action = "Undo Stage: " . $stage;
+                $action_title = "Undo Stage: " . $stage;
             }
         }
         else if ($action_type == 'message' || $action_type == 'reset'){
@@ -1555,57 +1227,19 @@ function go_activity_dataloader_ajax(){
             $message = $result_array[1];
             $message = $title . ": <br>" . $message;
             //$action = "<span class='tooltip' ><span class='tooltiptext'>{$message}</span>See Message</span>  ";
-            $action =' <span class="tooltip" data-tippy-content="'. $message .'">See Message</span>';
-
-            if (!empty($badge_ids)) {
-                $badge_dir = $result_array[2];
-
-                //$badges_name = get_option('options_go_badges_name_plural');
-
-                if ($badge_dir == "badges+"){
-                    $badge_dir = "<b>Add </b> ";
-                }else if ($badge_dir == "badges-"){
-                    $badge_dir = "<b>Remove </b> ";
-                }else{
-                    $badge_dir = "";
-                }
-            }
-            else{
-                $badge_dir = "";
-            }
-
-            if (!empty($group_ids)){
-                $groups_dir = $result_array[3];
-                if ($groups_dir == "groups+"){
-                    $group_dir = "<b>Add </b> ";
-                }else if ($groups_dir == "groups-") {
-                    $group_dir = "<b>Remove </b> ";
-                }else{
-                    $group_dir = "";
-                }
-            }else{
-                $group_dir = "";
-            }
-
+            $action_title =' <span class="tooltip" data-tippy-content="'. $message .'">See Message</span>';
         }
         else if ($action_type == 'bonus_loot'){
-            $action = "Bonus Loot";
+            $action_title = "Bonus Loot";
         }
         else if ($action_type == 'undo_bonus_loot'){
-            $action = "Undo Bonus Loot";
+            $action_title = "Undo Bonus Loot";
         }
-        else{
-            $badge_dir = "";
-            $group_dir = "";
-        }
-
-        $badges_names = $badge_dir . $badges_names . $group_dir . $group_names;
-
 
         if ($result == 'undo_bonus'){
             //$type = strtoupper( get_option( 'options_go_tasks_name_singular' ) ) . " Undo Bonus";
             //$type = "Undo Bonus";
-            $action = "Undo Bonus: " . $bonus_status ;
+            $action_title = "Undo Bonus: " . $bonus_status ;
         }
 
         $quiz_mod_int = intval($quiz_mod);
@@ -1644,22 +1278,17 @@ function go_activity_dataloader_ajax(){
         $row[] = "{$TIMESTAMP}";
         $row[] = "{$type}";
         $row[] = "{$post_title}";
-        $row[] = "{$action}";
+        $row[] = "{$action_title}";
         $row[] = "{$health_mod_str}   {$timer_mod}   {$late_mod}   {$quiz_mod}";
+
+
+        $go_loot_columns = go_loot_columns_stats($action);
+        $row = array_merge($row, $go_loot_columns);
 
         $xp_toggle = get_option('options_go_loot_xp_toggle');
         $gold_toggle = get_option('options_go_loot_gold_toggle');
         $health_toggle = get_option('options_go_loot_health_toggle');
 
-        if ($xp_toggle){
-            $row[] = "{$xp}";
-        }
-        if ($gold_toggle){
-            $row[] = "{$gold}";
-        }
-        if ($health_toggle){
-            $row[] = "{$health}";
-        }
         if ($xp_toggle){
             $row[] = "{$xp_total}";
         }
@@ -1669,7 +1298,6 @@ function go_activity_dataloader_ajax(){
         if ($health_toggle){
             $row[] = "{$health_total}";
         }
-        $row[] = "{$badges_names}";
         $output['aaData'][] = $row;
     }
 
@@ -1678,44 +1306,40 @@ function go_activity_dataloader_ajax(){
 }
 
 /**
+ * @param $skip_ajax_checks
  * @param $user_id
+ *
  */
-function go_stats_badges_list($user_id) {
-    if ( !is_user_logged_in() ) {
-        echo "login";
-        die();
+function go_stats_badges_list($skip_ajax_checks = false, $user_id = null) {
+    if(!$skip_ajax_checks) {
+        if (!is_user_logged_in()) {
+            echo "login";
+            die();
+        }
+
+        //check_ajax_referer( 'go_stats_badges_list_' );
+        if (!wp_verify_nonce($_REQUEST['_ajax_nonce'], 'go_stats_badges_list')) {
+            echo "refresh";
+            die();
+        }
     }
 
-    //check_ajax_referer( 'go_stats_badges_list_' );
-    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_badges_list' ) ) {
-        echo "refresh";
-        die( );
-    }
-
-
-    global $wpdb;
-    $go_loot_table_name = "{$wpdb->prefix}go_loot";
     if ( ! empty( $_POST['user_id'] ) ) {
         $user_id = (int) $_POST['user_id'];
     }
 
-    $badges_array = $wpdb->get_var ("SELECT badges FROM {$go_loot_table_name} WHERE uid = {$user_id}");
-    $badges_array = unserialize($badges_array);
+    $key = go_prefix_key('go_badge');
+    $badges_array = get_user_meta($user_id, $key, false);
+
     if (empty($badges_array)){
         $badges_array = array();
     }
-    $args = array(
-        'hide_empty' => false,
-        'orderby' => 'name',
-        'order' => 'ASC',
-        'parent' => '0'
-    );
 
     /* Get all task chains with no parents--these are the badge categories.  */
     $taxonomy = 'go_badges';
     //$badges_name = get_option('options_go_badges_name_plural');
 
-    $rows = get_terms( $taxonomy, $args);//the rows
+    $rows = go_get_terms_ordered($taxonomy, '0');
     echo"<div id='go_badges_list' class='go_datatables'> ";
 
 
@@ -1726,23 +1350,8 @@ function go_stats_badges_list($user_id) {
     foreach ( $rows as $row ) {
         $chainParentNum++;
         $row_id = $row->term_id;//id of the row
-        //$custom_fields = get_term_meta( $row_id );
-        /*
-        $cat_hidden = (isset($custom_fields['go_hide_store_cat'][0]) ?  $custom_fields['go_hide_store_cat'][0] : null);
-        if( $cat_hidden == true){
-            continue;
-        }
-        */
-        $column_args=array(
-            'hide_empty' => false,
-            'orderby' => 'order',
-            'order' => 'ASC',
-            'parent' => $row_id,
 
-        );
-
-        $badges = get_terms($taxonomy,$column_args);
-
+        $badges = go_get_terms_ordered($taxonomy, $row_id);
         if(empty($badges)){
             continue;
         }
@@ -1762,57 +1371,25 @@ function go_stats_badges_list($user_id) {
             $badge_id = $badge->term_id;
             $badge_assigned = in_array($badge_id, $badges_array);
             if ($badge_assigned){
-                $badge_class = 'go_badge_earned';
+                $class = 'go_badge_earned';
             }else{
-                $badge_class = 'go_badge_needed';
-            }
-            $badge_img_id = get_term_meta( $badge_id, 'my_image' );
-            $badge_description = term_description( $badge_id );
-            /*
-            $cat_hidden = (isset($custom_fields['go_hide_store_cat'][0]) ?  $custom_fields['go_hide_store_cat'][0] : null);
-            if( $cat_hidden == true){
-                continue;
-            }
-            */
-
-            $badge_obj = get_term( $badge_id);
-            $badge_name = $badge_obj->name;
-            //$badge_img_id =(isset($custom_fields['my_image'][0]) ?  $custom_fields['my_image'][0] : null);
-            if (isset($badge_img_id[0]) && !empty($badge_img_id[0])){
-                $badge_img = wp_get_attachment_image($badge_img_id[0], array( 100, 100 ));
-            }else{
-                $badge_img = '<i class="fas fa-award fa-4x"></i>';
+                $class = 'go_badge_needed';
             }
 
-
-            if ( ! empty( $badge_obj ) ) {
-                echo"<div class='go_badge_wrap'>
-                        <div class='go_badge_container {$badge_class}'><figure class=go_badge title='{$badge_name}'>";
-
-                if (!empty($badge_description)){
-                    echo "<span class='tooltip' ><span class='tooltiptext'>{$badge_description}</span>{$badge_img}</span>";
-                }else{
-                    echo "$badge_img";
-                }
-                echo "        
-               <figcaption>{$badge_name}</figcaption>
-                            </figure>
-                        </div>
-                       </div>";
-
-            }
+            go_print_single_badge( $badge_id, 'badge', true, $class );
         }
         echo "</div></div>";
     }
     echo "</div></div>";
-    die();
-
+    if(!$skip_ajax_checks) {
+        die();
+    }
 }
 
 /**
  * @param $user_id
  */
-function go_stats_groups_list($user_id) {
+function go_stats_groups_list() {
 
     if ( !is_user_logged_in() ) {
         echo "login";
@@ -1825,297 +1402,58 @@ function go_stats_groups_list($user_id) {
         die( );
     }
 
-    global $wpdb;
-    $go_loot_table_name = "{$wpdb->prefix}go_loot";
     if ( ! empty( $_POST['user_id'] ) ) {
         $user_id = (int) $_POST['user_id'];
     } else {
         $user_id = get_current_user_id();
     }
 
-
-    $badges_array = $wpdb->get_var ("SELECT groups FROM {$go_loot_table_name} WHERE uid = {$user_id}");
-    $badges_array = unserialize($badges_array);
-    $args = array(
-        'hide_empty' => true,
-        'orderby' => 'name',
-        'order' => 'ASC',
-        'parent' => '0'
-    );
+    $key = go_prefix_key('go_group');
+    $groups_array = get_user_meta($user_id, $key, false);
 
     /* Get all task chains with no parents--these are the sections of the store.  */
     $taxonomy = 'user_go_groups';
+    $rows = go_get_terms_ordered($taxonomy, '0');
 
-
-    $rows = get_terms( $taxonomy, $args);//the rows
     echo"<div id='go_groups_list' class='go_datatables'>";
 
 
     /* For each Store Category with no parent, get all the children.  These are the store rows.*/
     $chainParentNum = 0 ;
     echo '<div id="go_groups">';
-    //for each row
+
     foreach ( $rows as $row ) {
         $chainParentNum++;
         $row_id = $row->term_id;//id of the row
-        //$custom_fields = get_term_meta( $row_id );
-        /*
-        $cat_hidden = (isset($custom_fields['go_hide_store_cat'][0]) ?  $custom_fields['go_hide_store_cat'][0] : null);
-        if( $cat_hidden == true){
-            continue;
-        }
-        */
 
-        $column_args=array(
-            'hide_empty' => false,
-            'orderby' => 'order',
-            'order' => 'ASC',
-            'parent' => $row_id,
-
-        );
-
-        $badges = get_terms($taxonomy,$column_args);
-
-        if(empty($badges)){
+        $groups = go_get_terms_ordered($taxonomy, $row_id);
+        if(empty($groups)){
             continue;
         }
 
         echo 	"<div class='parent_cat'>
-                            <div id='row_$chainParentNum' class='groups_row_container'>
-                                <h3>$row->name</h3>
-                            </div>
-                            <div class='groups_row'>
-                            ";//row title and row container
+                        <div id='row_$chainParentNum' class='badges_row_container'>
+						    <h3>$row->name</h3>
+						</div>
+					    <div class='badges_row'>
+						";//row title and row container
 
-
-
-        /*Loop for each chain.  Prints the chain name then looks up children (quests). */
+        /*Loop for each chain.  Prints the chain name then looks up children. */
         $badge_blocks = '';
-        foreach ( $badges as $badge) {
-            $badge_id = $badge->term_id;
-            $badge_assigned = in_array($badge_id, $badges_array);
-            if ($badge_assigned){
-                $badge_class = 'go_group_earned';
+        foreach ( $groups as $group) {
+            $id = $group->term_id;
+            $assigned = in_array($id, $groups_array);
+            if ($assigned){
+                $class = 'go_badge_earned';
             }else{
-                $badge_class = 'go_group_needed';
+                $class = 'go_badge_needed';
             }
-            $custom_fields = get_term_meta( $badge_id );
-            /*
-            $cat_hidden = (isset($custom_fields['go_hide_store_cat'][0]) ?  $custom_fields['go_hide_store_cat'][0] : null);
-            if( $cat_hidden == true){
-                continue;
-            }
-            */
-
-            $badge_obj = get_term( $badge_id);
-            $badge_name = $badge_obj->name;
-            $badge_img_id =(isset($custom_fields['my_image'][0]) ?  $custom_fields['my_image'][0] : null);
-            $badge_img = wp_get_attachment_image($badge_img_id, array( 100, 100 ));
-
-            //$badge_attachment = wp_get_attachment_image( $badge_img_id, array( 100, 100 ) );
-            //$img_post = get_post( $badge_id );
-            if ( ! empty( $badge_obj ) ) {
-                echo"<div class='go_group_wrap'>
-                            <div class='go_group_container {$badge_class}'>
-                                    <p>{$badge_name}</p>
-                            </div>
-                        </div>";
-
-            }
+            go_print_single_badge( $id, 'group', $output = true, $class );
         }
         echo "</div></div>";
     }
     echo "</div></div>";
     die();
 }
-
-
-
-
-/**
- *
- */
-/*
-function go_stats_lite(){
-    if ( !is_user_logged_in() ) {
-        echo "login";
-        die();
-    }
-    //check_ajax_referer( 'go_stats_lite' );
-    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_lite' ) ) {
-        echo "refresh";
-        die( );
-    }
-    if ( ! empty( $_POST['uid'] ) ) {
-        $user_id = (int) $_POST['uid'];
-        //$current_user = get_userdata( $user_id );
-    } else {
-        $current_user = wp_get_current_user();
-        $user_id = $current_user->ID;
-    }
-
-
-
-
-
-//$user_focuses = go_display_user_focuses( $user_id );
-
-
-
-
-
-//////////////////
-
-
-
-    ?>
-    <div id='go_stats_lite_wrapper'>
-
-    <?php
-    go_stats_header($user_id, true, true, true, true, true, true);
-
-//////////////////////////////
-/// /////////////////////////
-/// Table
-    global $wpdb;
-    $go_task_table_name = "{$wpdb->prefix}go_tasks";
-
-    $tasks = $wpdb->get_results(
-        $wpdb->prepare(
-            "SELECT *
-        FROM {$go_task_table_name}
-        WHERE uid = %d
-        ORDER BY id ASC",
-            $user_id
-        )
-    );
-    echo "<div id='go_task_list_lite' class='go_datatables'><table id='go_tasks_datatable_lite' class='pretty display'>
-               <thead>
-                    <tr>
-                        <th class='header' id='go_stats_post_name'><a href=\"#\">Title</a></th>
-                        <th class='header' id='go_stats_status'><a href=\"#\">Status</a></th>
-                        <th class='header' id='go_stats_bonus_status'><a href=\"#\">Bonus</a></th>
-                        <th class='header' id='go_stats_links'><a href=\"#\">Activity</a></th>
-                    </tr>
-                    </thead>
-            <tbody>
-                    ";
-    foreach ( $tasks as $task ) {
-
-        $post_id = $task->post_id;
-        $custom_fields = get_post_custom( $post_id );
-        $post_name = get_the_title($post_id);
-        $post_link = get_post_permalink($post_id);
-        $status = $task->status;
-        $total_stages = (isset($custom_fields['go_stages'][0]) ?  $custom_fields['go_stages'][0] : null);
-
-
-        $bonus_switch = (isset($custom_fields['bonus_switch'][0]) ?  $custom_fields['bonus_switch'][0] : null);
-        $bonus_status = null;
-        $total_bonus_stages = null;
-        if ($bonus_switch) {
-            $bonus_status = $task->bonus_status;
-            $total_bonus_stages = (isset($custom_fields['go_bonus_limit'][0]) ? $custom_fields['go_bonus_limit'][0] : null);
-        }
-        $xp = $task->xp;
-        $gold = $task->gold;
-        $health = $task->health;
-        //$start_time = $task->start_time;
-        $last_time = $task->last_time;
-        $time  = date("m/d/y g:i A", strtotime($last_time));
-
-
-        $go_actions_table_name = "{$wpdb->prefix}go_actions";
-        $actions = $wpdb->get_results(
-            $wpdb->prepare(
-                "SELECT *
-        FROM {$go_actions_table_name}
-        WHERE source_id = %d
-        ORDER BY id DESC",
-                $post_id
-            )
-        );
-
-        $next_bonus_stage = null;
-        $i = 0;
-        $links = array();
-        foreach ($actions as $action){
-            $i++;
-            $check_type = $action->check_type;
-            $result = $action->result;
-            $action_time = $action->TIMESTAMP;
-            $action_time = date("m/d/y g:i A", strtotime($action_time));
-            $action_stage = $action->stage;
-            if ($action->action_type == 'task'){
-                $loop_bonus_status = $action->bonus_status; //get the bonus status if it exists
-                $stage = $action->stage ; //get the stage
-
-                if ($loop_bonus_status > 0){//it is a bonus stage
-                    $last_bonus = (isset($last_bonus) ?  false : true);//if this is the first encounter set to true, after that false
-                    if ($last_bonus || ($next_bonus_stage > 0 && $loop_bonus_status == $next_bonus_stage )){
-                        //$links[] = go_result_link($check_type, $result, $action_stage, $action_time);
-                        $next_bonus_stage = $loop_bonus_status -1;
-                        $links[] = go_result_link($check_type, $result, $loop_bonus_status, $action_time, true);
-                    }
-                }
-                else if ($next_bonus_stage <= 0 || $next_bonus_stage == null) {//if it's not a bonus and it's not the last one completed
-                    $next_stage = (isset($next_stage) ?  $next_stage : $stage );
-                    if ($next_stage > 0 && $stage == $next_stage){
-                        $action_stage = $action->stage;
-                        $links[] = go_result_link($check_type, $result, $action_stage, $action_time, false);
-                        $next_stage = $stage - 1;
-                    }
-                }
-
-            }
-
-
-        }
-        $links = array_reverse($links);
-        $link_count = count($links);
-        $links = $comma_separated = implode(" ", $links);
-
-
-        $status_order = $status/$total_stages;
-        $bonus_status_order = $bonus_status/$total_bonus_stages;
-        if (!empty($total_bonus_stages)){
-            $bonus_str = $bonus_status . " / " . $total_bonus_stages;
-        }else{
-            $bonus_str = null;
-        }
-        echo "
-                <tr id='postID_{$post_id}'>
-
-                    <td><a href='{$post_link}' >{$post_name}<a></td>
-
-                    <td data-order='{$status_order}'>{$status} / {$total_stages}</td>
-                    <td data-order='{$bonus_status_order}'>{$bonus_str}</td>
-                    <td data-order='{$link_count}'>{$links} </td>
-
-                </tr>
-                ";
-
-
-    }
-    echo "</tbody>
-<tfoot>
-                    <tr>
-                        
-                        <th><a href=\"#\">Title</a></th>
-
-
-                        <th><a href=\"#\">Status</a></th>
-                        <th><a href=\"#\">Bonus</a></th>
-                        <th><a href=\"#\">Activity</a></th>
-
-                    </tr>
-                    </tfoot>
-            </table></div></div>";
-
-    die();
-}
-*/
-
-
 
 ?>

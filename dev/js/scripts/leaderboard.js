@@ -1,20 +1,69 @@
 jQuery( document ).ready( function() {
-
-    if (typeof (IsLeaderboard) !== 'undefined') {
-
-        //this only needs to run on the leaderboard
-
-        go_make_select2_filter('user_go_sections', 'section', false, false);
-        go_make_select2_filter('user_go_groups', 'group', false, true);
-        go_stats_leaderboard_page();
+    if (typeof (IsLeaderboard) !== 'undefined') {//this only needs to run on the leaderboard
+        //groups and the table are callbacks on success of this function call
+        go_make_leaderboard_filter('user_go_sections');
     }
 });
 
+function go_make_leaderboard_filter(taxonomy){
+    console.log('go_make_leaderboard_filter');
+    jQuery.ajax({
+        type: "post",
+        url: MyAjax.ajaxurl,
+        data: {
+            //_ajax_nonce: nonce,
+            action: 'go_make_leaderboard_filter',
+            taxonomy: taxonomy
+        },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+
+        },
+        success: function( res ) {
+            //console.log(res);
+            let error = go_ajax_error_checker(res);
+            if (error == 'true') return;
+
+            if ( -1 !== res ) {
+
+                if (res){
+                    var res = JSON.parse( res );
+                    go_make_select2_filter(taxonomy,false, false, false);
+                    let value = res['term_id'];
+                    let value_name = res['term_name'];
+
+                    var valueSelect = jQuery('#go_page_' + taxonomy + '_select');
+                    var option = new Option(value_name, value, true, true);
+                    //valueSelect.append(option);
+                    valueSelect.append(option).trigger('change.select2');
+
+                    jQuery('#go_page_' + taxonomy +'_select').val(value);
+                }
+            }
+
+            if(taxonomy === 'user_go_sections'){
+                go_make_leaderboard_filter('user_go_groups');
+            }
+
+            if(taxonomy === 'user_go_groups'){
+                go_stats_leaderboard_page();
+            }
+
+        }
+    });
+}
 
 function go_stats_leaderboard_page() {
     console.log("go_stats_leaderboard_page");
     // if (jQuery("#go_leaderboard_wrapper").length == 0) {
-    console.log('here');
+    //var section_value = jQuery('#go_page_user_go_sections_select').val();
+    //console.log(section_value);
     var is_admin = GO_EVERY_PAGE_DATA.go_is_admin;
     var initial_sort = 3;
     if (is_admin == true){
@@ -28,8 +77,11 @@ function go_stats_leaderboard_page() {
         "ajax": {
             "url": MyAjax.ajaxurl + '?action=go_stats_leaderboard_dataloader_ajax',
             "data": function(d){
-                d.section = jQuery('#go_clipboard_user_go_sections_select').val();
-                d.group = jQuery('#go_clipboard_user_go_groups_select').val();
+                var section_value = jQuery('#go_page_user_go_sections_select').val();
+                var group_value = jQuery('#go_page_user_go_groups_select').val();
+
+                d.section = section_value;
+                d.group = group_value;
             }
         },
         //"orderFixed": [[4, "desc"]],
@@ -58,8 +110,7 @@ function go_stats_leaderboard_page() {
             },
             {
                 "targets": [3],
-                sortable: true,
-                "orderSequence": [ "desc" ]
+                sortable: false
             },
             {
                 "targets": [4],
@@ -76,11 +127,16 @@ function go_stats_leaderboard_page() {
                 sortable: true,
                 "orderSequence": [ "desc" ]
             },
+            {
+                "targets": [7],
+                sortable: true,
+                "orderSequence": [ "desc" ]
+            },
         ],
     });
 
     // Event listener to the range filtering inputs to redraw on input
-    jQuery('#go_clipboard_user_go_sections_select, #go_clipboard_user_go_groups_select').change( function() {
+    jQuery('#go_page_user_go_sections_select, #go_page_user_go_groups_select').change( function() {
         //var section = jQuery('#go_user_go_sections_select').val();
         console.log('redraw');
         if (jQuery("#go_leaders_datatable").length) {

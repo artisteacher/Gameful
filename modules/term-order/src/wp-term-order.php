@@ -73,7 +73,7 @@ final class WP_Term_Order {
 	 */
 	public function __construct() {
 
-        add_action( 'wp_ajax_check_if_top_term', 'go_check_if_top_term' );
+        add_action( 'wp_ajax_check_if_parent_term', 'check_if_parent_term' );
 
 		// Setup plugin
 		$this->file     = __FILE__;
@@ -83,7 +83,9 @@ final class WP_Term_Order {
 		$this->fancy    = apply_filters( 'wp_fancy_term_order', true );
 
 		// Queries
-		add_filter( 'get_terms_orderby', array( $this, 'get_terms_orderby' ), 10, 2 );
+		//add_filter( 'get_terms_orderby', array( $this, 'get_terms_orderby' ), 10, 2 );
+        add_filter( 'get_terms_args', array( $this, 'get_terms_args'    ), 10, 2 );
+        //add_filter( 'get_terms_args', 'go_taxonomy_filter', 10, 2 );
 		add_action( 'create_term',       array( $this, 'add_term_order'    ), 10, 3 );
 		add_action( 'edit_term',         array( $this, 'add_term_order'    ), 10, 3 );
 
@@ -105,12 +107,11 @@ final class WP_Term_Order {
 			//add_action( "{$value}_edit_form_fields", array( $this, 'term_order_edit_form_field' ) );
 		}
 
-		// Ajax actions
+		// Ajax actions--I don't think this does anything
 		add_action( 'wp_ajax_reordering_terms', array( $this, 'ajax_reordering_terms' ) );
 
 		// Only blog admin screens
 		if ( is_blog_admin() || doing_action( 'wp_ajax_inline_save_tax' ) ) {
-			add_action( 'admin_init',         array( $this, 'admin_init' ) );
 			add_action( 'load-edit-tags.php', array( $this, 'edit_tags'  ) );
 		}
 	}
@@ -122,8 +123,7 @@ final class WP_Term_Order {
 	 */
 	public function admin_init() {
 
-		// Check for DB update
-		$this->maybe_upgrade_database();
+
 	}
 
 	/**
@@ -303,6 +303,7 @@ final class WP_Term_Order {
 		$taxonomies = get_taxonomies( $r );
 
 		// Filter taxonomies & return
+        //I don't think this filter is used
 		return apply_filters( 'wp_term_order_get_taxonomies', $taxonomies, $r, $args );
 	}
 
@@ -391,7 +392,7 @@ final class WP_Term_Order {
 	 * @param  bool    $clean_cache
 	 */
 	public static function set_term_order( $term_id = 0, $taxonomy = '', $order = 0, $clean_cache = false ) {
-		global $wpdb;
+		//global $wpdb;
 
 		if ($taxonomy == 'task_chains') {
             //Delete transient of map term order on previous map
@@ -399,17 +400,7 @@ final class WP_Term_Order {
         }
 
 
-		// Update the database row
-		$wpdb->update(
-			$wpdb->term_taxonomy,
-			array(
-				'order' => $order
-			),
-			array(
-				'term_id'  => $term_id,
-				'taxonomy' => $taxonomy
-			)
-		);
+        update_term_meta($term_id, 'go_order', $order);
 
         if ($taxonomy == 'store_types') {
             $store = go_make_store_html();
@@ -483,7 +474,7 @@ final class WP_Term_Order {
 	}
 
 	/** Markup ****************************************************************/
-	
+
 	/**
 	 * Output the "order" form field when adding a new term
 	 *
@@ -542,7 +533,7 @@ final class WP_Term_Order {
 	 *
 	 * @param  $term
 	 */
-	 
+
 	public function quick_edit_term_order( $column_name = '', $screen = '', $name = '' ) {
 
 		// Bail if not the `order` column on the `edit-tags` screen for a visible taxonomy
@@ -591,51 +582,75 @@ final class WP_Term_Order {
 
 		// Return possibly modified `orderby` value
 		return $orderby;
-		
+
 	}
 
-	/** Database Alters *******************************************************/
+    //This adds a filter to the taxonomies pages in admin
+    //GAME ON ADDITION
+    //THIS WAS ADDED TO MOVE THE TERM ORDER VARIABLE TO TERMMETA--NOT A CUSTOM COLUMN
+    //https://wordpress.stackexchange.com/questions/268495/is-it-possible-to-add-extra-table-nav-to-edit-tags-php-screens
+    // @see https://developer.wordpress.org/reference/hooks/get_terms_args/
 
-	/**
-	 * Should a database update occur
-	 *
-	 * @since 0.1.0
-	 *
-	 * Runs on `init`
-	 */
-	private function maybe_upgrade_database() {
 
-		// Check DB for version
-		$db_version = get_option( $this->db_version_key );
+        public function get_terms_args( $args, $taxonomies ) {
+            global $pagenow;
 
-		// Needs
-		if ( $db_version < $this->db_version ) {
-			$this->upgrade_database( $db_version );
-		}
-	}
+            $taxonomy = $taxonomies[0];
+            if ( 'edit-tags.php' !== $pagenow || ! in_array( $taxonomy, array('task_chains', 'store_types', 'go_badges', 'user_go_groups'), true )) {
+                return $args;
+            }
 
-	/**
-	 * Modify the `term_taxonomy` table and add an `order` column to it
-	 *
-	 * @since 0.1.0
-	 *
-	 * @param  int    $old_version
-	 *
-	 * @global object $wpdb
-	 */
-	private function upgrade_database( $old_version = 0 ) {
-		global $wpdb;
+            $first_loop  = ( isset( $args['skip_loop'] ) ) ? $args['skip_loop']  : true;
 
-		$old_version = (int) $old_version;
+            $parent = ( isset( $_GET['parent'] ) ) ? sanitize_text_field( $_GET['parent'] ) : '';
 
-		// The main column alter
-		if ( $old_version < 201508110005 ) {
-			$wpdb->query( "ALTER TABLE `{$wpdb->term_taxonomy}` ADD `order` INT (11) NOT NULL DEFAULT 0;" );
-		}
+            //if a parent is set, the goal is to get the parent and the children
+            //this can't be done in a WP_TERM_QUERY.
+            //the get-terms below will get the terms and then set them as includes on the main term query
+            //if there is a parent term set, set the parent arg and do the search
 
-		// Update the DB version
-		update_option( $this->db_version_key, $this->db_version );
-	}
+            if ($first_loop) {
+
+                $query = array(
+                    'parent' => $parent,
+                    'orderby' => 'meta_value_num',
+                    'order' => 'ASC',
+                    'meta_query' => array(
+                        'relation' => 'OR',
+                        array(
+                            'key' => 'go_order',
+                            'compare' => 'NOT EXISTS'
+                        ),
+                        array(
+                            'key' => 'go_order',
+                            'value' => 0,
+                            'compare' => '>='
+                        )
+                    ),
+                    'hide_empty' => false,
+                    'skip_loop' => false,//this is a custom variable to avoid a infinite loop here
+                );
+                $includes = get_terms( $taxonomy, $query );
+
+
+                    if($parent){
+                        $ids[] = $parent;
+                    }
+                    foreach ($includes as $include){
+                        $ids[] = $include ->term_id;
+
+                    }
+                    $args['include'] = $ids;
+                    $args['orderby'] = 'include';
+
+            }else{
+                unset($args['skip_loop']);
+            }
+            return $args;
+        }
+
+
+
 
 	/** Admin Ajax ************************************************************/
 
@@ -687,45 +702,27 @@ final class WP_Term_Order {
 
 		// attempt to get the intended parent...
 		$parent_id        = $term->parent;
-		//if ($parent_id) 
-		$next_term_parent = $nextid
-			? wp_get_term_taxonomy_parent_id( $nextid, $taxonomy )
-			: false;
-		/*
-		// If the preceding term is the parent of the next term, move it inside
-		if ( $previd === $next_term_parent ) {
-			$parent_id = $next_term_parent;
 
-		// If the next term's parent isn't the same as our parent, we need more info
-		} elseif ( $next_term_parent !== $parent_id ) {
-			$prev_term_parent = $previd
-				? wp_get_term_taxonomy_parent_id( $nextid, $taxonomy )
-				: false;
-
-			// If the previous term is not our parent now, set it
-			if ( $prev_term_parent !== $parent_id ) {
-				$parent_id = ( $prev_term_parent !== false )
-					? $prev_term_parent
-					: $next_term_parent;
-			}
-		}
-
-		// If the next term's parent isn't our parent, set to false
-		if ( $next_term_parent !== $parent_id ) {
-			$nextid = false;
-		}
-		*/
-
-		// Get term siblings for relative ordering
-		$siblings = get_terms( $taxonomy, array(
-			'depth'      => 1,
-			'number'     => 100,
-			'parent'     => $parent_id,
-			'orderby'    => 'order',
-			'order'      => 'ASC',
-			'hide_empty' => false,
-			'exclude'    => $excluded
-		) );
+        $query = array(
+            'parent'     => $parent_id,
+            'orderby' => 'meta_value_num',
+            'order' => 'ASC',
+            'meta_query' => array(
+                'relation' => 'OR',
+                array(
+                    'key' => 'go_order',
+                    'compare' => 'NOT EXISTS'
+                ),
+                array(
+                    'key' => 'go_order',
+                    'value' => 0,
+                    'compare' => '>='
+                )
+            ),
+            'hide_empty' => false,
+            'exclude'    => $excluded,
+        );
+        $siblings = get_terms( $taxonomy, $query );
 
 		// Loop through siblings and update terms
 		foreach ( $siblings as $sibling ) {
@@ -828,11 +825,13 @@ endif;
  */
 function _wp_term_order() {
 	new WP_Term_Order();
+
 }
 add_action( 'init', '_wp_term_order', 99 );
 
 
-function go_check_if_top_term () {
+
+function check_if_parent_term () {
     global $wpdb;
     $term_taxonomy_table_name = "{$wpdb->prefix}term_taxonomy";
     $termDivIDs = (isset($_POST['goTermDivIDs']) ?  $_POST['goTermDivIDs'] : null);
@@ -881,6 +880,9 @@ function go_check_if_top_term () {
 		}
 	}
 }
+
+
+
 
 
 ?>

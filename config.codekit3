@@ -3984,100 +3984,6 @@
 		"oAP": "/includes/wp-frontend-media-master/uninstall.php",
 		"oF": 0
 		},
-	"/includes/wp-term-order/js/quick-edit.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/wp-term-order/js/quick-edit-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/wp-term-order/js/reorder-min.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/wp-term-order/js/reorder-min-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/wp-term-order/js/reorder.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/wp-term-order/js/reorder-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/wp-term-order/LICENSE": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/includes/wp-term-order/LICENSE",
-		"oF": 0
-		},
-	"/includes/wp-term-order/README.md": {
-		"cB": 0,
-		"cS": 0,
-		"eF": 1,
-		"eL": 1,
-		"ema": 1,
-		"eSQ": 1,
-		"ft": 4096,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/includes/wp-term-order/README.html",
-		"oF": 0,
-		"oFM": 0,
-		"oS": 0,
-		"pHT": 0,
-		"pME": 1,
-		"rFN": 0,
-		"uCM": 0
-		},
-	"/includes/wp-term-order/readme.txt": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/includes/wp-term-order/readme.txt",
-		"oF": 0
-		},
-	"/includes/wp-term-order/screenshot-1.gif": {
-		"ft": 4194304,
-		"iS": 25169,
-		"oA": 0,
-		"oAP": "/includes/wp-term-order/screenshot-1.gif",
-		"oF": 0,
-		"opt": 0
-		},
-	"/includes/wp-term-order/wp-term-order.css": {
-		"aP": 1,
-		"bl": 0,
-		"ft": 16,
-		"ma": 0,
-		"oA": 0,
-		"oAP": "/includes/wp-term-order/wp-term-order-min.css",
-		"oF": 0,
-		"oS": 3
-		},
-	"/includes/wp-term-order/wp-term-order.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/includes/wp-term-order/wp-term-order.php",
-		"oF": 0
-		},
 	"/js/go_enque_js.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -4123,6 +4029,17 @@
 		"mi": 1,
 		"oA": 0,
 		"oAP": "/js/min/go_frontend-min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/js/scripts/go_acf_admin-min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/js/scripts/go_acf_admin-min-min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
@@ -4689,6 +4606,14 @@
 		"oAP": "/modules/clipboard/src/ajax.php",
 		"oF": 0
 		},
+	"/modules/clipboard/src/public_ajax.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/clipboard/src/public_ajax.php",
+		"oF": 0
+		},
 	"/modules/feedback/includes.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -4783,6 +4708,14 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/modules/login/src/templates/profile_template.php",
+		"oF": 0
+		},
+	"/modules/login/src/templates/register_template.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/login/src/templates/register_template.php",
 		"oF": 0
 		},
 	"/modules/login/src/templates/reset_password_template.php": {
@@ -5015,6 +4948,116 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/modules/tasks/timer/src/public_ajax.php",
+		"oF": 0
+		},
+	"/modules/term-order/includes.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/term-order/includes.php",
+		"oF": 0
+		},
+	"/modules/term-order/src/js/quick-edit.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/modules/term-order/src/js/quick-edit-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/modules/term-order/src/js/reorder-min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/modules/term-order/src/js/reorder-min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/modules/term-order/src/js/reorder.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/modules/term-order/src/js/reorder-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/modules/term-order/src/LICENSE": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/term-order/src/LICENSE",
+		"oF": 0
+		},
+	"/modules/term-order/src/README.html": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/term-order/src/README.html",
+		"oF": 0
+		},
+	"/modules/term-order/src/README.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/term-order/src/README.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"/modules/term-order/src/readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/term-order/src/readme.txt",
+		"oF": 0
+		},
+	"/modules/term-order/src/screenshot-1.gif": {
+		"ft": 4194304,
+		"iS": 25169,
+		"oA": 0,
+		"oAP": "/modules/term-order/src/screenshot-1.gif",
+		"oF": 0,
+		"opt": 0
+		},
+	"/modules/term-order/src/wp-term-order.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/modules/term-order/src/wp-term-order-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/modules/term-order/src/wp-term-order.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/term-order/src/wp-term-order.php",
 		"oF": 0
 		},
 	"/modules/tools/includes.php": {

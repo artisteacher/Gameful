@@ -293,18 +293,11 @@ function go_badge_lock($id, $user_id, $task_name, $custom_fields, $i, $k, $is_lo
 
 
         global $wpdb;
-        $go_loot_table_name = "{$wpdb->prefix}go_loot";
-        $badges_array = $wpdb->get_var ("SELECT badges FROM {$go_loot_table_name} WHERE uid = {$user_id}");
-        if (is_serialized($badges_array)) {
-            $badges_array = unserialize($badges_array);
-        }
-        if(is_array($badges_array)) {
-            $badges_array = array_values($badges_array);
-        }else{
-            $badges_array = array();
-        }
 
-        if (!$badges_array || !is_array($badges_array)) {
+        $key = go_prefix_key('go_badge');
+        $badges_array = get_user_meta($user_id, $key, false);
+
+        if(!is_array($badges_array)) {
             $badges_array = array();
         }
 
@@ -356,13 +349,16 @@ function go_user_lock($id, $user_id, $task_name, $custom_fields, $i, $k, $is_log
         $terms_needed = $custom_fields[$option][0];
         $terms_needed = array_values(unserialize($terms_needed));
 
-        global $wpdb;
-        $go_loot_table_name = "{$wpdb->prefix}go_loot";
-        $groups_array = $wpdb->get_var ("SELECT groups FROM {$go_loot_table_name} WHERE uid = {$user_id}");
-        $user_terms = array_values(unserialize($groups_array));
+
+        $key = go_prefix_key('go_group');
+        $user_terms = get_user_meta($user_id, $key, false);
+
+        if(!is_array($user_terms)) {
+            $user_terms = array();
+        }
 
         //set $user_terms to empty array if not set
-        if (!$user_terms || !is_array($user_terms)) {
+        if (!is_array($user_terms)) {
             $user_terms = array();
         }
 
@@ -414,26 +410,21 @@ function go_period_lock($id, $user_id, $task_name, $custom_fields, $i, $k, $is_l
         $option = "go_locks_" . $i . "_keys_" . $k . "_options_0_lock_sections";
         $terms_needed = $custom_fields[$option][0];
         $terms_needed = unserialize($terms_needed);
-        // gets the current user's period(s)
-        $num_terms = get_user_option('go_section_and_seat', $user_id);
-        $user_terms = array();
-        for ($i = 0; $i < $num_terms; $i++) {
 
-            $user_period = "go_section_and_seat_" . $i . "_user-section";
-            $user_period = get_user_option($user_period, $user_id);
-            $user_terms[] = $user_period;
-        }
+        //Get the users section(s)
+        $key = go_prefix_key('go_section');
+        $user_terms = get_user_meta($user_id, $key, false);
 
-        //set $user_terms to empty array if not set
-        if (!$user_terms) {
+        if(!is_array($user_terms)) {
             $user_terms = array();
         }
 
+
         // determines if the user has the correct term
         if (!empty($terms_needed)) {
-            // checks to see if the filter array are in the the user's badge array
+            // checks to see if the filter array are in the the user's section array
             $intersection = array_values(array_intersect($user_terms, $terms_needed));
-            // stores an array of the badges that were not found in the user's badge array
+            // stores an array of the terms that were not found in the user's term array
             $term_diff = array_diff($terms_needed, $intersection);
             if (!empty($term_diff)) {
                 if (!$check_only) {
@@ -611,22 +602,15 @@ function go_health_lock($id, $user_id, $task_name, $custom_fields, $i, $k, $is_l
  */
 function go_schedule_access($user_id, $custom_fields, $is_logged_in, $check_only){
     //if( $is_logged_in || !$is_logged_in) {
-        $is_locked = true;
-        //$user_terms = array();
-        $num_terms = get_user_option('go_section_and_seat', $user_id);
+    $is_locked = true;
+
+    //Get the users section(s)
+    $key = go_prefix_key('go_section');
+    $user_terms = get_user_meta($user_id, $key, false);
+
+    if(!is_array($user_terms)) {
         $user_terms = array();
-        for ($i = 0; $i < $num_terms; $i++) {
-
-            $user_period = "go_section_and_seat_" . $i . "_user-section";
-            $user_period = get_user_option($user_period, $user_id);
-            $user_terms[] = $user_period;
-        }
-
-        //set $user_terms to empty array if not set
-        if (!$user_terms) {
-            $user_terms = array();
-        }
-
+    }
         $sched_num = (isset($custom_fields['go_sched_opt'][0]) ?  $custom_fields['go_sched_opt'][0] : null); //the number of schedule locks
 
         //loop through the locks to see if any one of them allows the user to proceed
