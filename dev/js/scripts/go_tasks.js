@@ -340,7 +340,7 @@ function task_stage_change( target, required_elements = null ) {
                     window.location = res.redirect;
                 }
                 else if ( res.button_type == 'timer' ){
-                    jQuery( '#go_wrapper > div' ).slice(-2).hide( 'slow', function() { jQuery(this).remove();} );
+                    jQuery( '#go_wrapper > div' ).slice(-3).hide( 'slow', function() { jQuery(this).remove();} );
                     var audio = new Audio( PluginDir.url + 'media/sounds/airhorn.mp3' );
                     audio.play();
                 }

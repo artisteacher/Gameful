@@ -231,15 +231,7 @@ function go_messages_opener( user_id, post_id, message_type, target ) {
             });
             */
 
-            tippy('.tooltip', {
-                delay: 0,
-                arrow: true,
-                arrowType: 'round',
-                size: 'large',
-                duration: 300,
-                animation: 'scale',
-                zIndex: 999999
-            });
+            go_activate_tippy();
 
             jQuery('#go_additional_penalty_toggle').change(function () {
                 var penalty = document.getElementById("go_additional_penalty_toggle").checked;
@@ -294,14 +286,15 @@ function go_send_message(reset_vars, message_type, post_id) {
         message = "";
     }
 
-
+    console.log("1:" + message_type);
     if (message_type == "message" || ((message_type == "reset" || message_type == "reset_stage") && additional_penalty_toggle == true ) ){
         if (message_type == "message" ){
-            var xp_toggle = (jQuery('.xp_toggle_messages').siblings().hasClass("-on")) ? 1 : -1;
-            var gold_toggle = (jQuery('.gold_toggle_messages').siblings().hasClass("-on")) ? 1 : -1;
-            var health_toggle = (jQuery('.health_toggle_messages').siblings().hasClass("-on")) ? 1 : -1;
-            var badges_toggle = jQuery('.badges_toggle_messages').siblings().hasClass("-on");
-            var groups_toggle = jQuery('.groups_toggle_messages').siblings().hasClass("-on");
+            var xp_toggle = (jQuery('#messages_form .xp_toggle_messages').siblings().hasClass("-on")) ? 1 : -1;
+            var gold_toggle = (jQuery('#messages_form .gold_toggle_messages').siblings().hasClass("-on")) ? 1 : -1;
+            var health_toggle = (jQuery('#messages_form .health_toggle_messages').siblings().hasClass("-on")) ? 1 : -1;
+            var badges_toggle = jQuery('#messages_form .badges_toggle_messages').siblings().hasClass("-on");
+            var groups_toggle = jQuery('#messages_form .groups_toggle_messages').siblings().hasClass("-on");
+            console.log("2:" + xp_toggle);
         }else{
             var xp_toggle = -1;
             var gold_toggle = -1;
@@ -309,13 +302,14 @@ function go_send_message(reset_vars, message_type, post_id) {
             var badges_toggle = false;
             var groups_toggle = false;
         }
-        console.log("xp: " + jQuery('.xp_messages').val());
-        var xp = jQuery('.xp_messages').val() * xp_toggle;
-        var gold = jQuery('.gold_messages').val() * gold_toggle;
-        var health = jQuery('.health_messages').val() * health_toggle;
+        console.log("xp: " + jQuery('#messages_form .xp_messages').val());
+        var xp = jQuery('#messages_form .xp_messages').val() * xp_toggle;
+        console.log("3:" + xp);
+        var gold = jQuery('#messages_form .gold_messages').val() * gold_toggle;
+        var health = jQuery('#messages_form .health_messages').val() * health_toggle;
 
-        var badges = jQuery('#go_lightbox_go_badges_select').val();
-        var groups = jQuery('#go_lightbox_user_go_groups_select').val();
+        var badges = jQuery('#messages_form #go_lightbox_go_badges_select').val();
+        var groups = jQuery('#messages_form #go_lightbox_user_go_groups_select').val();
         console.log("badges:");
         console.log(badges);
     }
@@ -363,7 +357,7 @@ function go_send_message(reset_vars, message_type, post_id) {
         },
         success: function( results ) {
             // show success or error message
-            console.log("send successful");
+            console.log("my send successful");
             Swal.fire(//sw2 OK
                 'Success!',
                 '',

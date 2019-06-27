@@ -1328,12 +1328,7 @@ function go_stats_badges_list($skip_ajax_checks = false, $user_id = null) {
         $user_id = (int) $_POST['user_id'];
     }
 
-    $key = go_prefix_key('go_badge');
-    $badges_array = get_user_meta($user_id, $key, false);
 
-    if (empty($badges_array)){
-        $badges_array = array();
-    }
 
     /* Get all task chains with no parents--these are the badge categories.  */
     $taxonomy = 'go_badges';
@@ -1341,7 +1336,6 @@ function go_stats_badges_list($skip_ajax_checks = false, $user_id = null) {
 
     $rows = go_get_terms_ordered($taxonomy, '0');
     echo"<div id='go_badges_list' class='go_datatables'> ";
-
 
     /* For each Store Category with no parent, get all the children. */
     $chainParentNum = 0;
@@ -1367,16 +1361,11 @@ function go_stats_badges_list($skip_ajax_checks = false, $user_id = null) {
 
         /*Loop for each chain.  Prints the chain name then looks up children (quests). */
         $badge_blocks = '';
+
         foreach ( $badges as $badge) {
             $badge_id = $badge->term_id;
-            $badge_assigned = in_array($badge_id, $badges_array);
-            if ($badge_assigned){
-                $class = 'go_badge_earned';
-            }else{
-                $class = 'go_badge_needed';
-            }
 
-            go_print_single_badge( $badge_id, 'badge', true, $class );
+            go_print_single_badge( $badge_id, 'badge', true, $user_id );
         }
         echo "</div></div>";
     }
@@ -1408,9 +1397,6 @@ function go_stats_groups_list() {
         $user_id = get_current_user_id();
     }
 
-    $key = go_prefix_key('go_group');
-    $groups_array = get_user_meta($user_id, $key, false);
-
     /* Get all task chains with no parents--these are the sections of the store.  */
     $taxonomy = 'user_go_groups';
     $rows = go_get_terms_ordered($taxonomy, '0');
@@ -1439,16 +1425,9 @@ function go_stats_groups_list() {
 						";//row title and row container
 
         /*Loop for each chain.  Prints the chain name then looks up children. */
-        $badge_blocks = '';
         foreach ( $groups as $group) {
             $id = $group->term_id;
-            $assigned = in_array($id, $groups_array);
-            if ($assigned){
-                $class = 'go_badge_earned';
-            }else{
-                $class = 'go_badge_needed';
-            }
-            go_print_single_badge( $id, 'group', $output = true, $class );
+            go_print_single_badge( $id, 'group', $output = true, $user_id );
         }
         echo "</div></div>";
     }

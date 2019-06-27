@@ -103,6 +103,7 @@ function go_user_profile_link(){
  * @param $bonus
  * @return string
  */
+/*
 function go_result_link($check_type, $result, $stage, $time, $bonus = false){
     if ($bonus){
         $stage = 'Bonus ' . $stage ;
@@ -130,7 +131,7 @@ function go_result_link($check_type, $result, $stage, $time, $bonus = false){
     }
     return $link;
 
-}
+}*/
 
 /**
  * @param $check_type
@@ -140,6 +141,7 @@ function go_result_link($check_type, $result, $stage, $time, $bonus = false){
  * @param $bonus
  * @return string
  */
+/*
 function go_bonus_result_link($check_type, $result, $stage, $time, $bonus = true){
     if ($bonus){
         $stage = 'Bonus ' . $stage ;
@@ -168,4 +170,4 @@ function go_bonus_result_link($check_type, $result, $stage, $time, $bonus = true
     return $link;
 
 }
-
+*/

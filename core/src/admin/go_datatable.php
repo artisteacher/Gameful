@@ -3,7 +3,7 @@
 global $wpdb;
 
 function go_update_db_check() {
-    $go_db_version = 5.01;
+    $go_db_version = 5.04;
     if ( get_site_option( 'go_db_version' ) != $go_db_version ) {
         update_option('go_db_version', $go_db_version);
         go_update_db();
@@ -30,9 +30,9 @@ function go_table_tasks() {
 			post_id bigint(20),
 			status TINYINT,
 			bonus_status TINYINT DEFAULT 0,
-			xp INT,
-			gold DECIMAL (10,2),
-			health INT,
+			xp INT unsigned,
+			gold DECIMAL (10,2) unsigned,
+			health DECIMAL (10,2) unsigned,
 			badges VARCHAR (4096),
 			groups VARCHAR (4096),
 			start_time datetime,
@@ -42,12 +42,13 @@ function go_table_tasks() {
 			PRIMARY KEY  (id),
             KEY uid (uid),
             KEY post_id (post_id),
-            KEY last_time (last_time),
             KEY uid_post (uid, post_id)        
 		);
 	";
     require_once( ABSPATH.'wp-admin/includes/upgrade.php' );
     dbDelta( $sql );
+
+    drop_index( $table_name, 'last_time' );
 }
 
 function go_table_actions() {
@@ -75,19 +76,21 @@ function go_table_actions() {
 			groups VARCHAR (4096),
 			xp_total INT unsigned,
 			gold_total DECIMAL (10,2) unsigned,
-			health_total INT unsigned,
+			health_total DECIMAL (10,2) unsigned,
 			PRIMARY KEY  (id),
             KEY uid (uid),
             KEY source_id (source_id),
-            KEY action_type (action_type ),
-            KEY TIMESTAMP (TIMESTAMP),
-            KEY uid_source (uid, source_id),
-            KEY uid_date (uid, TIMESTAMP)
+            KEY action_type (action_type )
+            KEY uid_source (uid, source_id)
             
 		);
 	";
     require_once( ABSPATH.'wp-admin/includes/upgrade.php' );
     dbDelta( $sql );
+
+    drop_index( $table_name, 'uid_date' );
+    drop_index( $table_name, 'TIMESTAMP' );
+
 }
 
 function go_table_totals() {
@@ -98,11 +101,11 @@ function go_table_totals() {
 			id bigint(20) NOT NULL AUTO_INCREMENT,
 			uid bigint(20) NOT NULL,
 			xp INT unsigned DEFAULT 0,
-			gold DECIMAL (10,2) DEFAULT 0,
+			gold DECIMAL (10,2) unsigned DEFAULT 0,
 			health DECIMAL (10,2) unsigned DEFAULT 100,
 			badge_count INT DEFAULT 0,
-			PRIMARY KEY  (id),
-            CONSTRAINT user_id UNIQUE (uid)                
+			PRIMARY KEY (id),
+            ADD CONSTRAINT user_id UNIQUE (uid)                
 		);
 	";
 

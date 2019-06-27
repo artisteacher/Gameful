@@ -914,52 +914,60 @@ function go_reset_message($this_message, $message, $penalty, $xp, $gold, $health
     return $message;
 }
 
-function go_send_message(){
+function go_send_message($skip_ajax = false, $title = '', $message = '', $type = '', $penalty = '', $xp = '', $gold = '', $health = '', $go_blog_task_id = '', $badges_toggle = '', $badge_id = '', $groups_toggle = '', $group_id = '', $reset_vars = ''){
 
-    if ( !is_user_logged_in() ) {
-        echo "login";
-        die();
+    if(!$skip_ajax) {
+        if (!is_user_logged_in()) {
+            echo "login";
+            die();
+        }
+
+        //check_ajax_referer( 'go_send_message');
+        if (!wp_verify_nonce($_REQUEST['_ajax_nonce'], 'go_send_message')) {
+            echo "refresh";
+            die();
+        }
+
+
+        $title = (!empty($_POST['title']) ? $_POST['title'] : "");
+
+        $message = stripslashes(!empty($_POST['message']) ? $_POST['message'] : "");
+
+        $type = (!empty($_POST['message_type']) ? $_POST['message_type'] : "message");// can be message, or reset
+
+        $penalty = (!empty($_POST['penalty']) ? $_POST['penalty'] : false);// can be message, or reset
+
+        $xp = ($_POST['xp']);
+        $gold = ($_POST['gold']);
+        $health = ($_POST['health']);
+        $go_blog_task_id = null;
+
+        $badges_toggle = $_POST['badges_toggle'];
+        $badge_id = $_POST['badges'];
+
+        $groups_toggle = $_POST['groups_toggle'];
+        $group_id = $_POST['groups'];
+
+        $reset_vars = $_POST['reset_vars'];
     }
 
-    //check_ajax_referer( 'go_send_message');
-    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_send_message' ) ) {
-        echo "refresh";
-        die( );
-    }
-    global $wpdb;
-
-    $title = ( !empty( $_POST['title'] ) ? $_POST['title'] : "" );
-
-    $message = stripslashes( !empty( $_POST['message'] ) ? $_POST['message'] : "" );
-
-    if(!empty($message) && empty($title)){
+    if (!empty($message) && empty($title)) {
         $title = "view message";
     }
 
-    $type = ( !empty( $_POST['message_type'] ) ? $_POST['message_type'] : "message" );// can be message, or reset
+    global $wpdb;
+    $go_task_table_name = "{$wpdb->prefix}go_tasks";
 
-    $penalty = ( !empty( $_POST['penalty'] ) ? $_POST['penalty'] : false );// can be message, or reset
-
-    $xp = ($_POST['xp']);
-    $gold = ($_POST['gold']);
-    $health = ($_POST['health']);
-    $go_blog_task_id = null;
-
-    $badges_toggle = $_POST['badges_toggle'];
-    $badge_id = $_POST['badges'];
     if(is_numeric($badge_id)){
         $badge_ids[]=$badge_id;
     }
 
 
-    $groups_toggle = $_POST['groups_toggle'];
-    $group_id = $_POST['groups'];
     if(is_numeric($group_id)){
         $group_ids[]=$group_id;
     }
 
 
-    $reset_vars = $_POST['reset_vars'];
 
     $task_name = get_option('options_go_tasks_name_singular');
 
@@ -986,7 +994,7 @@ function go_send_message(){
             }
 
             //get task table name if this is a reset
-            $go_task_table_name = "{$wpdb->prefix}go_tasks";
+
             $tasks = $wpdb->get_results($wpdb->prepare("SELECT *
 			FROM {$go_task_table_name}
 			WHERE uid = %d and post_id = %d
@@ -1242,7 +1250,7 @@ function go_send_message(){
         $result = serialize($result);
 
         //update actions
-        go_update_actions($user_id, $type, $go_blog_task_id, 1, null, null, $result, null, null, null, null, $xp, $gold, $health, $badge_ids, $group_ids, false, false);
+        go_update_actions($user_id, $type, $go_blog_task_id, 1, null, null, $result, null, null, null, null, $xp, $gold, $health, $badge_ids, $group_ids, true);
     }
 
     //set new message user option to true so each user gets the message

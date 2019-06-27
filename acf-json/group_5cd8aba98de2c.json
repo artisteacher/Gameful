@@ -137,7 +137,7 @@
                         },
                         {
                             "key": "field_5cc0ba56364bc",
-                            "label": "Health",
+                            "label": "Reputation",
                             "name": "health",
                             "type": "number",
                             "instructions": "",
@@ -178,5 +178,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1559804726
+    "modified": 1560904813
 }

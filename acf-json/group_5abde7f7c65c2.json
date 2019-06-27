@@ -332,7 +332,7 @@
                         },
                         {
                             "key": "field_5abde803a0864",
-                            "label": "Health",
+                            "label": "Reputation",
                             "name": "health",
                             "type": "number",
                             "instructions": "",
@@ -864,7 +864,7 @@
                                 "go_after_lock": "Lock After Date",
                                 "go_badge_lock": "Badges - 1 of these",
                                 "go_user_lock": "User Groups - 1 of these",
-                                "go_health_lock": "Minimum Health Level",
+                                "go_health_lock": "Minimum Reputation Level",
                                 "go_period_lock": "Class Section - 1 of these",
                                 "go_xp_levels_lock": "XP Minimum"
                             },
@@ -872,8 +872,8 @@
                             "allow_null": 1,
                             "multiple": 0,
                             "ui": 0,
-                            "ajax": 0,
                             "return_format": "value",
+                            "ajax": 0,
                             "placeholder": ""
                         },
                         {
@@ -1018,7 +1018,7 @@
                                 },
                                 {
                                     "key": "field_5b1b1f4210e06",
-                                    "label": "Minimum Health Level",
+                                    "label": "Minimum Reputation Level",
                                     "name": "health",
                                     "type": "number",
                                     "instructions": "",
@@ -1101,10 +1101,12 @@
                                     },
                                     "choices": {
                                         "": "Select",
-                                        "0": "Level1 -  : 0 PP",
-                                        "50": "Level2 -  : 50 PP",
-                                        "105": "Level3 -  : 105 PP",
-                                        "170": "Level4 -  : 170 PP"
+                                        "0": "Level1 - beginner : 0 PP",
+                                        "50": "Level2 - beginner : 50 PP",
+                                        "105": "Level3 - beginner : 105 PP",
+                                        "200": "Level4 - beginner : 200 PP",
+                                        "300": "Level5 - beginner : 300 PP",
+                                        "400": "Level6 - beginner : 400 PP"
                                     },
                                     "default_value": [],
                                     "allow_null": 0,
@@ -1193,5 +1195,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1555710204
+    "modified": 1560904637
 }

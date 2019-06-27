@@ -143,15 +143,7 @@ function go_clipboard_callback() {
             go_messages_opener(null, null, "multiple_messages", this);
         });
 
-        tippy('.tooltip', {
-            delay: 0,
-            arrow: true,
-            arrowType: 'round',
-            size: 'large',
-            duration: 300,
-            animation: 'scale',
-            zIndex: 999999
-        });
+        go_activate_tippy();
 
     //*******************//
     //GET CURRENT TAB

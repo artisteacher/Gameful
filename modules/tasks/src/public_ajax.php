@@ -249,11 +249,6 @@ function go_task_shortcode($atts, $content = null ) {
 }
 add_shortcode( 'go_task','go_task_shortcode' );
 
-
-
-
-
-
 /**
  * LOCKS
  * prevents all visitors both logged in and out from accessing the task content,
@@ -793,12 +788,10 @@ function go_print_bonus_loot_possibilities($custom_fields, $user_id){
 
 }
 
-
-
 /**
  * @param $badges
  */
-function go_display_stage_badges_and_groups($badge_ids, $group_ids) {
+function go_display_task_badges_and_groups($badge_ids, $group_ids) {
 
     //the serialzed array in the outro
     if (is_serialized($badge_ids)) {
@@ -835,7 +828,6 @@ function go_display_stage_badges_and_groups($badge_ids, $group_ids) {
                 go_print_single_badge( $group_id, 'group');
             }
         }
-        echo "</div>";
     }
     if(!empty($badge_ids_array) || !empty($group_ids_array)){
         echo "</div>";
@@ -986,7 +978,7 @@ function go_display_rewards($custom_fields, $task_name, $user_id, $position, $po
 
     echo "</div>";
 
-    go_display_stage_badges_and_groups($badges, $groups);
+    go_display_task_badges_and_groups($badges, $groups);
 
     /*
     $bonus_radio =(isset($custom_fields['bonus_loot_toggle'][0]) ? $custom_fields['bonus_loot_toggle'][0] : null);//is bonus set default, custom or off

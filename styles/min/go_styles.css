@@ -1328,46 +1328,53 @@ body.wp-admin {
 /*
 TOOLTIP
  */
-/* Tooltip container */
+/*
+// Tooltip container
 .tooltip {
-  position: relative;
-  display: inline-block; }
+	position: relative;
+	display: inline-block;
+}
 
-/* Tooltip text */
+// Tooltip text
 .tooltip .tooltiptext {
-  visibility: hidden;
-  width: 120px;
-  background-color: #555;
-  color: #fff;
-  text-align: center;
-  padding: 10px;
-  border-radius: 6px;
-  /* Position the tooltip text */
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 50%;
-  margin-left: -60px;
-  /* Fade in tooltip */
-  opacity: 0;
-  transition: opacity 0.3s; }
+	visibility: hidden;
+	width: 120px;
+	background-color: #555;
+	color: #fff;
+	text-align: center;
+	padding: 10px;
+	border-radius: 6px;
 
-/* Tooltip arrow */
+	// Position the tooltip text
+	position: absolute;
+	z-index: 1;
+	bottom: 125%;
+	left: 50%;
+	margin-left: -60px;
+
+	//Fade in tooltip
+	opacity: 0;
+	transition: opacity 0.3s;
+}
+
+// Tooltip arrow
 .tooltip .tooltiptext::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #555 transparent transparent transparent; }
+	content: "";
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin-left: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: #555 transparent transparent transparent;
+}
 
-/* Show the tooltip text when you mouse over the tooltip container */
+// Show the tooltip text when you mouse over the tooltip container
 .tooltip:hover .tooltiptext {
-  visibility: visible;
-  opacity: 1; }
-
+	visibility: visible;
+	opacity: 1;
+}
+*/
 /*
 END TOOLTIP
  */
@@ -1821,34 +1828,13 @@ store lightbox styles
   left: 50%;
   z-index: 1; }
 
+#sitemap {
+  margin: 10px; }
+
 #maps {
   visibility: hidden;
   /* ------------------------------------------------------------
         Reset Styles (from meyerweb.com)
-    ------------------------------------------------------------ */
-  /* ------------------------------------------------------------
-	Loader (from https://www.w3schools.com/howto/howto_css_loader.asp)
------------------------------------------------------------- */
-  /* Add animation to "page content" */
-  /* ------------------------------------------------------------
-        Checkmarks
-    ------------------------------------------------------------ */
-  /*
-	.checkmark:after {
-		content: '';
-		display: block;
-		width: 6px;
-		height: 12px;
-		border: solid green;
-		border-width: 0 4px 4px 0;
-		transform: rotate(45deg);
-	}
-*/
-  /* ------------------------------------------------------------
-        NUMBER OF COLUMNS: Adjust .primaryNav li to set the number
-        of columns required in your site map. The default is
-        4 columns (25%). 5 columns would be 20%, 6 columns would
-        be 16.6%, etc.
     ------------------------------------------------------------ */
   /* ------------------------------------------------------------
         General Styles
@@ -1857,24 +1843,13 @@ store lightbox styles
         Site Map Styles
     ------------------------------------------------------------ */
   /* --------	Top Level --------- */
-  /*
-    .primaryNav li p:hover {
-        background-color: #e2f4fd;
-        border-color: #97bdcf;
-    }
-    */
-  /* --------	Second Level --------- */
-  /* --------	grey out colors --------- */
-  /* --------	available tasks colors --------- */
-  /* --------	Third Level --------- */
   /* ------------------------------------------------------------
-        Bonus Stars
     ------------------------------------------------------------ */
   /* ------------------------------------------------------------
         Badges
     ------------------------------------------------------------ */
   /** Badge Styles **/ }
-  #maps html, #maps body, #maps div, #maps span, #maps applet, #maps object, #maps iframe,
+  #maps div, #maps span, #maps applet, #maps object, #maps iframe,
   #maps h1, #maps h2, #maps h3, #maps h4, #maps h5, #maps h6, #maps p, #maps blockquote, #maps pre,
   #maps a, #maps abbr, #maps acronym, #maps address, #maps big, #maps cite, #maps code,
   #maps del, #maps dfn, #maps em, #maps font, #maps img, #maps ins, #maps kbd, #maps q, #maps s, #maps samp,
@@ -1891,62 +1866,6 @@ store lightbox styles
     font-size: 100%;
     font-family: inherit;
     vertical-align: baseline; }
-
-@-webkit-keyframes spin {
-  0% {
-    -webkit-transform: rotate(0deg); }
-  100% {
-    -webkit-transform: rotate(360deg); } }
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg); }
-  100% {
-    transform: rotate(360deg); } }
-  #maps .animate-bottom {
-    position: relative;
-    -webkit-animation-name: animatebottom;
-    -webkit-animation-duration: 1s;
-    animation-name: animatebottom;
-    animation-duration: 1s; }
-
-@-webkit-keyframes animatebottom {
-  from {
-    bottom: -100px;
-    opacity: 0; }
-  to {
-    bottom: 0px;
-    opacity: 1; } }
-
-@keyframes animatebottom {
-  from {
-    bottom: -100px;
-    opacity: 0; }
-  to {
-    bottom: 0;
-    opacity: 1; } }
-  #maps #myDiv {
-    display: none;
-    text-align: center; }
-  #maps .checkmark {
-    display: inline-block;
-    float: left;
-    margin: 0 10px 0 10px; }
-  #maps .primaryNav li {
-    width: 90%; }
-  #maps .primaryNav li ul {
-    padding: 0px !important; }
-  #maps body {
-    background: white;
-    color: black;
-    padding: 40px;
-    font-family: Gotham, Helvetica, Arial, sans-serif;
-    font-size: 12px;
-    line-height: 1; }
-  #maps .sitemap {
-    margin: 0 0 40px 0;
-    float: left;
-    width: 100%; }
   #maps h1 {
     font-weight: bold;
     text-transform: uppercase;
@@ -1962,192 +1881,125 @@ store lightbox styles
   #maps ol, #maps ul {
     list-style: none !important; }
   #maps .map {
-    padding-top: 20px;
-    display: block; }
+    display: block;
+    text-align: center; }
+  #maps .singleCol {
+    width: 100% !important; }
   #maps .primaryNav {
     margin: 0px 0 0 0;
     float: left;
     width: 100%;
-    padding: 20px 0px; }
-  #maps .primaryNav li {
-    float: left;
-    background: url("../../media/map/L1-center.png") center top no-repeat;
-    padding: 30px 0;
-    margin-top: -30px; }
-  #maps .primaryNav .ParentNav {
-    display: block;
-    float: none;
-    background: none !important;
-    position: relative;
-    z-index: 2;
-    width: 100% !important; }
-  #maps .primaryNav li p,
-  #maps .primaryNav li a {
-    margin: 0 10px;
-    padding: 10px 0;
-    display: block;
-    font-size: 14px;
-    font-weight: bold;
-    text-align: center;
-    color: black;
-    background: #c3eafb;
-    -webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
-    -moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
-    /* FF 3.5+ */ }
-  #maps .primaryNav li:last-child {
-    background: url("../../media/map/L1-right.png") center top no-repeat; }
-  #maps .primaryNav > li:nth-child(2) {
-    background: url("../../media/map/L1-left.png") center top no-repeat; }
-  #maps .primaryNav > li:first-child {
-    background: none; }
-  #maps .primaryNav ul {
-    margin: 0; }
-  #maps .primaryNav li li {
-    width: 100%;
-    clear: left;
-    margin-top: 0;
-    padding: 10px 0 0 0;
-    background: url("../../media/map/vertical-line.png") center bottom repeat-y; }
-  #maps .singleCol {
-    background: url("../../media/map/vertical-line.png") center top no-repeat !important; }
-  #maps .primaryNav li li a,
-  #maps .primaryNav .done a {
-    background-color: #cee3ac;
-    border-color: #b8da83; }
-  #maps .primaryNav li li a:hover,
-  #maps .primaryNav .done a:hover {
-    border-color: #94b75f;
-    background-color: #e7f1d7; }
-  #maps .optional_task {
-    width: 80% !important;
-    margin-left: 20% !important; }
-  #maps .optional_task a {
-    font-size: 1em !important;
-    font-style: italic; }
-  #maps .primaryNav .locked a,
-  #maps .primaryNav li .locked a,
-  #maps .primaryNav li .locked a:hover {
-    background-color: #cccccc;
-    border-color: #000;
-    color: #555; }
-  #maps .primaryNav .up a {
-    -webkit-box-shadow: #37b6ec 0 0 7px 1px;
-    -moz-box-shadow: #37b6ec 0 0 7px 1px;
-    /* FF 3.5+ */ }
-  #maps .primaryNav .down a {
-    -webkit-box-shadow: #ec3761 0 0 7px 1px;
-    -moz-box-shadow: #ec3761 0 0 7px 1px;
-    /* FF 3.5+ */ }
-  #maps .primaryNav li .available a {
-    background-color: #fff7aa;
-    border-color: #e3ca4b; }
-  #maps .primaryNav li .available a:hover {
-    background-color: #fffce5;
-    border-color: #d1b62c; }
-  #maps .primaryNav li li:first-child {
-    padding-top: 30px; }
-  #maps .primaryNav li li:last-child {
-    background: url("../../media/map/vertical-line.png") center bottom repeat-y; }
-  #maps .primaryNav li li ul {
-    margin: 10px 0 0 0;
-    width: 100%;
-    float: right;
-    padding: 9px 0 10px 0;
-    background: #ffffff url("../../media/map/L3-ul-top.png") center top no-repeat; }
-  #maps .primaryNav li li li {
-    background: url("../../media/map/L3-center.png") left center no-repeat;
-    padding: 5px 0; }
-  #maps .primaryNav li li li a {
-    background-color: #fff7aa;
-    border-color: #e3ca4b;
-    font-size: 12px;
-    padding: 5px 0;
-    width: 80%;
-    float: right; }
-  #maps .primaryNav li li li a:hover {
-    background-color: #fffce5;
-    border-color: #d1b62c; }
-  #maps .primaryNav li li li:first-child {
-    padding: 15px 0 5px 0;
-    background: url("../../media/map/L3-li-top.png") left center no-repeat; }
-  #maps .primaryNav li li li:last-child {
-    background: url("../../media/map/L3-bottom.png") left center no-repeat; }
-  #maps .star-empty .fas.fa-star {
-    color: white; }
-  #maps .star-full .fas.fa-star {
-    color: gold; }
-  #maps .star-half .fas.fa-star {
-    color: white; }
-  #maps .star-half .fas.fa-star-half-o {
-    color: gold; }
-  #maps .go_quest_badge {
-    margin: 0px; }
+    /* --------	grey out colors --------- */
+    /* --------	available tasks colors --------- */ }
+    #maps .primaryNav li ul {
+      padding: 0px !important; }
+    #maps .primaryNav li {
+      float: left; }
+    #maps .primaryNav .ParentNav {
+      display: block;
+      float: none;
+      position: relative;
+      z-index: 2;
+      background: #c3eafb;
+      -webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
+      -moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
+      /* FF 3.5+ */
+      margin: 0px 10px 0px 10px;
+      padding: 0 0 0 0;
+      width: calc(100% - 20px) !important; }
+      #maps .primaryNav .ParentNav p {
+        margin-top: 0px;
+        -webkit-box-shadow: unset;
+        -moz-box-shadow: unset; }
+    #maps .primaryNav .optional_task {
+      margin-top: 0px;
+      border-top: 1px solid grey;
+      border-left: 10px solid grey;
+      display: none; }
+    #maps .primaryNav .go_optional_toggle, #maps .primaryNav .go_optional_toggle:hover {
+      margin-top: 0px;
+      background-color: #292929;
+      color: whitesmoke;
+      height: 19px; }
+    #maps .primaryNav .optional_task a {
+      font-style: italic; }
+    #maps .primaryNav > li p,
+    #maps .primaryNav > li li {
+      background: #c3eafb;
+      -webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
+      -moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
+      /* FF 3.5+ */
+      margin: 10px 10px 0px 10px;
+      padding: 0 0 0 0;
+      width: calc(100% - 20px) !important; }
+    #maps .primaryNav > li a,
+    #maps .primaryNav > li p {
+      padding: 10px 0;
+      display: block;
+      font-size: 14px;
+      font-weight: bold;
+      text-align: center;
+      color: black; }
+    #maps .primaryNav .go_bonus_progresss_bar_position {
+      height: 15px; }
+    #maps .primaryNav .go_bonus_progresss_bar_container {
+      height: 15px;
+      border: 1px solid;
+      box-sizing: unset;
+      border: thin black solid;
+      background-color: #292929;
+      color: whitesmoke;
+      position: absolute;
+      bottom: 0;
+      width: 100%; }
+      #maps .primaryNav .go_bonus_progresss_bar_container .go_bonus_progress_bar {
+        position: absolute;
+        height: 15px;
+        background-color: #39b54a; }
+    #maps .primaryNav li li,
+    #maps .primaryNav .done {
+      background-color: #cee3ac;
+      border-color: #b8da83;
+      position: relative; }
+    #maps .primaryNav li li:hover,
+    #maps .primaryNav .done:hover {
+      border-color: #94b75f;
+      background-color: #e7f1d7; }
+    #maps .primaryNav .locked,
+    #maps .primaryNav li .locked,
+    #maps .primaryNav li .locked:hover {
+      background-color: #cccccc;
+      border-color: #000;
+      color: #555; }
+    #maps .primaryNav .up a {
+      border: 2px solid mediumturquoise; }
+    #maps .primaryNav .down a {
+      border: 2px solid indianred; }
+    #maps .primaryNav .reset a {
+      border: 2px solid indianred;
+      background-color: pink; }
+    #maps .primaryNav li .available {
+      background-color: #fff7aa;
+      border-color: #e3ca4b; }
+    #maps .primaryNav li .available:hover {
+      background-color: #fffce5;
+      border-color: #d1b62c; }
   #maps .go_badge_wrap {
     width: 100%;
-    padding-right: 20px; }
-  #maps .go_badge_container {
-    width: 150px;
-    height: 150px;
-    border-radius: 150px;
-    margin: 0 auto;
-    margin: 25px 0px 0 55px !important;
-    float: none; }
-  #maps .go_badge {
-    text-align: center;
-    float: none; }
-  #maps .tooltiptext {
-    margin: 0 -60px; }
+    height: unset;
+    margin-bottom: 10px;
+    font-weight: 500; }
+    #maps .go_badge_wrap .go_badge_container {
+      margin: 0 auto;
+      float: none; }
+      #maps .go_badge_wrap .go_badge_container .go_badge {
+        float: unset !important;
+        width: 100%;
+        margin: 0 auto;
+        padding: 10px; }
+        #maps .go_badge_wrap .go_badge_container .go_badge img {
+          width: 75px !important; }
 
-/* ------------------------------------------------------------
-        Utility Navigation
-
-
-    #utilityNav {
-        float: left;
-        max-width: 100%;
-        margin-right: 10px;
-    }
-    #utilityNav li {
-        float: left;
-        margin-bottom: 10px;
-    }
-    #utilityNav li a {
-        margin: 0 10px 0 0;
-        padding: 5px 10px;
-        display: block;
-        border: 2px solid #e3ca4b;
-        font-size: 12px;
-        font-weight: bold;
-        text-align: center;
-        color: black;
-        background: #fff7aa url('images/map/white-highlight.png') top left repeat-x;
-        -moz-border-radius: 5px;
-        -webkit-border-radius: 5px;
-        -webkit-box-shadow: rgba(0,0,0,0.5) 2px 2px 2px;
-        -moz-box-shadow: rgba(0,0,0,0.5) 2px 2px 2px;
-        cursor: pointer;
-    }
-
-    #utilityNav .filtered a,
-    #utilityNav .filtered a:hover{
-        background-color: #cccccc;
-        border-color: #000;
-        color: #555;
-    }
-    #utilityNav .done a,
-    #utilityNav .done a:hover{
-        background-color: #cee3ac;
-        border-color: #b8da83;
-    }
-
-    #utilityNav li a:hover {
-        background-color: #fffce5;
-        border-color: #d1b62c;
-        cursor: pointer;
-    }
-
-
-    ------------------------------------------------------------ */
 /* Dropdown Button */
 .dropbtn, .dropbtn:hover, .dropbtn:focus {
   cursor: pointer;

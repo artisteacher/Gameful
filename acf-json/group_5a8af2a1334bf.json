@@ -790,15 +790,15 @@
                                 "go_user_lock": "User Groups - 1 of these",
                                 "go_xp_levels_lock": "Minimum XP",
                                 "go_gold_lock": "Minimum Gold",
-                                "go_health_lock": "Minimum Health",
+                                "go_health_lock": "Minimum Reputation",
                                 "go_period_lock": "Class Section - 1 of these"
                             },
                             "default_value": [],
                             "allow_null": 1,
                             "multiple": 0,
                             "ui": 0,
-                            "ajax": 0,
                             "return_format": "value",
+                            "ajax": 0,
                             "placeholder": ""
                         },
                         {
@@ -964,10 +964,12 @@
                                     },
                                     "choices": {
                                         "": "Select",
-                                        "0": "Level1 -  : 0 PP",
-                                        "50": "Level2 -  : 50 PP",
-                                        "105": "Level3 -  : 105 PP",
-                                        "20000": "Level4 -  : 20000 PP"
+                                        "0": "Level1 - beginner : 0 PP",
+                                        "50": "Level2 - beginner : 50 PP",
+                                        "105": "Level3 - beginner : 105 PP",
+                                        "200": "Level4 - beginner : 200 PP",
+                                        "300": "Level5 - beginner : 300 PP",
+                                        "400": "Level6 - beginner : 400 PP"
                                     },
                                     "default_value": [],
                                     "allow_null": 0,
@@ -1008,7 +1010,7 @@
                                 },
                                 {
                                     "key": "field_5ac134bb78595",
-                                    "label": "Minimum Health",
+                                    "label": "Minimum Reputation",
                                     "name": "health",
                                     "type": "number",
                                     "instructions": "",
@@ -1228,7 +1230,7 @@
                 },
                 {
                     "key": "field_5ac134fa12f50",
-                    "label": "Health",
+                    "label": "Reputation",
                     "name": "health",
                     "type": "number",
                     "instructions": "",
@@ -1787,7 +1789,7 @@
                         },
                         {
                             "key": "field_5ac134fe12f56",
-                            "label": "Health",
+                            "label": "Reputation",
                             "name": "health",
                             "type": "number",
                             "instructions": "",
@@ -2035,7 +2037,7 @@
                                 },
                                 {
                                     "key": "field_5b526d2e79585",
-                                    "label": "Health",
+                                    "label": "Reputation",
                                     "name": "health",
                                     "type": "number",
                                     "instructions": "",
@@ -2635,7 +2637,7 @@
                         },
                         {
                             "key": "field_5a8b14a6f32f9",
-                            "label": "Health",
+                            "label": "Reputation",
                             "name": "health",
                             "type": "number",
                             "instructions": "",
@@ -2685,5 +2687,5 @@
     ],
     "active": 1,
     "description": "",
-    "modified": 1558031529
+    "modified": 1560904706
 }

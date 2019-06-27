@@ -255,7 +255,7 @@ function go_blog_trash(){
                     intval($go_blog_task_id)
                 )
             );
-            go_update_actions( $uid, 'reset',  $go_blog_task_id, $new_status_task, $new_bonus_status_task, null, null, null, null, null, null,  $xp, $gold, $health, $badge_ids, $group_ids, false, true);
+            go_update_actions($uid, 'reset',  $go_blog_task_id, $new_status_task, $new_bonus_status_task, null, null, null, null, null, null,  $xp, $gold, $health, $badge_ids, $group_ids, false);
 
             update_user_option(intval($uid), 'go_new_messages', true);
 
@@ -431,7 +431,7 @@ function go_save_blog_post($post_id = null, $stage = null, $bonus_status = null,
         wp_save_post_revision(  $new_post_id );
         $result = $new_post_id;
         //create an entry in the actions table that attaches this blog post to this task and stage.  This is how the check for understanding looks up the blog post.
-        go_update_actions($user_id, 'blog_post', $post_id, $stage, $bonus_status, null, $result, null, null, null, null, null, null, null, null, null, false, null);
+        go_update_actions($user_id, 'blog_post', $post_id, $stage, $bonus_status, null, $result, null, null, null, null, null, null, null, null, null, false);
 
     }else{
         wp_update_post($my_post);

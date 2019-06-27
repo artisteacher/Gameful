@@ -26,6 +26,9 @@ function go_check_messages($response = null , $data = null){
     $is_logged_in = is_user_logged_in();
     $is_new_messages = get_user_option('go_new_messages');
 
+    $up = false;
+    $down = false;
+
     if ($is_logged_in && $is_new_messages ){
         //get unread messages
         $go_actions_table_name = "{$wpdb->prefix}go_actions";
@@ -49,7 +52,7 @@ function go_check_messages($response = null , $data = null){
         //set them as read
         foreach ($actions as $action) {
             $type = $action->action_type;
-            $post_id = $action->source_id;
+            //$post_id = $action->source_id;
             $result = $action->result;
             $result = unserialize($result);
             $title = $result[0];
@@ -86,11 +89,10 @@ function go_check_messages($response = null , $data = null){
             }
             else if ( $type == 'reset' && $type = 'reset_stage') {
                 go_noty_message_generic('warning', $title, $message, '');
+                $sound = go_down_sound();
+                echo $sound;
             }
             else{
-
-
-
                 $xp_penalty = null;
                 $xp_reward = null;
                 $xp_loot = null;
@@ -99,8 +101,10 @@ function go_check_messages($response = null , $data = null){
                 }
                 if ($xp > 0) {
                     $xp_reward = $xp_loot.'<br>';
+                    $up = true;
                 } else if ($xp < 0) {
                     $xp_penalty = $xp_loot.'<br>';
+                    $down = true;
                 }
 
                 $gold_penalty = null;
@@ -111,9 +115,11 @@ function go_check_messages($response = null , $data = null){
                 }
                 if ($gold > 0) {
                     $gold_reward = $gold_loot.'<br>';
+                    $up = true;
                 }
                 else if ($gold < 0) {
                     $gold_penalty = $gold_loot.'<br>';
+                    $down = true;
                 }
 
 
@@ -125,16 +131,17 @@ function go_check_messages($response = null , $data = null){
                 }
                 if ($health > 0) {
                     $health_reward = $health_loot.'<br>';
+                    $up = true;
                 }
                 else if ($health < 0) {
                     $health_penalty = $health_loot.'<br>';
+                    $down = true;
                 }
 
 
                 $badges_toggle = get_option('options_go_badges_toggle');
                 if ($badges_toggle && !empty($badges_ids)) {
                     $badge_dir = $result[2];
-
                     $badges_name = get_option('options_go_badges_name_plural');
 
                     $badges_names = array();
@@ -214,6 +221,18 @@ function go_check_messages($response = null , $data = null){
             }
 
         }
+        go_update_admin_bar($user_id);
+
+        if($up){
+            $sound = go_up_sound();
+            echo $sound;
+        }
+
+        if($down){
+            $sound = go_down_sound();
+            echo $sound;
+        }
+
 
 
         $wpdb->query(

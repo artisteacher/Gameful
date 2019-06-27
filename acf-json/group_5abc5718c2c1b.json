@@ -1450,7 +1450,7 @@
         },
         {
             "key": "field_5abc866f8e8a1",
-            "label": "Health",
+            "label": "Reputation",
             "name": "go_loot_health",
             "type": "group",
             "instructions": "",
@@ -1503,8 +1503,8 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "Health",
-                    "placeholder": "Health",
+                    "default_value": "Reputation",
+                    "placeholder": "Reputation",
                     "prepend": "",
                     "append": "",
                     "maxlength": ""
@@ -1530,8 +1530,8 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "HP",
-                    "placeholder": "HP",
+                    "default_value": "REP",
+                    "placeholder": "REP",
                     "prepend": "",
                     "append": "",
                     "maxlength": ""
@@ -1564,6 +1564,35 @@
                     "min": 0,
                     "max": 100,
                     "step": ""
+                },
+                {
+                    "key": "field_5d09b5c84eee2",
+                    "label": "Maximum Modifier",
+                    "name": "max_health_mod",
+                    "type": "number",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5ad67502ceed3",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": 200,
+                    "placeholder": 200,
+                    "prepend": "",
+                    "append": "%",
+                    "min": 100,
+                    "max": 1000,
+                    "step": 1
                 }
             ]
         },
@@ -2092,5 +2121,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1560268628
+    "modified": 1560967194
 }

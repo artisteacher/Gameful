@@ -6,7 +6,7 @@ jQuery( document ).ready( function() {
     //    go_login_lightbox();
    // });
 
-
+    go_activate_tippy();
     let debug = go_debug;
     if (debug === 'false') {
         jQuery(document).on('heartbeat-tick', function (event, data) {
@@ -47,7 +47,22 @@ jQuery( document ).ready( function() {
         jQuery('#footer-widgets').hide();
     }
 
+
+
 });
+
+function go_activate_tippy(){
+    tippy('.tooltip', {
+        delay: 0,
+        arrow: true,
+        arrowType: 'round',
+        size: 'large',
+        duration: 300,
+        animation: 'scale',
+        zIndex: 999999,
+        placement: 'top',
+    });
+}
 
 function go_new_task_from_template(){
     console.log('go_new_task_from_template');
@@ -960,15 +975,7 @@ function go_stats_activity_list() {
 
                         "order": [[0, "desc"]],
                         "drawCallback": function( settings ) {
-                            tippy('.tooltip', {
-                                delay: 0,
-                                arrow: true,
-                                arrowType: 'round',
-                                size: 'large',
-                                duration: 300,
-                                animation: 'scale',
-                                zIndex: 999999
-                            });
+                            go_activate_tippy();
                         }
 
                     });
@@ -1055,6 +1062,8 @@ function go_stats_badges_list() {
                 //console.log(res);
                 if (-1 !== res) {
                     jQuery('#stats_badges').html(res);
+
+                    go_activate_tippy();
                 }
             }
         });

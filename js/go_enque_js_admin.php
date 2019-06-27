@@ -155,6 +155,13 @@ function go_admin_scripts ($hook) {
                     ),
                 )
             );
+
+
+            wp_localize_script(
+                'go_admin_user',
+                'go_is_map',
+                array(true)
+            );
         }
 
         // Enqueue and Localization for options page

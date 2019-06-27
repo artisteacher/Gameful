@@ -68,25 +68,17 @@ function go_player_bar_v5() {
             ), '');
             $id = $atts['id'];
             //$custom_fields = get_post_custom($id); // Just gathering some data about this task with its post id
-            echo '<div id="go_timer"><i class="fa fa-clock-o ab-icon" aria-hidden="true"></i><div><span class="days"></span>d : </div><div><span class="hours"></span>h : </div><div><span class="minutes"></span>m : </div><div><span class="seconds"></span>s</div>';
+            echo '<div id="go_timer"><i class="fa fa-clock-o ab-icon" aria-hidden="true"></i><div><span class="days"></span>d : </div><div><span class="hours"></span>h : </div><div><span class="minutes"></span>m : </div><div><span class="seconds"></span>s</div></div>';
         }
 
 
 
 
-        $user_loot = go_get_loot($user_id);
+        //$user_loot = go_get_loot($user_id);
 
         if ($gold_toggle) {
-            echo '<div id="go_user_bar_loot" class="userbar_dropdown">';
-            $go_current_gold = $user_loot['gold'];
-            $user_bar_coins = '<div id="go_admin_bar_gold" class="admin_bar_loot">' . go_display_longhand_currency('gold', $go_current_gold, false, false, true) . '</div>';
-            echo "<div class='narrow_content'>$user_bar_coins</div>";
-
-            echo '<div class="wide_content">';
-                // the user's current amount of currency
-                //$go_current_gold = go_get_user_loot($user_id, 'gold');
-                echo $user_bar_coins;
-            echo "</div>";//end of the dropdown hover area
+           $gold_bar = go_gold_bar($user_id);
+           echo $gold_bar;
 
         }
 

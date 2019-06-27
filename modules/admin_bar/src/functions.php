@@ -71,6 +71,8 @@ function go_admin_bar_v5() {
             );
         }*/
 
+        $wp_admin_bar->remove_node('new-tasks');
+        $wp_admin_bar->remove_node('new-go_store');
 
         $wp_admin_bar->add_node(array('id' => 'go_section_pipe', 'title' => ' | ', 'href' => 'javascript:void(0)',));
 

@@ -381,7 +381,7 @@ function go_send_feedback()
         $result[] = $feedback_percent;
         $result = serialize($result);
         //update actions--send the feedback
-        go_update_actions($user_id, $type, $blog_post_id, 1, null, $uniqueid, $result, null, null, null, null, $xp, $gold, $health, null, null, false, false);
+        go_update_actions($user_id, $type, $blog_post_id, 1, null, $uniqueid, $result, null, null, null, null, $xp, $gold, $health, null, null, false);
 
         //set new message user option to true so each user gets the message
         $user_id = intval($user_id);

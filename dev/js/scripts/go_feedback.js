@@ -54,10 +54,6 @@ jQuery( document ).ready( function() {
 
     }
 
-
-
-
-
     go_reader_activate_buttons();
 
 
@@ -351,15 +347,7 @@ function go_reader_activate_buttons(){
         go_messages_opener( this.getAttribute('data-uid'), this.getAttribute('data-task'), 'reset_stage', this );
     });
 
-    tippy('.tooltip', {
-        delay: 0,
-        arrow: true,
-        arrowType: 'round',
-        size: 'large',
-        duration: 300,
-        animation: 'scale',
-        zIndex: 999999
-    });
+    go_activate_tippy();
 
     jQuery("#go_mark_all_read").off().one("click", function(){
         go_reader_bulk_read(this);

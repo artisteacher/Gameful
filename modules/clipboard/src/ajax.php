@@ -1265,7 +1265,7 @@ function go_clipboard_activity_dataloader_ajax(){
         //  $task_id = "data-task='" . $task_id . "'";
         //}
 
-        $user_id = $action['uid'];
+        $user_id = $action['user_id'];
         $row[] = '<a href="javascript:;" class="go_blog_user_task" data-UserId="'.$user_id.'" onclick="go_blog_user_task('.$user_id.', '.$task_id.');"><i style="padding: 0px 10px;" class="fas fa-search" aria-hidden="true"></i></a><a><i data-uid="' . $user_id . '" data-task="'. $task_id . '" style="padding: 0px 10px;" class="go_reset_task_clipboard fa fa-times-circle" aria-hidden="true"></a>';//actions
 
         $start = $action['start_time'];

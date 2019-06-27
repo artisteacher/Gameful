@@ -14,23 +14,55 @@ jQuery( window ).resize(function() {
 });
 */
 
+if (typeof (go_is_map) !== 'undefined') {
 
 
-// Close the dropdown menu if the user clicks outside of it
-window.onclick = function(event) {
-    if (!event.target.matches('.dropbtn')) {
+    jQuery( document ).ready( function() {
+        go_setup_map();
+    });
+}
 
-        var dropdowns = document.getElementsByClassName("dropdown-content");
-        var i;
-        for (i = 0; i < dropdowns.length; i++) {
-            var openDropdown = dropdowns[i];
-            if (openDropdown.classList.contains('show')) {
-                openDropdown.classList.remove('show');
+function go_setup_map(){
+    // Close the dropdown menu if the user clicks outside of it
+    window.onclick = function (event) {
+        if (!event.target.matches('.dropbtn')) {
+
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
             }
         }
     }
+
+    //add onclick to to optional toggles
+
+        console.log('map is ready');
+        jQuery('.go_optional_toggle').click(go_optional_task_toggle);
+
+
 }
 
+
+function go_optional_task_toggle(){
+    console.log('go_optional_task_toggle');
+    console.log(this);
+
+    var task = jQuery(this).next();
+    task.toggle();
+    console.log(task);
+    while(task.next().hasClass('optional_task') == true){
+        console.log('true');
+        var task = task.next()
+        task.toggle();
+        console.log(task);
+    }
+
+
+}
 
 function go_to_this_map(map_id) {
     var nonce = GO_EVERY_PAGE_DATA.nonces.go_to_this_map;
@@ -97,7 +129,7 @@ function go_show_map(mapid) {
 				go_resizeMap();
 				document.getElementById("loader_container").style.display = "none";
  				document.getElementById("maps").style.display = "block";
-				
+                go_setup_map();
 			}
 			
 	});
@@ -239,6 +271,7 @@ function go_user_map(user_id) {
                     }
                 });
             }
+            go_setup_map();
         }
     });
 

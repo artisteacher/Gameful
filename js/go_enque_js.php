@@ -145,6 +145,15 @@ function go_scripts () {
 
     );
 
+    $request_uri = (isset($_SERVER['REQUEST_URI']) ?  $_SERVER['REQUEST_URI'] : null);//page currently being loaded
+
+    if ($request_uri == '/maplink/')
+    wp_localize_script(
+        'go_frontend',
+        'go_is_map',
+        array(true)
+    );
+
 
     /**
      * Resize All Images on Client Side

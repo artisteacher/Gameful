@@ -16,6 +16,12 @@
 	z-index: 1;
 }
 
+#sitemap {
+	margin: 10px;
+	//float: left;
+	//width: 100%;
+}
+
 #maps {
 	visibility: hidden;
 
@@ -23,7 +29,7 @@
         Reset Styles (from meyerweb.com)
     ------------------------------------------------------------ */
 
-	html, body, div, span, applet, object, iframe,
+	div, span, applet, object, iframe,
 	h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 	a, abbr, acronym, address, big, cite, code,
 	del, dfn, em, font, img, ins, kbd, q, s, samp,
@@ -43,119 +49,9 @@
 	}
 
 	/* ------------------------------------------------------------
-	Loader (from https://www.w3schools.com/howto/howto_css_loader.asp)
------------------------------------------------------------- */
-
-
-
-
-	@-webkit-keyframes spin {
-		0% {
-			-webkit-transform: rotate(0deg);
-		}
-		100% {
-			-webkit-transform: rotate(360deg);
-		}
-	}
-
-	@keyframes spin {
-		0% {
-			transform: rotate(0deg);
-		}
-		100% {
-			transform: rotate(360deg);
-		}
-	}
-
-	/* Add animation to "page content" */
-	.animate-bottom {
-		position: relative;
-		-webkit-animation-name: animatebottom;
-		-webkit-animation-duration: 1s;
-		animation-name: animatebottom;
-		animation-duration: 1s
-	}
-
-	@-webkit-keyframes animatebottom {
-		from {
-			bottom: -100px;
-			opacity: 0
-		}
-		to {
-			bottom: 0px;
-			opacity: 1
-		}
-	}
-
-	@keyframes animatebottom {
-		from {
-			bottom: -100px;
-			opacity: 0
-		}
-		to {
-			bottom: 0;
-			opacity: 1
-		}
-	}
-
-	#myDiv {
-		display: none;
-		text-align: center;
-	}
-
-	/* ------------------------------------------------------------
-        Checkmarks
-    ------------------------------------------------------------ */
-
-	.checkmark {
-		display: inline-block;
-		float: left;
-		margin: 0 10px 0 10px;
-	}
-	/*
-	.checkmark:after {
-		content: '';
-		display: block;
-		width: 6px;
-		height: 12px;
-		border: solid green;
-		border-width: 0 4px 4px 0;
-		transform: rotate(45deg);
-	}
-*/
-
-	/* ------------------------------------------------------------
-        NUMBER OF COLUMNS: Adjust .primaryNav li to set the number
-        of columns required in your site map. The default is
-        4 columns (25%). 5 columns would be 20%, 6 columns would
-        be 16.6%, etc.
-    ------------------------------------------------------------ */
-
-	.primaryNav li {
-		width: 90%;
-	}
-
-	.primaryNav li ul {
-		padding: 0px !important;
-	}
-
-	/* ------------------------------------------------------------
         General Styles
     ------------------------------------------------------------ */
 
-	body {
-		background: white;
-		color: black;
-		padding: 40px;
-		font-family: Gotham, Helvetica, Arial, sans-serif;
-		font-size: 12px;
-		line-height: 1;
-	}
-	.sitemap {
-		margin: 0 0 40px 0;
-		float: left;
-		width: 100%;
-	}
 	h1 {
 		font-weight: bold;
 		text-transform: uppercase;
@@ -175,8 +71,9 @@
 		list-style: none !important;
 	}
 	.map {
-		padding-top: 20px;
+		//padding-top: 20px;
 		display: block;
+		text-align: center;
 	}
 
 	/* ------------------------------------------------------------
@@ -185,187 +82,174 @@
 
 	/* --------	Top Level --------- */
 
+	.singleCol {
+		//	background: url('../../media/map/vertical-line.png') center top no-repeat !important;
+		width: 100% !important;
+	}
+
+	/* ------------------------------------------------------------
+    ------------------------------------------------------------ */
 	.primaryNav {
 		margin: 0px 0 0 0;
 		float: left;
 		width: 100%;
-		padding: 20px 0px;
 
-	}
+		li {
+			//width: 90%;
+		}
 
-	.primaryNav li {
-		float: left;
-		background: url('../../media/map/L1-center.png') center top no-repeat;
-		padding: 30px 0;
-		margin-top: -30px;
-	}
-	.primaryNav .ParentNav {
-		display: block;
-		float: none;
-		background: none !important;
-		position: relative;
-		z-index: 2;
-		width: 100% !important;
-	}
-	.primaryNav li p,
-	.primaryNav li a {
-		margin: 0 10px;
-		padding: 10px 0;
-		display: block;
-		font-size: 14px;
-		font-weight: bold;
-		text-align: center;
-		color: black;
-		background: #c3eafb;
-		//border: 2px solid #b5d9ea;
-		//-moz-border-radius: 5px;
-		//-webkit-border-radius: 5px;
-		-webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
-		-moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px; /* FF 3.5+ */
-	}
-	/*
-    .primaryNav li p:hover {
-        background-color: #e2f4fd;
-        border-color: #97bdcf;
-    }
-    */
-	.primaryNav li:last-child {
-		background: url('../../media/map/L1-right.png') center top no-repeat;
-	}
-	.primaryNav > li:nth-child(2) {
-		background: url('../../media/map/L1-left.png') center top no-repeat;
-	}
+		li ul {
+			padding: 0px !important;
+		}
 
-	.primaryNav > li:first-child {
-		background: none;
-	}
+		li {
+			float: left;
+		}
 
-	/* --------	Second Level --------- */
-	.primaryNav ul {
-		margin: 0;
-	}
-	.primaryNav li li {
-		width: 100%;
-		clear: left;
-		margin-top: 0;
-		padding: 10px 0 0 0;
-		background: url('../../media/map/vertical-line.png') center bottom repeat-y;
-	}
+		//top map name
+		.ParentNav {
+			display: block;
+			float: none;
+			position: relative;
+			z-index: 2;
+			background: #c3eafb;
+			-webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
+			-moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px; /* FF 3.5+ */
+			margin: 0px 10px 0px 10px;
+			padding: 0 0 0 0;
+			width: calc(100% - 20px) !important;
+			p{ margin-top: 0px;
+				-webkit-box-shadow: unset;
+				-moz-box-shadow: unset;
+			}
+		}
 
-	.singleCol {
-		background: url('../../media/map/vertical-line.png') center top no-repeat !important;
-	}
+		.optional_task {
+			margin-top: 0px;
+			border-top: 1px solid grey;
+			border-left: 10px solid grey;
+			display: none;
+		}
 
-	.primaryNav li li a,
-	.primaryNav .done a{
-		background-color: #cee3ac;
-		border-color: #b8da83;
-	}
-	.primaryNav li li a:hover,
-	.primaryNav .done a:hover{
-		border-color: #94b75f;
-		background-color: #e7f1d7;
-	}
+		.go_optional_toggle, .go_optional_toggle:hover {
+			margin-top: 0px;
+			background-color: #292929;
+			color: whitesmoke;
+			height: 19px;
+		}
 
-	.optional_task {
-		width: 80% !important;
-		margin-left: 20% !important;
-	}
+		.optional_task a {
+			//font-size: 1em !important;
+			font-style: italic;
 
-	.optional_task a {
-		font-size: 1em !important;
-		font-style: italic;
-	}
-	/* --------	grey out colors --------- */
-	.primaryNav .locked a,
-	.primaryNav li .locked a,
-	.primaryNav li .locked a:hover {
-		background-color: #cccccc;
-		border-color: #000;
-		color: #555;
-	}
+		}
 
-	/* --------	available tasks colors --------- */
-	.primaryNav .up a{
-		-webkit-box-shadow: rgba(55, 182, 236, 1) 0 0 7px 1px;
-		-moz-box-shadow: rgba(55, 182, 236, 1) 0 0 7px 1px; /* FF 3.5+ */
-	}
+		> li {//task chains
+			p,//task chains names
+			li//tasks
+			{
+				background: #c3eafb;
+				-webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
+				-moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px; /* FF 3.5+ */
+				margin: 10px 10px 0px 10px;
+				padding: 0 0 0 0;
+				width: calc(100% - 20px) !important;
+			}
 
-	.primaryNav .down a{
-		-webkit-box-shadow: rgba(236, 55, 97, 1) 0 0 7px 1px;
-		-moz-box-shadow: rgba(236, 55, 97, 1) 0 0 7px 1px; /* FF 3.5+ */
-	}
+			//clickable area inside of tasks
+			a,
+			p{
+				//margin: 0 10px;
+				padding: 10px 0;
+				display: block;
+				font-size: 14px;
+				font-weight: bold;
+				text-align: center;
+				color: black;
 
-	.primaryNav li .available a {
-		background-color: #fff7aa;
-		border-color: #e3ca4b;
-	}
-	.primaryNav li .available a:hover {
-		background-color: #fffce5;
-		border-color: #d1b62c;
-	}
+			}
+
+		}
+
+		.go_bonus_progresss_bar_position{
+			height: 15px;
+		}
 
 
-	.primaryNav li li:first-child {
-		padding-top: 30px;
-	}
-	.primaryNav li li:last-child {
-		background: url('../../media/map/vertical-line.png') center bottom repeat-y;
-	}
+		.go_bonus_progresss_bar_container {
+			height: 15px;
+			border: 1px solid;
+			box-sizing: unset;
+			border: thin black solid;
+			background-color: #292929;
+			color: whitesmoke;
+			position: absolute;
+			bottom: 0;
+			width: 100%;
+
+
+			.go_bonus_progress_bar{
+				position: absolute;
+				height: 15px;
+				background-color: #39b54a ;
+			}
+		}
 
 
 
-	/* --------	Third Level --------- */
+		li li ,
+		.done  {
+			background-color: #cee3ac;
+			border-color: #b8da83;
+			position: relative;
+		}
 
-	.primaryNav li li ul {
-		margin: 10px 0 0 0;
-		width: 100%;
-		float: right;
-		padding: 9px 0 10px 0;
-		background: #ffffff url('../../media/map/L3-ul-top.png') center top no-repeat;
-	}
-	.primaryNav li li li {
-		background: url('../../media/map/L3-center.png') left center no-repeat;
-		padding: 5px 0;
-	}
-	.primaryNav li li li a {
-		background-color: #fff7aa;
-		border-color: #e3ca4b;
-		font-size: 12px;
-		padding: 5px 0;
-		width: 80%;
-		float: right;
-	}
-	.primaryNav li li li a:hover {
-		background-color: #fffce5;
-		border-color: #d1b62c;
-	}
-	.primaryNav li li li:first-child {
-		padding: 15px 0 5px 0;
-		background: url('../../media/map/L3-li-top.png') left center no-repeat;
-	}
-	.primaryNav li li li:last-child {
-		background: url('../../media/map/L3-bottom.png') left center no-repeat;
-	}
+		li li:hover,
+		.done:hover {
+			border-color: #94b75f;
+			background-color: #e7f1d7;
+		}
+
+		/* --------	grey out colors --------- */
+		.locked,
+		li .locked,
+		li .locked:hover {
+			background-color: #cccccc;
+			border-color: #000;
+			color: #555;
+		}
+
+		/* --------	available tasks colors --------- */
+		.up a{
+			border: 2px solid mediumturquoise;
+		}
+
+		.down a{
+			border: 2px solid indianred;
+		}
+
+		.reset a{
+			border: 2px solid indianred;
+			background-color: pink;
+		}
+
+		li .available {
+			background-color: #fff7aa;
+			border-color: #e3ca4b;
+		}
+		li .available:hover {
+			background-color: #fffce5;
+			border-color: #d1b62c;
+		}
 
 
+		li li:first-child {
+			//padding-top: 30px;
+		}
+		li li:last-child {
+			//background: url('../../media/map/vertical-line.png') center bottom repeat-y;
+		}
 
-
-	/* ------------------------------------------------------------
-        Bonus Stars
-    ------------------------------------------------------------ */
-
-	.star-empty .fas.fa-star {
-		color: white;
-	}
-	.star-full .fas.fa-star {
-		color: gold;
-	}
-	.star-half .fas.fa-star {
-		color: white;
-	}
-	.star-half .fas.fa-star-half-o {
-		color: gold;
 	}
 
 	/* ------------------------------------------------------------
@@ -374,83 +258,32 @@
 
 	/** Badge Styles **/
 
-	.go_quest_badge{
-		margin: 0px;
-	}
-
 	.go_badge_wrap {
 		width: 100%;
-		padding-right: 20px;
+		height: unset;
+		margin-bottom: 10px;
+		font-weight: 500;
+
+		.go_badge_container {
+			margin: 0 auto;
+			float: none;
+
+			.go_badge{
+				float: unset !important;
+				width: 100%;
+				margin: 0 auto;
+				padding: 10px;
+
+				img{
+					width: 75px !important;
+				}
+			}
+		}
 	}
 
-	.go_badge_container {
-		width: 150px;
-		height: 150px;
-		border-radius: 150px;
-		margin: 0 auto;
-		margin: 25px 0px 0 55px !important;
-		float: none;
-	}
-
-	.go_badge {
-		text-align: center;
-		float: none;
-	}
-	.tooltiptext {
-		margin: 0 -60px;
-	}
 }
 
-/* ------------------------------------------------------------
-        Utility Navigation
 
-
-    #utilityNav {
-        float: left;
-        max-width: 100%;
-        margin-right: 10px;
-    }
-    #utilityNav li {
-        float: left;
-        margin-bottom: 10px;
-    }
-    #utilityNav li a {
-        margin: 0 10px 0 0;
-        padding: 5px 10px;
-        display: block;
-        border: 2px solid #e3ca4b;
-        font-size: 12px;
-        font-weight: bold;
-        text-align: center;
-        color: black;
-        background: #fff7aa url('images/map/white-highlight.png') top left repeat-x;
-        -moz-border-radius: 5px;
-        -webkit-border-radius: 5px;
-        -webkit-box-shadow: rgba(0,0,0,0.5) 2px 2px 2px;
-        -moz-box-shadow: rgba(0,0,0,0.5) 2px 2px 2px;
-        cursor: pointer;
-    }
-
-    #utilityNav .filtered a,
-    #utilityNav .filtered a:hover{
-        background-color: #cccccc;
-        border-color: #000;
-        color: #555;
-    }
-    #utilityNav .done a,
-    #utilityNav .done a:hover{
-        background-color: #cee3ac;
-        border-color: #b8da83;
-    }
-
-    #utilityNav li a:hover {
-        background-color: #fffce5;
-        border-color: #d1b62c;
-        cursor: pointer;
-    }
-
-
-    ------------------------------------------------------------ */
 
 /* Dropdown Button */
 .dropbtn, .dropbtn:hover, .dropbtn:focus {

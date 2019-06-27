@@ -130,7 +130,7 @@ function go_save_quiz_result() {
     //$go_actions_table_name = "{$wpdb->prefix}go_actions";
     $html = (isset($_POST['html']) ?  $_POST['html'] : '');
     //check to see if a quiz-mod exists for this stage
-    go_update_actions($user_id, 'quiz_result', $task_id, $status + 1, null, null, $html, null, null, null, null, null, null, null, null, null, null, null, false);
+    go_update_actions($user_id, 'quiz_result', $task_id, $status + 1, null, null, $html, null, null, null, null, null, null, null, null, null, null, null);
     //  go_update_actions($user_id, $type,              $source_id,     $status,        $bonus_status, $check_type, $result, $quiz_mod, $late_mod, $timer_mod, $global_mod, $xp, $gold, $health, $badge_ids, $group_ids, $notify, $debt)
 
 
@@ -167,7 +167,7 @@ function go_update_fail_count($user_id, $task_id, $fail_count, $status, $total_q
     );
     if ($quiz_mod_exists == null) {
         //then update if needed
-        go_update_actions($user_id, 'quiz_mod', $task_id, $status + 1, null, $total_questions, $fail_count, null, null, null, null, null, null, null, null, null, null, null, false);
+        go_update_actions($user_id, 'quiz_mod', $task_id, $status + 1, null, $total_questions, $fail_count, null, null, null, null, null, null, null, null, null, null);
     //  go_update_actions($user_id, $type,              $source_id,     $status,        $bonus_status, $check_type, $result, $quiz_mod, $late_mod, $timer_mod, $global_mod, $xp, $gold, $health, $badge_ids, $group_ids, $notify, $debt)
     }
 }

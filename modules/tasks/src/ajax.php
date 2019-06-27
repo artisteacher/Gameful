@@ -168,7 +168,7 @@ function go_task_change_stage() {
             $result = go_lock_password_validate($result, $custom_fields);
             if ($result == 'password' || $result == 'master password') {
                 //set unlock flag
-                go_update_actions( $user_id, 'task',  $post_id, null, null, $check_type, $result, null, null,  null, null, null, null, null, null, null, null, null, false );
+                go_update_actions( $user_id, 'task',  $post_id, null, null, $check_type, $result, null, null,  null, null, null, null, null, null, null, null, null );
                 //go_update_task_post_save( $post_id );
                 echo json_encode(array('json_status' => 'refresh'));
                 die;
@@ -273,7 +273,7 @@ function go_task_change_stage() {
             $xp = ($row->xp) * -1;
             $gold = ($row->gold) * -1;
             $health = ($row->health) * -1;
-            go_update_actions( $user_id, 'undo_bonus_loot',  $post_id, null, null, null, $result, null, null, null, null,  $xp, $gold, $health, null, null, true, true);
+            go_update_actions( $user_id, 'undo_bonus_loot',  $post_id, null, null, null, $result, null, null, null, null,  $xp, $gold, $health, null, null, true);
 
             ///////
         }

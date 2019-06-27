@@ -324,6 +324,10 @@ template {
 #go_timer > div {
   float: left; }
 
+#go_timer {
+  margin: auto;
+  padding: 25px 20px 0px; }
+
 #go_login_center {
   display: none;
   width: 350px;
