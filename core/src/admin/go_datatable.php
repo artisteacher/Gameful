@@ -3,10 +3,19 @@
 global $wpdb;
 
 function go_update_db_check() {
-    $go_db_version = 5.04;
-    if ( get_site_option( 'go_db_version' ) != $go_db_version ) {
+    $go_db_version = 5.05;
+    $old_version = get_site_option( 'go_db_version' );
+
+    if ( $old_version != $go_db_version ) {
+
+
         update_option('go_db_version', $go_db_version);
+
         go_update_db();
+
+        if ($old_version > 3 && $old_version < 5) {
+            go_update_go_to_v5();
+        }
     }
 
 }

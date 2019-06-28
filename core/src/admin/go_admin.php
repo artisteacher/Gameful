@@ -214,6 +214,14 @@ function go_add_toplevel_menu() {
             'parent_slug' 	=> 'game-on-options',
         ));
 
+        if( get_current_blog_id() == 1 ) {
+
+
+            acf_add_options_page(array('page_title' => 'Performance', 'menu_slug' => 'go_performance', 'autoload' => true, 'capability' => 'edit_posts', 'icon_url' => 'dashicons-admin-settings',
+                'parent_slug' 	=> 'game-on-options',
+            ));
+
+        }
 
     }
 

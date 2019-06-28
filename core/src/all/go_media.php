@@ -32,13 +32,14 @@ function go_users_own_attachments( $wp_query_obj ) {
 
 $resize = get_option( 'options_go_images_resize_toggle' );
 if ($resize) {
+
     add_filter('plupload_default_settings', function ($settings) {
         $settings['resize'] = array(
             'enabled' => true,
             'width' => 1920,
-            'height' => 1920,
+            'height' => 1080,
             'quality' => 80,
-            'preserve_headers' => false
+            'preserve_headers' => true,
         );
         return $settings;
     });

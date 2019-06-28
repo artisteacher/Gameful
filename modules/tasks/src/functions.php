@@ -23,6 +23,7 @@ function go_register_task_tax_and_cpt() {
         'choose_from_most_used' => _x('Choose from the most used '. get_option( 'options_go_tasks_name_singular' ) . ' Map', 'task_chains' ),
         'menu_name' => _x(get_option( 'options_go_tasks_name_singular' ). 'Maps', 'task_chains' ),
     );
+
     $task_chains_args = array(
         'labels' => $task_chains_labels,
         'public' => true,
@@ -37,10 +38,9 @@ function go_register_task_tax_and_cpt() {
         ),
         'query_var' => true
     );
+
     register_taxonomy( 'task_chains', array( '' ), $task_chains_args );
     //register_taxonom  y_for_object_type( 'task_chains', 'tasks' );
-
-
 
 	$badges_name_singular = get_option('options_go_badges_name_singular');
 	$badges_name_plural = get_option('options_go_badges_name_plural');

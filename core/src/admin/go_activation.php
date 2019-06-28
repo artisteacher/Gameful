@@ -14,7 +14,7 @@
 function go_update_db_ms( ) {
     global $wpdb;
     if ( is_multisite() ) {
-        // Get all blogs in the network and activate plugin on each one
+        // Get all blogs in the network and update db on each one
         $blog_ids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
         foreach ( $blog_ids as $blog_id ) {
             switch_to_blog( $blog_id );
@@ -37,21 +37,36 @@ function go_update_db_ms( ) {
  * Flush rewrite rules on activation
  */
 function go_flush_rewrites() {
-    // call your CPT registration function here (it should also be hooked into 'init')
-    go_register_task_tax_and_cpt();
-    go_register_store_tax_and_cpt();
-    go_blogs();
-    go_custom_rewrite();
-    go_map_page();
-    go_store_page();
-    go_reader_page();
-    go_login_rewrite();
-    go_reset_password_rewrite();
-    go_profile_rewrite();
-    go_registration_rewrite();
-    go_leaderboard_rewrite();
-    go_leaderboard_rewrite();
+    //CPT registration functions are here and also hooked into init
+    //the init action runs after the activation hook that calls this function
+    //running the registration functions here makes the cpts available at the flush
+    go_register_task_tax_and_cpt();// on init priority 0
+    go_register_store_tax_and_cpt();// on init priority 0
+    go_blogs();// on init priority 0
+
+
+    //These run on init as well.
+    //It might seem unnecessary to run them every load with init but is needed because
+    //it makes sure the rewrites are always available even if another plugin flushes the rules.
+    go_blogs_rewrite();// on init priority 10 (default), adds rewrite rule
+    go_map_page();// on init priority 10 (default), adds rewrite rule
+    go_store_page();// on init priority 10 (default), adds rewrite rule
+    go_reader_page();// on init priority 10 (default), adds rewrite rule
+    go_login_rewrite(); // on init priority 10 (default), adds rewrite rule
+    go_reset_password_rewrite();// on init priority 10 (default), adds rewrite rule
+    go_profile_rewrite();// on init priority 10 (default), adds rewrite rule
+    go_registration_rewrite();// on init priority 10 (default), adds rewrite rule
+    go_leaderboard_rewrite();// on init priority 10 (default), adds rewrite rule
+
+    flush_rewrite_rules();
+    //use a tool to flush them on a multisite as needed.
 }
+
+//When does the flush need to happen.
+//Activation on a non-multisite
+//Manually on multisite with a tool.
+//Is there a hook for the flush.
+
 
 
 
@@ -121,11 +136,6 @@ function go_reader_activate() {
 function go_media_access() {
     $role = get_role( 'subscriber' );
     $role->add_cap( 'upload_files' );
-    //$role->add_cap( 'edit_posts' );
-
-    //$role = get_role( 'contributor' );
-    //$role->add_cap( 'upload_files' );
-
 }
 
 function go_tsk_actv_activate() {
@@ -174,6 +184,8 @@ function go_admin_head_notification() {
 }
 add_action( 'admin_notices', 'go_admin_head_notification' );
 
+
+/*
 //this is the activation notification
 function go_upgrade_notification() {
     if ( !get_site_option( 'go_update_version_5') && current_user_can( 'manage_options' ) ) {
@@ -186,7 +198,7 @@ function go_upgrade_notification() {
     }
 }
 add_action( 'admin_notices', 'go_upgrade_notification' );
-
+*/
 
 
 

@@ -5,7 +5,32 @@
  * Date: 7/1/18
  * Time: 9:18 PM
  */
+function go_reset_all_users(){
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
 
+    //check_ajax_referer( 'go_reset_all_users' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_reset_all_users' ) ) {
+        echo "refresh";
+        die( );
+    }
+    global $wpdb;
+    $loot_table  = $wpdb->prefix . 'go_loot';
+    $wpdb->query("TRUNCATE TABLE $loot_table");
+
+    $tasks_table  = $wpdb->prefix . 'go_tasks';
+    $wpdb->query("TRUNCATE TABLE $tasks_table");
+
+    $actions_table  = $wpdb->prefix . 'go_actions';
+    $wpdb->query("TRUNCATE TABLE $actions_table");
+    echo "reset";
+    die();
+
+}
+
+/*
 function go_upgade4 (){
     if ( !is_user_logged_in() ) {
         echo "login";
@@ -246,32 +271,15 @@ function go_upgade4 (){
         }
     }
 }
+*/
 
-function go_reset_all_users(){
-    if ( !is_user_logged_in() ) {
-        echo "login";
-        die();
-    }
-
-    //check_ajax_referer( 'go_reset_all_users' );
-    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_reset_all_users' ) ) {
-        echo "refresh";
-        die( );
-    }
-    global $wpdb;
-    $loot_table  = $wpdb->prefix . 'go_loot';
-    $wpdb->query("TRUNCATE TABLE $loot_table");
-
-    $tasks_table  = $wpdb->prefix . 'go_tasks';
-    $wpdb->query("TRUNCATE TABLE $tasks_table");
-
-    $actions_table  = $wpdb->prefix . 'go_actions';
-    $wpdb->query("TRUNCATE TABLE $actions_table");
-    echo "reset";
-    die();
-
-}
-
+/**
+ * This is the check for the function that updates existing content from v4.
+ * The GO table structure is updated at activation of v5.
+ * This function checks if the update has been run before.
+ * It runs if it hasn't and gives an option to run again if it has.
+ */
+/*
 function go_update_go_ajax_v5_check()
 {
     if ( !is_user_logged_in() ) {
@@ -298,9 +306,11 @@ function go_update_go_ajax_v5_check()
     }
 
 }
+*/
 
-function go_update_go_ajax_v5(){
-
+function go_update_go_to_v5(){
+/*
+ * Not run from ajax anymore--just runs on activation if needed.
     if ( !is_user_logged_in() ) {
         echo "login";
         die();
@@ -311,6 +321,9 @@ function go_update_go_ajax_v5(){
         echo "refresh";
         die( );
     }
+
+*/
+
     $query = new WP_Query(array(
         'post_type' => 'tasks',
         'posts_per_page' => 10000

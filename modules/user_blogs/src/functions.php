@@ -808,12 +808,13 @@ function go_custom_post_status(){
         'label_count'               => _n_noop( 'Revise <span class="count">(%s)</span>', 'Revise <span class="count">(%s)</span>' ),
     ) );
 }
-add_action( 'init', 'go_custom_post_status' );
+add_action( 'init', 'go_custom_post_status', 0 );
 
 /**
- *
+ * Creates new rewrite rules.
+ * Only needs to to be run on activation/flushing of rewrite rules
  */
-function go_custom_rewrite() {
+function go_blogs_rewrite() {
     // we are telling wordpress that if somebody access yoursite.com/all-post/user/username
     // wordpress will do a request on this query var yoursite.com/index.php?query_type=user_blog&uname=username
     //flush_rewrite_rules();
@@ -822,6 +823,7 @@ function go_custom_rewrite() {
     add_rewrite_rule( "^user/(.*)", 'index.php?query_type=user_blog&uname=$matches[1]', "top");
 
 }
+add_action( 'init', 'go_blogs_rewrite' );
 
 /**
  * @param $vars
@@ -835,7 +837,6 @@ function go_custom_query($vars ) {
     return $vars;
 }
 // Then add those two functions on their appropriate hook and filter
-add_action( 'init', 'go_custom_rewrite' );
 add_filter( 'query_vars', 'go_custom_query' );
 
 /**

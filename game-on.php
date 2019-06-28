@@ -9,7 +9,6 @@ Version: 5.04b
 */
 
 
-
 //$go_debug = true;//set to true when coding
 $go_debug = true;
 global $go_debug;
@@ -38,18 +37,14 @@ include_once('includes/go_enqueue_includes.php');
 add_action( 'wp_enqueue_scripts', 'go_includes' );
 add_action( 'admin_enqueue_scripts', 'go_includes' );
 
-
 //https://www.advancedcustomfields.com/resources/local-json/
 //Loads ACF fields from JSON file as needed
 add_filter('acf/settings/load_json', 'go_acf_json_load_point');
 function go_acf_json_load_point( $paths ) {
-
     // remove original path (optional)
     unset($paths[0]);
-
     // append path
     $paths[] = (plugin_dir_path(__FILE__) . 'acf-json');
-
     // return
     return $paths;
 }
@@ -65,16 +60,9 @@ if ( !is_admin() ) { //IF PUBLIC FACING PAGE
 
     include_once('styles/go_enque_styles.php');
     add_action( 'wp_enqueue_scripts', 'go_styles' );
-
 }
 else if ( defined( 'DOING_AJAX' )) { //ELSE THIS IS AN AJAX CALL
-
-
-    //there is a way to include in ajax, but I don't know if we need to.
-    //Updates
-
-    //Admin
-
+    //if this is an ajax call, skip the enqueue functions
 }
 else {//ELSE THIS IS AN ADMIN PAGE
 
@@ -173,9 +161,6 @@ include_once('modules/user_blogs/includes.php');
 include_once('modules/term-order/includes.php'); //try to load only on admin pages
 
 
-
-
-
 /**
  * Plugin Activation Hooks
  */
@@ -187,7 +172,8 @@ register_activation_hook( __FILE__, 'go_tsk_actv_activate' );
 //register_activation_hook( __FILE__, 'go_store_activate' );
 register_activation_hook( __FILE__, 'go_media_access' );
 register_activation_hook( __FILE__, 'go_flush_rewrites' );
-register_activation_hook( __FILE__, 'go_v5_update_db' );
+
+register_deactivation_hook( __FILE__, 'flush_rewrite_rules' );
 
 
 

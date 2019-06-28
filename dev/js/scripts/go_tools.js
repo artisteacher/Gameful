@@ -1,13 +1,14 @@
 jQuery(document).ready(function(){
     //add on click
-    jQuery('#go_tool_update').one("click", function() {go_update_go_ajax();});
-    jQuery('#go_tool_update_no_loot').one("click", function() {go_update_go_ajax_no_task_loot();});
+    //jQuery('#go_tool_update').one("click", function() {go_update_go_ajax();});
+    //jQuery('#go_tool_update_no_loot').one("click", function() {go_update_go_ajax_no_task_loot();});
     jQuery('#go_reset_all_users').one("click", function() {go_reset_all_users_dialog();});
-    jQuery('#go_tool_update_v5').one("click", function() {go_update_go_ajax_v5_check();});
+    //jQuery('#go_tool_update_v5').one("click", function() {go_update_go_ajax_v5_check();});
 
 
 });
 
+/*
 function go_update_go_ajax_v5_check (){
     console.log('go_update_go_ajax_v5_check');
     var nonce = GO_EVERY_PAGE_DATA.nonces.go_update_go_ajax_v5_check;
@@ -141,6 +142,7 @@ function go_update_go_ajax_no_task_loot (){
         }
     });
 }
+*/
 
 function go_reset_all_users_dialog (){
 
