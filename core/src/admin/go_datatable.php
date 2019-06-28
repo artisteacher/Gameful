@@ -4,7 +4,7 @@ global $wpdb;
 
 function go_update_db_check() {
     $go_db_version = 5.05;
-    $old_version = get_site_option( 'go_db_version' );
+    $old_version = get_option( 'go_db_version' );
 
     if ( $old_version != $go_db_version ) {
 
