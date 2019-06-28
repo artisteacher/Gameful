@@ -255,10 +255,13 @@ function go_login_session_expired() {
     }
 }
 add_action( 'wp_enqueue_scripts', 'go_login_session_expired' );
-
-
+// Makes sure the plugin is defined before trying to use it
+if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
+    require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+}
 
 function go_is_ms(){
-    $is_ms = is_plugin_active_for_network(__FILE__ );
+    $myfile = plugin_basename(__FILE__);
+    $is_ms = is_plugin_active_for_network($myfile );
     return $is_ms;
 }

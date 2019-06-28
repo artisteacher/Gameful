@@ -8,7 +8,7 @@
 
 /**
  * MULTISITE FUNCTIONS
- *
+ * https://sudarmuthu.com/blog/how-to-properly-create-tables-in-wordpress-multisite-plugins/
  */
 
 
@@ -33,7 +33,7 @@ function go_on_create_blog( $blog_id, $user_id, $domain, $path, $site_id, $meta 
 add_action( 'wpmu_new_blog', 'go_on_create_blog', 10, 6 );
 
 /**
- * // Deleting the table whenever a blog is deleted
+ * // Deleting the tables whenever a blog is deleted
  * @param $tables
  * @return array
  */
