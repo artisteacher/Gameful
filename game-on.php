@@ -258,3 +258,7 @@ add_action( 'wp_enqueue_scripts', 'go_login_session_expired' );
 
 
 
+function go_is_ms(){
+    $is_ms = is_plugin_active_for_network(__FILE__ );
+    return $is_ms;
+}

@@ -45,8 +45,6 @@ include_once('src/all/go_core_functions.php');
  * This places the mce in in hidden footer. Loads all of the scripts and styles that allow mce to be loaded later.
  */
 function go_hidden_footer(){
-
-
     ?>
 <div style="display: none;">
     <?php

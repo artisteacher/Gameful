@@ -23,7 +23,8 @@
  * @param $meta
  */
 function go_on_create_blog( $blog_id, $user_id, $domain, $path, $site_id, $meta ) {
-    if ( is_plugin_active_for_network(__FILE__ ) ) {
+    $is_ms = go_is_ms();
+    if ( $is_ms ) {
         switch_to_blog( $blog_id );
         go_update_db();
         restore_current_blog();
