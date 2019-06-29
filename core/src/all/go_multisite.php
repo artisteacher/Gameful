@@ -24,11 +24,11 @@
  */
 function go_on_create_blog( $blog_id, $user_id, $domain, $path, $site_id, $meta ) {
     $is_ms = go_is_ms();
-    if ( $is_ms ) {
+    //if ( $is_ms ) {
         switch_to_blog( $blog_id );
         go_update_db();
         restore_current_blog();
-    }
+    //}
 }
 add_action( 'wpmu_new_blog', 'go_on_create_blog', 10, 6 );
 
