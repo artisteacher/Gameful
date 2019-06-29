@@ -8,7 +8,6 @@ function go_update_db_check() {
 
     if ( $old_version != $go_db_version ) {
 
-
         update_option('go_db_version', $go_db_version);
 
         go_update_db();
@@ -26,7 +25,7 @@ function go_update_db() {
     go_table_tasks();
     go_table_actions();
     go_install_data();
-    go_set_options_autoload();
+    //go_set_options_autoload(); //legacy function
 }
 
 function go_table_tasks() {
@@ -89,7 +88,7 @@ function go_table_actions() {
 			PRIMARY KEY  (id),
             KEY uid (uid),
             KEY source_id (source_id),
-            KEY action_type (action_type )
+            KEY action_type (action_type ),
             KEY uid_source (uid, source_id)
             
 		);
@@ -113,8 +112,7 @@ function go_table_totals() {
 			gold DECIMAL (10,2) unsigned DEFAULT 0,
 			health DECIMAL (10,2) unsigned DEFAULT 100,
 			badge_count INT DEFAULT 0,
-			PRIMARY KEY (id),
-            ADD CONSTRAINT user_id UNIQUE (uid)                
+			PRIMARY KEY (id)               
 		);
 	";
 
@@ -122,7 +120,8 @@ function go_table_totals() {
     dbDelta( $sql );
 }
 
-//this is just for older installs that didn't have the autoload on
+/*
+//this is just for older installs (before v4) that didn't have the autoload on
 function go_set_options_autoload(){
     $options_array = array(
         'options_go_tasks_name_singular',
@@ -200,6 +199,7 @@ function go_set_options_autoload(){
         update_option( $option, $value, true );//update the value
     }
 }
+*/
 
 function go_install_data ($reset = false) {
     global $wpdb;
@@ -288,8 +288,6 @@ function go_install_data ($reset = false) {
         'options_go_user_bar_link_color' => '#FFFFFF',
         'options_go_user_bar_hover_color' => '#a0a5aa',
         'options_go_home_toggle' => 1,
-
-
     );
     foreach ( $options_array as $key => $value ) {
         add_option( $key, $value, '', 'yes' );
@@ -332,11 +330,10 @@ function go_install_data ($reset = false) {
         add_option('options_go_loot_xp_levels_level_13_xp', 12921);
         add_option('options_go_loot_xp_levels_level_14_xp', 19381);
         add_option('options_go_loot_xp_levels_level_14_name', 'Guru');
-
     }
 
     //For Levels
-    $isset = get_option('options_go_feedback_canned'); //if there are no level at all
+    $isset = get_option('options_go_feedback_canned'); //if there is no canned feedback, add the defaults
     if ($isset == false){
         add_option('options_go_feedback_canned', 3);
         add_option('options_go_feedback_canned_0_title', 'Post has been reset');
@@ -355,7 +352,6 @@ function go_install_data ($reset = false) {
         add_option('options_go_feedback_canned_2_defaults_gold', 10);
         add_option('options_go_feedback_canned_2_defaults_health', 0);
     }
-
 }
 
 //not sure what this does, but it is in an activation hook
