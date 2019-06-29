@@ -18,10 +18,7 @@ function go_update_db_ms( ) {
         $blog_ids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
         foreach ( $blog_ids as $blog_id ) {
             switch_to_blog( $blog_id );
-            //check if plugin is active on blog
-            if(go_is_plugin_active()) {
-                go_update_db_check();
-            }
+            go_update_db_check();
             restore_current_blog();
         }
     }else{
