@@ -260,8 +260,14 @@ if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
     require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
 }
 
-function go_is_ms(){
+function go_is_ms_active_network_wide(){
     $myfile = plugin_basename(__FILE__);
     $is_ms = is_plugin_active_for_network($myfile );
+    return $is_ms;
+}
+
+function go_is_plugin_active(){//for the current blog
+    $myfile = plugin_basename(__FILE__);
+    $is_ms = is_plugin_active($myfile );
     return $is_ms;
 }

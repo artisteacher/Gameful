@@ -18,13 +18,62 @@ function go_update_db_ms( ) {
         $blog_ids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
         foreach ( $blog_ids as $blog_id ) {
             switch_to_blog( $blog_id );
-            go_update_db_check();
+            //check if plugin is active on blog
+            if(go_is_plugin_active()) {
+                go_update_db_check();
+            }
             restore_current_blog();
         }
     }else{
         go_update_db_check();
     }
 }
+
+/**
+ * MULTISITE FUNCTIONS
+ * https://sudarmuthu.com/blog/how-to-properly-create-tables-in-wordpress-multisite-plugins/
+ */
+
+/**
+ * Creating table whenever a new blog is created
+ * Only do this if plugin is active network wide
+ * @param $blog_id
+ * @param $user_id
+ * @param $domain
+ * @param $path
+ * @param $site_id
+ * @param $meta
+ */
+function go_on_create_blog( $blog_id, $user_id, $domain, $path, $site_id, $meta ) {
+    $is_ms = go_is_ms_active_network_wide();
+    if ( $is_ms ) {
+        switch_to_blog( $blog_id );
+        go_update_db();
+        restore_current_blog();
+    }
+}
+add_action( 'wpmu_new_blog', 'go_on_create_blog', 10, 6 );
+
+/**
+ * // Deleting the tables whenever a blog is deleted
+ * @param $tables
+ * @return array
+ */
+function go_on_delete_blog( $tables ) {
+    global $wpdb;
+    $tables[] = $wpdb->prefix . 'go_tasks';
+    $tables[] = $wpdb->prefix . 'go_actions';
+    $tables[] = $wpdb->prefix . 'go_loot';
+    //$tables[] = $wpdb->prefix . 'go_totals';
+
+    return $tables;
+}
+add_filter( 'wpmu_drop_tables', 'go_on_delete_blog' );
+
+
+
+
+
 
 /**
  * Registers Game On custom post types and taxonomies, then

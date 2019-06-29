@@ -3,7 +3,7 @@
 global $wpdb;
 
 function go_update_db_check() {
-    $go_db_version = 5.05;
+    $go_db_version = 5.1;
     $old_version = get_option( 'go_db_version' );
 
     if ( $old_version != $go_db_version ) {
@@ -13,12 +13,12 @@ function go_update_db_check() {
         go_update_db();
 
         if ($old_version > 3 && $old_version < 5) {
-            go_update_go_to_v5();
+            go_update_go_to_v5();//update the tasks and blogs to v5 if this is an upgrade from v4
         }
     }
 
 }
-add_action( 'plugins_loaded', 'go_update_db_check' );
+//add_action( 'plugins_loaded', 'go_update_db_check' );
 
 function go_update_db() {
     go_table_totals();
@@ -107,7 +107,7 @@ function go_table_totals() {
     $sql = "
 		CREATE TABLE $table_name (
 			id bigint(20) NOT NULL AUTO_INCREMENT,
-			uid bigint(20) NOT NULL,
+			uid bigint(20) NOT NULL UNIQUE,
 			xp INT unsigned DEFAULT 0,
 			gold DECIMAL (10,2) unsigned DEFAULT 0,
 			health DECIMAL (10,2) unsigned DEFAULT 100,
