@@ -54,7 +54,7 @@ function go_player_bar_v5() {
     $is_admin = go_user_is_admin($user_id);
 
 
-    if (is_user_logged_in()) {
+    if (is_user_member_of_blog()) {
 
 
         //displays Timer in admin bar
@@ -62,11 +62,11 @@ function go_player_bar_v5() {
         $timer_on = get_post_meta($post_id, 'go_timer_toggle', true);
         if ($timer_on) {
 
-            $atts = shortcode_atts(array(
+            /*$atts = shortcode_atts(array(
                 'id' => '', // ID defined in Shortcode
                 'cats' => '', // Cats defined in Shortcode
             ), '');
-            $id = $atts['id'];
+            $id = $atts['id'];*/
             //$custom_fields = get_post_custom($id); // Just gathering some data about this task with its post id
             echo '<div id="go_timer"><i class="fa fa-clock-o ab-icon" aria-hidden="true"></i><div><span class="days"></span>d : </div><div><span class="hours"></span>h : </div><div><span class="minutes"></span>m : </div><div><span class="seconds"></span>s</div></div>';
         }
@@ -90,7 +90,7 @@ function go_player_bar_v5() {
         $go_home_link = get_site_url();
         echo '<div class="go_user_bar_icon go_user_bar_home"><a href="'.$go_home_link.'"><i class="fas fa-home ab-icon" aria-hidden="true"></i><br><div class="go_player_bar_text">Home</div></a></div>';
     }
-    if (is_user_logged_in()) {
+    if (is_user_member_of_blog()) {
         if ($go_stats_switch) {
             //acf_form_head();
             $stats_name = get_option('options_go_stats_name');
@@ -146,24 +146,36 @@ function go_player_bar_v5() {
 
     }*/
 
-
-    $go_login_link = get_site_url(null, 'login');
-
+    //if is logged in,
+        //if is blog user, show profile
+        //else show join
+    //else show login--always show wp login.
     if (is_user_logged_in()) {
-        $login_text = 'Profile';
+
+        if (is_user_member_of_blog()){
+            $login_text = 'Profile';
+            $go_login_link = get_site_url(null, 'profile');
+        }else{
+            $login_text = 'Join';
+            $go_login_link = get_site_url(null, 'join');
+        }
+
     }
     else{
         $login_text = 'Login';
+        $go_login_link = get_site_url(null, 'login');
+        //$go_login_link = wp_login_url( get_site_url(null, 'login'));
+
     }
     $avatar = get_user_option('go_avatar');
-    if (is_user_logged_in() && $avatar) {
+    if (is_user_member_of_blog() && !empty($avatar)) {
 
         $avatar = wp_get_attachment_image($avatar, array('29', '29'));
         echo "<div class='go_user_bar_icon userbar_dropdown'><a href='$go_login_link'>$avatar<br><div class='go_player_bar_text' id='go_user_link'>$login_text</div></a>";
     }else {
         echo '<div class="go_user_bar_icon userbar_dropdown"><a href="' . $go_login_link . '"><i class="fas fa-user ab-icon" aria-hidden="true"></i><br><div class="go_player_bar_text" id="go_user_link">' . $login_text . '</div></a>';
     }
-    if (is_user_logged_in()) {
+    if (is_user_member_of_blog()) {
 
         echo ' <div class="userbar_dropdown-content" style="text-align: left;"><div><a href="'.$go_login_link.'">View Profile</a></div><br><div> <a href="/wp-login.php?action=logout" class="go_logout">Logout</a></div><br><div><a href="#" class="go_password_change_modal">Change Password</a></div></div>';
 

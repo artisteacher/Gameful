@@ -360,7 +360,7 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
             echo "<div id='go_blog_min' style='text-align:right'><span class='char_count'>" . $min_words . "</span> Words Required</div>";
         }
     }
-    if ( is_user_logged_in() && !$all_content) {
+    if ( is_user_member_of_blog() && !$all_content) {
         echo "<p id='go_blog_stage_error_msg' class='go_error_msg' style='display: none; color: red;'></p>";
 
         echo "<div class='go_blog_form_footer {$suffix}' style='background-color: #b3b3b3;'>";

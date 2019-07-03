@@ -11,15 +11,20 @@
 if ( !is_admin() ) {
     //get variables for conditional includes
     //$page = (isset($_REQUEST['page']) ?  $_REQUEST['page'] : null);
-    $request_uri = (isset($_SERVER['REQUEST_URI']) ?  $_SERVER['REQUEST_URI'] : null);
-    $request_uri = str_replace('?updated=true', '', $request_uri);
 
-    if ($request_uri == '/profile/' || $request_uri == '/registration/') {
+    $page_uri = go_get_page_uri();
+    //$request_uri = str_replace('?updated=true', '', $request_uri);
+
+
+    if ($page_uri == 'profile' || $page_uri == 'register' || $page_uri == 'join') {
         $acf_location = dirname(__DIR__) . '/../includes/acf/acf.php';
         include($acf_location);
 
         $acf_location = dirname(__DIR__) . '/../custom-acf-fields/acf-level2-taxonomy/acf-level2-taxonomy.php';
         include_once($acf_location);
+
+        $location = dirname(__DIR__) . '/../includes/acf-recaptcha-master/acf-recaptcha.php';
+        include_once($location);
         //include_once('custom-acf-fields/acf-level2-taxonomy/acf-level2-taxonomy.php');
         //include_once('public/public.php');
 

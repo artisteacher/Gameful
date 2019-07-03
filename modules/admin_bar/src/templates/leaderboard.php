@@ -12,7 +12,7 @@ get_header();
 
 
 
-if ( is_user_logged_in() ) {
+if ( is_user_member_of_blog() ) {
 
 
     go_stats_leaderboard();

@@ -146,6 +146,9 @@ function go_scripts () {
     );
 
     $request_uri = (isset($_SERVER['REQUEST_URI']) ?  $_SERVER['REQUEST_URI'] : null);//page currently being loaded
+    $details  = get_blog_details();
+    $path = $details -> path;
+    $request_uri = str_replace($path, '', $request_uri);
 
     if ($request_uri == '/maplink/')
     wp_localize_script(

@@ -103,6 +103,7 @@ else if ( is_admin() ) {
     //INCLUDE ACF and ACF custom fields
     include_once('includes/acf/acf.php');
     include_once('includes/wp-acf-unique_id-master/acf-unique_id.php');
+    include_once('includes/acf-recaptcha-master/acf-recaptcha.php');
     include_once('custom-acf-fields/acf-order-posts/acf-order-posts.php');
     include_once('custom-acf-fields/go-acf-functions.php');
     include_once('custom-acf-fields/acf-level2-taxonomy/acf-level2-taxonomy.php');
@@ -130,6 +131,7 @@ else{
     //INCLUDES on Public Pages
     //include_once('includes/acf/acf.php');
     include_once('custom-acf-fields/go-acf-functions.php');
+
 
     //DEPENDENCY
     //Allows uploading on frontend

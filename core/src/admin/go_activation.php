@@ -68,10 +68,6 @@ function go_on_delete_blog( $tables ) {
 add_filter( 'wpmu_drop_tables', 'go_on_delete_blog' );
 
 
-
-
-
-
 /**
  * Registers Game On custom post types and taxonomies, then
  * updates the site's rewrite rules to mitigate cpt and
@@ -103,6 +99,8 @@ function go_flush_rewrites() {
     go_profile_rewrite();// on init priority 10 (default), adds rewrite rule
     go_registration_rewrite();// on init priority 10 (default), adds rewrite rule
     go_leaderboard_rewrite();// on init priority 10 (default), adds rewrite rule
+    go_join_rewrite();
+    my_registration_page_redirect();
 
     flush_rewrite_rules();
     //use a tool to flush them on a multisite as needed.

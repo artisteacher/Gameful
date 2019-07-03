@@ -1,10 +1,20 @@
 <?php
 
-//Redirect to homepage after logout
+//Redirect to homepage after logout and remove cookies
 add_action('wp_logout','auto_redirect_after_logout');
-function auto_redirect_after_logout(){
-  wp_redirect( home_url() );
-  exit();
+function auto_redirect_after_logout($k){
+    array_map(function ($k) {
+        setcookie($k, FALSE, time()-YEAR_IN_SECONDS, '', COOKIE_DOMAIN);
+
+    }, array_keys($_COOKIE));
+
+    // Redirect to 'siteurl' since by default WordPress redirects to its login
+    // URL, which actually sets a new cookie
+    header('Location: '.get_option('siteurl'));
+
+
+    //wp_redirect( home_url() );
+    exit();
 }
 
 //remove_menu_page( 'index.php' );
@@ -21,7 +31,6 @@ function remove_wp_admin_items( $wp_admin_bar ) {
 function Wps_remove_tools(){
 	if ( ! get_option('go_dashboard_toggle') && ! current_user_can('administrator') ){
 		remove_menu_page( 'index.php' ); //dashboard
-		
 	}
 }
 
@@ -297,7 +306,7 @@ function go_admin_bar_v5() {
 
 
         //VIEW TYPE ON QUESTS
-        if (is_user_logged_in()) {
+        if (is_user_member_of_blog()) {
            // $wp_admin_bar->remove_menu('wp-logo');
             /**
              * If is admin, show the dropdown for view type

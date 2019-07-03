@@ -223,7 +223,9 @@ function go_task_change_stage() {
     }
     else if ($button_type == 'abandon') {
         //remove entry loot
-        $redirect_url = go_get_user_redirect($user_id);
+        //$redirect_url = go_get_user_redirect($user_id);
+        $redirect_url = $_SERVER['HTTP_REFERER'];
+
         go_update_stage_table ($user_id, $post_id, $custom_fields, $status, null, false, 'abandon', null, null, null );
         if($blog_post_id) {
             wp_trash_post(intval($blog_post_id));

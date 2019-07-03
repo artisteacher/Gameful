@@ -241,6 +241,54 @@
 		"oO": 0,
 		"oS": 1
 		},
+	"/acf-json/group_5d1a547987fd1.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5d1a547987fd1-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/acf-json/group_5d1ae494a41c7.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5d1ae494a41c7-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/acf-json/group_5d1ae4e703241.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5d1ae4e703241-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/acf-json/group_5d1ae51854beb.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5d1ae51854beb-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/acf-json/group_5d1ae569ba586.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5d1ae569ba586-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/acf-json/group_5d1ba6d5b662e.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5d1ba6d5b662e-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
 	"/core/includes.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -1673,6 +1721,322 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/game-on.php",
+		"oF": 0
+		},
+	"/includes/acf-recaptcha-master/.editorconfig": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/.editorconfig",
+		"oF": 0
+		},
+	"/includes/acf-recaptcha-master/.gitignore": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/.gitignore",
+		"oF": 0
+		},
+	"/includes/acf-recaptcha-master/acf-recaptcha-v5.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/acf-recaptcha-v5.php",
+		"oF": 0
+		},
+	"/includes/acf-recaptcha-master/acf-recaptcha.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/acf-recaptcha.php",
+		"oF": 0
+		},
+	"/includes/acf-recaptcha-master/assets/banner-1544x500.png": {
+		"ft": 32768,
+		"iS": 33515,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/assets/banner-1544x500.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/acf-recaptcha-master/assets/banner-772x250.png": {
+		"ft": 32768,
+		"iS": 16602,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/assets/banner-772x250.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/acf-recaptcha-master/assets/icon-128x128.png": {
+		"ft": 32768,
+		"iS": 6296,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/assets/icon-128x128.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/acf-recaptcha-master/assets/icon-256x256.png": {
+		"ft": 32768,
+		"iS": 9904,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/assets/icon-256x256.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/acf-recaptcha-master/assets/screenshot-1.png": {
+		"ft": 32768,
+		"iS": 190757,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/assets/screenshot-1.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/acf-recaptcha-master/assets/screenshot-2.png": {
+		"ft": 32768,
+		"iS": 101712,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/assets/screenshot-2.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/acf-recaptcha-master/assets/screenshot-3.png": {
+		"ft": 32768,
+		"iS": 120397,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/assets/screenshot-3.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/acf-recaptcha-master/composer.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/includes/acf-recaptcha-master/composer-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/includes/acf-recaptcha-master/css/field-group.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/css/field-group-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/includes/acf-recaptcha-master/css/plugin-update.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/css/plugin-update-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/includes/acf-recaptcha-master/css/settings-page.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/css/settings-page-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/includes/acf-recaptcha-master/includes/classes/WPRemoteRequestMethod.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/includes/classes/WPRemoteRequestMethod.php",
+		"oF": 0
+		},
+	"/includes/acf-recaptcha-master/includes/field-message.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/includes/field-message.php",
+		"oF": 0
+		},
+	"/includes/acf-recaptcha-master/includes/plugin-update.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/includes/plugin-update.php",
+		"oF": 0
+		},
+	"/includes/acf-recaptcha-master/includes/script-loader.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/includes/script-loader.php",
+		"oF": 0
+		},
+	"/includes/acf-recaptcha-master/includes/settings-page.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/includes/settings-page.php",
+		"oF": 0
+		},
+	"/includes/acf-recaptcha-master/js/field-group.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/js/field-group-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/acf-recaptcha-master/js/input.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/js/input-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/acf-recaptcha-master/lib/autoload.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/lib/autoload.php",
+		"oF": 0
+		},
+	"/includes/acf-recaptcha-master/lib/ReCaptcha/ReCaptcha.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/lib/ReCaptcha/ReCaptcha.php",
+		"oF": 0
+		},
+	"/includes/acf-recaptcha-master/lib/ReCaptcha/RequestMethod.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/lib/ReCaptcha/RequestMethod.php",
+		"oF": 0
+		},
+	"/includes/acf-recaptcha-master/lib/ReCaptcha/RequestMethod/Curl.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/lib/ReCaptcha/RequestMethod/Curl.php",
+		"oF": 0
+		},
+	"/includes/acf-recaptcha-master/lib/ReCaptcha/RequestMethod/Post.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/lib/ReCaptcha/RequestMethod/Post.php",
+		"oF": 0
+		},
+	"/includes/acf-recaptcha-master/lib/ReCaptcha/RequestMethod/Socket.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/lib/ReCaptcha/RequestMethod/Socket.php",
+		"oF": 0
+		},
+	"/includes/acf-recaptcha-master/lib/ReCaptcha/RequestMethod/SocketPost.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/lib/ReCaptcha/RequestMethod/SocketPost.php",
+		"oF": 0
+		},
+	"/includes/acf-recaptcha-master/lib/ReCaptcha/RequestParameters.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/lib/ReCaptcha/RequestParameters.php",
+		"oF": 0
+		},
+	"/includes/acf-recaptcha-master/lib/ReCaptcha/Response.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/lib/ReCaptcha/Response.php",
+		"oF": 0
+		},
+	"/includes/acf-recaptcha-master/LICENSE": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/LICENSE",
+		"oF": 0
+		},
+	"/includes/acf-recaptcha-master/README.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/README.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"/includes/acf-recaptcha-master/readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf-recaptcha-master/readme.txt",
 		"oF": 0
 		},
 	"/includes/acf/acf.php": {
@@ -4708,6 +5072,14 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/modules/login/src/templates/disabled/change_password_template.php",
+		"oF": 0
+		},
+	"/modules/login/src/templates/join.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/login/src/templates/join.php",
 		"oF": 0
 		},
 	"/modules/login/src/templates/profile_template.php": {

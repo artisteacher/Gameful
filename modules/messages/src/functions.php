@@ -23,7 +23,7 @@ function go_check_messages($response = null , $data = null){
     ob_start();
     //on each page load, check if user has new messages
     $user_id =  get_current_user_id();
-    $is_logged_in = is_user_logged_in();
+    $is_logged_in = is_user_member_of_blog();
     $is_new_messages = get_user_option('go_new_messages');
 
     $up = false;

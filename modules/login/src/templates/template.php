@@ -22,6 +22,7 @@
 //https://codex.wordpress.org/Customizing_the_Login_Form#Make_a_Custom_Login_Page
 if ( ! is_user_logged_in() ) { // Display WordPress login form:
     wp_head();
+    //get_header();
     ///////////
     echo "<div id ='go_login_center'><div id='go_login_container'>";
 
@@ -60,9 +61,14 @@ if ( ! is_user_logged_in() ) { // Display WordPress login form:
 
     do_action( 'login_form' );
 
+    //NOTE: function go_added_login_field inserts the reset password link
 
-    //there is a function that inserts the reset password link
+/*
     $background = get_option('options_login_appearance_background_color');
+
+    jQuery('body').css('background', '<?php echo $background;?>');
+*/
+
 
     ?>
     </div>
@@ -71,7 +77,7 @@ if ( ! is_user_logged_in() ) { // Display WordPress login form:
     $registration_allowed = get_option('options_allow_registration');
     if ($registration_allowed) {
         ?>|
-        <a href="<?php echo home_url('registration'); ?>">Register</a>
+        <a href="<?php echo home_url('register'); ?>">Register</a>
         <?php
     }
         ?>
@@ -80,7 +86,6 @@ if ( ! is_user_logged_in() ) { // Display WordPress login form:
     <script>
         jQuery( document ).ready( function()  {
             jQuery('#go_login_center').fadeIn(1000);
-            jQuery('body').css('background', '<?php echo $background;?>');
         });
     </script>
     <?php

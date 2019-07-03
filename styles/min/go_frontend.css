@@ -331,7 +331,7 @@ template {
 #go_login_center {
   display: none;
   width: 350px;
-  margin: auto; }
+  margin: 150px auto; }
   #go_login_center #go_login_container {
     margin-top: 20px;
     margin-left: 0;

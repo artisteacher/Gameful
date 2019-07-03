@@ -635,6 +635,8 @@ final class WP_Term_Order {
 
                     if($parent){
                         $ids[] = $parent;
+                    }else{
+                        $ids[]= '';
                     }
                     foreach ($includes as $include){
                         $ids[] = $include ->term_id;

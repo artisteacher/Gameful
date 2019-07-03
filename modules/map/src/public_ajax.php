@@ -19,7 +19,11 @@ function go_make_map() {
             );
             $firstmap = get_terms($taxonomy,$term_args0);*/
             $firstmap = go_get_terms_ordered($taxonomy, '0', 1);
-            $last_map_id = $firstmap[0]->term_id;
+            if (!empty($firstmap)) {
+                $last_map_id = $firstmap[0]->term_id;
+            }else{
+                $last_map_id = null;
+            }
         }
         echo "<div id='go_map_container' style='padding:10px 30px; margin: 30px 5%; background-color: white;'>";
         $map_title = get_option( 'options_go_locations_map_title');

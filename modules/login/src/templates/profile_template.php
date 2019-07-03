@@ -22,7 +22,7 @@ get_header();
 
 echo "<div id='go_profile_wrapper' style='max-width: 1100px; margin: 20px auto;'><h2 style='padding-top:10px;'>Profile</h2>";
 
-if ( is_user_logged_in() ) {
+if ( is_user_member_of_blog() ) {
 
     $updated  = (isset($_GET['updated']) ) ? $_GET['updated'] : 0;
     if ($updated === "true") {

@@ -11,7 +11,7 @@ function go_make_leaderboard_filter(){
     $current_id = get_current_user_id();
 
     //set the last searched leaderboard as an user option
-    if(is_user_logged_in()) {
+    if(is_user_member_of_blog()) {
         $return = array();
         $taxonomy = $_POST['taxonomy'];
         $term_id = intval(get_user_option('go_leaderboard_' . $taxonomy, $current_id));
@@ -40,7 +40,7 @@ function go_stats_leaderboard_dataloader_ajax(){
     $is_admin = go_user_is_admin($current_id);
 
     //set the last searched leaderboard as an user option
-    if(is_user_logged_in()) {
+    if(is_user_member_of_blog()) {
         $section = $_GET['section'];
         $group = $_GET['group'];
 

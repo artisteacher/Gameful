@@ -1,4 +1,93 @@
 <?php
+/**
+ * TESTING STUFF HERE
+ */
+
+//add_action( 'wp_login_failed', 'my_front_end_login_fail' );  // hook failed login
+
+function my_front_end_login_fail( $username ) {
+    //add_query_arg( 'key', 'value', 'http://example.com' );
+    $go_login_link = wp_login_url( get_site_url(null, 'join'));
+    wp_redirect($go_login_link);
+
+}
+
+
+//add_action(  'login_init', 'use_main_blog_login_init', 0  );
+function use_main_blog_login_init(){
+    switch_to_blog(1);
+}
+
+//add_action(  'login_footer', 'switch_to_current_blog', 0  );
+function switch_to_current_blog(){
+    restore_current_blog();
+}
+
+
+//* Add custom message to WordPress login page
+
+function smallenvelop_login_message( $message ) {
+    if ( empty($message) ){
+        $id =get_current_blog_id();
+        return "<p><strong>Welcome to SmallEnvelop. Please login to continue</strong>". $id . "</p>";
+    } else {
+        return $message;
+    }
+}
+
+add_filter( 'login_message', 'smallenvelop_login_message' );
+
+
+
+/**
+ * SET LOGIN REDIRECT BASED ON OPTIONS
+ */
+
+add_action( 'login_redirect', 'go_user_redirect', 10, 3 );
+function go_user_redirect( $redirect_to, $request, $user )
+{
+    if (isset($user) && ($user instanceof WP_User)) {
+
+        $user_id = $user->ID;
+        $redirect_url = go_get_user_redirect($user_id);
+        if (!empty ($redirect_url)) {
+            return  $redirect_url;
+        } else {
+            return;
+        }
+
+    }
+}
+
+
+function go_get_user_redirect($user_id = null){
+
+    $redirect_to = get_option('options_go_landing_page_radio', 'home');
+    $page = get_option('options_go_landing_page_on_login', '');
+
+    if ($redirect_to == 'store'){
+        $page = get_option('options_go_store_store_link', 'store');
+    }
+    else if ($redirect_to == 'map'){
+        $page = get_option('options_go_locations_map_map_link', 'map');
+    }
+    else if ($redirect_to == 'custom'){
+        $page = get_option('options_go_landing_page_on_login', '');
+    }
+
+    if ($user_id != null) {
+        //this sets the default map on login--this can be moved, but it needs to run before this function
+        $default_map = get_option('options_go_locations_map_default', '');
+        if ($default_map !== '') {
+            update_user_option($user_id, 'go_last_map', $default_map);
+
+        }
+    }
+
+    return home_url($page);
+}
+
+
 
 /**
  * ADD LOGIN PAGE
@@ -8,6 +97,7 @@ add_action('init', 'go_login_rewrite');
 function go_login_rewrite(){
     $page_name = 'login';
     add_rewrite_rule( $page_name, 'index.php?' . $page_name . '=true', "top");
+    //add_rewrite_rule( $page_name, 'wp-login.php?' . $page_name . '=true', "top");
 }
 
 // Query Vars
@@ -24,10 +114,9 @@ function go_login_template_include($template){
     $page_name = 'login';
     global $wp_query; //Load $wp_query object
 
-    $page_value = ( isset($wp_query->query_vars[$page_name]) ? $wp_query->query_vars[$page_name] : false ); //Check for query var "blah"
+    $page_value = ( isset($wp_query->query_vars[$page_name]) ? $wp_query->query_vars[$page_name] : false ); //Check for query var
 
     if ($page_value && ($page_value == "true" || $page_value == "failed" || $page_value == "empty" || $page_value == "checkemail")) { //Verify "blah" exists and value is "true".
-
         return plugin_dir_path(__FILE__).'templates/template.php'; //Load your template or file
     }
 
@@ -35,15 +124,16 @@ function go_login_template_include($template){
 }
 
 
-add_filter('login_form_middle','my_added_login_field');
-function my_added_login_field(){
+add_filter('login_form_middle','go_added_login_field');
+function go_added_login_field(){
     //Output your HTML
     //this adds the lost password field
     //and a hidden input field that is used to show the error messages
-    $additional_field = '<div style="float: right"><a href="/lostpassword">Lost Password?</a></div>
-                        <div class="login-custom-field-wrapper" style="display: none;">
-         <input type="text" tabindex="20" size="20" value="true" class="input" id="go_frontend_login" name="go_frontend_login">
-     </div>';
+    $link = get_site_url(null, 'lostpassword');
+    $additional_field = "<div style='float: right'><a href='$link'>Lost Password?</a></div>
+                        <div class='login-custom-field-wrapper' style='display: none;'>
+         <input type='text' tabindex='20' size='20' value='true' class='input' id='go_frontend_login' name='go_frontend_login'>
+     </div>";
 
     return $additional_field;
 }
@@ -52,31 +142,33 @@ function my_added_login_field(){
  * Following 2 functions used to show login error message in same page
  */
 
-function login_failed() {
+function go_login_failed() {
     $is_gameon = (isset($_POST['go_frontend_login']) ? $_POST['go_frontend_login'] : false);
     if ($is_gameon) {
         $page_name = 'login';
-        $login_page = get_home_url($page_name);
-        wp_redirect($login_page . '?' . $page_name . '=failed');
+        //$login_page = get_home_url($page_name);
+        $go_login_link = get_site_url(null, 'login');
+        wp_redirect($go_login_link . '?' . $page_name . '=failed');
 
         //add_rewrite_rule( $page_name, 'index.php?' . $page_name . '=true&login=failed', "top");
         exit;
     }
 }
-add_action('wp_login_failed', 'login_failed');
+add_action('wp_login_failed', 'go_login_failed');
 
-function verify_username_password($user, $username, $password){
+function go_verify_username_password($user, $username, $password){
     $is_gameon = (isset($_POST['go_frontend_login']) ? $_POST['go_frontend_login'] : false);
     if ($is_gameon) {
         $page_name = 'login';
-        $login_page = get_home_url($page_name);
+        //$login_page = get_home_url($page_name);
+        $go_login_link = get_site_url(null, 'login');
         if ($username == "" || $password == "") {
-             wp_redirect($login_page . '?'.$page_name. '=empty');
+             wp_redirect($go_login_link . '?'.$page_name. '=empty');
              exit;
         }
     }
 }
-add_filter('authenticate', 'verify_username_password', 1, 3);
+add_filter('authenticate', 'go_verify_username_password', 1, 3);
 
 
 
@@ -172,7 +264,7 @@ function go_profile_template_include($template){
     if ($page_value && $page_value == "true" ) { //Verify "blah" exists and value is "true".
 
         acf_form_head();
-        return plugin_dir_path(__FILE__).'templates/profile_template.php'; //Load your template or file
+        return plugin_dir_path(__FILE__).'templates/join.php'; //Load your template or file
 
     }
 
@@ -186,14 +278,14 @@ function go_profile_template_include($template){
 
 add_action('init', 'go_registration_rewrite');
 function go_registration_rewrite(){
-    $page_name = 'registration';
+    $page_name = 'register';
     add_rewrite_rule( $page_name, 'index.php?' . $page_name . '=true', "top");
 }
 
 // Query Vars
 add_filter( 'query_vars', 'go_registration_query_var' );
 function go_registration_query_var( $vars ) {
-    $page_name = 'registration';
+    $page_name = 'register';
     $vars[] = $page_name;
     return $vars;
 }
@@ -202,14 +294,65 @@ function go_registration_query_var( $vars ) {
 /* Template Include */
 add_filter('template_include', 'go_registration_template_include', 1, 1);
 function go_registration_template_include($template){
-    $page_name = 'registration';
+    $page_name = 'register';
     global $wp_query; //Load $wp_query object
 
     $page_value = ( isset($wp_query->query_vars[$page_name]) ? $wp_query->query_vars[$page_name] : false ); //Check for query var "blah"
 
     if ($page_value && $page_value == "true" ) { //Verify "blah" exists and value is "true".
         acf_form_head();
-        return plugin_dir_path(__FILE__).'templates/register_template.php'; //Load your template or file
+        return plugin_dir_path(__FILE__).'templates/join.php'; //Load your template or file
+    }
+
+    return $template; //Load normal template when $page_value != "true" as a fallback
+}
+
+add_action(  'login_init', 'user_registration_login_init', 0  );
+function user_registration_login_init () {
+    $url = get_site_url();
+    if( ! is_user_logged_in() ) {
+        $action = (isset($_GET['action']) ?  $_GET['action'] : null);
+        if($action == 'register') {
+            wp_redirect($url . '/register');
+            exit;
+        }
+    }
+}
+
+
+/************************
+ * ADD Join PAGE
+ */
+
+add_action('init', 'go_join_rewrite', 0);
+function go_join_rewrite(){
+    $page_name = 'join';
+    add_rewrite_rule( $page_name, 'index.php?' . $page_name . '=true', "top");
+    //add_rewrite_rule( 'wp-login.php\?action\=register', 'index.php?' . $page_name . '=true', "top");
+
+}
+
+
+// Query Vars
+add_filter( 'query_vars', 'go_join_query_var' );
+function go_join_query_var( $vars ) {
+    $page_name = 'join';
+    $vars[] = $page_name;
+    return $vars;
+}
+
+
+/* Template Include */
+add_filter('template_include', 'go_join_template_include', 1, 1);
+function go_join_template_include($template){
+    $page_name = 'join';
+    global $wp_query; //Load $wp_query object
+
+    $page_value = ( isset($wp_query->query_vars[$page_name]) ? $wp_query->query_vars[$page_name] : false ); //Check for query var "blah"
+
+    if ($page_value && $page_value == "true" ) { //Verify "blah" exists and value is "true".
+        acf_form_head();
+        return plugin_dir_path(__FILE__).'templates/join.php'; //Load your template or file
     }
 
     return $template; //Load normal template when $page_value != "true" as a fallback
@@ -261,6 +404,7 @@ function register_user( $email, $first_name, $last_name ) {
     return $user_id;
 }
 
+/*
 //THIS CHANGES THE DEFAULT WORDPRESS USER REGISTRATION--DO I NEED THIS
 add_action( 'login_form_register', 'do_register_user'  );
 function do_register_user() {
@@ -291,7 +435,7 @@ function do_register_user() {
         wp_redirect( $redirect_url );
         exit;
     }
-}
+}*/
 
 function go_include_password_checker(){
     $minPassword = get_option('options_minimum_password_strength');
@@ -366,7 +510,6 @@ function go_acf_user_form_func( $groups = array(), $fields = array(), $post_id =
         //if this is a registration page, redirect to the default game on page on success
         //else for other pages add the updated=true query variable
         if ($post_id ==='register'){
-
             $options['return'] = go_get_user_redirect();
         }
         else {
@@ -406,7 +549,7 @@ function go_validate_email($valid, $value, $field, $input){
     $user_id_email = email_exists($value);//returns the user_id of this email address, or false
     $user_id = get_current_user_id();
 
-    if ($user_id_email) {//if this user id exists in the database
+    if (!empty($user_id_email)) {//if this user id exists in the database
         if ($user_id != $user_id_email) {//if this $user_id is not the current user, return an error
             $valid = 'An account with this email already exists.';
             return $valid;
@@ -428,7 +571,7 @@ function go_validate_uname($valid, $value, $field, $input){
     return $valid;
 }
 
-//Validate that an user with this username doesn't already exist.
+//Validate the registration code
 add_filter('acf/validate_value/key=field_5cd9f85e5f788', 'go_validate_code', 10, 4);
 function go_validate_code($valid, $value, $field, $input){
     $code = get_option('options_go_registration_code');
@@ -510,7 +653,7 @@ function acf_save_user( $post_id ) {
     //RESET PASSWORDS
     if ($post_id === 'password_reset'){
         $user_id = get_current_user_id();
-        $newpassword = $_POST['acf']['field_5cd3638830f17'];
+        $newpassword = (isset($_POST['acf']['field_5cd3638830f17']) ?  $_POST['acf']['field_5cd3638830f17'] : null);
 
         wp_set_password( $newpassword, $user_id );
         wp_clear_auth_cookie();
@@ -523,91 +666,104 @@ function acf_save_user( $post_id ) {
 
         $wp_user_id = str_replace("user_", "", $post_id);
 
-        $emailField = $_POST['acf']['field_5cd4be08e7077'];
-        //$emailField = (isset($_POST['acf']['field_5cd4be08e7077']) ?  $_POST['acf']['field_5cd4be08e7077'] : '');
-        if (isset($emailField)) {
+        //REGISTER A NEW USER
+        //if ($post_id === 'register'){
+        if ($wp_user_id == 0){
+            //add a check for if user is already logged in and redirect
 
-            $args = array(
-                'ID'         => $wp_user_id,
-                'user_email' => esc_attr( $emailField )
+            if (is_user_logged_in()){
+                //$redirect_url = get_home_url();
+                wp_redirect( home_url() );
+                return;
+
+            }
+
+            //get the fields and then clear their values--the values don't need to save outside of this function
+
+            $_POST['acf']['field_5cd9f85e5f788'] = '';//membership code
+            $user_name = (isset($_POST['acf']['field_5cd4fa743159f']) ?  $_POST['acf']['field_5cd4fa743159f'] : null);
+            $user_name = sanitize_text_field($user_name);//username
+            $_POST['acf']['field_5cd4fa743159f'] = '';
+
+            $email = (isset($_POST['acf']['field_5cd4be08e7077']) ?  $_POST['acf']['field_5cd4be08e7077'] : null);
+            $email = sanitize_email($email);//email
+            $_POST['acf']['field_5cd4be08e7077'] = '';
+
+            $first = (isset($_POST['acf']['field_5cd1d1de5491b']) ?  $_POST['acf']['field_5cd1d1de5491b'] : null);
+            $first = sanitize_text_field($first);//first name
+            //$_POST['acf']['field_5cd1d1de5491b'] = '';
+
+            $last = (isset($_POST['acf']['field_5cd1d21168754']) ?  $_POST['acf']['field_5cd1d21168754'] : null);
+            $last = sanitize_text_field($last);//last name
+            //$_POST['acf']['field_5cd1d21168754'] = '';
+
+            $display = (isset($_POST['acf']['field_5cd1d13769aa9']) ?  $_POST['acf']['field_5cd1d13769aa9'] : null);
+            $display = sanitize_text_field($display);//display name
+            //$_POST['acf']['field_5cd1d13769aa9'] = '';
+
+            $new_password = (isset($_POST['acf']['field_5cd3638830f17']) ?  $_POST['acf']['field_5cd3638830f17'] : null);
+            $new_password = sanitize_text_field($new_password);
+            $_POST['acf']['field_5cd3638830f17'] = '';
+            $_POST['acf']['field_5cd363d130f18'] = '';//clear the confirm password field
+
+            //$sections_seats = $_POST['acf']['field_5cd4f7b43672b'];//sections and seats saved with own function
+            //$_POST['acf']['field_5cd4f7b43672b'] = array();//clear the field
+
+            $user_id = wp_insert_user(
+                array(
+                    'user_login'	=>	$user_name,
+                    'user_pass'	=>	$new_password,
+                    'first_name'	=>	$first,
+                    'last_name'	=>	$last,
+                    'user_email'	=>	$email,
+                    'display_name'	=>	$display,
+                    'nickname'	=>	$display,
+                    'role'		=>	'subscriber'
+                )
             );
-            wp_update_user( $args );
+
+            //save sections and seats on registration
+            $post_id = "user_".$user_id;
+            //update_field( 'field_5cd4f7b43672b', $sections_seats, $this_post );
+
+
+            $creds = array();
+            $creds['user_login'] = $user_name;
+            $creds['user_password'] = $new_password;
+            $creds['remember'] = false;
+            $user = wp_signon( $creds, false );
+            if ( is_wp_error($user) )
+                echo $user->get_error_message();
         }
+        else {
+            $emailField = sanitize_email($_POST['acf']['field_5cd4be08e7077']);
+            //$emailField = (isset($_POST['acf']['field_5cd4be08e7077']) ?  $_POST['acf']['field_5cd4be08e7077'] : '');
+            if (isset($emailField)) {
 
-        $website =(isset($_POST['acf']['field_5cd4f996c0d86']) ?  $_POST['acf']['field_5cd4f996c0d86'] : null);
-        //$website = (isset($_POST['acf']['field_5cd4f996c0d86']) ?  $_POST['acf']['field_5cd4f996c0d86'] : null);
-        if (isset($website)) {
+                $args = array(
+                    'ID' => $wp_user_id,
+                    'user_email' => esc_attr($emailField)
+                );
+                wp_update_user($args);
+            }
 
-            $args = array(
-                'ID'         => $wp_user_id,
-                'user_url' => esc_attr( $website )
-            );
-            wp_update_user( $args );
+            $website = (isset($_POST['acf']['field_5cd4f996c0d86']) ? $_POST['acf']['field_5cd4f996c0d86'] : null);
+            //$website = (isset($_POST['acf']['field_5cd4f996c0d86']) ?  $_POST['acf']['field_5cd4f996c0d86'] : null);
+            if (isset($website)) {
+
+                $args = array(
+                    'ID' => $wp_user_id,
+                    'user_url' => esc_attr($website)
+                );
+                wp_update_user($args);
+            }
         }
-
     }
 
 
-    //REGISTER A NEW USER
-    if ($post_id === 'register'){
-        //add a check for if user is already logged in and redirect
-        if (is_user_logged_in()){
-            $redirect_url = get_home_url();
-
-        }
-
-        //get the fields and then clear their values--the values don't need to save outside of this function
-
-        $_POST['acf']['field_5cd9f85e5f788'] = '';//membership code
-
-        $user_name = sanitize_text_field($_POST['acf']['field_5cd4fa743159f']);
-        $_POST['acf']['field_5cd4fa743159f'] = '';
-
-        $email = sanitize_email($_POST['acf']['field_5cd4be08e7077']);
-        $_POST['acf']['field_5cd4be08e7077'] = '';
-
-        $first = sanitize_text_field($_POST['acf']['field_5cd1d1de5491b']);
-        $_POST['acf']['field_5cd1d1de5491b'] = '';
-
-        $last = sanitize_text_field($_POST['acf']['field_5cd1d21168754']);
-        $_POST['acf']['field_5cd1d21168754'] = '';
-
-        $display = sanitize_text_field($_POST['acf']['field_5cd1d13769aa9']);
-        $_POST['acf']['field_5cd1d13769aa9'] = '';
-
-        $new_password = sanitize_text_field($_POST['acf']['field_5cd3638830f17']);
-        $_POST['acf']['field_5cd3638830f17'] = '';
-        $_POST['acf']['field_5cd363d130f18'] = '';//clear the confirm password field
-
-        //$sections_seats = $_POST['acf']['field_5cd4f7b43672b'];//sections and seats saved with own function
-        //$_POST['acf']['field_5cd4f7b43672b'] = array();//clear the field
-
-        $user_id = wp_insert_user(
-            array(
-                'user_login'	=>	$user_name,
-                'user_pass'	=>	$new_password,
-                'first_name'	=>	$first,
-                'last_name'	=>	$last,
-                'user_email'	=>	$email,
-                'display_name'	=>	$display,
-                'nickname'	=>	$display,
-                'role'		=>	'subscriber'
-            )
-        );
-
-        //save sections and seats on registration
-        $post_id = "user_".$user_id;
-        //update_field( 'field_5cd4f7b43672b', $sections_seats, $this_post );
 
 
-        $creds = array();
-        $creds['user_login'] = $user_name;
-        $creds['user_password'] = $new_password;
-        $creds['remember'] = false;
-        $user = wp_signon( $creds, false );
-        if ( is_wp_error($user) )
-            echo $user->get_error_message();
-    }
+
 
     /*
     if (substr($post_id, 0 , 5) === 'user_') {
@@ -623,55 +779,53 @@ function acf_save_user( $post_id ) {
 }
 
 //removes sections and seats from metadata before resaving them
-function go_remove_sections_and_seats( $user_id) {
-    global $wpdb;
-    $key = 'go_section';
-    $prefix = $wpdb->prefix;
-    if($prefix){
-        $key = $prefix . $key;
-    }
-    delete_user_meta($user_id, $key);
-    $key = 'go_seat';
-    $prefix = $wpdb->prefix;
-    if($prefix){
-        $key = $prefix . $key;
-    }
-    delete_user_meta($user_id, $key);
+function go_remove_sections_and_seats($user_id) {
+        $key = go_prefix_key('go_section');
+        delete_user_meta($user_id, $key);
+
+        $key = go_prefix_key('go_seat');
+        delete_user_meta($user_id, $key);
 }
-add_filter('acf/update_value/key=field_5cd4f7b43672b', 'go_remove_sections_and_seats', 10, 3);
-add_filter('acf/update_value/key=field_5cd5031deb291', 'go_remove_sections_and_seats', 10, 3);
-
-
 
 function go_update_sections( $value, $post_id, $field  ) {
-    global $wpdb;
+    global $sections_cleared;
+
     if (substr($post_id, 0 , 5) === 'user_') {
         $user_id = str_replace("user_", "", $post_id);
+
+        //remove sections and seats previously saved
+        if(empty($sections_cleared)) {
+            go_remove_sections_and_seats($user_id);
+            $sections_cleared = true;
+            global $sections_cleared;
+        }
+
         $key = go_prefix_key('go_section');
-        add_user_meta( $user_id, $key, $value, false );
+        add_user_meta( $user_id, $key, $value, false );//need to use add user meta with prefix added so multiple options can be added
+        //update_user_option($user_id, 'go_section', $value);//update option adds prefix, but only can save one option
     }
     $GLOBALS['section'] = $value;
     return $value;
 
 }
-add_filter('acf/update_value/key=field_5cd4f7b4498dd', 'go_update_sections', 10, 3);
-add_filter('acf/update_value/key=field_5cd5031deb292', 'go_update_sections', 10, 3);
+add_filter('acf/update_value/name=user-section', 'go_update_sections', 5, 3);
+//add_filter('acf/update_value/key=field_5cd5031deb292', 'go_update_sections', 5, 3);
 
 
 function go_update_seats( $value, $post_id, $field  ) {
-    global $wpdb;
+
     if (substr($post_id, 0 , 5) === 'user_') {
         $user_id = str_replace("user_", "", $post_id);
         $key = go_prefix_key('go_seat');
         $section = $GLOBALS['section'];
         $myvalue = $value . "_" . $section;
-        //update_user_option($user_id, 'go_seat', $value);
-        add_user_meta( $user_id, $key, $myvalue, false );
+        //update_user_option($user_id, 'go_seat', $myvalue);//update option adds prefix, but only can save one option
+        add_user_meta( $user_id, $key, $myvalue, false );//need to use add user meta with prefix added so multiple options can be added
     }
     return $value;
 }
-add_filter('acf/update_value/key=field_5cd4f7b449909', 'go_update_seats', 10, 3);
-add_filter('acf/update_value/key=field_5cd5031deb293', 'go_update_seats', 10, 3);
+add_filter('acf/update_value/name=user-seat', 'go_update_seats', 10, 3);
+//add_filter('acf/update_value/key=field_5cd5031deb293', 'go_update_seats', 10, 3);
 
 
 

@@ -14,8 +14,7 @@ if ( !is_admin() ) {
          include_once('src/public_ajax.php');
      }*/
     $request_uri = (isset($_SERVER['REQUEST_URI']) ?  $_SERVER['REQUEST_URI'] : null);//pages to not load this on
-    if ( !in_array($request_uri, ['/login/','/?login=failed', '/?login=empty', '/lostpassword/', '/?lostpassword=invalid', '/?login=checkemail'], true )
-        && strpos($request_uri, 'user_archive') != true) {
+    if ( strpos($request_uri, 'user_archive') != true) {
 
         include_once('src/public.php');
     }
