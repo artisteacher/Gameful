@@ -100,7 +100,7 @@ function go_flush_rewrites() {
     go_registration_rewrite();// on init priority 10 (default), adds rewrite rule
     go_leaderboard_rewrite();// on init priority 10 (default), adds rewrite rule
     go_join_rewrite();
-    my_registration_page_redirect();
+    go_registration_page_redirect();
 
     flush_rewrite_rules();
     //use a tool to flush them on a multisite as needed.

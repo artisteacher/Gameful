@@ -5,36 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4c52fe7c-a769-413b-9a8a-3effed8b98a6" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/modules/login/src/templates/join.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acf-json/group_5a8fb5fbe075d.json" beforeDir="false" afterPath="$PROJECT_DIR$/acf-json/group_5a8fb5fbe075d.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acf-json/group_5cd8b11c8b6ec.json" beforeDir="false" afterPath="$PROJECT_DIR$/acf-json/group_5cd8b11c8b6ec.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.codekit3" beforeDir="false" afterPath="$PROJECT_DIR$/config.codekit3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/src/admin/go_activation.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/admin/go_activation.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/all/go_core_functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/all/go_core_functions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/all/go_users.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/all/go_users.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/public_ajax/go_shortcodes.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/public_ajax/go_shortcodes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/css/files/go_every_page.scss" beforeDir="false" afterPath="$PROJECT_DIR$/dev/css/files/go_every_page.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-on.php" beforeDir="false" afterPath="$PROJECT_DIR$/game-on.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/go_enque_js.php" beforeDir="false" afterPath="$PROJECT_DIR$/js/go_enque_js.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/admin_bar/includes.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/admin_bar/includes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/admin_bar/src/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/admin_bar/src/functions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/admin_bar/src/public.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/admin_bar/src/public.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/admin_bar/src/public_ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/admin_bar/src/public_ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/admin_bar/src/templates/leaderboard.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/admin_bar/src/templates/leaderboard.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/login/includes.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/login/includes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/login/src/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/login/src/functions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/login/src/templates/profile_template.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/login/src/templates/profile_template.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/login/src/templates/register_template.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/login/src/templates/register_template.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/login/src/templates/template.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/login/src/templates/template.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/map/src/public_ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/map/src/public_ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/messages/src/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/messages/src/functions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/tasks/src/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/tasks/src/ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/tasks/src/public_ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/tasks/src/public_ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/term-order/src/wp-term-order.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/term-order/src/wp-term-order.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/user_blogs/src/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/user_blogs/src/functions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/min/go_frontend.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/min/go_frontend.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/min/go_styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/min/go_styles.css" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -72,10 +43,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/modules/login/src/functions.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1153">
-              <caret line="169" column="55" selection-start-line="169" selection-start-column="55" selection-end-line="169" selection-end-column="55" />
+            <state relative-caret-position="18">
+              <caret line="105" column="25" lean-forward="true" selection-start-line="105" selection-start-column="25" selection-end-line="105" selection-end-column="25" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#!!top" expanded="true" />
                 <element signature="n#go_include_password_checker#0;n#!!top" />
                 <element signature="n#go_validate_uname#0;n#!!top" />
                 <element signature="n#go_validate_password#0;n#!!top" />
@@ -350,7 +322,6 @@
         <option value="$PROJECT_DIR$/modules/tasks/src/ajax.php" />
         <option value="$PROJECT_DIR$/modules/tasks/src/public_ajax.php" />
         <option value="$PROJECT_DIR$/modules/login/src/templates/join.php" />
-        <option value="$PROJECT_DIR$/core/src/admin/go_activation.php" />
         <option value="$PROJECT_DIR$/core/src/all/go_users.php" />
         <option value="$PROJECT_DIR$/modules/map/src/public_ajax.php" />
         <option value="$PROJECT_DIR$/modules/admin_bar/src/public.php" />
@@ -358,6 +329,7 @@
         <option value="$PROJECT_DIR$/styles/min/go_frontend.css" />
         <option value="$PROJECT_DIR$/modules/login/src/templates/template.php" />
         <option value="$PROJECT_DIR$/modules/login/src/functions.php" />
+        <option value="$PROJECT_DIR$/core/src/admin/go_activation.php" />
       </list>
     </option>
   </component>
@@ -757,12 +729,12 @@
       <workItem from="1561945908787" duration="1995000" />
       <workItem from="1561951768510" duration="1857000" />
       <workItem from="1561960133192" duration="363000" />
-      <workItem from="1561960785201" duration="75505000" />
+      <workItem from="1561960785201" duration="75910000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5586284000" />
+    <option name="totallyTimeSpent" value="5586689000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -775,7 +747,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1681" y="23" width="1746" height="1019" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4984375" visible="true" weight="0.18955399" />
       <window_info id="Structure" order="1" sideWeight="0.5015625" side_tool="true" weight="0.19340234" />
@@ -1364,12 +1335,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>409</line>
+          <line>410</line>
           <option name="timeStamp" value="2949" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>146</line>
+          <line>147</line>
           <option name="timeStamp" value="2957" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1529,7 +1500,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>373</line>
+          <line>374</line>
           <option name="timeStamp" value="3311" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1699,17 +1670,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>821</line>
+          <line>822</line>
           <option name="timeStamp" value="3590" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>791</line>
+          <line>792</line>
           <option name="timeStamp" value="3592" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>815</line>
+          <line>816</line>
           <option name="timeStamp" value="3594" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1734,7 +1705,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>781</line>
+          <line>782</line>
           <option name="timeStamp" value="3618" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1744,12 +1715,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>131</line>
+          <line>132</line>
           <option name="timeStamp" value="3622" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>649</line>
+          <line>650</line>
           <option name="timeStamp" value="3623" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -2416,10 +2387,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/modules/login/src/functions.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1153">
-          <caret line="169" column="55" selection-start-line="169" selection-start-column="55" selection-end-line="169" selection-end-column="55" />
+        <state relative-caret-position="18">
+          <caret line="105" column="25" lean-forward="true" selection-start-line="105" selection-start-column="25" selection-end-line="105" selection-end-column="25" />
           <folding>
             <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#!!top" expanded="true" />
             <element signature="n#go_include_password_checker#0;n#!!top" />
             <element signature="n#go_validate_uname#0;n#!!top" />
             <element signature="n#go_validate_password#0;n#!!top" />
