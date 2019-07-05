@@ -270,6 +270,10 @@ if(($this_page == 'register' || $this_page == 'join') && $registrations_allowed 
     echo $form;
 }
 
+if ($this_page == 'register'){
+    //  If multisite, register settings are always from blog #1.
+    restore_current_blog();
+}
 echo "</div>";
 
 

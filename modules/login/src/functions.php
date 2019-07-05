@@ -66,7 +66,7 @@ add_filter( 'login_message', 'smallenvelop_login_message' );
  * SET LOGIN REDIRECT BASED ON OPTIONS
  */
 
-add_action( 'login_redirect', 'go_user_redirect', 10, 3 );
+//add_action( 'login_redirect', 'go_user_redirect', 10, 3 );
 function go_user_redirect( $redirect_to, $request, $user )
 {
     if (isset($user) && ($user instanceof WP_User)) {
