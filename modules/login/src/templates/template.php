@@ -20,12 +20,14 @@
 
 
 //https://codex.wordpress.org/Customizing_the_Login_Form#Make_a_Custom_Login_Page
-if ( ! is_user_logged_in() ) { // Display WordPress login form:
+//
     wp_head();
     //get_header();
     ///////////
     echo "<div id ='go_login_center'><div id='go_login_container'>";
 
+
+if ( ! is_user_logged_in() ) { // Display WordPress login form:
 
     $logo = get_option('options_login_appearance_logo');
     //$url = wp_get_attachment_image($logo, array('250', '250'));
@@ -48,20 +50,48 @@ if ( ! is_user_logged_in() ) { // Display WordPress login form:
     }
 
 
-    $args = array(
-        'redirect' => get_home_url('login'),
-        'form_id' => 'game-on-login',
-        'label_username' => __( 'Username' ),
-        'label_password' => __( 'Password' ),
-        'label_remember' => __( 'Remember Me' ),
-        'label_log_in' => __( 'Log In' ),
-        'remember' => true
-    );
-    wp_login_form( $args );
 
-    do_action( 'login_form' );
 
+   // Display WordPress login form:
+        $args = array(
+            'redirect' => get_home_url('login'),
+            'form_id' => 'game-on-login',
+            'label_username' => __( 'Username' ),
+            'label_password' => __( 'Password' ),
+            'label_remember' => __( 'Remember Me' ),
+            'label_log_in' => __( 'Log In' ),
+            'remember' => true
+        );
+        wp_login_form( $args );
     //NOTE: function go_added_login_field inserts the reset password link
+        ?>
+        </div>
+        <a href="<?php echo home_url();?>">Home</a>
+        <?php
+        $registration_allowed = get_option('options_allow_registration');
+        if ($registration_allowed) {
+            ?>|
+            <a href="<?php echo home_url('register'); ?>">Register</a>
+            <?php
+        }
+        echo "</div>";
+
+
+} else { // If logged in:
+        wp_loginout( home_url() ); // Display "Log Out" link.
+        //echo " | ";
+        //wp_register('', ''); // Display "Site Admin" link.
+    }
+
+    ?>
+<script>
+    jQuery( document ).ready( function()  {
+        jQuery('#go_login_center').fadeIn(1000);
+    });
+</script>
+<?php
+
+
 
 /*
     $background = get_option('options_login_appearance_background_color');
@@ -70,30 +100,13 @@ if ( ! is_user_logged_in() ) { // Display WordPress login form:
 */
 
 
-    ?>
-    </div>
-    <a href="<?php echo home_url();?>">Home</a>
-    <?php
-    $registration_allowed = get_option('options_allow_registration');
-    if ($registration_allowed) {
-        ?>|
-        <a href="<?php echo home_url('register'); ?>">Register</a>
-        <?php
-    }
-        ?>
-    </div>
 
-    <script>
-        jQuery( document ).ready( function()  {
-            jQuery('#go_login_center').fadeIn(1000);
-        });
-    </script>
-    <?php
-    wp_footer();
+wp_footer();
+/*
 } else { // If logged in:
     $redirect_url = home_url('profile');
     wp_redirect( $redirect_url );
     wp_loginout( home_url() ); // Display "Log Out" link.
-}
+}*/
 
 

@@ -57,9 +57,10 @@ if ( ! is_user_logged_in() ) { // Display WordPress login form:
 
 
 } else { // If logged in:
-    $redirect_url = home_url('profile');
+    $redirect_url = get_site_url(null, 'profile');
     wp_redirect( $redirect_url );
-    wp_loginout( home_url() ); // Display "Log Out" link.
+    exit;
+    //wp_loginout( home_url() ); // Display "Log Out" link.
 }
 
 

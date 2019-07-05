@@ -5,11 +5,34 @@
 
 //add_action( 'wp_login_failed', 'my_front_end_login_fail' );  // hook failed login
 
+add_action('nsl_limit_domains', 'nsl_limit_domains');
+//add_action('init', 'nsl_limit_domains');
+function nsl_limit_domains($email){
+    $domain_count = get_option('options_limit_domains_domains');
+    //$domains = get_field('options_limit_domains_domains');
+    $i = 0;
+    $domains = array();
+    while (  $domain_count > $i) {
+        $domain = get_option('options_limit_domains_domains_'.$i.'_domain');
+        $domains[] = $domain;
+        $i++;
+    }
+    $domains = $domains;
+    $user_domain = substr(strrchr($email, "@"), 1);
+    $is_valid = in_array($user_domain, $domains);
+    if(!$is_valid){
+        $home_link = ( get_site_url(null, 'big_error'));
+        wp_redirect($home_link);
+        exit;
+    }
+
+}
+
 function my_front_end_login_fail( $username ) {
     //add_query_arg( 'key', 'value', 'http://example.com' );
     $go_login_link = wp_login_url( get_site_url(null, 'join'));
     wp_redirect($go_login_link);
-
+    exit;
 }
 
 
@@ -62,32 +85,32 @@ function go_user_redirect( $redirect_to, $request, $user )
 
 function go_get_user_redirect($user_id = null){
 
-    $redirect_to = get_option('options_go_landing_page_radio', 'home');
-    $page = get_option('options_go_landing_page_on_login', '');
+    if(is_user_member_of_blog($user_id)) {
+        $redirect_to = get_option('options_go_landing_page_radio', 'home');
+        //$page = get_option('options_go_landing_page_on_login', '');
 
-    if ($redirect_to == 'store'){
-        $page = get_option('options_go_store_store_link', 'store');
-    }
-    else if ($redirect_to == 'map'){
-        $page = get_option('options_go_locations_map_map_link', 'map');
-    }
-    else if ($redirect_to == 'custom'){
-        $page = get_option('options_go_landing_page_on_login', '');
+        if ($redirect_to == 'store') {
+            $page = get_option('options_go_store_store_link', 'store');
+        } else if ($redirect_to == 'map') {
+            $page = get_option('options_go_locations_map_map_link', 'map');
+        } else if ($redirect_to == 'custom') {
+            $page = get_option('options_go_landing_page_on_login', '');
+        }
+
+    }else{
+        $page = 'join';
     }
 
+    //this sets the default map on login
     if ($user_id != null) {
-        //this sets the default map on login--this can be moved, but it needs to run before this function
         $default_map = get_option('options_go_locations_map_default', '');
         if ($default_map !== '') {
             update_user_option($user_id, 'go_last_map', $default_map);
-
         }
     }
 
     return home_url($page);
 }
-
-
 
 /**
  * ADD LOGIN PAGE
@@ -220,6 +243,7 @@ function do_password_lost() {
             $page_name = 'lostpassword';
             $login_page = get_home_url( $page_name);
             wp_redirect($login_page . '?'.$page_name. '=invalid');
+            exit;
         } else {
             // Email sent
             //$redirect_url = home_url( 'member-login' );
@@ -227,10 +251,11 @@ function do_password_lost() {
             $page_name = 'login';
             $login_page = get_home_url( $page_name);
             wp_redirect($login_page . '?'.$page_name. '=checkemail');
+            exit;
         }
 
         //wp_redirect( $redirect_url );
-        exit;
+        //exit;
     }
 }
 
@@ -371,6 +396,7 @@ function go_join_template_include($template){
  * @param $last_name
  * @return WP_Error
  */
+/*
 function register_user( $email, $first_name, $last_name ) {
     $errors = new WP_Error();
 
@@ -403,7 +429,7 @@ function register_user( $email, $first_name, $last_name ) {
 
     return $user_id;
 }
-
+*/
 /*
 //THIS CHANGES THE DEFAULT WORDPRESS USER REGISTRATION--DO I NEED THIS
 add_action( 'login_form_register', 'do_register_user'  );
@@ -708,7 +734,7 @@ function acf_save_user( $post_id ) {
 
             //$sections_seats = $_POST['acf']['field_5cd4f7b43672b'];//sections and seats saved with own function
             //$_POST['acf']['field_5cd4f7b43672b'] = array();//clear the field
-
+            switch_to_blog(1);
             $user_id = wp_insert_user(
                 array(
                     'user_login'	=>	$user_name,
@@ -721,6 +747,7 @@ function acf_save_user( $post_id ) {
                     'role'		=>	'subscriber'
                 )
             );
+            restore_current_blog();
 
             //save sections and seats on registration
             $post_id = "user_".$user_id;
@@ -826,9 +853,6 @@ function go_update_seats( $value, $post_id, $field  ) {
 }
 add_filter('acf/update_value/name=user-seat', 'go_update_seats', 10, 3);
 //add_filter('acf/update_value/key=field_5cd5031deb293', 'go_update_seats', 10, 3);
-
-
-
 
 //this changes the logo on the default wordpress login
 function go_login_logo()

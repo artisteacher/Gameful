@@ -343,4 +343,4 @@ template {
     #go_login_center #go_login_container #user_login, #go_login_center #go_login_container #user_pass {
       width: 100%; }
   #go_login_center .login-submit {
-    float: right; }
+    text-align: right; }

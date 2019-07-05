@@ -20,125 +20,6 @@
             "endpoint": 0
         },
         {
-            "key": "field_5d1ae16ff2ad9",
-            "label": "Login Page",
-            "name": "login_page",
-            "type": "group",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "layout": "block",
-            "sub_fields": [
-                {
-                    "key": "field_5d1ad4036d578",
-                    "label": "Use Custom",
-                    "name": "custom_toggle",
-                    "type": "true_false",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "message": "",
-                    "default_value": 0,
-                    "ui": 1,
-                    "ui_on_text": "",
-                    "ui_off_text": ""
-                },
-                {
-                    "key": "field_5d1b9dff0c1ba",
-                    "label": "Hide Username and Password Fields",
-                    "name": "hide_username_and_password",
-                    "type": "true_false",
-                    "instructions": "If you are using social login, you can turn off the regular sign in and require sign in by social login only. This is a great option if you are using Google Apps.",
-                    "required": 0,
-                    "conditional_logic": [
-                        [
-                            {
-                                "field": "field_5d1ad4036d578",
-                                "operator": "==",
-                                "value": "1"
-                            }
-                        ]
-                    ],
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "message": "",
-                    "default_value": 0,
-                    "ui": 1,
-                    "ui_on_text": "",
-                    "ui_off_text": ""
-                },
-                {
-                    "key": "field_5cd8b38785249",
-                    "label": "Appearance",
-                    "name": "appearance",
-                    "type": "group",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "layout": "block",
-                    "sub_fields": [
-                        {
-                            "key": "field_5cd8b39d8524a",
-                            "label": "Logo",
-                            "name": "logo",
-                            "type": "image",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "return_format": "id",
-                            "preview_size": "thumbnail",
-                            "library": "uploadedTo",
-                            "min_width": "",
-                            "min_height": "",
-                            "min_size": "",
-                            "max_width": "",
-                            "max_height": "",
-                            "max_size": "",
-                            "mime_types": ""
-                        },
-                        {
-                            "key": "field_5cd8b6818524b",
-                            "label": "Background Color",
-                            "name": "background_color",
-                            "type": "color_picker",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": "#cccccc"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
             "key": "field_5d1ad74e2a3ac",
             "label": "Landing Page on Login",
             "name": "go_landing_page",
@@ -167,6 +48,7 @@
                         "id": ""
                     },
                     "choices": {
+                        "default": "Default",
                         "home": "Home",
                         "map": "Map",
                         "store": "Store",
@@ -358,31 +240,44 @@
                     "ui_off_text": ""
                 },
                 {
-                    "key": "field_5d1ad9f93770c",
+                    "key": "field_5d1e909ac15db",
                     "label": "Domains",
                     "name": "domains",
-                    "type": "textarea",
-                    "instructions": "Add domains of the emails that are allowed to join this site. One domain per line. (e.g., google.com)",
+                    "type": "repeater",
+                    "instructions": "",
                     "required": 0,
-                    "conditional_logic": [
-                        [
-                            {
-                                "field": "field_5d1adac53770e",
-                                "operator": "==",
-                                "value": "1"
-                            }
-                        ]
-                    ],
+                    "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "",
-                    "placeholder": "",
-                    "maxlength": "",
-                    "rows": "",
-                    "new_lines": ""
+                    "collapsed": "",
+                    "min": 1,
+                    "max": 0,
+                    "layout": "table",
+                    "button_label": "",
+                    "sub_fields": [
+                        {
+                            "key": "field_5d1e90a6c15dc",
+                            "label": "Domain",
+                            "name": "domain",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "maxlength": ""
+                        }
+                    ]
                 }
             ]
         },
@@ -1185,5 +1080,5 @@
     "active": 1,
     "description": "",
     "recaptcha": 0,
-    "modified": 1562103158
+    "modified": 1562284568
 }

@@ -150,36 +150,61 @@ function go_player_bar_v5() {
         //if is blog user, show profile
         //else show join
     //else show login--always show wp login.
+    /*
     if (is_user_logged_in()) {
 
         if (is_user_member_of_blog()){
-            $login_text = 'Profile';
-            $go_login_link = get_site_url(null, 'profile');
+
         }else{
-            $login_text = 'Join';
-            $go_login_link = get_site_url(null, 'join');
+            $join_text = 'Join';
+            $go_join_link = get_site_url(null, 'join');
         }
 
     }
     else{
+
+        //
+
+    }
+
+
+
+        //$avatar = wp_get_attachment_image($avatar, array('29', '29'));
+        //echo "<div class='go_user_bar_icon userbar_dropdown'><a href='$go_login_link'>$avatar<br><div class='go_player_bar_text' id='go_user_link'>$login_text</div></a>";
+    else {
+        echo '<div class="go_user_bar_icon userbar_dropdown"><a href="' . $go_login_link . '"><i class="fas fa-user ab-icon" aria-hidden="true"></i><br><div class="go_player_bar_text" id="go_user_link">' . $login_text . '</div></a>';
+    }*/
+
+    //$go_login_link = wp_login_url( get_site_url(null, 'login'));
+
+    $avatar = (is_int(get_user_option('go_avatar')) ?  wp_get_attachment_image(get_user_option('go_avatar'), array('29', '29')) : '<i class="fas fa-user ab-icon" aria-hidden="true"></i>');
+    if (is_user_logged_in()) {
+        $log_out_link = get_site_url(null, 'login');
+        if (is_user_member_of_blog()){//show profile
+            //$avatar = get_user_option('go_avatar');
+            $text = 'Profile';
+            $dropdown_text = 'View Profile';
+            $link = get_site_url(null, 'profile');
+
+            //echo ' <div class="userbar_dropdown-content" style="text-align: left;"><div><a href="'.$go_login_link.'">View Profile</a></div><br><div> <a href="'.$go_login_link.'" class="go_logout">Logout</a></div><br><div><a href="#" class="go_password_change_modal">Change Password</a></div></div>';
+        }
+        else{//show join
+            $text = 'Join';
+            $dropdown_text = 'Join Site';
+            $link = get_site_url(null, 'join');
+        }
+
+        echo "<div class='go_user_bar_icon userbar_dropdown'><a href='$link'>$avatar<br><div class='go_player_bar_text' id='go_user_link'>$text</div></a>";
+        //dropdown with profile and logout
+        echo "<div class='userbar_dropdown-content' style='text-align: left;'><div><a href='$link'>$dropdown_text</a></div><br><div> <a href='$log_out_link' class='go_logout'>Logout</a></div></div>";
+
+    }else{//not logged in, show login and no dropdown
         $login_text = 'Login';
         $go_login_link = get_site_url(null, 'login');
-        //$go_login_link = wp_login_url( get_site_url(null, 'login'));
-
+        echo "<div class='go_user_bar_icon userbar_dropdown'><a href='$go_login_link'><i class='fas fa-user ab-icon' aria-hidden='true'></i><br><div class='go_player_bar_text' id='go_user_link'>$login_text</div></a>";
     }
-    $avatar = get_user_option('go_avatar');
-    if (is_user_member_of_blog() && !empty($avatar)) {
 
-        $avatar = wp_get_attachment_image($avatar, array('29', '29'));
-        echo "<div class='go_user_bar_icon userbar_dropdown'><a href='$go_login_link'>$avatar<br><div class='go_player_bar_text' id='go_user_link'>$login_text</div></a>";
-    }else {
-        echo '<div class="go_user_bar_icon userbar_dropdown"><a href="' . $go_login_link . '"><i class="fas fa-user ab-icon" aria-hidden="true"></i><br><div class="go_player_bar_text" id="go_user_link">' . $login_text . '</div></a>';
-    }
-    if (is_user_member_of_blog()) {
 
-        echo ' <div class="userbar_dropdown-content" style="text-align: left;"><div><a href="'.$go_login_link.'">View Profile</a></div><br><div> <a href="/wp-login.php?action=logout" class="go_logout">Logout</a></div><br><div><a href="#" class="go_password_change_modal">Change Password</a></div></div>';
-
-    }
     echo "</div>";
 
     if ($go_search_switch) {
