@@ -143,7 +143,7 @@ else if(!$is_valid_email) {
             echo "<div style='max-width: 800px; '>";
             echo $message;
             $go_login_link = get_site_url(null, 'login');
-            $go_logout_link = wp_loginout( 'login', false );
+            $go_logout_link = wp_loginout( 'logout', false );
             echo $go_logout_link . " and register with a valid email.";
             echo "</div>";
 

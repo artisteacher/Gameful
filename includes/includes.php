@@ -45,3 +45,6 @@ else{
     include( 'wp-frontend-media-master/frontend-media.php' );
 
 }
+
+//$nsl_location = dirname(__FILE__) . '/nextend-gameon-connect/nextend-facebook-connect.php';
+//include($nsl_location);

@@ -179,7 +179,7 @@ function go_player_bar_v5() {
 
     $avatar = (is_int(get_user_option('go_avatar')) ?  wp_get_attachment_image(get_user_option('go_avatar'), array('29', '29')) : '<i class="fas fa-user ab-icon" aria-hidden="true"></i>');
     if (is_user_logged_in()) {
-        $log_out_link = get_site_url(null, 'login');
+        $log_out_link = get_site_url(null, 'logout');
         if (is_user_member_of_blog()){//show profile
             //$avatar = get_user_option('go_avatar');
             $text = 'Profile';

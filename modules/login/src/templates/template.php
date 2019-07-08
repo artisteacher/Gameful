@@ -17,13 +17,18 @@
  * @since 1.0
  * @version 1.0
  */
+if(is_user_logged_in()){
+    $join_url = site_url('join');
 
+    wp_redirect(go_get_user_redirect());
+}
 
 
 //https://codex.wordpress.org/Customizing_the_Login_Form#Make_a_Custom_Login_Page
 //
-wp_head();
+//wp_head();
 //get_header();
+get_header();
 ///////////
 
 
@@ -52,6 +57,10 @@ if ( ! is_user_logged_in() ) { // Display WordPress login form:
         echo '<p class="success"> Check your email for instructions on resetting your password.</p>';
     } elseif ($login === "false") {
         echo '<p class="success"> You are logged out now.</p><br><br>';
+    }elseif ($login === "bad_domain") {
+        echo '<p class="error">';
+        echo  go_domain_restrictions_message();
+        echo '</p>';
     }
 
 
@@ -90,11 +99,7 @@ if ( ! is_user_logged_in() ) { // Display WordPress login form:
         }
     }
 
-} else { // If logged in:
-        wp_loginout( home_url() ); // Display "Log Out" link.
-        //echo " | ";
-        //wp_register('', ''); // Display "Site Admin" link.
-    }
+}
 
     ?>
 <script>

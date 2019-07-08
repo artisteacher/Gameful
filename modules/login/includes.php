@@ -16,7 +16,7 @@ if ( !is_admin() ) {
     //$request_uri = str_replace('?updated=true', '', $request_uri);
 
 
-    if ($page_uri == 'profile' || $page_uri == 'register' || $page_uri == 'join') {
+    if ($page_uri == 'profile' || $page_uri == 'register' || $page_uri == 'join' || $page_uri == 'bad_domain') {
         $acf_location = dirname(__DIR__) . '/../includes/acf/acf.php';
         include($acf_location);
 

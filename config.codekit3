@@ -5147,6 +5147,14 @@
 		"oAP": "/modules/login/src/templates/disabled/register_template.php",
 		"oF": 0
 		},
+	"/modules/login/src/templates/logout.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/login/src/templates/logout.php",
+		"oF": 0
+		},
 	"/modules/login/src/templates/reset_password_template.php": {
 		"cB": 0,
 		"ft": 8192,

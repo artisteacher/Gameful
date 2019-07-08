@@ -1,16 +1,26 @@
 <?php
 /**
  * DOMAIN VALIDATION
- * Action was added to nsl plugin to allow it to validate on social login.
- * Social login validation only works with domains set in options on site 1
- * Because of this, the domains in site 1 are added to the lists from the sub-site.
- * --they are universal on a multisite.
- * On sub-sites, the validation happens:
- * --with social login, on the join page after login/register
- * --on the registration form.
+ * An action was added to nsl plugin to allow it to validate on social login.
  */
 
 //return list of domains that are allowed
+function go_get_domain_restrictions(){
+    //$current_blog_id = get_current_blog_id();
+    $domains = array();
+        $domain_count = get_option('options_limit_domains_domains');
+        //$domains = get_field('options_limit_domains_domains');
+        $i = 0;
+
+        while ($domain_count > $i) {
+            $domain = get_option('options_limit_domains_domains_' . $i . '_domain');
+            if (!empty($domain)) {
+                $domains[] = $domain;
+            }
+        }
+    return $domains;
+}
+/*
 function go_get_domain_restrictions(){
     $current_blog_id = get_current_blog_id();
     $blog_ids = array($current_blog_id, 1);
@@ -41,7 +51,7 @@ function go_get_domain_restrictions(){
         restore_current_blog();
     }
     return $domains;
-}
+}*/
 
 function validate_email_against_domains($email){
     $domains = go_get_domain_restrictions();
@@ -52,15 +62,33 @@ function validate_email_against_domains($email){
 
 //filter for the social login
 //always gets domains from the main blog (1)
+
+/**
+ * @param $args
+ *
+ * for this to work, the action needs to be added to the nsl plugin in the includes/user.php register function
+ * get getLastLocationRedirectTo in the provider.php must also be made a public function
+ * $blog_url =  $this->provider->getLastLocationRedirectTo();$args = array($email, $blog_url);do_action('nsl_limit_domains', $args);
+ */
 add_action('nsl_limit_domains', 'go_limit_domains');
-function go_limit_domains($email){
+function go_limit_domains($args){
+    $email = $args[0];
+    $blog_url = $args[1];
+
+    $path_parts = preg_split("/\//", $blog_url);
+    $blog_name = $path_parts[1];
+    $blog_id = get_blog_id_from_url($path_parts[2], "/" . $path_parts[3] . "/");
+
+    switch_to_blog($blog_id);
     $is_valid = validate_email_against_domains($email);
     if(!$is_valid){
-        $go_login_link = get_site_url(null, 'login');
+        $go_login_link = get_site_url($blog_id, 'login');
         wp_redirect($go_login_link . '?login=bad_domain');
         exit;
     }
+    restore_current_blog();
 }
+
 
 //USE THIS FOR INSTUCTIONS ABOUT DOMAINS
 //* Add custom message to WordPress login page
@@ -120,6 +148,9 @@ function go_user_redirect( $redirect_to, $request, $user )
 
 function go_get_user_redirect($user_id = null){
     $page = '';
+    if ($user_id == null){
+        $user_id = get_current_user_id();
+    }
     if(is_user_member_of_blog($user_id)) {
         $redirect_to = get_option('options_go_landing_page_radio', 'home');
         //$page = get_option('options_go_landing_page_on_login', '');
@@ -205,7 +236,7 @@ function go_login_template_include($template){
 
     $page_value = ( isset($wp_query->query_vars[$page_name]) ? $wp_query->query_vars[$page_name] : false ); //Check for query var
 
-    if ($page_value && ($page_value == "true" || $page_value == "failed" || $page_value == "empty" || $page_value == "checkemail")) { //Verify "blah" exists and value is "true".
+    if ($page_value && ($page_value == "true" || $page_value == "failed" || $page_value == "empty" || $page_value == "checkemail" || $page_value == "bad_domain")) { //Verify "blah" exists and value is "true".
         return plugin_dir_path(__FILE__).'templates/template.php'; //Load your template or file
     }
 
@@ -259,6 +290,39 @@ function go_verify_username_password($user, $username, $password){
 }
 add_filter('authenticate', 'go_verify_username_password', 1, 3);
 
+/**
+ *  ADD LOG OUT PAGE
+ */
+
+add_action('init', 'go_logout_rewrite');
+function go_logout_rewrite(){
+    $page_name = 'logout';
+    add_rewrite_rule( $page_name, 'index.php?' . $page_name . '=true', "top");
+    //add_rewrite_rule( $page_name, 'wp-login.php?' . $page_name . '=true', "top");
+}
+
+// Query Vars
+add_filter( 'query_vars', 'go_logout_query_var' );
+function go_logout_query_var( $vars ) {
+    $page_name = 'logout';
+    $vars[] = $page_name;
+    return $vars;
+}
+
+/* Template Include */
+add_filter('template_include', 'go_logout_template_include', 1, 1);
+function go_logout_template_include($template){
+    $page_name = 'logout';
+    global $wp_query; //Load $wp_query object
+
+    $page_value = ( isset($wp_query->query_vars[$page_name]) ? $wp_query->query_vars[$page_name] : false ); //Check for query var "blah"
+
+    if ($page_value && ($page_value == "true" || $page_value == "invalid") ) { //Verify "blah" exists and value is "true".
+        return plugin_dir_path(__FILE__).'templates/logout.php'; //Load your template or file
+    }
+
+    return $template; //Load normal template when $page_value != "true" as a fallback
+}
 
 
 /**
@@ -449,86 +513,6 @@ function go_join_template_include($template){
 
     return $template; //Load normal template when $page_value != "true" as a fallback
 }
-
-
-/****************
- * Process User Registration
- * https://code.tutsplus.com/tutorials/build-a-custom-wordpress-user-flow-part-2-new-user-registration--cms-23810
- */
-
-/**
- * THIS CHANGES THE DEFAULT WORDPRESS USER REGISTRATION--DO I NEED THIS
- * @param $email
- * @param $first_name
- * @param $last_name
- * @return WP_Error
- */
-/*
-function register_user( $email, $first_name, $last_name ) {
-    $errors = new WP_Error();
-
-    // Email address is used as both username and email. It is also the only
-    // parameter we need to validate
-    if ( ! is_email( $email ) ) {
-        $errors->add( 'email', get_error_message( 'email' ) );
-        return $errors;
-    }
-
-    if ( username_exists( $email ) || email_exists( $email ) ) {
-        $errors->add( 'email_exists', get_error_message( 'email_exists') );
-        return $errors;
-    }
-
-    // Generate the password so that the subscriber will have to check email...
-    $password = wp_generate_password( 12, false );
-
-    $user_data = array(
-        'user_login'    => $email,
-        'user_email'    => $email,
-        'user_pass'     => $password,
-        'first_name'    => $first_name,
-        'last_name'     => $last_name,
-        'nickname'      => $first_name,
-    );
-
-    $user_id = wp_insert_user( $user_data );
-    wp_new_user_notification( $user_id, $password );
-
-    return $user_id;
-}
-*/
-/*
-//THIS CHANGES THE DEFAULT WORDPRESS USER REGISTRATION--DO I NEED THIS
-add_action( 'login_form_register', 'do_register_user'  );
-function do_register_user() {
-    if ( 'POST' == $_SERVER['REQUEST_METHOD'] ) {
-        $redirect_url = home_url( 'registration' );
-
-        if ( ! get_option( 'users_can_register' ) ) {
-            // Registration closed, display error
-            $redirect_url = add_query_arg( 'register-errors', 'closed', $redirect_url );
-        } else {
-            $email = $_POST['email'];
-            $first_name = sanitize_text_field( $_POST['first_name'] );
-            $last_name = sanitize_text_field( $_POST['last_name'] );
-
-            $result = register_user( $email, $first_name, $last_name );
-
-            if ( is_wp_error( $result ) ) {
-                // Parse errors into a string and append as parameter to redirect
-                $errors = join( ',', $result->get_error_codes() );
-                $redirect_url = add_query_arg( 'register-errors', $errors, $redirect_url );
-            } else {
-                // Success, redirect to login page.
-                $redirect_url = home_url( 'registration' );
-                $redirect_url = add_query_arg( 'registered', $email, $redirect_url );
-            }
-        }
-
-        wp_redirect( $redirect_url );
-        exit;
-    }
-}*/
 
 function go_include_password_checker(){
     $minPassword = get_option('options_minimum_password_strength');

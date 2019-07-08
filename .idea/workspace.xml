@@ -5,239 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4c52fe7c-a769-413b-9a8a-3effed8b98a6" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-level2-taxonomy/assets/css/input.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-order-posts/assets/css/input.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-quiz/assets/css/input.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/includes/includes.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/localize_scripts.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/login/src/templates/logout.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acf-json/group_5a8af2a1334bf.json" beforeDir="false" afterPath="$PROJECT_DIR$/acf-json/group_5a8af2a1334bf.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acf-json/group_5abc5718c2c1b.json" beforeDir="false" afterPath="$PROJECT_DIR$/acf-json/group_5abc5718c2c1b.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acf-json/group_5d1a547987fd1.json" beforeDir="false" afterPath="$PROJECT_DIR$/acf-json/group_5d1a547987fd1.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config.codekit3" beforeDir="false" afterPath="$PROJECT_DIR$/config.codekit3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/includes.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/includes.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/src/admin/go_activation.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/admin/go_activation.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/admin/go_admin.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/admin/go_admin.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/admin/go_datatable.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/admin/go_datatable.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/ajax/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/ajax/ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/all/go_core_functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/all/go_core_functions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/all/go_loot_and_updates.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/all/go_loot_and_updates.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/all/go_transients.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/all/go_transients.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/public_ajax/go_checks.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/public_ajax/go_checks.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/public_ajax/go_locks.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/public_ajax/go_locks.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-level2-taxonomy/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-level2-taxonomy/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-level2-taxonomy/acf-level2-taxonomy.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-level2-taxonomy/acf-level2-taxonomy.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-level2-taxonomy/assets/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-level2-taxonomy/assets/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-level2-taxonomy/assets/css/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-level2-taxonomy/assets/css/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-level2-taxonomy/assets/css/input.css" beforeDir="false" afterPath="$PROJECT_DIR$/dev/ABOUT_DEV.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-level2-taxonomy/assets/images/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-level2-taxonomy/assets/images/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-level2-taxonomy/assets/js/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-level2-taxonomy/assets/js/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-level2-taxonomy/assets/js/input-min.js" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-level2-taxonomy/assets/js/input-min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-level2-taxonomy/assets/js/input.js" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-level2-taxonomy/assets/js/input.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-level2-taxonomy/fields/class-go-acf-field-level2-taxonomy-v4.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-level2-taxonomy/fields/class-go-acf-field-level2-taxonomy-v4.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-level2-taxonomy/fields/class-go-acf-field-level2-taxonomy-v5.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-level2-taxonomy/fields/class-go-acf-field-level2-taxonomy-v5.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-level2-taxonomy/lang/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-level2-taxonomy/lang/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-level2-taxonomy/readme.txt" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-level2-taxonomy/readme.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-order-posts/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-order-posts/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-order-posts/acf-order-posts.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-order-posts/acf-order-posts.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-order-posts/assets/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-order-posts/assets/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-order-posts/assets/css/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-order-posts/assets/css/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-order-posts/assets/css/input.css" beforeDir="false" afterPath="$PROJECT_DIR$/dev/js/go_all.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-order-posts/assets/images/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-order-posts/assets/images/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-order-posts/assets/js/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-order-posts/assets/js/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-order-posts/assets/js/input-min.js" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-order-posts/assets/js/input-min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-order-posts/assets/js/input.js" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-order-posts/assets/js/input.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-order-posts/fields/class-go-acf-field-order-posts-v4.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-order-posts/fields/class-go-acf-field-order-posts-v4.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-order-posts/fields/class-go-acf-field-order-posts-v5.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-order-posts/fields/class-go-acf-field-order-posts-v5.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-order-posts/lang/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-order-posts/lang/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-order-posts/readme.txt" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-order-posts/readme.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-quiz/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-quiz/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-quiz/acf-quiz.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-quiz/acf-quiz.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-quiz/assets/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-quiz/assets/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-quiz/assets/css/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-quiz/assets/css/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-quiz/assets/css/input.css" beforeDir="false" afterPath="$PROJECT_DIR$/includes/ABOUT_INCLUDES.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-quiz/assets/images/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-quiz/assets/images/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-quiz/assets/js/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-quiz/assets/js/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-quiz/assets/js/input-min.js" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-quiz/assets/js/input-min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-quiz/assets/js/input.js" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-quiz/assets/js/input.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-quiz/fields/class-go-acf-field-quiz-v4.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-quiz/fields/class-go-acf-field-quiz-v4.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-quiz/fields/class-go-acf-field-quiz-v5.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-quiz/fields/class-go-acf-field-quiz-v5.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-quiz/lang/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-quiz/lang/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/acf-quiz/readme.txt" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-quiz/readme.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/css/go_tasks-admin-acf-min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/css/go_tasks-admin-acf.css" beforeDir="false" afterPath="$PROJECT_DIR$/dev/css/files/go_tasks-admin-acf.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/go-acf-functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/all/go-acf-functions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/go_enque_js_acf.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/js/dev/go_acf.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/js/min/go_acf-min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-acf-fields/js/scripts/my-acf-extension.js" beforeDir="false" afterPath="$PROJECT_DIR$/dev/js/scripts/go_acf_extension.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/css/files/go_every_page.scss" beforeDir="false" afterPath="$PROJECT_DIR$/dev/css/files/go_every_page.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/css/files/login.scss" beforeDir="false" afterPath="$PROJECT_DIR$/dev/css/files/login.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/css/go_admin.scss" beforeDir="false" afterPath="$PROJECT_DIR$/dev/css/go_admin.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/js/go_admin_user.js" beforeDir="false" afterPath="$PROJECT_DIR$/dev/js/go_admin_user.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/js/go_frontend.js" beforeDir="false" afterPath="$PROJECT_DIR$/dev/js/go_frontend.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/js/scripts/buy_the_item.js" beforeDir="false" afterPath="$PROJECT_DIR$/dev/js/scripts/buy_the_item.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/js/scripts/go_blogs.js" beforeDir="false" afterPath="$PROJECT_DIR$/dev/js/scripts/go_blogs.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/js/scripts/go_every_page.js" beforeDir="false" afterPath="$PROJECT_DIR$/dev/js/scripts/go_every_page.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/js/scripts/go_feedback.js" beforeDir="false" afterPath="$PROJECT_DIR$/dev/js/scripts/go_feedback.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/js/scripts/go_map.js" beforeDir="false" afterPath="$PROJECT_DIR$/dev/js/scripts/go_map.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/js/scripts/go_tasks.js" beforeDir="false" afterPath="$PROJECT_DIR$/dev/js/scripts/go_tasks.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/js/scripts/go_tools.js" beforeDir="false" afterPath="$PROJECT_DIR$/dev/js/scripts/go_tools.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/js/scripts/leaderboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/dev/js/scripts/leaderboard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/js/scripts/user_bar.js" beforeDir="false" afterPath="$PROJECT_DIR$/dev/js/scripts/user_bar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-on.php" beforeDir="false" afterPath="$PROJECT_DIR$/game-on.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/CollapsibleLists.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/.editorconfig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/LICENSE" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/acf-recaptcha-v5.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/acf-recaptcha-v5.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/acf-recaptcha.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/acf-recaptcha.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/assets/banner-1544x500.png" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/assets/banner-1544x500.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/assets/banner-772x250.png" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/assets/banner-772x250.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/assets/icon-128x128.png" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/assets/icon-128x128.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/assets/icon-256x256.png" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/assets/icon-256x256.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/assets/screenshot-1.png" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/assets/screenshot-1.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/assets/screenshot-2.png" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/assets/screenshot-2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/assets/screenshot-3.png" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/assets/screenshot-3.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/css/field-group.css" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/css/field-group.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/css/plugin-update.css" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/css/plugin-update.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/css/settings-page.css" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/css/settings-page.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/includes/classes/WPRemoteRequestMethod.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/includes/classes/WPRemoteRequestMethod.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/includes/field-message.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/includes/field-message.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/includes/plugin-update.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/includes/plugin-update.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/includes/script-loader.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/includes/script-loader.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/includes/settings-page.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/includes/settings-page.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/js/field-group.js" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/js/field-group.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/js/input.js" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/js/input.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/lib/ReCaptcha/ReCaptcha.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/lib/ReCaptcha/ReCaptcha.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/lib/ReCaptcha/RequestMethod.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/lib/ReCaptcha/RequestMethod.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/lib/ReCaptcha/RequestMethod/Curl.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/lib/ReCaptcha/RequestMethod/Curl.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/lib/ReCaptcha/RequestMethod/Post.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/lib/ReCaptcha/RequestMethod/Post.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/lib/ReCaptcha/RequestMethod/Socket.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/lib/ReCaptcha/RequestMethod/Socket.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/lib/ReCaptcha/RequestMethod/SocketPost.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/lib/ReCaptcha/RequestMethod/SocketPost.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/lib/ReCaptcha/RequestParameters.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/lib/ReCaptcha/RequestParameters.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/lib/ReCaptcha/Response.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/lib/ReCaptcha/Response.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/lib/autoload.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/lib/autoload.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf-recaptcha-master/readme.txt" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/readme.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/acf.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/acf.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/assets/css/acf-global.css" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/assets/css/acf-global.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/assets/css/acf-input.css" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/assets/css/acf-input.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/assets/js/acf-input.js" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/assets/js/acf-input.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/assets/js/acf-input.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/assets/js/acf-input.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/acf-data-functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/acf-data-functions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/acf-form-functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/acf-form-functions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/acf-helper-functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/acf-helper-functions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/acf-user-functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/acf-user-functions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/admin/admin-field-group.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/admin/admin-field-group.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/admin/admin-field-groups.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/admin/admin-field-groups.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/admin/tools/class-acf-admin-tool-import.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/admin/tools/class-acf-admin-tool-import.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/ajax/class-acf-ajax-check-screen.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/ajax/class-acf-ajax-check-screen.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/ajax/class-acf-ajax-query-terms.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/ajax/class-acf-ajax-query.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/ajax/class-acf-ajax-upgrade.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/ajax/class-acf-ajax-upgrade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/ajax/class-acf-ajax-user-setting.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/ajax/class-acf-ajax-user-setting.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/ajax/class-acf-ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/ajax/class-acf-ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/api/api-field-group.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/api/api-field.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/api/api-helpers.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/api/api-helpers.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/api/api-template.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/api/api-template.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/api/api-value.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/assets.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/assets.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/cache.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/class-acf-data.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/class-acf-data.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/compatibility.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/compatibility.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/fields/class-acf-field-file.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/fields/class-acf-field-file.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/fields/class-acf-field-google-map.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/fields/class-acf-field-google-map.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/fields/class-acf-field-image.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/fields/class-acf-field-image.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/fields/class-acf-field-link.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/fields/class-acf-field-link.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/fields/class-acf-field-page_link.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/fields/class-acf-field-page_link.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/fields/class-acf-field-post_object.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/fields/class-acf-field-post_object.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/fields/class-acf-field-relationship.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/fields/class-acf-field-relationship.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/fields/class-acf-field-select.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/fields/class-acf-field-select.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/fields/class-acf-field-text.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/fields/class-acf-field-text.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/fields/class-acf-field-textarea.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/fields/class-acf-field-textarea.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/fields/class-acf-field-user.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/fields/class-acf-field-user.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/forms/form-gutenberg.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/forms/form-gutenberg.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/forms/form-post.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/forms/form-post.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/forms/form-taxonomy.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/forms/form-taxonomy.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/forms/form-user.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/forms/form-user.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/json.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/json.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/l10n.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/l10n.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/local.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/locations.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/locations.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/locations/class-acf-location-page-template.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/locations/class-acf-location-page-template.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/includes/locations/class-acf-location-post-template.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/includes/locations/class-acf-location-post-template.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/lang/acf-ar.mo" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/lang/acf-ar.mo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/lang/acf-ar.po" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/lang/acf-ar.po" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/lang/acf-de_CH.mo" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/lang/acf-de_CH.mo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/lang/acf-de_CH.po" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/lang/acf-de_CH.po" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/lang/acf-de_DE.mo" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/lang/acf-de_DE.mo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/lang/acf-de_DE.po" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/lang/acf-de_DE.po" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/lang/acf-de_DE_formal.mo" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/lang/acf-de_DE_formal.mo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/lang/acf-de_DE_formal.po" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/lang/acf-de_DE_formal.po" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/lang/acf-fa_IR.mo" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/lang/acf-fa_IR.mo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/lang/acf-fa_IR.po" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/lang/acf-fa_IR.po" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/lang/acf-nl_NL.mo" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/lang/acf-nl_NL.mo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/lang/acf-nl_NL.po" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/lang/acf-nl_NL.po" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/lang/acf-pt_PT.mo" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/lang/acf-pt_PT.mo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/lang/acf-pt_PT.po" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/lang/acf-pt_PT.po" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/lang/acf-sv_SE.mo" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/lang/acf-sv_SE.mo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/lang/acf-sv_SE.po" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/lang/acf-sv_SE.po" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/lang/acf-tr_TR.mo" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/lang/acf-tr_TR.mo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/lang/acf-tr_TR.po" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/lang/acf-tr_TR.po" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/lang/acf.pot" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/lang/acf.pot" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/pro/acf-pro.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/pro/acf-pro.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/pro/assets/css/acf-pro-input.css" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/pro/assets/css/acf-pro-input.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/pro/assets/js/acf-pro-input.js" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/pro/assets/js/acf-pro-input.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/pro/assets/js/acf-pro-input.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/pro/assets/js/acf-pro-input.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/pro/fields/class-acf-field-flexible-content.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/pro/fields/class-acf-field-flexible-content.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/pro/fields/class-acf-field-gallery.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/pro/fields/class-acf-field-gallery.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/pro/fields/class-acf-field-repeater.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/pro/fields/class-acf-field-repeater.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/acf/readme.txt" beforeDir="false" afterPath="$PROJECT_DIR$/includes/acf/readme.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/go_enqueue_includes.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/go_enqueue_includes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/wp-acf-unique_id-master/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/wp-acf-unique_id-master/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/wp-acf-unique_id-master/acf-unique_id-v5.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/wp-acf-unique_id-master/acf-unique_id-v5.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/wp-acf-unique_id-master/acf-unique_id.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/wp-acf-unique_id-master/acf-unique_id.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/wp-acf-unique_id-master/readme.txt" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/wp-acf-unique_id-master/readme.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/go_enque_js.php" beforeDir="false" afterPath="$PROJECT_DIR$/js/go_enque_js.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/go_enque_js_admin.php" beforeDir="false" afterPath="$PROJECT_DIR$/js/go_enque_js_admin.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/min/go_admin_user-min.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/min/go_admin_user-min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/min/go_frontend-min.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/min/go_frontend-min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/admin_bar/src/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/admin_bar/src/functions.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/includes.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/includes.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/admin_bar/src/public.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/admin_bar/src/public.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/clipboard/src/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/clipboard/src/ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/feedback/src/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/feedback/src/ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/feedback/src/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/feedback/src/functions.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/login/includes.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/login/includes.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/login/src/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/login/src/functions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/login/src/templates/join.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/login/src/templates/user.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/login/src/templates/profile_template.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/login/src/templates/disabled/profile_template.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/login/src/templates/register_template.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/login/src/templates/disabled/register_template.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/login/src/templates/template.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/login/src/templates/template.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/map/includes.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/map/includes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/map/src/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/map/src/functions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/map/src/public_ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/map/src/public_ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/messages/src/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/messages/src/ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/quiz/src/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/quiz/src/ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/stats/src/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/stats/src/ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/store/src/admin_ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/store/src/admin_ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/store/src/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/store/src/ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/tasks/src/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/tasks/src/ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/tasks/src/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/tasks/src/functions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/tasks/src/public_ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/tasks/src/public_ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/tools/src/admin.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/tools/src/admin.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/tools/src/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/tools/src/ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/tools/src/functions.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/user_blogs/src/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/user_blogs/src/ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/user_blogs/src/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/user_blogs/src/functions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/user_blogs/src/public_ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/user_blogs/src/public_ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/go_enque_styles.php" beforeDir="false" afterPath="$PROJECT_DIR$/styles/go_enque_styles.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/go_enque_styles_admin.php" beforeDir="false" afterPath="$PROJECT_DIR$/styles/go_enque_styles_admin.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/min/go_admin.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/min/go_admin.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/login/src/templates/user.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/login/src/templates/user.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/styles/min/go_frontend.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/min/go_frontend.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/min/go_styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/min/go_styles.css" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -272,11 +51,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/modules/login/src/functions.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="14" selection-start-line="14" selection-end-line="14" />
+            <state relative-caret-position="120">
+              <caret line="8" column="6" selection-start-line="8" selection-start-column="6" selection-end-line="8" selection-end-column="6" />
               <folding>
                 <element signature="e#6#34#0#PHP" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
@@ -302,10 +81,37 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/src/admin/go_activation.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="565">
+              <caret line="252" selection-start-line="252" selection-end-line="252" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modules/login/includes.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="195">
+              <caret line="18" column="109" selection-start-line="18" selection-start-column="81" selection-end-line="18" selection-end-column="109" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/includes/includes.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="525">
+              <caret line="40" column="1" lean-forward="true" selection-start-line="40" selection-start-column="1" selection-end-line="40" selection-end-column="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/login/src/templates/template.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="93" column="54" selection-start-line="93" selection-start-column="47" selection-end-line="93" selection-end-column="54" />
+            <state relative-caret-position="326">
+              <caret line="28" column="2" selection-start-line="28" selection-start-column="2" selection-end-line="28" selection-end-column="2" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
@@ -314,11 +120,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dev/css/files/login.scss">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="270">
+              <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/login/src/templates/user.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="229">
-              <caret line="146" column="36" selection-start-line="146" selection-start-column="36" selection-end-line="146" selection-end-column="36" />
+            <state relative-caret-position="313">
+              <caret line="28" column="21" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="21" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#h3#0;n#!!top" expanded="true" />
@@ -329,92 +144,22 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modules/admin_bar/src/functions.php">
+        <entry file="file://$PROJECT_DIR$/modules/login/src/templates/logout.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="390">
-              <caret line="26" selection-start-line="26" selection-end-line="26" />
+            <state relative-caret-position="90">
+              <caret line="6" column="3" lean-forward="true" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
               <folding>
-                <element signature="n#go_admin_bar_v5#0;n#!!top" />
-                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="e#6#91#0#PHP" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/all/go_core_functions.php">
+        <entry file="file://$PROJECT_DIR$/config.codekit3">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="325">
-              <caret line="244" column="4" lean-forward="true" selection-start-line="244" selection-start-column="4" selection-end-line="251" selection-end-column="21" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/game-on.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="293">
-              <caret line="73" selection-start-line="73" selection-end-line="73" />
-              <folding>
-                <element signature="e#6#233#0#PHP" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dev/js/scripts/go_every_page.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="72" column="46" selection-start-line="72" selection-start-column="21" selection-end-line="72" selection-end-column="46" />
-              <folding>
-                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#!!block;n#go_load_daterangepicker#0" />
-                <element signature="n#!!block;n#go_load_daterangepicker_empty#0" />
-                <element signature="n#style#0;n#i#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#!!block;n#go_clear_daterange#0" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modules/tasks/src/functions.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="197">
-              <caret line="266" selection-start-line="266" selection-end-line="266" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/admin/go_activation.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="565">
-              <caret line="251" selection-start-line="251" selection-end-line="251" />
-              <folding>
-                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modules/map/src/functions.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="115">
-              <caret line="8" column="91" selection-start-line="8" selection-start-column="91" selection-end-line="8" selection-end-column="91" />
-              <folding>
-                <element signature="e#6#90#0#PHP" expanded="true" />
-              </folding>
+            <state relative-caret-position="266">
+              <caret line="5147" column="15" lean-forward="true" selection-start-line="5147" selection-start-column="15" selection-end-line="5147" selection-end-column="15" />
             </state>
           </provider>
         </entry>
@@ -432,26 +177,7 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>go_post_title</find>
-      <find>go_post_meta</find>
-      <find>required</find>
-      <find>and</find>
-      <find>min_word</find>
-      <find>This lock is set based on the timezone</find>
-      <find>$min_words</find>
-      <find>Access Schedule</find>
-      <find>go_error_red</find>
-      <find>Your session has expired.</find>
-      <find>login_appear</find>
-      <find>wp-admin-bar-go_add_quest_from_template</find>
-      <find>go_new_task_from_template</find>
-      <find>Cheatin’ uh?</find>
-      <find>registration_code</find>
-      <find>wp_redirect</find>
-      <find>get_current_user_id</find>
       <find>go_clone_post_new_menu_bar</find>
-      <find>go_login_center</find>
-      <find>switch_to</find>
       <find>domain</find>
       <find>updated</find>
       <find>options_limit_domains_toggle</find>
@@ -460,8 +186,27 @@
       <find>wp_loginout</find>
       <find>wp_logout</find>
       <find>get_page_uri</find>
-      <find>log out</find>
       <find>email</find>
+      <find>#go_login_center</find>
+      <find>NextendSocialProvider</find>
+      <find>redirectToLastLocationLogin</find>
+      <find>redirect</find>
+      <find>\NSL\Persistent\Persistent</find>
+      <find>\NSL\Persistent\Persistent::get('redirect'</find>
+      <find>bad_domain</find>
+      <find>store</find>
+      <find>switch_to</find>
+      <find>loginLastLocationRedirect</find>
+      <find>getLoginUrl</find>
+      <find>url</find>
+      <find>getLastLocationRedirectTo</find>
+      <find>site_url</find>
+      <find>redirectToLastLocation</find>
+      <find>go_password_change_lightbox</find>
+      <find>nsl</find>
+      <find>logout</find>
+      <find>go_login_center</find>
+      <find>log out</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -495,6 +240,7 @@
       <dir>$PROJECT_DIR$/modules/login</dir>
       <dir>$PROJECT_DIR$/js</dir>
       <dir>$PROJECT_DIR$/includes</dir>
+      <dir>$PROJECT_DIR$/includes/nextend-gameon-connect</dir>
     </dirStrings>
   </component>
   <component name="Git.Settings">
@@ -503,21 +249,15 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/dev/js/scripts/go_feedback.js" />
-        <option value="$PROJECT_DIR$/dev/js/scripts/buy_the_item.js" />
-        <option value="$PROJECT_DIR$/styles/localize_scripts.php" />
         <option value="$PROJECT_DIR$/modules/tools/src/ajax.php" />
         <option value="$PROJECT_DIR$/dev/js/scripts/go_tools.js" />
         <option value="$PROJECT_DIR$/dev/js/scripts/go_map.js" />
         <option value="$PROJECT_DIR$/core/includes.php" />
         <option value="$PROJECT_DIR$/core/src/ajax/ajax.php" />
-        <option value="$PROJECT_DIR$/core/src/admin/go_activation.php" />
         <option value="$PROJECT_DIR$/dev/css/go_admin.scss" />
         <option value="$PROJECT_DIR$/js/go_enque_js.php" />
         <option value="$PROJECT_DIR$/js/go_enque_js_admin.php" />
-        <option value="$PROJECT_DIR$/modules/login/includes.php" />
         <option value="$PROJECT_DIR$/includes/ABOUT_INCLUDES.txt" />
-        <option value="$PROJECT_DIR$/includes/includes.php" />
         <option value="$PROJECT_DIR$/includes/go_enqueue_includes.php" />
         <option value="$PROJECT_DIR$/core/src/public_ajax/go_checks.php" />
         <option value="$PROJECT_DIR$/modules/quiz/src/ajax.php" />
@@ -529,7 +269,6 @@
         <option value="$PROJECT_DIR$/modules/feedback/src/functions.php" />
         <option value="$PROJECT_DIR$/modules/tasks/src/ajax.php" />
         <option value="$PROJECT_DIR$/modules/user_blogs/src/public_ajax.php" />
-        <option value="$PROJECT_DIR$/modules/admin_bar/src/public.php" />
         <option value="$PROJECT_DIR$/modules/tools/src/admin.php" />
         <option value="$PROJECT_DIR$/modules/stats/src/ajax.php" />
         <option value="$PROJECT_DIR$/dev/js/scripts/user_bar.js" />
@@ -548,12 +287,19 @@
         <option value="$PROJECT_DIR$/modules/tasks/src/functions.php" />
         <option value="$PROJECT_DIR$/game-on.php" />
         <option value="$PROJECT_DIR$/modules/login/src/templates/join.php" />
-        <option value="$PROJECT_DIR$/dev/css/files/login.scss" />
-        <option value="$PROJECT_DIR$/modules/login/src/functions.php" />
-        <option value="$PROJECT_DIR$/modules/login/src/templates/template.php" />
         <option value="$PROJECT_DIR$/core/src/all/go_core_functions.php" />
         <option value="$PROJECT_DIR$/modules/admin_bar/src/functions.php" />
+        <option value="$PROJECT_DIR$/includes/nextend-gameon-connect/includes/user.php" />
+        <option value="$PROJECT_DIR$/includes/nextend-gameon-connect/includes/provider.php" />
+        <option value="$PROJECT_DIR$/modules/login/includes.php" />
+        <option value="$PROJECT_DIR$/core/src/admin/go_activation.php" />
+        <option value="$PROJECT_DIR$/includes/includes.php" />
+        <option value="$PROJECT_DIR$/modules/admin_bar/src/public.php" />
         <option value="$PROJECT_DIR$/modules/login/src/templates/user.php" />
+        <option value="$PROJECT_DIR$/modules/login/src/templates/template.php" />
+        <option value="$PROJECT_DIR$/dev/css/files/login.scss" />
+        <option value="$PROJECT_DIR$/modules/login/src/templates/logout.php" />
+        <option value="$PROJECT_DIR$/modules/login/src/functions.php" />
       </list>
     </option>
   </component>
@@ -563,7 +309,7 @@
     <other-services-enabled>true</other-services-enabled>
     <auto-save>true</auto-save>
   </component>
-  <component name="PhpDebugGeneral" xdebug_show_addresses="true" listening_started="true" xdebug_force_break_when_outside_project="false" />
+  <component name="PhpDebugGeneral" xdebug_show_addresses="true" xdebug_force_break_when_outside_project="false" />
   <component name="PhpServers">
     <servers>
       <server host="localhost" id="3921dc9d-31df-49b8-a3ad-25e0abc23ff5" name="localhost" />
@@ -632,21 +378,44 @@
             <path>
               <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
               <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="all" type="462c0819:PsiDirectoryNode" />
+              <item name="dev" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
               <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="public_ajax" type="462c0819:PsiDirectoryNode" />
+              <item name="dev" type="462c0819:PsiDirectoryNode" />
+              <item name="css" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
+              <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
+              <item name="includes" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
               <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
               <item name="modules" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
+              <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
+              <item name="modules" type="462c0819:PsiDirectoryNode" />
+              <item name="login" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
+              <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
+              <item name="modules" type="462c0819:PsiDirectoryNode" />
+              <item name="login" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
+              <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
+              <item name="modules" type="462c0819:PsiDirectoryNode" />
+              <item name="login" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
@@ -935,12 +704,12 @@
       <workItem from="1561945908787" duration="1995000" />
       <workItem from="1561951768510" duration="1857000" />
       <workItem from="1561960133192" duration="363000" />
-      <workItem from="1561960785201" duration="166382000" />
+      <workItem from="1561960785201" duration="180354000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5677161000" />
+    <option name="totallyTimeSpent" value="5691133000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -955,13 +724,13 @@
     <frame x="1681" y="23" width="1746" height="1019" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4984375" visible="true" weight="0.18955399" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4984375" visible="true" weight="0.18955399" />
       <window_info id="Structure" order="1" sideWeight="0.5015625" side_tool="true" weight="0.19340234" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Command Line Tools Console" order="0" sideWeight="0.49939686" visible="true" weight="0.3268817" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.6778784" weight="0.30744338" />
       <window_info anchor="bottom" id="Message" order="2" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.6890287" visible="true" weight="0.3106796" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.6890287" weight="0.3106796" />
       <window_info anchor="bottom" id="Run" order="4" weight="0.3289183" />
       <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3289183" />
@@ -1558,12 +1327,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>503</line>
-          <option name="timeStamp" value="2949" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>236</line>
+          <line>267</line>
           <option name="timeStamp" value="2957" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1705,11 +1469,6 @@
           <url>file://$PROJECT_DIR$/modules/stats/src/ajax.php</url>
           <line>1433</line>
           <option name="timeStamp" value="3309" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>467</line>
-          <option name="timeStamp" value="3311" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/core/src/all/go_loot_and_updates.php</url>
@@ -1858,17 +1617,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>935</line>
+          <line>919</line>
           <option name="timeStamp" value="3590" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>905</line>
+          <line>889</line>
           <option name="timeStamp" value="3592" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>929</line>
+          <line>913</line>
           <option name="timeStamp" value="3594" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1883,7 +1642,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>895</line>
+          <line>879</line>
           <option name="timeStamp" value="3618" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1893,7 +1652,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>106</line>
+          <line>134</line>
           <option name="timeStamp" value="3631" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1923,7 +1682,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>757</line>
+          <line>741</line>
           <option name="timeStamp" value="3658" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1998,47 +1757,47 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/core/src/admin/go_activation.php</url>
-          <line>120</line>
+          <line>121</line>
           <option name="timeStamp" value="3697" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/core/src/admin/go_activation.php</url>
-          <line>141</line>
+          <line>142</line>
           <option name="timeStamp" value="3698" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/core/src/admin/go_activation.php</url>
-          <line>160</line>
+          <line>161</line>
           <option name="timeStamp" value="3699" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/core/src/admin/go_activation.php</url>
-          <line>183</line>
+          <line>184</line>
           <option name="timeStamp" value="3700" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/core/src/admin/go_activation.php</url>
-          <line>187</line>
+          <line>188</line>
           <option name="timeStamp" value="3701" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/core/src/admin/go_activation.php</url>
-          <line>195</line>
+          <line>196</line>
           <option name="timeStamp" value="3702" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/core/src/admin/go_activation.php</url>
-          <line>251</line>
+          <line>252</line>
           <option name="timeStamp" value="3703" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/core/src/admin/go_activation.php</url>
-          <line>102</line>
+          <line>103</line>
           <option name="timeStamp" value="3709" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/core/src/admin/go_activation.php</url>
-          <line>101</line>
+          <line>102</line>
           <option name="timeStamp" value="3710" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -2048,7 +1807,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>14</line>
+          <line>8</line>
           <option name="timeStamp" value="3721" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -2060,6 +1819,11 @@
           <url>file://$PROJECT_DIR$/modules/login/src/templates/user.php</url>
           <line>144</line>
           <option name="timeStamp" value="3724" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
+          <line>314</line>
+          <option name="timeStamp" value="3728" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/js/front/scripts/go_videos_fit_and_box.js</url>
@@ -2217,66 +1981,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/dev/css/go_admin.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="33" selection-start-line="2" selection-start-column="33" selection-end-line="2" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/localize_scripts.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="8" column="32" selection-start-line="8" selection-start-column="9" selection-end-line="8" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/go_enque_js_admin.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-516">
-          <caret line="72" column="28" selection-start-line="72" selection-start-column="28" selection-end-line="72" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/includes/ABOUT_INCLUDES.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" column="71" selection-start-line="21" selection-start-column="71" selection-end-line="21" selection-end-column="71" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/includes/fontawesome/css/all.min.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="53732" selection-start-line="4" selection-start-column="53666" selection-end-line="4" selection-end-column="53732" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/includes/wp-frontend-media-master/frontend-media.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="41" column="39" selection-start-line="41" selection-start-column="24" selection-end-line="41" selection-end-column="39" />
-          <folding>
-            <element signature="e#7#478#0#PHP" expanded="true" />
-            <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/go_enque_js.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="717">
-          <caret line="96" column="28" selection-start-line="96" selection-start-column="28" selection-end-line="96" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/login/includes.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="25" column="70" selection-start-line="25" selection-start-column="70" selection-end-line="25" selection-end-column="70" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/src/ajax/ajax.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="675">
@@ -2357,22 +2061,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/includes/includes.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="27" column="61" selection-start-line="27" selection-start-column="61" selection-end-line="27" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dev/css/files/login.css">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dev/css/files/login.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="25" column="17" selection-start-line="25" selection-start-column="17" selection-end-line="25" selection-end-column="17" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/modules/tools/src/admin.php">
       <provider selected="true" editor-type-id="text-editor">
@@ -2659,31 +2349,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/admin/go_activation.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="565">
-          <caret line="251" selection-start-line="251" selection-end-line="251" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/login/src/templates/template.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="93" column="54" selection-start-line="93" selection-start-column="47" selection-end-line="93" selection-end-column="54" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/src/all/go_core_functions.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="325">
-          <caret line="244" column="4" lean-forward="true" selection-start-line="244" selection-start-column="4" selection-end-line="251" selection-end-column="21" />
+          <caret line="244" column="4" selection-start-line="244" selection-start-column="4" selection-end-line="251" selection-end-column="21" />
         </state>
       </provider>
     </entry>
@@ -2701,10 +2370,160 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/includes/nextend-gameon-connect/admin/templates/providers.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-268" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/nextend-gameon-connect/includes/provider.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="183">
+          <caret line="711" column="10" selection-start-line="711" selection-start-column="10" selection-end-line="711" selection-end-column="10" />
+          <folding>
+            <element signature="e#627#2393#0#PHP" />
+            <element signature="e#3050#3410#0#PHP" />
+            <element signature="e#3416#3629#0#PHP" />
+            <element signature="e#3635#3901#0#PHP" />
+            <element signature="e#3907#4076#0#PHP" />
+            <element signature="e#4930#5201#0#PHP" />
+            <element signature="e#5207#5366#0#PHP" />
+            <element signature="e#5585#6009#0#PHP" />
+            <element signature="e#6082#6531#0#PHP" />
+            <element signature="e#6806#12625#0#PHP" />
+            <element signature="e#12799#13072#0#PHP" />
+            <element signature="e#13313#14258#0#PHP" />
+            <element signature="e#14264#14588#0#PHP" />
+            <element signature="e#14594#14915#0#PHP" />
+            <element signature="e#15026#15319#0#PHP" />
+            <element signature="e#15325#15739#0#PHP" />
+            <element signature="e#15905#16361#0#PHP" />
+            <element signature="e#16540#16931#0#PHP" />
+            <element signature="e#17105#17364#0#PHP" />
+            <element signature="e#17370#18649#0#PHP" />
+            <element signature="e#18655#19403#0#PHP" />
+            <element signature="e#19409#20067#0#PHP" />
+            <element signature="e#20556#21510#0#PHP" />
+            <element signature="e#21571#22013#0#PHP" />
+            <element signature="e#22552#22649#0#PHP" />
+            <element signature="e#22879#23632#0#PHP" />
+            <element signature="e#24033#27485#0#PHP" />
+            <element signature="e#27840#28226#0#PHP" />
+            <element signature="e#28334#29076#0#PHP" />
+            <element signature="e#29160#29298#0#PHP" />
+            <element signature="e#29304#29423#0#PHP" />
+            <element signature="e#29429#29804#0#PHP" />
+            <element signature="e#29853#31792#0#PHP" />
+            <element signature="e#31798#31927#0#PHP" />
+            <element signature="e#31933#32057#0#PHP" />
+            <element signature="e#32063#32172#0#PHP" />
+            <element signature="e#32270#32336#0#PHP" />
+            <element signature="e#32379#32450#0#PHP" />
+            <element signature="e#32456#32555#0#PHP" />
+            <element signature="e#32818#34260#0#PHP" />
+            <element signature="e#34831#36266#0#PHP" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/nextend-gameon-connect/nextend-social-login.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="10200">
+          <caret line="896" column="38" selection-start-line="896" selection-start-column="27" selection-end-line="896" selection-end-column="38" />
+          <folding>
+            <element signature="n#plugins_loaded#0;n#NextendSocialLogin#0;n#!!top" />
+            <element signature="n#alternate_login_page_template_redirect#0;n#NextendSocialLogin#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/nextend-gameon-connect/nextend-facebook-connect.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#6#351#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/nextend-gameon-connect/includes/user.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2955">
+          <caret line="197" column="63" selection-start-line="197" selection-start-column="38" selection-end-line="197" selection-end-column="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/login/includes.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="18" column="109" selection-start-line="18" selection-start-column="81" selection-end-line="18" selection-end-column="109" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/includes.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="525">
+          <caret line="40" column="1" lean-forward="true" selection-start-line="40" selection-start-column="1" selection-end-line="40" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config.codekit3">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="5147" column="15" lean-forward="true" selection-start-line="5147" selection-start-column="15" selection-end-line="5147" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/admin/go_activation.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="565">
+          <caret line="252" selection-start-line="252" selection-end-line="252" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dev/css/files/login.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/login/src/templates/template.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="326">
+          <caret line="28" column="2" selection-start-line="28" selection-start-column="2" selection-end-line="28" selection-end-column="2" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/login/src/templates/user.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="313">
+          <caret line="28" column="21" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="21" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#h3#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/login/src/templates/logout.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="3" lean-forward="true" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
+          <folding>
+            <element signature="e#6#91#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/modules/login/src/functions.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" selection-start-line="14" selection-end-line="14" />
+        <state relative-caret-position="120">
+          <caret line="8" column="6" selection-start-line="8" selection-start-column="6" selection-end-line="8" selection-end-column="6" />
           <folding>
             <element signature="e#6#34#0#PHP" expanded="true" />
             <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
@@ -2724,18 +2543,6 @@
             <element signature="n#go_remove_sections_and_seats#0;n#!!top" />
             <element signature="n#go_update_sections#0;n#!!top" />
             <element signature="n#go_update_seats#0;n#!!top" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/login/src/templates/user.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="146" column="36" selection-start-line="146" selection-start-column="36" selection-end-line="146" selection-end-column="36" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h3#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
