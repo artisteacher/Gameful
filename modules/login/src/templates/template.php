@@ -26,7 +26,7 @@ if(is_user_logged_in()){
 
 //https://codex.wordpress.org/Customizing_the_Login_Form#Make_a_Custom_Login_Page
 //
-//wp_head();
+//  wp_head();
 //get_header();
 get_header();
 ///////////

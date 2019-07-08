@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4c52fe7c-a769-413b-9a8a-3effed8b98a6" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/login/src/templates/logout.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/login/src/templates/logout.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/login/src/templates/template.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/login/src/templates/template.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -97,11 +97,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/modules/login/src/templates/template.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="326">
-              <caret line="28" column="2" selection-start-line="28" selection-start-column="2" selection-end-line="28" selection-end-column="2" />
+            <state relative-caret-position="261">
+              <caret line="28" column="14" lean-forward="true" selection-start-line="28" selection-start-column="14" selection-end-line="28" selection-end-column="14" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
@@ -122,7 +122,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/login/src/templates/user.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="313">
+            <state relative-caret-position="195">
               <caret line="28" column="21" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="21" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
@@ -133,7 +133,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/login/src/templates/logout.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="540">
@@ -180,7 +180,6 @@
       <find>#go_login_center</find>
       <find>NextendSocialProvider</find>
       <find>redirectToLastLocationLogin</find>
-      <find>redirect</find>
       <find>\NSL\Persistent\Persistent</find>
       <find>\NSL\Persistent\Persistent::get('redirect'</find>
       <find>bad_domain</find>
@@ -195,8 +194,9 @@
       <find>go_password_change_lightbox</find>
       <find>logout</find>
       <find>go_login_center</find>
-      <find>log out</find>
       <find>nsl</find>
+      <find>log out</find>
+      <find>redirect</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -286,10 +286,10 @@
         <option value="$PROJECT_DIR$/includes/includes.php" />
         <option value="$PROJECT_DIR$/modules/admin_bar/src/public.php" />
         <option value="$PROJECT_DIR$/modules/login/src/templates/user.php" />
-        <option value="$PROJECT_DIR$/modules/login/src/templates/template.php" />
         <option value="$PROJECT_DIR$/dev/css/files/login.scss" />
         <option value="$PROJECT_DIR$/modules/login/src/functions.php" />
         <option value="$PROJECT_DIR$/modules/login/src/templates/logout.php" />
+        <option value="$PROJECT_DIR$/modules/login/src/templates/template.php" />
       </list>
     </option>
   </component>
@@ -694,12 +694,12 @@
       <workItem from="1561945908787" duration="1995000" />
       <workItem from="1561951768510" duration="1857000" />
       <workItem from="1561960133192" duration="363000" />
-      <workItem from="1561960785201" duration="180935000" />
+      <workItem from="1561960785201" duration="182045000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5691714000" />
+    <option name="totallyTimeSpent" value="5692824000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -712,6 +712,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1681" y="23" width="1746" height="1019" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4984375" visible="true" weight="0.18955399" />
       <window_info id="Structure" order="1" sideWeight="0.5015625" side_tool="true" weight="0.19340234" />
@@ -2469,36 +2470,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dev/css/files/login.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/login/src/templates/template.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="326">
-          <caret line="28" column="2" selection-start-line="28" selection-start-column="2" selection-end-line="28" selection-end-column="2" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/login/src/templates/user.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="313">
-          <caret line="28" column="21" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="21" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h3#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/modules/login/src/functions.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -2526,12 +2497,42 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/modules/login/src/templates/user.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="28" column="21" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="21" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#h3#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/modules/login/src/templates/logout.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="540">
           <caret line="36" selection-start-line="36" selection-end-line="40" />
           <folding>
             <element signature="e#6#91#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dev/css/files/login.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/login/src/templates/template.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="261">
+          <caret line="28" column="14" lean-forward="true" selection-start-line="28" selection-start-column="14" selection-end-line="28" selection-end-column="14" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
