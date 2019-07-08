@@ -5,18 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4c52fe7c-a769-413b-9a8a-3effed8b98a6" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/modules/login/src/templates/logout.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.codekit3" beforeDir="false" afterPath="$PROJECT_DIR$/config.codekit3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/admin/go_activation.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/admin/go_activation.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/css/files/login.scss" beforeDir="false" afterPath="$PROJECT_DIR$/dev/css/files/login.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/includes.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/includes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/admin_bar/src/public.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/admin_bar/src/public.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/login/includes.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/login/includes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/login/src/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/login/src/functions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/login/src/templates/template.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/login/src/templates/template.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/login/src/templates/user.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/login/src/templates/user.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/min/go_frontend.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/min/go_frontend.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/login/src/templates/logout.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/login/src/templates/logout.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -51,7 +41,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/login/src/functions.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="120">
@@ -143,11 +133,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/modules/login/src/templates/logout.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="6" column="3" lean-forward="true" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
+            <state relative-caret-position="540">
+              <caret line="36" selection-start-line="36" selection-end-line="40" />
               <folding>
                 <element signature="e#6#91#0#PHP" expanded="true" />
               </folding>
@@ -203,10 +193,10 @@
       <find>site_url</find>
       <find>redirectToLastLocation</find>
       <find>go_password_change_lightbox</find>
-      <find>nsl</find>
       <find>logout</find>
       <find>go_login_center</find>
       <find>log out</find>
+      <find>nsl</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -298,8 +288,8 @@
         <option value="$PROJECT_DIR$/modules/login/src/templates/user.php" />
         <option value="$PROJECT_DIR$/modules/login/src/templates/template.php" />
         <option value="$PROJECT_DIR$/dev/css/files/login.scss" />
-        <option value="$PROJECT_DIR$/modules/login/src/templates/logout.php" />
         <option value="$PROJECT_DIR$/modules/login/src/functions.php" />
+        <option value="$PROJECT_DIR$/modules/login/src/templates/logout.php" />
       </list>
     </option>
   </component>
@@ -704,12 +694,12 @@
       <workItem from="1561945908787" duration="1995000" />
       <workItem from="1561951768510" duration="1857000" />
       <workItem from="1561960133192" duration="363000" />
-      <workItem from="1561960785201" duration="180354000" />
+      <workItem from="1561960785201" duration="180935000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5691133000" />
+    <option name="totallyTimeSpent" value="5691714000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -722,7 +712,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1681" y="23" width="1746" height="1019" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4984375" visible="true" weight="0.18955399" />
       <window_info id="Structure" order="1" sideWeight="0.5015625" side_tool="true" weight="0.19340234" />
@@ -2510,16 +2499,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/login/src/templates/logout.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="3" lean-forward="true" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
-          <folding>
-            <element signature="e#6#91#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/modules/login/src/functions.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -2543,6 +2522,16 @@
             <element signature="n#go_remove_sections_and_seats#0;n#!!top" />
             <element signature="n#go_update_sections#0;n#!!top" />
             <element signature="n#go_update_seats#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/login/src/templates/logout.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="36" selection-start-line="36" selection-end-line="40" />
+          <folding>
+            <element signature="e#6#91#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>

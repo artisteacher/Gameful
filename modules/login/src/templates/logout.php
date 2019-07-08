@@ -32,10 +32,12 @@ get_header();
 echo "<div id ='go_login_center'>";
 
 echo "<div id='go_login_container'>";
-$log_out_link = get_site_url(null, 'logout');
+//$log_out_link = get_site_url(null, 'logout');
 
 echo "Are you sure you want to leave?<br>";
-echo "<a href='$log_out_link' class='go_logout'>Log out</a>";
+//echo "<a href='$log_out_link' class='go_logout'>Log out</a>";
+wp_loginout(home_url()); // Display "Log Out" link.
+
 
 echo "</div></div>"
 
