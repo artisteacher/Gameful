@@ -483,7 +483,7 @@ function go_blog_opener( el ) {
     var blog_post_id= jQuery( el ).attr( 'blog_post_id' );
     //console.log(el);
     //console.log(blog_post_id);
-    var nonce = GO_EVERY_PAGE_DATA.nonces.go_blog_opener;
+    var nonce = GO_FRONTEND_DATA.nonces.go_blog_opener;
     var gotoSend = {
         action:"go_blog_opener",
         _ajax_nonce: nonce,
@@ -719,7 +719,7 @@ function go_blog_submit( el, reload, required_elements = null ) {
 
     //go_enable_loading( el );
 
-    var nonce = GO_EVERY_PAGE_DATA.nonces.go_blog_submit;
+    var nonce = GO_FRONTEND_DATA.nonces.go_blog_submit;
     var suffix = jQuery( el ).attr( 'blog_suffix' );
 
     //var result = tinyMCE.activeEditor.getContent();
@@ -878,7 +878,7 @@ function go_blog_trash( el ) {
     })
         .then((result) => {
             if (result.value) {
-                var nonce = GO_EVERY_PAGE_DATA.nonces.go_blog_trash;
+                var nonce = GO_FRONTEND_DATA.nonces.go_blog_trash;
 
                 var blog_post_id= jQuery( el ).attr( 'blog_post_id' );
 
@@ -956,9 +956,6 @@ function go_get_tinymce_content_blog( source ){
             //return tinymce.get('go_blog_post').getContent();
             return go_tmce_getContent('go_blog_post');
         }
-
-
-
     }
 }
 
@@ -1069,7 +1066,7 @@ function go_show_private(target){
     //show loader
     const checked = jQuery(target).attr('checked');
     //send ajax to set variable
-    const nonce = GO_EVERY_PAGE_DATA.nonces.go_show_private;
+    const nonce = GO_FRONTEND_DATA.nonces.go_show_private;
     const userid = jQuery(target).data('userid');
 
     jQuery("#go_wrapper").hide();

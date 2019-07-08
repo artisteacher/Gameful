@@ -33,7 +33,7 @@ if ( is_user_member_of_blog() ) {
 
     echo '<div class="go_user_actions"><a href="/wp-login.php?action=logout" class="go_logout">Logout</a> – ';
     echo '<a href="#" class="go_password_change_modal">Change Password</a> – ';
-    echo '<span id="go_save_archive" style=""><a href="javascript:void(0)">Save Archive</a></span></div>';
+    echo '<span id="go_save_archive" style=""><a href="javascript:void(0)">Create Blog Archive</a></span></div>';
     //$groups = array('group_5a8fb5fbe075d');
     $groups = array();
     $fields = array('field_5cd4be08e7077', 'field_5cd1d1de5491b', 'field_5cd1d21168754', 'field_5cd1d13769aa9', 'field_5cd4f996c0d86', 'field_5cd4f7b4366c6', 'field_5cd4f7b43672b' );

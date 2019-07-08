@@ -249,7 +249,7 @@ function go_send_feedback()
 
        // $custom_fields = get_post_meta($blog_post_id, '');
        // $blog_meta = (isset($custom_fields['go_badges'][0]) ?  $custom_fields['go_badges'][0] : null);
-        $uniqueid = get_post_meta($blog_post_id, 'go_stage_uniqueid', true);
+        $uniqueid = go_post_meta($blog_post_id, 'go_stage_uniqueid', true);
 
         //$go_blog_task_id = (isset($blog_meta['go_blog_task_id'][0]) ? $blog_meta['go_blog_task_id'][0] : null);
         //$stage_num = (isset($blog_meta['go_blog_task_stage'][0]) ? $blog_meta['go_blog_task_stage'][0] : null);

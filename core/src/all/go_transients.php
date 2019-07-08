@@ -271,24 +271,66 @@ function go_post_data($post_id){
     $data = get_transient($key);
 
     if ($data !== false){
-        $task_data = $data;
+        $post_data = $data;
 
     }else {
-        $task_data = array();
-        $task = get_post($post_id);
-        $term_name = $task->post_title;
-        $task_data[] = $term_name;//0
-        $term_status = $task->post_status;
-        $task_data[] = $term_status;//1
-        $term_permalink = get_permalink($task);
-        $task_data[] = $term_permalink;//2
-        $term_custom = get_post_custom($post_id);
-        $task_data[] = $term_custom;//3
-        set_transient($key, $task_data, 3600 * 24);
+        $post_data = array();
+        $post = get_post($post_id);
+        $post_title = $post->post_title;
+        $post_data[] = $post_title;//0
+        $post_status = $post->post_status;
+        $post_data[] = $post_status;//1
+        $post_permalink = get_permalink($post);
+        $post_data[] = $post_permalink;//2
+        $post_custom = get_post_meta($post_id);
+        $post_data[] = $post_custom;//3
+        set_transient($key, $post_data, 3600 * 24);
     }
-    return $task_data;
+    return $post_data;
 
 }
+
+function go_the_title($post_id){
+    $post_data = go_post_data( $post_id );
+    $post_title = $post_data[0];
+    $post_title= (isset($post_data[0]) ? $post_data[0] : null);
+    return $post_title;
+}
+
+function go_post_status($post_id){
+    $post_data = go_post_data( $post_id );
+    $post_status = (isset($post_data[1]) ? $post_data[1] : null);
+    return $post_status;
+}
+function go_post_permalink($post_id){
+    $post_data = go_post_data( $post_id );
+    $post_permalink = (isset($post_data[2]) ? $post_data[2] : null);
+
+    return $post_permalink;
+}
+function go_post_meta($post_id, $key = '', $single = 'false'){
+    $post_data = go_post_data( $post_id );
+    ///$custom_fields = $post_data[3];
+    $custom_fields = (isset($post_data[3]) ? $post_data[3] : null);
+    if (null === $custom_fields){
+        return null;
+    }
+    if (empty($key)) {
+        $post_meta = $custom_fields;
+    }else{
+        $post_meta = (isset($custom_fields[$key]) ? $custom_fields[$key] : null);
+        if ( null !== $post_meta ) {
+            if ( $single && is_array( $post_meta ) ) {
+                return $post_meta[0];
+            } else {
+                return $post_meta;
+            }
+        }
+    }
+
+    return $post_meta;
+}
+
 
 /**
  * Update transients on post save, delete or trash
@@ -318,11 +360,11 @@ function go_update_task_post_save( $post_id ) {
         delete_transient($key);
 
         //delete new task chain transient
-        get_post($post_id);
-        $custom_fields = get_post_custom($post_id);
+        $custom_fields = get_post_meta($post_id);
         $term_id = (isset($custom_fields['go-location_map_loc'][0]) ? $custom_fields['go-location_map_loc'][0] : null);
         $key = 'go_get_chain_posts_' . $term_id;
         delete_transient($key);
+
 
 
 }

@@ -31,7 +31,7 @@ function go_buy_item() {
 
 
     $post_id = ( ! empty( $_POST["the_id"] ) ? (int) $_POST["the_id"] : 0 );
-    $custom_fields = get_post_custom( $post_id );
+    $custom_fields = go_post_meta( $post_id );
 
     $purchase_count = go_get_purchase_count($post_id, $user_id, $custom_fields);
     $purchase_limit = go_get_purchase_limit($post_id, $user_id, $custom_fields, $purchase_count);
@@ -64,7 +64,7 @@ function go_buy_item() {
         }
     }
 
-    $the_title = get_the_title($post_id);
+    $the_title = go_the_title($post_id);
     $health_mod = go_get_health_mod ($user_id);
     //$health_mod = go_get_user_loot( $user_id, 'health' );
     $xp = 0;
@@ -188,11 +188,8 @@ function go_the_lb_ajax() {
     $post_id = (int) $_POST['the_item_id'];
     $skip_locks = (isset($_POST['skip_locks']) ?  $_POST['skip_locks'] : false);
 
-    $go_post_data = go_post_data($post_id); //0--name, 1--status, 2--permalink, 3--metadata
-    $the_title = $go_post_data[0];
-    //$status = $go_post_data[1];
-    //$task_link = $go_post_data[2];
-    $custom_fields = $go_post_data[3];
+    $the_title = go_the_title($post_id);
+    $custom_fields = go_post_meta($post_id);
 
     $item_content = (isset($custom_fields['go_store_item_desc'][0]) ?  $custom_fields['go_store_item_desc'][0] : null);
     $the_content  = apply_filters( 'the_content', $item_content );

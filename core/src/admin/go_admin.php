@@ -578,44 +578,73 @@ function go_options_menu_content() {
         <h2>Options and Set Up</h2>
         <div class="go_tools_section">
 
-        <div class="go_tools_section">
-            <div class="card">
-                <h2><a href="<?php menu_page_url('go_options'); ?>">Set Up Options</a></h2>
-                <p>Here you can set your Loot Options, Map and Store Options, User Options, and Appearance</p>
+            <div class="go_tools_section">
+                <div class="card">
+                    <h2><a href="<?php menu_page_url('go_options'); ?>">Set Up Options</a></h2>
+                    <p>Here you can set your Loot Options, Map and Store Options, User Options, and Appearance</p>
+                </div>
             </div>
-        </div>
 
-        <div class="go_tools_section">
-            <div class="card">
-                <h2><a href="<?php menu_page_url('go_login_options'); ?>">Login and Registration</a></h2>
-                <p>Here you can set up how students will register and login to your site.</p>
+            <div class="go_tools_section">
+                <div class="card">
+                    <h2><a href="<?php menu_page_url('go_login_options'); ?>">Login and Registration</a></h2>
+                    <p>Here you can set up how students will register and login to your site.</p>
+                </div>
             </div>
-        </div>
-        <div class="go_tools_section">
-            <div class="card">
-                <h2><a href="<?php menu_page_url('go_feedback'); ?>">Canned Feedback</a></h2>
-                <p>Find yourself leaving the same feedback over and over again? Create a preset and save yourself time.</p>
+            <div class="go_tools_section">
+                <div class="card">
+                    <h2><a href="<?php menu_page_url('go_feedback'); ?>">Canned Feedback</a></h2>
+                    <p>Find yourself leaving the same feedback over and over again? Create a preset and save yourself time.</p>
+                </div>
             </div>
-        </div>
-        <div class="go_tools_section">
-            <div class="card">
-                <h2><a href="<?php menu_page_url('go_messages'); ?>">Canned Messages</a></h2>
-                <p>Messages can be used to reward or provide consequences for behavior.  Set or modify the presets here for common behaviors.</p>
+            <div class="go_tools_section">
+                <div class="card">
+                    <h2><a href="<?php menu_page_url('go_messages'); ?>">Canned Messages</a></h2>
+                    <p>Messages can be used to reward or provide consequences for behavior.  Set or modify the presets here for common behaviors.</p>
+                </div>
             </div>
-        </div>
-        <div class="go_tools_section">
-            <div class="card">
-                <h2><a href="<?php menu_page_url('go_bonus_loot'); ?>">Bonus Loot Defaults</a></h2>
-                <p>Create a default set of bonus loot that you can apply to any <?php echo $task_name; ?>.  Students have a chance to win bonus loot upon completion of a <?php echo $task_name; ?>. </p>
+            <div class="go_tools_section">
+                <div class="card">
+                    <h2><a href="<?php menu_page_url('go_bonus_loot'); ?>">Bonus Loot Defaults</a></h2>
+                    <p>Create a default set of bonus loot that you can apply to any <?php echo $task_name; ?>.  Students have a chance to win bonus loot upon completion of a <?php echo $task_name; ?>. </p>
+                </div>
             </div>
-        </div>
-        <div class="go_tools_section">
-            <div class="card">
-                <h2><a href="<?php menu_page_url('go_appearance'); ?>">Game On Appearance</a></h2>
-                <p>Adjust the appearance of game on menus and pages.</p>
+            <div class="go_tools_section">
+                <div class="card">
+                    <h2><a href="<?php menu_page_url('go_appearance'); ?>">Game On Appearance</a></h2>
+                    <p>Adjust the appearance of game on menus and pages.</p>
+                </div>
             </div>
+            <?php
+            if (!is_multisite()) {
+                ?>
+                <div class="go_tools_section">
+                    <div class="card">
+                        <h2><a href="<?php menu_page_url('go_performance'); ?>">Performance</a></h2>
+                        <p>Rewrite slugs, and image resizing.</p>
+                    </div>
+                </div>
+                <?php
+            }
+            ?>
+
         </div>
-        </div>
+        <?php
+        if (is_multisite() && get_current_blog_id() == 1) {
+            ?>
+            <h3>Site-Wide Settings</h3>
+            <div class="go_tools_section">
+
+                <div class="go_tools_section">
+                    <div class="card">
+                        <h2><a href="<?php menu_page_url('go_performance'); ?>">Performance</a></h2>
+                        <p>Rewrite slugs, and image resizing.</p>
+                    </div>
+                </div>
+            </div>
+            <?php
+        }
+        ?>
     </div>
 
 

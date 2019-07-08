@@ -86,33 +86,23 @@ add_filter('acf/load_field/key=field_5b52731ddd4f7', 'acf_load_xp_levels');
  * This is needed because the options page can change some rewrite rules
  */
 function acf_flush_rewrite_rules( $post_id ) {
-
     if ($post_id == 'options') {
         update_option( 'go-flush-rewrite-rules', 1 );
         //flush_rewrite_rules(true);
     }
-
 }
-
 add_action('acf/save_post', 'acf_flush_rewrite_rules', 2);
 
 function go_late_init_flush() {
-
     if ( ! $option = get_option( 'go-flush-rewrite-rules' ) ) {
         return false;
     }
-
     if ( $option == 1 ) {
-
         flush_rewrite_rules();
         update_option( 'go-flush-rewrite-rules', 0 );
-
     }
-
     return true;
-
 }
-
 add_action( 'init', 'go_late_init_flush', 999999 );
 
 /**
@@ -161,7 +151,12 @@ function default_value_field_5b526d2e7957e($value, $post_id, $field) {
 add_filter('acf/load_value/key=field_5b526d2e7957e', 'default_value_field_5b526d2e7957e', 10, 3);
 
 
-
-
-
+/**
+ * Only show the top level terms for a taxonomy
+ */
+function go_top_terms( $args, $field, $post_id  ){
+    $args['parent'] = 0;
+    return $args;
+}
+add_filter('acf/fields/taxonomy/query/key=field_5b017d76920ec', 'go_top_terms', 10, 3);
 

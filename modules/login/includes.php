@@ -20,10 +20,10 @@ if ( !is_admin() ) {
         $acf_location = dirname(__DIR__) . '/../includes/acf/acf.php';
         include($acf_location);
 
-        $acf_location = dirname(__DIR__) . '/../custom-acf-fields/acf-level2-taxonomy/acf-level2-taxonomy.php';
+        $acf_location = dirname(__DIR__) . '/../includes/custom-acf-fields/acf-level2-taxonomy/acf-level2-taxonomy.php';
         include_once($acf_location);
 
-        $location = dirname(__DIR__) . '/../includes/acf-recaptcha-master/acf-recaptcha.php';
+        $location = dirname(__DIR__) . '/../includes/custom-acf-fields/acf-recaptcha-master/acf-recaptcha.php';
         include_once($location);
         //include_once('custom-acf-fields/acf-level2-taxonomy/acf-level2-taxonomy.php');
         //include_once('public/public.php');

@@ -1053,7 +1053,7 @@ function go_send_message($skip_ajax = false, $title = '', $message = '', $type =
 
             if ($blog_post_id != 0 && !empty($blog_post_id)) {
 
-                $blog_meta = get_post_custom($blog_post_id);
+                $blog_meta = get_post_meta($blog_post_id);
                 $stage_num = (isset($blog_meta['go_blog_task_stage'][0]) ? $blog_meta['go_blog_task_stage'][0] : null);
                 $bonus_stage_num = (isset($blog_meta['go_blog_bonus_stage'][0]) ? $blog_meta['go_blog_bonus_stage'][0] : null);
                 $aTable = "{$wpdb->prefix}go_actions";

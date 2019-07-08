@@ -4,7 +4,7 @@
     "fields": [
         {
             "key": "field_5d1b02165b83f",
-            "label": "Login Page",
+            "label": "Login Options",
             "name": "",
             "type": "accordion",
             "instructions": "",
@@ -91,6 +91,52 @@
             ]
         },
         {
+            "key": "field_5b017d76920ec",
+            "label": "Default Map",
+            "name": "go_locations_map_default",
+            "type": "taxonomy",
+            "instructions": "This map will be the first map shown on visiting the map page after every login. If the map page is the default page, this is the shown at loagin.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "taxonomy": "task_chains",
+            "field_type": "select",
+            "allow_null": 0,
+            "add_term": 0,
+            "save_terms": 0,
+            "load_terms": 0,
+            "return_format": "id",
+            "multiple": 0
+        },
+        {
+            "key": "field_5cd8b39d8524a",
+            "label": "Logo",
+            "name": "go_login_logo",
+            "type": "image",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "id",
+            "preview_size": "thumbnail",
+            "library": "uploadedTo",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": ""
+        },
+        {
             "key": "field_5d1b019a5b83d",
             "label": "Registration",
             "name": "",
@@ -171,7 +217,7 @@
                 {
                     "key": "field_5cd8b34685248",
                     "label": "Code",
-                    "name": "go_registration_code",
+                    "name": "code",
                     "type": "text",
                     "instructions": "Code, word or phrase that users must type to register.",
                     "required": 0,
@@ -246,7 +292,15 @@
                     "type": "repeater",
                     "instructions": "",
                     "required": 0,
-                    "conditional_logic": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5d1adac53770e",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
                     "wrapper": {
                         "width": "",
                         "class": "",
@@ -264,7 +318,7 @@
                             "name": "domain",
                             "type": "text",
                             "instructions": "",
-                            "required": 0,
+                            "required": 1,
                             "conditional_logic": 0,
                             "wrapper": {
                                 "width": "",
@@ -315,7 +369,15 @@
             "type": "group",
             "instructions": "",
             "required": 0,
-            "conditional_logic": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5d1a5479aac67",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
             "wrapper": {
                 "width": "",
                 "class": "",
@@ -323,6 +385,42 @@
             },
             "layout": "block",
             "sub_fields": [
+                {
+                    "key": "field_5d210a917ded6",
+                    "label": "Display Name",
+                    "name": "display_name",
+                    "type": "group",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "row",
+                    "sub_fields": [
+                        {
+                            "key": "field_5d210a917ded7",
+                            "label": "Show",
+                            "name": "toggle",
+                            "type": "true_false",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "message": "",
+                            "default_value": 0,
+                            "ui": 1,
+                            "ui_on_text": "",
+                            "ui_off_text": ""
+                        }
+                    ]
+                },
                 {
                     "key": "field_5d1a61a64732e",
                     "label": "Avatar",
@@ -1080,5 +1178,5 @@
     "active": 1,
     "description": "",
     "recaptcha": 0,
-    "modified": 1562284568
+    "modified": 1562563969
 }

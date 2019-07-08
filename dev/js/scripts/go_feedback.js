@@ -241,7 +241,7 @@ function go_reader_update() {
     var limit = jQuery('#go_posts_num').val();
     //console.log("unread:" + unread);
 
-    var nonce = GO_EVERY_PAGE_DATA.nonces.go_filter_reader;
+    var nonce = GO_FRONTEND_DATA.nonces.go_filter_reader;
     //console.log("refresh" + nonce);
     //console.log("stats");
     jQuery.ajax({
@@ -404,7 +404,7 @@ function go_num_posts(){
     const where = jQuery('#go_num_posts').data('where');
     const order = jQuery('#go_num_posts').data('order');
     //const tQuery = jQuery('#go_num_posts').data('tQuery');
-    const nonce = GO_EVERY_PAGE_DATA.nonces.go_num_posts;
+    const nonce = GO_FRONTEND_DATA.nonces.go_num_posts;
 
     jQuery.ajax({
         url: MyAjax.ajaxurl,
@@ -456,7 +456,7 @@ function go_num_posts(){
 }
 
 function go_reader_bulk_read(target){
-    var nonce = GO_EVERY_PAGE_DATA.nonces.go_reader_bulk_read;
+    var nonce = GO_FRONTEND_DATA.nonces.go_reader_bulk_read;
 
     const query = jQuery('#go_num_posts').data('query');
     const where = jQuery('#go_num_posts').data('where');
@@ -495,7 +495,7 @@ function go_reader_bulk_read(target){
 
 function go_reader_read_printed(){
     console.log('go_reader_read_printed');
-    var nonce = GO_EVERY_PAGE_DATA.nonces.go_reader_read_printed;
+    var nonce = GO_FRONTEND_DATA.nonces.go_reader_read_printed;
     var postids = new Array();
     jQuery('.go_blog_post_wrapper').each(function( index ) {
         var post_id = jQuery( this ).data('postid') ;

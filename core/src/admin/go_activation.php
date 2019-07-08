@@ -91,7 +91,6 @@ function go_flush_rewrites() {
     //It might seem unnecessary to run them every load with init but is needed because
     //it makes sure the rewrites are always available even if another plugin flushes the rules.
     go_blogs_rewrite();// on init priority 10 (default), adds rewrite rule
-    go_map_page();// on init priority 10 (default), adds rewrite rule
     go_store_page();// on init priority 10 (default), adds rewrite rule
     go_reader_page();// on init priority 10 (default), adds rewrite rule
     go_login_rewrite(); // on init priority 10 (default), adds rewrite rule
@@ -100,6 +99,10 @@ function go_flush_rewrites() {
     go_registration_rewrite();// on init priority 10 (default), adds rewrite rule
     go_leaderboard_rewrite();// on init priority 10 (default), adds rewrite rule
     go_join_rewrite();
+    $go_map_switch = get_option( 'options_go_locations_map_toggle' );
+    if ($go_map_switch) {
+        go_map_page();// on init priority 10 (default), adds rewrite rule
+    }
 
     flush_rewrite_rules();
     //use a tool to flush them on a multisite as needed.

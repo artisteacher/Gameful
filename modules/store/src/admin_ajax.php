@@ -80,7 +80,9 @@ function go_make_store_html() {
                         continue;
                     }
                     $store_item_id = $go_store_obj->ID;
-                    $custom_fields = get_post_custom($store_item_id);
+
+                    $custom_fields = go_post_meta( $store_item_id );
+
                     $xp_toggle = (isset($custom_fields['go_loot_reward_toggle_xp'][0]) ?  $custom_fields['go_loot_reward_toggle_xp'][0] : null);
                     $xp_value = (isset($custom_fields['go_loot_loot_xp'][0]) ?  $custom_fields['go_loot_loot_xp'][0] : null);
                     $gold_toggle = (isset($custom_fields['go_loot_reward_toggle_gold'][0]) ?  $custom_fields['go_loot_reward_toggle_gold'][0] : null);

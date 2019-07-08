@@ -103,8 +103,8 @@ function go_lb_opener( id ) {
 //called when the "buy" button is clicked.
 function goBuytheItem( id, count ) {
 
-	var nonce = GO_BUY_ITEM_DATA.nonces.go_buy_item;
-	var user_id = GO_BUY_ITEM_DATA.userID;
+	var nonce = GO_FRONTEND_DATA.nonces.go_buy_item;
+	var user_id = GO_FRONTEND_DATA.userID;
 
 	jQuery( document ).ready( function( jQuery ) {
 		var gotoBuy = {
@@ -287,7 +287,7 @@ function go_max_purchase_limit(){
 }
 
 function go_count_item( item_id ) {
-	var nonce = GO_BUY_ITEM_DATA.nonces.go_get_purchase_count;
+	var nonce = GO_FRONTEND_DATA.nonces.go_get_purchase_count;
 	jQuery.ajax({
 		url: MyAjax.ajaxurl,
 		type: 'POST',

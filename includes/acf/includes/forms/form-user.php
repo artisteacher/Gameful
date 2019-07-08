@@ -294,7 +294,8 @@ class ACF_Form_User {
 	*/
 	
 	function save_user( $user_id ) {
-        // verify nonce
+		
+		// verify nonce
 		if( !acf_verify_nonce('user') ) {
 			return $user_id;
 		}

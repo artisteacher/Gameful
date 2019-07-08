@@ -1,5 +1,5 @@
 #go_login_center {
-  display:none; width:350px; margin: auto;
+  display:none; width:350px; margin: 150px auto 0 auto;
 
   #go_login_container {
     margin-top: 20px;
@@ -20,4 +20,9 @@
   .login-submit {float: right;}
 }
 
-
+#go_profile_wrapper{
+  .success{
+    background: lightgreen;
+    padding: 5px;
+  }
+}

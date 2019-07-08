@@ -23,8 +23,8 @@ jQuery(document).ready(function($){
 	}
 
     if (go_map_toggle == 0){
-        jQuery(".go_map").hide();
-        jQuery('.acf-th[data-name="map"]').hide();
+        //jQuery(".go_map").hide();
+        //jQuery('.acf-th[data-name="map"]').hide();
     }
 
     if (go_gold_toggle == 0){

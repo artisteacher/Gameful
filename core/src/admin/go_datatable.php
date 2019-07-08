@@ -231,6 +231,7 @@ function go_install_data ($reset = false) {
         'options_go_stats_leaderboard_toggle' => 1,
         'options_go_stats_leaderboard_name' => 'Leaderboard',
         'options_go_locations_map_toggle' => 1,
+        'options_go_locations_map_name' => 'Map',
         'options_go_locations_map_title' => 'Map',
         'options_go_locations_map_map_link' => 'map',
         'options_go_loot_name' => 'Loot',
@@ -240,13 +241,13 @@ function go_install_data ($reset = false) {
 
         'options_go_loot_xp_name' => 'Experience Points',
         'options_go_loot_gold_name' => 'Gold',
-        'options_go_loot_health_name' => 'Health',
+        'options_go_loot_health_name' => 'Reputation',
 
         'options_go_loot_xp_abbreviation' => 'XP',
         'options_go_loot_gold_abbreviation' => 'G',
-        'options_go_loot_health_abbreviation' => 'HP',
+        'options_go_loot_health_abbreviation' => 'REP',
 
-        'options_go_loot_gold_currency' => 'currency',
+        'options_go_loot_gold_currency' => 'coins',
         'options_go_loot_gold_coin_names_gold_coin_name' => 'Gold',
         'options_go_loot_gold_coin_names_gold_coin_abbreviation' => 'G',
         'options_go_loot_gold_coin_names_silver_name' => 'Silver',
@@ -254,7 +255,9 @@ function go_install_data ($reset = false) {
         'options_go_loot_gold_coin_names_copper_name' => 'Copper',
         'options_go_loot_gold_coin_names_copper_abbreviation' => 'C',
 
-
+        'options_go_loot_health_starting' => 50,
+        'options_go_loot_health_bankruptcy_penalty' => 5,
+        'options_go_loot_health_max_health_mod' => 200,
 
         'options_go_loot_xp_levels_name_singular' => 'Level',
         'options_go_loot_xp_levels_name_plural' => 'Levels',

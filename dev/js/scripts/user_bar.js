@@ -7,7 +7,7 @@ jQuery( document ).ready( function() {
     //sets the media queries based on the current width of the user bar
     console.log("UBW" + user_bar_width);
     document.querySelector('style').textContent +=
-        "@media screen and (max-width:" + user_bar_width_1 + "px) { #go_user_bar .narrow_content  { display: block !important; } " +
+        "@media screen and (max-width:" + user_bar_width_1 + "px) { #go_user_bar .narrow_content  { display: table-cell !important; } " +
         "#go_user_bar .wide_content {display: none !important;} " +
         "#go_user_bar {height: 78px !important;} " +
         "#go_user_bar .go_player_bar_text {display: none !important;}" +

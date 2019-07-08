@@ -49,32 +49,6 @@ function go_admin_remove_notification() {
 }
 
 
-/**
- *
- */
-function go_deactivate_plugin() {
-    if ( ! current_user_can( 'manage_options' ) ) {
-        die( -1 );
-    }
-
-    if ( !is_user_logged_in() ) {
-        echo "login";
-        die();
-    }
-
-
-    //check_ajax_referer( 'go_deactivate_plugin_' . get_current_user_id() );
-    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_deactivate_plugin' ) ) {
-        echo "refresh";
-        die( );
-    }
-
-    include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-    $plugin = plugin_basename( __FILE__ );
-    deactivate_plugins( $plugin );
-    die();
-}
-
 //Get the time on task from two times as timestamps
 //or as one variable passed as a number of seconds
 /**

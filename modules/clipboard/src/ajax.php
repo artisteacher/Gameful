@@ -1285,12 +1285,7 @@ function go_clipboard_activity_dataloader_ajax(){
         }
         $row[] = $diff;
 
-
-        $go_post_data = go_post_data($action['post_id']);
-        //$the_title = $go_post_data[0];
-        //$status = $go_post_data[1];
-        //$task_link = $go_post_data[2];
-        $custom_fields = $go_post_data[3];
+        $custom_fields = go_post_meta($action['post_id']);
 
         $bonus_count = 0;
         if ($action['status'] >= 0) {

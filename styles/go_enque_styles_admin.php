@@ -1,5 +1,7 @@
 <?php
 
+
+add_action( 'admin_enqueue_scripts', 'go_admin_styles' );
 function go_admin_styles () {
     global $go_css_version;
     /*

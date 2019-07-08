@@ -19,6 +19,20 @@ if ($go_debug){
     function stop_heartbeat() {
             wp_deregister_script('heartbeat');
     }
+
+    //if currently coding, set the ACF save point
+    //if should be off for releases to stop accidental changing of the ACF data
+    if (is_admin()){
+        //add_filter('acf/settings/show_admin', '__return_false');
+        add_filter('acf/settings/save_json', 'go_acf_json_save_point');
+        function go_acf_json_save_point( $path ) {
+            // update path
+            $path = (plugin_dir_path(__FILE__) . 'acf-json');
+            // return
+            return $path;
+        }
+
+    }
 }
 
 $go_js_version = 5.04;
@@ -50,16 +64,17 @@ function go_acf_json_load_point( $paths ) {
 }
 
 
+
+
 ////////////////////////////
 /// CONDITIONAL INCLUDES
 /////////////////////////////
 //INCLUDE CSS AND JS FILES
 if ( !is_admin() ) { //IF PUBLIC FACING PAGE
     include_once('js/go_enque_js.php');
-    add_action( 'wp_enqueue_scripts', 'go_scripts' );
+    include_once('js/localize_scripts.php');
 
     include_once('styles/go_enque_styles.php');
-    add_action( 'wp_enqueue_scripts', 'go_styles' );
 }
 else if ( defined( 'DOING_AJAX' )) { //ELSE THIS IS AN AJAX CALL
     //if this is an ajax call, skip the enqueue functions
@@ -68,85 +83,21 @@ else {//ELSE THIS IS AN ADMIN PAGE
 
     //admin js
     include_once('js/go_enque_js_admin.php');
+    include_once('js/localize_scripts.php');
 
     //admin css
     include_once('styles/go_enque_styles_admin.php');
-
-    add_action( 'admin_enqueue_scripts', 'go_admin_scripts' );
-    add_action( 'admin_enqueue_scripts', 'go_admin_styles' );
 }
 
 //INCLUDE PHP
+//These files have their own conditional includes
 
-
-if ( defined( 'DOING_AJAX' )) {
-
-    //add_action('wp_ajax_check_if_parent_term', 'check_if_parent_term'); //for term order //OK
-    $action  = (isset($_POST['action']) ?  $_POST['action'] : null);
-    $action = substr($action, 0 , 3);
-    if ($action==='acf') {
-        $acf_location = dirname(__FILE__) . '/includes/acf/acf.php';
-        include($acf_location);
-    }
-
-    //INCLUDE ACF and ACF custom fields --this might only be needed on ajax from admin pages (is there a conditional for that?)
-    include_once('includes/acf/acf.php');
-    include_once('includes/wp-acf-unique_id-master/acf-unique_id.php');
-    include_once('custom-acf-fields/acf-order-posts/acf-order-posts.php');
-    include_once('custom-acf-fields/go-acf-functions.php');
-    include_once('custom-acf-fields/acf-level2-taxonomy/acf-level2-taxonomy.php');
-    include_once('custom-acf-fields/acf-quiz/acf-quiz.php');
-
-}
-else if ( is_admin() ) {
-
-    //INCLUDE ACF and ACF custom fields
-    include_once('includes/acf/acf.php');
-    include_once('includes/wp-acf-unique_id-master/acf-unique_id.php');
-    include_once('includes/acf-recaptcha-master/acf-recaptcha.php');
-    include_once('custom-acf-fields/acf-order-posts/acf-order-posts.php');
-    include_once('custom-acf-fields/go-acf-functions.php');
-    include_once('custom-acf-fields/acf-level2-taxonomy/acf-level2-taxonomy.php');
-    include_once('custom-acf-fields/acf-quiz/acf-quiz.php');
-
-    //currently coding, set the ACF save point
-    //if should be off for releases to stop accidental changing of the ACF data
-    if ($go_debug) {
-        //add_filter('acf/settings/show_admin', '__return_false');
-        add_filter('acf/settings/save_json', 'go_acf_json_save_point');
-        function go_acf_json_save_point( $path ) {
-            // update path
-            $path = (plugin_dir_path(__FILE__) . 'acf-json');
-            // return
-            return $path;
-        }
-    }
-
-    //These can be moved to a regular js file--they don't need to be separate.
-    include_once('custom-acf-fields/go_enque_js_acf.php');
-    add_action( 'admin_enqueue_scripts', 'go_acf_scripts' );
-
-}
-else{
-    //INCLUDES on Public Pages
-    //include_once('includes/acf/acf.php');
-    include_once('custom-acf-fields/go-acf-functions.php');
-
-
-    //DEPENDENCY
-    //Allows uploading on frontend
-    include( 'includes/wp-frontend-media-master/frontend-media.php' );
-}
-
-
-////////////////////////
-//INCLUDE ON ALL PAGES
-/////////////////////////
-//these core files include the functions that are used across several modules
-//the core/includes.php file has conditionals to load the functions as needed.
+//Core files include the functions that are used across several modules
 include_once('core/includes.php');
 
-//Modules have their own conditional includes
+include_once('includes/includes.php');
+
+//Modules
 include_once('modules/admin_bar/includes.php');
 include_once('modules/archive/includes.php');
 include_once('modules/clipboard/includes.php');
@@ -262,14 +213,3 @@ if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
     require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
 }
 
-function go_is_ms_active_network_wide(){
-    $myfile = plugin_basename(__FILE__);
-    $is_ms = is_plugin_active_for_network($myfile );
-    return $is_ms;
-}
-
-function go_is_plugin_active(){//for the current blog
-    $myfile = plugin_basename(__FILE__);
-    $is_ms = is_plugin_active($myfile );
-    return $is_ms;
-}

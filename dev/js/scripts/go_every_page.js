@@ -28,7 +28,6 @@ jQuery( document ).ready( function() {
         console.log('Game On Debug Mode On');
     }
 
-
     jQuery('#wp-admin-bar-go_add_quest_from_template, .go_add_quest_from_template').on("click", function(e){
         go_new_task_from_template();
     });
@@ -84,12 +83,15 @@ function go_new_task_from_template(){
 
         },
         success: function( res ) {
-            //console.log(res);
+
             let error = go_ajax_error_checker(res);
-            if (error == 'true') return;
+            if (error == 'true') {
+                return;
+            }
 
             if ( -1 !== res ) {
-
+                console.log('winning');
+                console.log(res);
                 if (res){
                     console.log(res);
                     jQuery.featherlight.close();

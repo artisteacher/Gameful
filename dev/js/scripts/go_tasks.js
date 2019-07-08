@@ -459,7 +459,7 @@ function go_update_admin_view(go_admin_view){
         type: "POST",
         url : MyAjax.ajaxurl,
         data: {
-            _ajax_nonce: GO_EVERY_PAGE_DATA.nonces.go_update_admin_view,
+            _ajax_nonce: GO_FRONTEND_DATA.nonces.go_update_admin_view,
             'action':'go_update_admin_view',
             //user_id: go_task_data.userID,
             'go_admin_view' : go_admin_view,

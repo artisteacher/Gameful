@@ -271,17 +271,19 @@ function go_new_task_from_template($admin_bar=true){
 		'numberposts' => -1
 		// 'order'    => 'ASC'
 	]);
-	if ($templates) {
+
 		//create a select dropdown
 		if($admin_bar) {
 			echo '<h3>Choose a Template:</h3>';
 		}
 
 		echo '<select class="go_new_task_from_template" name="new_task"><option value="0">New Empty '.$task_name.'</option>';
-		foreach ($templates as $template){
-			$post_id = $template->ID;
-			$title = $template->post_title;
-			echo '<option value="' .$post_id.'">' .$title.'</option>';
+		if ($templates) {
+			foreach ($templates as $template){
+				$post_id = $template->ID;
+				$title = $template->post_title;
+				echo '<option value="' .$post_id.'">' .$title.'</option>';
+			}
 		}
 		echo '</select>';
 		if($admin_bar) {
@@ -296,7 +298,7 @@ function go_new_task_from_template($admin_bar=true){
 
 		// $url_new_task = get_admin_url(null, 'post-new.php?post_type=tasks');
 		// echo '<br><br>-or-<br><br><p style="float:right;"><a href="'. $url_new_task .'">Create New Empty '.$task_name.'</a></p>';
-	}
+
 
 
 

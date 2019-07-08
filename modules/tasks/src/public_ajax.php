@@ -51,9 +51,9 @@ function go_task_shortcode($atts, $content = null ) {
     }
     else { $is_unlocked = false;}
     //Get all the custom fields
-    //$custom_fields = get_post_custom( $post_id ); // Just gathering some data about this task with its post id
-    $go_task_data = go_post_data($post_id); //0--name, 1--status, 2--permalink, 3--metadata
-    $custom_fields = $go_task_data[3];
+    //$custom_fields = go_post_meta( $post_id ); // Just gathering some data about this task with its post id
+    $custom_fields = go_post_meta($post_id); //0--name, 1--status, 2--permalink, 3--metadata
+
 
     /**
      * Get options needed for task display
@@ -95,7 +95,8 @@ function go_task_shortcode($atts, $content = null ) {
     );
 
     //$redirect_url = go_get_user_redirect($user_id);
-    $redirect_url = $_SERVER['HTTP_REFERER'];
+    //$redirect_url = $_SERVER['HTTP_REFERER'];
+    $redirect_url = (isset($_SERVER['HTTP_REFERER']) ?  $_SERVER['HTTP_REFERER'] : go_get_user_redirect($user_id));
 
 
     wp_localize_script(
@@ -691,7 +692,7 @@ function go_print_bonus_stage ($user_id, $post_id, $custom_fields, $all_content)
 function go_print_outro ($user_id, $post_id, $custom_fields, $stage_count, $status, $all_content){
     global $wpdb;
     $go_task_table_name = "{$wpdb->prefix}go_tasks";
-    //$custom_fields = get_post_custom( $post_id );
+    //$custom_fields = go_post_meta( $post_id );
     $task_name = strtolower( get_option( 'options_go_tasks_name_singular' ) );
     $outro_message = (isset($custom_fields['go_outro_message'][0]) ?  $custom_fields['go_outro_message'][0] : null);
     //$outro_message = do_shortcode($outro_message);
@@ -1034,11 +1035,8 @@ function go_task_render_chain_pagination ( $task_id, $custom_fields ) {
             $prev_key = (int)$this_task_order - 1;
             $prev_task = $chain_order[$prev_key];
             if (is_int($prev_task)){
-                $go_task_data = go_post_data($prev_task); //0--name, 1--status, 2--permalink, 3--metadata
-                $task_title = $go_task_data[0];
-                //$status = $go_task_data[1];
-                $task_link = $go_task_data[2];
-                //$custom_fields = $go_task_data[3];
+                $task_title = go_the_title($prev_task);
+                $task_link = go_post_permalink($prev_task);
 
                 $prev_link = $task_link;
                 $prev_title = $task_title;
@@ -1049,10 +1047,9 @@ function go_task_render_chain_pagination ( $task_id, $custom_fields ) {
         if ($count > $next_key){
             $next_task = $chain_order[$next_key];
             if (is_int($next_task)){
-                $go_task_data = go_post_data($next_task); //0--name, 1--status, 2--permalink, 3--metadata
-                $task_title = $go_task_data[0];
+                $task_title = go_the_title($next_task);
                 //$status = $go_task_data[1];
-                $task_link = $go_task_data[2];
+                $task_link = go_post_permalink($next_task);
                 //$custom_fields = $go_task_data[3];
 
 

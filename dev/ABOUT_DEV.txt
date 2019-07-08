@@ -1,0 +1,5 @@
+This directory contains js and css files that are combined and minified.
+
+These files are for developer use only and are not loaded by the plugin.
+
+The files in the includes folder are external libraries and dependencies that are combined for use on the site.

@@ -103,3 +103,210 @@ function go_create_user_blog_archive(){
 
 <?php
 }
+
+
+
+function go_update_go_to_v5(){
+    /*
+     * Not run from ajax anymore--just runs on activation if needed.
+        if ( !is_user_logged_in() ) {
+            echo "login";
+            die();
+        }
+
+        //check_ajax_referer( 'go_upgade4' );
+        if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_update_go_ajax_v5' ) ) {
+            echo "refresh";
+            die( );
+        }
+
+    */
+
+    $query = new WP_Query(array(
+        'post_type' => 'tasks',
+        'posts_per_page' => 10000
+    ));
+
+
+    while ($query->have_posts()) {
+        $query->the_post();
+        $post_id = get_the_ID();
+
+        //get number of stages
+        $stage_count = get_post_meta($post_id, 'go_stages', true);
+        //UPDATE ALL STAGES
+        for ($i = 0; $i <= $stage_count; $i++) {
+            //add a uniqueID to the stage
+            update_post_meta($post_id, 'go_stages_' . $i . '_uniqueid', $post_id . "_v4_stage" . $i);
+
+            //this is used to set the required elements on the new repeater field
+            $element_count = 0;
+
+            //move old elements over
+            $title = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_title', true);
+            update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_title', $title);
+
+            $private = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_private', true);
+            update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_private', $private);
+
+            $text = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_blog_text_toggle', true);
+            update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_text_toggle', $text);
+
+            $min = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_blog_text_minimum_length', true);
+            update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_text_minimum_length', $min);
+
+            $check_type = get_post_meta($post_id, 'go_stages_' . $i . '_check', true);
+
+            if ($check_type == 'none' || $check_type == 'quiz' || $check_type == 'password'){
+                update_post_meta($post_id, 'go_stages_' . $i . '_check_v5', $check_type);
+            }else{
+                update_post_meta($post_id, 'go_stages_' . $i . '_check_v5', 'blog');
+            }
+
+            //update the required elements, if the old check was a blog
+            if ($check_type == 'blog') {
+                //if a URL was required, add it as a new required element
+                $url = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_url_toggle', true);
+                if ($url) {
+                    update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $element_count . '_element', 'URL');
+                    $validate = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_url_url_validation', true);
+                    if (!empty($validate)) {
+                        update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $element_count . '_requirements_url_validation', $validate);
+                    }
+                    // add a uniqueID
+                    update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $element_count . '_uniqueid', $post_id."_v4_s".$i."_url");
+                    $element_count++;
+                }
+
+                //if a file upload was required, add it as a new required element
+                $file = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_attach_file_toggle', true);
+                if ($file) {
+                    update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $element_count . '_element', 'File');
+                    $restrict = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_attach_file_restrict_file_types', true);
+                    if ($restrict) {
+                        $types = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_attach_file_allowed_types', true);
+                        update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $element_count . '_requirements_allowed_types', $types);
+                    }
+                    // add a uniqueID
+                    update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $element_count . '_uniqueid', $post_id."_v4_s".$i."_file");
+                    $element_count++;
+                }
+
+                //if video was required, add it as a new required element
+                $video = get_post_meta($post_id, 'go_stages_' . $i . '_blog_options_video', true);
+                if ($video) {
+                    update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $element_count . '_element', 'Video');
+                    // add a uniqueID
+                    update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $element_count . '_uniqueid', $post_id."_v4_s".$i."_video");
+                    $element_count++;
+                }
+                //add the count of the required elements. These are the repeater rows.
+                update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements', $element_count);
+            }
+            //update if it was a file upload
+            //add file as the only required element on the blog
+            else if($check_type=='upload'){
+                update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_0_element', 'File');
+                update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements', 1);
+                //update_post_meta($post_id, 'go_stages_' . $i . '_check', 'blog');
+                // add a uniqueID
+                update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $element_count . '_uniqueid', $post_id."_v4_s".$i."_file");
+
+            }
+            //update if it was a URL
+            //add URL as the only required element on the blog
+            else if($check_type=='URL'){
+                update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_0_element', 'URL');
+                update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements', 1);
+                //update_post_meta($post_id, 'go_stages_' . $i . '_check', 'blog');
+                // add a uniqueID
+                update_post_meta($post_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $element_count . '_uniqueid', $post_id."_v4_s".$i."_url");
+
+            }
+        }//END STAGE UPDATE
+
+        //BONUS STAGE UPDATE
+        $bonus_element_count = 0;
+        $check_type = get_post_meta($post_id, 'go_bonus_stage_check', true);
+        if ($check_type == 'none' || $check_type == 'quiz' || $check_type == 'password'){
+            update_post_meta($post_id, 'go_bonus_stage_check_v5', $check_type);
+        }else{
+            update_post_meta($post_id, 'go_bonus_stage_check_v5', 'blog');
+        }
+
+        if ($check_type == 'blog') {
+            $private = get_post_meta($post_id, 'go_bonus_stage_blog_options_bonus_private', true);
+            update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_private', $private);
+
+            $text = get_post_meta($post_id, 'go_bonus_stage_blog_options_bonus_blog_text_toggle', true);
+            update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_blog_text_toggle', $text);
+
+            $min = get_post_meta($post_id, 'go_bonus_stage_blog_options_bonus_blog_text_minimum_length', true);
+            update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_blog_text_minimum_length', $min);
+
+
+            //if URL was required, add it as a new required element
+            $url = get_post_meta($post_id, 'go_bonus_stage_blog_options_bonus_url_toggle', true);
+            if ($url) {
+                update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_blog_elements_' . $bonus_element_count . '_element', 'URL');
+                $validate = get_post_meta($post_id, 'go_bonus_stage_blog_options_bonus_url_url_validation', true);
+                if (!empty($validate)) {
+                    update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_blog_elements_' . $bonus_element_count . '_requirements_url_validation', $validate);
+                }
+                $bonus_element_count++;
+                // add a uniqueID
+                update_post_meta($post_id, 'go_bonus_stage__blog_options_v5_blog_elements_' . $bonus_element_count . '_uniqueid', $post_id."_v4_bonus_url");
+
+            }
+
+            //if file was required, add it as a new required element
+            $file = get_post_meta($post_id, 'go_bonus_stage_blog_options_bonus_attach_file_toggle', true);
+            if ($file) {
+                update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_blog_elements_' . $bonus_element_count . '_element', 'File');
+                $restrict = get_post_meta($post_id, 'go_bonus_stage_blog_options_bonus_attach_file_restrict_file_types', true);
+                if ($restrict) {
+                    $types = get_post_meta($post_id, 'go_bonus_stage_blog_options_bonus_attach_file_allowed_types', true);
+                    update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_blog_elements_' . $bonus_element_count . '_requirements_allowed_types', $types);
+                }
+                $bonus_element_count++;
+                // add a uniqueID
+                update_post_meta($post_id, 'go_bonus_stage__blog_options_v5_blog_elements_' . $bonus_element_count . '_uniqueid', $post_id."_v4_bonus_file");
+            }
+
+            //if video was required, add it as a new required element
+            $video = get_post_meta($post_id, 'go_bonus_stage_blog_options_bonus_video', true);
+            if ($video) {
+                update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_blog_elements_' . $bonus_element_count . '_element', 'Video');
+                $bonus_element_count++;
+                // add a uniqueID
+                update_post_meta($post_id, 'go_bonus_stage__blog_options_v5_blog_elements_' . $bonus_element_count . '_uniqueid', $post_id."_v4_bonus_video");
+            }
+
+            update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_blog_elements', $bonus_element_count);
+
+        }
+        //update if it was a file upload on bonus.
+        //add File as the only required element on the blog
+        else if($check_type=='upload'){
+            update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_blog_elements_0_element', 'File');
+            update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_blog_elements', 1);
+            //update_post_meta($post_id, 'go_bonus_stage_check', 'blog');
+            // add a uniqueID
+            update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_blog_elements_' . $bonus_element_count . '_uniqueid', $post_id."_v4_bonus_file");
+        }
+        //update if it was a URL on bonus
+        //add URL as the only required element on the blog
+        else if($check_type=='URL'){
+            update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_blog_elements_0_element', 'URL');
+            update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_blog_elements', 1);
+            //update_post_meta($post_id, 'go_bonus_stage_check', 'blog');
+            // add a uniqueID
+            update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_blog_elements_' . $bonus_element_count . '_uniqueid', $post_id."_v4_bonus_url");
+        }
+        $key = 'go_post_data_' . $post_id;
+        delete_transient($key);
+    }
+    wp_reset_query();
+
+}
+

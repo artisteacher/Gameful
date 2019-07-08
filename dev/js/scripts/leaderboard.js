@@ -64,7 +64,7 @@ function go_stats_leaderboard_page() {
     // if (jQuery("#go_leaderboard_wrapper").length == 0) {
     //var section_value = jQuery('#go_page_user_go_sections_select').val();
     //console.log(section_value);
-    var is_admin = GO_EVERY_PAGE_DATA.go_is_admin;
+    var is_admin = GO_FRONTEND_DATA.go_is_admin;
     var initial_sort = 3;
     if (is_admin == true){
         initial_sort = 4;

@@ -1,16 +1,5 @@
 // @codekit-prepend 'scripts/archive_frontend.js'
-// @codekit-prepend 'scripts/archive_all.js'
-
-// @codekit-prepend 'scripts/go_blogs.js'
-// @codekit-prepend 'scripts/go_feedback.js'
-// @codekit-prepend 'scripts/go_tasks.js'
 // @codekit-prepend 'scripts/go_load_more.js'
-//
-// @codekit-prepend 'scripts/go_every_page.js'
-// @codekit-prepend 'scripts/buy_the_item.js'
-// @codekit-prepend 'scripts/go_fitvids.js'
-// @codekit-prepend 'scripts/go_messages.js'
-// @codekit-prepend 'scripts/go_videos_fit_and_box.js'
-// @codekit-prepend 'scripts/go_map.js'
-// @codekit-prepend 'scripts/user_bar.js'
+// @codekit-prepend 'scripts/go_tasks.js'
 // @codekit-prepend 'scripts/leaderboard.js'
+// @codekit-prepend 'scripts/user_bar.js'

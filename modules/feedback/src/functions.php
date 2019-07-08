@@ -215,9 +215,9 @@ function go_post_status_icon($post_id, $is_archive = false){
 
 function go_blog_is_private($post_id){
 
-    //$blog_meta = get_post_custom($post_id);
+    //$blog_meta = go_post_meta($post_id);
     //$status = (isset($blog_meta['go_blog_private_post'][0]) ? $blog_meta['go_blog_private_post'][0] : false);
-    $status = get_post_meta($post_id, 'go_blog_private_post', true );
+    $status = go_post_meta($post_id, 'go_blog_private_post', true );
     if ($status) {
 
         //$status = get_post_status($post_id);
@@ -227,7 +227,7 @@ function go_blog_is_private($post_id){
 
 function go_blog_favorite($post_id, $is_admin, $is_archive){
 
-        $status = get_post_meta($post_id, 'go_blog_favorite', true );
+        $status = go_post_meta($post_id, 'go_blog_favorite', true );
         if ($status == 'true'){
             $checked = 'checked';
         }else{
@@ -355,7 +355,7 @@ function go_feedback_input($post_id){
                         </tr>
                         <?php
                         //get the current % and the latest loot awarded.
-                        $percent = get_post_meta( $post_id, 'go_feedback_percent', true );
+                        $percent = go_post_meta( $post_id, 'go_feedback_percent', true );
 
                         global $wpdb;
                         $aTable = "{$wpdb->prefix}go_actions";

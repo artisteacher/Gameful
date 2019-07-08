@@ -179,7 +179,7 @@ function go_reset_all_users_dialog (){
 }
 
 function go_reset_all_users (){
-    var nonce = GO_EVERY_PAGE_DATA.nonces.go_reset_all_users;
+    var nonce = GO_ADMIN_PAGE_DATA.nonces.go_reset_all_users;
     jQuery.ajax({
         type: 'post',
         url: MyAjax.ajaxurl,

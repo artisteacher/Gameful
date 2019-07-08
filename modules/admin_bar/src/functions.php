@@ -3,18 +3,27 @@
 //Redirect to homepage after logout and remove cookies
 add_action('wp_logout','auto_redirect_after_logout');
 function auto_redirect_after_logout($k){
-    array_map(function ($k) {
-        setcookie($k, FALSE, time()-YEAR_IN_SECONDS, '', COOKIE_DOMAIN);
+    $HTTP_REFERER = (isset($_SERVER['HTTP_REFERER']) ?  $_SERVER['HTTP_REFERER'] : null);//page currently being loaded
+    $details  = get_blog_details();
+    $siteurl = $details -> siteurl;
+    $strip_path = str_replace($siteurl, '', $HTTP_REFERER);
+    $strip_slashes = str_replace('/','',$strip_path);
+    $HTTP_REFERER = strtok($strip_slashes,'?');
 
-    }, array_keys($_COOKIE));
+    if ($HTTP_REFERER !== 'join'){
+        array_map(function ($k) {
+            setcookie($k, FALSE, time()-YEAR_IN_SECONDS, '', COOKIE_DOMAIN);
 
-    // Redirect to 'siteurl' since by default WordPress redirects to its login
-    // URL, which actually sets a new cookie
-    header('Location: '.get_option('siteurl'));
+        }, array_keys($_COOKIE));
+
+        // Redirect to 'siteurl' since by default WordPress redirects to its login
+        // URL, which actually sets a new cookie
+        header('Location: '.get_option('siteurl'));
 
 
-    //wp_redirect( home_url() );
-    exit();
+        //wp_redirect( home_url() );
+        exit();
+    }
 }
 
 //remove_menu_page( 'index.php' );

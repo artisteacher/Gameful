@@ -378,6 +378,9 @@ video.wp-video-shortcode {
   margin: 10px;
   background-color: #f5b3bd; }
 
+.go_lock .go_error_red {
+  color: unset; }
+
 .go_checks_and_buttons {
   background-color: #c9fbc9; }
 
@@ -1251,12 +1254,21 @@ body.wp-admin {
       margin-bottom: 4px; }
     #go_user_bar .go_user_bar_icon .go_player_bar_text {
       font-size: 14px; }
-  #go_user_bar #go_user_bar_loot .wide_content {
-    margin: 0px 15px 0px 0px; }
-    #go_user_bar #go_user_bar_loot .wide_content p {
-      margin: 0; }
-  #go_user_bar #go_user_bar_loot .narrow_content {
-    font-size: .8em; }
+  #go_user_bar #go_user_bar_loot {
+    text-align: center;
+    display: block;
+    height: 48px; }
+    #go_user_bar #go_user_bar_loot .wide_content {
+      margin: 0px 15px 0px 0px;
+      display: table-cell;
+      vertical-align: middle;
+      height: 48px; }
+      #go_user_bar #go_user_bar_loot .wide_content p {
+        margin: 0; }
+    #go_user_bar #go_user_bar_loot .narrow_content {
+      font-size: .8em;
+      vertical-align: middle;
+      height: 48px; }
   #go_user_bar .userbar_dropbtn {
     display: flex; }
   #go_user_bar .userbar_dropdown,

@@ -38,7 +38,8 @@ function go_check_quiz_answers() {
 
     $all_test_choices = (isset($_POST['chosen_answer']) ?  $_POST['chosen_answer'] : array());
 
-    $custom_fields = get_post_custom( $task_id );
+    $custom_fields = go_post_meta( $task_id );
+
     $test_stage = 'go_stages_' . $status . '_quiz';
     //$test_fail_name = 'test_fail_count';
 

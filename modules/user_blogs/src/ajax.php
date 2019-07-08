@@ -36,14 +36,14 @@ function go_blog_opener(){
 
     if ($blog_post_id != 0) { //if opening an existing post
         //get the minimum character count to add to the button
-        $blog_meta = get_post_custom($blog_post_id);
+        $blog_meta = get_post_meta($blog_post_id);
         //$go_blog_task_id = wp_get_post_parent_id($blog_post_id);
 
         $stage = (isset($blog_meta['go_blog_task_stage'][0]) ? $blog_meta['go_blog_task_stage'][0] : null);
 
         $go_blog_task_id = go_get_task_id($blog_post_id);
         if(!empty($go_blog_task_id)) {
-            $custom_fields = get_post_custom($go_blog_task_id);
+            $custom_fields = get_post_meta($go_blog_task_id);
             $task_is_locked = go_task_locks($go_blog_task_id, null, false, $custom_fields, $is_logged_in, true);
             if ( $task_is_locked === true ) {
                 echo "locked";
@@ -110,7 +110,7 @@ function go_blog_trash(){
 
     if ($blog_post_id != 0 && !empty($blog_post_id)) {
 
-        $blog_meta = get_post_custom($blog_post_id);
+        $blog_meta = get_post_meta($blog_post_id);
         //$go_blog_task_id = (isset($blog_meta['go_blog_task_id'][0]) ? $blog_meta['go_blog_task_id'][0] : null);
         $stage_num = (isset($blog_meta['go_blog_task_stage'][0]) ? $blog_meta['go_blog_task_stage'][0] : null);
         $bonus_stage_num = (isset($blog_meta['go_blog_bonus_stage'][0]) ? $blog_meta['go_blog_bonus_stage'][0] : null);
@@ -296,7 +296,7 @@ function go_blog_submit(){
     }
 
     if($blog_post_id) {//if this blog post already exists
-        $blog_meta = get_post_custom($blog_post_id);
+        $blog_meta = get_post_meta($blog_post_id);
         //$go_blog_task_id = intval(isset($blog_meta['go_blog_task_id'][0]) ? $blog_meta['go_blog_task_id'][0] : null);
         $go_blog_task_id = wp_get_post_parent_id($blog_post_id);
         $go_blog_task_stage = intval(isset($blog_meta['go_blog_task_stage'][0]) ? $blog_meta['go_blog_task_stage'][0] : null);
@@ -355,7 +355,7 @@ function go_save_blog_post($post_id = null, $stage = null, $bonus_status = null,
     $uniqueid = null;
     if (is_int($post_id) and $post_id > 0) {//if this is attached to a quest
         //stage uniqueid
-        $uniqueid = get_post_meta($post_id, 'go_stages_' . $stage . '_uniqueid', true);
+        $uniqueid = go_post_meta($post_id, 'go_stages_' . $stage . '_uniqueid', true);
 
         //check if there is an existing post from this quest and stage
 
@@ -392,7 +392,7 @@ function go_save_blog_post($post_id = null, $stage = null, $bonus_status = null,
 
         } else {
             //do something for new blog posts
-                //$custom_fields = get_post_custom($post_id);
+                //$custom_fields = get_post_meta($post_id);
                 //$is_private = (isset($custom_fields[$meta_key][0]) ? $custom_fields[$meta_key][0] : true);
             $is_private = get_post_meta($post_id, $meta_key, true);
         }

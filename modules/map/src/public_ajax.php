@@ -1,4 +1,6 @@
 <?php
+
+
 /**
  *
  */
@@ -99,7 +101,9 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
 				<ul class='primaryNav'>
 				<li class='ParentNav'><p>$last_map_object->name</p>";
         //go_map_quest_badge($badge_id, $user_badges, true);
-        go_print_single_badge( $badge_id, 'badge', $output = true, $user_id );
+        if(intval($badge_id) > 0) {
+            go_print_single_badge($badge_id, 'badge', $output = true, $user_id);
+        }
         echo "</li>";
 
         $term_ids = go_get_map_chain_term_ids($last_map_id);
@@ -182,7 +186,7 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
                     //$task_name = $row->post_title; //Q
                     //$task_link = get_permalink($row); //Q
                     //$id = $row->ID;
-                    //$custom_fields = get_post_custom( $id ); // Just gathering some data about this task with its post id
+                    //$custom_fields = go_post_meta( $id ); // Just gathering some data about this task with its post id
                     $stage_count = $custom_fields['go_stages'][0];//total stages
 
                     //$user_tasks is an array of task object arrays

@@ -24,7 +24,6 @@ function go_checks_for_understanding ($custom_fields, $i, $status, $user_id, $po
     $go_actions_table_name = "{$wpdb->prefix}go_actions";
     $stage_count = (isset($custom_fields['go_stages'][0]) ?  $custom_fields['go_stages'][0] : null); //total # of stages
 
-
     if ($bonus){
         $check_type = (isset($custom_fields['go_bonus_stage_check_v5'][0]) ?  $custom_fields['go_bonus_stage_check_v5'][0] : null);
 

@@ -5,6 +5,7 @@
  * Registering Scripts/Styles For The Front-end
  */
 
+add_action( 'wp_enqueue_scripts', 'go_styles' );
 function go_styles () {
     global $go_css_version;
 

@@ -23,6 +23,7 @@ if (typeof (go_is_map) !== 'undefined') {
 }
 
 function go_setup_map(){
+    console.log("go_setup_map");
     // Close the dropdown menu if the user clicks outside of it
     window.onclick = function (event) {
         if (!event.target.matches('.dropbtn')) {
@@ -97,7 +98,7 @@ function go_show_map(mapid) {
 //
 	document.getElementById("maps").style.display = "none";
 	document.getElementById("loader_container").style.display = "block";
-    var nonce = GO_EVERY_PAGE_DATA.nonces.go_update_last_map;
+    var nonce = GO_FRONTEND_DATA.nonces.go_update_last_map;
     var uid = jQuery('#go_map_user').data("uid");
 	//var map_nonce = jQuery( '#_wpnonce' ).val();
 
@@ -236,7 +237,7 @@ function go_map_dropDown() {
 
 function go_user_map(user_id) {
     console.log("map");
-    var nonce = GO_EVERY_PAGE_DATA.nonces.go_user_map_ajax;
+    var nonce = GO_ADMIN_PAGE_DATA.nonces.go_user_map_ajax;
     jQuery.ajax({
         type: 'post',
         url: MyAjax.ajaxurl,

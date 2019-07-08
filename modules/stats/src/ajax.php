@@ -421,7 +421,7 @@ function go_tasks_dataloader_ajax(){
         ///
         $post_id = $task['post_id'];
         //$post_name = $task[post_title];
-        $custom_fields = get_post_custom( $post_id );
+        $custom_fields = go_post_meta( $post_id );
         $post_name = get_the_title($post_id);
         $post_link = get_post_permalink($post_id);
         $status = $task['status'];

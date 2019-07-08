@@ -1,0 +1,23 @@
+The includes folder contains plugins that are a core part of Game On.
+
+ACF: This is an unmodified version of ACF Pro that is used to develop Game On
+
+Custom ACF Fields:
+    Unmodified from download--can be replaced with updated versions:
+        acf-recaptcha-master
+        wp-acf-unique_id-master
+    Modified or created from scratch:
+        acf-level2-taxonomy
+        acf-quiz
+        acf-order-posts
+
+fontawesome: Files needed for fontawesome.  Not using the CDN so there are fewer external dependencies.
+
+Front-end Media Master
+This is what allows the inclusion of the media uploader for subscribers on the frontend.
+
+
+go_enqueue_includes
+enqueues fontawesome and frontend media master js files
+fontawesome was not included in other dependencies because of it's size
+pdfmake is also enqueued from a CDN here

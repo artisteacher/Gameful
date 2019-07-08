@@ -1,72 +1,107 @@
 <?php
 /**
- * TESTING STUFF HERE
+ * DOMAIN VALIDATION
+ * Action was added to nsl plugin to allow it to validate on social login.
+ * Social login validation only works with domains set in options on site 1
+ * Because of this, the domains in site 1 are added to the lists from the sub-site.
+ * --they are universal on a multisite.
+ * On sub-sites, the validation happens:
+ * --with social login, on the join page after login/register
+ * --on the registration form.
  */
 
-//add_action( 'wp_login_failed', 'my_front_end_login_fail' );  // hook failed login
-
-add_action('nsl_limit_domains', 'nsl_limit_domains');
-//add_action('init', 'nsl_limit_domains');
-function nsl_limit_domains($email){
-    $domain_count = get_option('options_limit_domains_domains');
-    //$domains = get_field('options_limit_domains_domains');
-    $i = 0;
+//return list of domains that are allowed
+function go_get_domain_restrictions(){
+    $current_blog_id = get_current_blog_id();
+    $blog_ids = array($current_blog_id, 1);
     $domains = array();
-    while (  $domain_count > $i) {
-        $domain = get_option('options_limit_domains_domains_'.$i.'_domain');
-        $domains[] = $domain;
-        $i++;
+    $x = 0;
+    foreach ($blog_ids as $blog_id) {
+
+        if ($blog_id == 1) {//adding blog 1 domains to the list, but only once if current blog is blog 1
+            if ($x> 0){
+                continue;
+            }
+            $x++;
+            switch_to_blog(1);
+
+        }
+        $domain_count = get_option('options_limit_domains_domains');
+        //$domains = get_field('options_limit_domains_domains');
+        $i = 0;
+
+        while ($domain_count > $i) {
+            $domain = get_option('options_limit_domains_domains_' . $i . '_domain');
+            if (!empty($domain)) {
+                $domains[] = $domain;
+            }
+            $i++;
+        }
+
+        restore_current_blog();
     }
-    $domains = $domains;
+    return $domains;
+}
+
+function validate_email_against_domains($email){
+    $domains = go_get_domain_restrictions();
     $user_domain = substr(strrchr($email, "@"), 1);
     $is_valid = in_array($user_domain, $domains);
+    return $is_valid;
+}
+
+//filter for the social login
+//always gets domains from the main blog (1)
+add_action('nsl_limit_domains', 'go_limit_domains');
+function go_limit_domains($email){
+    $is_valid = validate_email_against_domains($email);
     if(!$is_valid){
-        $home_link = ( get_site_url(null, 'big_error'));
-        wp_redirect($home_link);
+        $go_login_link = get_site_url(null, 'login');
+        wp_redirect($go_login_link . '?login=bad_domain');
         exit;
     }
-
 }
 
-function my_front_end_login_fail( $username ) {
-    //add_query_arg( 'key', 'value', 'http://example.com' );
-    $go_login_link = wp_login_url( get_site_url(null, 'join'));
-    wp_redirect($go_login_link);
-    exit;
-}
-
-
-//add_action(  'login_init', 'use_main_blog_login_init', 0  );
-function use_main_blog_login_init(){
-    switch_to_blog(1);
-}
-
-//add_action(  'login_footer', 'switch_to_current_blog', 0  );
-function switch_to_current_blog(){
-    restore_current_blog();
-}
-
-
+//USE THIS FOR INSTUCTIONS ABOUT DOMAINS
 //* Add custom message to WordPress login page
+add_filter( 'login_message', 'go_login_message' );
+function go_login_message($message){
+    $go_domain_restrictions_message = go_domain_restrictions_message();
+    if ( !empty($go_domain_restrictions_message) ){
+        $message .= "<div style ='background-color: white; 
+                                    margin-left: 0;
+                                    padding: 26px 24px 46px;
+                                    font-size: .9em;
+                                    overflow: hidden;
+                                    background: #fff;
+                                    box-shadow: 0 1px 3px rgba(0,0,0,.13);'>";
+        $message .= "<br>$go_domain_restrictions_message";
+        $message .= "</div>";
 
-function smallenvelop_login_message( $message ) {
-    if ( empty($message) ){
-        $id =get_current_blog_id();
-        return "<p><strong>Welcome to SmallEnvelop. Please login to continue</strong>". $id . "</p>";
-    } else {
-        return $message;
+
     }
+    return $message;
 }
 
-add_filter( 'login_message', 'smallenvelop_login_message' );
+function go_domain_restrictions_message($message = null ) {
+    $domains = go_get_domain_restrictions();
+
+    if (!empty($domains)){
+        $message = "This site only allows registration with email addresses that are in the following domains:<br>";
+        $message .= '<ul class="acf-notice" style="padding:0 20px;">';
+        $message .= '<li class="acf-notice" >' . implode( '</li><li>', $domains) . '</li>';
+        $message .= '</ul>';
+    }
+    return $message;
+}
 
 
 
 /**
  * SET LOGIN REDIRECT BASED ON OPTIONS
  */
-
-//add_action( 'login_redirect', 'go_user_redirect', 10, 3 );
+//after login, user should be sent to the join page and then redirected if already a member
+add_action( 'login_redirect', 'go_user_redirect', 10, 3 );
 function go_user_redirect( $redirect_to, $request, $user )
 {
     if (isset($user) && ($user instanceof WP_User)) {
@@ -80,11 +115,11 @@ function go_user_redirect( $redirect_to, $request, $user )
         }
 
     }
+
 }
 
-
 function go_get_user_redirect($user_id = null){
-
+    $page = '';
     if(is_user_member_of_blog($user_id)) {
         $redirect_to = get_option('options_go_landing_page_radio', 'home');
         //$page = get_option('options_go_landing_page_on_login', '');
@@ -110,6 +145,37 @@ function go_get_user_redirect($user_id = null){
     }
 
     return home_url($page);
+}
+
+add_filter('init', 'go_user_page_redirect');
+function go_user_page_redirect(){
+    $this_page =  go_get_page_uri();
+
+    if ($this_page === 'join' || $this_page === 'register' || $this_page === 'profile') {
+        if (is_user_logged_in()) {
+
+            if (is_user_member_of_blog()) {
+                $redirect_path = 'profile';//if logged in this is a profile page
+            } else {
+                $redirect_path = 'join';//if logged in, but not a member of this blog, this is a join page
+            }
+        } else {
+            $redirect_path = 'register';//else not logged in and this is a register page.
+        }
+
+        $updated = (isset($_GET['updated'])) ? $_GET['updated'] : 0;
+        if ($updated && $this_page === 'join') {
+            $user_id = get_current_user_id();
+            $landing_page = go_get_user_redirect($user_id);
+            wp_redirect($landing_page);
+            exit;
+        }
+
+        if ($this_page !== $redirect_path) {
+            wp_redirect(site_url($redirect_path));
+            exit;
+        }
+    }
 }
 
 /**
@@ -277,7 +343,6 @@ function go_profile_query_var( $vars ) {
     return $vars;
 }
 
-
 /* Template Include */
 add_filter('template_include', 'go_profile_template_include', 1, 1);
 function go_profile_template_include($template){
@@ -289,12 +354,14 @@ function go_profile_template_include($template){
     if ($page_value && $page_value == "true" ) { //Verify "blah" exists and value is "true".
 
         acf_form_head();
-        return plugin_dir_path(__FILE__).'templates/join.php'; //Load your template or file
+        return plugin_dir_path(__FILE__).'templates/user.php'; //Load your template or file
 
     }
 
     return $template; //Load normal template when $page_value != "true" as a fallback
 }
+
+
 
 
 /************************
@@ -326,7 +393,7 @@ function go_registration_template_include($template){
 
     if ($page_value && $page_value == "true" ) { //Verify "blah" exists and value is "true".
         acf_form_head();
-        return plugin_dir_path(__FILE__).'templates/join.php'; //Load your template or file
+        return plugin_dir_path(__FILE__).'templates/user.php'; //Load your template or file
     }
 
     return $template; //Load normal template when $page_value != "true" as a fallback
@@ -377,7 +444,7 @@ function go_join_template_include($template){
 
     if ($page_value && $page_value == "true" ) { //Verify "blah" exists and value is "true".
         acf_form_head();
-        return plugin_dir_path(__FILE__).'templates/join.php'; //Load your template or file
+        return plugin_dir_path(__FILE__).'templates/user.php'; //Load your template or file
     }
 
     return $template; //Load normal template when $page_value != "true" as a fallback
@@ -581,6 +648,16 @@ function go_validate_email($valid, $value, $field, $input){
             return $valid;
         }
     }
+
+    $limit_domains_toggle = get_option('options_limit_domains_toggle');
+    if ($limit_domains_toggle) {
+        $email = $value;
+        $is_valid_email = validate_email_against_domains($email);
+        if (!$is_valid_email) {
+            $valid = go_domain_restrictions_message();
+            return $valid;
+        }
+    }
     //else this is a new email and is a valid for saving
     return $valid;
 }
@@ -600,7 +677,8 @@ function go_validate_uname($valid, $value, $field, $input){
 //Validate the registration code
 add_filter('acf/validate_value/key=field_5cd9f85e5f788', 'go_validate_code', 10, 4);
 function go_validate_code($valid, $value, $field, $input){
-    $code = get_option('options_go_registration_code');
+    $id = get_current_blog_id();
+    $code = get_option('options_registration_code_code');
     if ($code != $value) {//if the code is not correct set the error
         $valid = 'This is not the correct membership code.';
         return $valid;
@@ -675,7 +753,7 @@ add_filter('acf/pre_save_post' , 'acf_save_user' );
 function acf_save_user( $post_id ) {
 
     error_log( 'post id: ' . $post_id);
-
+    $page_uri = go_get_page_uri();
     //RESET PASSWORDS
     if ($post_id === 'password_reset'){
         $user_id = get_current_user_id();
@@ -763,26 +841,34 @@ function acf_save_user( $post_id ) {
                 echo $user->get_error_message();
         }
         else {
-            $emailField = sanitize_email($_POST['acf']['field_5cd4be08e7077']);
-            //$emailField = (isset($_POST['acf']['field_5cd4be08e7077']) ?  $_POST['acf']['field_5cd4be08e7077'] : '');
-            if (isset($emailField)) {
+            $email = (isset($_POST['acf']['field_5cd4be08e7077']) ? $_POST['acf']['field_5cd4be08e7077'] : null);
+            if(!empty($email)) {
+                $emailField = sanitize_email($_POST['acf']['field_5cd4be08e7077']);
+                //$emailField = (isset($_POST['acf']['field_5cd4be08e7077']) ?  $_POST['acf']['field_5cd4be08e7077'] : '');
+                if (isset($emailField)) {
 
-                $args = array(
-                    'ID' => $wp_user_id,
-                    'user_email' => esc_attr($emailField)
-                );
-                wp_update_user($args);
+                    $args = array(
+                        'ID' => $wp_user_id,
+                        'user_email' => esc_attr($emailField)
+                    );
+                    wp_update_user($args);
+                }
             }
 
             $website = (isset($_POST['acf']['field_5cd4f996c0d86']) ? $_POST['acf']['field_5cd4f996c0d86'] : null);
             //$website = (isset($_POST['acf']['field_5cd4f996c0d86']) ?  $_POST['acf']['field_5cd4f996c0d86'] : null);
-            if (isset($website)) {
+            if (!empty($website)) {
 
                 $args = array(
                     'ID' => $wp_user_id,
                     'user_url' => esc_attr($website)
                 );
                 wp_update_user($args);
+            }
+
+            if($page_uri === 'join' && !is_user_member_of_blog()){
+                $blog_id = get_current_blog_id();
+                add_user_to_blog( $blog_id, $wp_user_id, 'subscriber' );
             }
         }
     }
@@ -857,11 +943,12 @@ add_filter('acf/update_value/name=user-seat', 'go_update_seats', 10, 3);
 //this changes the logo on the default wordpress login
 function go_login_logo()
 {
-    $logo = get_option('options_login_appearance_logo');
+    $logo = get_option('options_go_login_logo');
 
     if ($logo) {
 
-        $url = wp_get_attachment_image_src($logo, '250, 250');
+        //$url = wp_get_attachment_image_src($logo, '250, 250');
+        $url = wp_get_attachment_image_src($logo, 'medium');
         $url = $url[0];
         ?>
         <style type="text/css">

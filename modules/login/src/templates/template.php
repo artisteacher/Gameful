@@ -19,24 +19,29 @@
  */
 
 
+
 //https://codex.wordpress.org/Customizing_the_Login_Form#Make_a_Custom_Login_Page
 //
-    wp_head();
-    //get_header();
-    ///////////
-    echo "<div id ='go_login_center'><div id='go_login_container'>";
+wp_head();
+//get_header();
+///////////
 
+
+echo "<div id ='go_login_center'>";
+
+echo "<div id='go_login_container'>";
 
 if ( ! is_user_logged_in() ) { // Display WordPress login form:
 
-    $logo = get_option('options_login_appearance_logo');
+    $logo = get_option('options_go_login_logo');
     //$url = wp_get_attachment_image($logo, array('250', '250'));
     $url = wp_get_attachment_image_src($logo, 'medium');
     $url = $url[0];
 
     if ($url) {
-        echo "<div><div style=' width: 200px; margin: 0 auto;'><img src='$url' width='100%'</div></div>";
+        echo "<div><div style=' width: 300px; margin: 0 auto;'><img src='$url' width='100%'</div></div>";
     }
+
 
     $login  = (isset($_GET['login']) ) ? $_GET['login'] : 0;
     if ($login === "failed") {
@@ -75,7 +80,15 @@ if ( ! is_user_logged_in() ) { // Display WordPress login form:
             <?php
         }
         echo "</div>";
-
+    $limit_domains_toggle = get_option('options_limit_domains_toggle');
+    if($limit_domains_toggle && $registration_allowed) {
+        $message = go_domain_restrictions_message();
+        if (!empty($message)) {
+            echo "<div style='max-width: 800px; margin: 0 auto;'>";
+            echo $message;
+            echo "</div>";
+        }
+    }
 
 } else { // If logged in:
         wp_loginout( home_url() ); // Display "Log Out" link.

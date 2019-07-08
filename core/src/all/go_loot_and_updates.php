@@ -1565,7 +1565,9 @@ function go_update_bonus_loot ($post_id){
         }
 
 
-        $custom_fields = get_post_custom($post_id);
+
+        $custom_fields = go_post_meta( $post_id );
+
 
         /*
         $row_count = (isset($custom_fields['bonus_loot_go_bonus_loot'][0]) ? $custom_fields['bonus_loot_go_bonus_loot'][0] : null);//number of loot drops
@@ -1703,7 +1705,14 @@ function xp_progress_bar($user_id){
     } else if ($percentage >= 100) {
         $percentage = 100;
     }
-    $progress_bar = '<div class="go_admin_bar_progress_bar_border progress-bar-border"><div class="go_admin_bar_progress_bar stats_progress_bar" ' .
+    if (intval($user_id) < 1){
+        $not_logged_in_class = 'not_logged_in';
+        $pts_to_rank_up_str = 'Log in to see stats.';
+        $color = 'grey';
+    }else{
+        $not_logged_in_class = '';
+    }
+    $progress_bar = '<div class="go_admin_bar_progress_bar_border '. $not_logged_in_class .' progress-bar-border"><div class="go_admin_bar_progress_bar stats_progress_bar" ' .
         'style="width: ' . $percentage . '%; background-color: ' . $color . ' ;">' .
         '</div>' .
         '<div class="points_needed_to_level_up go_admin_bar_text">' .
@@ -1725,7 +1734,16 @@ function go_health_bar($user_id){
         $health_percentage = 100;
     }
     $name = get_option("options_go_loot_health_abbreviation");
-    $health_bar = '<div class="go_admin_health_bar_border progress-bar-border">' . '<div class="go_admin_bar_health_bar stats_progress_bar progress_bar" ' . 'style="width: ' . $health_percentage . '%; background-color: red ;">' . '</div>' . '<div class="health_bar_percentage_str go_admin_bar_text ">' . $name . " Mod: " . $go_current_health . "%" . '</div>' . '</div>';
+    if (intval($user_id) < 1){
+        //$pts_to_rank_up_str = 'Log in to see stats.';
+        $color = 'grey';
+        $health_string = '';
+    }else{
+        $health_string = $name . " Mod: " . $go_current_health . "%";
+        $color = 'red';
+    }
+
+    $health_bar = '<div class="go_admin_health_bar_border progress-bar-border"><div class="go_admin_bar_health_bar stats_progress_bar progress_bar" style="width: ' . $health_percentage . '%; background-color: ' . $color .' ;">' . '</div>' . '<div class="health_bar_percentage_str go_admin_bar_text ">' . $health_string . '</div>' . '</div>';
 
     return $health_bar;
 }

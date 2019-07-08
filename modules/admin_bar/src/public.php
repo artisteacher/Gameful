@@ -59,7 +59,7 @@ function go_player_bar_v5() {
 
         //displays Timer in admin bar
         $post_id = get_the_ID();
-        $timer_on = get_post_meta($post_id, 'go_timer_toggle', true);
+        $timer_on = go_post_meta($post_id, 'go_timer_toggle', true);
         if ($timer_on) {
 
             /*$atts = shortcode_atts(array(
@@ -67,7 +67,7 @@ function go_player_bar_v5() {
                 'cats' => '', // Cats defined in Shortcode
             ), '');
             $id = $atts['id'];*/
-            //$custom_fields = get_post_custom($id); // Just gathering some data about this task with its post id
+            //$custom_fields = go_post_meta($id); // Just gathering some data about this task with its post id
             echo '<div id="go_timer"><i class="fa fa-clock-o ab-icon" aria-hidden="true"></i><div><span class="days"></span>d : </div><div><span class="hours"></span>h : </div><div><span class="minutes"></span>m : </div><div><span class="seconds"></span>s</div></div>';
         }
 

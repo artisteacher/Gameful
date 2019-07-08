@@ -461,6 +461,10 @@ video.wp-video-shortcode {
 	background-color: #f5b3bd;
 }
 
+.go_lock .go_error_red {
+	color: unset;
+}
+
 .go_checks_and_buttons{
 	background-color: #c9fbc9;
 
@@ -1496,7 +1500,7 @@ body.wp-admin {
 	z-index: 100000;
 	height: 91px;
 	font-family: sans-serif;
-	font-size: 14px ;
+	font-size: 14px;
 
 	.progress-bar-border {
 		width: 100%;
@@ -1509,15 +1513,15 @@ body.wp-admin {
 		background-color: #2d2d2d;
 	}
 
-	#go_admin_bar_gold{
+	#go_admin_bar_gold {
 
-		.coin_wrapper{
+		.coin_wrapper {
 			line-height: .5em;
 		}
 
 		.go_coin {
 			font-size: .5em;
-			top:5px;
+			top: 5px;
 		}
 
 		.go_amount {
@@ -1526,12 +1530,11 @@ body.wp-admin {
 		}
 	}
 
-	#go_user_bar_inner{
+	#go_user_bar_inner {
 		display: flex;
 		white-space: nowrap;
 		padding: 0 40px;
 	}
-
 
 
 	.go_user_bar_icon {
@@ -1539,12 +1542,12 @@ body.wp-admin {
 		line-height: .8em;
 		padding: 5px 10px;
 
-		.ab-icon, img{
+		.ab-icon, img {
 			font-size: 23px;
 			margin: 3px 0px 8px 0px;
 		}
 
-		img{
+		img {
 			margin-top: 0px;
 			margin-bottom: 4px;
 		}
@@ -1555,15 +1558,30 @@ body.wp-admin {
 		}
 	}
 
-	#go_user_bar_loot .wide_content{
-		margin: 0px 15px 0px 0px;
-		//font-size: .8em;
+	#go_user_bar_loot {
+		text-align: center;
+		display: block;
+		height: 48px;
 
-		p {margin: 0;}
-	}
+		.wide_content {
+			margin: 0px 15px 0px 0px;
+			//font-size: .8em;
 
-	#go_user_bar_loot .narrow_content{
-		font-size: .8em;
+			p {
+				margin: 0;
+			}
+
+			display: table-cell;
+			vertical-align: middle;
+			height: 48px;
+		}
+
+
+		.narrow_content {
+			font-size: .8em;
+			vertical-align: middle;
+			height: 48px;
+		}
 	}
 
 	.userbar_dropbtn {

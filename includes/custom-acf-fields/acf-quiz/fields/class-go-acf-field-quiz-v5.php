@@ -131,7 +131,7 @@ class go_acf_field_quiz extends acf_field {
         $stage_num = substr($stage_num, strpos($stage_num, ']') + 2);
         if ($stage_num != 'acfcloneindex') {
             $stage_num = (int)$stage_num;
-            //$custom = get_post_custom();
+            //$custom = go_post_meta();
 
             //Get field name (complete string from DB)
             $meta_id = 'go_stages_' . $stage_num . '_quiz';

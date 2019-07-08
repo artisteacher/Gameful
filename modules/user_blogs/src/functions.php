@@ -45,7 +45,7 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
         $post = get_post($blog_post_id, OBJECT, 'edit');
         $content = $post->post_content;
         $title = get_the_title($blog_post_id);
-        $blog_meta = get_post_custom($blog_post_id);
+        $blog_meta = get_post_meta($blog_post_id);
         $post_status = get_post_status($blog_post_id);
 
        $go_blog_task_id = (isset($blog_meta['go_blog_task_id'][0]) ? $blog_meta['go_blog_task_id'][0] : null); //for posts created before v4.6
@@ -58,13 +58,13 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
         }
     }
     if($go_blog_task_id != 0) {
-        $custom_fields = get_post_custom($go_blog_task_id);
+        $custom_fields = go_post_meta($go_blog_task_id);
 
         if ($bonus == true ) {
-            $blog_title = (isset($custom_fields['go_bonus_stage_blog_options_v5_bonus_title'][0]) ? $custom_fields['go_bonus_stage_blog_options_bonus_title'][0] : false);
-            $text_toggle = (isset($custom_fields['go_bonus_stage_blog_options_v5_bonus_blog_text_toggle'][0]) ? $custom_fields['go_bonus_stage_blog_options_bonus_blog_text_toggle'][0] : true);
-            $min_words = (isset($custom_fields['go_bonus_stage_blog_options_bonus_blog_v5_text_minimum_length'][0]) ? $custom_fields['go_bonus_stage_blog_options_bonus_blog_text_minimum_length'][0] : null);
-            $is_private = (isset($custom_fields['go_bonus_stage_blog_options_v5_bonus_private'][0]) ?  $custom_fields['go_bonus_stage_blog_options_bonus_private'][0] : false);
+            $blog_title = (isset($custom_fields['go_bonus_stage_blog_options_v5_bonus_title'][0]) ? $custom_fields['go_bonus_stage_blog_options_v5_bonus_title'][0] : false);
+            $text_toggle = (isset($custom_fields['go_bonus_stage_blog_options_v5_bonus_blog_text_toggle'][0]) ? $custom_fields['go_bonus_stage_blog_options_v5_bonus_blog_text_toggle'][0] : true);
+            $min_words = (isset($custom_fields['go_bonus_stage_blog_options_v5_blog_text_minimum_length'][0]) ? $custom_fields['go_bonus_stage_blog_options_v5_blog_text_minimum_length'][0] : null);
+            $is_private = (isset($custom_fields['go_bonus_stage_blog_options_v5_bonus_private'][0]) ?  $custom_fields['go_bonus_stage_blog_options_v5_bonus_private'][0] : false);
             $num_elements = (isset($custom_fields['go_bonus_stage_blog_options_v5_blog_elements'][0]) ?  $custom_fields['go_bonus_stage_blog_options_v5_blog_elements'][0] : false);
 
             if (!$blog_title){
@@ -202,7 +202,7 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
             $num_elements = (isset($custom_fields['go_stages_'.$i.'_blog_options_v5_blog_elements'][0]) ?  $custom_fields['go_stages_'.$i.'_blog_options_v5_blog_elements'][0] : false);
             $s = $i + 1;
             for($x = 0; $x < $num_elements; $x++){//if this post has elements assigned, loop through them
-                $type = get_post_meta($go_blog_task_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $x . '_element');
+                $type = go_post_meta($go_blog_task_id, 'go_stages_' . $i . '_blog_options_v5_blog_elements_' . $x . '_element');
                 $uniqueid = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_blog_elements_' . $x . '_uniqueid'][0]) ?  $custom_fields['go_stages_' . $i . '_blog_options_v5_blog_elements_' . $x . '_uniqueid'][0] : 0);
 
                 if ($type[0] =='URL'){
@@ -459,7 +459,7 @@ function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_underst
     //get info from the post_id
     $title = get_the_title($blog_post_id);
     if (isset($blog_post_id)) {
-        $blog_meta = get_post_custom($blog_post_id);
+        $blog_meta = get_post_meta($blog_post_id);
     }
 
     //if the task that this post is attached to was not sent, try to get the task_id
@@ -529,7 +529,7 @@ function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_underst
         $i = $task_stage_num;
         echo "<script>console.log('i: {$i}')</script>";
         //if $i (task stage) is not set, then this must be a bonus stage
-        $custom_fields = get_post_custom($go_blog_task_id);
+        $custom_fields = go_post_meta($go_blog_task_id);
         //variables for retrieving v4 content not in blog
         global $wpdb;
         $go_actions_table_name = "{$wpdb->prefix}go_actions";

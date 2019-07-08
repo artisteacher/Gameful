@@ -249,6 +249,11 @@ function go_get_page_uri(){
     $strip_slashes = str_replace('/','',$strip_path);
     $page_uri = strtok($strip_slashes,'?');
 
-
     return $page_uri;
+}
+
+function go_is_ms_active_network_wide(){
+    $myfile = plugin_basename(__FILE__);
+    $is_ms = is_plugin_active_for_network($myfile );
+    return $is_ms;
 }

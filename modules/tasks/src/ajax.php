@@ -29,7 +29,10 @@ function go_task_change_stage() {
     $is_admin = go_user_is_admin( $user_id );
     // post id posted from ajax function (untrusted)
     $post_id = ( ! empty( $_POST['post_id'] ) ? (int) $_POST['post_id'] : 0 );
-    $custom_fields = get_post_custom( $post_id ); // Just gathering some data about this task with its post id
+    $post_data = go_post_data( $post_id );
+    $post_status = go_post_status( $post_id );
+    $custom_fields = go_post_meta( $post_id );
+    //$custom_fields = go_post_meta( $post_id ); // Just gathering some data about this task with its post id
     $task_name = strtolower( get_option( 'options_go_tasks_name_singular' ) );
     $button_type 			= ( ! empty( $_POST['button_type'] ) ? $_POST['button_type'] : null );
     $check_type 			= ( ! empty( $_POST['check_type'] ) ? $_POST['check_type'] : null );
@@ -57,8 +60,8 @@ function go_task_change_stage() {
      */
     // gets the task's post id to validate that it exists, user requests for non-existent tasks
     // should be stopped and the user redirected to the home page
-    $post_obj = get_post( $post_id );
-    if ( null === $post_obj || ( 'publish' !== $post_obj->post_status && ! $is_admin ) || ( 'trash' === $post_obj->post_status && $is_admin )) {
+
+    if ( null === $post_data || ( 'publish' !== $post_status && ! $is_admin ) || ( 'trash' === $post_status && $is_admin )) {
         echo json_encode(
             array(
                 'json_status' => 302,
@@ -298,7 +301,7 @@ function go_task_change_stage() {
         if ( $the_query->have_posts() ) :
             while ( $the_query->have_posts() ) : $the_query->the_post();
                 $blog_post_id = get_the_ID();
-                $meta = get_post_meta($blog_post_id, 'go_blog_task_stage', true);
+                $meta = go_post_meta($blog_post_id, 'go_blog_task_stage', true);
                 if (intval($meta) == ($status -1)){
                     wp_trash_post(intval($blog_post_id));
                 }
