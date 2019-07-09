@@ -3,11 +3,13 @@
 Game-On (GO) is an educational framework that provides teachers with a vast amount of tools to create their own <a href="http://en.wikipedia.org/wiki/Gamification" target="_blank">gamified</a> learning system.
 
 ### Important note on development dependency
-This fork of the Game-On project is dependent on several open source libraries and plugins. They have been seamlessly included where possible.  One important exception is Advanced Custom Fields (ACF) Pro. This plugin is required for the Gameful to work in both development and production environments. It is not included in this repository because it is a paid subscription plugin. If you wish to develop this plugin, you can purchase a copy of the complete plugin including all dependencies at http://gameful.me, or include your own copy of ACF Pro in the /includes/acf directory. Do not install ACF normally because there are conditionals in the Gameful code that load the plugin as needed.
+
+This fork of the Game-On project is dependent on several open source libraries and plugins. They have been seamlessly included where possible.  One important exception is Advanced Custom Fields (ACF) Pro. This plugin is required for the Gameful to work in both development and production environments. It is not included in this repository because it is a paid subscription plugin. If you wish to develop this plugin, you can purchase a copy of the complete plugin including all dependencies at http://gameful.me, or include your own copy of ACF Pro in the /includes/acf directory. Do not install ACF normally because there are conditionals in the Gameful code that load the plugin as needed. Developers may also request to fork the private branch of the plugin that contains the dependencies.
 
 ### Information and Help
 
 * <a href="http://maclab.guhsd.net/game-on" rel="nofollow">Game-On Documentation</a>: This is still v3 documentation.  v4 documentation is in the works.
+
 * <a href='https://www.youtube.com/channel/UC1G3josozpubdzaINcFjk0g' >YouTube</a> Visit our YouTube Channel for the most recent updates.
 * <a href="http://edex.adobe.com/group/game-on/discussions/" rel="nofollow">Adobe Education Exchange (AEE)</a> Game-On Group Forum
 
@@ -26,11 +28,9 @@ Make sure to talk to your web hosting service provider about these technical req
 
 #### PHP
 
-Make sure that your hosting service supports and maintains a PHP version of **at least** `5.3`. Ideally, every service would have updated their PHP versions to `7.1`, but that isn't a realistic assumption. If the most recent version is not an option, version `5.6` should do the trick.
+Make sure that your hosting service supports and maintains a PHP version of **at least** `7.0`. Ideally, every service would have updated their PHP versions to `7.1`, but that isn't a realistic assumption. 
 
-In order of best scenario: `7.1` is better than `5.6`, which is better than `5.3`.
-
-If your service does not provide a version of PHP greater than `5.3`, please be aware that there are potential compatibility issues due to the nature of the outdated software.
+If your service does not provide a version of PHP greater than `7.0`, please be aware that there are potential compatibility issues due to the nature of the outdated software.
 
 #### WordPress
 
