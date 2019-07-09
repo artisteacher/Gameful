@@ -1,0 +1,29 @@
+#go_login_center {
+  display:none; width:350px; margin: 0px auto 100px auto;
+
+  #go_login_container {
+    margin-top: 20px;
+    margin-left: 0;
+    padding: 25px;
+    font-weight: 400;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,.13);
+
+    #user_login, #user_pass {
+      width: 100%;
+    }
+
+
+  }
+
+  .login-submit {text-align: right;}
+}
+
+
+#go_profile_wrapper{
+  .success{
+    background: lightgreen;
+    padding: 5px;
+  }
+}

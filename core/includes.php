@@ -13,34 +13,22 @@ if ( !is_admin() ) {
     include_once('src/public_ajax/go_shortcodes.php');
     include_once('src/public_ajax/go_locks.php');
     include_once('src/public_ajax/go_checks.php');
-
 }else if ( defined( 'DOING_AJAX' )) {
-
     include_once('src/public_ajax/go_shortcodes.php');
     include_once('src/public_ajax/go_locks.php');
     include_once('src/public_ajax/go_checks.php');
     include_once('src/ajax/ajax.php');
-    //include_once('admin/ajax/admin_ajax.php');
-
-
     add_action( 'wp_ajax_go_user_profile_link', 'go_user_profile_link' );
-    add_action( 'wp_ajax_go_deactivate_plugin', 'go_deactivate_plugin' );
     add_action( 'wp_ajax_go_admin_remove_notification', 'go_admin_remove_notification' ); //OK
     add_action( 'wp_ajax_go_update_bonus_loot', 'go_update_bonus_loot' );//OK
-
-
-
+    add_action( 'wp_ajax_go_clone_post_new_menu_bar', 'go_clone_post_new_menu_bar' );//OK
+    add_action( 'wp_ajax_go_make_cpt_select2_ajax', 'go_make_cpt_select2_ajax' );
+    add_action( 'wp_ajax_go_make_taxonomy_dropdown_ajax', 'go_make_taxonomy_dropdown_ajax' );
 }else{
-    //include_once('admin/admin.php');
-    //include_once('admin/ajax/admin_ajax.php');
     include_once('src/admin/go_datatable.php');
     include_once('src/admin/go_activation.php');
     include_once('src/admin/go_admin.php');
-
 }
-
-
-
 
 //always include
 include_once('src/all/go_links.php');
@@ -50,14 +38,13 @@ include_once('src/all/go_transients.php');
 include_once('src/all/go_mce.php');
 include_once('src/all/go_loot_and_updates.php');
 include_once('src/all/go_users.php');
+include_once('src/all/go_core_functions.php');
+include_once('src/all/go-acf-functions.php');
 
 /**
- * This places the mce in in hidden footer to be used later.
+ * This places the mce in in hidden footer. Loads all of the scripts and styles that allow mce to be loaded later.
  */
 function go_hidden_footer(){
-
-    //ob_start();
-
     ?>
 <div style="display: none;">
     <?php
@@ -65,10 +52,6 @@ function go_hidden_footer(){
     ?>
 </div>
 <?php
-
-    //wp_editor( '', 'initialize');
-    //$editor = ob_get_clean(); // We do not need the editor on the page load so no echo.
-
 
 }
 

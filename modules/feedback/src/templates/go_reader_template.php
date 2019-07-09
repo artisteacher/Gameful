@@ -19,9 +19,10 @@
  */
 
 get_header();
-
-
-echo "<h1 style='padding-top:30px;'>reader</h1>";
+echo "<div class='go_reader_wrapper' style='max-width: 1100px; margin: 0 auto;'>";
+echo "<h2 style='padding-top:10px;'>Reader</h2>";
 go_make_reader();
+
+echo "</div>";
 
 get_footer();

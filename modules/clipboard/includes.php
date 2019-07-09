@@ -7,14 +7,7 @@
  */
 
 //conditional includes
-if ( !is_admin() ) {
-   // include_once('public/public.php');
-
-
-}else if ( defined( 'DOING_AJAX' )) {
-
-
-
+if ( defined( 'DOING_AJAX' )) {
     //Clipboard
     add_action( 'wp_ajax_go_clipboard_stats', 'go_clipboard_stats' ); //OK
     add_action( 'wp_ajax_go_clipboard_activity', 'go_clipboard_activity' ); //OK
@@ -24,15 +17,18 @@ if ( !is_admin() ) {
     add_action( 'wp_ajax_go_clipboard_store_dataloader_ajax', 'go_clipboard_store_dataloader_ajax' ); //OK
     add_action( 'wp_ajax_go_clipboard_messages_dataloader_ajax', 'go_clipboard_messages_dataloader_ajax' ); //OK
     add_action( 'wp_ajax_go_clipboard_activity_dataloader_ajax', 'go_clipboard_activity_dataloader_ajax' ); //OK
-    add_action( 'wp_ajax_go_make_store_dropdown_ajax', 'go_make_store_dropdown_ajax' );
-    add_action( 'wp_ajax_go_make_cpt_select2_ajax', 'go_make_cpt_select2_ajax' );
-    add_action( 'wp_ajax_go_make_taxonomy_dropdown_ajax', 'go_make_taxonomy_dropdown_ajax' );
 
     include_once('src/ajax.php');
+    include_once('src/public_ajax.php');
+
+}else if ( is_admin() ) {
+    // include_once('public/public.php');
+
+    include_once('src/admin.php');
 
 }else{
-    //include_once('admin/admin.php');
-    include_once('src/admin.php');
+    include_once('src/public_ajax.php');
+
 }
 
 //always include

@@ -1,0 +1,155 @@
+{
+    "key": "group_5cd502fa18282",
+    "title": "Profile Page--backend",
+    "fields": [
+        {
+            "key": "field_5cd5030feb290",
+            "label": "Avatar",
+            "name": "go_avatar",
+            "type": "image",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": "go_local_avatar"
+            },
+            "return_format": "id",
+            "preview_size": "thumbnail",
+            "library": "uploadedTo",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": ""
+        },
+        {
+            "key": "field_5cd5031deb291",
+            "label": "Section and Seat",
+            "name": "go_section_and_seat",
+            "type": "repeater",
+            "instructions": "",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "collapsed": "",
+            "min": 1,
+            "max": 6,
+            "layout": "table",
+            "button_label": "",
+            "sub_fields": [
+                {
+                    "key": "field_5cd5031deb292",
+                    "label": "Section",
+                    "name": "user-section",
+                    "type": "taxonomy",
+                    "instructions": "",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "taxonomy": "user_go_sections",
+                    "field_type": "select",
+                    "allow_null": 0,
+                    "add_term": 0,
+                    "save_terms": 1,
+                    "load_terms": 0,
+                    "return_format": "id",
+                    "multiple": 0
+                },
+                {
+                    "key": "field_5cd5031deb293",
+                    "label": "Seat",
+                    "name": "user-seat",
+                    "type": "select",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "choices": {
+                        "": "Select",
+                        "computer 1": "computer 1",
+                        "computer 2": "computer 2",
+                        "computer 3": "computer 3",
+                        "computer 4": "computer 4",
+                        "computer 5": "computer 5",
+                        "computer 6": "computer 6",
+                        "computer 7": "computer 7",
+                        "computer 8": "computer 8",
+                        "computer 9": "computer 9",
+                        "computer 10": "computer 10",
+                        "computer 11": "computer 11",
+                        "computer 12": "computer 12",
+                        "computer 13": "computer 13",
+                        "computer 14": "computer 14",
+                        "computer 15": "computer 15",
+                        "computer 16": "computer 16",
+                        "computer 17": "computer 17",
+                        "computer 18": "computer 18",
+                        "computer 19": "computer 19",
+                        "computer 20": "computer 20",
+                        "computer 21": "computer 21",
+                        "computer 22": "computer 22",
+                        "computer 23": "computer 23",
+                        "computer 24": "computer 24",
+                        "computer 25": "computer 25",
+                        "computer 26": "computer 26",
+                        "computer 27": "computer 27",
+                        "computer 28": "computer 28",
+                        "computer 29": "computer 29",
+                        "computer 30": "computer 30",
+                        "computer 31": "computer 31",
+                        "computer 32": "computer 32",
+                        "computer 33": "computer 33",
+                        "computer 34": "computer 34",
+                        "computer 35": "computer 35",
+                        "computer 36": "computer 36",
+                        "computer 37": "computer 37",
+                        "computer 38": "computer 38",
+                        "computer 39": "computer 39",
+                        "computer 40": "computer 40"
+                    },
+                    "default_value": [],
+                    "allow_null": 0,
+                    "multiple": 0,
+                    "ui": 1,
+                    "ajax": 0,
+                    "return_format": "value",
+                    "placeholder": "Select"
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "user_form",
+                "operator": "==",
+                "value": "edit"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": "",
+    "modified": 1560188714
+}

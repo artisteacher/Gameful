@@ -53,20 +53,23 @@ function go_upload_frontend(div_id, mime_types) {
     });
 
     file_frame.on('select', function () {
-        attachment = file_frame.state().get('selection').first().toJSON();
-        console.log ("here" + this);
+        const attachment = file_frame.state().get('selection').first().toJSON();
+        //console.log ("here");
+        //console.log (attachment);
+
 
         // do something with the file here
         $('#frontend-button').attr('value', 'Change File');
         $('#go_stage_error_msg').hide();
         if (attachment.type == 'image') {
             $(val).attr('src', attachment.url);
+            $(val).closest('a').attr('data-featherlight', attachment.url);
         }
         else{
             $(val).attr('src', attachment.icon);
         }
         $(val).attr('value', attachment.id);
-        $('#go_result_media_name').html(attachment.title);
+        //$('#go_result_media_name').html(attachment.title);
 
     });
 

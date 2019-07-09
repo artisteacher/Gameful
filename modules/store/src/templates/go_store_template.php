@@ -19,7 +19,7 @@
  */
 
 get_header();
-
+$store_name = get_option( 'options_go_store_store_link');
 
 go_make_store_new();
 

@@ -57,6 +57,7 @@ add_action( 'admin_head', 'hide_all_slugs'  );
  * Function for post duplication. Dups appear as drafts. User is redirected to the edit screen
  * https://www.hostinger.com/tutorials/how-to-duplicate-wordpress-page-post#gref
  */
+add_action( 'admin_action_go_duplicate_post_as_draft', 'go_duplicate_post_as_draft' );
 function go_duplicate_post_as_draft(){
 
     if (! ( isset( $_GET['post']) || isset( $_POST['post'])  || ( isset($_REQUEST['action']) && 'go_duplicate_post_as_draft' == $_REQUEST['action'] ) ) ) {
@@ -71,11 +72,10 @@ function go_duplicate_post_as_draft(){
 
     go_clone_post_new(false);
 }
-add_action( 'admin_action_go_duplicate_post_as_draft', 'go_duplicate_post_as_draft' );
 
+//this is the function called from the task list edit table
 function go_new_task_from_template_as_draft()
 {
-
     if (!(isset($_GET['post']) || isset($_POST['post']) || (isset($_REQUEST['action']) && 'go_new_task_from_template_as_draft' == $_REQUEST['action']))) {
         wp_die('No post to duplicate has been supplied!');
     }
@@ -88,104 +88,17 @@ function go_new_task_from_template_as_draft()
     go_clone_post_new(true);
 }
 
-function go_clone_post_new($is_template = false){
-    global $wpdb;
-    /*
-     * get the original post id
-     */
-    $post_id = (isset($_GET['post']) ? absint( $_GET['post'] ) : absint( $_POST['post'] ) );
-    /*
-     * and all the original post data then
-     */
-    $post = get_post( $post_id );
 
-    /*
-     * if you don't want current user to be the new post author,
-     * then change next couple of lines to this: $new_post_author = $post->post_author;
-     */
-    $current_user = wp_get_current_user();
-    $new_post_author = $current_user->ID;
-
-    /*
-     * if post data exists, create the post duplicate
-     */
-    if (isset( $post ) && $post != null) {
-
-        if ($is_template) {
-            $post_type = 'tasks';
-        }else{
-            $post_type = $post->post_type;
-        }
-
-        /*
-         * new post data array
-         */
-        $args = array(
-            'comment_status' => $post->comment_status,
-            'ping_status'    => $post->ping_status,
-            'post_author'    => $new_post_author,
-            'post_content'   => $post->post_content,
-            'post_excerpt'   => $post->post_excerpt,
-            'post_name'      => $post->post_name,
-            'post_parent'    => $post->post_parent,
-            'post_password'  => $post->post_password,
-            'post_status'    => 'draft',
-            'post_title'     => $post->post_title . " copy",
-            'post_type'      => $post_type,
-            'to_ping'        => $post->to_ping,
-            'menu_order'     => $post->menu_order
-        );
-
-        /*
-         * insert the post by wp_insert_post() function
-         */
-        $new_post_id = wp_insert_post( $args );
-
-        /*
-         * get all current post terms ad set them to the new post draft
-         */
-        $taxonomies = get_object_taxonomies($post->post_type); // returns array of taxonomy names for post type, ex array("category", "post_tag");
-        foreach ($taxonomies as $taxonomy) {
-            $post_terms = wp_get_object_terms($post_id, $taxonomy, array('fields' => 'slugs'));
-            wp_set_object_terms($new_post_id, $post_terms, $taxonomy, false);
-        }
-
-        /*
-         * duplicate all post meta just in two SQL queries
-         */
-        $post_meta_infos = $wpdb->get_results("SELECT meta_key, meta_value FROM $wpdb->postmeta WHERE post_id=$post_id");
-        if (count($post_meta_infos)!=0) {
-            $sql_query = "INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value) ";
-            foreach ($post_meta_infos as $meta_info) {
-                $meta_key = $meta_info->meta_key;
-                if( $meta_key == '_wp_old_slug' ) continue;
-                $meta_value = addslashes($meta_info->meta_value);
-                $sql_query_sel[]= "SELECT $new_post_id, '$meta_key', '$meta_value'";
-            }
-            $sql_query.= implode(" UNION ALL ", $sql_query_sel);
-            $wpdb->query($sql_query);
-        }
-
-
-        /*
-         * finally, redirect to the edit post screen for the new draft
-         */
-        wp_redirect( admin_url( 'post.php?action=edit&post=' . $new_post_id ) );
-        exit;
-    } else {
-        wp_die('Post creation failed, could not find original post: ' . $post_id);
-    }
-}
-add_action( 'admin_action_go_new_task_from_template_as_draft', 'go_new_task_from_template_as_draft' );
 
 /*
  * Add the duplicate link to action list for post_row_actions
  */
 function go_duplicate_post_link( $actions, $post ) {
     if (current_user_can('edit_posts')) {
+        $task_name = get_option('options_go_tasks_name_singular');
         $actions['duplicate'] = '<a href="' . wp_nonce_url('admin.php?action=go_duplicate_post_as_draft&post=' . $post->ID, basename(__FILE__), 'duplicate_nonce' ) . '" title="Duplicate this item" rel="permalink">Clone</a>';
         if ($post->post_type == 'tasks_templates') {
-            $actions['new_from_template'] = '<a href="' . wp_nonce_url('admin.php?action=go_new_task_from_template_as_draft&post=' . $post->ID, basename(__FILE__), 'template_nonce' ) . '" title="Duplicate this item" rel="permalink">New From Template</a>';
+            $actions['new_from_template'] = '<a href="' . wp_nonce_url('admin.php?action=go_new_task_from_template_as_draft&post=' . $post->ID, basename(__FILE__), 'template_nonce' ) . '" title="Duplicate this item" rel="permalink">New '.$task_name.' From Template</a>';
 
         }
     }
@@ -196,9 +109,10 @@ add_filter( 'post_row_actions', 'go_duplicate_post_link', 10, 2 );
 
 function go_duplicate_post_button($post ) {
     if (current_user_can('edit_posts')) {
+        $task_name = get_option('options_go_tasks_name_singular');
         echo '<div style="padding: 10px;"><a class="button" href="' . wp_nonce_url('admin.php?action=go_duplicate_post_as_draft&post=' . $post->ID, basename(__FILE__), 'duplicate_nonce' ) . '" title="Duplicate this item" rel="permalink">Clone</a></div>';
         if ($post->post_type == 'tasks_templates'){
-            echo '<div style="padding: 10px;"><a class="button" href="' . wp_nonce_url('admin.php?action=go_new_task_from_template_as_draft&post=' . $post->ID, basename(__FILE__), 'template_nonce' ) . '" title="Duplicate this item" rel="permalink">New From Template</a></div>';
+            echo '<div style="padding: 10px;"><a class="button" href="' . wp_nonce_url('admin.php?action=go_new_task_from_template_as_draft&post=' . $post->ID, basename(__FILE__), 'template_nonce' ) . '" title="Duplicate this item" rel="permalink">New '.$task_name.' From Template</a></div>';
         }
     }
 }
@@ -212,7 +126,7 @@ add_action( 'post_submitbox_misc_actions', 'go_duplicate_post_button' );
 function go_reorder_admin_menu( ) {
     return array(
         'game-on', //GO heading
-        'go_options', //GO options
+        'game-on-options', //GO options
         'go_clipboard', //GO clipboard
         'edit.php?post_type=tasks', // Quests
         'edit-tags.php?taxonomy=task_chains', //Maps
@@ -251,37 +165,74 @@ function go_add_toplevel_menu() {
      */
 // add sub page
 
-if( function_exists('acf_add_options_page') ) {
-    acf_add_options_page(array('page_title' => 'Options', 'menu_slug' => 'go_options', 'autoload' => true, 'capability' => 'edit_posts', 'icon_url' => 'dashicons-admin-settings',
-        //'parent_slug' 	=> 'game-on',
-    ));
 
-    acf_add_options_page(array('page_title' => 'Canned Feedback', 'menu_slug' => 'go_feedback', 'autoload' => true, 'capability' => 'edit_posts', 'icon_url' => 'dashicons-admin-settings',
-        //'parent_slug' 	=> 'edit.php?post_type=go_blogs',
-    ));
-
-
-}
 
     /* add a new menu item */
     add_menu_page(
-        'Game On',
-        'About Game On',
-        'manage_options',
-        'game-on',
-        'go_admin_game_on_menu_content',
-        'dashicons-admin-home',
-        ''
+        'Game On', // page title
+        'About Game On', // menu title
+        'manage_options', // capability
+        'game-on', // menu slug
+        'go_admin_game_on_menu_content', // callback function
+        'dashicons-admin-home',// icon
+        1
     );
 
+    /* add a new menu item */
+    add_menu_page(
+        'Game On Options', // page title
+        'Options', // menu title
+        'manage_options', // capability
+        'game-on-options', // menu slug
+        'go_options_menu_content', // callback function
+        'dashicons-admin-home', // icon
+        2
+    );
+
+    if( function_exists('acf_add_options_page') ) {
+        acf_add_options_page(array('page_title' => 'Game Set-up Options', 'menu_slug' => 'go_options', 'autoload' => true, 'capability' => 'edit_posts', 'icon_url' => 'dashicons-admin-settings',
+            'parent_slug' 	=> 'game-on-options',
+        ));
+
+        acf_add_options_page(array('page_title' => 'Appearance', 'menu_slug' => 'go_appearance', 'autoload' => true, 'capability' => 'edit_posts', 'icon_url' => 'dashicons-admin-settings',
+            'parent_slug' 	=> 'game-on-options',
+        ));
+
+        acf_add_options_page(array('page_title' => 'Login and Registration', 'menu_slug' => 'go_login_options', 'autoload' => true, 'capability' => 'edit_posts', 'icon_url' => 'dashicons-admin-settings',
+            'parent_slug' 	=> 'game-on-options',
+        ));
+
+        acf_add_options_page(array('page_title' => 'Canned Feedback', 'menu_slug' => 'go_feedback', 'autoload' => true, 'capability' => 'edit_posts', 'icon_url' => 'dashicons-admin-settings',
+            'parent_slug' 	=> 'game-on-options',
+        ));
+
+        acf_add_options_page(array('page_title' => 'Canned Messages', 'menu_slug' => 'go_messages', 'autoload' => true, 'capability' => 'edit_posts', 'icon_url' => 'dashicons-admin-settings',
+            'parent_slug' 	=> 'game-on-options',
+        ));
+
+        acf_add_options_page(array('page_title' => 'Bonus Loot Default', 'menu_slug' => 'go_bonus_loot', 'autoload' => true, 'capability' => 'edit_posts', 'icon_url' => 'dashicons-admin-settings',
+            'parent_slug' 	=> 'game-on-options',
+        ));
+
+        if( get_current_blog_id() == 1 ) {
+
+
+            acf_add_options_page(array('page_title' => 'Performance', 'menu_slug' => 'go_performance', 'autoload' => true, 'capability' => 'edit_posts', 'icon_url' => 'dashicons-admin-settings',
+                'parent_slug' 	=> 'game-on-options',
+            ));
+
+        }
+
+    }
+
 
     /* add a new menu item */
     add_menu_page(
-        'Clipboard',
-        'Clipboard',
-        'manage_options',
-        'go_clipboard',
-        'go_clipboard_menu',
+        'Clipboard', // page title
+        'Clipboard', // menu title
+        'manage_options', // capability
+        'go_clipboard', // menu slug
+        'go_clipboard_menu', // callback function
         'dashicons-clipboard', // icon
         4
     );
@@ -310,32 +261,40 @@ if( function_exists('acf_add_options_page') ) {
         // 4 // menu position
         );
     }
+
+    $groups_toggle = get_option('options_go_groups_toggle');
+    if($groups_toggle) {
+
+        $groups_name = get_option('options_go_groups_name_plural');
+        /* add a new menu item */
+        add_menu_page(
+            $groups_name, // page title
+            $groups_name, // Menu title
+            'edit_posts', // capability
+            'groups', // menu slug
+            '', // callback function
+            '', // icon
+            4 // menu position
+        );
+
+    }
     /* add a new menu item */
     add_menu_page(
-        'User Groups', // page title
-        'User Groups', // menu title
-        'edit_posts', // capability
-        'groups', // menu slug
-        '', // callback function
-        '', // icon
+        'Tools',// page title
+        'Tools',// page title
+        'manage_options',// capability
+        'game-tools',// menu slug
+        'go_admin_tools_menu_content',// callback function
+        '',// icon
         4 // menu position
     );
 
-    /* add a new menu item */
-    add_menu_page(
-        'Tools',
-        'Tools',
-        'manage_options',
-        'game-tools',
-        'go_admin_tools_menu_content',
-        'dashicons-admin-tools',
-        4
-    );
+
+
 }
-add_action( 'admin_menu', 'go_add_toplevel_menu' );
+add_action( 'admin_menu', 'go_add_toplevel_menu');
 
-function go_add_templates_as_submenu() {
-
+function go_add_submenus() {
     /* add the sub menu under content for posts */
     add_submenu_page(
         'edit.php?post_type=tasks', // parent slug
@@ -344,12 +303,6 @@ function go_add_templates_as_submenu() {
         'edit_posts', // capability,
         'edit.php?post_type=tasks_templates' // menu_slug,
     );
-
-}
-add_action( 'admin_menu', 'go_add_templates_as_submenu', 9 );
-
-
-function go_add_mapmenu_as_submenu() {
 
     /* add the sub menu under content for posts */
     add_submenu_page(
@@ -360,13 +313,8 @@ function go_add_mapmenu_as_submenu() {
         'maps_menus' // menu_slug,
     );
 
-}
-add_action( 'admin_menu', 'go_add_mapmenu_as_submenu', 9 );
-
-function go_add_badges_sub_menus() {
-    $badges_name = get_option('options_go_badges_name_singular');
-
     // add the sub menu under content for posts */
+    $badges_name = get_option('options_go_badges_name_singular');
     add_submenu_page(
         'badges', // parent slug
         'Manage ' . $badges_name, // page_title,
@@ -374,10 +322,6 @@ function go_add_badges_sub_menus() {
         'edit_posts', // capability,
         'edit-tags.php?taxonomy=go_badges' // menu_slug,
     );
-}
-add_action( 'admin_menu', 'go_add_badges_sub_menus', 9 );
-
-function go_add_groups_as_submenu() {
 
     /* add the sub menu under content for posts */
     add_submenu_page(
@@ -388,11 +332,6 @@ function go_add_groups_as_submenu() {
         'edit-tags.php?taxonomy=user_go_groups' // menu_slug,
     );
 
-}
-add_action( 'admin_menu', 'go_add_groups_as_submenu', 9 );
-
-function go_add_sections_sub_menus() {
-
     // add the sub menu under content for posts */
     add_submenu_page(
         'groups', // parent slug
@@ -401,10 +340,6 @@ function go_add_sections_sub_menus() {
         'edit_posts', // capability,
         'edit-tags.php?taxonomy=user_go_sections' // menu_slug,
     );
-}
-add_action( 'admin_menu', 'go_add_sections_sub_menus', 9 );
-
-function go_add_chains_as_submenu() {
 
     /* add the sub menu under content for posts */
     add_submenu_page(
@@ -415,10 +350,10 @@ function go_add_chains_as_submenu() {
         'edit-tags.php?taxonomy=task_chains' // menu_slug,
     );
 
+
+
 }
-add_action( 'admin_menu', 'go_add_chains_as_submenu', 9 );
-
-
+add_action( 'admin_menu', 'go_add_submenus', 9 );
 
 /**
  * Add content to submenus
@@ -624,17 +559,101 @@ function action_after_taxonomy_table( $taxonomy ) {
 };
 
 $mytaxonomy = (isset($_GET['taxonomy']) ?  $_GET['taxonomy'] : null);
-
 if ($mytaxonomy) {
     $taxonomy = $mytaxonomy;
-
 // add the action
     add_action("after-{$taxonomy}-table", 'action_after_taxonomy_table', 10, 1);
 
 // run the action
     do_action('after-{$taxonomy}-table', $taxonomy);
+}
+
+
+function go_options_menu_content() {
+
+    $task_name = get_option('options_go_tasks_name_singular');
+    ?>
+
+    <div id="go_tools_wrapper" class="wrap">
+        <h2>Options and Set Up</h2>
+        <div class="go_tools_section">
+
+            <div class="go_tools_section">
+                <div class="card">
+                    <h2><a href="<?php menu_page_url('go_options'); ?>">Set Up Options</a></h2>
+                    <p>Here you can set your Loot Options, Map and Store Options, User Options, and Appearance</p>
+                </div>
+            </div>
+
+            <div class="go_tools_section">
+                <div class="card">
+                    <h2><a href="<?php menu_page_url('go_login_options'); ?>">Login and Registration</a></h2>
+                    <p>Here you can set up how students will register and login to your site.</p>
+                </div>
+            </div>
+            <div class="go_tools_section">
+                <div class="card">
+                    <h2><a href="<?php menu_page_url('go_feedback'); ?>">Canned Feedback</a></h2>
+                    <p>Find yourself leaving the same feedback over and over again? Create a preset and save yourself time.</p>
+                </div>
+            </div>
+            <div class="go_tools_section">
+                <div class="card">
+                    <h2><a href="<?php menu_page_url('go_messages'); ?>">Canned Messages</a></h2>
+                    <p>Messages can be used to reward or provide consequences for behavior.  Set or modify the presets here for common behaviors.</p>
+                </div>
+            </div>
+            <div class="go_tools_section">
+                <div class="card">
+                    <h2><a href="<?php menu_page_url('go_bonus_loot'); ?>">Bonus Loot Defaults</a></h2>
+                    <p>Create a default set of bonus loot that you can apply to any <?php echo $task_name; ?>.  Students have a chance to win bonus loot upon completion of a <?php echo $task_name; ?>. </p>
+                </div>
+            </div>
+            <div class="go_tools_section">
+                <div class="card">
+                    <h2><a href="<?php menu_page_url('go_appearance'); ?>">Game On Appearance</a></h2>
+                    <p>Adjust the appearance of game on menus and pages.</p>
+                </div>
+            </div>
+            <?php
+            if (!is_multisite()) {
+                ?>
+                <div class="go_tools_section">
+                    <div class="card">
+                        <h2><a href="<?php menu_page_url('go_performance'); ?>">Performance</a></h2>
+                        <p>Rewrite slugs, and image resizing.</p>
+                    </div>
+                </div>
+                <?php
+            }
+            ?>
+
+        </div>
+        <?php
+        if (is_multisite() && get_current_blog_id() == 1) {
+            ?>
+            <h3>Site-Wide Settings</h3>
+            <div class="go_tools_section">
+
+                <div class="go_tools_section">
+                    <div class="card">
+                        <h2><a href="<?php menu_page_url('go_performance'); ?>">Performance</a></h2>
+                        <p>Rewrite slugs, and image resizing.</p>
+                    </div>
+                </div>
+            </div>
+            <?php
+        }
+        ?>
+    </div>
+
+
+
+    <?php
 
 }
+
+
 
 
 

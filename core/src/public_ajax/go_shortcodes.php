@@ -72,7 +72,7 @@ add_shortcode( 'get_displayname', 'go_get_displayname_function' );
 add_shortcode( 'go_get_displayname', 'go_get_displayname_function' );
 
 //Gets the users first name
-function go_get_firstname_function( $atts, $content = null ) {
+function go_get_firstname_function( $atts = null, $content = null ) {
 	if (is_user_logged_in() ) {
 		$current_user = wp_get_current_user();
 	    return "<span id='go-firstname'>{$current_user->user_firstname}</span>";
@@ -157,7 +157,7 @@ add_shortcode ( 'go_latest_post', 'go_latest_post_url_shortcode' );
 
 //Makes content within tags only visible to people who aren't logged in
 function go_visitor_only_content_function( $atts, $content = null ) {
-	if ( is_user_logged_in() ) {
+	if ( is_user_member_of_blog() ) {
     	echo '';
 	} else {
     	return '<div id="visitor-only-content">'.do_shortcode( $content ).'</div>';
@@ -168,7 +168,7 @@ add_shortcode ( 'go_visitor_only_content', 'go_visitor_only_content_function' );
 
 //Makes content within tags visible to only people who are logged in  
 function go_user_only_content_function( $atts, $content = null ) {
-	if ( is_user_logged_in() ) {
+	if ( is_user_member_of_blog() ) {
     	return '<div id="user-only-content">'.do_shortcode( $content).'</div>';
 	} else {
     	return '';

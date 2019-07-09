@@ -11,136 +11,137 @@
  * checks the test answers
  *
  */
-function go_unlock_stage() {
-    global $wpdb;
-    $task_id = ( ! empty( $_POST['task_id'] ) ? (int) $_POST['task_id'] : 0 );
-    $user_id = ( ! empty( $_POST['user_id'] ) ? (int) $_POST['user_id'] : 0 );
-    //$go_task_table_name = "{$wpdb->prefix}go_tasks";
+function go_check_quiz_answers() {
+   //global $wpdb;
+
+    if ( !is_user_logged_in() ) {
+     echo "login";
+     die();
+    }
+
+    //check_ajax_referer( 'go_check_quiz_answers' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_check_quiz_answers' ) ) {
+        echo "refresh";
+        die( );
+    }
+
+    $task_id = (isset($_POST['task_id']) ?  intval($_POST['task_id']) : 0);
+    $user_id = (isset( $_POST['user_id'] ) ? intval($_POST['user_id']) : 0 );
+
     $db_status = go_get_status($task_id, $user_id);
-    $status        = ( ! empty( $_POST['status'] ) ? (int) $_POST['status'] : 0 ); // Task's status posted from ajax function
+    $status        = (isset( $_POST['status'] ) ? (int) $_POST['status'] : 0 ); // Task's status posted from ajax function
     if ($status != $db_status){
         echo "refresh";
         die();
     }
+    $current_stage = $status+1;
 
-    check_ajax_referer( 'go_unlock_stage_' . $task_id . '_' . $user_id );
-    $test_size  = ( ! empty( $_POST['list_size'] ) ? (int) $_POST['list_size'] : 0 );
-    $choice = ( ! empty( $_POST['chosen_answer'] ) ? stripslashes( $_POST['chosen_answer'] ) : '' );
-    $type   = ( ! empty( $_POST['type'] )          ? sanitize_key( $_POST['type'] ) : '' );
-    if ( $test_size > 1 ) {
-        $all_test_choices = explode( "#### ", $choice );
-        $type_array = explode( "### ", $type );
-    } else {
-        if ( $type == 'checkbox' ) {
-            $choice_array = explode( "### ", $choice );
-        }
-    }
+    $all_test_choices = (isset($_POST['chosen_answer']) ?  $_POST['chosen_answer'] : array());
 
-    $custom_fields = get_post_custom( $task_id );
+    $custom_fields = go_post_meta( $task_id );
+
     $test_stage = 'go_stages_' . $status . '_quiz';
     //$test_fail_name = 'test_fail_count';
 
 
     $test_c_array = $custom_fields[ $test_stage ][0];
-    $test_c_uns = unserialize( $test_c_array );
-    $keys = $test_c_uns[1];
-    $all_keys_array = array();
-    for ( $i = 0; $i < count( $keys ); $i++ ) {
-        $all_keys_array[] = implode( "### ", $keys[ $i ][1] );
-    }
-    $key = $all_keys_array[0];
+    $temp_uns = unserialize( $test_c_array );
 
-    if ( $type == 'checkbox'  ) {
-        $key_str = preg_replace( '/\s*\#\#\#\s*/', '### ', $key );
-        $key_array = explode( '### ', $key_str );
-    }
+    $test_field_input_array = (!empty($temp_uns[1]) ? $temp_uns[1] : null);//an array of the answers[0] and the correct answer[1]
+    $test_field_select_array = (!empty($temp_uns[2]) ? $temp_uns[2] : null);//an array of the type of questions (radio or checkbox)
+    $num_questions = (!empty($temp_uns[3]) ? (int)$temp_uns[3] : null);//an integer of the number of questions
 
     $fail_question_ids = array();
-    //if there is at least 2 questions, make array of wrong answers
-    if ( $test_size > 1 ) {
-        $total_matches = 0;
-        for ( $i = 0; $i < $test_size; $i++ ) {
-            if ( ! empty( $type_array[ $i ] ) && 'radio' == $type_array[ $i ] ) {
-                if ( strtolower( $all_keys_array[ $i ] ) == strtolower( $all_test_choices[ $i ] ) ) {
-                    $total_matches++;
-                } else {
-                    if ( ! in_array( "#go_test_{$i}", $fail_question_ids ) ) {
-                        array_push( $fail_question_ids, "#go_test_{$i}" );
-                    }
-                }
-            } else {
-                $k_array = explode( "### ", $all_keys_array[ $i ] );
-                $c_array = explode( "### ", $all_test_choices[ $i ] );
-                $match_count = 0;
-                for ( $x = 0; $x < count( $c_array ); $x++ ) {
-                    if ( strtolower( $c_array[ $x ] ) == strtolower( $k_array[ $x ] ) ) {
-                        $match_count++;
-                    }
-                }
+    $total_matches = 0;
 
-                if ( $match_count == count( $k_array ) && $match_count == count( $c_array ) ) {
-                    $total_matches++;
-                } else {
-                    if ( ! in_array( "#go_test_{$i}", $fail_question_ids ) ) {
-                        array_push( $fail_question_ids, "#go_test_{$i}" );
+    //for each question
+    //check each answer
+    //if correct
+    //add 1 to correct count
+    //if wrong
+    //add 1 to fail count
+    //add question 1 to fail array
+
+    //update fail count
+    //return true if all correct
+
+
+    if ($num_questions > 0) {//if there are questions
+        for ($i = 0; $i < $num_questions; $i++) {//for each question
+            $correct = (isset($test_field_input_array[$i][1]) ? $test_field_input_array[$i][1] : array());
+            $question_type = (isset($test_field_select_array[$i]) ? $test_field_select_array[$i] : 'radio');
+                if ($question_type == 'radio') {
+                    if ($correct[0] == $all_test_choices[$i]){
+                        $total_matches++;
+                    }else{
+                        $fail_question_ids[] = "go_test_{$current_stage}_{$i}";
+                    }
+                }else {//this is a multi-select
+                    $checkbox = 0;
+                    $count = count($correct);//the count of the number that need to be checked
+                    $correct = array_values($correct);
+                    for ($a = 0; $a < $count; $a++) {
+                        $answer = (isset($all_test_choices[$i][$a]) ?  $all_test_choices[$i][$a] : null);
+                        if (in_array( $answer ,$correct) ){
+                            $checkbox++;
+                        }
+                    }
+                    if ($checkbox == $count){
+                        $total_matches++;
+                    }else{
+                        $fail_question_ids[] = "go_test_{$current_stage}_{$i}";
                     }
                 }
-            }
-        }
-
-        if ( $total_matches == $test_size ) {
-            echo true;
-            die();
-        } else {
-            //go_inc_test_fail_count( $test_fail_name, $test_fail_max );
-            if ( ! empty( $fail_question_ids ) ) {
-                $fail_id_str = implode( ', ', $fail_question_ids );
-                $fail_count = count($fail_question_ids);
-                go_update_fail_count($user_id, $task_id, $fail_count, $status);
-                echo $fail_id_str;
-            } else {
-                echo 0;
-            }
-            die();
         }
     }
-    //else there is only one answer, so just return true or false
-    else {
 
-        if ( $type == 'radio' ) {
-            if ( strtolower( $choice ) == strtolower( $key ) ) {
-                echo true;
-                die();
-            } else {
-                //go_inc_test_fail_count( $test_fail_name, $test_fail_max );
-                echo 0;
-                go_update_fail_count($user_id, $task_id,1, $status);
-                die();
-            }
-        } elseif ( $type == 'checkbox' ) {
-            $key_match = 0;
-            for ( $i = 0; $i < count( $key_array ); $i++ ) {
-                for ( $x = 0; $x < count( $choice_array );  $x++ ) {
-                    if ( strtolower( $choice_array[ $x ] ) == strtolower( $key_array[ $i ] ) ) {
-                        $key_match++;
-                        break;
-                    }
-                }
-            }
-            if ( $key_match == count( $key_array ) && $key_match == count( $choice_array ) ) {
-                echo true;
-                die();
-            } else {
-                //go_inc_test_fail_count( $test_fail_name, $test_fail_max );
-                echo 0;
-                go_update_fail_count($user_id, $task_id, 1, $status);
-                die();
-            }
-        }
+    $fail_count = count($fail_question_ids);
+    go_update_fail_count($user_id, $task_id, $fail_count, $status, $num_questions);
+    if ($total_matches == $num_questions ){
+        echo true;
+    }else {
+        echo json_encode($fail_question_ids);
     }
 
     die();
+
+
+
 }
+
+function go_save_quiz_result() {
+    //global $wpdb;
+
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
+    //check_ajax_referer( 'go_save_quiz_result' . $task_id . '_' . $user_id );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_save_quiz_result' ) ) {
+        echo "refresh";
+        die( );
+    }
+    $status        = (isset( $_POST['status'] ) ? (int) $_POST['status'] : 0 ); // Task's status posted from ajax function
+    $task_id = (isset($_POST['task_id']) ?  intval($_POST['task_id']) : 0);
+    $user_id = (isset( $_POST['user_id'] ) ? intval($_POST['user_id']) : 0 );
+
+
+    //global $wpdb;
+    //$go_actions_table_name = "{$wpdb->prefix}go_actions";
+    $html = (isset($_POST['html']) ?  $_POST['html'] : '');
+    //check to see if a quiz-mod exists for this stage
+    go_update_actions($user_id, 'quiz_result', $task_id, $status + 1, null, null, $html, null, null, null, null, null, null, null, null, null, null, null);
+    //  go_update_actions($user_id, $type,              $source_id,     $status,        $bonus_status, $check_type, $result, $quiz_mod, $late_mod, $timer_mod, $global_mod, $xp, $gold, $health, $badge_ids, $group_ids, $notify, $debt)
+
+
+    die();
+
+
+
+}
+
+
 
 //Adds the quiz modifier to the actions table
 /**
@@ -149,23 +150,26 @@ function go_unlock_stage() {
  * @param $fail_count
  * @param $status
  */
-function go_update_fail_count($user_id, $task_id, $fail_count, $status){
+function go_update_fail_count($user_id, $task_id, $fail_count, $status, $total_questions){
     global $wpdb;
     $go_actions_table_name = "{$wpdb->prefix}go_actions";
+    //$html = (isset($_POST['html']) ?  $_POST['html'] : '');
     //check to see if a quiz-mod exists for this stage
     $quiz_mod_exists = $wpdb->get_var(
         $wpdb->prepare(
             "SELECT id 
 				FROM {$go_actions_table_name} 
-				WHERE source_id = %d AND uid = %d AND action_type = %s",
+				WHERE source_id = %d AND uid = %d AND stage = %d AND action_type = %s",
             $task_id,
             $user_id,
+            $status+ 1,
             'quiz_mod'
         )
     );
     if ($quiz_mod_exists == null) {
         //then update if needed
-        go_update_actions($user_id, 'quiz_mod', $task_id, $status + 1, null, $status, $fail_count, null, null, null, null, null, null, null, null, null, null, null, false);
+        go_update_actions($user_id, 'quiz_mod', $task_id, $status + 1, null, $total_questions, $fail_count, null, null, null, null, null, null, null, null, null, null);
+    //  go_update_actions($user_id, $type,              $source_id,     $status,        $bonus_status, $check_type, $result, $quiz_mod, $late_mod, $timer_mod, $global_mod, $xp, $gold, $health, $badge_ids, $group_ids, $notify, $debt)
     }
 }
 

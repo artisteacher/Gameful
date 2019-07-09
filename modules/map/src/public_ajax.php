@@ -1,4 +1,6 @@
 <?php
+
+
 /**
  *
  */
@@ -6,6 +8,25 @@ function go_make_map() {
     if ( ! is_admin() ) {
         $user_id = get_current_user_id();
         $last_map_id = get_user_option('go_last_map', $user_id);
+        if(!$last_map_id){
+            $last_map_id = get_option('options_go_locations_map_default', '');
+        }
+        if(!$last_map_id){
+            $taxonomy = 'task_chains';
+            /*$term_args0=array(
+                'hide_empty' => false,
+                'order' => 'ASC',
+                'parent' => '0',
+                'number' => 1
+            );
+            $firstmap = get_terms($taxonomy,$term_args0);*/
+            $firstmap = go_get_terms_ordered($taxonomy, '0', 1);
+            if (!empty($firstmap)) {
+                $last_map_id = $firstmap[0]->term_id;
+            }else{
+                $last_map_id = null;
+            }
+        }
         echo "<div id='go_map_container' style='padding:10px 30px; margin: 30px 5%; background-color: white;'>";
         $map_title = get_option( 'options_go_locations_map_title');
         echo "<h1 style='padding:0px 30px 30px 0px;'>{$map_title}</h1>";
@@ -37,7 +58,7 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
     </script>
         <?php
     global $wpdb;
-    $go_loot_table_name = "{$wpdb->prefix}go_loot";
+    //$go_loot_table_name = "{$wpdb->prefix}go_loot";
     $go_task_table_name = "{$wpdb->prefix}go_tasks";
     //wp_nonce_field( 'go_update_last_map');
     $last_map_object = get_term_by( 'id' , $last_map_id, 'task_chains');//Query 1 - get the map
@@ -54,7 +75,8 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
     $is_logged_in = ! empty( $user_id ) && $user_id > 0 ? true : false;
     //$taxonomy_name = 'task_chains';
 
-    $user_badges =  $wpdb->get_var ("SELECT badges FROM {$go_loot_table_name} WHERE uid = {$user_id}");
+    $key = go_prefix_key('go_badge');
+    $user_badges = get_user_meta($user_id, $key, false);
     if(empty($user_badges)){ //if there were no badges then create empty array
         $user_badges = array();
     }
@@ -67,14 +89,22 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
     if ($reload == false) {echo "<div id='mapwrapper' style='overflow: auto; '>";}
     echo "<div id='loader_container' style='display:none; height: 250px; width: 100%; padding: 10px 30px; '>
                 <div id='loader'>
+                <i class='fas fa-spinner fa-pulse fa-4x'></i>
                 </div>
           </div>
             <div id='maps' data-mapid='$last_map_id' style='overflow: auto;'>";
     if(!empty($last_map_id)){
 
+
+        $badge_id = get_term_meta($last_map_id, "pod_achievement", true);
         echo 	"<div id='map_$last_map_id' class='map' style='overflow: auto;'>
 				<ul class='primaryNav'>
-				<li class='ParentNav'><p>$last_map_object->name</p></li>";
+				<li class='ParentNav'><p>$last_map_object->name</p>";
+        //go_map_quest_badge($badge_id, $user_badges, true);
+        if(intval($badge_id) > 0) {
+            go_print_single_badge($badge_id, 'badge', $output = true, $user_id);
+        }
+        echo "</li>";
 
         $term_ids = go_get_map_chain_term_ids($last_map_id);
 
@@ -138,6 +168,10 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
                 );
                 $user_tasks = json_decode(json_encode($user_tasks), True);
 
+                $task_color = '';
+                $first_optional = true;
+                $last_was_optional = false;
+
                 //for each of the tasks (objects retrieved in query 2)
                 foreach($go_post_ids as $post_id) {
                     $go_task_data = go_post_data($post_id); //0--name, 1--status, 2--permalink, 3--metadata
@@ -152,7 +186,7 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
                     //$task_name = $row->post_title; //Q
                     //$task_link = get_permalink($row); //Q
                     //$id = $row->ID;
-                    //$custom_fields = get_post_custom( $id ); // Just gathering some data about this task with its post id
+                    //$custom_fields = go_post_meta( $id ); // Just gathering some data about this task with its post id
                     $stage_count = $custom_fields['go_stages'][0];//total stages
 
                     //$user_tasks is an array of task object arrays
@@ -168,10 +202,14 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
                     if ($key !== false) {
                         $this_task = $user_tasks[$key];
                         $status = $this_task['status'];
+                        $class = $this_task['class'];
+                        if ($status == -2){
+                            $class = 'reset';
+                        }
                     }else{
                         $status = 0;
                         $this_task = array();
-
+                        $class = '';
                     }
                     //add status to cache
                     $cache_key = 'go_get_status_' . $post_id;
@@ -198,25 +236,12 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
                     //$task_is_locked = false;
                     $unlock_message = '';
                     if ($task_is_locked === 'password'){
-                        $unlock_message = '<div><i class="fa fa-unlock"></i> Password</div>';
+                        $unlock_message = '<div><i class="fas fa-unlock"></i> Password</div>';
                         $task_is_locked = false;
                     }
                     else if ($task_is_locked === 'master password') {
-                        $unlock_message = '<div><i class="fa fa-unlock"></i> Master Password</div>';
+                        $unlock_message = '<div><i class="fas fa-unlock"></i> Master Password</div>';
                         $task_is_locked = false;
-                    }
-
-
-                    if ($stage_count <= $status){
-                        $task_color = 'done';
-                        $finished = 'checkmark';
-                    }else if ($task_is_locked){
-                        $task_color = 'locked';
-                        $finished = null;
-                    }
-                    else{
-                        $task_color = 'available';
-                        $finished = null;
                     }
 
                     if ($custom_fields['go-location_map_opt'][0]) {
@@ -228,11 +253,38 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
                         $bonus_task = null;
                     }
 
-                    if ($task_links === true) {
-                        echo "<li class='$task_color $optional '><a href='$task_link'><div class='$finished'></div><span style='font-size: .8em;'>$bonus_task $task_name <br>$unlock_message</span>";
+                    //if this task is optional and the previous task isn't done, then don't print the task
+                    if (($optional === 'optional_task' &&  $task_color != 'done') && !$last_was_optional ){
+                        continue;
+                    }else if ($optional === 'optional_task' &&  $first_optional === true ){
+                        echo "<li class='go_optional_toggle'><i class=\"fas fa-caret-down\"></i></li>";
+                        $first_optional = false;
                     }else{
-                        echo "<li class='$task_color $optional '><a href='javascript:;' class='go_blog_user_task' data-UserId='".$user_id."' onclick='go_blog_user_task(".$user_id.", ".$post_id.");'><div class='$finished'></div><span style='font-size: .8em;'>$bonus_task $task_name <br>$unlock_message</span>";
-                        //echo "<li class='$task_color $optional '><a href='$task_link'><div class='$finished'></div><span style='font-size: .8em;'>$bonus_task $task_name <br>$unlock_message</span>";
+                        $first_optional = true;
+                    }
+
+                    if ($optional === 'optional_task'){
+                        $last_was_optional = true;
+                    }else{
+                        $last_was_optional = false;
+                    }
+
+                    if ($stage_count <= $status){
+                        $task_color = 'done';
+                    }else if ($task_is_locked){
+                        $task_color = 'locked';
+                    }
+                    else{
+                        $task_color = 'available';
+                    }
+
+
+
+                    if ($task_links === true) {
+                        echo "<li class='$task_color $optional $class'><a href='$task_link'><span style='font-size: .8em;'>$bonus_task $task_name <br>$unlock_message</span>";
+                    }else{
+                        echo "<li class='$task_color $optional $class'><a href='javascript:;' class='go_blog_user_task' data-UserId='".$user_id."' onclick='go_blog_user_task(".$user_id.", ".$post_id.");'><span style='font-size: .8em;'>$bonus_task $task_name <br>$unlock_message</span>";
+                        //echo "<li class='$task_color $optional '><a href='$task_link'><span style='font-size: .8em;'>$bonus_task $task_name <br>$unlock_message</span>";
                         }
                     //<a href="javascript:;" class="go_blog_user_task" data-UserId="'.$user_id.'" onclick="go_blog_user_task('.$user_id.', '.$post_id.');">
 
@@ -241,7 +293,8 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
 
                     if($badge_ids) {//if there are badges awarded on this task
                         if (!empty($badge_ids)) {
-                            go_map_badge($badge_ids, $user_badges, false);
+                            //go_map_badge($badge_ids, $user_badges, false, $user_id);
+                            go_print_single_badge( $badge_ids, 'badge', $output = true, $user_id );
                         }
                     }
 
@@ -277,11 +330,14 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
                     }
                     */
 
+
+
+                    echo"</a>";
+
                     if ($bonus_stage_toggle == true){
                         $percentage = $bonus_status / $repeat_max * 100;
-                        $color = 'gold';
-                        $progress_bar = '<div style="position: relative; width:90%; margin-left: 5%; height:15px; border: 1px solid; background-color: white; box-sizing: unset;">'.'<div class="go_bonus_progress_bar" '.
-                            'style="position: absolute; height: 15px; width: '.$percentage.'%; background-color: '.$color.' ;">'.
+                        $progress_bar = '<div class="go_bonus_progresss_bar_position"></div><div class="go_bonus_progresss_bar_container" >'.'<div class="go_bonus_progress_bar" '.
+                            'style="width: '.$percentage.'%;">'.
                             '</div>'.
                             '<div style="position: absolute; width: 100%; height: 100%; font-size: .7em; line-height: initial;" class="bonus_progress">Bonus: '.
                             $bonus_status . ' / ' . $repeat_max .'</div>'.
@@ -289,8 +345,8 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
                         echo $progress_bar;
                     }
 
-                    echo"</a>
-							</li>";
+
+					echo"</li>";
                 }
 
                 //badge for chains
@@ -298,17 +354,19 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
 
 
                 if (!empty($badge_ids)) {
-                    go_map_badge($badge_ids, $user_badges, true);
+                    go_map_badge($badge_ids, $user_badges, true, $user_id);
                 }
 
             }
             echo "</ul>";
         }
+        /*
+         * //Show map at end of map in own colum
         //badge for map
         $badge_ids = get_term_meta($last_map_id, "pod_achievement", true);
         if (!empty($badge_ids)) {
             go_map_badge($badge_ids, $user_badges, true);
-        }
+        }*/
 
 
 
@@ -344,7 +402,7 @@ add_shortcode( 'go_single_map_link', 'go_single_map_link' );
  *
  * Show badge on map for tasks
  */
-function go_map_badge($badge_ids, $user_badges, $container){
+function go_map_badge($badge_ids, $user_badges, $container, $user_id){
 
     if($badge_ids) {//if there are badges awarded on this task
         if (is_serialized($badge_ids)){
@@ -365,7 +423,8 @@ function go_map_badge($badge_ids, $user_badges, $container){
                     }
                     echo "<li class='". $task_color . "'><a class='go_map_badge'>";
                 }
-                go_map_quest_badge($badge_id, $user_badges);
+                //go_map_quest_badge($badge_id, $user_badges, true);
+                go_print_single_badge( $badge_id, 'badge', $output = true, $user_id );
                 if ($container){
                     echo "</a></li>";
                 }
@@ -381,7 +440,8 @@ function go_map_badge($badge_ids, $user_badges, $container){
  * @param $badge
  * @param $user_badges
  */
-function go_map_quest_badge($badge, $user_badges){
+/*
+function go_map_quest_badge($badge, $user_badges, $small = false){
     //does this term have a badge assigned and if so show it
     if ($user_badges == null){
         $user_badges = array();
@@ -401,35 +461,64 @@ function go_map_quest_badge($badge, $user_badges){
         $badge_obj = get_term( $badge);
         $badge_name = $badge_obj->name;
         //$badge_img_id =(isset($custom_fields['my_image'][0]) ?  $custom_fields['my_image'][0] : null);
-        $badge_img = wp_get_attachment_image($badge_img_id[0], array( 50, 50 ));
-        if (!$badge_img){
-            $badge_img = "<div style='width:50px; height: 50px;'></div>";
-        }
+
+
 
         //$badge_attachment = wp_get_attachment_image( $badge_img_id, array( 100, 100 ) );
         //$img_post = get_post( $badge_id );
-        if ( ! empty( $badge_obj ) ) {
-            echo"<div class='go_badge_quest_wrap'>
-                        <div class='go_badge_quest_container ". $badge_needed . "'><figure class=go_quest_badge title='{$badge_name}'>";
-
-            if (!empty($badge_description)){
-                $badge_description = strip_tags($badge_description );
-                echo "<span class='tooltip' ><span class='tooltiptext'>{$badge_description}</span>{$badge_img}</span>";
+        if(!$small) {
+            if (isset($badge_img_id[0]) && !empty($badge_img_id[0])){
+                $badge_img = wp_get_attachment_image($badge_img_id[0], array( 100, 100 ));
             }else{
-                echo "$badge_img";
+                $badge_img = '<i class="fas fa-award fa-4x"></i>';
             }
-            echo "        
+
+            if (!empty($badge_obj)) {
+                echo "<div class='go_badge_quest_wrap'>
+                        <div class='go_badge_quest_container " . $badge_needed . "'><figure class=go_quest_badge title='{$badge_name}'>";
+
+                if (!empty($badge_description)) {
+                    $badge_description = strip_tags($badge_description);
+                    //echo "<span class='tooltip' ><span class='tooltiptext'>{$badge_description}</span>{$badge_img}</span>";
+                    echo "<span class='tooltip' data-tippy-content='{$badge_description}'>{$badge_img}</span>";
+                } else {
+                    echo "$badge_img";
+                }
+                echo "        
               				 <figcaption>{$badge_name}</figcaption>
                             </figure>
                         </div>
                        </div>";
 
+            }
+        }else{
+            if (isset($badge_img_id[0]) && !empty($badge_img_id[0])){
+                $badge_img = wp_get_attachment_image($badge_img_id[0], array( 50, 50 ));
+            }else{
+                $badge_img = '<i class="fas fa-award fa-3x"></i>';
+            }
+            if (!empty($badge_obj)) {
+                echo "<div class='go_badge_quest_container " . $badge_needed . "'><figure class=go_quest_badge title='{$badge_name}'>";
+
+                if (!empty($badge_description)) {
+                    $badge_description = strip_tags($badge_description);
+                    echo "<span class='tooltip' data-tippy-content='{$badge_description}'>{$badge_img}</span>";
+                } else {
+                    echo "$badge_img";
+                }
+                echo "        
+              				 <figcaption>{$badge_name}</figcaption>
+                            </figure>
+                        </div>
+                       ";
+
+            }
         }
         //echo "</li>";
 
     }
 }
-
+*/
 
 /**
  *
@@ -437,13 +526,14 @@ function go_map_quest_badge($badge, $user_badges){
 function go_make_map_dropdown($user_id = null){
 /* Get all task chains with no parents--these are the top level on the map.  They are chains of chains (realms). */
 	$taxonomy = 'task_chains';
-	$term_args0=array(
+	/*$term_args0=array(
   		'hide_empty' => false,
-  		'orderby' => 'name',
   		'order' => 'ASC',
   		'parent' => '0'
-	);
-	$tax_terms_maps = get_terms($taxonomy,$term_args0);
+	);*/
+	//$tax_terms_maps = get_terms($taxonomy,$term_args0);
+
+    $tax_terms_maps = go_get_terms_ordered($taxonomy, '0');
 
 	if($user_id != null){
 	    $user_data = get_userdata($user_id );
@@ -465,7 +555,7 @@ function go_make_map_dropdown($user_id = null){
                     echo "
                 <div id='mapLink_$term_id' >
                 <a onclick=go_show_map($term_id)>$tax_term_map->name</a></div>";
-                }
+               }
             }
         echo"</div></div></div> ";
 }

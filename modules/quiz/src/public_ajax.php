@@ -8,86 +8,48 @@
 
 
 add_shortcode( 'go_test', 'go_test_shortcode' );
-function go_test_shortcode( $atts, $content ) {
-    $atts = shortcode_atts( array(
-        'type' => 'radio',
-        'question' => 'What is the ultimate answer to life, the universe, and everything?',
-        'possible_answers' => '42### There is no answer',
-        'key' => '42',
-        'test_id' => '0',
-        'total_num' => '1'
-    ), $atts);
-    $type = $atts['type'];
-    $question = $atts['question'];
-    $possible_answers = $atts['possible_answers'];
-    $key = $atts['key'];
-    $test_id = $atts['test_id'];
-    $total_num = $atts['total_num'];
-    $possible_answers_str = preg_replace( array( "/\#\#\#\s*/", "/(\&#91;)/", "/(\&#93;)/" ), array( "### ", '[', ']' ), $possible_answers );
-    $answer_array = explode( "### ", $possible_answers_str );
-    $key_decoded = preg_replace( array( "/(\&#91;)/", "/(\&#93;)/" ), array( '[', ']' ), $key );
-    if ( $type == 'checkbox' ) {
-        $key_str = preg_replace( "/\s*\#\#\#\s*/", "### ", $key_decoded );
-        $key_array = explode( "### ", $key_str );
-    }
-    $key_check = false;
-    $key_match = 0;
-    if ( $type == 'radio' ) {
-        for ( $i = 0; $i < count( $answer_array ); $i++ ) {
-            if (strtolower( $answer_array[ $i ] ) == strtolower( $key_decoded ) ) {
-                $key_check = true;
-                break;
-            }
-        }
-    } elseif ( $type == 'checkbox' ) {
-        for ( $i = 0; $i < count( $answer_array ); $i++ ) {
-            for ( $x = 0; $x < count( $key_array ); $x++ ) {
-                if ( strtolower( $answer_array[ $i ] ) == strtolower( $key_array[ $x ] ) ) {
-                    $key_match++;
-                    break;
+function go_test_shortcode( $atts ) {
+
+    $test_stage_array = unserialize($atts['quiz']);
+    $stage = intval($atts['stage']);
+
+    $test_field_input_question = (!empty($test_stage_array[0]) ? $test_stage_array[0] : null);//an array of the questions
+    $test_field_input_array = (!empty($test_stage_array[1]) ? $test_stage_array[1] : null);//an array of the answers[0] and the correct answer[1]
+    $test_field_select_array = (!empty($test_stage_array[2]) ? $test_stage_array[2] : null);//an array of the type of questions (radio or checkbox)
+    $test_field_block_count = (!empty($test_stage_array[3]) ? (int)$test_stage_array[3] : null);//an integer of the number of questions
+    $test_field_input_count = (!empty($test_stage_array[4]) ? $test_stage_array[4] : null);//an array of integers of the number of answers
+
+    if ($test_field_block_count > 0) {//if there are questions
+        echo "<div id='go_test_container_{$stage}' class='go_test_container'>";
+        for ($i = 0; $i < $test_field_block_count; $i++) {//print out at least one question block
+            //$correct = (isset($test_field_input_array[$i][1]) ? $test_field_input_array[$i][1] : array());
+            $question_type = (isset($test_field_select_array[$i]) ? $test_field_select_array[$i] : 'radio');
+            $question = (isset($test_field_input_question[$i]) ? $test_field_input_question[$i] : "");
+            $answer_count = (isset($test_field_input_count[$i]) ? $test_field_input_count[$i] : 1);
+
+            $question_num = $i;
+            //$answer_array = array();
+            echo "
+                    <ul id='go_test_{$stage}_{$question_num}'  class='go_test_{$question_num} go_test go_test_list go_test_{$question_type}'>
+                        <li>
+                            <div style='font-weight:700;'>".ucfirst( $question )."<span class='go_wrong_answer_marker' style='display: none;'>wrong</span><span class='go_correct_answer_marker' style='display: none;'>correct</span></div>
+                        </li>";
+
+            for ($x = 0; $x < $answer_count; $x++) {
+                $answer = (isset($test_field_input_array[$i][0][$x]) ? $test_field_input_array[$i][0][$x] : null);
+
+                if ($question_type == 'radio') {
+                    echo "<li class='go_test go_test_element'><input type='radio' name='go_test_answer_{$question_num}' value='{$answer}'/> {$answer}</li>";
+                }else {
+                    echo "<li class='go_test go_test_element'><input type='checkbox' name='go_test_answer_{$question_num}_{$x}' value='{$answer}'/>{$answer}</li>";
                 }
             }
+            echo "</ul>";
+
         }
-        if ( $key_match == count( $key_array ) && $key_match >= 1 ) {
-            $key_check = true;
-        }
+        echo "</div>";
     }
-    if ( count( $answer_array ) >= 2 && $question != '' && $key_check == true ) {
-        $output_array = array();
-        if ( $type == 'radio' ) {
-            for ( $i = 0; $i < count( $answer_array ); $i++ ) {
-                $name = $answer_array[ $i ];
-                array_push( $output_array, "<li class='go_test go_test_element'><input type='radio' name='go_test_answer_{$test_id}' value='{$name}'/> {$name}</li>" );
-            }
-        } elseif ( $type == 'checkbox' ) {
-            for ( $i = 0; $i < count( $answer_array ); $i++ ) {
-                $name = $answer_array[ $i ];
-                array_push( $output_array, "<li class='go_test go_test_element'><input type='checkbox' name='go_test_answer_{$test_id}_{$answer_array[ $i ]}' value='{$name}'/>{$name}</li>" );
-            }
-        }
-        $output_array_str = implode( ' ', $output_array );
-        if ( $total_num > 1 ) {
-            $rtn_output = "<div class='go_test_container'><ul id='go_test_{$test_id}' class='go_test go_test_list go_test_{$type}'><li><div style='font-weight:700;'>".ucfirst( $question )."<span class='go_wrong_answer_marker' style='display: none;'>wrong</span><span class='go_correct_answer_marker' style='display: none;'>correct</span></div></li>{$output_array_str}</div>";
-        } else {
-            $rtn_output = "<div class='go_test_container'><ul id='go_test' class='go_test go_test_list go_test_{$type}'><li><div style='font-weight:700;'>".ucfirst( $question )."<span class='go_wrong_answer_marker' style='display: none;'>wrong</span><span class='go_correct_answer_marker' style='display: none;'>correct</span></div></li>{$output_array_str}</ul></div>";
+    echo "<p id='go_test_error_msg' class='go_error_msg' style='color: red;'></p>";
 
-        }
-        return $rtn_output;
-    } else {
-        if ( current_user_can( 'manage_options' ) ) {
-            $error_array = array();
 
-            if ( $key_check == false ) {
-                array_push( $error_array, "<b>ERROR: The correct answer provided does not match any of the possible answers.</b>" );
-            }
-
-            if ( mb_strlen( $question ) === 0 ) {
-                array_push( $error_array, "<b>ERROR: The question attribute has been left blank.</b>" );
-            }
-            $error_array_str = implode( "<br/>", $error_array );
-            return ( "<p id='test_failure_msg'>{$error_array_str}</p>" );
-        } else {
-            return '';
-        }
-    }
 }

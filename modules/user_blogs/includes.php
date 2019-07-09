@@ -12,7 +12,7 @@ if ( !is_admin() ) {
 
 }else if ( defined( 'DOING_AJAX' )) {
     include_once('src/ajax.php');
-    //include_once('src/public_ajax.php');
+    include_once('src/public_ajax.php');
 
     //Blogs
     //add_action( 'wp_ajax_go_blog_lightbox_opener', 'go_blog_lightbox_opener' ); //OK
@@ -21,6 +21,7 @@ if ( !is_admin() ) {
     add_action( 'wp_ajax_go_blog_submit', 'go_blog_submit' ); //OK
     add_action( 'wp_ajax_go_blog_user_task', 'go_blog_user_task');
     add_action( 'wp_ajax_go_blog_favorite_toggle', 'go_blog_favorite_toggle');
+    add_action( 'wp_ajax_go_show_private', 'go_show_private');
 }else{
     //include_once('admin/admin.php');
 }

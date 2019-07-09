@@ -3,8 +3,8 @@
     "title": "Task Setup",
     "fields": [
         {
-            "key": "setup",
-            "label": "Location",
+            "key": "field_5d20d95df10a1",
+            "label": "Map Location",
             "name": "",
             "type": "accordion",
             "instructions": "",
@@ -21,7 +21,7 @@
         },
         {
             "key": "field_5a960f458bf8c",
-            "label": "Location",
+            "label": "Map",
             "name": "go-location",
             "type": "group",
             "instructions": "",
@@ -790,15 +790,15 @@
                                 "go_user_lock": "User Groups - 1 of these",
                                 "go_xp_levels_lock": "Minimum XP",
                                 "go_gold_lock": "Minimum Gold",
-                                "go_health_lock": "Minimum Health",
+                                "go_health_lock": "Minimum Reputation",
                                 "go_period_lock": "Class Section - 1 of these"
                             },
                             "default_value": [],
                             "allow_null": 1,
                             "multiple": 0,
                             "ui": 0,
-                            "ajax": 0,
                             "return_format": "value",
+                            "ajax": 0,
                             "placeholder": ""
                         },
                         {
@@ -964,10 +964,12 @@
                                     },
                                     "choices": {
                                         "": "Select",
-                                        "0": "Level1 -  : 0 XP",
-                                        "50": "Level2 -  : 50 XP",
-                                        "105": "Level3 -  : 105 XP",
-                                        "170": "Level4 -  : 170 XP"
+                                        "0": "Level1 - beginner : 0 PP",
+                                        "50": "Level2 - beginner : 50 PP",
+                                        "105": "Level3 - beginner : 105 PP",
+                                        "200": "Level4 - beginner : 200 PP",
+                                        "300": "Level5 - beginner : 300 PP",
+                                        "400": "Level6 - beginner : 400 PP"
                                     },
                                     "default_value": [],
                                     "allow_null": 0,
@@ -1008,7 +1010,7 @@
                                 },
                                 {
                                     "key": "field_5ac134bb78595",
-                                    "label": "Minimum Health",
+                                    "label": "Minimum Reputation",
                                     "name": "health",
                                     "type": "number",
                                     "instructions": "",
@@ -1224,11 +1226,11 @@
                     "append": "",
                     "min": 0,
                     "max": "",
-                    "step": ""
+                    "step": ".01"
                 },
                 {
                     "key": "field_5ac134fa12f50",
-                    "label": "Health",
+                    "label": "Reputation",
                     "name": "health",
                     "type": "number",
                     "instructions": "",
@@ -1245,7 +1247,7 @@
                     "append": "",
                     "min": 0,
                     "max": "",
-                    "step": ""
+                    "step": ".01"
                 }
             ]
         },
@@ -1262,12 +1264,31 @@
                 "class": "go-stages",
                 "id": ""
             },
-            "collapsed": "",
+            "collapsed": "field_5cb1ef2c433c4",
             "min": 1,
             "max": 8,
-            "layout": "row",
+            "layout": "block",
             "button_label": "Add Stage",
             "sub_fields": [
+                {
+                    "key": "field_5cb1ef2c433c4",
+                    "label": "Stage Heading",
+                    "name": "heading",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "go_acf_header",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                },
                 {
                     "key": "field_5ac134fe12f52",
                     "label": "Content",
@@ -1307,9 +1328,9 @@
                     "delay": 0
                 },
                 {
-                    "key": "field_5ac134fe12f57",
+                    "key": "field_5cbd31bcaf725",
                     "label": "Check for Understanding",
-                    "name": "check",
+                    "name": "check_v5",
                     "type": "radio",
                     "instructions": "",
                     "required": 0,
@@ -1322,8 +1343,6 @@
                     "choices": {
                         "blog": "Blog",
                         "quiz": "Multiple Choice",
-                        "upload": "Upload File",
-                        "URL": "URL",
                         "password": "Password",
                         "none": "none"
                     },
@@ -1335,16 +1354,16 @@
                     "save_other_choice": 0
                 },
                 {
-                    "key": "field_5c2d29caf9143",
-                    "label": "Blog Post Requirements",
-                    "name": "blog_options",
+                    "key": "field_5cba487b9f57a",
+                    "label": "Options",
+                    "name": "blog_options_v5",
                     "type": "group",
                     "instructions": "",
                     "required": 0,
                     "conditional_logic": [
                         [
                             {
-                                "field": "field_5ac134fe12f57",
+                                "field": "field_5cbd31bcaf725",
                                 "operator": "==",
                                 "value": "blog"
                             }
@@ -1358,11 +1377,11 @@
                     "layout": "block",
                     "sub_fields": [
                         {
-                            "key": "field_5c9c5547c8a18",
+                            "key": "field_5cba487b9f57b",
                             "label": "Title",
                             "name": "title",
                             "type": "text",
-                            "instructions": "Leave blank to have the \"quest name-stage #\" set as the titel",
+                            "instructions": "Leave blank to have the title automaticall set to \"quest name-stage #\"",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -1371,178 +1390,17 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "stage # by default",
+                            "placeholder": "quest name-stage # by default",
                             "prepend": "",
                             "append": "",
                             "maxlength": 30
                         },
                         {
-                            "key": "field_5c2d2ef2e62d2",
-                            "label": "URL",
-                            "name": "url",
-                            "type": "group",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "layout": "row",
-                            "sub_fields": [
-                                {
-                                    "key": "field_5c2d29dff9144",
-                                    "label": "",
-                                    "name": "toggle",
-                                    "type": "true_false",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": 0,
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "message": "",
-                                    "default_value": 0,
-                                    "ui": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": ""
-                                },
-                                {
-                                    "key": "field_5c2d2a31f9145",
-                                    "label": "URL Validation",
-                                    "name": "url_validation",
-                                    "type": "text",
-                                    "instructions": "url must contain this string",
-                                    "required": 0,
-                                    "conditional_logic": [
-                                        [
-                                            {
-                                                "field": "field_5c2d29dff9144",
-                                                "operator": "==",
-                                                "value": "1"
-                                            }
-                                        ]
-                                    ],
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "default_value": "",
-                                    "placeholder": "",
-                                    "prepend": "",
-                                    "append": "",
-                                    "maxlength": ""
-                                }
-                            ]
-                        },
-                        {
-                            "key": "field_5c2d2f35e62d3",
-                            "label": "Attach File",
-                            "name": "attach_file",
-                            "type": "group",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "layout": "block",
-                            "sub_fields": [
-                                {
-                                    "key": "field_5c2d2a64f9146",
-                                    "label": "",
-                                    "name": "toggle",
-                                    "type": "true_false",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": 0,
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "message": "",
-                                    "default_value": 0,
-                                    "ui": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": ""
-                                },
-                                {
-                                    "key": "field_5c2d2a8ff9147",
-                                    "label": "Restrict File Types",
-                                    "name": "restrict_file_types",
-                                    "type": "true_false",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": [
-                                        [
-                                            {
-                                                "field": "field_5c2d2a64f9146",
-                                                "operator": "==",
-                                                "value": "1"
-                                            }
-                                        ]
-                                    ],
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "message": "",
-                                    "default_value": 0,
-                                    "ui": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": ""
-                                },
-                                {
-                                    "key": "field_5c3031c3c3605",
-                                    "label": "Allowed File Types",
-                                    "name": "allowed_types",
-                                    "type": "checkbox",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": [
-                                        [
-                                            {
-                                                "field": "field_5c2d2a8ff9147",
-                                                "operator": "==",
-                                                "value": "1"
-                                            }
-                                        ]
-                                    ],
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "choices": {
-                                        "image": "Images (jpg, png, gif, tiff, ico, bmp)",
-                                        "application": "Application Files (e.g., Office, iWork, Adobe)",
-                                        "text": "Text (e.g., txt, csv, css, html)",
-                                        "audio": "Audio",
-                                        "video": "Video"
-                                    },
-                                    "allow_custom": 0,
-                                    "default_value": [],
-                                    "layout": "vertical",
-                                    "toggle": 1,
-                                    "return_format": "value",
-                                    "save_custom": 0
-                                }
-                            ]
-                        },
-                        {
-                            "key": "field_5c2d2bf4f914b",
-                            "label": "Video URL",
-                            "name": "video",
+                            "key": "field_5cba487b9f587",
+                            "label": "Private",
+                            "name": "private",
                             "type": "true_false",
-                            "instructions": "Links to videos on YouTube and Vimeo can be inserted directly into the blog.",
+                            "instructions": "",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -1550,15 +1408,185 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "message": "",
+                            "message": "Private Post",
                             "default_value": 0,
                             "ui": 0,
                             "ui_on_text": "",
                             "ui_off_text": ""
                         },
                         {
-                            "key": "field_5c2d2f88e62d4",
-                            "label": "Show Blog Text Editor",
+                            "key": "field_5cba48899f588",
+                            "label": "Required Elements",
+                            "name": "blog_elements",
+                            "type": "repeater",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "collapsed": "",
+                            "min": 0,
+                            "max": 0,
+                            "layout": "table",
+                            "button_label": "",
+                            "sub_fields": [
+                                {
+                                    "key": "field_5cba489d9f589",
+                                    "label": "Elements",
+                                    "name": "element",
+                                    "type": "radio",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "40",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "URL": "URL",
+                                        "File": "File",
+                                        "Video": "Video"
+                                    },
+                                    "allow_null": 0,
+                                    "other_choice": 0,
+                                    "default_value": "",
+                                    "layout": "vertical",
+                                    "return_format": "value",
+                                    "save_other_choice": 0
+                                },
+                                {
+                                    "key": "field_5cba4a5867887",
+                                    "label": "requirements",
+                                    "name": "requirements",
+                                    "type": "group",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "60",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "layout": "block",
+                                    "sub_fields": [
+                                        {
+                                            "key": "field_5cba487b9f57e",
+                                            "label": "URL Validation",
+                                            "name": "url_validation",
+                                            "type": "text",
+                                            "instructions": "url must contain this string",
+                                            "required": 0,
+                                            "conditional_logic": [
+                                                [
+                                                    {
+                                                        "field": "field_5cba489d9f589",
+                                                        "operator": "==",
+                                                        "value": "URL"
+                                                    }
+                                                ]
+                                            ],
+                                            "wrapper": {
+                                                "width": "",
+                                                "class": "",
+                                                "id": ""
+                                            },
+                                            "default_value": "",
+                                            "placeholder": "",
+                                            "prepend": "",
+                                            "append": "",
+                                            "maxlength": ""
+                                        },
+                                        {
+                                            "key": "field_5cba487b9f582",
+                                            "label": "Allowed File Types",
+                                            "name": "allowed_types",
+                                            "type": "checkbox",
+                                            "instructions": "",
+                                            "required": 0,
+                                            "conditional_logic": [
+                                                [
+                                                    {
+                                                        "field": "field_5cba489d9f589",
+                                                        "operator": "==",
+                                                        "value": "File"
+                                                    }
+                                                ]
+                                            ],
+                                            "wrapper": {
+                                                "width": "",
+                                                "class": "",
+                                                "id": ""
+                                            },
+                                            "choices": {
+                                                "image": "Images (jpg, png, gif, tiff, ico, bmp)",
+                                                "application": "Application Files (e.g., Office, iWork, Adobe)",
+                                                "text": "Text (e.g., txt, csv, css, html)",
+                                                "audio": "Audio",
+                                                "video": "Video"
+                                            },
+                                            "allow_custom": 0,
+                                            "default_value": [
+                                                "image",
+                                                "application",
+                                                "text",
+                                                "audio",
+                                                "video"
+                                            ],
+                                            "layout": "vertical",
+                                            "toggle": 1,
+                                            "return_format": "value",
+                                            "save_custom": 0
+                                        },
+                                        {
+                                            "key": "field_5cba487b9f583",
+                                            "label": "Video URL",
+                                            "name": "",
+                                            "type": "message",
+                                            "instructions": "",
+                                            "required": 0,
+                                            "conditional_logic": [
+                                                [
+                                                    {
+                                                        "field": "field_5cba489d9f589",
+                                                        "operator": "==",
+                                                        "value": "Video"
+                                                    }
+                                                ]
+                                            ],
+                                            "wrapper": {
+                                                "width": "",
+                                                "class": "",
+                                                "id": ""
+                                            },
+                                            "message": "Links to videos on YouTube and Vimeo can be inserted directly into the blog.",
+                                            "new_lines": "wpautop",
+                                            "esc_html": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "key": "field_5cba56c3e8804",
+                                    "label": "uniqueID",
+                                    "name": "uniqueid",
+                                    "type": "unique_id",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "0",
+                                        "class": "",
+                                        "id": ""
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "key": "field_5cba4c7387032",
+                            "label": "Show Text Editor",
                             "name": "blog_text",
                             "type": "group",
                             "instructions": "",
@@ -1569,10 +1597,10 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "layout": "row",
+                            "layout": "table",
                             "sub_fields": [
                                 {
-                                    "key": "field_5c2d2c49f914c",
+                                    "key": "field_5cba4c7387033",
                                     "label": "",
                                     "name": "toggle",
                                     "type": "true_false",
@@ -1591,7 +1619,7 @@
                                     "ui_off_text": ""
                                 },
                                 {
-                                    "key": "field_5c2d2cbbf914d",
+                                    "key": "field_5cba4c7387034",
                                     "label": "Minimum Words",
                                     "name": "minimum_length",
                                     "type": "number",
@@ -1600,7 +1628,7 @@
                                     "conditional_logic": [
                                         [
                                             {
-                                                "field": "field_5c2d2c49f914c",
+                                                "field": "field_5cba4c7387033",
                                                 "operator": "==",
                                                 "value": "1"
                                             }
@@ -1615,30 +1643,11 @@
                                     "placeholder": "minimum words",
                                     "prepend": "",
                                     "append": "",
-                                    "min": "",
+                                    "min": 0,
                                     "max": "",
-                                    "step": 10
+                                    "step": 1
                                 }
                             ]
-                        },
-                        {
-                            "key": "field_5c6b76a18ae97",
-                            "label": "Private",
-                            "name": "private",
-                            "type": "true_false",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "message": "Private Post",
-                            "default_value": 0,
-                            "ui": 0,
-                            "ui_on_text": "",
-                            "ui_off_text": ""
                         }
                     ]
                 },
@@ -1652,7 +1661,7 @@
                     "conditional_logic": [
                         [
                             {
-                                "field": "field_5ac134fe12f57",
+                                "field": "field_5cbd31bcaf725",
                                 "operator": "==",
                                 "value": "quiz"
                             }
@@ -1681,7 +1690,7 @@
                     "conditional_logic": [
                         [
                             {
-                                "field": "field_5ac134fe12f57",
+                                "field": "field_5cbd31bcaf725",
                                 "operator": "==",
                                 "value": "quiz"
                             }
@@ -1698,13 +1707,13 @@
                     "key": "field_5ac134fe12f5a",
                     "label": "Password",
                     "name": "password",
-                    "type": "password",
+                    "type": "text",
                     "instructions": "Optional password in addition to master password.",
                     "required": 0,
                     "conditional_logic": [
                         [
                             {
-                                "field": "field_5ac134fe12f57",
+                                "field": "field_5cbd31bcaf725",
                                 "operator": "==",
                                 "value": "password"
                             }
@@ -1715,9 +1724,11 @@
                         "class": "go_call_to_action",
                         "id": ""
                     },
+                    "default_value": "",
                     "placeholder": "",
                     "prepend": "",
-                    "append": ""
+                    "append": "",
+                    "maxlength": ""
                 },
                 {
                     "key": "field_5ac134fe12f53",
@@ -1774,11 +1785,11 @@
                             "append": "",
                             "min": 0,
                             "max": "",
-                            "step": 1
+                            "step": ".01"
                         },
                         {
                             "key": "field_5ac134fe12f56",
-                            "label": "Health",
+                            "label": "Reputation",
                             "name": "health",
                             "type": "number",
                             "instructions": "",
@@ -1798,6 +1809,20 @@
                             "step": ".01"
                         }
                     ]
+                },
+                {
+                    "key": "field_5cbba33877009",
+                    "label": "uniqueID",
+                    "name": "uniqueid",
+                    "type": "unique_id",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    }
                 }
             ]
         },
@@ -1906,10 +1931,10 @@
                     ],
                     "wrapper": {
                         "width": "",
-                        "class": "go-loot",
+                        "class": "go-loot ",
                         "id": ""
                     },
-                    "collapsed": "",
+                    "collapsed": "field_5b526d2e7957f",
                     "min": 1,
                     "max": 0,
                     "layout": "row",
@@ -1925,7 +1950,7 @@
                             "conditional_logic": 0,
                             "wrapper": {
                                 "width": "",
-                                "class": "",
+                                "class": "go_acf_header",
                                 "id": ""
                             },
                             "default_value": "",
@@ -2008,11 +2033,11 @@
                                     "append": "",
                                     "min": 0,
                                     "max": "",
-                                    "step": 1
+                                    "step": ".01"
                                 },
                                 {
                                     "key": "field_5b526d2e79585",
-                                    "label": "Health",
+                                    "label": "Reputation",
                                     "name": "health",
                                     "type": "number",
                                     "instructions": "",
@@ -2204,9 +2229,9 @@
                     "delay": 0
                 },
                 {
-                    "key": "field_5a8b14a6f32fa",
+                    "key": "field_5cbd3689d1fb5",
                     "label": "Check for Understanding",
-                    "name": "check",
+                    "name": "check_v5",
                     "type": "radio",
                     "instructions": "",
                     "required": 0,
@@ -2218,8 +2243,6 @@
                     },
                     "choices": {
                         "blog": "Blog",
-                        "upload": "Upload File",
-                        "URL": "URL",
                         "password": "Password",
                         "none": "none"
                     },
@@ -2231,16 +2254,16 @@
                     "save_other_choice": 0
                 },
                 {
-                    "key": "field_5c31719e270f0",
-                    "label": "Blog Post Requirements",
-                    "name": "blog_options_bonus",
+                    "key": "field_5cbad9e8eb50c",
+                    "label": "Options",
+                    "name": "blog_options_v5",
                     "type": "group",
                     "instructions": "",
                     "required": 0,
                     "conditional_logic": [
                         [
                             {
-                                "field": "field_5a8b14a6f32fa",
+                                "field": "field_5cbd3689d1fb5",
                                 "operator": "==",
                                 "value": "blog"
                             }
@@ -2254,10 +2277,29 @@
                     "layout": "block",
                     "sub_fields": [
                         {
-                            "key": "field_5c31719e270f1",
-                            "label": "URL",
-                            "name": "url",
-                            "type": "group",
+                            "key": "field_5cbad9e8eb50d",
+                            "label": "Title",
+                            "name": "title",
+                            "type": "text",
+                            "instructions": "Leave blank to have the title automaticall set to \"quest name-stage #\"",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "quest name-stage # by default",
+                            "prepend": "",
+                            "append": "",
+                            "maxlength": 30
+                        },
+                        {
+                            "key": "field_5cbad9e8eb50e",
+                            "label": "Private",
+                            "name": "private",
+                            "type": "true_false",
                             "instructions": "",
                             "required": 0,
                             "conditional_logic": 0,
@@ -2266,176 +2308,185 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "layout": "row",
-                            "sub_fields": [
-                                {
-                                    "key": "field_5c31719e270f2",
-                                    "label": "",
-                                    "name": "toggle",
-                                    "type": "true_false",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": 0,
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "message": "",
-                                    "default_value": 0,
-                                    "ui": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": ""
-                                },
-                                {
-                                    "key": "field_5c31719e270f3",
-                                    "label": "URL Validation",
-                                    "name": "url_validation",
-                                    "type": "text",
-                                    "instructions": "url must contain this string",
-                                    "required": 0,
-                                    "conditional_logic": [
-                                        [
-                                            {
-                                                "field": "field_5c31719e270f2",
-                                                "operator": "==",
-                                                "value": "1"
-                                            }
-                                        ]
-                                    ],
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "default_value": "",
-                                    "placeholder": "",
-                                    "prepend": "",
-                                    "append": "",
-                                    "maxlength": ""
-                                }
-                            ]
-                        },
-                        {
-                            "key": "field_5c31719e270f4",
-                            "label": "Attach File",
-                            "name": "attach_file",
-                            "type": "group",
-                            "instructions": "<a target=\"codex\" href=\"https:\/\/codex.wordpress.org\/Function_Reference\/get_allowed_mime_types\"> See allowed file types.<\/a>",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "layout": "row",
-                            "sub_fields": [
-                                {
-                                    "key": "field_5c31719e270f5",
-                                    "label": "",
-                                    "name": "toggle",
-                                    "type": "true_false",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": 0,
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "message": "",
-                                    "default_value": 0,
-                                    "ui": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": ""
-                                },
-                                {
-                                    "key": "field_5c31719e270f6",
-                                    "label": "Restrict File Types",
-                                    "name": "restrict_file_types",
-                                    "type": "true_false",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": [
-                                        [
-                                            {
-                                                "field": "field_5c31719e270f5",
-                                                "operator": "==",
-                                                "value": "1"
-                                            }
-                                        ]
-                                    ],
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "message": "",
-                                    "default_value": 0,
-                                    "ui": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": ""
-                                },
-                                {
-                                    "key": "field_5c31719e270f7",
-                                    "label": "Allowed File Types",
-                                    "name": "allowed_types",
-                                    "type": "checkbox",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": [
-                                        [
-                                            {
-                                                "field": "field_5c31719e270f6",
-                                                "operator": "==",
-                                                "value": "1"
-                                            }
-                                        ]
-                                    ],
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "choices": {
-                                        "image": "Images (jpg, png, gif, tiff, ico, bmp)",
-                                        "application": "Application Files (e.g., Office, iWork, Adobe)",
-                                        "text": "Text (e.g., txt, csv, css, html)",
-                                        "audio": "Audio",
-                                        "video": "Video"
-                                    },
-                                    "allow_custom": 0,
-                                    "default_value": [],
-                                    "layout": "vertical",
-                                    "toggle": 1,
-                                    "return_format": "value",
-                                    "save_custom": 0
-                                }
-                            ]
-                        },
-                        {
-                            "key": "field_5c31719e270f8",
-                            "label": "Video URL",
-                            "name": "video",
-                            "type": "true_false",
-                            "instructions": "Links to videos on YouTube and Vimeo can be inserted directly into the blog.",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "message": "",
+                            "message": "Private Post",
                             "default_value": 0,
                             "ui": 0,
                             "ui_on_text": "",
                             "ui_off_text": ""
                         },
                         {
-                            "key": "field_5c31719e270f9",
-                            "label": "Show Blog Text Editor",
+                            "key": "field_5cbad9e8eb50f",
+                            "label": "Required Elements",
+                            "name": "blog_elements",
+                            "type": "repeater",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "collapsed": "",
+                            "min": 0,
+                            "max": 0,
+                            "layout": "table",
+                            "button_label": "",
+                            "sub_fields": [
+                                {
+                                    "key": "field_5cbad9e8eb510",
+                                    "label": "Elements",
+                                    "name": "element",
+                                    "type": "radio",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "30",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "URL": "URL",
+                                        "File": "File",
+                                        "Video": "Video"
+                                    },
+                                    "allow_null": 0,
+                                    "other_choice": 0,
+                                    "default_value": "",
+                                    "layout": "vertical",
+                                    "return_format": "value",
+                                    "save_other_choice": 0
+                                },
+                                {
+                                    "key": "field_5cbad9e8eb511",
+                                    "label": "requirements",
+                                    "name": "requirements",
+                                    "type": "group",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "70",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "layout": "block",
+                                    "sub_fields": [
+                                        {
+                                            "key": "field_5cbad9e8eb512",
+                                            "label": "URL Validation",
+                                            "name": "url_validation",
+                                            "type": "text",
+                                            "instructions": "url must contain this string",
+                                            "required": 0,
+                                            "conditional_logic": [
+                                                [
+                                                    {
+                                                        "field": "field_5cbad9e8eb510",
+                                                        "operator": "==",
+                                                        "value": "URL"
+                                                    }
+                                                ]
+                                            ],
+                                            "wrapper": {
+                                                "width": "",
+                                                "class": "",
+                                                "id": ""
+                                            },
+                                            "default_value": "",
+                                            "placeholder": "",
+                                            "prepend": "",
+                                            "append": "",
+                                            "maxlength": ""
+                                        },
+                                        {
+                                            "key": "field_5cbad9e8eb513",
+                                            "label": "Allowed File Types",
+                                            "name": "allowed_types",
+                                            "type": "checkbox",
+                                            "instructions": "",
+                                            "required": 0,
+                                            "conditional_logic": [
+                                                [
+                                                    {
+                                                        "field": "field_5cbad9e8eb510",
+                                                        "operator": "==",
+                                                        "value": "File"
+                                                    }
+                                                ]
+                                            ],
+                                            "wrapper": {
+                                                "width": "",
+                                                "class": "",
+                                                "id": ""
+                                            },
+                                            "choices": {
+                                                "image": "Images (jpg, png, gif, tiff, ico, bmp)",
+                                                "application": "Application Files (e.g., Office, iWork, Adobe)",
+                                                "text": "Text (e.g., txt, csv, css, html)",
+                                                "audio": "Audio",
+                                                "video": "Video"
+                                            },
+                                            "allow_custom": 0,
+                                            "save_custom": 0,
+                                            "default_value": [
+                                                "image",
+                                                "application",
+                                                "text",
+                                                "audio",
+                                                "video"
+                                            ],
+                                            "layout": "vertical",
+                                            "toggle": 1,
+                                            "return_format": "value"
+                                        },
+                                        {
+                                            "key": "field_5cbad9e8eb514",
+                                            "label": "Video URL",
+                                            "name": "",
+                                            "type": "message",
+                                            "instructions": "",
+                                            "required": 0,
+                                            "conditional_logic": [
+                                                [
+                                                    {
+                                                        "field": "field_5cbad9e8eb510",
+                                                        "operator": "==",
+                                                        "value": "Video"
+                                                    }
+                                                ]
+                                            ],
+                                            "wrapper": {
+                                                "width": "",
+                                                "class": "",
+                                                "id": ""
+                                            },
+                                            "message": "Links to videos on YouTube and Vimeo can be inserted directly into the blog.",
+                                            "new_lines": "wpautop",
+                                            "esc_html": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "key": "field_5cbad9e8eb515",
+                                    "label": "uniqueID",
+                                    "name": "uniqueid",
+                                    "type": "unique_id",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "0",
+                                        "class": "acf-hide",
+                                        "id": ""
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "key": "field_5cbad9e8eb516",
+                            "label": "Show Text Editor",
                             "name": "blog_text",
                             "type": "group",
                             "instructions": "",
@@ -2446,10 +2497,10 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "layout": "row",
+                            "layout": "table",
                             "sub_fields": [
                                 {
-                                    "key": "field_5c31719e270fa",
+                                    "key": "field_5cbad9e8eb517",
                                     "label": "",
                                     "name": "toggle",
                                     "type": "true_false",
@@ -2468,7 +2519,7 @@
                                     "ui_off_text": ""
                                 },
                                 {
-                                    "key": "field_5c31719e270fb",
+                                    "key": "field_5cbad9e8eb518",
                                     "label": "Minimum Words",
                                     "name": "minimum_length",
                                     "type": "number",
@@ -2477,7 +2528,7 @@
                                     "conditional_logic": [
                                         [
                                             {
-                                                "field": "field_5c31719e270fa",
+                                                "field": "field_5cbad9e8eb517",
                                                 "operator": "==",
                                                 "value": "1"
                                             }
@@ -2492,73 +2543,25 @@
                                     "placeholder": "minimum words",
                                     "prepend": "",
                                     "append": "",
-                                    "min": "",
+                                    "min": 0,
                                     "max": "",
-                                    "step": 10
+                                    "step": 1
                                 }
                             ]
-                        },
-                        {
-                            "key": "field_5c6b76e88ae98",
-                            "label": "Private",
-                            "name": "private",
-                            "type": "true_false",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "message": "Private Post",
-                            "default_value": 0,
-                            "ui": 0,
-                            "ui_on_text": "",
-                            "ui_off_text": ""
                         }
                     ]
-                },
-                {
-                    "key": "field_5afa5a78d25dc",
-                    "label": "Quiz Modifier",
-                    "name": "quiz_modifier",
-                    "type": "number",
-                    "instructions": "% of Stage Loot Lost for Each Wrong Answer",
-                    "required": 0,
-                    "conditional_logic": [
-                        [
-                            {
-                                "field": "field_5a8b14a6f32fa",
-                                "operator": "==",
-                                "value": "quiz"
-                            }
-                        ]
-                    ],
-                    "wrapper": {
-                        "width": "",
-                        "class": "go_call_to_action",
-                        "id": ""
-                    },
-                    "default_value": 0,
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "%",
-                    "min": 0,
-                    "max": 100,
-                    "step": ""
                 },
                 {
                     "key": "field_5a8b14a6f3301",
                     "label": "Password",
                     "name": "password",
-                    "type": "password",
+                    "type": "text",
                     "instructions": "Users will need a password to proceed. The master password that is set on the options page will work. You can set an additional password that only applies to this stage.",
                     "required": 0,
                     "conditional_logic": [
                         [
                             {
-                                "field": "field_5a8b14a6f32fa",
+                                "field": "field_5cbd3689d1fb5",
                                 "operator": "==",
                                 "value": "password"
                             }
@@ -2569,9 +2572,11 @@
                         "class": "go_call_to_action",
                         "id": ""
                     },
+                    "default_value": "",
                     "placeholder": "",
                     "prepend": "",
-                    "append": ""
+                    "append": "",
+                    "maxlength": ""
                 },
                 {
                     "key": "field_5a8b14a6f32f6",
@@ -2588,27 +2593,6 @@
                     },
                     "layout": "table",
                     "sub_fields": [
-                        {
-                            "key": "field_5a8b14a6f32f7",
-                            "label": "Gold",
-                            "name": "gold",
-                            "type": "number",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "go_reward go_gold",
-                                "id": ""
-                            },
-                            "default_value": 0,
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": "",
-                            "min": 0,
-                            "max": "",
-                            "step": 1
-                        },
                         {
                             "key": "field_5a8b14a6f32f8",
                             "label": "XP",
@@ -2631,8 +2615,29 @@
                             "step": 1
                         },
                         {
+                            "key": "field_5a8b14a6f32f7",
+                            "label": "Gold",
+                            "name": "gold",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "go_reward go_gold",
+                                "id": ""
+                            },
+                            "default_value": 0,
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "min": 0,
+                            "max": "",
+                            "step": ".01"
+                        },
+                        {
                             "key": "field_5a8b14a6f32f9",
-                            "label": "Health",
+                            "label": "Reputation",
                             "name": "health",
                             "type": "number",
                             "instructions": "",
@@ -2682,5 +2687,6 @@
     ],
     "active": 1,
     "description": "",
-    "modified": 1554173152
+    "recaptcha": 0,
+    "modified": 1562433932
 }

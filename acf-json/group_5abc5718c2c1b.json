@@ -1,6 +1,6 @@
 {
     "key": "group_5abc5718c2c1b",
-    "title": "Options",
+    "title": "Game Set-up Options",
     "fields": [
         {
             "key": "field_5b79de396cc4b",
@@ -24,7 +24,7 @@
         },
         {
             "key": "field_5abc7eb2f480e",
-            "label": "Game Play Options",
+            "label": "Feature Setup",
             "name": "",
             "type": "accordion",
             "instructions": "",
@@ -38,6 +38,69 @@
             "open": 0,
             "multi_expand": 0,
             "endpoint": 0
+        },
+        {
+            "key": "field_5abc817c3c007",
+            "label": "Stats Panel",
+            "name": "go_stats",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_5abc8e474b1ad",
+                    "label": "Name",
+                    "name": "name",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5b0f93c92e512",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "Stats",
+                    "placeholder": "Stats",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                }
+            ]
+        },
+        {
+            "key": "field_5cd91b8a996e1",
+            "label": "Show Home Link in Player Bar",
+            "name": "go_home_toggle",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 1,
+            "ui": 1,
+            "ui_on_text": "",
+            "ui_off_text": ""
         },
         {
             "key": "field_5abc8a8cf56e0",
@@ -205,6 +268,140 @@
             ]
         },
         {
+            "key": "field_5ac980f30f162",
+            "label": "Map",
+            "name": "go_locations_map",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "row",
+            "sub_fields": [
+                {
+                    "key": "field_5abc90cb65b25",
+                    "label": "toggle",
+                    "name": "toggle",
+                    "type": "true_false",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "acf-hide-label",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 1,
+                    "ui": 1,
+                    "ui_on_text": "On",
+                    "ui_off_text": "Off"
+                },
+                {
+                    "key": "field_5ca452f44cc49",
+                    "label": "Menu Bar Name",
+                    "name": "name",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5abc90cb65b25",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "Map",
+                    "placeholder": "Map",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                },
+                {
+                    "key": "field_5ac980f30f163",
+                    "label": "Title",
+                    "name": "title",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5abc90cb65b25",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "Map",
+                    "placeholder": "Map",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                },
+                {
+                    "key": "field_5b06186083d19",
+                    "label": "Map Link",
+                    "name": "map_link",
+                    "type": "text",
+                    "instructions": "Example:\r\nto redirect to http:\/\/mysite.com\/map\r\nyou only enter \"map”",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "map",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                },
+                {
+                    "key": "field_5d20da4b94be2",
+                    "label": "Note on Hidden Map",
+                    "name": "",
+                    "type": "message",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5abc90cb65b25",
+                                "operator": "!=",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "When maps are off, they are removed from the frontend but you can still access the map tools on the backend.  The maps menu and options will still show in the backend of the site and quests can still be assigned to a map chain.",
+                    "new_lines": "wpautop",
+                    "esc_html": 0
+                }
+            ]
+        },
+        {
             "key": "field_5ad57b865c8e2",
             "label": "Store",
             "name": "go_store",
@@ -221,7 +418,7 @@
             "sub_fields": [
                 {
                     "key": "field_5abc8feb65b24",
-                    "label": "Show",
+                    "label": "",
                     "name": "toggle",
                     "type": "true_false",
                     "instructions": "",
@@ -330,7 +527,7 @@
             "sub_fields": [
                 {
                     "key": "field_5ad67688902d9",
-                    "label": "Show",
+                    "label": "",
                     "name": "toggle",
                     "type": "true_false",
                     "instructions": "",
@@ -354,7 +551,15 @@
                     "type": "group",
                     "instructions": "",
                     "required": 0,
-                    "conditional_logic": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5ad67688902d9",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
                     "wrapper": {
                         "width": "",
                         "class": "",
@@ -405,9 +610,9 @@
             ]
         },
         {
-            "key": "field_5abc817c3c007",
-            "label": "Stats Panel",
-            "name": "go_stats",
+            "key": "field_5cf92495be560",
+            "label": "Groups",
+            "name": "go_groups",
             "type": "group",
             "instructions": "",
             "required": 0,
@@ -417,11 +622,11 @@
                 "class": "",
                 "id": ""
             },
-            "layout": "block",
+            "layout": "row",
             "sub_fields": [
                 {
-                    "key": "field_5b0f93c92e512",
-                    "label": "Show",
+                    "key": "field_5cf92495be561",
+                    "label": "",
                     "name": "toggle",
                     "type": "true_false",
                     "instructions": "",
@@ -439,43 +644,16 @@
                     "ui_off_text": "Off"
                 },
                 {
-                    "key": "field_5abc8e474b1ad",
+                    "key": "field_5cf92495be562",
                     "label": "Name",
                     "name": "name",
-                    "type": "text",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": [
-                        [
-                            {
-                                "field": "field_5b0f93c92e512",
-                                "operator": "==",
-                                "value": "1"
-                            }
-                        ]
-                    ],
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "Stats",
-                    "placeholder": "Stats",
-                    "prepend": "",
-                    "append": "",
-                    "maxlength": ""
-                },
-                {
-                    "key": "field_5ad67850291c8",
-                    "label": "Leaderboard",
-                    "name": "leaderboard",
                     "type": "group",
                     "instructions": "",
                     "required": 0,
                     "conditional_logic": [
                         [
                             {
-                                "field": "field_5b0f93c92e512",
+                                "field": "field_5cf92495be561",
                                 "operator": "==",
                                 "value": "1"
                             }
@@ -489,10 +667,10 @@
                     "layout": "table",
                     "sub_fields": [
                         {
-                            "key": "field_5ad6786d291c9",
-                            "label": "Toggle",
-                            "name": "toggle",
-                            "type": "true_false",
+                            "key": "field_5cf92495be563",
+                            "label": "Singular",
+                            "name": "singular",
+                            "type": "text",
                             "instructions": "",
                             "required": 0,
                             "conditional_logic": 0,
@@ -501,40 +679,103 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "message": "",
-                            "default_value": 1,
-                            "ui": 1,
-                            "ui_on_text": "On",
-                            "ui_off_text": "Off"
+                            "default_value": "Group",
+                            "placeholder": "Group",
+                            "prepend": "",
+                            "append": "",
+                            "maxlength": ""
                         },
                         {
-                            "key": "field_5abc8eba4b1af",
-                            "label": "Name",
-                            "name": "name",
+                            "key": "field_5cf92495be564",
+                            "label": "Plural",
+                            "name": "plural",
                             "type": "text",
                             "instructions": "",
                             "required": 0,
-                            "conditional_logic": [
-                                [
-                                    {
-                                        "field": "field_5ad6786d291c9",
-                                        "operator": "==",
-                                        "value": "1"
-                                    }
-                                ]
-                            ],
+                            "conditional_logic": 0,
                             "wrapper": {
                                 "width": "",
                                 "class": "",
                                 "id": ""
                             },
-                            "default_value": "Leaderboard",
-                            "placeholder": "Leaderboard",
+                            "default_value": "Groups",
+                            "placeholder": "Groups",
                             "prepend": "",
                             "append": "",
                             "maxlength": ""
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "key": "field_5ad67850291c8",
+            "label": "Leaderboard",
+            "name": "go_stats_leaderboard",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5b0f93c92e512",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_5ad6786d291c9",
+                    "label": "",
+                    "name": "toggle",
+                    "type": "true_false",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 1,
+                    "ui": 1,
+                    "ui_on_text": "On",
+                    "ui_off_text": "Off"
+                },
+                {
+                    "key": "field_5abc8eba4b1af",
+                    "label": "Name",
+                    "name": "name",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5ad6786d291c9",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "Leaderboard",
+                    "placeholder": "Leaderboard",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
                 }
             ]
         },
@@ -554,154 +795,6 @@
             "placeholder": "",
             "prepend": "",
             "append": ""
-        },
-        {
-            "key": "field_5adc00e241914",
-            "label": "Location Options",
-            "name": "",
-            "type": "accordion",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "open": 0,
-            "multi_expand": 0,
-            "endpoint": 0
-        },
-        {
-            "key": "field_5ac980f30f162",
-            "label": "Map",
-            "name": "go_locations_map",
-            "type": "group",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "layout": "row",
-            "sub_fields": [
-                {
-                    "key": "field_5abc90cb65b25",
-                    "label": "toggle",
-                    "name": "toggle",
-                    "type": "true_false",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "acf-hide-label",
-                        "id": ""
-                    },
-                    "message": "",
-                    "default_value": 1,
-                    "ui": 1,
-                    "ui_on_text": "On",
-                    "ui_off_text": "Off"
-                },
-                {
-                    "key": "field_5ca452f44cc49",
-                    "label": "Menu Bar Name",
-                    "name": "name",
-                    "type": "text",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": [
-                        [
-                            {
-                                "field": "field_5abc90cb65b25",
-                                "operator": "==",
-                                "value": "1"
-                            }
-                        ]
-                    ],
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "Map",
-                    "placeholder": "Map",
-                    "prepend": "",
-                    "append": "",
-                    "maxlength": ""
-                },
-                {
-                    "key": "field_5ac980f30f163",
-                    "label": "Title",
-                    "name": "title",
-                    "type": "text",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": [
-                        [
-                            {
-                                "field": "field_5abc90cb65b25",
-                                "operator": "==",
-                                "value": "1"
-                            }
-                        ]
-                    ],
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "Map",
-                    "placeholder": "Map",
-                    "prepend": "",
-                    "append": "",
-                    "maxlength": ""
-                },
-                {
-                    "key": "field_5b06186083d19",
-                    "label": "Map Link",
-                    "name": "map_link",
-                    "type": "text",
-                    "instructions": "Example:\r\nto redirect to http:\/\/mysite.com\/map\r\nyou only enter \"map”",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "map",
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "",
-                    "maxlength": ""
-                },
-                {
-                    "key": "field_5b017d76920ec",
-                    "label": "Default Map",
-                    "name": "default",
-                    "type": "taxonomy",
-                    "instructions": "This map will be the default after every login.",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "taxonomy": "task_chains",
-                    "field_type": "select",
-                    "allow_null": 1,
-                    "add_term": 0,
-                    "save_terms": 0,
-                    "load_terms": 0,
-                    "return_format": "id",
-                    "multiple": 0
-                }
-            ]
         },
         {
             "key": "field_5adc010641915",
@@ -919,7 +1012,7 @@
                             "name": "growth",
                             "type": "number",
                             "instructions": "This will auto increment new rows added by this multiplier. The high the multiplier the more difficult the high levels will be obtain.",
-                            "required": 1,
+                            "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
                                 "width": "",
@@ -940,7 +1033,7 @@
                             "name": "go_first_level_up",
                             "type": "number",
                             "instructions": "This is used to calculate new rows below.",
-                            "required": 1,
+                            "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
                                 "width": "",
@@ -954,6 +1047,27 @@
                             "min": 1,
                             "max": 1000,
                             "step": 1
+                        },
+                        {
+                            "key": "field_5cbe9d1cb6698",
+                            "label": "Max Amount to Level",
+                            "name": "max",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": "go_levels_max"
+                            },
+                            "default_value": 1000,
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "min": 0,
+                            "max": "",
+                            "step": ""
                         },
                         {
                             "key": "field_5abc934260c5b",
@@ -1021,8 +1135,325 @@
             ]
         },
         {
+            "key": "field_5abc863c8e89e",
+            "label": "Currency",
+            "name": "go_loot_gold",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "row",
+            "sub_fields": [
+                {
+                    "key": "field_5ad673ebab9b1",
+                    "label": "Toggle",
+                    "name": "toggle",
+                    "type": "true_false",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "acf-hide-label",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 1,
+                    "ui": 1,
+                    "ui_on_text": "On",
+                    "ui_off_text": "Off"
+                },
+                {
+                    "key": "field_5cb92fed8af66",
+                    "label": "Currency or Coins",
+                    "name": "currency",
+                    "type": "radio",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5ad673ebab9b1",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "choices": {
+                        "currency": "Currency ($)",
+                        "coins": "Coins (Gold, Silver, and Copper)"
+                    },
+                    "allow_null": 0,
+                    "other_choice": 0,
+                    "default_value": "",
+                    "layout": "vertical",
+                    "return_format": "value",
+                    "save_other_choice": 0
+                },
+                {
+                    "key": "field_5abc863c8e89f",
+                    "label": "Name",
+                    "name": "name",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5ad673ebab9b1",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "Dollars",
+                    "placeholder": "Dollars",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                },
+                {
+                    "key": "field_5abc863c8e8a0",
+                    "label": "Abbreviation",
+                    "name": "abbreviation",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5ad673ebab9b1",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "$",
+                    "placeholder": "$",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                },
+                {
+                    "key": "field_5cb930998af68",
+                    "label": "Coin Names",
+                    "name": "coin_names",
+                    "type": "group",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5ad673ebab9b1",
+                                "operator": "==",
+                                "value": "1"
+                            },
+                            {
+                                "field": "field_5cb92fed8af66",
+                                "operator": "==",
+                                "value": "coins"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "table",
+                    "sub_fields": [
+                        {
+                            "key": "field_5cb930de8af6b",
+                            "label": "Gold",
+                            "name": "gold_coin",
+                            "type": "group",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "layout": "block",
+                            "sub_fields": [
+                                {
+                                    "key": "field_5cb930ab8af69",
+                                    "label": "Name",
+                                    "name": "name",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "Gold",
+                                    "placeholder": "Gold",
+                                    "prepend": "",
+                                    "append": "",
+                                    "maxlength": ""
+                                },
+                                {
+                                    "key": "field_5cb931098af6c",
+                                    "label": "Abbreviation",
+                                    "name": "abbreviation",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "go_gold_show",
+                                        "id": ""
+                                    },
+                                    "default_value": "G",
+                                    "placeholder": "G",
+                                    "prepend": "",
+                                    "append": "",
+                                    "maxlength": 1
+                                }
+                            ]
+                        },
+                        {
+                            "key": "field_5cb931518af6d",
+                            "label": "Silver",
+                            "name": "silver",
+                            "type": "group",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "layout": "block",
+                            "sub_fields": [
+                                {
+                                    "key": "field_5cb931518af6e",
+                                    "label": "Name",
+                                    "name": "name",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "Silver",
+                                    "placeholder": "Silver",
+                                    "prepend": "",
+                                    "append": "",
+                                    "maxlength": ""
+                                },
+                                {
+                                    "key": "field_5cb931518af6f",
+                                    "label": "Abbreviation",
+                                    "name": "abbreviation",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "S",
+                                    "placeholder": "S",
+                                    "prepend": "",
+                                    "append": "",
+                                    "maxlength": 1
+                                }
+                            ]
+                        },
+                        {
+                            "key": "field_5cb931738af70",
+                            "label": "Copper",
+                            "name": "copper",
+                            "type": "group",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "layout": "block",
+                            "sub_fields": [
+                                {
+                                    "key": "field_5cb931738af71",
+                                    "label": "Name",
+                                    "name": "name",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "Bronze",
+                                    "placeholder": "Bronze",
+                                    "prepend": "",
+                                    "append": "",
+                                    "maxlength": ""
+                                },
+                                {
+                                    "key": "field_5cb931738af72",
+                                    "label": "Abbreviation",
+                                    "name": "abbreviation",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "B",
+                                    "placeholder": "B",
+                                    "prepend": "",
+                                    "append": "",
+                                    "maxlength": 1
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "key": "field_5abc866f8e8a1",
-            "label": "Health",
+            "label": "Reputation",
             "name": "go_loot_health",
             "type": "group",
             "instructions": "",
@@ -1075,8 +1506,8 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "Health",
-                    "placeholder": "Health",
+                    "default_value": "Reputation",
+                    "placeholder": "Reputation",
                     "prepend": "",
                     "append": "",
                     "maxlength": ""
@@ -1102,59 +1533,23 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "HP",
-                    "placeholder": "HP",
+                    "default_value": "REP",
+                    "placeholder": "REP",
                     "prepend": "",
                     "append": "",
                     "maxlength": ""
-                }
-            ]
-        },
-        {
-            "key": "field_5abc863c8e89e",
-            "label": "Gold",
-            "name": "go_loot_gold",
-            "type": "group",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "layout": "row",
-            "sub_fields": [
-                {
-                    "key": "field_5ad673ebab9b1",
-                    "label": "Toggle",
-                    "name": "toggle",
-                    "type": "true_false",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "acf-hide-label",
-                        "id": ""
-                    },
-                    "message": "",
-                    "default_value": 1,
-                    "ui": 1,
-                    "ui_on_text": "On",
-                    "ui_off_text": "Off"
                 },
                 {
-                    "key": "field_5abc863c8e89f",
-                    "label": "Name",
-                    "name": "name",
-                    "type": "text",
-                    "instructions": "",
+                    "key": "field_5cdbb41b9c851",
+                    "label": "Bankruptcy Penalty",
+                    "name": "bankruptcy_penalty",
+                    "type": "number",
+                    "instructions": "Health lost if a player does not have enough gold to cover an undo or penalty (they spent the gold received already).",
                     "required": 0,
                     "conditional_logic": [
                         [
                             {
-                                "field": "field_5ad673ebab9b1",
+                                "field": "field_5ad67502ceed3",
                                 "operator": "==",
                                 "value": "1"
                             }
@@ -1165,23 +1560,25 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "Gold",
-                    "placeholder": "Gold",
+                    "default_value": 0,
+                    "placeholder": "",
                     "prepend": "",
                     "append": "",
-                    "maxlength": ""
+                    "min": 0,
+                    "max": 100,
+                    "step": ""
                 },
                 {
-                    "key": "field_5abc863c8e8a0",
-                    "label": "Abbreviation",
-                    "name": "abbreviation",
-                    "type": "text",
+                    "key": "field_5d09b5c84eee2",
+                    "label": "Maximum Modifier",
+                    "name": "max_health_mod",
+                    "type": "number",
                     "instructions": "",
                     "required": 0,
                     "conditional_logic": [
                         [
                             {
-                                "field": "field_5ad673ebab9b1",
+                                "field": "field_5ad67502ceed3",
                                 "operator": "==",
                                 "value": "1"
                             }
@@ -1192,55 +1589,19 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "G",
-                    "placeholder": "G",
+                    "default_value": 200,
+                    "placeholder": 200,
                     "prepend": "",
-                    "append": "",
-                    "maxlength": ""
-                }
-            ]
-        },
-        {
-            "key": "field_5c43453fab971",
-            "label": "Bonus Loot Defaults",
-            "name": "",
-            "type": "accordion",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "open": 0,
-            "multi_expand": 0,
-            "endpoint": 0
-        },
-        {
-            "key": "field_5acaeb729ce10",
-            "label": "Bonus Loot Defaults",
-            "name": "go_loot_bonus_loot",
-            "type": "repeater",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "go-loot",
-                "id": ""
-            },
-            "collapsed": "",
-            "min": 1,
-            "max": 0,
-            "layout": "row",
-            "button_label": "",
-            "sub_fields": [
+                    "append": "%",
+                    "min": 100,
+                    "max": 1000,
+                    "step": 1
+                },
                 {
-                    "key": "field_5b526c86fabad",
-                    "label": "Title",
-                    "name": "title",
-                    "type": "text",
+                    "key": "field_5d2190c46593c",
+                    "label": "Starting Amount",
+                    "name": "starting",
+                    "type": "number",
                     "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
@@ -1249,131 +1610,13 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "",
+                    "default_value": 50,
                     "placeholder": "",
                     "prepend": "",
                     "append": "",
-                    "maxlength": ""
-                },
-                {
-                    "key": "field_5b526ca1fabae",
-                    "label": "Message",
-                    "name": "message",
-                    "type": "textarea",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "placeholder": "",
-                    "maxlength": "",
-                    "rows": "",
-                    "new_lines": ""
-                },
-                {
-                    "key": "field_5b526c3afabac",
-                    "label": "Loot",
-                    "name": "defaults",
-                    "type": "group",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "layout": "table",
-                    "sub_fields": [
-                        {
-                            "key": "field_5acaeb729ce12",
-                            "label": "XP",
-                            "name": "xp",
-                            "type": "number",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": 0,
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": "",
-                            "min": 0,
-                            "max": "",
-                            "step": ""
-                        },
-                        {
-                            "key": "field_5acaeb729ce11",
-                            "label": "Gold",
-                            "name": "gold",
-                            "type": "number",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": 0,
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": "",
-                            "min": 0,
-                            "max": "",
-                            "step": ""
-                        },
-                        {
-                            "key": "field_5acaeb729ce13",
-                            "label": "Health",
-                            "name": "health",
-                            "type": "number",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": 0,
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": "",
-                            "min": 0,
-                            "max": "",
-                            "step": ".01"
-                        },
-                        {
-                            "key": "field_5acaeb729ce14",
-                            "label": "Drop Rate",
-                            "name": "drop_rate",
-                            "type": "number",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": "",
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": "%",
-                            "min": 0,
-                            "max": 100,
-                            "step": ".001"
-                        }
-                    ]
+                    "min": 0,
+                    "max": 100,
+                    "step": ""
                 }
             ]
         },
@@ -1488,11 +1731,30 @@
             ]
         },
         {
-            "key": "field_5b38852f5117e",
-            "label": "Avatars",
-            "name": "go_avatars",
+            "key": "field_5abc961f959a6",
+            "label": "Use Full Names",
+            "name": "go_full-names_toggle",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_5cfc749f28626",
+            "label": "About Me Quest",
+            "name": "about_me",
             "type": "group",
-            "instructions": "If both options are on and set, the local avatar will override the gravatar",
+            "instructions": "Set a quest where students answers will be output on a tab in the stats panel.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1503,9 +1765,9 @@
             "layout": "block",
             "sub_fields": [
                 {
-                    "key": "field_5b3885525117f",
-                    "label": "Use Local Only Avatars",
-                    "name": "local",
+                    "key": "field_5cfc753b28627",
+                    "label": "Toggle",
+                    "name": "toggle",
                     "type": "true_false",
                     "instructions": "",
                     "required": 0,
@@ -1516,109 +1778,67 @@
                         "id": ""
                     },
                     "message": "",
-                    "default_value": 1,
+                    "default_value": 0,
                     "ui": 1,
                     "ui_on_text": "On",
                     "ui_off_text": "Off"
                 },
                 {
-                    "key": "field_5b3885a351180",
-                    "label": "Use Gravatars",
-                    "name": "gravatars",
-                    "type": "true_false",
+                    "key": "field_5cfc756028628",
+                    "label": "About Me Quest",
+                    "name": "quest",
+                    "type": "post_object",
                     "instructions": "",
                     "required": 0,
-                    "conditional_logic": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5cfc753b28627",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "post_type": [
+                        "tasks"
+                    ],
+                    "taxonomy": "",
+                    "allow_null": 0,
+                    "multiple": 0,
+                    "return_format": "id",
+                    "ui": 1
+                },
+                {
+                    "key": "field_5cfc75c528629",
+                    "label": "Public",
+                    "name": "public",
+                    "type": "true_false",
+                    "instructions": "Show tab to all users.",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5cfc753b28627",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
                     "wrapper": {
                         "width": "",
                         "class": "",
                         "id": ""
                     },
                     "message": "",
-                    "default_value": 1,
+                    "default_value": 0,
                     "ui": 1,
-                    "ui_on_text": "On",
-                    "ui_off_text": "Off"
-                }
-            ]
-        },
-        {
-            "key": "field_5b495b7b4ba6b",
-            "label": "User Profile Questions",
-            "name": "go_user_profile_questions",
-            "type": "repeater",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "collapsed": "",
-            "min": 0,
-            "max": 0,
-            "layout": "table",
-            "button_label": "Add Question",
-            "sub_fields": [
-                {
-                    "key": "field_5b4a59ec158e0",
-                    "label": "Title",
-                    "name": "title",
-                    "type": "text",
-                    "instructions": "Shows as heading on stats panel.",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "",
-                    "maxlength": ""
-                },
-                {
-                    "key": "field_5b495c4a4ba6d",
-                    "label": "question",
-                    "name": "question",
-                    "type": "textarea",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "placeholder": "",
-                    "maxlength": "",
-                    "rows": "",
-                    "new_lines": ""
-                },
-                {
-                    "key": "field_5b57aa3b424d6",
-                    "label": "Number of Rows",
-                    "name": "rows",
-                    "type": "number",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "15",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": 4,
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "",
-                    "min": 1,
-                    "max": 15,
-                    "step": ""
+                    "ui_on_text": "Show",
+                    "ui_off_text": "Hide"
                 }
             ]
         },
@@ -1775,244 +1995,6 @@
             ]
         },
         {
-            "key": "field_5abda772ad33a",
-            "label": "Images",
-            "name": "go_images",
-            "type": "group",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "layout": "block",
-            "sub_fields": [
-                {
-                    "key": "field_5abda83b7e6fa",
-                    "label": "Resize",
-                    "name": "resize",
-                    "type": "group",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "layout": "table",
-                    "sub_fields": [
-                        {
-                            "key": "field_5abda782ad33b",
-                            "label": "Resize On Client",
-                            "name": "toggle",
-                            "type": "true_false",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "message": "",
-                            "default_value": 1,
-                            "ui": 1,
-                            "ui_on_text": "On",
-                            "ui_off_text": "Off"
-                        },
-                        {
-                            "key": "field_5abda7a8ad33c",
-                            "label": "Resize Longest Side",
-                            "name": "longest_side",
-                            "type": "number",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": [
-                                [
-                                    {
-                                        "field": "field_5abda782ad33b",
-                                        "operator": "==",
-                                        "value": "1"
-                                    }
-                                ]
-                            ],
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": 1920,
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": "px",
-                            "min": 1000,
-                            "max": 3840,
-                            "step": 10
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "key": "field_5c434a58ab972",
-            "label": "Canned Feedback",
-            "name": "",
-            "type": "accordion",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "open": 0,
-            "multi_expand": 0,
-            "endpoint": 0
-        },
-        {
-            "key": "field_5c434b1b956b6",
-            "label": "Feedback",
-            "name": "go_feedback_canned",
-            "type": "repeater",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "go-loot",
-                "id": ""
-            },
-            "collapsed": "",
-            "min": 1,
-            "max": 0,
-            "layout": "row",
-            "button_label": "",
-            "sub_fields": [
-                {
-                    "key": "field_5c434b1b956b7",
-                    "label": "Title",
-                    "name": "title",
-                    "type": "text",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "",
-                    "maxlength": ""
-                },
-                {
-                    "key": "field_5c434b1b956b8",
-                    "label": "Message",
-                    "name": "message",
-                    "type": "textarea",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "placeholder": "",
-                    "maxlength": "",
-                    "rows": "",
-                    "new_lines": ""
-                },
-                {
-                    "key": "field_5c434b1b956b9",
-                    "label": "Loot",
-                    "name": "defaults",
-                    "type": "group",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "layout": "table",
-                    "sub_fields": [
-                        {
-                            "key": "field_5c434b1b956ba",
-                            "label": "XP",
-                            "name": "xp",
-                            "type": "number",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": 0,
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": "",
-                            "min": "",
-                            "max": "",
-                            "step": ""
-                        },
-                        {
-                            "key": "field_5c434b1b956bb",
-                            "label": "Gold",
-                            "name": "gold",
-                            "type": "number",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": 0,
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": "",
-                            "min": "",
-                            "max": "",
-                            "step": ""
-                        },
-                        {
-                            "key": "field_5c434b1b956bc",
-                            "label": "Health",
-                            "name": "health",
-                            "type": "number",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": 0,
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": "",
-                            "min": "",
-                            "max": "",
-                            "step": ".01"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
             "key": "field_5abc95db959a4",
             "label": "Other",
             "name": "",
@@ -2055,25 +2037,6 @@
             "return_format": "value"
         },
         {
-            "key": "field_5abc961f959a6",
-            "label": "Use Full Names",
-            "name": "go_full-names_toggle",
-            "type": "true_false",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "message": "",
-            "default_value": 0,
-            "ui": 0,
-            "ui_on_text": "",
-            "ui_off_text": ""
-        },
-        {
             "key": "field_5afe0c56ad661",
             "label": "Show Search Box",
             "name": "go_search_toggle",
@@ -2091,82 +2054,6 @@
             "ui": 1,
             "ui_on_text": "Yes",
             "ui_off_text": "No"
-        },
-        {
-            "key": "field_5afe0d1bff5b6",
-            "label": "Show Dashboard",
-            "name": "go_dashboard_toggle",
-            "type": "true_false",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "message": "",
-            "default_value": 0,
-            "ui": 1,
-            "ui_on_text": "Yes",
-            "ui_off_text": "No"
-        },
-        {
-            "key": "field_5afe0d43ff5b7",
-            "label": "Always Show Admin Bar",
-            "name": "go_admin_bar_toggle",
-            "type": "true_false",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "message": "",
-            "default_value": 0,
-            "ui": 1,
-            "ui_on_text": "Yes",
-            "ui_off_text": "No"
-        },
-        {
-            "key": "field_5abc9707c66ea",
-            "label": "Rewrite Slugs",
-            "name": "go_slugs_toggle",
-            "type": "true_false",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "message": "",
-            "default_value": 1,
-            "ui": 1,
-            "ui_on_text": "On",
-            "ui_off_text": "Off"
-        },
-        {
-            "key": "field_5b0178b05eb2c",
-            "label": "Landing Page on Login",
-            "name": "go_landing_page_on_login",
-            "type": "text",
-            "instructions": "Example:\r\nto redirect to http:\/\/mysite.com\/map\r\nyou only enter \\\"map\\”",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "map",
-            "placeholder": "map",
-            "prepend": "",
-            "append": "",
-            "maxlength": ""
         }
     ],
     "location": [
@@ -2186,5 +2073,6 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1554273169
+    "recaptcha": 0,
+    "modified": 1562480897
 }

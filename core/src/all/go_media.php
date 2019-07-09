@@ -23,9 +23,24 @@ function go_users_own_attachments( $wp_query_obj ) {
         return;
 
     //if( !current_user_can('delete_pages') ) {
-        $wp_query_obj->set('author', $current_user->ID);
+    $wp_query_obj->set('author', $current_user->ID);
     //}
 
     return;
 }
 
+
+$resize = get_option( 'options_go_images_resize_toggle' );
+if ($resize) {
+
+    add_filter('plupload_default_settings', function ($settings) {
+        $settings['resize'] = array(
+            'enabled' => true,
+            'width' => 1920,
+            'height' => 1080,
+            'quality' => 80,
+            'preserve_headers' => true,
+        );
+        return $settings;
+    });
+}

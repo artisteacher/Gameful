@@ -3,20 +3,29 @@
 global $wpdb;
 
 function go_update_db_check() {
-    $go_db_version = 4.6;
-    if ( get_site_option( 'go_db_version' ) != $go_db_version ) {
+    $go_db_version = 5.1;
+    $old_version = get_option( 'go_db_version' );
+
+    if ( $old_version != $go_db_version ) {
+
         update_option('go_db_version', $go_db_version);
+
         go_update_db();
+
+        if ($old_version > 3 && $old_version < 5) {
+            go_update_go_to_v5();//update the tasks and blogs to v5 if this is an upgrade from v4
+        }
     }
+
 }
-add_action( 'plugins_loaded', 'go_update_db_check' );
+//add_action( 'plugins_loaded', 'go_update_db_check' );
 
 function go_update_db() {
     go_table_totals();
     go_table_tasks();
     go_table_actions();
     go_install_data();
-    go_set_options_autoload();
+    //go_set_options_autoload(); //legacy function
 }
 
 function go_table_tasks() {
@@ -29,23 +38,25 @@ function go_table_tasks() {
 			post_id bigint(20),
 			status TINYINT,
 			bonus_status TINYINT DEFAULT 0,
-			xp INT,
-			gold DECIMAL (10,2),
-			health INT,
+			xp INT unsigned,
+			gold DECIMAL (10,2) unsigned,
+			health DECIMAL (10,2) unsigned,
 			badges VARCHAR (4096),
 			groups VARCHAR (4096),
 			start_time datetime,
 			last_time datetime,
 			timer_time datetime,
+			class VARCHAR (4096),
 			PRIMARY KEY  (id),
             KEY uid (uid),
             KEY post_id (post_id),
-            KEY last_time (last_time),
             KEY uid_post (uid, post_id)        
 		);
 	";
     require_once( ABSPATH.'wp-admin/includes/upgrade.php' );
     dbDelta( $sql );
+
+    drop_index( $table_name, 'last_time' );
 }
 
 function go_table_actions() {
@@ -73,19 +84,21 @@ function go_table_actions() {
 			groups VARCHAR (4096),
 			xp_total INT unsigned,
 			gold_total DECIMAL (10,2) unsigned,
-			health_total INT unsigned,
+			health_total DECIMAL (10,2) unsigned,
 			PRIMARY KEY  (id),
             KEY uid (uid),
             KEY source_id (source_id),
             KEY action_type (action_type ),
-            KEY TIMESTAMP (TIMESTAMP),
-            KEY uid_source (uid, source_id),
-            KEY uid_date (uid, TIMESTAMP)
+            KEY uid_source (uid, source_id)
             
 		);
 	";
     require_once( ABSPATH.'wp-admin/includes/upgrade.php' );
     dbDelta( $sql );
+
+    drop_index( $table_name, 'uid_date' );
+    drop_index( $table_name, 'TIMESTAMP' );
+
 }
 
 function go_table_totals() {
@@ -94,15 +107,12 @@ function go_table_totals() {
     $sql = "
 		CREATE TABLE $table_name (
 			id bigint(20) NOT NULL AUTO_INCREMENT,
-			uid bigint(20) NOT NULL,
+			uid bigint(20) NOT NULL UNIQUE,
 			xp INT unsigned DEFAULT 0,
-			gold DECIMAL (10,2) DEFAULT 0,
+			gold DECIMAL (10,2) unsigned DEFAULT 0,
 			health DECIMAL (10,2) unsigned DEFAULT 100,
-			badges VARCHAR (4096),
-			groups VARCHAR (4096),
 			badge_count INT DEFAULT 0,
-			PRIMARY KEY  (id),
-            CONSTRAINT user_id UNIQUE (uid)                
+			PRIMARY KEY (id)               
 		);
 	";
 
@@ -110,6 +120,8 @@ function go_table_totals() {
     dbDelta( $sql );
 }
 
+/*
+//this is just for older installs (before v4) that didn't have the autoload on
 function go_set_options_autoload(){
     $options_array = array(
         'options_go_tasks_name_singular',
@@ -125,6 +137,9 @@ function go_set_options_autoload(){
         'options_go_badges_toggle',
         'options_go_badges_name_singular',
         'options_go_badges_name_plural',
+        'options_go_groups_toggle',
+        'options_go_groups_name_singular',
+        'options_go_groups_name_plural',
         'options_go_stats_toggle',
         'options_go_blogs_toggle',
         'options_go_stats_name',
@@ -172,8 +187,8 @@ function go_set_options_autoload(){
 
         'options_go_slugs_toggle',
 
-        'options_go_avatars_local',
-        'options_go_avatars_gravatars',
+        'options_go_avatars_local'
+
     );
 
     foreach ( $options_array as $option ) {//autoload must be set on creation of option
@@ -184,6 +199,7 @@ function go_set_options_autoload(){
         update_option( $option, $value, true );//update the value
     }
 }
+*/
 
 function go_install_data ($reset = false) {
     global $wpdb;
@@ -206,12 +222,16 @@ function go_install_data ($reset = false) {
         'options_go_badges_toggle' => 1,
         'options_go_badges_name_singular' => 'Badge',
         'options_go_badges_name_plural' => 'Badges',
+        'options_go_groups_toggle' => 1,
+        'options_go_groups_name_singular' => 'Group',
+        'options_go_groups_name_plural' => 'Groups',
         'options_go_stats_toggle' => 1,
         'options_go_blogs_toggle' => 1,
         'options_go_stats_name' => 'Stats',
         'options_go_stats_leaderboard_toggle' => 1,
         'options_go_stats_leaderboard_name' => 'Leaderboard',
         'options_go_locations_map_toggle' => 1,
+        'options_go_locations_map_name' => 'Map',
         'options_go_locations_map_title' => 'Map',
         'options_go_locations_map_map_link' => 'map',
         'options_go_loot_name' => 'Loot',
@@ -221,11 +241,23 @@ function go_install_data ($reset = false) {
 
         'options_go_loot_xp_name' => 'Experience Points',
         'options_go_loot_gold_name' => 'Gold',
-        'options_go_loot_health_name' => 'Health',
+        'options_go_loot_health_name' => 'Reputation',
 
         'options_go_loot_xp_abbreviation' => 'XP',
         'options_go_loot_gold_abbreviation' => 'G',
-        'options_go_loot_health_abbreviation' => 'HP',
+        'options_go_loot_health_abbreviation' => 'REP',
+
+        'options_go_loot_gold_currency' => 'coins',
+        'options_go_loot_gold_coin_names_gold_coin_name' => 'Gold',
+        'options_go_loot_gold_coin_names_gold_coin_abbreviation' => 'G',
+        'options_go_loot_gold_coin_names_silver_name' => 'Silver',
+        'options_go_loot_gold_coin_names_silver_abbreviation' => 'S',
+        'options_go_loot_gold_coin_names_copper_name' => 'Copper',
+        'options_go_loot_gold_coin_names_copper_abbreviation' => 'C',
+
+        'options_go_loot_health_starting' => 50,
+        'options_go_loot_health_bankruptcy_penalty' => 5,
+        'options_go_loot_health_max_health_mod' => 200,
 
         'options_go_loot_xp_levels_name_singular' => 'Level',
         'options_go_loot_xp_levels_name_plural' => 'Levels',
@@ -242,8 +274,7 @@ function go_install_data ($reset = false) {
         'options_go_video_width_pixels' => '500',
         'options_go_video_lightbox' => '1',
 
-        //'options_go_images_resize_toggle' => 1,
-        //'options_go_images_resize_longest_side' => '1920',
+        'options_go_images_resize_toggle' => 1,
 
         'options_go_guest_global' => 'regular',
         'options_go_full-names_toggle' => 0,
@@ -255,7 +286,11 @@ function go_install_data ($reset = false) {
         'options_go_slugs_toggle' => 1,
 
         'options_go_avatars_local' => 1,
-        'options_go_avatars_gravatars' => 1,
+
+        'options_go_user_bar_background_color' => '#268FBB',
+        'options_go_user_bar_link_color' => '#FFFFFF',
+        'options_go_user_bar_hover_color' => '#a0a5aa',
+        'options_go_home_toggle' => 1,
     );
     foreach ( $options_array as $key => $value ) {
         add_option( $key, $value, '', 'yes' );
@@ -298,11 +333,10 @@ function go_install_data ($reset = false) {
         add_option('options_go_loot_xp_levels_level_13_xp', 12921);
         add_option('options_go_loot_xp_levels_level_14_xp', 19381);
         add_option('options_go_loot_xp_levels_level_14_name', 'Guru');
-
     }
 
     //For Levels
-    $isset = get_option('options_go_feedback_canned'); //if there are no level at all
+    $isset = get_option('options_go_feedback_canned'); //if there is no canned feedback, add the defaults
     if ($isset == false){
         add_option('options_go_feedback_canned', 3);
         add_option('options_go_feedback_canned_0_title', 'Post has been reset');
@@ -321,7 +355,6 @@ function go_install_data ($reset = false) {
         add_option('options_go_feedback_canned_2_defaults_gold', 10);
         add_option('options_go_feedback_canned_2_defaults_health', 0);
     }
-
 }
 
 //not sure what this does, but it is in an activation hook
@@ -329,6 +362,9 @@ function go_open_comments() {
     global $wpdb;
     $wpdb->update( $wpdb->posts, array( 'comment_status' => 'open', 'ping_status' => 'open' ), array( 'post_type' => 'tasks' ) );
 }
+
+
+
 
 
 ?>

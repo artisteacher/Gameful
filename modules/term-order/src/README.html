@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+	<meta charset="utf-8"/>
+</head>
+<body>
+
+<h1 id="gameon-wptermorder">GAME ON - WP Term Order</h1>
+
+<p>This is a modified version on the WP Term Order Plugin.</p>
+
+<p>Sort taxonomy terms, your way.</p>
+
+<p>WP Term Order allows users to order any visible category, tag, or taxonomy term numerically, providing a customized order for their taxonomy terms.</p>
+
+<h1 id="installation">Installation</h1>
+
+<ul>
+<li>Download and install using the built in WordPress plugin installer.</li>
+<li>Activate in the &#8220;Plugins&#8221; area of your admin by clicking the &#8220;Activate&#8221; link.</li>
+<li>No further setup or configuration is necessary.</li>
+</ul>
+
+<h1 id="demo">Demo</h1>
+
+<figure>
+<img src="screenshot-1.gif" alt="Term Reorder" />
+<figcaption>Term Reorder</figcaption>
+</figure>
+
+<h1 id="faq">FAQ</h1>
+
+<h3 id="doesthiscreatenewdatabasetables">Does this create new database tables?</h3>
+
+<p>No. There are no new database tables with this plugin.</p>
+
+<h3 id="doesthismodifyexistingdatabasetables">Does this modify existing database tables?</h3>
+
+<p>Yes. The <code>wp_term_taxonomy</code> table is altered, and an <code>order</code> column is added.</p>
+
+<h3 id="caniqueryandsortbyorder">Can I query and sort by <code>order</code>?</h3>
+
+<p>Yes. Use it like:</p>
+
+<pre><code>$terms = get_terms( 'category', array(
+	'depth'      =&gt; 1,
+	'number'     =&gt; 100,
+	'parent'     =&gt; 0,
+	'orderby'    =&gt; 'order', // &lt;--- Looky looky!
+	'order'      =&gt; 'ASC',
+	'hide_empty' =&gt; false,
+
+	// Try the &quot;wp-term-meta&quot; plugin!
+	'meta_query' =&gt; array( array(
+		'key' =&gt; 'term_thumbnail'
+	) )
+) );
+</code></pre>
+
+<h3 id="wherecanigetsupport">Where can I get support?</h3>
+
+<p>The WordPress support forums: https://wordpress.org/support/plugin/wp-term-order/</p>
+
+<h3 id="canicontribute">Can I contribute?</h3>
+
+<p>Yes, please! The number of users needing more robust taxonomy term ordering is growing fast. Having an easy-to-use UI and powerful set of functions is critical to managing complex WordPress installations. If this is your thing, please help us out!</p>
+
+</body>
+</html>
+

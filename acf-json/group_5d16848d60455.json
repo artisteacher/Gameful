@@ -1,0 +1,79 @@
+{
+    "key": "group_5d16848d60455",
+    "title": "Performance and Core Functionality Settings",
+    "fields": [
+        {
+            "key": "field_5d168670326ad",
+            "label": "Multisite Information",
+            "name": "",
+            "type": "message",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "These settings are only available on the main site for a multisite and will affect all sub-sites.",
+            "new_lines": "wpautop",
+            "esc_html": 0
+        },
+        {
+            "key": "field_5d16871d14236",
+            "label": "Resize Images",
+            "name": "go_images_resize",
+            "type": "true_false",
+            "instructions": "Resizes all images to HD quality (1920w x 1080h) before uploading to the server. This improves server performance because it works with a smaller original file when resizing for display and can improve user performance on upload particularly on slow connections and mobile devices.",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 1,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_5abc9707c66ea",
+            "label": "Rewrite Slugs",
+            "name": "go_slugs_toggle",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 1,
+            "ui": 1,
+            "ui_on_text": "On",
+            "ui_off_text": "Off"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "go_performance"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": "",
+    "modified": 1561757558
+}

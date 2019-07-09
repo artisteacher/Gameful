@@ -19,8 +19,7 @@
  */
 
 get_header();
-
-
+$map_name = get_option( 'options_go_locations_map_map_link');
 go_make_map();
 
 

@@ -18,11 +18,11 @@ if ( !is_admin() ) {
 
     //Store
     add_action( 'wp_ajax_go_get_purchase_count', 'go_get_purchase_count' ); //OK
-    add_action( 'wp_ajax_nopriv_go_get_purchase_count', 'go_get_purchase_count' ); //OK
+    //add_action( 'wp_ajax_nopriv_go_get_purchase_count', 'go_get_purchase_count' ); //OK
     add_action( 'wp_ajax_go_buy_item', 'go_buy_item' ); //OK
-    add_action( 'wp_ajax_nopriv_go_buy_item', 'go_buy_item' ); //OK
+    //add_action( 'wp_ajax_nopriv_go_buy_item', 'go_buy_item' ); //OK
     add_action( 'wp_ajax_go_the_lb_ajax', 'go_the_lb_ajax' ); //OK
-    add_action( 'wp_ajax_nopriv_go_the_lb_ajax', 'go_the_lb_ajax' ); //OK
+   // add_action( 'wp_ajax_nopriv_go_the_lb_ajax', 'go_the_lb_ajax' ); //OK
 
 }else{
     include_once('src/admin.php');

@@ -1,13 +1,8 @@
 <?php
-
+add_action( 'admin_enqueue_scripts', 'go_admin_scripts' );
 function go_admin_scripts ($hook) {
     global $post;
     global $go_js_version;
-    global $go_debug;
-
-    $user_id = get_current_user_id();
-    //is the current user an admin
-    $is_admin = go_user_is_admin($user_id);
 
     /*
      * Registering Scripts For Admin Pages
@@ -19,22 +14,16 @@ function go_admin_scripts ($hook) {
      * Combined scripts for every admin page. Combine all scripts unless the page needs localization.
      */
 
-    wp_register_script( 'go_scripts', plugin_dir_url( __FILE__ ).'min/go_scripts-min.js', array( 'jquery' ), $go_js_version, true);
-
     wp_register_script( 'go_admin_user', plugin_dir_url( __FILE__ ).'min/go_admin_user-min.js', array( 'jquery' ), $go_js_version, true);
 
-    wp_register_script( 'go_clipboard', plugin_dir_url( __FILE__ ).'min/go_clipboard-min.js', array( 'jquery' ), $go_js_version, true);
+    wp_register_script( 'go_all_pages_js', plugin_dir_url( __FILE__ ).'min/go_all-min.js', array('jquery'), $go_js_version, true);
+    wp_enqueue_script( 'go_all_pages_js' );
 
-    wp_register_script( 'go_admin_page', plugin_dir_url( __FILE__ ).'min/go_every_admin_page-min.js', array( 'jquery' ), $go_js_version, true);
+    wp_register_script( 'go_combined_js_depend', plugin_dir_url( __FILE__ ).'min/go_combine_dependencies-min.js', array( 'jquery' ), $go_js_version, true);
+    wp_enqueue_script( 'go_combined_js_depend' );
 
     //this one doesn't minify for some reason
-    wp_register_script( 'go_admin-tools', plugin_dir_url( __FILE__ ).'scripts/go_tools.js', array( 'jquery' ), $go_js_version, true);
-
-    if(!$go_debug) {
-        wp_register_script('go_admin_notifications', plugin_dir_url(__FILE__) . 'scripts/go_admin_notifications.js', array('jquery'), $go_js_version, true);
-        wp_enqueue_script('go_admin_notifications');
-    }
-
+    //wp_register_script( 'go_admin-tools', plugin_dir_url( __FILE__ ).'scripts/go_tools.js', array( 'jquery' ), $go_js_version, true);
 
     /*
      * Enqueue Scripts For Admin Pages (Except for page specific ones below)
@@ -51,83 +40,62 @@ function go_admin_scripts ($hook) {
     wp_enqueue_script( 'jquery-ui-spinner' );
     wp_enqueue_script( 'jquery-ui-progressbar' );
     wp_enqueue_script( 'jquery-effects-core' );
+    /**
+     * Tabs
+     */
+    wp_enqueue_script( 'jquery-ui-tabs');
     //wp_enqueue_script( 'go_featherlight_min' );
 
     //Combined Scripts
-    wp_enqueue_script( 'go_scripts' );
-
-    //single script
-    wp_enqueue_script( 'go_admin-tools' );
-
-    //Combined Scripts
-    wp_enqueue_script( 'go_admin_page' );
+    //wp_enqueue_script( 'go_scripts' );
 
     //END Combined Scripts
+    //single script
+    //wp_enqueue_script( 'go_admin-tools' );
 
-    $go_lightbox_switch = get_option( 'options_go_video_lightbox' );
-    $go_video_unit = get_option ('options_go_video_width_unit');
-    $go_fitvids_maxwidth = "";
-    if ($go_video_unit == 'px'){
-        $go_fitvids_maxwidth = get_option('options_go_video_width_pixels')."px";
-    }
-    if ($go_video_unit == '%'){
-        $go_fitvids_maxwidth = get_option('options_go_video_width_percent')."%";
-    }
+    //LOCALIZE
+    // Localization for all admin page
+    wp_localize_script( 'go_admin_user', 'SiteURL', get_site_url() );
+    wp_localize_script( 'go_admin_user', 'MyAjax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
+    wp_localize_script( 'go_admin_user', 'PluginDir', array( 'url' => plugin_dir_url(dirname(__FILE__) ) ) );
 
-		// Localization for all admin page
-        wp_localize_script( 'go_scripts', 'SiteURL', get_site_url() );
-        wp_localize_script( 'go_scripts', 'MyAjax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
-		wp_localize_script( 'go_scripts', 'PluginDir', array( 'url' => plugin_dir_url(dirname(__FILE__) ) ) );
-		wp_localize_script(
-			'go_scripts',
-			'GO_EVERY_PAGE_DATA',
-			array(
-				'nonces' => array(
-					'go_deactivate_plugin'         	=> wp_create_nonce( 'go_deactivate_plugin_' . $user_id ),
-					//'go_admin_bar_add'             	=> wp_create_nonce( 'go_admin_bar_add_' . $user_id ),
-					'go_admin_bar_stats'           	=> wp_create_nonce( 'go_admin_bar_stats_' ),
-                    'go_stats_about'               	=> wp_create_nonce( 'go_stats_about' ),
-					'go_stats_task_list'           	=> wp_create_nonce( 'go_stats_task_list_' ),
-					//'go_stats_move_stage'         => wp_create_nonce( 'go_stats_move_stage_' ),
-					'go_stats_item_list'           	=> wp_create_nonce( 'go_stats_item_list_' ),
-					//'go_stats_rewards_list'       => wp_create_nonce( 'go_stats_rewards_list_' ),
-					'go_stats_activity_list'       	=> wp_create_nonce( 'go_stats_activity_list_' ),
-                    'go_stats_messages'       	    => wp_create_nonce( 'go_stats_messages' ),
-                    //'go_activity_dataloader_ajax'   => wp_create_nonce( 'go_activity_dataloader_ajax_' ),
-                    'go_stats_single_task_activity_list'       => wp_create_nonce( 'go_stats_single_task_activity_list' ),
-					//'go_stats_penalties_list'     => wp_create_nonce( 'go_stats_penalties_list_' ),
-					'go_stats_badges_list'         	=> wp_create_nonce( 'go_stats_badges_list_' ),
-                    'go_stats_groups_list'         	=> wp_create_nonce( 'go_stats_groups_list_' ),
-					//'go_stats_leaderboard_choices' => wp_create_nonce( 'go_stats_leaderboard_choices_' ),
-					'go_stats_leaderboard'         	=> wp_create_nonce( 'go_stats_leaderboard_' ),
-                    //'go_stats_leaderboard2'        	=> wp_create_nonce( 'go_stats_leaderboard2_' ),
-                    'go_stats_lite'                	=> wp_create_nonce( 'go_stats_lite' ),
-                    'go_upgade4'                   	=> wp_create_nonce( 'go_upgade4'),
-                    'go_reset_all_users'			=> wp_create_nonce( 'go_reset_all_users'),
-                    'go_the_lb_ajax' 				=> wp_create_nonce( 'go_the_lb_ajax' ),
-                    'go_create_admin_message' 		=> wp_create_nonce('go_create_admin_message'),
-                    'go_send_message' 				=> wp_create_nonce('go_send_message'),
-                    'go_blog_lightbox_opener'       => wp_create_nonce('go_blog_lightbox_opener'),
-                    'go_blog_user_task'             => wp_create_nonce('go_blog_user_task'),
-                    'go_user_map_ajax'              => wp_create_nonce('go_user_map_ajax'),
-                    'go_update_last_map'            => wp_create_nonce('go_update_last_map'),
-                    'go_blog_favorite_toggle'            => wp_create_nonce('go_blog_favorite_toggle')
-				),
-				'go_is_admin'                   => $is_admin,
-                'go_lightbox_switch'            => $go_lightbox_switch,
-                'go_fitvids_maxwidth'           => $go_fitvids_maxwidth
-			)
-		);
+    wp_localize_script(
+        'go_admin_user',
+        'GO_ADMIN_PAGE_DATA',
+        array(
+            'nonces' => array(
+                'go_user_map_ajax'              => wp_create_nonce('go_user_map_ajax'),//on the clipboard
+                'go_reset_all_users'			=> wp_create_nonce( 'go_reset_all_users'),//could be just on tools
+            ),
+        )
+    );
+
+    go_localize_all_pages();
 
     $is_admin_user = go_user_is_admin();
     if ($is_admin_user){
         wp_localize_script(
-            'go_scripts',
+            'go_admin_user',
             'GO_ADMIN_DATA',
             array(
                 'nonces' => array(
-                    'go_admin_messages'         => wp_create_nonce( 'go_admin_messages'),
+                    'go_admin_messages' => wp_create_nonce('go_admin_messages'),
                 )
+            )
+        );
+
+        wp_localize_script(
+            'go_admin_user',
+            'GO_ACF_DATA',
+            array(
+                'go_store_toggle'       => get_option('options_go_store_toggle') ,
+                'go_map_toggle'         => get_option('options_go_locations_map_toggle') ,
+                'go_gold_toggle'        => get_option('options_go_loot_gold_toggle') ,
+                'go_xp_toggle'          => get_option('options_go_loot_xp_toggle') ,
+                'go_health_toggle'      => get_option('options_go_loot_health_toggle') ,
+                'go_badges_toggle'      => get_option('options_go_badges_toggle'),
+                //'go_leaderboard_toggle'      => get_option('options_go_stats_leaderboard_toggle')
+
             )
         );
 
@@ -138,36 +106,30 @@ function go_admin_scripts ($hook) {
             /*
              * Clipboard Scripts
              */
-
-            //COMBINED
-            wp_enqueue_script( 'go_clipboard' );
-
-            // Localization
-            //wp_localize_script( 'go_admin_user', 'Minutes_limit', array( 'limit' => get_option( 'go_minutes_color_limit' ) ) );
             wp_localize_script(
-                'go_clipboard',
+                'go_admin_user',
                 'GO_CLIPBOARD_DATA',
                 array(
                     'nonces' => array(
-                        'go_clipboard_stats'          => wp_create_nonce( 'go_clipboard_stats_' . $user_id ),
-                        //'go_clipboard_intable_messages' => wp_create_nonce( 'go_clipboard_intable_messages_' . $user_id ),
-                        'go_clipboard_activity' => wp_create_nonce( 'go_clipboard_activity_' . $user_id ),
-                        //'go_activity_stateSave' => wp_create_nonce( 'go_activity_stateSave_' . $user_id ),
+                        'go_clipboard_stats'          => wp_create_nonce( 'go_clipboard_stats' ),
+                        'go_clipboard_activity' => wp_create_nonce( 'go_clipboard_activity' ),
                         'go_clipboard_messages' => wp_create_nonce( 'go_clipboard_messages'),
                         'go_clipboard_store' => wp_create_nonce( 'go_clipboard_store'),
-                        //'go_update_user_focuses'        => wp_create_nonce( 'go_update_user_focuses_' . $user_id ),
-                        //'go_clipboard_add'              => wp_create_nonce( 'go_clipboard_add_' . $user_id ),
-                        //'go_fix_messages'               => wp_create_nonce( 'go_fix_messages_' . $user_id ),
-                        'go_clipboard_save_filters'     => wp_create_nonce( 'go_clipboard_save_filters_' . $user_id )
+                        'go_clipboard_save_filters'     => wp_create_nonce( 'go_clipboard_save_filters' )
                     ),
                 )
+            );
+
+
+            wp_localize_script(
+                'go_admin_user',
+                'go_is_map',
+                array(true)
             );
         }
 
         // Enqueue and Localization for options page
-        if ( 'toplevel_page_go_options' === $hook ) {
-
-            //wp_enqueue_script('go_options_admin_js');
+        if ( 'options_page_go_options' === $hook ) {
             wp_localize_script('go_admin_user', 'levelGrowth', get_option('options_go_loot_xp_levels_growth'));
             wp_localize_script('go_admin_user', 'go_is_options_page', array('is_options_page' => true));
         }
@@ -182,26 +144,17 @@ function go_admin_scripts ($hook) {
         }
     }
 
-    /**
-     * Resize All Images on Client Side
-     */
-    //wp_enqueue_script( 'client-resize' , plugins_url( 'scripts/client-side-image-resize.js' , __FILE__ ) , array('media-editor' ) , '0.0.1' );
-    /*
-    wp_localize_script( 'client-resize' , 'client_resize' , array(
-        'plupload' => array(
-            'resize' => array(
-                'enabled' => true,
-                'width' => 1920, // enter your width here
-                'height' => 1200, // enter your width here
-                'quality' => 90,
-            ),
-        )
-    ) );
-    */
 
 }
 
+function go_admin_enqueue_scripts_acf() {
+
+    global $go_js_version;
+    wp_register_script( 'go_acf_js', plugin_dir_url( __FILE__ ).'scripts/go_acf_admin.js', array( 'jquery' ), $go_js_version, true);
+    wp_enqueue_script( 'go_acf_js');
+
+}
+
+add_action('acf/input/admin_enqueue_scripts', 'go_admin_enqueue_scripts_acf');
 
 
-
-?>

@@ -129,62 +129,6 @@
 		"oAP": "/.idea/workspace.xml",
 		"oF": 1
 		},
-	"/acf-json copy/group_5a8af2a1334bf.json": {
-		"ft": 524288,
-		"oA": 1,
-		"oAP": "/acf-json copy/group_5a8af2a1334bf-min.json",
-		"oF": 0,
-		"oO": 0,
-		"oS": 1
-		},
-	"/acf-json copy/group_5a8b6cf082397.json": {
-		"ft": 524288,
-		"oA": 1,
-		"oAP": "/acf-json copy/group_5a8b6cf082397-min.json",
-		"oF": 0,
-		"oO": 0,
-		"oS": 1
-		},
-	"/acf-json copy/group_5a8fb5fbe075d.json": {
-		"ft": 524288,
-		"oA": 1,
-		"oAP": "/acf-json copy/group_5a8fb5fbe075d-min.json",
-		"oF": 0,
-		"oO": 0,
-		"oS": 1
-		},
-	"/acf-json copy/group_5abc5718c2c1b.json": {
-		"ft": 524288,
-		"oA": 1,
-		"oAP": "/acf-json copy/group_5abc5718c2c1b-min.json",
-		"oF": 0,
-		"oO": 0,
-		"oS": 1
-		},
-	"/acf-json copy/group_5abde7c8d18ca.json": {
-		"ft": 524288,
-		"oA": 1,
-		"oAP": "/acf-json copy/group_5abde7c8d18ca-min.json",
-		"oF": 0,
-		"oO": 0,
-		"oS": 1
-		},
-	"/acf-json copy/group_5abde7f7c65c2.json": {
-		"ft": 524288,
-		"oA": 1,
-		"oAP": "/acf-json copy/group_5abde7f7c65c2-min.json",
-		"oF": 0,
-		"oO": 0,
-		"oS": 1
-		},
-	"/acf-json copy/group_5b3eede2d1c5a.json": {
-		"ft": 524288,
-		"oA": 1,
-		"oAP": "/acf-json copy/group_5b3eede2d1c5a-min.json",
-		"oF": 0,
-		"oO": 0,
-		"oS": 1
-		},
 	"/acf-json/group_5a8af2a1334bf.json": {
 		"ft": 524288,
 		"oA": 1,
@@ -241,6 +185,110 @@
 		"oO": 0,
 		"oS": 1
 		},
+	"/acf-json/group_5cd502fa18282.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5cd502fa18282-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/acf-json/group_5cd8a9e1010ad.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5cd8a9e1010ad-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/acf-json/group_5cd8aba98de2c.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5cd8aba98de2c-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/acf-json/group_5cd8abc03abce.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5cd8abc03abce-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/acf-json/group_5cd8b11c8b6ec.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5cd8b11c8b6ec-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/acf-json/group_5cdd928042205.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5cdd928042205-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/acf-json/group_5d16848d60455.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5d16848d60455-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/acf-json/group_5d1a547987fd1.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5d1a547987fd1-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/acf-json/group_5d1ae494a41c7.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5d1ae494a41c7-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/acf-json/group_5d1ae4e703241.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5d1ae4e703241-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/acf-json/group_5d1ae51854beb.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5d1ae51854beb-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/acf-json/group_5d1ae569ba586.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5d1ae569ba586-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/acf-json/group_5d1ba6d5b662e.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5d1ba6d5b662e-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
 	"/core/includes.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -279,6 +327,22 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/core/src/ajax/ajax.php",
+		"oF": 0
+		},
+	"/core/src/all/go-acf-functions.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/core/src/all/go-acf-functions.php",
+		"oF": 0
+		},
+	"/core/src/all/go_core_functions.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/core/src/all/go_core_functions.php",
 		"oF": 0
 		},
 	"/core/src/all/go_links.php": {
@@ -383,605 +447,726 @@
 		"oAP": "/core/src/public_ajax/go_shortcodes.php",
 		"oF": 0
 		},
-	"/custom-acf-fields/acf-level2-taxonomy/acf-level2-taxonomy.php": {
+	"/dev/ABOUT_DEV.txt": {
 		"cB": 0,
 		"ft": 8192,
 		"hM": 0,
 		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-level2-taxonomy/acf-level2-taxonomy.php",
+		"oAP": "/dev/ABOUT_DEV.txt",
 		"oF": 0
 		},
-	"/custom-acf-fields/acf-level2-taxonomy/assets/css/input.css": {
+	"/dev/css/Disabled/go_clipboard.css": {
 		"aP": 1,
 		"bl": 0,
 		"ft": 16,
 		"ma": 0,
 		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-level2-taxonomy/assets/css/input-min.css",
+		"oAP": "/dev/css/Disabled/go_clipboard-min.css",
 		"oF": 0,
 		"oS": 3
 		},
-	"/custom-acf-fields/acf-level2-taxonomy/assets/css/README.md": {
-		"cB": 0,
-		"cS": 0,
-		"eF": 1,
-		"eL": 1,
-		"ema": 1,
-		"eSQ": 1,
-		"ft": 4096,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-level2-taxonomy/assets/css/README.html",
-		"oF": 0,
-		"oFM": 0,
-		"oS": 0,
-		"pHT": 0,
-		"pME": 1,
-		"rFN": 0,
-		"uCM": 0
-		},
-	"/custom-acf-fields/acf-level2-taxonomy/assets/images/README.md": {
-		"cB": 0,
-		"cS": 0,
-		"eF": 1,
-		"eL": 1,
-		"ema": 1,
-		"eSQ": 1,
-		"ft": 4096,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-level2-taxonomy/assets/images/README.html",
-		"oF": 0,
-		"oFM": 0,
-		"oS": 0,
-		"pHT": 0,
-		"pME": 1,
-		"rFN": 0,
-		"uCM": 0
-		},
-	"/custom-acf-fields/acf-level2-taxonomy/assets/js/input-min.js": {
-		"bF": 0,
-		"ft": 64,
+	"/dev/css/Disabled/go_clipboard_sass.scss": {
+		"aP": 0,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
 		"ma": 0,
-		"mi": 1,
 		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-level2-taxonomy/assets/js/input-min-min.js",
+		"oAP": "/dev/css/Disabled/go_clipboard_sass.css",
 		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/custom-acf-fields/acf-level2-taxonomy/assets/js/input.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-level2-taxonomy/assets/js/input-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/custom-acf-fields/acf-level2-taxonomy/assets/js/README.md": {
-		"cB": 0,
-		"cS": 0,
-		"eF": 1,
-		"eL": 1,
-		"ema": 1,
-		"eSQ": 1,
-		"ft": 4096,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-level2-taxonomy/assets/js/README.html",
-		"oF": 0,
-		"oFM": 0,
 		"oS": 0,
-		"pHT": 0,
-		"pME": 1,
-		"rFN": 0,
-		"uCM": 0
+		"uL": 1
 		},
-	"/custom-acf-fields/acf-level2-taxonomy/assets/README.md": {
-		"cB": 0,
-		"cS": 0,
-		"eF": 1,
-		"eL": 1,
-		"ema": 1,
-		"eSQ": 1,
-		"ft": 4096,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-level2-taxonomy/assets/README.html",
-		"oF": 0,
-		"oFM": 0,
-		"oS": 0,
-		"pHT": 0,
-		"pME": 1,
-		"rFN": 0,
-		"uCM": 0
-		},
-	"/custom-acf-fields/acf-level2-taxonomy/fields/class-go-acf-field-level2-taxonomy-v4.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-level2-taxonomy/fields/class-go-acf-field-level2-taxonomy-v4.php",
-		"oF": 0
-		},
-	"/custom-acf-fields/acf-level2-taxonomy/fields/class-go-acf-field-level2-taxonomy-v5.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-level2-taxonomy/fields/class-go-acf-field-level2-taxonomy-v5.php",
-		"oF": 0
-		},
-	"/custom-acf-fields/acf-level2-taxonomy/lang/README.md": {
-		"cB": 0,
-		"cS": 0,
-		"eF": 1,
-		"eL": 1,
-		"ema": 1,
-		"eSQ": 1,
-		"ft": 4096,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-level2-taxonomy/lang/README.html",
-		"oF": 0,
-		"oFM": 0,
-		"oS": 0,
-		"pHT": 0,
-		"pME": 1,
-		"rFN": 0,
-		"uCM": 0
-		},
-	"/custom-acf-fields/acf-level2-taxonomy/README.md": {
-		"cB": 0,
-		"cS": 0,
-		"eF": 1,
-		"eL": 1,
-		"ema": 1,
-		"eSQ": 1,
-		"ft": 4096,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-level2-taxonomy/README.html",
-		"oF": 0,
-		"oFM": 0,
-		"oS": 0,
-		"pHT": 0,
-		"pME": 1,
-		"rFN": 0,
-		"uCM": 0
-		},
-	"/custom-acf-fields/acf-level2-taxonomy/readme.txt": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-level2-taxonomy/readme.txt",
-		"oF": 0
-		},
-	"/custom-acf-fields/acf-order-posts/acf-order-posts.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-order-posts/acf-order-posts.php",
-		"oF": 0
-		},
-	"/custom-acf-fields/acf-order-posts/assets/css/input.css": {
+	"/dev/css/files/go-acf-global.css": {
 		"aP": 1,
 		"bl": 0,
 		"ft": 16,
 		"ma": 0,
 		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-order-posts/assets/css/input-min.css",
+		"oAP": "/dev/css/files/go-acf-global-min.css",
 		"oF": 0,
 		"oS": 3
 		},
-	"/custom-acf-fields/acf-order-posts/assets/css/README.md": {
-		"cB": 0,
-		"cS": 0,
-		"eF": 1,
-		"eL": 1,
-		"ema": 1,
-		"eSQ": 1,
-		"ft": 4096,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-order-posts/assets/css/README.html",
-		"oF": 0,
-		"oFM": 0,
-		"oS": 0,
-		"pHT": 0,
-		"pME": 1,
-		"rFN": 0,
-		"uCM": 0
-		},
-	"/custom-acf-fields/acf-order-posts/assets/images/README.md": {
-		"cB": 0,
-		"cS": 0,
-		"eF": 1,
-		"eL": 1,
-		"ema": 1,
-		"eSQ": 1,
-		"ft": 4096,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-order-posts/assets/images/README.html",
-		"oF": 0,
-		"oFM": 0,
-		"oS": 0,
-		"pHT": 0,
-		"pME": 1,
-		"rFN": 0,
-		"uCM": 0
-		},
-	"/custom-acf-fields/acf-order-posts/assets/js/input-min.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-order-posts/assets/js/input-min-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/custom-acf-fields/acf-order-posts/assets/js/input.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-order-posts/assets/js/input-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/custom-acf-fields/acf-order-posts/assets/js/README.md": {
-		"cB": 0,
-		"cS": 0,
-		"eF": 1,
-		"eL": 1,
-		"ema": 1,
-		"eSQ": 1,
-		"ft": 4096,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-order-posts/assets/js/README.html",
-		"oF": 0,
-		"oFM": 0,
-		"oS": 0,
-		"pHT": 0,
-		"pME": 1,
-		"rFN": 0,
-		"uCM": 0
-		},
-	"/custom-acf-fields/acf-order-posts/assets/README.md": {
-		"cB": 0,
-		"cS": 0,
-		"eF": 1,
-		"eL": 1,
-		"ema": 1,
-		"eSQ": 1,
-		"ft": 4096,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-order-posts/assets/README.html",
-		"oF": 0,
-		"oFM": 0,
-		"oS": 0,
-		"pHT": 0,
-		"pME": 1,
-		"rFN": 0,
-		"uCM": 0
-		},
-	"/custom-acf-fields/acf-order-posts/fields/class-go-acf-field-order-posts-v4.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-order-posts/fields/class-go-acf-field-order-posts-v4.php",
-		"oF": 0
-		},
-	"/custom-acf-fields/acf-order-posts/fields/class-go-acf-field-order-posts-v5.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-order-posts/fields/class-go-acf-field-order-posts-v5.php",
-		"oF": 0
-		},
-	"/custom-acf-fields/acf-order-posts/lang/README.md": {
-		"cB": 0,
-		"cS": 0,
-		"eF": 1,
-		"eL": 1,
-		"ema": 1,
-		"eSQ": 1,
-		"ft": 4096,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-order-posts/lang/README.html",
-		"oF": 0,
-		"oFM": 0,
-		"oS": 0,
-		"pHT": 0,
-		"pME": 1,
-		"rFN": 0,
-		"uCM": 0
-		},
-	"/custom-acf-fields/acf-order-posts/README.md": {
-		"cB": 0,
-		"cS": 0,
-		"eF": 1,
-		"eL": 1,
-		"ema": 1,
-		"eSQ": 1,
-		"ft": 4096,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-order-posts/README.html",
-		"oF": 0,
-		"oFM": 0,
-		"oS": 0,
-		"pHT": 0,
-		"pME": 1,
-		"rFN": 0,
-		"uCM": 0
-		},
-	"/custom-acf-fields/acf-order-posts/readme.txt": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-order-posts/readme.txt",
-		"oF": 0
-		},
-	"/custom-acf-fields/acf-quiz/acf-quiz.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-quiz/acf-quiz.php",
-		"oF": 0
-		},
-	"/custom-acf-fields/acf-quiz/assets/css/input.css": {
+	"/dev/css/files/go-acf-input.css": {
 		"aP": 1,
 		"bl": 0,
 		"ft": 16,
 		"ma": 0,
 		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-quiz/assets/css/input-min.css",
+		"oAP": "/dev/css/files/go-acf-input-min.css",
 		"oF": 0,
 		"oS": 3
 		},
-	"/custom-acf-fields/acf-quiz/assets/css/README.md": {
-		"cB": 0,
-		"cS": 0,
-		"eF": 1,
-		"eL": 1,
-		"ema": 1,
-		"eSQ": 1,
-		"ft": 4096,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-quiz/assets/css/README.html",
-		"oF": 0,
-		"oFM": 0,
-		"oS": 0,
-		"pHT": 0,
-		"pME": 1,
-		"rFN": 0,
-		"uCM": 0
-		},
-	"/custom-acf-fields/acf-quiz/assets/images/README.md": {
-		"cB": 0,
-		"cS": 0,
-		"eF": 1,
-		"eL": 1,
-		"ema": 1,
-		"eSQ": 1,
-		"ft": 4096,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-quiz/assets/images/README.html",
-		"oF": 0,
-		"oFM": 0,
-		"oS": 0,
-		"pHT": 0,
-		"pME": 1,
-		"rFN": 0,
-		"uCM": 0
-		},
-	"/custom-acf-fields/acf-quiz/assets/js/input-min.js": {
-		"bF": 0,
-		"ft": 64,
+	"/dev/css/files/go_clipboard_sass.scss": {
+		"aP": 0,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
 		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-quiz/assets/js/input-min-min.js",
+		"oA": 1,
+		"oAP": "/dev/css/files/go_clipboard_sass.css",
 		"oF": 0,
-		"sC": 3,
-		"tS": 0
+		"oS": 0,
+		"uL": 1
 		},
-	"/custom-acf-fields/acf-quiz/assets/js/input.js": {
-		"bF": 0,
-		"ft": 64,
+	"/dev/css/files/go_every_page.scss": {
+		"aP": 0,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
 		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-quiz/assets/js/input-min.js",
+		"oA": 1,
+		"oAP": "/dev/css/files/go_every_page.css",
 		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/custom-acf-fields/acf-quiz/assets/js/README.md": {
-		"cB": 0,
-		"cS": 0,
-		"eF": 1,
-		"eL": 1,
-		"ema": 1,
-		"eSQ": 1,
-		"ft": 4096,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-quiz/assets/js/README.html",
-		"oF": 0,
-		"oFM": 0,
 		"oS": 0,
-		"pHT": 0,
-		"pME": 1,
-		"rFN": 0,
-		"uCM": 0
+		"uL": 1
 		},
-	"/custom-acf-fields/acf-quiz/assets/README.md": {
-		"cB": 0,
-		"cS": 0,
-		"eF": 1,
-		"eL": 1,
-		"ema": 1,
-		"eSQ": 1,
-		"ft": 4096,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-quiz/assets/README.html",
+	"/dev/css/files/go_map.scss": {
+		"aP": 0,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "/dev/css/files/go_map.css",
 		"oF": 0,
-		"oFM": 0,
 		"oS": 0,
-		"pHT": 0,
-		"pME": 1,
-		"rFN": 0,
-		"uCM": 0
+		"uL": 1
 		},
-	"/custom-acf-fields/acf-quiz/fields/class-go-acf-field-quiz-v4.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-quiz/fields/class-go-acf-field-quiz-v4.php",
-		"oF": 0
-		},
-	"/custom-acf-fields/acf-quiz/fields/class-go-acf-field-quiz-v5.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-quiz/fields/class-go-acf-field-quiz-v5.php",
-		"oF": 0
-		},
-	"/custom-acf-fields/acf-quiz/lang/README.md": {
-		"cB": 0,
-		"cS": 0,
-		"eF": 1,
-		"eL": 1,
-		"ema": 1,
-		"eSQ": 1,
-		"ft": 4096,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-quiz/lang/README.html",
+	"/dev/css/files/go_stats.scss": {
+		"aP": 0,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "/dev/css/files/go_stats.css",
 		"oF": 0,
-		"oFM": 0,
 		"oS": 0,
-		"pHT": 0,
-		"pME": 1,
-		"rFN": 0,
-		"uCM": 0
+		"uL": 1
 		},
-	"/custom-acf-fields/acf-quiz/README.md": {
-		"cB": 0,
-		"cS": 0,
-		"eF": 1,
-		"eL": 1,
-		"ema": 1,
-		"eSQ": 1,
-		"ft": 4096,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-quiz/README.html",
+	"/dev/css/files/go_store.scss": {
+		"aP": 0,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "/dev/css/files/go_store.css",
 		"oF": 0,
-		"oFM": 0,
 		"oS": 0,
-		"pHT": 0,
-		"pME": 1,
-		"rFN": 0,
-		"uCM": 0
+		"uL": 1
 		},
-	"/custom-acf-fields/acf-quiz/readme.txt": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/acf-quiz/readme.txt",
-		"oF": 0
-		},
-	"/custom-acf-fields/css/go_tasks-admin-acf-min.css": {
+	"/dev/css/files/go_tasks-admin-acf.css": {
 		"aP": 1,
 		"bl": 0,
 		"ft": 16,
 		"ma": 0,
 		"oA": 0,
-		"oAP": "/custom-acf-fields/css/go_tasks-admin-acf-min-min.css",
+		"oAP": "/dev/css/files/go_tasks-admin-acf-min.css",
 		"oF": 0,
 		"oS": 3
 		},
-	"/custom-acf-fields/css/go_tasks-admin-acf.css": {
+	"/dev/css/files/go_timer_sass.scss": {
+		"aP": 0,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "/dev/css/files/go_timer_sass.css",
+		"oF": 0,
+		"oS": 0,
+		"uL": 1
+		},
+	"/dev/css/files/login.css": {
 		"aP": 1,
 		"bl": 0,
 		"ft": 16,
 		"ma": 0,
 		"oA": 0,
-		"oAP": "/custom-acf-fields/css/go_tasks-admin-acf-min.css",
+		"oAP": "/dev/css/files/login-min.css",
 		"oF": 0,
 		"oS": 3
 		},
-	"/custom-acf-fields/go-acf-functions.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/go-acf-functions.php",
-		"oF": 0
-		},
-	"/custom-acf-fields/go_enque_js_acf.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/custom-acf-fields/go_enque_js_acf.php",
-		"oF": 0
-		},
-	"/custom-acf-fields/js/dev/go_acf.js": {
-		"bF": 0,
-		"ft": 64,
+	"/dev/css/files/login.scss": {
+		"aP": 0,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
 		"ma": 0,
-		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/css/files/login.css",
+		"oF": 0,
+		"oS": 0,
+		"uL": 1
+		},
+	"/dev/css/files/normalize.scss": {
+		"aP": 0,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "/dev/css/files/normalize.css",
+		"oF": 0,
+		"oS": 0,
+		"uL": 1
+		},
+	"/dev/css/files/tasks-admin.scss": {
+		"aP": 0,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "/dev/css/files/tasks-admin.css",
+		"oF": 0,
+		"oS": 0,
+		"uL": 1
+		},
+	"/dev/css/go_admin.scss": {
+		"aP": 0,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
 		"oA": 0,
-		"oAP": "/custom-acf-fields/js/min/go_acf-min.js",
+		"oAP": "/styles/min/go_admin.css",
 		"oF": 2,
-		"sC": 3,
-		"tS": 0
+		"oS": 0,
+		"uL": 1
 		},
-	"/custom-acf-fields/js/min/go_acf-min.js": {
+	"/dev/css/go_frontend.scss": {
+		"aP": 0,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/styles/min/go_frontend.css",
+		"oF": 2,
+		"oS": 0,
+		"uL": 1
+		},
+	"/dev/css/go_styles.scss": {
+		"aP": 0,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/styles/min/go_styles.css",
+		"oF": 2,
+		"oS": 0,
+		"uL": 1
+		},
+	"/dev/includes/css/datatables.min.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/dev/includes/css/datatables.min-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/dev/includes/css/daterangepicker.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/dev/includes/css/daterangepicker-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/dev/includes/css/featherlight.min.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/dev/includes/css/featherlight.min-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/dev/includes/css/jquery-ui_datatables.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/dev/includes/css/jquery-ui_datatables-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/dev/includes/css/noty.min.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/dev/includes/css/noty.min-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/dev/includes/css/select2.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/dev/includes/css/select2-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/dev/includes/go_combine_dependencies.js": {
 		"bF": 0,
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "/custom-acf-fields/js/min/go_acf-min-min.js",
-		"oF": 0,
+		"oAP": "/js/min/go_combine_dependencies-min.js",
+		"oF": 3,
 		"sC": 3,
 		"tS": 0
 		},
-	"/custom-acf-fields/js/scripts/my-acf-extension.js": {
+	"/dev/includes/go_combine_dependencies.scss": {
+		"aP": 0,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/styles/min/go_combine_dependencies.css",
+		"oF": 2,
+		"oS": 0,
+		"uL": 1
+		},
+	"/dev/includes/js/datatables.min.js": {
 		"bF": 0,
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 1,
-		"oAP": "/custom-acf-fields/js/scripts/my-acf-extension-min.js",
+		"oAP": "/dev/includes/js/datatables.min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/includes/js/daterangepicker.min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/includes/js/daterangepicker.min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/includes/js/featherlight.min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/includes/js/featherlight.min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/includes/js/moment.min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/includes/js/moment.min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/includes/js/natural_sort_datatables.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/includes/js/natural_sort_datatables-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/includes/js/noty.min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/includes/js/noty.min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/includes/js/select2.full.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/dev/includes/js/select2.full-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/includes/js/select2.min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/includes/js/select2.min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/includes/js/sweetalert.min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/dev/includes/js/sweetalert.min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/includes/js/sweetalert2@8.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/includes/js/sweetalert2@8-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/includes/js/tippy.all.min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/includes/js/tippy.all.min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/disabled/client-side-image-resize.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/dev/js/disabled/client-side-image-resize-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/go_admin_user.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/js/min/go_admin_user-min.js",
+		"oF": 2,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/go_all.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/js/min/go_all-min.js",
+		"oF": 3,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/go_frontend.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/js/min/go_frontend-min.js",
+		"oF": 2,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/scripts": {
+		"ft": 65536,
+		"oA": 1,
+		"oAP": "/build/dev/js/scripts",
+		"oF": 0
+		},
+	"/dev/js/scripts/archive_admin.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/js/scripts/archive_admin-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/scripts/archive_all.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/js/scripts/archive_all-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/scripts/archive_frontend.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/js/scripts/archive_frontend-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/scripts/buy_the_item.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/js/scripts/buy_the_item-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/scripts/go_acf_extension.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/js/scripts/go_acf_extension-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/scripts/go_admin_notifications.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/js/scripts/go_admin_notifications-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/scripts/go_admin_page_admin_user.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/js/scripts/go_admin_page_admin_user-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/scripts/go_blogs.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/js/scripts/go_blogs-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/scripts/go_clipboard.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/js/scripts/go_clipboard-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/scripts/go_edit_store.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/js/scripts/go_edit_store-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/scripts/go_every_page.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/js/scripts/go_every_page-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/scripts/go_feedback.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/js/scripts/go_feedback-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/scripts/go_fitvids.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/js/scripts/go_fitvids-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/scripts/go_load_more.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/js/scripts/go_load_more-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/scripts/go_map.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/js/scripts/go_map-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/scripts/go_messages.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/js/scripts/go_messages-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/scripts/go_options.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/js/scripts/go_options-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/scripts/go_tasks.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/js/scripts/go_tasks-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/scripts/go_tools.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/js/scripts/go_tools-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/scripts/go_videos_fit_and_box.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/js/scripts/go_videos_fit_and_box-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/scripts/leaderboard.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/js/scripts/leaderboard-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/js/scripts/user_bar.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/js/scripts/user_bar-min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
@@ -994,12 +1179,12 @@
 		"oAP": "/game-on.php",
 		"oF": 0
 		},
-	"/go_acf_groups.php": {
+	"/includes/ABOUT_INCLUDES.txt": {
 		"cB": 0,
 		"ft": 8192,
 		"hM": 0,
 		"oA": 0,
-		"oAP": "/go_acf_groups.php",
+		"oAP": "/includes/ABOUT_INCLUDES.txt",
 		"oF": 0
 		},
 	"/includes/acf/acf.php": {
@@ -1427,6 +1612,30 @@
 		"oAP": "/includes/acf/includes/acf-data-functions.php",
 		"oF": 0
 		},
+	"/includes/acf/includes/acf-deprecated-functions.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf/includes/acf-deprecated-functions.php",
+		"oF": 0
+		},
+	"/includes/acf/includes/acf-field-functions.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf/includes/acf-field-functions.php",
+		"oF": 0
+		},
+	"/includes/acf/includes/acf-field-group-functions.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf/includes/acf-field-group-functions.php",
+		"oF": 0
+		},
 	"/includes/acf/includes/acf-form-functions.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -1443,12 +1652,44 @@
 		"oAP": "/includes/acf/includes/acf-helper-functions.php",
 		"oF": 0
 		},
+	"/includes/acf/includes/acf-hook-functions.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf/includes/acf-hook-functions.php",
+		"oF": 0
+		},
+	"/includes/acf/includes/acf-meta-functions.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf/includes/acf-meta-functions.php",
+		"oF": 0
+		},
+	"/includes/acf/includes/acf-post-functions.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf/includes/acf-post-functions.php",
+		"oF": 0
+		},
 	"/includes/acf/includes/acf-user-functions.php": {
 		"cB": 0,
 		"ft": 8192,
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/includes/acf/includes/acf-user-functions.php",
+		"oF": 0
+		},
+	"/includes/acf/includes/acf-value-functions.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf/includes/acf-value-functions.php",
 		"oF": 0
 		},
 	"/includes/acf/includes/admin/admin-field-group.php": {
@@ -1643,22 +1884,6 @@
 		"oAP": "/includes/acf/includes/ajax/class-acf-ajax-check-screen.php",
 		"oF": 0
 		},
-	"/includes/acf/includes/ajax/class-acf-ajax-query-terms.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/includes/acf/includes/ajax/class-acf-ajax-query-terms.php",
-		"oF": 0
-		},
-	"/includes/acf/includes/ajax/class-acf-ajax-query.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/includes/acf/includes/ajax/class-acf-ajax-query.php",
-		"oF": 0
-		},
 	"/includes/acf/includes/ajax/class-acf-ajax-upgrade.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -1681,22 +1906,6 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/includes/acf/includes/ajax/class-acf-ajax.php",
-		"oF": 0
-		},
-	"/includes/acf/includes/api/api-field-group.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/includes/acf/includes/api/api-field-group.php",
-		"oF": 0
-		},
-	"/includes/acf/includes/api/api-field.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/includes/acf/includes/api/api-field.php",
 		"oF": 0
 		},
 	"/includes/acf/includes/api/api-helpers.php": {
@@ -1731,28 +1940,12 @@
 		"oAP": "/includes/acf/includes/api/api-term.php",
 		"oF": 0
 		},
-	"/includes/acf/includes/api/api-value.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/includes/acf/includes/api/api-value.php",
-		"oF": 0
-		},
 	"/includes/acf/includes/assets.php": {
 		"cB": 0,
 		"ft": 8192,
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/includes/acf/includes/assets.php",
-		"oF": 0
-		},
-	"/includes/acf/includes/cache.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/includes/acf/includes/cache.php",
 		"oF": 0
 		},
 	"/includes/acf/includes/class-acf-data.php": {
@@ -2155,12 +2348,20 @@
 		"oAP": "/includes/acf/includes/l10n.php",
 		"oF": 0
 		},
-	"/includes/acf/includes/local.php": {
+	"/includes/acf/includes/local-fields.php": {
 		"cB": 0,
 		"ft": 8192,
 		"hM": 0,
 		"oA": 0,
-		"oAP": "/includes/acf/includes/local.php",
+		"oAP": "/includes/acf/includes/local-fields.php",
+		"oF": 0
+		},
+	"/includes/acf/includes/local-meta.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf/includes/local-meta.php",
 		"oF": 0
 		},
 	"/includes/acf/includes/locations.php": {
@@ -2943,6 +3144,17 @@
 		"oF": 0,
 		"oS": 3
 		},
+	"/includes/acf/pro/assets/js/acf-pro-blocks.min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/acf/pro/assets/js/acf-pro-blocks.min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"/includes/acf/pro/assets/js/acf-pro-field-group.js": {
 		"bF": 0,
 		"ft": 64,
@@ -2987,6 +3199,14 @@
 		"sC": 3,
 		"tS": 0
 		},
+	"/includes/acf/pro/blocks.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf/pro/blocks.php",
+		"oF": 0
+		},
 	"/includes/acf/pro/fields/class-acf-field-clone.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -3017,6 +3237,14 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/includes/acf/pro/fields/class-acf-field-repeater.php",
+		"oF": 0
+		},
+	"/includes/acf/pro/locations/class-acf-location-block.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf/pro/locations/class-acf-location-block.php",
 		"oF": 0
 		},
 	"/includes/acf/pro/locations/class-acf-location-options-page.php": {
@@ -3051,79 +3279,1049 @@
 		"oAP": "/includes/acf/readme.txt",
 		"oF": 0
 		},
-	"/includes/CollapsibleLists.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/CollapsibleLists-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/go_enque_includes.php": {
+	"/includes/custom-acf-fields/acf-level2-taxonomy/acf-level2-taxonomy.php": {
 		"cB": 0,
 		"ft": 8192,
 		"hM": 0,
 		"oA": 0,
-		"oAP": "/includes/go_enque_includes.php",
+		"oAP": "/includes/custom-acf-fields/acf-level2-taxonomy/acf-level2-taxonomy.php",
 		"oF": 0
 		},
-	"/includes/noty/lib/noty.css": {
+	"/includes/custom-acf-fields/acf-level2-taxonomy/assets/css/input.css": {
 		"aP": 1,
 		"bl": 0,
 		"ft": 16,
 		"ma": 0,
 		"oA": 0,
-		"oAP": "/includes/noty/lib/noty-min.css",
+		"oAP": "/includes/custom-acf-fields/acf-level2-taxonomy/assets/css/input-min.css",
 		"oF": 0,
 		"oS": 3
 		},
-	"/includes/noty/lib/noty.css.map": {
+	"/includes/custom-acf-fields/acf-level2-taxonomy/assets/css/README.md": {
 		"cB": 0,
-		"ft": 8192,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
 		"hM": 0,
 		"oA": 0,
-		"oAP": "/includes/noty/lib/noty.css.map",
-		"oF": 0
+		"oAP": "/includes/custom-acf-fields/acf-level2-taxonomy/assets/css/README.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
 		},
-	"/includes/noty/lib/noty.js": {
+	"/includes/custom-acf-fields/acf-level2-taxonomy/assets/images/README.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-level2-taxonomy/assets/images/README.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"/includes/custom-acf-fields/acf-level2-taxonomy/assets/js/input-min.js": {
 		"bF": 0,
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "/includes/noty/lib/noty-min.js",
+		"oAP": "/includes/custom-acf-fields/acf-level2-taxonomy/assets/js/input-min-min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},
-	"/includes/noty/lib/noty.js.map": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/includes/noty/lib/noty.js.map",
-		"oF": 0
-		},
-	"/includes/noty/lib/noty.min.js": {
+	"/includes/custom-acf-fields/acf-level2-taxonomy/assets/js/input.js": {
 		"bF": 0,
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "/includes/noty/lib/noty.min-min.js",
+		"oAP": "/includes/custom-acf-fields/acf-level2-taxonomy/assets/js/input-min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},
-	"/includes/noty/lib/noty.min.js.map": {
+	"/includes/custom-acf-fields/acf-level2-taxonomy/assets/js/README.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-level2-taxonomy/assets/js/README.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"/includes/custom-acf-fields/acf-level2-taxonomy/assets/README.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-level2-taxonomy/assets/README.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"/includes/custom-acf-fields/acf-level2-taxonomy/fields/class-go-acf-field-level2-taxonomy-v4.php": {
 		"cB": 0,
 		"ft": 8192,
 		"hM": 0,
 		"oA": 0,
-		"oAP": "/includes/noty/lib/noty.min.js.map",
+		"oAP": "/includes/custom-acf-fields/acf-level2-taxonomy/fields/class-go-acf-field-level2-taxonomy-v4.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-level2-taxonomy/fields/class-go-acf-field-level2-taxonomy-v5.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-level2-taxonomy/fields/class-go-acf-field-level2-taxonomy-v5.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-level2-taxonomy/lang/README.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-level2-taxonomy/lang/README.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"/includes/custom-acf-fields/acf-level2-taxonomy/README.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-level2-taxonomy/README.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"/includes/custom-acf-fields/acf-level2-taxonomy/readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-level2-taxonomy/readme.txt",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-order-posts/acf-order-posts.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-order-posts/acf-order-posts.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-order-posts/assets/css/input.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-order-posts/assets/css/input-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/includes/custom-acf-fields/acf-order-posts/assets/css/README.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-order-posts/assets/css/README.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"/includes/custom-acf-fields/acf-order-posts/assets/images/README.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-order-posts/assets/images/README.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"/includes/custom-acf-fields/acf-order-posts/assets/js/input-min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-order-posts/assets/js/input-min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/custom-acf-fields/acf-order-posts/assets/js/input.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-order-posts/assets/js/input-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/custom-acf-fields/acf-order-posts/assets/js/README.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-order-posts/assets/js/README.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"/includes/custom-acf-fields/acf-order-posts/assets/README.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-order-posts/assets/README.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"/includes/custom-acf-fields/acf-order-posts/fields/class-go-acf-field-order-posts-v4.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-order-posts/fields/class-go-acf-field-order-posts-v4.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-order-posts/fields/class-go-acf-field-order-posts-v5.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-order-posts/fields/class-go-acf-field-order-posts-v5.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-order-posts/lang/README.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-order-posts/lang/README.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"/includes/custom-acf-fields/acf-order-posts/README.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-order-posts/README.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"/includes/custom-acf-fields/acf-order-posts/readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-order-posts/readme.txt",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-quiz/acf-quiz.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-quiz/acf-quiz.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-quiz/assets/css/input.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-quiz/assets/css/input-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/includes/custom-acf-fields/acf-quiz/assets/css/README.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-quiz/assets/css/README.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"/includes/custom-acf-fields/acf-quiz/assets/images/README.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-quiz/assets/images/README.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"/includes/custom-acf-fields/acf-quiz/assets/js/input-min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-quiz/assets/js/input-min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/custom-acf-fields/acf-quiz/assets/js/input.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-quiz/assets/js/input-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/custom-acf-fields/acf-quiz/assets/js/README.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-quiz/assets/js/README.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"/includes/custom-acf-fields/acf-quiz/assets/README.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-quiz/assets/README.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"/includes/custom-acf-fields/acf-quiz/fields/class-go-acf-field-quiz-v4.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-quiz/fields/class-go-acf-field-quiz-v4.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-quiz/fields/class-go-acf-field-quiz-v5.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-quiz/fields/class-go-acf-field-quiz-v5.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-quiz/lang/README.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-quiz/lang/README.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"/includes/custom-acf-fields/acf-quiz/README.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-quiz/README.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"/includes/custom-acf-fields/acf-quiz/readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-quiz/readme.txt",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/.editorconfig": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/.editorconfig",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/.gitignore": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/.gitignore",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/acf-recaptcha-v5.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/acf-recaptcha-v5.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/acf-recaptcha.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/acf-recaptcha.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/assets/banner-1544x500.png": {
+		"ft": 32768,
+		"iS": 33515,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/assets/banner-1544x500.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/assets/banner-772x250.png": {
+		"ft": 32768,
+		"iS": 16602,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/assets/banner-772x250.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/assets/icon-128x128.png": {
+		"ft": 32768,
+		"iS": 6296,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/assets/icon-128x128.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/assets/icon-256x256.png": {
+		"ft": 32768,
+		"iS": 9904,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/assets/icon-256x256.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/assets/screenshot-1.png": {
+		"ft": 32768,
+		"iS": 190757,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/assets/screenshot-1.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/assets/screenshot-2.png": {
+		"ft": 32768,
+		"iS": 101712,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/assets/screenshot-2.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/assets/screenshot-3.png": {
+		"ft": 32768,
+		"iS": 120397,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/assets/screenshot-3.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/composer.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/composer-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/css/field-group.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/css/field-group-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/css/plugin-update.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/css/plugin-update-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/css/settings-page.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/css/settings-page-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/includes/classes/WPRemoteRequestMethod.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/includes/classes/WPRemoteRequestMethod.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/includes/field-message.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/includes/field-message.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/includes/plugin-update.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/includes/plugin-update.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/includes/script-loader.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/includes/script-loader.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/includes/settings-page.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/includes/settings-page.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/js/field-group.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/js/field-group-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/js/input.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/js/input-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/lib/autoload.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/lib/autoload.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/lib/ReCaptcha/ReCaptcha.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/lib/ReCaptcha/ReCaptcha.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/lib/ReCaptcha/RequestMethod.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/lib/ReCaptcha/RequestMethod.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/lib/ReCaptcha/RequestMethod/Curl.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/lib/ReCaptcha/RequestMethod/Curl.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/lib/ReCaptcha/RequestMethod/Post.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/lib/ReCaptcha/RequestMethod/Post.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/lib/ReCaptcha/RequestMethod/Socket.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/lib/ReCaptcha/RequestMethod/Socket.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/lib/ReCaptcha/RequestMethod/SocketPost.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/lib/ReCaptcha/RequestMethod/SocketPost.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/lib/ReCaptcha/RequestParameters.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/lib/ReCaptcha/RequestParameters.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/lib/ReCaptcha/Response.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/lib/ReCaptcha/Response.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/LICENSE": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/LICENSE",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/README.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/README.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"/includes/custom-acf-fields/acf-recaptcha-master/readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/readme.txt",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/wp-acf-unique_id-master/acf-unique_id-v5.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/wp-acf-unique_id-master/acf-unique_id-v5.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/wp-acf-unique_id-master/acf-unique_id.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/wp-acf-unique_id-master/acf-unique_id.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/wp-acf-unique_id-master/README.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/wp-acf-unique_id-master/README.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"/includes/custom-acf-fields/wp-acf-unique_id-master/readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/wp-acf-unique_id-master/readme.txt",
+		"oF": 0
+		},
+	"/includes/fontawesome/css/all.min.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/includes/fontawesome/css/all.min-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/includes/fontawesome/webfonts/fa-brands-400.eot": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/fontawesome/webfonts/fa-brands-400.eot",
+		"oF": 0
+		},
+	"/includes/fontawesome/webfonts/fa-brands-400.svg": {
+		"ft": 2097152,
+		"miP": 0,
+		"oA": 2,
+		"oAP": "/includes/fontawesome/webfonts/fa-brands-400.svg",
+		"oF": 0,
+		"opt": 0,
+		"plM": 3758088159,
+		"prP": 0
+		},
+	"/includes/fontawesome/webfonts/fa-brands-400.ttf": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/fontawesome/webfonts/fa-brands-400.ttf",
+		"oF": 0
+		},
+	"/includes/fontawesome/webfonts/fa-brands-400.woff": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/fontawesome/webfonts/fa-brands-400.woff",
+		"oF": 0
+		},
+	"/includes/fontawesome/webfonts/fa-brands-400.woff2": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/fontawesome/webfonts/fa-brands-400.woff2",
+		"oF": 0
+		},
+	"/includes/fontawesome/webfonts/fa-regular-400.eot": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/fontawesome/webfonts/fa-regular-400.eot",
+		"oF": 0
+		},
+	"/includes/fontawesome/webfonts/fa-regular-400.svg": {
+		"ft": 2097152,
+		"miP": 0,
+		"oA": 2,
+		"oAP": "/includes/fontawesome/webfonts/fa-regular-400.svg",
+		"oF": 0,
+		"opt": 0,
+		"plM": 3758088159,
+		"prP": 0
+		},
+	"/includes/fontawesome/webfonts/fa-regular-400.ttf": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/fontawesome/webfonts/fa-regular-400.ttf",
+		"oF": 0
+		},
+	"/includes/fontawesome/webfonts/fa-regular-400.woff": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/fontawesome/webfonts/fa-regular-400.woff",
+		"oF": 0
+		},
+	"/includes/fontawesome/webfonts/fa-regular-400.woff2": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/fontawesome/webfonts/fa-regular-400.woff2",
+		"oF": 0
+		},
+	"/includes/fontawesome/webfonts/fa-solid-900.eot": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/fontawesome/webfonts/fa-solid-900.eot",
+		"oF": 0
+		},
+	"/includes/fontawesome/webfonts/fa-solid-900.svg": {
+		"ft": 2097152,
+		"miP": 0,
+		"oA": 2,
+		"oAP": "/includes/fontawesome/webfonts/fa-solid-900.svg",
+		"oF": 0,
+		"opt": 0,
+		"plM": 3758088159,
+		"prP": 0
+		},
+	"/includes/fontawesome/webfonts/fa-solid-900.ttf": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/fontawesome/webfonts/fa-solid-900.ttf",
+		"oF": 0
+		},
+	"/includes/fontawesome/webfonts/fa-solid-900.woff": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/fontawesome/webfonts/fa-solid-900.woff",
+		"oF": 0
+		},
+	"/includes/fontawesome/webfonts/fa-solid-900.woff2": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/fontawesome/webfonts/fa-solid-900.woff2",
+		"oF": 0
+		},
+	"/includes/go_enqueue_includes.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/go_enqueue_includes.php",
+		"oF": 0
+		},
+	"/includes/includes.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/includes.php",
 		"oF": 0
 		},
 	"/includes/wp-frontend-media-master/frontend-media.php": {
@@ -3196,298 +4394,6 @@
 		"oAP": "/includes/wp-frontend-media-master/uninstall.php",
 		"oF": 0
 		},
-	"/includes/wp-term-order/js/quick-edit.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/wp-term-order/js/quick-edit-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/wp-term-order/js/reorder-min.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/wp-term-order/js/reorder-min-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/wp-term-order/js/reorder.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/wp-term-order/js/reorder-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/wp-term-order/LICENSE": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/includes/wp-term-order/LICENSE",
-		"oF": 0
-		},
-	"/includes/wp-term-order/README.md": {
-		"cB": 0,
-		"cS": 0,
-		"eF": 1,
-		"eL": 1,
-		"ema": 1,
-		"eSQ": 1,
-		"ft": 4096,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/includes/wp-term-order/README.html",
-		"oF": 0,
-		"oFM": 0,
-		"oS": 0,
-		"pHT": 0,
-		"pME": 1,
-		"rFN": 0,
-		"uCM": 0
-		},
-	"/includes/wp-term-order/readme.txt": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/includes/wp-term-order/readme.txt",
-		"oF": 0
-		},
-	"/includes/wp-term-order/screenshot-1.gif": {
-		"ft": 4194304,
-		"iS": 25169,
-		"oA": 0,
-		"oAP": "/includes/wp-term-order/screenshot-1.gif",
-		"oF": 0,
-		"opt": 0
-		},
-	"/includes/wp-term-order/wp-term-order.css": {
-		"aP": 1,
-		"bl": 0,
-		"ft": 16,
-		"ma": 0,
-		"oA": 0,
-		"oAP": "/includes/wp-term-order/wp-term-order-min.css",
-		"oF": 0,
-		"oS": 3
-		},
-	"/includes/wp-term-order/wp-term-order.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/includes/wp-term-order/wp-term-order.php",
-		"oF": 0
-		},
-	"/js/dev/go_admin_user.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 0,
-		"oA": 0,
-		"oAP": "/js/min/go_admin_user-min.js",
-		"oF": 3,
-		"sC": 3,
-		"tS": 0
-		},
-	"/js/dev/go_clipboard.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/js/min/go_clipboard-min.js",
-		"oF": 2,
-		"sC": 3,
-		"tS": 0
-		},
-	"/js/dev/go_every_admin_page.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/js/min/go_every_admin_page-min.js",
-		"oF": 2,
-		"sC": 3,
-		"tS": 0
-		},
-	"/js/dev/go_frontend.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/js/min/go_frontend-min.js",
-		"oF": 3,
-		"sC": 3,
-		"tS": 0
-		},
-	"/js/dev/go_scripts.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/js/min/go_scripts-min.js",
-		"oF": 3,
-		"sC": 3,
-		"tS": 0
-		},
-	"/js/dev/go_tasks.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/js/min/go_tasks-min.js",
-		"oF": 2,
-		"sC": 3,
-		"tS": 0
-		},
-	"/js/dev/scripts/buy_the_item.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 1,
-		"oAP": "/js/dev/scripts/buy_the_item-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/js/dev/scripts/go_admin_page_admin_user.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 1,
-		"oAP": "/js/dev/scripts/go_admin_page_admin_user-min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
-	"/js/dev/scripts/go_blogs.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 1,
-		"oAP": "/js/dev/scripts/go_blogs-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/js/dev/scripts/go_edit_store.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 1,
-		"oAP": "/js/dev/scripts/go_edit_store-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/js/dev/scripts/go_every_page.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 1,
-		"oAP": "/js/dev/scripts/go_every_page-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/js/dev/scripts/go_fitvids.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 1,
-		"oAP": "/js/dev/scripts/go_fitvids-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/js/dev/scripts/go_map.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 1,
-		"oAP": "/js/dev/scripts/go_map-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/js/dev/scripts/go_messages.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 1,
-		"oAP": "/js/dev/scripts/go_messages-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/js/dev/scripts/go_options.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 1,
-		"oAP": "/js/dev/scripts/go_options-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/js/dev/scripts/go_quiz_admin.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/js/dev/scripts/go_quiz_admin-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/js/dev/scripts/go_videos_fit_and_box.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 1,
-		"oAP": "/js/dev/scripts/go_videos_fit_and_box-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/js/dev/scripts/sorttable.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 1,
-		"oAP": "/js/dev/scripts/sorttable-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
 	"/js/go_enque_js.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -3504,6 +4410,14 @@
 		"oAP": "/js/go_enque_js_admin.php",
 		"oF": 0
 		},
+	"/js/localize_scripts.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/js/localize_scripts.php",
+		"oF": 0
+		},
 	"/js/min/go_admin_user-min.js": {
 		"bF": 0,
 		"ft": 64,
@@ -3515,24 +4429,24 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"/js/min/go_clipboard-min.js": {
+	"/js/min/go_all-min.js": {
 		"bF": 0,
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "/js/min/go_clipboard-min-min.js",
+		"oAP": "/js/min/go_all-min-min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},
-	"/js/min/go_every_admin_page-min.js": {
+	"/js/min/go_combine_dependencies-min.js": {
 		"bF": 0,
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "/js/min/go_every_admin_page-min-min.js",
+		"oAP": "/js/min/go_combine_dependencies-min-min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
@@ -3548,47 +4462,25 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"/js/min/go_scripts-min.js": {
+	"/js/scripts/go_acf_admin-min.js": {
 		"bF": 0,
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "/js/min/go_scripts-min-min.js",
+		"oAP": "/js/scripts/go_acf_admin-min-min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},
-	"/js/min/go_tasks-min.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 1,
-		"oAP": "/js/min/go_tasks-min-min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
-	"/js/scripts/client-side-image-resize.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 1,
-		"oAP": "/js/scripts/client-side-image-resize-min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
-	"/js/scripts/go_admin_notifications.js": {
+	"/js/scripts/go_acf_admin.js": {
 		"bF": 0,
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "/js/scripts/go_admin_notifications-min.js",
-		"oF": 0,
+		"oAP": "/js/scripts/go_acf_admin-min.js",
+		"oF": 2,
 		"sC": 3,
 		"tS": 0
 		},
@@ -3597,20 +4489,9 @@
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
-		"oA": 1,
+		"oA": 0,
 		"oAP": "/js/scripts/go_shortcode_mce-min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
-	"/js/scripts/go_tools.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "/js/scripts/go_tools-min.js",
-		"oF": 1,
+		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},
@@ -4052,6 +4933,84 @@
 		"oAP": "/modules/admin_bar/src/functions.php",
 		"oF": 0
 		},
+	"/modules/admin_bar/src/public.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/admin_bar/src/public.php",
+		"oF": 0
+		},
+	"/modules/admin_bar/src/public_ajax.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/admin_bar/src/public_ajax.php",
+		"oF": 0
+		},
+	"/modules/admin_bar/src/templates/leaderboard.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/admin_bar/src/templates/leaderboard.php",
+		"oF": 0
+		},
+	"/modules/admin_bar/src/templates/new_task_from_template.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/admin_bar/src/templates/new_task_from_template.php",
+		"oF": 0
+		},
+	"/modules/archive/includes.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/archive/includes.php",
+		"oF": 0
+		},
+	"/modules/archive/src/admin.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/archive/src/admin.php",
+		"oF": 0
+		},
+	"/modules/archive/src/admin_ajax.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/archive/src/admin_ajax.php",
+		"oF": 0
+		},
+	"/modules/archive/src/ajax.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/archive/src/ajax.php",
+		"oF": 0
+		},
+	"/modules/archive/src/archive_temp": {
+		"ft": 65536,
+		"oA": 1,
+		"oAP": "/build/modules/archive/src/archive_temp",
+		"oF": 0
+		},
+	"/modules/archive/src/functions.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/archive/src/functions.php",
+		"oF": 0
+		},
 	"/modules/clipboard/includes.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -4076,28 +5035,20 @@
 		"oAP": "/modules/clipboard/src/ajax.php",
 		"oF": 0
 		},
+	"/modules/clipboard/src/public_ajax.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/clipboard/src/public_ajax.php",
+		"oF": 0
+		},
 	"/modules/feedback/includes.php": {
 		"cB": 0,
 		"ft": 8192,
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/modules/feedback/includes.php",
-		"oF": 0
-		},
-	"/modules/feedback/src/admin.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/modules/feedback/src/admin.php",
-		"oF": 0
-		},
-	"/modules/feedback/src/admin_ajax.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/modules/feedback/src/admin_ajax.php",
 		"oF": 0
 		},
 	"/modules/feedback/src/ajax.php": {
@@ -4124,12 +5075,108 @@
 		"oAP": "/modules/feedback/src/public.php",
 		"oF": 0
 		},
+	"/modules/feedback/src/public_ajax.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/feedback/src/public_ajax.php",
+		"oF": 0
+		},
 	"/modules/feedback/src/templates/go_reader_template.php": {
 		"cB": 0,
 		"ft": 8192,
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/modules/feedback/src/templates/go_reader_template.php",
+		"oF": 0
+		},
+	"/modules/login/includes.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/login/includes.php",
+		"oF": 0
+		},
+	"/modules/login/src/admin.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/login/src/admin.php",
+		"oF": 0
+		},
+	"/modules/login/src/ajax.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/login/src/ajax.php",
+		"oF": 0
+		},
+	"/modules/login/src/functions.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/login/src/functions.php",
+		"oF": 0
+		},
+	"/modules/login/src/templates/disabled/change_password_template.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/login/src/templates/disabled/change_password_template.php",
+		"oF": 0
+		},
+	"/modules/login/src/templates/disabled/profile_template.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/login/src/templates/disabled/profile_template.php",
+		"oF": 0
+		},
+	"/modules/login/src/templates/disabled/register_template.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/login/src/templates/disabled/register_template.php",
+		"oF": 0
+		},
+	"/modules/login/src/templates/logout.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/login/src/templates/logout.php",
+		"oF": 0
+		},
+	"/modules/login/src/templates/reset_password_template.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/login/src/templates/reset_password_template.php",
+		"oF": 0
+		},
+	"/modules/login/src/templates/template.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/login/src/templates/template.php",
+		"oF": 0
+		},
+	"/modules/login/src/templates/user.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/login/src/templates/user.php",
 		"oF": 0
 		},
 	"/modules/map/includes.php": {
@@ -4236,6 +5283,14 @@
 		"oAP": "/modules/stats/src/ajax.php",
 		"oF": 0
 		},
+	"/modules/stats/src/functions.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/stats/src/functions.php",
+		"oF": 0
+		},
 	"/modules/store/includes.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -4340,6 +5395,116 @@
 		"oAP": "/modules/tasks/timer/src/public_ajax.php",
 		"oF": 0
 		},
+	"/modules/term-order/includes.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/term-order/includes.php",
+		"oF": 0
+		},
+	"/modules/term-order/src/js/quick-edit.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/modules/term-order/src/js/quick-edit-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/modules/term-order/src/js/reorder-min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/modules/term-order/src/js/reorder-min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/modules/term-order/src/js/reorder.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/modules/term-order/src/js/reorder-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/modules/term-order/src/LICENSE": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/term-order/src/LICENSE",
+		"oF": 0
+		},
+	"/modules/term-order/src/README.html": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/term-order/src/README.html",
+		"oF": 0
+		},
+	"/modules/term-order/src/README.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/term-order/src/README.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"/modules/term-order/src/readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/term-order/src/readme.txt",
+		"oF": 0
+		},
+	"/modules/term-order/src/screenshot-1.gif": {
+		"ft": 4194304,
+		"iS": 25169,
+		"oA": 0,
+		"oAP": "/modules/term-order/src/screenshot-1.gif",
+		"oF": 0,
+		"opt": 0
+		},
+	"/modules/term-order/src/wp-term-order.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/modules/term-order/src/wp-term-order-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/modules/term-order/src/wp-term-order.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/term-order/src/wp-term-order.php",
+		"oF": 0
+		},
 	"/modules/tools/includes.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -4412,22 +5577,6 @@
 		"oAP": "/modules/user_blogs/src/templates/go_user_blog_template.php",
 		"oF": 0
 		},
-	"/modules/user_profiles/includes.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/modules/user_profiles/includes.php",
-		"oF": 0
-		},
-	"/modules/user_profiles/src/admin.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/modules/user_profiles/src/admin.php",
-		"oF": 0
-		},
 	"/README.html": {
 		"cB": 0,
 		"ft": 8192,
@@ -4455,192 +5604,6 @@
 		"rFN": 0,
 		"uCM": 0
 		},
-	"/styles/css/Disabled/go_clipboard.css": {
-		"aP": 1,
-		"bl": 0,
-		"ft": 16,
-		"ma": 0,
-		"oA": 0,
-		"oAP": "/styles/css/Disabled/go_clipboard-min.css",
-		"oF": 0,
-		"oS": 3
-		},
-	"/styles/css/Disabled/go_clipboard_sass.scss": {
-		"aP": 0,
-		"bl": 0,
-		"dP": 10,
-		"dS": 0,
-		"ft": 4,
-		"ma": 0,
-		"oA": 0,
-		"oAP": "/styles/css/Disabled/go_clipboard_sass.css",
-		"oF": 0,
-		"oS": 0,
-		"uL": 1
-		},
-	"/styles/css/go-acf-global.css": {
-		"aP": 1,
-		"bl": 0,
-		"ft": 16,
-		"ma": 0,
-		"oA": 0,
-		"oAP": "/styles/css/go-acf-global-min.css",
-		"oF": 0,
-		"oS": 3
-		},
-	"/styles/css/go-acf-input.css": {
-		"aP": 1,
-		"bl": 0,
-		"ft": 16,
-		"ma": 0,
-		"oA": 0,
-		"oAP": "/styles/css/go-acf-input-min.css",
-		"oF": 0,
-		"oS": 3
-		},
-	"/styles/css/go_clipboard_sass.scss": {
-		"aP": 0,
-		"bl": 0,
-		"dP": 10,
-		"dS": 0,
-		"ft": 4,
-		"ma": 0,
-		"oA": 1,
-		"oAP": "/styles/css/go_clipboard_sass.css",
-		"oF": 0,
-		"oS": 0,
-		"uL": 1
-		},
-	"/styles/css/go_every_page.scss": {
-		"aP": 0,
-		"bl": 0,
-		"dP": 10,
-		"dS": 0,
-		"ft": 4,
-		"ma": 0,
-		"oA": 1,
-		"oAP": "/styles/css/go_every_page.css",
-		"oF": 0,
-		"oS": 0,
-		"uL": 1
-		},
-	"/styles/css/go_map.scss": {
-		"aP": 0,
-		"bl": 0,
-		"dP": 10,
-		"dS": 0,
-		"ft": 4,
-		"ma": 0,
-		"oA": 1,
-		"oAP": "/styles/css/go_map.css",
-		"oF": 0,
-		"oS": 0,
-		"uL": 1
-		},
-	"/styles/css/go_stats.scss": {
-		"aP": 0,
-		"bl": 0,
-		"dP": 10,
-		"dS": 0,
-		"ft": 4,
-		"ma": 0,
-		"oA": 1,
-		"oAP": "/styles/css/go_stats.css",
-		"oF": 0,
-		"oS": 0,
-		"uL": 1
-		},
-	"/styles/css/go_store.scss": {
-		"aP": 0,
-		"bl": 0,
-		"dP": 10,
-		"dS": 0,
-		"ft": 4,
-		"ma": 0,
-		"oA": 1,
-		"oAP": "/styles/css/go_store.css",
-		"oF": 0,
-		"oS": 0,
-		"uL": 1
-		},
-	"/styles/css/go_timer_sass.scss": {
-		"aP": 0,
-		"bl": 0,
-		"dP": 10,
-		"dS": 0,
-		"ft": 4,
-		"ma": 0,
-		"oA": 1,
-		"oAP": "/styles/css/go_timer_sass.css",
-		"oF": 0,
-		"oS": 0,
-		"uL": 1
-		},
-	"/styles/css/normalize.scss": {
-		"aP": 0,
-		"bl": 0,
-		"dP": 10,
-		"dS": 0,
-		"ft": 4,
-		"ma": 0,
-		"oA": 1,
-		"oAP": "/styles/css/normalize.css",
-		"oF": 0,
-		"oS": 0,
-		"uL": 1
-		},
-	"/styles/css/tasks-admin.scss": {
-		"aP": 0,
-		"bl": 0,
-		"dP": 10,
-		"dS": 0,
-		"ft": 4,
-		"ma": 0,
-		"oA": 1,
-		"oAP": "/styles/css/tasks-admin.css",
-		"oF": 0,
-		"oS": 0,
-		"uL": 1
-		},
-	"/styles/dev/go_admin.scss": {
-		"aP": 0,
-		"bl": 0,
-		"dP": 10,
-		"dS": 0,
-		"ft": 4,
-		"ma": 0,
-		"oA": 0,
-		"oAP": "/styles/min/go_admin.css",
-		"oF": 3,
-		"oS": 0,
-		"uL": 1
-		},
-	"/styles/dev/go_frontend.scss": {
-		"aP": 0,
-		"bl": 0,
-		"dP": 10,
-		"dS": 0,
-		"ft": 4,
-		"ma": 0,
-		"oA": 0,
-		"oAP": "/styles/min/go_frontend.css",
-		"oF": 3,
-		"oS": 0,
-		"uL": 1
-		},
-	"/styles/dev/go_styles.scss": {
-		"aP": 0,
-		"bl": 0,
-		"dP": 10,
-		"dS": 0,
-		"ft": 4,
-		"ma": 0,
-		"oA": 0,
-		"oAP": "/styles/min/go_styles.css",
-		"oF": 3,
-		"oS": 0,
-		"uL": 1
-		},
 	"/styles/go_enque_styles.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -4665,6 +5628,16 @@
 		"oA": 1,
 		"oAP": "/styles/min/go_admin-min.css",
 		"oF": 1,
+		"oS": 3
+		},
+	"/styles/min/go_combine_dependencies.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/styles/min/go_combine_dependencies-min.css",
+		"oF": 0,
 		"oS": 3
 		},
 	"/styles/min/go_frontend.css": {
@@ -4695,7 +5668,7 @@
 "projectAttributes": {
 	"creationDate": 536785481,
 	"displayValue": "game-on-v4",
-	"displayValueWasSetByUser": 0,
+	"displayValueWasSetByUser": 1,
 	"iconImageName": "meme-yesBaby",
 	"iconImageWasSetByUser": 0
 	},
@@ -6740,7 +7713,7 @@
 		],
 	"overrideExternalServerCSS": 0,
 	"previewPathAddition": "/wordpress_new/wp-admin/admin.php?page=game-on-options.php",
-	"skippedFoldersString": "log, _logs, logs, _cache, cache, /storage/framework/sessions, node_modules",
+	"skippedFoldersString": "log, _logs, logs, _cache, cache, /storage/framework/sessions, node_modules, /modules/archive/src/archive_temp, /dev/js/scripts",
 	"sourceFolderName": "source",
 	"susyVersion": 3,
 	"tsAllowSyntheticDefaultImports": 0,

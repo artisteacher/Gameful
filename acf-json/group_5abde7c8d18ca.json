@@ -12,7 +12,7 @@
             "conditional_logic": 0,
             "wrapper": {
                 "width": "",
-                "class": "",
+                "class": "go_child_term",
                 "id": ""
             },
             "return_format": "array",
@@ -34,6 +34,13 @@
                 "operator": "==",
                 "value": "go_badges"
             }
+        ],
+        [
+            {
+                "param": "taxonomy",
+                "operator": "==",
+                "value": "user_go_groups"
+            }
         ]
     ],
     "menu_order": 0,
@@ -44,5 +51,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1549906793
+    "modified": 1560873401
 }

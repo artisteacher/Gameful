@@ -1,5 +1,7 @@
 <?php
 
+
+add_action( 'admin_enqueue_scripts', 'go_admin_styles' );
 function go_admin_styles () {
     global $go_css_version;
     /*
@@ -10,6 +12,9 @@ function go_admin_styles () {
 
     // Styles for all GO
     wp_register_style( 'go_styles', plugin_dir_url( __FILE__ ).'min/go_styles.css', null, $go_css_version );
+
+    // Styles dependencies combined
+    wp_register_style( 'go_dependencies', plugin_dir_url( __FILE__ ).'min/go_combine_dependencies.css', null, $go_css_version );
 
     /*
      * Enqueueing Styles For Admin Pages
@@ -22,8 +27,7 @@ function go_admin_styles () {
 
     wp_enqueue_style( 'go_styles' );
 
+    wp_enqueue_style( 'go_dependencies' );
+
 
 }
-
-
-?>

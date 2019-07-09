@@ -23,6 +23,7 @@ function go_register_task_tax_and_cpt() {
         'choose_from_most_used' => _x('Choose from the most used '. get_option( 'options_go_tasks_name_singular' ) . ' Map', 'task_chains' ),
         'menu_name' => _x(get_option( 'options_go_tasks_name_singular' ). 'Maps', 'task_chains' ),
     );
+
     $task_chains_args = array(
         'labels' => $task_chains_labels,
         'public' => true,
@@ -37,10 +38,9 @@ function go_register_task_tax_and_cpt() {
         ),
         'query_var' => true
     );
+
     register_taxonomy( 'task_chains', array( '' ), $task_chains_args );
     //register_taxonom  y_for_object_type( 'task_chains', 'tasks' );
-
-
 
 	$badges_name_singular = get_option('options_go_badges_name_singular');
 	$badges_name_plural = get_option('options_go_badges_name_plural');
@@ -227,9 +227,12 @@ function go_register_task_tax_and_cpt() {
         'capability_type' => 'post'
     );
     register_post_type( 'tasks_templates', $args_cpt );
-	
+
+
 }
 add_action( 'init', 'go_register_task_tax_and_cpt', 0 );
+
+
 
 
 add_filter( 'template_include', 'go_tasks_template_function', 1 );
@@ -252,6 +255,73 @@ function go_tasks_template_function( $template_path ) {
 function go_tasks_filter_content() {
     echo do_shortcode( '[go_task id="'.get_the_id().'"]' );
 }
+
+
+
+//Maybe move this to ajax.php
+function go_new_task_from_template($admin_bar=true){
+	if ( !is_user_logged_in() ) {
+		echo "login";
+		die();
+	}
+	$task_name = get_option('options_go_tasks_name_singular');
+	$templates = get_posts([
+		'post_type' => 'tasks_templates',
+		'post_status' => 'any',
+		'numberposts' => -1
+		// 'order'    => 'ASC'
+	]);
+
+		//create a select dropdown
+		if($admin_bar) {
+			echo '<h3>Choose a Template:</h3>';
+		}
+
+		echo '<select class="go_new_task_from_template" name="new_task"><option value="0">New Empty '.$task_name.'</option>';
+		if ($templates) {
+			foreach ($templates as $template){
+				$post_id = $template->ID;
+				$title = $template->post_title;
+				echo '<option value="' .$post_id.'">' .$title.'</option>';
+			}
+		}
+		echo '</select>';
+		if($admin_bar) {
+			echo '<br>';
+		}
+
+		echo '<button class="submit-button button go_new_task_from_template_button" type="submit"';
+		if($admin_bar) {
+			echo 'style="float: right;';
+		}
+		echo '">Create '.$task_name.'</button>';
+
+		// $url_new_task = get_admin_url(null, 'post-new.php?post_type=tasks');
+		// echo '<br><br>-or-<br><br><p style="float:right;"><a href="'. $url_new_task .'">Create New Empty '.$task_name.'</a></p>';
+
+
+
+
+	if ( defined( 'DOING_AJAX' )) {
+		die();
+	}
+}
+
+//remove add new button on tasks edit page becuase it has custom button
+add_action('admin_menu', 'go_disable_new_tasks');
+function go_disable_new_tasks() {
+// Hide sidebar link
+	global $submenu;
+	unset($submenu['edit.php?post_type=tasks'][10]);
+
+// Hide link on listing page
+	if (isset($_GET['post_type']) && $_GET['post_type'] == 'tasks') {
+		echo '<style type="text/css">
+    .page-title-action { display:none; }
+    </style>';
+	}
+}
+
 
 
 

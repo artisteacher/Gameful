@@ -1,0 +1,404 @@
+
+/* ------------------------------------------------------------
+    lightbox
+------------------------------------------------------------ */
+
+.featherlight.map .featherlight-content
+{
+	min-width: 90%;
+	min-height: 90%;
+}
+
+/* Center the loader */
+#loader {
+	position: relative;
+	left: 50%;
+	z-index: 1;
+}
+
+#sitemap {
+	margin: 10px;
+	//float: left;
+	//width: 100%;
+}
+
+#maps {
+	visibility: hidden;
+
+	/* ------------------------------------------------------------
+        Reset Styles (from meyerweb.com)
+    ------------------------------------------------------------ */
+
+	div, span, applet, object, iframe,
+	h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+	a, abbr, acronym, address, big, cite, code,
+	del, dfn, em, font, img, ins, kbd, q, s, samp,
+	small, strike, strong, sub, sup, tt, var,
+	dl, dt, dd, ol, ul, li,
+	fieldset, form, label, legend,
+	table, caption, tbody, tfoot, thead, tr, th, td {
+		margin: 0;
+		padding: 0;
+		border: 0;
+		outline: 0;
+		font-weight: inherit;
+		font-style: inherit;
+		font-size: 100%;
+		font-family: inherit;
+		vertical-align: baseline;
+	}
+
+	/* ------------------------------------------------------------
+        General Styles
+    ------------------------------------------------------------ */
+
+	h1 {
+		font-weight: bold;
+		text-transform: uppercase;
+		font-size: 20px;
+		margin: 0 0 5px 0;
+	}
+	h2 {
+		font-family: "Lucida Grande", Verdana, sans-serif;
+		font-size: 10px;
+		color: #777777;
+		margin: 0 0 20px 0;
+	}
+	a {
+		text-decoration: none;
+	}
+	ol, ul {
+		list-style: none !important;
+	}
+	.map {
+		//padding-top: 20px;
+		display: block;
+		text-align: center;
+	}
+
+	/* ------------------------------------------------------------
+        Site Map Styles
+    ------------------------------------------------------------ */
+
+	/* --------	Top Level --------- */
+
+	.singleCol {
+		//	background: url('../../media/map/vertical-line.png') center top no-repeat !important;
+		width: 100% !important;
+	}
+
+	/* ------------------------------------------------------------
+    ------------------------------------------------------------ */
+	.primaryNav {
+		margin: 0px 0 0 0;
+		float: left;
+		width: 100%;
+
+		li {
+			//width: 90%;
+		}
+
+		li ul {
+			padding: 0px !important;
+		}
+
+		li {
+			float: left;
+		}
+
+		//top map name
+		.ParentNav {
+			display: block;
+			float: none;
+			position: relative;
+			z-index: 2;
+			background: #c3eafb;
+			-webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
+			-moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px; /* FF 3.5+ */
+			margin: 0px 10px 0px 10px;
+			padding: 0 0 0 0;
+			width: calc(100% - 20px) !important;
+			p{ margin-top: 0px;
+				-webkit-box-shadow: unset;
+				-moz-box-shadow: unset;
+			}
+		}
+
+		.optional_task {
+			margin-top: 0px;
+			border-top: 1px solid grey;
+			border-left: 10px solid grey;
+			display: none;
+		}
+
+		.go_optional_toggle, .go_optional_toggle:hover {
+			margin-top: 0px;
+			background-color: #292929;
+			color: whitesmoke;
+			height: 19px;
+		}
+
+		.optional_task a {
+			//font-size: 1em !important;
+			font-style: italic;
+
+		}
+
+		> li {//task chains
+			p,//task chains names
+			li//tasks
+			{
+				background: #c3eafb;
+				-webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
+				-moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px; /* FF 3.5+ */
+				margin: 10px 10px 0px 10px;
+				padding: 0 0 0 0;
+				width: calc(100% - 20px) !important;
+			}
+
+			//clickable area inside of tasks
+			a,
+			p{
+				//margin: 0 10px;
+				padding: 10px 0;
+				display: block;
+				font-size: 14px;
+				font-weight: bold;
+				text-align: center;
+				color: black;
+
+			}
+
+		}
+
+		.go_bonus_progresss_bar_position{
+			height: 15px;
+		}
+
+
+		.go_bonus_progresss_bar_container {
+			height: 15px;
+			border: 1px solid;
+			box-sizing: unset;
+			border: thin black solid;
+			background-color: #292929;
+			color: whitesmoke;
+			position: absolute;
+			bottom: 0;
+			width: 100%;
+
+
+			.go_bonus_progress_bar{
+				position: absolute;
+				height: 15px;
+				background-color: #39b54a ;
+			}
+		}
+
+
+
+		li li ,
+		.done  {
+			background-color: #cee3ac;
+			border-color: #b8da83;
+			position: relative;
+		}
+
+		li li:hover,
+		.done:hover {
+			border-color: #94b75f;
+			background-color: #e7f1d7;
+		}
+
+		/* --------	grey out colors --------- */
+		.locked,
+		li .locked,
+		li .locked:hover {
+			background-color: #cccccc;
+			border-color: #000;
+			color: #555;
+		}
+
+		/* --------	available tasks colors --------- */
+		.up a{
+			border: 2px solid mediumturquoise;
+		}
+
+		.down a{
+			border: 2px solid indianred;
+		}
+
+		.reset a{
+			border: 2px solid indianred;
+			background-color: pink;
+		}
+
+		li .available {
+			background-color: #fff7aa;
+			border-color: #e3ca4b;
+		}
+		li .available:hover {
+			background-color: #fffce5;
+			border-color: #d1b62c;
+		}
+
+
+		li li:first-child {
+			//padding-top: 30px;
+		}
+		li li:last-child {
+			//background: url('../../media/map/vertical-line.png') center bottom repeat-y;
+		}
+
+	}
+
+	/* ------------------------------------------------------------
+        Badges
+    ------------------------------------------------------------ */
+
+	/** Badge Styles **/
+
+	.go_badge_wrap {
+		width: 100%;
+		height: unset;
+		margin-bottom: 10px;
+		font-weight: 500;
+
+		.go_badge_container {
+			margin: 0 auto;
+			float: none;
+
+			.go_badge{
+				float: unset !important;
+				width: 100%;
+				margin: 0 auto;
+				padding: 10px;
+
+				img{
+					width: 75px !important;
+				}
+			}
+		}
+	}
+
+}
+
+
+
+/* Dropdown Button */
+.dropbtn, .dropbtn:hover, .dropbtn:focus {
+	cursor: pointer;
+	margin: 0;
+	display: block;
+	text-align: center;
+	color: black;
+	background: #c3eafb;
+	border: 2px solid #b5d9ea;
+	//-moz-border-radius: 5px;
+	//-webkit-border-radius: 5px;
+	-webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
+	-moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px; /* FF 3.5+ */
+
+	/* styling */
+
+	border-radius: 4px;
+	font: inherit;
+	line-height: 1.5em;
+	padding: 0.5em 3.5em 0.5em 1em;
+
+	/* reset */
+
+	background-image: linear-gradient(45deg, transparent 50%, blue 50%),
+	linear-gradient(135deg, blue 50%, transparent 50%),
+	linear-gradient(to right, skyblue, skyblue);
+	background-position: calc(100% - 16px) calc(1em + 2px),
+	calc(100% - 11px) calc(1em + 2px),
+	100% 0;
+	background-size: 5px 5px,
+	5px 5px,
+	2.5em 2.5em;
+	background-repeat: no-repeat;
+
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+	position: relative;
+	display: inline-block;
+	z-index: 3;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+	display: none;
+	position: absolute;
+	background-color: #f9f9f9;
+	min-width: 160px;
+	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+	z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+	color: black;
+	padding: 8px 10px;
+	text-decoration: none;
+	display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+	background-color: #f1f1f1
+}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {
+	display: block;
+}
+
+/* ------------------------------------------------------------
+    Utility Navigation
+------------------------------------------------------------ */
+
+#go_Dropdown {
+	float: left;
+	max-width: 100%;
+	margin-right: 10px;
+}
+#utilityNav li {
+	float: left;
+	margin-bottom: 10px;
+}
+#go_Dropdown a {
+	display: block;
+	font-size: 12px;
+	min-width: 150px;
+	color: black;
+	background: #bae9ff;
+	cursor: pointer;
+
+}
+
+#go_Dropdown a:hover {
+	background: #aee1ff;
+	box-shadow: inset 0 -1px 0 rgb(146, 140, 140);
+}
+
+#go_Dropdown .locked a,
+#go_Dropdown .locked a:hover {
+	background-color: #cccccc;
+	border-color: #000;
+	color: #555;
+}
+#go_Dropdown .done a,
+#go_Dropdown .done a:hover {
+	background-color: #cee3ac;
+	border-color: #b8da83;
+}
+
+#utilityNav li a:hover {
+	background-color: #fffce5;
+	border-color: #d1b62c;
+	cursor: pointer;
+}
+

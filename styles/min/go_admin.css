@@ -13,9 +13,6 @@
 #records_tabs a, #records_tabs .tooltip {
   color: blue; }
 
-#go_messages .select2-container {
-  width: 100% !important; }
-
 .dt-buttons {
   padding: 10px; }
 
@@ -31,11 +28,46 @@
   z-index: 1 !important;
   margin: 0px !important; }
 
+.go_tools_section {
+  display: flex;
+  flex-wrap: wrap; }
+
+#go_tools_wrapper .card {
+  width: 300px;
+  margin: 20px;
+  padding-bottom: 10px; }
+
+#go_tools_wrapper button {
+  float: right; }
+
+.progress-bar-border-swal {
+  height: 30px;
+  width: 120px;
+  border: thin white solid;
+  margin: 30px 0px;
+  position: relative;
+  background-color: lightgrey;
+  font-size: 14px;
+  box-sizing: unset; }
+
+.archive_progress_bar {
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #3085d6; }
+
 .go_rewards {
   background-color: #c9fbc9; }
 
 .go_call_to_action {
   background-color: cornsilk; }
+
+.go_acf_header {
+  background-color: lightblue; }
+
+table tbody tr td.go_acf_header {
+  top-padding: 10em; }
 
 /**
  * Date Picker Setting Row
@@ -103,3 +135,161 @@ ul .row-actions {
 ********************/
 .wp-has-submenu.toplevel_page_maps_menus .wp-first-item {
   display: none; }
+
+.go-acf-locks .acf-fields.-left > .acf-field:before {
+  display: none; }
+
+.go-acf-keys .acf-row-handle.ui-sortable-handle:before {
+  content: " and"; }
+
+.go-acf-keys .acf-actions {
+  position: relative;
+  top: -8px; }
+
+.select2_child .select2 {
+  width: 100% !important; }
+
+.key_options .acf-label {
+  display: none; }
+
+.key_options .acf-table {
+  border: none; }
+
+.key_options .acf-field {
+  padding: 0px !important; }
+
+.go-acf-keys .acf-input {
+  width: 100% !important; }
+
+.go_toggle {
+  width: 100px; }
+
+.go-number .acf-input {
+  width: 200px !important; }
+
+.go-timer .acf-th {
+  display: none !important; }
+
+.go-timer .acf-field,
+.go-timer .acf-table .go-timer-input {
+  padding: 5px !important; }
+
+.go-timer .acf-table {
+  border: none; }
+
+.go-due-date .acf-th {
+  display: none !important; }
+
+.go-modifiers .acf-th {
+  display: table-cell !important; }
+
+.go-due-date .acf-table {
+  border: none; }
+
+.go-modifiers .acf-table {
+  border: #DFDFDF solid 1px; }
+
+.go-stages .acf-input .acf-label {
+  float: none !important;
+  width: 100% !important; }
+
+.go-stages .acf-field:before {
+  background: none !important;
+  border: none !important; }
+
+.go-stages .go-content .acf-input {
+  width: 100% !important; }
+
+.go-stages .go-content .acf-label {
+  display: none !important; }
+
+.acf-accordion-title {
+  background: lightblue !important; }
+
+.acf-hide-label .acf-label {
+  display: none; }
+
+.go-loot .acf-th {
+  display: table-cell; }
+
+.acf-no-padding {
+  padding: 0px !important; }
+
+.acf-hide-table-header .acf-th {
+  display: none; }
+
+.acf-table-no-border .acf-table {
+  border: solid 0px !important; }
+
+/********************
+*QUIZ
+********************/
+.go_test_field_table {
+  border-collapse: collapse; }
+
+.go_test_field_table tr {
+  border: solid 2px;
+  border-color: #969696; }
+
+.go_test_field_table ul {
+  list-style: none; }
+
+.go_test_field_table li {
+  display: flex;
+  margin-left: 50px;
+  justify-content: flex-end; }
+
+.go_test_field_input_question {
+  /* width: 100%; */
+  margin-left: 25px; }
+
+.go_test_field_table {
+  width: 100%; }
+
+.go_test_field_table td {
+  padding: 20px !important;
+  margin-left: -2px; }
+
+.go_test_field_input_row select,
+.go_test_field_input_question,
+.go_test_field_add,
+.go_test_field_rm,
+.go_test_field_add_block_button {
+  margin-left: inherit; }
+
+.go_test_loot_mod {
+  text-align: center;
+  width: 40px; }
+
+.go_test_field_input_question {
+  width: 100%; }
+
+.go_test_field_input_question::-webkit-input-placeholder {
+  padding-top: 2px; }
+
+.go_test_field_input_question::-moz-placeholder {
+  padding-top: 2px; }
+
+.go_test_field_input {
+  width: 75%;
+  margin: 0 5px 0 5px !important;
+  padding-top: 4px; }
+
+.go_test_field_input::-webkit-input-placeholder {
+  padding-top: 2px; }
+
+.go_test_field_input::-moz-placeholder {
+  padding-top: 2px; }
+
+.go_test_field_input_checkbox {
+  margin: 0 0 4px -2px !important; }
+
+.go_button_add_field, .go_test_field_add {
+  color: green; }
+
+.go_button_del_field, .go_test_field_rm {
+  color: red;
+  margin-left: 5px; }
+
+.go_test_field_input_rm_row_button {
+  margin-left: -2px !important; }

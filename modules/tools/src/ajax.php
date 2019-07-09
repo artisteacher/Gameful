@@ -5,10 +5,45 @@
  * Date: 7/1/18
  * Time: 9:18 PM
  */
+function go_reset_all_users(){
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
 
-function go_upgade4 (){
+    //check_ajax_referer( 'go_reset_all_users' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_reset_all_users' ) ) {
+        echo "refresh";
+        die( );
+    }
     global $wpdb;
-    check_ajax_referer( 'go_upgade4' );
+    $loot_table  = $wpdb->prefix . 'go_loot';
+    $wpdb->query("TRUNCATE TABLE $loot_table");
+
+    $tasks_table  = $wpdb->prefix . 'go_tasks';
+    $wpdb->query("TRUNCATE TABLE $tasks_table");
+
+    $actions_table  = $wpdb->prefix . 'go_actions';
+    $wpdb->query("TRUNCATE TABLE $actions_table");
+    echo "reset";
+    die();
+
+}
+
+/*
+function go_upgade4 (){
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
+    //check_ajax_referer( 'go_upgade4' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_upgade4' ) ) {
+        echo "refresh";
+        die( );
+    }
+
+    global $wpdb;
     $go_posts_table = "{$wpdb->prefix}posts";
     $tasks = $wpdb->get_results(
         $wpdb->prepare(
@@ -23,7 +58,7 @@ function go_upgade4 (){
     foreach ($tasks as $task) {
         $id = $task->ID;
         //echo $id;
-        $custom_fields = get_post_custom($id);
+        $custom_fields = go_post_meta($id);
         update_post_meta($id, 'go_stages', 3);
         $message1 = (isset($custom_fields['go_mta_quick_desc'][0]) ? $custom_fields['go_mta_quick_desc'][0] : null);
         update_post_meta($id, 'go_stages_0_content', $message1);
@@ -204,7 +239,7 @@ function go_upgade4 (){
     );
     foreach ($store_items as $store_item){
         $id = $store_item->ID;
-        $custom_fields = get_post_custom($id);
+        $custom_fields = go_post_meta($id);
         $store_description = $my_post_content = apply_filters('the_content', get_post_field('post_content', $id));
         update_post_meta($id, 'go_store_item_desc', $store_description);
 
@@ -236,18 +271,39 @@ function go_upgade4 (){
         }
     }
 }
+*/
 
-function go_reset_all_users(){
-    global $wpdb;
-    check_ajax_referer( 'go_reset_all_users' );
-    global $wpdb;
-    $loot_table  = $wpdb->prefix . 'go_loot';
-    $wpdb->query("TRUNCATE TABLE $loot_table");
+/**
+ * This is the check for the function that updates existing content from v4.
+ * The GO table structure is updated at activation of v5.
+ * This function checks if the update has been run before.
+ * It runs if it hasn't and gives an option to run again if it has.
+ */
+/*
+function go_update_go_ajax_v5_check()
+{
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
 
-    $tasks_table  = $wpdb->prefix . 'go_tasks';
-    $wpdb->query("TRUNCATE TABLE $tasks_table");
+    //check_ajax_referer( 'go_upgade4' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_update_go_ajax_v5_check' ) ) {
+        echo "refresh";
+        die( );
+    }
 
-    $actions_table  = $wpdb->prefix . 'go_actions';
-    $wpdb->query("TRUNCATE TABLE $actions_table");
+
+    $updated = get_site_option( 'go_update_version_5');
+    if ( $updated  ) {//if this has never been ran, set the option
+        echo 'run_again';
+        die();
+    }else {
+
+        update_option('go_update_version_5', true);
+        go_v5_update_db();
+        die();
+    }
 
 }
+*/

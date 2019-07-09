@@ -11,7 +11,17 @@
  *
  */
 function go_task_change_stage() {
-    global $wpdb;
+
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
+    //check_ajax_referer( 'go_task_change_stage_' . $post_id . '_' . $user_id );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_task_change_stage' ) ) {
+        echo "refresh";
+        die( );
+    }
 
     /* variables
     */
@@ -19,7 +29,10 @@ function go_task_change_stage() {
     $is_admin = go_user_is_admin( $user_id );
     // post id posted from ajax function (untrusted)
     $post_id = ( ! empty( $_POST['post_id'] ) ? (int) $_POST['post_id'] : 0 );
-    $custom_fields = get_post_custom( $post_id ); // Just gathering some data about this task with its post id
+    $post_data = go_post_data( $post_id );
+    $post_status = go_post_status( $post_id );
+    $custom_fields = go_post_meta( $post_id );
+    //$custom_fields = go_post_meta( $post_id ); // Just gathering some data about this task with its post id
     $task_name = strtolower( get_option( 'options_go_tasks_name_singular' ) );
     $button_type 			= ( ! empty( $_POST['button_type'] ) ? $_POST['button_type'] : null );
     $check_type 			= ( ! empty( $_POST['check_type'] ) ? $_POST['check_type'] : null );
@@ -47,8 +60,8 @@ function go_task_change_stage() {
      */
     // gets the task's post id to validate that it exists, user requests for non-existent tasks
     // should be stopped and the user redirected to the home page
-    $post_obj = get_post( $post_id );
-    if ( null === $post_obj || ( 'publish' !== $post_obj->post_status && ! $is_admin ) || ( 'trash' === $post_obj->post_status && $is_admin )) {
+
+    if ( null === $post_data || ( 'publish' !== $post_status && ! $is_admin ) || ( 'trash' === $post_status && $is_admin )) {
         echo json_encode(
             array(
                 'json_status' => 302,
@@ -59,8 +72,6 @@ function go_task_change_stage() {
         );
         die();
     }
-    check_ajax_referer( 'go_task_change_stage_' . $post_id . '_' . $user_id );
-
     //Sets the $status variable
     // and checks if the status on the button is the same as the database
     //they should be the same unless a user had two windows open and continued in one and then switch to the other.
@@ -78,17 +89,18 @@ function go_task_change_stage() {
 
         }
         if ($button_type == 'undo_bonus' || $button_type == 'undo_last_bonus') {
-            global $go_print_next;//the bonus stage to be printed, sometimes they print out of order if posts were trashed
-            $go_print_next = (isset($go_print_next) ?  $go_print_next : $next_bonus - 1);
-            global $go_bonus_count;//the bonus stage to be printed, sometimes they print out of order if posts were trashed
+            global $go_print_next;//the offset for the post search, they print in order of post modified
+            $go_print_next = (isset($go_print_next) ?  $go_print_next : $next_bonus - 2);
+            global $go_bonus_count;//the bonus stage to be printed
             $go_bonus_count = (isset($go_bonus_count) ?  $go_bonus_count : $status );
+
         }
     }
     else{
         $db_status = go_get_status($post_id, $user_id);
     }
 
-
+    //this makes sure the action wasn't done twice (perhaps two windows open) and refreshed page if it appears that is the case.
     if ($status != $db_status && $check_type != 'unlock'){
         echo json_encode(
             array(
@@ -103,8 +115,6 @@ function go_task_change_stage() {
     /**
      * BUTTON TYPE
      */
-
-
 
     /**
      * Button types and loot actions
@@ -161,7 +171,7 @@ function go_task_change_stage() {
             $result = go_lock_password_validate($result, $custom_fields);
             if ($result == 'password' || $result == 'master password') {
                 //set unlock flag
-                go_update_actions( $user_id, 'task',  $post_id, null, null, $check_type, $result, null, null,  null, null, null, null, null, null, null, null, null, false );
+                go_update_actions( $user_id, 'task',  $post_id, null, null, $check_type, $result, null, null,  null, null, null, null, null, null, null, null, null );
                 //go_update_task_post_save( $post_id );
                 echo json_encode(array('json_status' => 'refresh'));
                 die;
@@ -175,20 +185,19 @@ function go_task_change_stage() {
         ///
         //if task is complete, award badges and groups
         if ($button_type == 'complete') {
-            $badge_ids = (isset($custom_fields['go_badges'][0]) ?  $custom_fields['go_badges'][0] : null);//badges awarded on this task
-
             $group_ids = (isset($custom_fields['go_groups'][0]) ?  $custom_fields['go_groups'][0] : null);
-            $badge_ids_terms = go_badges_task_chains($post_id, $user_id, $custom_fields);//badges awarded on this term
-            if (!empty($badge_ids_terms)){//combine the term and task badges before adding them
-                $badge_ids = unserialize($badge_ids);
-                if (!is_array($badge_ids)){
-                    $badge_ids = array();
-                }
-                $badge_ids = array_unique(array_merge($badge_ids, $badge_ids_terms));
-                $badge_ids = serialize($badge_ids);
+
+            $task_badge_id = (isset($custom_fields['go_badges'][0]) ?  $custom_fields['go_badges'][0] : null);//badge awarded on this task
+            $term_badge_ids = go_badges_task_chains($post_id, $user_id, $custom_fields);//badges awarded on this term
+            if (!empty($term_badge_ids) && is_numeric($task_badge_id)){//combine the term and task badges before adding them
+                $term_badge_ids[] = intval($task_badge_id);
+                $badge_ids = $term_badge_ids;
+            }
+            else if (is_numeric($task_badge_id)){
+                $badge_ids[] = $task_badge_id;
             }
         }
-
+        //this is the update for continue and complete
         go_update_stage_table ($user_id, $post_id, $custom_fields, $status, null, true, $result, $check_type, $badge_ids, $group_ids );
         $status = $status + 1;
 
@@ -202,7 +211,8 @@ function go_task_change_stage() {
             //print new stage check for understanding
             go_checks_for_understanding($custom_fields, $status, $status, $user_id, $post_id, null, null, null, false);
             //$complete = false;
-        }else{//Complete
+        }
+        else{//Complete
 
             //print new check for understanding based on last stage check type
             go_checks_for_understanding($custom_fields, $status - 1, $status, $user_id, $post_id, null, null, null, false);
@@ -216,8 +226,9 @@ function go_task_change_stage() {
     }
     else if ($button_type == 'abandon') {
         //remove entry loot
-        $redirect_url = get_option('options_go_landing_page_on_login', '');
-        $redirect_url = (site_url() . '/' . $redirect_url);
+        //$redirect_url = go_get_user_redirect($user_id);
+        $redirect_url = $_SERVER['HTTP_REFERER'];
+
         go_update_stage_table ($user_id, $post_id, $custom_fields, $status, null, false, 'abandon', null, null, null );
         if($blog_post_id) {
             wp_trash_post(intval($blog_post_id));
@@ -225,21 +236,79 @@ function go_task_change_stage() {
     }
     else if ($button_type == 'undo' || $button_type == 'undo_last') {
         if ($button_type == 'undo_last') {
-            $badge_ids = (isset($custom_fields['go_badges'][0]) ?  $custom_fields['go_badges'][0] : null);
+
+            //Get badges awarded on this task and send to the go_update_stage_table
+            //These can be found in the task table
+            /*
+            $badge_id = (isset($custom_fields['go_badges'][0]) ?  $custom_fields['go_badges'][0] : null);
             $group_ids = (isset($custom_fields['go_groups'][0]) ?  $custom_fields['go_groups'][0] : null);
             $badge_ids_terms = go_badges_task_chain_undo($post_id, $custom_fields, $user_id);
 
             if (!empty($badge_ids_terms)){//combine the term and task badges before removing them
-                $badge_ids = unserialize($badge_ids);
-                if (!is_array($badge_ids)){
-                    $badge_ids = array();
-                }
-                $badge_ids = array_unique(array_merge($badge_ids, $badge_ids_terms));
-                $badge_ids = serialize($badge_ids);
-            }
+                //$badge_ids = unserialize($badge_ids);
+                //if (!is_array($badge_ids)){
+                //    $badge_ids = array();
+               // }
+                $badge_ids = $badge_ids_terms;
+                $badge_ids[] = $badge_id;
+                //$badge_ids = serialize($badge_ids_terms);
+            }*/
+            global $wpdb;
+            $go_tasks_table_name = "{$wpdb->prefix}go_tasks";
+            //Undo Bonus Loot Goes Here
+            $row = $wpdb->get_row($wpdb->prepare("SELECT badges, groups
+					FROM {$go_tasks_table_name} 
+					WHERE uid = %d and post_id  = %d 
+					ORDER BY id DESC LIMIT 1", $user_id, $post_id));
+
+            $badge_ids = $row->badges;
+            $badge_ids = unserialize($badge_ids);
+
+            $group_ids = $row->groups;
+            $group_ids = unserialize($group_ids);
+
+            //See if bonus loot was awarded and remove it.
+            global $wpdb;
+            $go_actions_table_name = "{$wpdb->prefix}go_actions";
+            //Undo Bonus Loot Goes Here
+            $row = $wpdb->get_row($wpdb->prepare("SELECT *
+					FROM {$go_actions_table_name} 
+					WHERE uid = %d and source_id  = %d and action_type = %s 
+					ORDER BY id DESC LIMIT 1", $user_id, $post_id, 'bonus_loot'));
+            $xp = ($row->xp) * -1;
+            $gold = ($row->gold) * -1;
+            $health = ($row->health) * -1;
+            go_update_actions( $user_id, 'undo_bonus_loot',  $post_id, null, null, null, $result, null, null, null, null,  $xp, $gold, $health, null, null, true);
+
+            ///////
         }
 
+        //Get previous stage#
+        //Get all "go_blogs" with parent of this task
+        //check if they are attached to this stage
+        //then set $blog_post_id
+        global $post;
 
+        $args = array(
+            'post_parent' => $post_id,
+            'post_type' => 'go_blogs', //you can use also 'any'
+        );
+
+
+        //Set status to trash for the blog post sent from this stage
+        $the_query = new WP_Query( $args );
+        // The Loop
+        if ( $the_query->have_posts() ) :
+            while ( $the_query->have_posts() ) : $the_query->the_post();
+                $blog_post_id = get_the_ID();
+                $meta = go_post_meta($blog_post_id, 'go_blog_task_stage', true);
+                if (intval($meta) == ($status -1)){
+                    wp_trash_post(intval($blog_post_id));
+                }
+            endwhile;
+        endif;
+// Reset Post Data
+        wp_reset_postdata();
         go_update_stage_table ($user_id, $post_id, $custom_fields, $status, null, false, 'undo', null, $badge_ids, $group_ids );
         go_checks_for_understanding ($custom_fields, $status -1 , $status - 1 , $user_id, $post_id, null, null, null, false);
     }
@@ -254,14 +323,14 @@ function go_task_change_stage() {
         $bonus_status = go_get_bonus_status($post_id, $user_id);
 
         if ($button_type == 'continue_bonus' || $button_type == 'complete_bonus') {
-
-            $check_type = $custom_fields['go_bonus_stage_check'][0];
+            //$check_type = $custom_fields['go_bonus_stage_check'][0];
             //validate the check for understanding and get modifiers
             if ($check_type == 'password'){
                 $result = go_stage_password_validate($result, $custom_fields, $status, true);
             }
             else if ($check_type == 'blog'){
                 $result = go_save_blog_post($post_id, null, $bonus_status, 'unread');
+
             }
 
             //get the rewards and apply modifiers
@@ -299,15 +368,20 @@ function go_task_change_stage() {
             go_print_outro ($user_id, $post_id, $custom_fields, $stage_count, $status, false);
 
         }
+
+        //this isn't elegent, but it will tell the post form to fail and refresh page
+        //there is no easy way to get the right posts on a bonus stage when the stage is changed
+        //when there is mixed v4 and v5 content
+        //this is a stop gap solution for the transition period
+        global $refresh_if_v4_content;
+        $refresh_if_v4_content = true;
     }
     //go_check_messages();
     do_action('go_after_stage_change');
 
     // stores the contents of the buffer and then clears it
     $buffer = ob_get_contents();
-
     ob_end_clean();
-
     // constructs the JSON response
     echo json_encode(
         array(
@@ -393,8 +467,6 @@ function go_badges_task_chains ($post_id, $user_id, $custom_fields ) {
             $term = get_term($chain_id, 'task_chains');
             $termParent = ($term->parent == 0) ? $term : get_term($term->parent, 'task_chains');
             $termParentID = $termParent->term_id;                                   //get the id of the map
-
-
 
             //if ($termParentID == $chain_id) {
 
