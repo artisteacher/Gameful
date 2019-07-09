@@ -7,30 +7,13 @@
  */
 
 
-/**
- * The template for displaying login page
- *
- * @link https://codex.wordpress.org/Template_Hierarchy
- *
- * @package WordPress
- * @subpackage Twenty_Seventeen
- * @since 1.0
- * @version 1.0
- */
 if(is_user_logged_in()){
     $join_url = site_url('join');
 
     wp_redirect(go_get_user_redirect());
 }
 
-
-//https://codex.wordpress.org/Customizing_the_Login_Form#Make_a_Custom_Login_Page
-//
-//  wp_head();
-//get_header();
 get_header();
-///////////
-
 
 echo "<div id ='go_login_center'>";
 
@@ -62,8 +45,6 @@ if ( ! is_user_logged_in() ) { // Display WordPress login form:
         echo  go_domain_restrictions_message();
         echo '</p>';
     }
-
-
 
 
    // Display WordPress login form:

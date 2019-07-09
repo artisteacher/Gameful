@@ -8,16 +8,17 @@
 function go_get_domain_restrictions(){
     //$current_blog_id = get_current_blog_id();
     $domains = array();
-        $domain_count = get_option('options_limit_domains_domains');
-        //$domains = get_field('options_limit_domains_domains');
-        $i = 0;
+    $domain_count = get_option('options_limit_domains_domains');
+    //$domains = get_field('options_limit_domains_domains');
+    $i = 0;
 
-        while ($domain_count > $i) {
-            $domain = get_option('options_limit_domains_domains_' . $i . '_domain');
-            if (!empty($domain)) {
-                $domains[] = $domain;
-            }
+    while ($domain_count > $i) {
+        $domain = get_option('options_limit_domains_domains_' . $i . '_domain');
+        if (!empty($domain)) {
+            $domains[] = $domain;
         }
+        $i++;
+    }
     return $domains;
 }
 /*
