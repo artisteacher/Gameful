@@ -4,14 +4,7 @@
     <option name="SCOPE_TYPE" value="3" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4c52fe7c-a769-413b-9a8a-3effed8b98a6" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/css/files/go_every_page.scss" beforeDir="false" afterPath="$PROJECT_DIR$/dev/css/files/go_every_page.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/js/scripts/user_bar.js" beforeDir="false" afterPath="$PROJECT_DIR$/dev/js/scripts/user_bar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/min/go_frontend-min.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/min/go_frontend-min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/admin_bar/src/public.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/admin_bar/src/public.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/min/go_styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/min/go_styles.css" afterDir="false" />
-    </list>
+    <list default="true" id="4c52fe7c-a769-413b-9a8a-3effed8b98a6" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,11 +78,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/modules/admin_bar/src/public.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="33" lean-forward="true" selection-start-line="33" selection-end-line="33" />
+            <state relative-caret-position="480">
+              <caret line="37" lean-forward="true" selection-start-line="37" selection-end-line="37" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
@@ -116,7 +109,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dev/js/scripts/user_bar.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="15">
@@ -307,8 +300,8 @@
         <option value="$PROJECT_DIR$/modules/login/src/templates/template.php" />
         <option value="$PROJECT_DIR$/modules/login/src/functions.php" />
         <option value="$PROJECT_DIR$/dev/css/files/go_every_page.scss" />
-        <option value="$PROJECT_DIR$/modules/admin_bar/src/public.php" />
         <option value="$PROJECT_DIR$/dev/js/scripts/user_bar.js" />
+        <option value="$PROJECT_DIR$/modules/admin_bar/src/public.php" />
       </list>
     </option>
   </component>
@@ -726,12 +719,12 @@
       <workItem from="1561945908787" duration="1995000" />
       <workItem from="1561951768510" duration="1857000" />
       <workItem from="1561960133192" duration="363000" />
-      <workItem from="1561960785201" duration="184115000" />
+      <workItem from="1561960785201" duration="184455000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5694894000" />
+    <option name="totallyTimeSpent" value="5695234000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -2550,21 +2543,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/admin_bar/src/public.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="33" lean-forward="true" selection-start-line="33" selection-end-line="33" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dev/js/scripts/user_bar.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="1" column="28" selection-start-line="1" selection-start-column="28" selection-end-line="1" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/admin_bar/src/public.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="480">
+          <caret line="37" lean-forward="true" selection-start-line="37" selection-end-line="37" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
