@@ -8,7 +8,7 @@
 
 
 
-add_action('wp_head', 'go_player_bar_v5');
+add_action( 'wp_head', 'go_user_bar_dynamic_styles', 99 );
 function go_user_bar_dynamic_styles() {
 
     $bkg_color = get_option('options_go_user_bar_background_color');
@@ -29,8 +29,12 @@ function go_user_bar_dynamic_styles() {
     <?php
 
 }
-add_action( 'wp_head', 'go_user_bar_dynamic_styles', 99 );
 
+$is_multisite = is_multisite();
+$blog_id = get_current_blog_id();
+if($blog_id > 1 || !$is_multisite){
+    add_action('wp_head', 'go_player_bar_v5');
+}
 
 function go_player_bar_v5() {
 
