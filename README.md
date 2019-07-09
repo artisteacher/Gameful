@@ -1,6 +1,9 @@
-# Game-On
+# Gameful: A fork of the Game-On Project
 
 Game-On (GO) is an educational framework that provides teachers with a vast amount of tools to create their own <a href="http://en.wikipedia.org/wiki/Gamification" target="_blank">gamified</a> learning system.
+
+### Important note on development dependency
+This fork of the Game-On project is dependent on several open source libraries and plugins. They have been seamlessly included where possible.  One important exception is Advanced Custom Fields (ACF) Pro. This plugin is required for the Gameful to work in both development and production environments. It is not included in this repository because it is a paid subscription plugin. If you wish to develop this plugin, you can purchase a copy of the complete plugin including all dependencies at http://gameful.me, or include your own copy of ACF Pro in the /includes/acf directory. Do not install ACF normally because there are conditionals in the Gameful code that load the plugin as needed. Developers may also request to fork the private branch of the plugin that contains the dependencies.
 
 ### Information and Help
 
