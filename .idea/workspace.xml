@@ -4,7 +4,9 @@
     <option name="SCOPE_TYPE" value="3" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4c52fe7c-a769-413b-9a8a-3effed8b98a6" name="Default" comment="" />
+    <list default="true" id="4c52fe7c-a769-413b-9a8a-3effed8b98a6" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,7 +80,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/admin_bar/src/public.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="480">
@@ -87,6 +89,15 @@
                 <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="5" column="12" selection-start-line="5" selection-start-column="12" selection-end-line="5" selection-end-column="12" />
             </state>
           </provider>
         </entry>
@@ -136,20 +147,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="270">
               <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modules/login/src/templates/user.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="28" column="21" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="21" />
-              <folding>
-                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#h3#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -251,7 +248,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/modules/tools/src/ajax.php" />
         <option value="$PROJECT_DIR$/dev/js/scripts/go_tools.js" />
         <option value="$PROJECT_DIR$/dev/js/scripts/go_map.js" />
         <option value="$PROJECT_DIR$/core/includes.php" />
@@ -302,6 +298,7 @@
         <option value="$PROJECT_DIR$/dev/css/files/go_every_page.scss" />
         <option value="$PROJECT_DIR$/dev/js/scripts/user_bar.js" />
         <option value="$PROJECT_DIR$/modules/admin_bar/src/public.php" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -358,35 +355,6 @@
             <path>
               <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
               <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
-              <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
-              <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
-              <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="admin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
-              <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
-              <item name="dev" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
-              <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
-              <item name="dev" type="462c0819:PsiDirectoryNode" />
-              <item name="css" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
@@ -719,12 +687,12 @@
       <workItem from="1561945908787" duration="1995000" />
       <workItem from="1561951768510" duration="1857000" />
       <workItem from="1561960133192" duration="363000" />
-      <workItem from="1561960785201" duration="184455000" />
+      <workItem from="1561960785201" duration="184736000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5695234000" />
+    <option name="totallyTimeSpent" value="5695515000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1996,9 +1964,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/modules/tasks/src/admin.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/modules/quiz/src/ajax.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="416">
@@ -2558,6 +2523,13 @@
             <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="12" selection-start-line="5" selection-start-column="12" selection-end-line="5" selection-end-column="12" />
         </state>
       </provider>
     </entry>
