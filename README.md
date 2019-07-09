@@ -26,11 +26,9 @@ Make sure to talk to your web hosting service provider about these technical req
 
 #### PHP
 
-Make sure that your hosting service supports and maintains a PHP version of **at least** `5.3`. Ideally, every service would have updated their PHP versions to `7.1`, but that isn't a realistic assumption. If the most recent version is not an option, version `5.6` should do the trick.
+Make sure that your hosting service supports and maintains a PHP version of **at least** `7.0`. Ideally, every service would have updated their PHP versions to `7.1`, but that isn't a realistic assumption. 
 
-In order of best scenario: `7.1` is better than `5.6`, which is better than `5.3`.
-
-If your service does not provide a version of PHP greater than `5.3`, please be aware that there are potential compatibility issues due to the nature of the outdated software.
+If your service does not provide a version of PHP greater than `7.0`, please be aware that there are potential compatibility issues due to the nature of the outdated software.
 
 #### WordPress
 
