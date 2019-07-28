@@ -5,16 +5,22 @@
  * Date: 7/31/18
  * Time: 12:25 PM
  */
-//switch_to_blog(1);
+//if(is_multisite()) {
+//            $main_site_id = get_network()->site_id;
+//            switch_to_blog($main_site_id);
+//        }
 //auth_redirect();
 
 $source_blog_id = (isset($_GET['blog_id']) ? $_GET['blog_id'] : null);
-switch_to_blog($source_blog_id);
+
+
 if(is_user_logged_in()){
     wp_redirect(go_get_user_redirect());
     exit;
 }
-restore_current_blog();
+if(is_multisite()) {
+    restore_current_blog();
+}
 
 //this form always prints as site 1
 //do someredirects for situations

@@ -17,9 +17,13 @@ function go_update_db_ms( ) {
         // Get all blogs in the network and update db on each one
         $blog_ids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
         foreach ( $blog_ids as $blog_id ) {
-            switch_to_blog( $blog_id );
+            if(is_multisite()) {
+                switch_to_blog($blog_id);
+            }
             go_update_db_check();
-            restore_current_blog();
+            if(is_multisite()) {
+                restore_current_blog();
+            }
         }
     }else{
         go_update_db_check();
@@ -46,7 +50,9 @@ function go_on_create_blog( $blog_id, $user_id, $domain, $path, $site_id, $meta 
     if ( $is_ms ) {
         switch_to_blog( $blog_id );
         go_update_db();
-        restore_current_blog();
+        if(is_multisite()) {
+            restore_current_blog();
+        }
     }
 }
 add_action( 'wpmu_new_blog', 'go_on_create_blog', 10, 6 );

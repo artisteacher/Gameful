@@ -154,11 +154,16 @@ class acf_field_recaptcha extends acf_field {
 
         //ADDED FOR GAMEON
         if (empty($site_key) || empty($secret_key)) {
-            switch_to_blog(1);
+            if(is_multisite()) {
+                $main_site_id = get_network()->site_id;
+                switch_to_blog($main_site_id);
+            }
             $settings = get_option('acf_recaptcha');
             $site_key = $settings['site_key'];
             $secret_key = $settings['secret_key'];
-            restore_current_blog();
+            if(is_multisite()) {
+                restore_current_blog();
+            }
         }
         //END ADDED FOR GAMEON
 

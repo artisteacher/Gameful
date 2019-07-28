@@ -484,10 +484,15 @@ function go_clipboard_stats_dataloader_ajax(){
     $sOrder = go_sOrder('stats', $section);
 
     $lTable = "{$wpdb->prefix}go_loot";
-    switch_to_blog(1);
+    if(is_multisite()) {
+        $main_site_id = get_network()->site_id;
+        switch_to_blog($main_site_id);
+    }
     $uTable = "{$wpdb->prefix}users";
     $umTable = "{$wpdb->prefix}usermeta";
-    restore_current_blog();
+    if(is_multisite()) {
+        restore_current_blog();
+    }
 
     $sectionQuery = go_sectionQuery();
     $badgeQuery = go_badgeQuery();
@@ -696,10 +701,15 @@ function go_clipboard_store_dataloader_ajax(){
     $pTable = "{$wpdb->prefix}posts";
     $lTable = "{$wpdb->prefix}go_loot";
     $aTable = "{$wpdb->prefix}go_actions";
-    switch_to_blog(1);
+    if(is_multisite()) {
+        $main_site_id = get_network()->site_id;
+        switch_to_blog($main_site_id);
+    }
     $uTable = "{$wpdb->prefix}users";
     $umTable = "{$wpdb->prefix}usermeta";
-    restore_current_blog();
+    if(is_multisite()) {
+        restore_current_blog();
+    }
 
     $sOn = go_sOn('store');
     //add store items to On statement
@@ -937,10 +947,15 @@ function go_clipboard_messages_dataloader_ajax(){
 
     $lTable = "{$wpdb->prefix}go_loot";
     $aTable = "{$wpdb->prefix}go_actions";
-    switch_to_blog(1);
+    if(is_multisite()) {
+        $main_site_id = get_network()->site_id;
+        switch_to_blog($main_site_id);
+    }
     $uTable = "{$wpdb->prefix}users";
     $umTable = "{$wpdb->prefix}usermeta";
-    restore_current_blog();
+    if(is_multisite()) {
+        restore_current_blog();
+    }
     $sectionQuery = go_sectionQuery();
     $badgeQuery = go_badgeQuery();
     $groupQuery = go_groupQuery();
@@ -1196,10 +1211,15 @@ function go_clipboard_activity_dataloader_ajax(){
 
     $lTable = "{$wpdb->prefix}go_loot";
     $aTable = "{$wpdb->prefix}go_actions";
-    switch_to_blog(1);
+    if(is_multisite()) {
+        $main_site_id = get_network()->site_id;
+        switch_to_blog($main_site_id);
+    }
     $uTable = "{$wpdb->prefix}users";
     $umTable = "{$wpdb->prefix}usermeta";
-    restore_current_blog();
+    if(is_multisite()) {
+        restore_current_blog();
+    }
     $tTable = "{$wpdb->prefix}go_tasks";
     $pTable = "{$wpdb->prefix}posts";
 

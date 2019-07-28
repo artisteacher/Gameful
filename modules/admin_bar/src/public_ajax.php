@@ -99,10 +99,15 @@ function go_stats_leaderboard_dataloader_ajax(){
     $sOrder = "ORDER BY " . $order_col . " " . $order_dir;
 
     $lTable = "{$wpdb->prefix}go_loot";
-    switch_to_blog(1);
+    if(is_multisite()) {
+        $main_site_id = get_network()->site_id;
+        switch_to_blog($main_site_id);
+    }
     $umTable = "{$wpdb->prefix}usermeta";
     $uTable = "{$wpdb->prefix}users";
-    restore_current_blog();
+    if(is_multisite()) {
+        restore_current_blog();
+    }
 
     $sectionQuery = go_sectionQuery($section);
     //$badgeQuery = go_badgeQuery();

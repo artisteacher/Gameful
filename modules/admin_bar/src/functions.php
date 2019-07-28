@@ -4,8 +4,14 @@
 //add_action('wp_logout','auto_redirect_after_logout');
 function auto_redirect_after_logout($k){
     $HTTP_REFERER = (isset($_SERVER['HTTP_REFERER']) ?  $_SERVER['HTTP_REFERER'] : null);//page currently being loaded
-    $details  = get_blog_details();
-    $siteurl = $details -> siteurl;
+    //for multisite
+    if(is_multisite()) {
+        $details  = get_blog_details();
+        $siteurl = $details -> siteurl;
+    }else{
+        $siteurl = home_url();
+    }
+
     $strip_path = str_replace($siteurl, '', $HTTP_REFERER);
     $strip_slashes = str_replace('/','',$strip_path);
     $HTTP_REFERER = strtok($strip_slashes,'?');
