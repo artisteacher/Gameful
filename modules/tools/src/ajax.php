@@ -30,6 +30,40 @@ function go_reset_all_users(){
 
 }
 
+//https://jeremyfelt.com/2015/07/17/flushing-rewrite-rules-in-wordpress-multisite-for-fun-and-profit/
+function go_flush_all_permalinks(){
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
+    //check_ajax_referer( 'go_reset_all_users' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_flush_all_permalinks' ) ) {
+        echo "refresh";
+        die( );
+    }
+    // Much better...
+    if ( wp_is_large_network() ) {
+        return;
+    }
+
+// ...and we're probably still friends.
+    $sites = wp_get_sites( array( 'network' => 1, 'limit' => 5000 ) );
+    foreach( $sites as $site ) {
+        if(is_multisite()) {
+            switch_to_blog( $site->blog_id );
+        }
+
+        delete_option( 'rewrite_rules' );
+        if(is_multisite()) {
+            restore_current_blog();
+        }
+    }
+
+}
+
+
+
 /*
 function go_upgade4 (){
     if ( !is_user_logged_in() ) {

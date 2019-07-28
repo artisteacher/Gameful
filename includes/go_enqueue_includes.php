@@ -20,7 +20,8 @@ $js_in_footer = true;
 $go_pdfmake_js_url       = 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js';
 $go_pdfmake_fonts_js_url  = 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js';
 
-//$font_awesome_url = 'https://use.fontawesome.com/releases/v5.8.1/css/all.css';
+$font_awesome_url = 'https://kit.fontawesome.com/4aaca053a1.js';
+
 
 
 
@@ -37,11 +38,13 @@ function go_includes ($hook) {
      * Font Awesome
      * https://fontawesome.com
      */
-    //wp_register_style ('go_font-awesome', $font_awesome_url );
-    //wp_enqueue_style('go_font-awesome');
-    wp_register_style( 'go_font_awesome', plugin_dir_url( __FILE__ ).'fontawesome/css/all.min.css', null, 5 );
+    //wp_register_script ('go_font-awesome', $font_awesome_url, 'v5', false );
+    //wp_enqueue_script('go_font-awesome');
+    wp_register_style( 'go_font_awesome', plugin_dir_url( __FILE__ ).'fontawesome/css/all.css', null, 5 );
     wp_enqueue_style( 'go_font_awesome' );
 
+    //wp_enqueue_style( 'custom-google-fonts', 'https://fonts.googleapis.com/css?family=B612+Mono&display=swap', false );
+    wp_enqueue_style( 'custom-google-fonts', 'https://fonts.googleapis.com/css?family=B612+Mono|Teko&display=swap', false );
 
     //on change password page
     wp_enqueue_script( 'password-strength-meter' );

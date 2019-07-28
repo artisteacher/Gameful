@@ -279,7 +279,7 @@ function go_create_admin_message ()
                                                         <?php
                                                         if ($go_xp_toggle) {
                                                             ?>
-                                                            <td class="go-acf-field go-acf-field-number go_reward go_xp  data-name="
+                                                            <td class="go-acf-field go-acf-field-number go_reward go_xp"  data-name="
                                                                 xp
                                                             " data-type="number">
                                                             <div class="go-acf-input">
@@ -616,7 +616,7 @@ function go_create_admin_message ()
                                                                 <?php
                                                                 if ($go_xp_toggle) {
                                                                     ?>
-                                                                    <td class="go-acf-field go-acf-field-number go_reward go_xp data-name="
+                                                                    <td class="go-acf-field go-acf-field-number go_reward go_xp" data-name="
                                                                         xp
                                                                     " data-type="number">
                                                                     <div class="go-acf-input">
@@ -928,11 +928,10 @@ function go_send_message($skip_ajax = false, $title = '', $message = '', $type =
             die();
         }
 
-
         $title = (!empty($_POST['title']) ? $_POST['title'] : "");
-
+        $title  = do_shortcode( $title );
         $message = stripslashes(!empty($_POST['message']) ? $_POST['message'] : "");
-
+        $message  = do_shortcode( $message );
         $type = (!empty($_POST['message_type']) ? $_POST['message_type'] : "message");// can be message, or reset
 
         $penalty = (!empty($_POST['penalty']) ? $_POST['penalty'] : false);// can be message, or reset
@@ -1223,11 +1222,11 @@ function go_send_message($skip_ajax = false, $title = '', $message = '', $type =
         //store the badge and group toggles so later we know if they were awarded or taken.
         if ($badges_toggle == "true" && !empty($badge_id)) {//if badges toggle is true and badges exist
             $result[] = "badges+";
-            go_add_badges($badge_ids, $user_id, false);//add badges
+            $badge_ids = go_add_badges($badge_ids, $user_id, false);//add badges
             $badge_ids = serialize($badge_ids);
         }else if ($badges_toggle == "false" && !empty($badge_id)) {//else if badges toggle is false and badges exist
             $result[] = "badges-";
-            go_remove_badges($badge_id, $user_id, false);//remove badges
+            $badge_ids = go_remove_badges($badge_id, $user_id, false);//remove badges
             $badge_ids = serialize($badge_ids);
         }else {
             $result[] = "badges0";
@@ -1250,7 +1249,7 @@ function go_send_message($skip_ajax = false, $title = '', $message = '', $type =
         $result = serialize($result);
 
         //update actions
-        go_update_actions($user_id, $type, $go_blog_task_id, 1, null, null, $result, null, null, null, null, $xp, $gold, $health, $badge_ids, $group_ids, true);
+        go_update_actions($user_id, $type, null, 1, null, null, $result, null, null, null, null, $xp, $gold, $health, $badge_ids, $group_ids, true);
     }
 
     //set new message user option to true so each user gets the message

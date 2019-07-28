@@ -24,31 +24,46 @@ if (is_user_member_of_blog()){
  * of load join, profile, or register page
  *
  */
-//$this_page =  go_get_page_uri();
+$this_page =  go_get_page_uri();
 
 if (is_user_logged_in()) {
     if (is_user_member_of_blog()) {
-        $this_page = 'profile';//if logged in this is a profile page
+        //if logged in and member then this is a profile page
+        if ($this_page != 'profile'){
+           wp_redirect(site_url('profile'));
+           exit;
+        }
+
     }
     else {
-        $this_page = 'join';//if logged in, but not a member of this blog, this is a join page
+        //if logged in, but not a member of this blog, this is a join page
+         if ($this_page != 'join'){
+            wp_redirect(site_url('join'));
+           exit;
+        }
     }
 }
 else{
-    $this_page = 'register';//else not logged in and this is a register page.
+    //else not logged in and this is a register page.
+     if ($this_page != 'register'){
+            wp_redirect(site_url('register'));
+            exit;
+        }
 }
 
 $registrations_allowed = get_option('options_allow_registration');
 $is_valid_email = true;
 
 acf_form_head();
-$ajaxurl =  admin_url( 'admin-ajax.php' );
+
+/*
 ?>
     <script>
         var ajaxurl = MyAjax.ajaxurl;
     </script>
 <?php
-wp_localize_script( 'go_frontend', 'ajaxurl', $ajaxurl);
+*/
+
 
 get_header();
 
@@ -59,26 +74,8 @@ get_header();
 <div id='go_profile_wrapper' style='max-width: 1100px; margin: 20px auto 100px auto;'>
 
     <?php
-    if ($this_page == 'register'){
-        ?>
-        <h3 style='padding-top:10px;'>Register for a new account</h3>
-        <?php
-        if ($registrations_allowed) {
-            $limit_domains_toggle = get_option('options_limit_domains_toggle');
-            if($limit_domains_toggle) {
-                $message = go_domain_restrictions_message();
-                if (!empty($message)) {
-                    echo "<div style='max-width: 800px;'>";
-                    echo $message;
-                    echo "</div>";
-
-                }
-            }
-        }
-        //  If multisite, register settings are always from blog #1.
-        switch_to_blog(1);
-    }
-    else if ($this_page == 'profile'){
+    $block_form = false;
+    if ($this_page == 'profile'){
         echo"<h3 style='padding-top:10px;'>Profile</h3>";
 
         $updated  = (isset($_GET['updated']) ) ? $_GET['updated'] : 0;
@@ -92,68 +89,70 @@ get_header();
         echo '<a href="#" class="go_password_change_modal">Change Password</a> – ';
         echo '<span id="go_save_archive" style=""><a href="javascript:void(0)">Create Blog Archive</a></span></div>';
     }
-    else{
-        ?>
-        <h3 style='padding-top:10px;'>Join Game</h3>
-        <div>Welcome <span style="font-size: 1.2em;" <?php echo go_get_firstname_function(); ?></span>. </div>
-        <?php
-        $limit_domains_toggle = get_option('options_limit_domains_toggle');
-        if($limit_domains_toggle) {
-            $domains = go_get_domain_restrictions();
-            $current_user = wp_get_current_user();
-            $email = $current_user->user_email;
-            $is_valid_email = validate_email_against_domains($email);
+    else if (($this_page == 'register') || ($this_page == 'join')){
+        if ($this_page == 'register') {
+            echo "<h3 style='padding-top:10px;'>Register for a new account</h3>";
         }
-        if ($is_valid_email){
-            echo "<div> Fill out the form below to join this game.</div>";
+        else if ($this_page == 'join'){
+            echo "<h3 style='padding-top:10px;'>Join Game</h3>";
         }
-    }
-    ?>
 
-<?php
-/*
-$updated  = (isset($_GET['updated']) ) ? $_GET['updated'] : 0;
-if ($updated === "true") {
-
-    echo '<p class="success">Your Profile was created.</p>';
-    if (is_user_logged_in()){
-        $page_name = 'login';
-        $redirect_url = get_home_url($page_name);
-        echo "<p><a href='$redirect_url'>Login</a></p>";
-        echo '<br><br>';
-
-    }
-
-}
-else {
-*/
-
-//if this is a registration or join page, check if registrations are allowed
-//and output a message if they aren't and skip the form.
-
-if(($this_page == 'register' || $this_page == 'join') && $registrations_allowed == false ){
-    echo "<div>This game is by invitation only.</div>";
-
-}
-else if(!$is_valid_email) {
-    $limit_domains_toggle = get_option('options_limit_domains_toggle');
-    if($limit_domains_toggle) {
-        $message = go_domain_restrictions_message();
-        if (!empty($message)) {
-            echo "<div style='max-width: 800px; '>";
-            echo $message;
-            $go_login_link = get_site_url(null, 'login');
-            $go_logout_link = wp_loginout( 'logout', false );
-            echo $go_logout_link . " and register with a valid email.";
-            echo "</div>";
-
+        if (!$registrations_allowed) {
+             echo "<div>This game is currently closed to new players.</div>";
+                $block_form = true;
+        }else{
+            if ($this_page == 'register') {
+                $limit_domains_toggle = get_option('options_limit_domains_toggle');
+                //print message at top of register page if domains are restricted
+                if ($limit_domains_toggle) {
+                    $message = go_domain_restrictions_message();
+                    if (!empty($message)) {
+                        echo "<div style='max-width: 800px;'>";
+                        echo $message;
+                        echo "</div>";
+                    }
+                }
+            }
+            else if ($this_page == 'join') {
+                ?>
+                <div>Welcome <span style="font-size: 1.2em;" <?php echo go_get_firstname_function(); ?></span>. </div>
+                <?php
+                $limit_domains_toggle = get_option('options_limit_domains_toggle');
+                if($limit_domains_toggle) {
+                    $domains = go_get_domain_restrictions();
+                    $current_user = wp_get_current_user();
+                    $email = $current_user->user_email;
+                    $is_valid_email = validate_email_against_domains($email);
+                    if ($is_valid_email){
+                        echo "<div> Fill out the form below to join this game.</div>";
+                    }else{
+                        if(!$is_valid_email) {
+                            $registrations_allowed = false;
+                            $message = go_domain_restrictions_message();
+                            if (!empty($message)) {
+                                $block_form = true;
+                                echo "<div style='max-width: 800px; '>";
+                                echo $message;
+                                $go_login_link = get_site_url(null, 'login');
+                                $go_logout_link = wp_loginout( 'logout', false );
+                                echo $go_logout_link . " and register with a valid email.";
+                                echo "</div>";
+                            }
+                        }
+                    }
+                }
+            }
         }
+        //If multisite, register settings are always from blog #1. NEW combine main and sub site settings.
+        //if(is_multisite()) {
+        //            $main_site_id = get_network()->site_id;
+        //            switch_to_blog($main_site_id);
+        //        }
+        //$restored = 0;
     }
-}
-else {//registrations are allowed or this is a profile page
-    if($this_page == 'join'){
-        //put check for particular domains on the join page
-    }
+
+
+if(!$block_form) {//registrations are allowed or this is a profile page
 
     $groups = array();
     $fields = array();
@@ -308,7 +307,6 @@ else {//registrations are allowed or this is a profile page
     //$fields = array('field_5cd9f85e5f788', 'field_5cd4fa743159f', 'field_5cd4be08e7077', 'field_5cd1d1de5491b', 'field_5cd1d21168754', 'field_5cd1d13769aa9', 'field_5cd4f7b4366c6', 'field_5cd4f7b43672b', 'field_5cd3638830f17', 'field_5cd363d130f18', 'field_5cd52c8f46296');
     //$fields = array('field_5cd1d13769aa9', 'field_5cd4be08e7077', 'field_5cd3638830f17', 'field_5cd363d130f18', 'field_5cd52c8f46296');
 
-
     $form = go_acf_user_form_func($groups, $fields);
 
     echo $form;
@@ -317,10 +315,13 @@ else {//registrations are allowed or this is a profile page
 
 echo "</div>";
 
+/*
 if ($this_page == 'register'){
-    //  If multisite, register settings are always from blog #1.
-    restore_current_blog();
-}
+    //  If multisite, register settings are always from blog #1, so switch back to current blog.
+    if(is_multisite()) {
+            restore_current_blog();
+        }
+}*/
 
 wp_footer();
 

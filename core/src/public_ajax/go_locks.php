@@ -193,7 +193,7 @@ function go_until_lock($id, $user_id, $task_name, $custom_fields, $i, $k, $is_lo
 
         // stops execution if the start date and time has not passed yet
         if ($unix_now < $start_unix) {
-            $time_string = date('g:i A', $start_unix) . ' on ' . date('D, F j, Y', $start_unix);
+            $time_string = date('g:ia', $start_unix) . ' on ' . date('D, F j, Y', $start_unix);
             if (!$check_only) {
                 $this_lock = "<li class='go_error_red'>It is after {$time_string}.</li>";
 
@@ -239,7 +239,7 @@ function go_after_lock($id, $user_id, $task_name, $custom_fields, $i, $k, $is_lo
         // stops execution if the user is a non-admin and the start date and time has not
         // passed yet
         if ($unix_now > $start_unix) {
-            $time_string = date('g:i A', $start_unix) . ' on ' . date('D, F j, Y', $start_unix);
+            $time_string = date('g:ia', $start_unix) . ' on ' . date('D, F j, Y', $start_unix);
             if (!$check_only) {
                 $this_lock =  "<li class='go_error_red'>This " . $task_name . " was only available until {$time_string}.</li>";
                 $this_lock .= go_timezone_message($user_id);
@@ -723,17 +723,17 @@ function go_schedule_access($user_id, $custom_fields, $is_logged_in, $check_only
                 }
 
                 if (!empty ($dow_section)) {
-                    print_r(implode(" & ", $dow_section));
+                    $this_lock .= (implode(" & ", $dow_section));
                     //echo ' on ';
                 } else {
                     $this_lock .= 'All Classes';
                 }
                 if (!empty($dow_days)){
-                    $this_lock .= " on";
-                    print_r(implode(" & ", $dow_days));
+                    $this_lock .= " on ";
+                    $this_lock .= (implode(" & ", $dow_days));
                 }
                 $this_lock .= " @ ";
-                $this_lock .= date('g:iA', $dow_time);
+                $this_lock .= date('g:ia', $dow_time);
                 $this_lock .= " for " . $dow_minutes . " minutes.";
                 $this_lock .= "<br>";
                 $first = false;

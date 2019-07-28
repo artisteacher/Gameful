@@ -35,6 +35,9 @@ if ( !is_admin() ) {
             go_include_password_checker();
         }
     }
+    //else if($page_uri = 'login'){
+        //unset($_COOKIE['SESSnsl']);
+    //}
 }else if ( defined( 'DOING_AJAX' )) {
     //include_once('src/ajax.php');
 

@@ -1,23 +1,34 @@
 <?php
 /*
-Plugin Name: Game-On
-Plugin URI: http://maclab.guhsd.net/game-on
-Description: Gamification tools for teachers.
-Author: Valhalla Mac Lab
-Author URI: https://github.com/TheMacLab/game-on/blob/master/README.md
-Version: 5.04b
+Plugin Name: Gameful Pro
+Plugin URI: http://gameful.me
+Description: Gamification tools for teachers. Forked from the Game On Project.
+Author: Gameful.me
+Author URI: https://github.com/mcmick/Gameful
+Version: 5.01
 */
 
 
 //$go_debug = true;//set to true when coding
-$go_debug = true;
+
+if ($domain ==='gameondev') {
+    $is_gameful = false;
+    $go_debug = true;
+
+}else{
+    $go_debug = false;
+    $is_gameful = true;
+}
+
 global $go_debug;
+global $is_gameful;
 
 //stop the heartbeat when testing
 if ($go_debug){
-    add_action( 'init', 'stop_heartbeat', 1 );
-    function stop_heartbeat() {
-            wp_deregister_script('heartbeat');
+
+    add_action( 'init', 'go_stop_heartbeat', 1 );
+    function go_stop_heartbeat() {
+            //wp_deregister_script('heartbeat');
     }
 
     //if currently coding, set the ACF save point
@@ -33,6 +44,26 @@ if ($go_debug){
         }
 
     }
+
+
+}
+else{
+    function remove_acf_menu() {
+        remove_menu_page('edit.php?post_type=acf-field-group');
+    }
+    add_action( 'admin_menu', 'remove_acf_menu', 999);
+
+    function redirect_acf_admin(){
+        $user_id = get_current_user_id();
+        $super = is_super_admin( $user_id );
+        $request = (isset($_REQUEST['post_type'][0]) ?  $_REQUEST['post_type'][0] : null);
+        if (!$super && $request ==='acf-field-group'){
+            wp_redirect(admin_url());
+            exit;
+        }
+
+    }
+    add_action('admin_init', 'redirect_acf_admin');
 }
 
 $go_js_version = 5.04;
@@ -41,9 +72,9 @@ global $go_js_version;
 $go_css_version = 5.04;
 global $go_css_version;
 
-/**
- * INCLUDE DEPENDENCIES
- */
+//////
+ //INCLUDE DEPENDENCIES
+////////
 //ACF is loaded conditionally below
 //Include external js and css resources from cdns
 //can these be given local fallbacks
@@ -114,44 +145,47 @@ include_once('modules/user_blogs/includes.php');
 include_once('modules/term-order/includes.php'); //try to load only on admin pages
 
 
-/**
- * Plugin Activation Hooks
- */
+/////
+ // Plugin Activation Hooks
+ /////
 register_activation_hook( __FILE__, 'go_update_db_ms' );
 register_activation_hook( __FILE__, 'go_open_comments' );
-register_activation_hook( __FILE__, 'go_tsk_actv_activate' );
+//register_activation_hook( __FILE__, 'go_tsk_actv_activate' );
 //register_activation_hook( __FILE__, 'go_map_activate' );
 //register_activation_hook( __FILE__, 'go_reader_activate' );
 //register_activation_hook( __FILE__, 'go_store_activate' );
 register_activation_hook( __FILE__, 'go_media_access' );
 register_activation_hook( __FILE__, 'go_flush_rewrites' );
 
+
 register_deactivation_hook( __FILE__, 'flush_rewrite_rules' );
 
 
 
-/**
- * ALL PAGES & AJAX
- */
+
+
+/////////////////////
+ //ALL PAGES & AJAX
+///////////////////
 //create non-persistent cache group
 //This is used by the transients
 wp_cache_add_non_persistent_groups( 'go_single' );
 
 //User Data
-add_action( 'delete_user', 'go_user_delete' ); //this should change for Multisite
-add_action( 'user_register', 'go_user_registration' ); //this should change for Multisite
+add_action( 'delete_user', 'go_user_delete' ); //this should change for Multisite?
+//add_action( 'user_register', 'go_user_registration' ); //this should change for Multisite?
 
-/**
- * Miscellaneous Filters
- */
+/////////////////////////
+ // Miscellaneous Filters
+///////////////////////////
 // mitigating compatibility issues with Jetpack plugin by Automatic
 // (https://wordpress.org/plugins/jetpack/).
 add_filter( 'jetpack_enable_open_graph', '__return_false' );
 
 
-/**
- * Debugging Functions
- */
+////////////////////////
+ // Debugging Functions
+ ////////////////////////
 
 function go_write_log($log) {
     if (true === WP_DEBUG) {
@@ -175,6 +209,8 @@ function go_total_query_time(){
     }
     $total_time = $total_time;//set a breakpoint here to monitor query times.
 }
+
+
 
 //This is the code that puts the login modal on the frontend
 //code used
@@ -208,8 +244,38 @@ function go_login_session_expired() {
     }
 }
 add_action( 'wp_enqueue_scripts', 'go_login_session_expired' );
+
+
 // Makes sure the plugin is defined before trying to use it
 if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
     require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
 }
+
+function go_is_ms_active_network_wide(){
+    $myfile = plugin_basename(__FILE__);
+    $is_ms = is_plugin_active_for_network($myfile );
+    return $is_ms;
+}
+
+
+
+//https://wordpress.stackexchange.com/questions/137545/custom-login-iframe-doesnt-work
+remove_action( 'login_init', 'send_frame_options_header' );
+remove_action( 'admin_init', 'send_frame_options_header' );
+
+add_filter('wp_auth_check_same_domain', 'go_allow_same_orgin');
+function go_allow_same_orgin($same_domain){
+
+    return true;
+}
+
+//add_filter('login_url', 'go_login_url_filter');
+function go_login_url_filter($login_url, $redirect, $force_reauth){
+    $blog_id = get_current_blog_id();
+    $go_login_link = get_site_url(1, 'login');
+    $go_login_link = network_site_url ('signin?redirect_to='.$go_login_link.'?blog_id='.$blog_id);
+    return $go_login_link;
+}
+
+
 

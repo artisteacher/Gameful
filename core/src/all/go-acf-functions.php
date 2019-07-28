@@ -160,3 +160,61 @@ function go_top_terms( $args, $field, $post_id  ){
 }
 add_filter('acf/fields/taxonomy/query/key=field_5b017d76920ec', 'go_top_terms', 10, 3);
 
+
+
+add_filter('acf/load_value/key=field_5d34f488b13ff', 'go_load_sections', 10, 3);
+
+function go_load_sections($value, $post_id, $field){
+
+    $terms = go_get_terms_ordered('user_go_sections');
+    $value = array();
+    $i = 0;
+    foreach ($terms as $term){
+        $name = $term->name;
+        $term_id = $term->term_id;
+        $value[$i] = array('field_5d34f49cb1400'=>$name, 'field_5d35279fb1592'=>$term_id);
+        $i++;
+    }
+
+    return $value;
+}
+
+add_filter('acf/update_value/key=field_5d34f488b13ff', 'go_save_sections', 10, 3);
+function go_save_sections($value, $post_id, $field){
+    //global $go_section_order;
+   // if(empty($go_section_order)){
+        //$go_section_order = 1;
+    //}
+    $section_fields = $_REQUEST['acf']['field_5d34f488b13ff'];
+    $order = 0;
+    $terms = go_get_terms_ordered('user_go_sections');
+    $old_terms = array();
+    foreach ($terms as $term) {
+        $old_terms[] = $term->term_id;
+    }
+    $new_terms = array();
+    foreach ($section_fields as $section_field){
+            $section_name = $section_field['field_5d34f49cb1400'];
+            $section_id = $section_field['field_5d35279fb1592'];
+            $new_terms[]=$section_id;
+            $args = array(
+                'name' => $section_name,
+            );
+            if(empty($section_id)) {
+                $term_id = wp_insert_term($section_name, 'user_go_sections');
+            }else{
+                $term_id = wp_update_term($section_id, 'user_go_sections', $args);
+            }
+            $order++;
+            update_term_meta($term_id['term_id'], 'go_order', $order);
+
+    }
+
+    $deleted_terms = array_diff($old_terms, $new_terms);
+    foreach ($deleted_terms as $deleted_term){
+        wp_delete_term($deleted_term, 'user_go_sections');
+    }
+
+
+    return '';
+}

@@ -144,11 +144,30 @@ class acf_field_recaptcha extends acf_field {
         $site_key = $field['site_key'];
         $secret_key = $field['secret_key'];
 
+
+
         // Fall back on keys from settings.
         if (empty($site_key) || empty($secret_key)) {
             $site_key = $this->settings['site_key'];
             $secret_key = $this->settings['secret_key'];
         }
+
+        //ADDED FOR GAMEON
+        if (empty($site_key) || empty($secret_key)) {
+            if(is_multisite()) {
+                $main_site_id = get_network()->site_id;
+                switch_to_blog($main_site_id);
+            }
+            $settings = get_option('acf_recaptcha');
+            $site_key = $settings['site_key'];
+            $secret_key = $settings['secret_key'];
+            if(is_multisite()) {
+                restore_current_blog();
+            }
+        }
+        //END ADDED FOR GAMEON
+
+
 
         // If we don't have both keys, then show an error message.
         if (empty($site_key) || empty($secret_key)) {

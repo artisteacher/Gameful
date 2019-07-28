@@ -330,7 +330,7 @@ template {
 
 #go_login_center {
   display: none;
-  width: 350px;
+  width: 450px;
   margin: 0px auto 100px auto; }
   #go_login_center #go_login_container {
     margin-top: 20px;
@@ -341,6 +341,9 @@ template {
     background: #fff;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.13); }
     #go_login_center #go_login_container #user_login, #go_login_center #go_login_container #user_pass {
+      width: 100%; }
+    #go_login_center #go_login_container input.button,
+    #go_login_center #go_login_container button {
       width: 100%; }
   #go_login_center .login-submit {
     text-align: right; }

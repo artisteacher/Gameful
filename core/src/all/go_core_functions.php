@@ -113,8 +113,6 @@ function go_clone_post_new($is_template = false, $print = false){
     }
 }
 
-
-
 /**
  * Called by the ajax dataloaders.
  * @param $TIMESTAMP
@@ -243,8 +241,15 @@ function go_get_terms_ordered($taxonomy, $parent = '', $number = ''){
 
 function go_get_page_uri(){
     $request_uri = (isset($_SERVER['REQUEST_URI']) ?  $_SERVER['REQUEST_URI'] : null);//page currently being loaded
-    $details  = get_blog_details();
-    $path = $details -> path;
+    //
+    //
+    if(is_multisite()){
+        $details  = get_blog_details();
+        $path = $details -> path;
+    }else{
+        $path = '';
+    }
+
     $strip_path = str_replace($path, '', $request_uri);
     $strip_slashes = str_replace('/','',$strip_path);
     $page_uri = strtok($strip_slashes,'?');
@@ -252,8 +257,4 @@ function go_get_page_uri(){
     return $page_uri;
 }
 
-function go_is_ms_active_network_wide(){
-    $myfile = plugin_basename(__FILE__);
-    $is_ms = is_plugin_active_for_network($myfile );
-    return $is_ms;
-}
+

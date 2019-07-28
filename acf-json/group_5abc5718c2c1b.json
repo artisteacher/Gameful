@@ -3,26 +3,6 @@
     "title": "Game Set-up Options",
     "fields": [
         {
-            "key": "field_5b79de396cc4b",
-            "label": "Admin User For Notifications",
-            "name": "go_admin_user_notifications",
-            "type": "user",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "role": [
-                "administrator"
-            ],
-            "allow_null": 0,
-            "multiple": 1,
-            "return_format": "id"
-        },
-        {
             "key": "field_5abc7eb2f480e",
             "label": "Feature Setup",
             "name": "",
@@ -797,6 +777,50 @@
             "append": ""
         },
         {
+            "key": "field_5afe0c56ad661",
+            "label": "Show Search Box",
+            "name": "go_search_toggle",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui": 1,
+            "ui_on_text": "Yes",
+            "ui_off_text": "No"
+        },
+        {
+            "key": "field_5abc9266b16aa",
+            "label": "Guest Access Global Setting",
+            "name": "go_guest_global",
+            "type": "radio",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "blocked": "Blocked",
+                "regular": "Regular (Locks Apply: Date and Map Order Locks Only)",
+                "open": "Open (no locks for visitors)"
+            },
+            "allow_null": 0,
+            "other_choice": 0,
+            "save_other_choice": 0,
+            "default_value": "regular",
+            "layout": "horizontal",
+            "return_format": "value"
+        },
+        {
             "key": "field_5adc010641915",
             "label": "Loot Options",
             "name": "",
@@ -812,25 +836,6 @@
             "open": 0,
             "multi_expand": 0,
             "endpoint": 0
-        },
-        {
-            "key": "field_5abc860d8e89d",
-            "label": "Name",
-            "name": "go_loot_name",
-            "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "Loot",
-            "placeholder": "Loot",
-            "prepend": "",
-            "append": "",
-            "maxlength": ""
         },
         {
             "key": "field_5abc85383b996",
@@ -919,218 +924,6 @@
                     "prepend": "",
                     "append": "",
                     "maxlength": ""
-                },
-                {
-                    "key": "field_5abc8d02510e6",
-                    "label": "Levels Name",
-                    "name": "levels_name",
-                    "type": "group",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": [
-                        [
-                            {
-                                "field": "field_5ad66d80f426c",
-                                "operator": "==",
-                                "value": "1"
-                            }
-                        ]
-                    ],
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "layout": "table",
-                    "sub_fields": [
-                        {
-                            "key": "field_5abc84ad427ee",
-                            "label": "Singular",
-                            "name": "singular",
-                            "type": "text",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": "Level",
-                            "placeholder": "Level",
-                            "prepend": "",
-                            "append": "",
-                            "maxlength": ""
-                        },
-                        {
-                            "key": "field_5abc84ad427ef",
-                            "label": "Plural",
-                            "name": "plural",
-                            "type": "text",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": "Levels",
-                            "placeholder": "Levels",
-                            "prepend": "",
-                            "append": "",
-                            "maxlength": ""
-                        }
-                    ]
-                },
-                {
-                    "key": "field_5abdb9ce10c45",
-                    "label": "Levels",
-                    "name": "levels",
-                    "type": "group",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": [
-                        [
-                            {
-                                "field": "field_5ad66d80f426c",
-                                "operator": "==",
-                                "value": "1"
-                            }
-                        ]
-                    ],
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": "go_levels"
-                    },
-                    "layout": "block",
-                    "sub_fields": [
-                        {
-                            "key": "field_5b37cc4882dd8",
-                            "label": "Growth Rate",
-                            "name": "growth",
-                            "type": "number",
-                            "instructions": "This will auto increment new rows added by this multiplier. The high the multiplier the more difficult the high levels will be obtain.",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": "go_levels_growth"
-                            },
-                            "default_value": 5,
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": "",
-                            "min": 0,
-                            "max": 10,
-                            "step": 1
-                        },
-                        {
-                            "key": "field_5c9db9e80429d",
-                            "label": "First Level Up",
-                            "name": "go_first_level_up",
-                            "type": "number",
-                            "instructions": "This is used to calculate new rows below.",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": "go_first_up"
-                            },
-                            "default_value": 50,
-                            "placeholder": 50,
-                            "prepend": "",
-                            "append": "XP",
-                            "min": 1,
-                            "max": 1000,
-                            "step": 1
-                        },
-                        {
-                            "key": "field_5cbe9d1cb6698",
-                            "label": "Max Amount to Level",
-                            "name": "max",
-                            "type": "number",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": "go_levels_max"
-                            },
-                            "default_value": 1000,
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": "",
-                            "min": 0,
-                            "max": "",
-                            "step": ""
-                        },
-                        {
-                            "key": "field_5abc934260c5b",
-                            "label": "Levels",
-                            "name": "level",
-                            "type": "repeater",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "acf-hide-label go_levels_repeaters",
-                                "id": "go_levels_repeater"
-                            },
-                            "collapsed": "",
-                            "min": 1,
-                            "max": 0,
-                            "layout": "table",
-                            "button_label": "",
-                            "sub_fields": [
-                                {
-                                    "key": "field_5abc94eb8737f",
-                                    "label": "Experience (XP)",
-                                    "name": "xp",
-                                    "type": "number",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": 0,
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "go_levels_repeater_numbers",
-                                        "id": ""
-                                    },
-                                    "default_value": 0,
-                                    "placeholder": "",
-                                    "prepend": "",
-                                    "append": "",
-                                    "min": 0,
-                                    "max": "",
-                                    "step": ""
-                                },
-                                {
-                                    "key": "field_5abc934f60c5c",
-                                    "label": "Rank",
-                                    "name": "name",
-                                    "type": "text",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": 0,
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "go_levels_repeater_names",
-                                        "id": ""
-                                    },
-                                    "default_value": "",
-                                    "placeholder": "optional",
-                                    "prepend": "",
-                                    "append": "",
-                                    "maxlength": 50
-                                }
-                            ]
-                        }
-                    ]
                 }
             ]
         },
@@ -1190,8 +983,8 @@
                         "id": ""
                     },
                     "choices": {
-                        "currency": "Currency ($)",
-                        "coins": "Coins (Gold, Silver, and Copper)"
+                        "currency": "Currency (e.g., 123.45 Credits)",
+                        "coins": "Coins (123 Gold, 4 Silver, 5 Copper)"
                     },
                     "allow_null": 0,
                     "other_choice": 0,
@@ -1213,6 +1006,11 @@
                                 "field": "field_5ad673ebab9b1",
                                 "operator": "==",
                                 "value": "1"
+                            },
+                            {
+                                "field": "field_5cb92fed8af66",
+                                "operator": "==",
+                                "value": "currency"
                             }
                         ]
                     ],
@@ -1237,9 +1035,9 @@
                     "conditional_logic": [
                         [
                             {
-                                "field": "field_5ad673ebab9b1",
+                                "field": "field_5cb92fed8af66",
                                 "operator": "==",
-                                "value": "1"
+                                "value": "currency"
                             }
                         ]
                     ],
@@ -1544,7 +1342,7 @@
                     "label": "Bankruptcy Penalty",
                     "name": "bankruptcy_penalty",
                     "type": "number",
-                    "instructions": "Health lost if a player does not have enough gold to cover an undo or penalty (they spent the gold received already).",
+                    "instructions": "Reputation lost if a player does not have enough gold to cover an undo or penalty (they spent the gold received already).",
                     "required": 0,
                     "conditional_logic": [
                         [
@@ -1621,6 +1419,250 @@
             ]
         },
         {
+            "key": "field_5d34aec73cae2",
+            "label": "Levels",
+            "name": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 0,
+            "multi_expand": 0,
+            "endpoint": 0
+        },
+        {
+            "key": "field_5abc8d02510e6",
+            "label": "Levels Name",
+            "name": "go_loot_xp_levels_name",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5ad66d80f426c",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "sub_fields": [
+                {
+                    "key": "field_5abc84ad427ee",
+                    "label": "Singular",
+                    "name": "singular",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "Level",
+                    "placeholder": "Level",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                },
+                {
+                    "key": "field_5abc84ad427ef",
+                    "label": "Plural",
+                    "name": "plural",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "Levels",
+                    "placeholder": "Levels",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                }
+            ]
+        },
+        {
+            "key": "field_5abdb9ce10c45",
+            "label": "Levels",
+            "name": "go_loot_xp_levels",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5ad66d80f426c",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": "go_levels"
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_5b37cc4882dd8",
+                    "label": "Growth Rate",
+                    "name": "growth",
+                    "type": "number",
+                    "instructions": "This will auto increment new rows added by this multiplier. The higher the multiplier the more difficult the high levels will be obtain.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": "go_levels_growth"
+                    },
+                    "default_value": 5,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "min": 0,
+                    "max": 10,
+                    "step": 1
+                },
+                {
+                    "key": "field_5c9db9e80429d",
+                    "label": "First Level Up",
+                    "name": "go_first_level_up",
+                    "type": "number",
+                    "instructions": "This is used to calculate new rows below.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": "go_first_up"
+                    },
+                    "default_value": 50,
+                    "placeholder": 50,
+                    "prepend": "",
+                    "append": "XP",
+                    "min": 1,
+                    "max": 1000,
+                    "step": 1
+                },
+                {
+                    "key": "field_5cbe9d1cb6698",
+                    "label": "Max Amount to Level Up",
+                    "name": "max",
+                    "type": "number",
+                    "instructions": "Limits the maximum amount between levels when adding new levels.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": "go_levels_max"
+                    },
+                    "default_value": 1000,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "min": 0,
+                    "max": "",
+                    "step": ""
+                },
+                {
+                    "key": "field_5abc934260c5b",
+                    "label": "Levels",
+                    "name": "level",
+                    "type": "repeater",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "acf-hide-label go_levels_repeaters",
+                        "id": "go_levels_repeater"
+                    },
+                    "collapsed": "",
+                    "min": 1,
+                    "max": 0,
+                    "layout": "table",
+                    "button_label": "",
+                    "sub_fields": [
+                        {
+                            "key": "field_5abc94eb8737f",
+                            "label": "Experience (XP)",
+                            "name": "xp",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "go_levels_repeater_numbers",
+                                "id": ""
+                            },
+                            "default_value": 0,
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "min": 0,
+                            "max": "",
+                            "step": ""
+                        },
+                        {
+                            "key": "field_5abc934f60c5c",
+                            "label": "Rank",
+                            "name": "name",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "go_levels_repeater_names",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "optional",
+                            "prepend": "",
+                            "append": "",
+                            "maxlength": 50
+                        },
+                        {
+                            "key": "field_5d34b02ec616c",
+                            "label": "Award Badge",
+                            "name": "award_badge",
+                            "type": "level2_taxonomy",
+                            "instructions": "Optionally award badge on reaching this level.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "taxonomy": "go_badges"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "key": "field_5abc7f48f4811",
             "label": "User Information",
             "name": "",
@@ -1638,10 +1680,10 @@
             "endpoint": 0
         },
         {
-            "key": "field_5b52b4261ff75",
-            "label": "Sections and Groups",
-            "name": "",
-            "type": "message",
+            "key": "field_5d34f488b13ff",
+            "label": "Sections",
+            "name": "sections",
+            "type": "repeater",
             "instructions": "",
             "required": 0,
             "conditional_logic": 0,
@@ -1650,28 +1692,53 @@
                 "class": "",
                 "id": ""
             },
-            "message": "",
-            "new_lines": "",
-            "esc_html": 0
-        },
-        {
-            "key": "field_5b61435c5a17e",
-            "label": "User Blogs",
-            "name": "go_blogs_toggle",
-            "type": "true_false",
-            "instructions": "Show blogs link on Stats Panel and Clipboard.",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "message": "",
-            "default_value": 1,
-            "ui": 1,
-            "ui_on_text": "",
-            "ui_off_text": ""
+            "collapsed": "",
+            "min": 0,
+            "max": 0,
+            "layout": "table",
+            "button_label": "",
+            "sub_fields": [
+                {
+                    "key": "field_5d34f49cb1400",
+                    "label": "Section Name",
+                    "name": "section_name",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "80",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                },
+                {
+                    "key": "field_5d35279fb1592",
+                    "label": "term id",
+                    "name": "term_id",
+                    "type": "number",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "20",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "min": "",
+                    "max": "",
+                    "step": ""
+                }
+            ]
         },
         {
             "key": "field_5b495af34ba69",
@@ -1731,11 +1798,11 @@
             ]
         },
         {
-            "key": "field_5abc961f959a6",
-            "label": "Use Full Names",
-            "name": "go_full-names_toggle",
+            "key": "field_5b61435c5a17e",
+            "label": "User Blogs",
+            "name": "go_blogs_toggle",
             "type": "true_false",
-            "instructions": "",
+            "instructions": "Show blogs link on Stats Panel and Clipboard.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1744,17 +1811,42 @@
                 "id": ""
             },
             "message": "",
-            "default_value": 0,
-            "ui": 0,
+            "default_value": 1,
+            "ui": 1,
             "ui_on_text": "",
             "ui_off_text": ""
+        },
+        {
+            "key": "field_5abc961f959a6",
+            "label": "Real Name Filter",
+            "name": "go_full-names_toggle",
+            "type": "radio",
+            "instructions": "This controls how users see each others names. Admin always see the full name on the stats panel and leaderboard.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "false": "Use Display Name Only",
+                "first": "First Name Only",
+                "full": "Full Name"
+            },
+            "allow_null": 0,
+            "other_choice": 0,
+            "default_value": "",
+            "layout": "vertical",
+            "return_format": "value",
+            "save_other_choice": 0
         },
         {
             "key": "field_5cfc749f28626",
             "label": "About Me Quest",
             "name": "about_me",
             "type": "group",
-            "instructions": "Set a quest where students answers will be output on a tab in the stats panel.",
+            "instructions": "Set a quest where students answers will be output on a tab in the stats panel. This is like having students fill out an information card that you have quick access to.  You can change this card out throughout the year here.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1841,219 +1933,6 @@
                     "ui_off_text": "Hide"
                 }
             ]
-        },
-        {
-            "key": "field_5abc7f77f4812",
-            "label": "Video and Images",
-            "name": "",
-            "type": "accordion",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "open": 0,
-            "multi_expand": 0,
-            "endpoint": 0
-        },
-        {
-            "key": "field_5abda746ad339",
-            "label": "Video",
-            "name": "go_video",
-            "type": "group",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "layout": "block",
-            "sub_fields": [
-                {
-                    "key": "field_5abda618c713a",
-                    "label": "Video Width",
-                    "name": "width",
-                    "type": "group",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "layout": "table",
-                    "sub_fields": [
-                        {
-                            "key": "field_5abda59ec7138",
-                            "label": "Measure",
-                            "name": "unit",
-                            "type": "radio",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "choices": {
-                                "px": "Pixels",
-                                "%": "Percent"
-                            },
-                            "allow_null": 0,
-                            "other_choice": 0,
-                            "save_other_choice": 0,
-                            "default_value": "",
-                            "layout": "vertical",
-                            "return_format": "value"
-                        },
-                        {
-                            "key": "field_5abda5d9c7139",
-                            "label": "Percent",
-                            "name": "percent",
-                            "type": "number",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": [
-                                [
-                                    {
-                                        "field": "field_5abda59ec7138",
-                                        "operator": "==",
-                                        "value": "%"
-                                    }
-                                ]
-                            ],
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": 100,
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": "%",
-                            "min": 20,
-                            "max": 100,
-                            "step": ""
-                        },
-                        {
-                            "key": "field_5abda683c713b",
-                            "label": "Pixels",
-                            "name": "pixels",
-                            "type": "number",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": [
-                                [
-                                    {
-                                        "field": "field_5abda59ec7138",
-                                        "operator": "==",
-                                        "value": "px"
-                                    }
-                                ]
-                            ],
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": 500,
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": "px",
-                            "min": 100,
-                            "max": 1200,
-                            "step": ""
-                        }
-                    ]
-                },
-                {
-                    "key": "field_5abda705ad338",
-                    "label": "Video Lightbox",
-                    "name": "lightbox",
-                    "type": "true_false",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "message": "",
-                    "default_value": 1,
-                    "ui": 1,
-                    "ui_on_text": "On",
-                    "ui_off_text": "Off"
-                }
-            ]
-        },
-        {
-            "key": "field_5abc95db959a4",
-            "label": "Other",
-            "name": "",
-            "type": "accordion",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "open": 0,
-            "multi_expand": 0,
-            "endpoint": 0
-        },
-        {
-            "key": "field_5abc9266b16aa",
-            "label": "Guest Access Global Setting",
-            "name": "go_guest_global",
-            "type": "radio",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "choices": {
-                "blocked": "Blocked",
-                "regular": "Regular (Locks Apply: Date and Map Order Locks Only)",
-                "open": "Open (no locks for visitors)"
-            },
-            "allow_null": 0,
-            "other_choice": 0,
-            "save_other_choice": 0,
-            "default_value": "regular",
-            "layout": "horizontal",
-            "return_format": "value"
-        },
-        {
-            "key": "field_5afe0c56ad661",
-            "label": "Show Search Box",
-            "name": "go_search_toggle",
-            "type": "true_false",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "message": "",
-            "default_value": 0,
-            "ui": 1,
-            "ui_on_text": "Yes",
-            "ui_off_text": "No"
         }
     ],
     "location": [
@@ -2074,5 +1953,5 @@
     "active": 1,
     "description": "",
     "recaptcha": 0,
-    "modified": 1562480897
+    "modified": 1563821235
 }

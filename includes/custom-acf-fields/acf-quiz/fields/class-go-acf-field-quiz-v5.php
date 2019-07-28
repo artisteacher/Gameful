@@ -523,15 +523,15 @@ class go_acf_field_quiz extends acf_field {
     function update_value( $value, $post_id, $field ) {
         //$val_uns = unserialize($value);
         //Get the order of the quizes on the page, even if stages are reordered or new stages are added.
-        $array = $_POST['acf']['field_5ac134fe12f51'];
-        $array = array_keys($array);
+        //$array = $_POST['acf']['field_5ac134fe12f51'];
+        //$array = array_keys($array);
         //$i = array_search('blah', array_keys($array));
         $stage_quiz_num = $field['name'];
         $ttc = trim($stage_quiz_num,"go_stages__quiz");
-        $ttc = $array[$ttc];
-        if (is_integer($ttc)){
-            $ttc =$ttc + 1;
-        }
+        //$ttc = $array[$ttc];
+
+            $ttc =intval($ttc) + 1;
+
 
         $question_temp 		= ( ! empty( $_POST["go_test_field_input_question_{$ttc}"] )	? $_POST["go_test_field_input_question_{$ttc}"] : null );
 

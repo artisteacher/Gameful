@@ -15,8 +15,6 @@ jQuery( window ).resize(function() {
 */
 
 if (typeof (go_is_map) !== 'undefined') {
-
-
     jQuery( document ).ready( function() {
         go_setup_map();
     });

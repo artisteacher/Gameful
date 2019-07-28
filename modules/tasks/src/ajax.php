@@ -189,11 +189,11 @@ function go_task_change_stage() {
 
             $task_badge_id = (isset($custom_fields['go_badges'][0]) ?  $custom_fields['go_badges'][0] : null);//badge awarded on this task
             $term_badge_ids = go_badges_task_chains($post_id, $user_id, $custom_fields);//badges awarded on this term
-            if (!empty($term_badge_ids) && is_numeric($task_badge_id)){//combine the term and task badges before adding them
+            if (!empty($term_badge_ids) && (!empty($task_badge_id) && is_numeric($task_badge_id))){//combine the term and task badges before adding them
                 $term_badge_ids[] = intval($task_badge_id);
                 $badge_ids = $term_badge_ids;
             }
-            else if (is_numeric($task_badge_id)){
+            else if (is_numeric($task_badge_id)  && !empty($task_badge_id)){
                 $badge_ids[] = $task_badge_id;
             }
         }
@@ -227,7 +227,9 @@ function go_task_change_stage() {
     else if ($button_type == 'abandon') {
         //remove entry loot
         //$redirect_url = go_get_user_redirect($user_id);
-        $redirect_url = $_SERVER['HTTP_REFERER'];
+        //$redirect_url = $_SERVER['HTTP_REFERER'];
+        $page = get_option('options_go_locations_map_map_link', 'map');
+        $redirect_url = home_url($page);
 
         go_update_stage_table ($user_id, $post_id, $custom_fields, $status, null, false, 'abandon', null, null, null );
         if($blog_post_id) {

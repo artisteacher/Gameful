@@ -42,7 +42,7 @@ function go_task_shortcode($atts, $content = null ) {
     // the current user's id
     $user_id = get_current_user_id();
     //$is_logged_in = is_user_member_of_blog( $user_id );
-    $is_logged_in = ! empty( $user_id ) && is_user_member_of_blog( ) ? true : false;
+    $is_logged_in = ! empty( $user_id ) && (is_user_member_of_blog( ) || is_super_admin())? true : false;
     //$is_logged_in = ! empty( $user_id ) && $user_id > 0 ? true : false;
     $go_task_table_name = "{$wpdb->prefix}go_tasks";
     $is_unlocked_type = go_master_unlocked($user_id, $post_id);

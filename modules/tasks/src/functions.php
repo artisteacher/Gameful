@@ -307,20 +307,6 @@ function go_new_task_from_template($admin_bar=true){
 	}
 }
 
-//remove add new button on tasks edit page becuase it has custom button
-add_action('admin_menu', 'go_disable_new_tasks');
-function go_disable_new_tasks() {
-// Hide sidebar link
-	global $submenu;
-	unset($submenu['edit.php?post_type=tasks'][10]);
-
-// Hide link on listing page
-	if (isset($_GET['post_type']) && $_GET['post_type'] == 'tasks') {
-		echo '<style type="text/css">
-    .page-title-action { display:none; }
-    </style>';
-	}
-}
 
 
 

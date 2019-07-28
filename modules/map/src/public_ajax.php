@@ -8,6 +8,18 @@ function go_make_map() {
     if ( ! is_admin() ) {
         $user_id = get_current_user_id();
         $last_map_id = get_user_option('go_last_map', $user_id);
+
+        $font = get_option('options_map_font');
+        $font_size = $font['font_size'];
+        $font_family = $font['font_family'];
+        $font_weight = $font['font_weight'];
+        $font_style = $font['font_style'];
+
+        $get_font = $font_family . ":" . $font_weight .$font_style;
+
+        wp_enqueue_style( 'acft-gf', 'https://fonts.googleapis.com/css?family='.$get_font );
+
+
         if(!$last_map_id){
             $last_map_id = get_option('options_go_locations_map_default', '');
         }
@@ -27,7 +39,8 @@ function go_make_map() {
                 $last_map_id = null;
             }
         }
-        echo "<div id='go_map_container' style='padding:10px 30px; margin: 30px 5%; background-color: white;'>";
+
+        echo "<div id='go_map_container' style='padding:10px 30px; margin: 30px 5%; background-color: white; font-family: $font_family; font-style: $font_style; font-weight: $font_weight; font-size: $font_size"."px;'>";
         $map_title = get_option( 'options_go_locations_map_title');
         echo "<h1 style='padding:0px 30px 30px 0px;'>{$map_title}</h1>";
         go_make_map_dropdown();
@@ -59,6 +72,7 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
         <?php
     global $wpdb;
     //$go_loot_table_name = "{$wpdb->prefix}go_loot";
+
     $go_task_table_name = "{$wpdb->prefix}go_tasks";
     //wp_nonce_field( 'go_update_last_map');
     $last_map_object = get_term_by( 'id' , $last_map_id, 'task_chains');//Query 1 - get the map
@@ -145,7 +159,7 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
                         $task_name = get_option('options_go_tasks_name_singular'); //Q option
                     }
 
-                    echo "<br><span style='padding-top: 10px; font-size: .8em;'>Complete at least $pod_min $task_name. </span>";
+                    echo "<br><span style='padding-top: 10px; font-size: .9em;'>Complete at least $pod_min $task_name. </span>";
                 }
             }
 
@@ -281,9 +295,9 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
 
 
                     if ($task_links === true) {
-                        echo "<li class='$task_color $optional $class'><a href='$task_link'><span style='font-size: .8em;'>$bonus_task $task_name <br>$unlock_message</span>";
+                        echo "<li class='$task_color $optional $class'><a href='$task_link'><span style='font-size: .9em;'>$bonus_task $task_name <br>$unlock_message</span>";
                     }else{
-                        echo "<li class='$task_color $optional $class'><a href='javascript:;' class='go_blog_user_task' data-UserId='".$user_id."' onclick='go_blog_user_task(".$user_id.", ".$post_id.");'><span style='font-size: .8em;'>$bonus_task $task_name <br>$unlock_message</span>";
+                        echo "<li class='$task_color $optional $class'><a href='javascript:;' class='go_blog_user_task' data-UserId='".$user_id."' onclick='go_blog_user_task(".$user_id.", ".$post_id.");'><span style='font-size: .9em;'>$bonus_task $task_name <br>$unlock_message</span>";
                         //echo "<li class='$task_color $optional '><a href='$task_link'><span style='font-size: .8em;'>$bonus_task $task_name <br>$unlock_message</span>";
                         }
                     //<a href="javascript:;" class="go_blog_user_task" data-UserId="'.$user_id.'" onclick="go_blog_user_task('.$user_id.', '.$post_id.');">
@@ -339,7 +353,7 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
                         $progress_bar = '<div class="go_bonus_progresss_bar_position"></div><div class="go_bonus_progresss_bar_container" >'.'<div class="go_bonus_progress_bar" '.
                             'style="width: '.$percentage.'%;">'.
                             '</div>'.
-                            '<div style="position: absolute; width: 100%; height: 100%; font-size: .7em; line-height: initial;" class="bonus_progress">Bonus: '.
+                            '<div style="position: absolute; width: 100%; height: 100%; font-size: .75em; line-height: initial;" class="bonus_progress">Bonus: '.
                             $bonus_status . ' / ' . $repeat_max .'</div>'.
                             '</div>';
                         echo $progress_bar;

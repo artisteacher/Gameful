@@ -206,6 +206,9 @@ ul .row-actions {
 .acf-accordion-title {
   background: lightblue !important; }
 
+[data-key="field_5d35279fb1592"] {
+  display: none; }
+
 .acf-hide-label .acf-label {
   display: none; }
 

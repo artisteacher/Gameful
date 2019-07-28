@@ -3,6 +3,23 @@
     "title": "Appearance",
     "fields": [
         {
+            "key": "field_5d34905dcda87",
+            "label": "User Bar",
+            "name": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 0,
+            "multi_expand": 0,
+            "endpoint": 0
+        },
+        {
             "key": "field_5cdd9285d5bf7",
             "label": "User Bar",
             "name": "go_user_bar",
@@ -78,6 +95,208 @@
                     "default_value": "#CCCCCC"
                 }
             ]
+        },
+        {
+            "key": "field_5d349078cda88",
+            "label": "Map",
+            "name": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 0,
+            "multi_expand": 0,
+            "endpoint": 0
+        },
+        {
+            "key": "field_5d33f68998ddc",
+            "label": "Font",
+            "name": "map_font",
+            "type": "Typography",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "display_properties": [
+                "font_size",
+                "font_family",
+                "font_weight",
+                "font_style"
+            ],
+            "required_properties": "",
+            "font_size": 17,
+            "font_family": "Muli",
+            "font_weight": 400,
+            "font_style": "normal",
+            "font_variant": "normal",
+            "font_stretch": "normal",
+            "line_height": "",
+            "letter_spacing": 0,
+            "text_align": "left",
+            "text_color": "#000",
+            "text_decoration": "none",
+            "text_transform": "none"
+        },
+        {
+            "key": "field_5abc7f77f4812",
+            "label": "Video",
+            "name": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 0,
+            "multi_expand": 0,
+            "endpoint": 0
+        },
+        {
+            "key": "field_5abda746ad339",
+            "label": "Video",
+            "name": "go_video",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_5abda618c713a",
+                    "label": "Video Width",
+                    "name": "width",
+                    "type": "group",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "table",
+                    "sub_fields": [
+                        {
+                            "key": "field_5abda59ec7138",
+                            "label": "Measure",
+                            "name": "unit",
+                            "type": "radio",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "px": "Pixels",
+                                "%": "Percent"
+                            },
+                            "allow_null": 0,
+                            "other_choice": 0,
+                            "save_other_choice": 0,
+                            "default_value": "",
+                            "layout": "vertical",
+                            "return_format": "value"
+                        },
+                        {
+                            "key": "field_5abda5d9c7139",
+                            "label": "Percent",
+                            "name": "percent",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_5abda59ec7138",
+                                        "operator": "==",
+                                        "value": "%"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": 100,
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "%",
+                            "min": 20,
+                            "max": 100,
+                            "step": ""
+                        },
+                        {
+                            "key": "field_5abda683c713b",
+                            "label": "Pixels",
+                            "name": "pixels",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_5abda59ec7138",
+                                        "operator": "==",
+                                        "value": "px"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": 500,
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "px",
+                            "min": 100,
+                            "max": 1200,
+                            "step": ""
+                        }
+                    ]
+                },
+                {
+                    "key": "field_5abda705ad338",
+                    "label": "Video Lightbox",
+                    "name": "lightbox",
+                    "type": "true_false",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 1,
+                    "ui": 1,
+                    "ui_on_text": "On",
+                    "ui_off_text": "Off"
+                }
+            ]
         }
     ],
     "location": [
@@ -97,5 +316,6 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1560037890
+    "recaptcha": 0,
+    "modified": 1563729641
 }

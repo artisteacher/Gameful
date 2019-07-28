@@ -78,11 +78,15 @@ function go_stats_header($user_id, $show_stats_link = true, $show_internal_links
 
                 <div class='go_stats_user_info'>
                     <?php
-                    if ($full_name_toggle || $is_admin){
-                        echo "<h2>{$user_fullname}</h2>{$user_display_name}<br>";
-                    }else{
-                        echo "<h2>{$user_display_name}</h2>";
+                    echo "<h2>{$user_display_name}</h2>";
+
+                    if ($full_name_toggle == 'full' || $is_admin){
+                        echo "<h3>{$user_fullname}</h3><br>";
+                    }else if ($full_name_toggle == 'first'){
+                        echo "<h3>{$user_data->first_name}</h3><br>";
                     }
+
+
                     go_user_links($user_id, $show_stats_link, $show_internal_links, $show_blog_link);
                     ?>
 

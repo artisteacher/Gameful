@@ -157,7 +157,7 @@ add_shortcode ( 'go_latest_post', 'go_latest_post_url_shortcode' );
 
 //Makes content within tags only visible to people who aren't logged in
 function go_visitor_only_content_function( $atts, $content = null ) {
-	if ( is_user_member_of_blog() ) {
+	if ( is_user_member_of_blog() || go_user_is_admin() ) {
     	echo '';
 	} else {
     	return '<div id="visitor-only-content">'.do_shortcode( $content ).'</div>';
@@ -168,7 +168,7 @@ add_shortcode ( 'go_visitor_only_content', 'go_visitor_only_content_function' );
 
 //Makes content within tags visible to only people who are logged in  
 function go_user_only_content_function( $atts, $content = null ) {
-	if ( is_user_member_of_blog() ) {
+	if ( is_user_member_of_blog() || go_user_is_admin() ) {
     	return '<div id="user-only-content">'.do_shortcode( $content).'</div>';
 	} else {
     	return '';
@@ -179,7 +179,7 @@ add_shortcode ( 'go_user_only_content','go_user_only_content_function' );
 
 //Makes content within tags visible to admins only
 function go_admin_only_content_function( $atts, $content = null ) {
-	if ( current_user_can( 'manage_options' ) ) {
+	if ( current_user_can( 'manage_options' ) || go_user_is_admin() ) {
 		return '<div id="admin-only-content" style="color:red"> <i>' .do_shortcode( $content). '</i> </div>';
 	} else {
 		return '';

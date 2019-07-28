@@ -2,11 +2,111 @@ jQuery(document).ready(function(){
     //add on click
     //jQuery('#go_tool_update').one("click", function() {go_update_go_ajax();});
     //jQuery('#go_tool_update_no_loot').one("click", function() {go_update_go_ajax_no_task_loot();});
-    jQuery('#go_reset_all_users').one("click", function() {go_reset_all_users_dialog();});
-    //jQuery('#go_tool_update_v5').one("click", function() {go_update_go_ajax_v5_check();});
+    if (typeof (go_is_tools) !== 'undefined') {
+        console.log("tools page loaded");
+        jQuery('#go_reset_all_users').one("click", function () {
+            go_reset_all_users_dialog();
+        });
+        jQuery('#go_export_game').one("click", function () {
+            go_export_wp();
+        });
+        //jQuery('#go_tool_update_v5').one("click", function() {go_update_go_ajax_v5_check();});
+    }
 
 
 });
+
+function go_export_wp (){
+    console.log('go_export_wp');
+    //var nonce = GO_ADMIN_PAGE_DATA.nonces.go_reset_all_users;
+       jQuery.ajax({
+            type: 'GET',
+            url: MyAjax.ajaxurl,
+            data:{
+                action: 'go_download_game_data'
+            },
+            success: function (data) {
+                console.log("success")
+                return data;
+            }
+        })
+}
+
+function go_reset_all_users_dialog (){
+
+    swal.fire({
+        title: "Reset User Game Data",
+        text: "Are you sure? This can't be undone!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Reset All User Game Data',
+        cancelButtonText: 'Cancel',
+        reverseButtons: true,
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+        },
+    })
+        .then((result) => {
+            if (result.value) {
+                go_reset_all_users ();
+
+            } else {
+                swal.fire({
+                        text: "Your user data is safe.",
+                        title: "No action taken."
+                    }
+                );
+                jQuery('#go_reset_all_users').one("click", function() {go_reset_all_users_dialog();});
+
+
+
+            }
+        });
+
+}
+
+
+
+function go_reset_all_users (){
+    var nonce = GO_ADMIN_PAGE_DATA.nonces.go_reset_all_users;
+    jQuery.ajax({
+        type: 'post',
+        url: MyAjax.ajaxurl,
+        data:{
+            _ajax_nonce: nonce,
+            action: 'go_reset_all_users'
+        },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
+        success: function( res ) {
+            if (res = 'reset') {
+                swal.fire("Success", "All user game data was reset.", "success");
+                jQuery('#go_reset_all_users').one("click", function () {
+                    go_reset_all_users_dialog();
+                });
+            }
+            else{
+                swal.fire("Error", "There was an error. Please refresh the page and try again. No data was changed.", "error");
+
+            }
+
+        }
+    });
+}
+
+
+
+
+
+
 
 /*
 function go_update_go_ajax_v5_check (){
@@ -143,72 +243,3 @@ function go_update_go_ajax_no_task_loot (){
     });
 }
 */
-
-function go_reset_all_users_dialog (){
-
-    swal.fire({
-        title: "Reset User Game Data",
-        text: "Are you sure? This can't be undone!",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonText: 'Reset All User Game Data',
-        cancelButtonText: 'Cancel',
-        reverseButtons: true,
-        customClass: {
-            confirmButton: 'btn btn-success',
-            cancelButton: 'btn btn-danger'
-        },
-    })
-    .then((result) => {
-        if (result.value) {
-            go_reset_all_users ();
-
-        } else {
-            swal.fire({
-                    text: "Your user data is safe.",
-                    title: "No action taken."
-                }
-            );
-            jQuery('#go_reset_all_users').one("click", function() {go_reset_all_users_dialog();});
-
-
-
-        }
-    });
-    
-}
-
-function go_reset_all_users (){
-    var nonce = GO_ADMIN_PAGE_DATA.nonces.go_reset_all_users;
-    jQuery.ajax({
-        type: 'post',
-        url: MyAjax.ajaxurl,
-        data:{
-            _ajax_nonce: nonce,
-            action: 'go_reset_all_users'
-        },
-        /**
-         * A function to be called if the request fails.
-         * Assumes they are not logged in and shows the login message in lightbox
-         */
-        error: function(jqXHR, textStatus, errorThrown) {
-            if (jqXHR.status === 400){
-                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
-            }
-        },
-        success: function( res ) {
-            if (res = 'reset') {
-                swal.fire("Success", "All user game data was reset.", "success");
-                jQuery('#go_reset_all_users').one("click", function () {
-                    go_reset_all_users_dialog();
-                });
-            }
-            else{
-                swal.fire("Error", "There was an error. Please refresh the page and try again. No data was changed.", "error");
-
-            }
-
-        }
-    });
-}
-

@@ -307,7 +307,7 @@ function task_stage_change( target, required_elements = null ) {
                 go_disable_loading();
                 go_reader_activate_buttons();
             }else {
-
+                    console.log(1);
                 if ( res.button_type == 'undo' ){
                     jQuery( '#go_wrapper div' ).last().hide();
                     jQuery( '#go_wrapper > div' ).slice(-3).hide( 'slow', function() { jQuery(this).remove();} );
@@ -369,14 +369,18 @@ function go_append (res){
    console.log("go_append");
     //jQuery( res.html ).addClass('active');
     var html = res.html;
-    console.log("html");
+    console.log(html);
     //console.log(html);
 
     jQuery( res.html ).appendTo( '#go_wrapper' ).stop().hide().show( 'slow' ).promise().then(function() {
         // Animation complete
+        console.log("1");
         go_Vids_Fit_and_Box("body");
+        console.log("2");
         go_make_clickable();
+        console.log("3");
         go_disable_loading();
+
         //go_mce();
         // remove existing editor instance, and add new one
         //tinymce.execCommand('mceRemoveEditor', true, 'go_blog_post');
@@ -439,6 +443,7 @@ function go_append (res){
         // this is needed for the editor to initiate
         tinyMCE.execCommand('mceAddEditor', false, fullId);
     });
+
 }
 
 // Makes it so you can press return and enter content in a field

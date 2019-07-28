@@ -188,6 +188,7 @@ function go_display_longhand_currency ( $currency_type, $amount, $output = false
         $copper_amount = intval(($amount * 100) - ($gold_amount * 100) - ($silver_amount * 10));
 
         $str = '';
+        /*
         if($show_coins) {
 
             if ($gold_amount != 0 || $show_empty) {
@@ -201,7 +202,7 @@ function go_display_longhand_currency ( $currency_type, $amount, $output = false
                 $str .= '<div class="coin_wrapper"><div class="go_coin copper"><p>' .$copper_suffix . '</p></div>&nbsp;<div class="go_amount">' . $copper_amount . '</div>&nbsp;</div>';
             }
         }
-        else{
+        else{*/
             if ($gold_amount !=  0 || $show_empty) {
 
                 $str .= "{$gold_amount} {$gold_name} ({$gold_suffix})&nbsp;&nbsp;&nbsp;";
@@ -212,7 +213,7 @@ function go_display_longhand_currency ( $currency_type, $amount, $output = false
             if ($copper_amount !=  0 || $show_empty) {
                 $str .= "{$copper_amount} {$copper_name} ({$copper_suffix})&nbsp;&nbsp;&nbsp;";
             }
-        }
+       // }
         if (empty($str)){
             $str = false;
         }
@@ -235,7 +236,7 @@ function go_display_longhand_currency ( $currency_type, $amount, $output = false
  * @param string $divider
  * @return bool|string
  */
-function go_display_shorthand_currency ($currency_type, $amount, $output = false, $breaks = false, $divider =' ' ) {
+function go_display_shorthand_currency ($currency_type, $amount, $output = false, $breaks = false, $divider =' ', $show_empty = false ) {
 
     $coins_currency = get_option("options_go_loot_gold_currency");
     $str = false;
@@ -257,24 +258,41 @@ function go_display_shorthand_currency ($currency_type, $amount, $output = false
 
 
             $str = '';
-            if ($gold_amount != 0){
+            if ($gold_amount != 0 || $show_empty){
 
-                $str = "{$gold_amount}{$divider}{$gold_suffix}&nbsp;&nbsp;&nbsp;";
+
                 if ($breaks) {
-                    $str .= "<br>";
+                    $l_str = "{$gold_amount}<br>";
+                    $r_str = "{$gold_suffix}<br>";
+                }else{
+                    $str = "{$gold_amount}{$divider}{$gold_suffix}";
+                    $str .= "&nbsp;&nbsp;&nbsp;";
                 }
             }
-            if ($silver_amount != 0){
-                $str .=  "{$silver_amount}{$divider}{$silver_suffix}&nbsp;&nbsp;&nbsp;";
+            if ($silver_amount != 0 || $show_empty){
+
                 if ($breaks) {
-                    $str .= "<br>";
+                    $l_str .= "{$silver_amount}<br>";
+                    $r_str .= "{$silver_suffix}<br>";
+                }else{
+                    $str .=  "{$silver_amount}{$divider}{$silver_suffix}";
+                    $str .= "&nbsp;&nbsp;&nbsp;";
                 }
             }
-            if ($copper_amount != 0){
-                $str .=  "{$copper_amount}{$divider}{$copper_suffix}&nbsp;&nbsp;&nbsp;";
+            if ($copper_amount != 0 || $show_empty){
+
                 if ($breaks) {
-                    $str .= "<br>";
+                    $l_str .= "{$copper_amount}<br>";
+                    $r_str .= "{$copper_suffix}<br>";
                 }
+                else{
+                    $str .=  "{$copper_amount}{$divider}{$copper_suffix}";
+                    $str .= "&nbsp;&nbsp;&nbsp;";
+                }
+            }
+
+            if ($breaks){
+                $str = '<div style="padding-right: 10px;"><div style="float: left; padding-right: 5px;">'.$l_str.'</div><div>'.$r_str.'</div></div>';
             }
             if (empty($str)){
                 $str = false;
@@ -298,6 +316,9 @@ function go_display_shorthand_currency ($currency_type, $amount, $output = false
 function go_get_health_mod ($user_id){
     //set the health mod
     $is_logged_in = ! empty( $user_id ) && is_user_member_of_blog( $user_id ) ? true : false;
+    if (go_user_is_admin($user_id)){
+        $is_logged_in = true;
+    }
     $health_toggle = go_get_loot_toggle( 'health' );
     $max_mod = intval(get_option( 'options_go_loot_health_max_health_mod' ));
     if ($max_mod<100){
@@ -395,6 +416,9 @@ function go_update_stage_table ($user_id, $post_id, $custom_fields, $status, $bo
     $go_task_table_name = "{$wpdb->prefix}go_tasks";
     $go_actions_table_name = "{$wpdb->prefix}go_actions";
     $is_logged_in = !empty($user_id) && is_user_member_of_blog($user_id) ? true : false;
+    if (go_user_is_admin($user_id)){
+        $is_logged_in = true;
+    }
     $bonus_status = (isset($bonus_status) ? $bonus_status : null);
     $status = (isset($status) ? $status : null);
     $health_mod = null;
@@ -730,7 +754,7 @@ function go_add_badges ($badge_ids, $user_id, $notify = false) {
             if(!in_array ( $badge_id, $existing_array )) {
                 add_user_meta($user_id, $key, $badge_id, false);
                 if ($notify === true) {
-                    go_term_notification('badge', $badge_id, true);
+                    go_term_notification('badges', $badge_id, true);
                 }
                 $badges_added[]=$badge_id;
             }
@@ -741,7 +765,7 @@ function go_add_badges ($badge_ids, $user_id, $notify = false) {
         if(!in_array ( $badge_id, $existing_array )) {
             add_user_meta($user_id, $key, $badge_id, false);
             if ($notify === true) {
-                go_term_notification('badge', $badge_id, true);
+                go_term_notification('badges', $badge_id, true);
             }
             $badges_added[]=$badge_id;
         }
@@ -767,10 +791,10 @@ function go_term_notification($term, $term_id, $add){
     if (isset($img_id[0]) && !empty($img_id[0])){
         $img = wp_get_attachment_image($img_id[0], array( 100, 100 ));
     }else{
-        if($term === 'badge') {
+        if($term === 'badges') {
             $img = '<i class="fas fa-award fa-4x"></i>';
         }
-        else if($term === 'group') {
+        else if($term === 'groups') {
             $img = '<i class="fas fa-users fa-4x"></i>';
         }
     }
@@ -799,20 +823,22 @@ function go_remove_badges ($badge_ids, $user_id, $notify = false) {
         $badge_ids = unserialize($badge_ids);
     }
     $key = go_prefix_key('go_badge');
-
+    $badges_removed = array();
     if (is_array($badge_ids)) {
         foreach ($badge_ids as $badge_id) {
             delete_user_meta($user_id, $key, $badge_id);
             if ($notify === true) {
-                go_term_notification('badge', $badge_id, false);
+                go_term_notification('badges', $badge_id, false);
             }
+            $badges_removed[]=$badge_id;
         }
     }else if (is_numeric($badge_ids)){
         $badge_id = $badge_ids;
         delete_user_meta($user_id, $key, $badge_id);
         if ($notify === true) {
-            go_term_notification('badge', $badge_id, false);
+            go_term_notification('badges', $badge_id, false);
         }
+        $badges_removed[]=$badge_id;
     }
 
     $key = go_prefix_key('go_badge');
@@ -822,6 +848,7 @@ function go_remove_badges ($badge_ids, $user_id, $notify = false) {
 
     $key = 'go_get_loot_' . $user_id;
     delete_transient($key);
+    return $badges_removed;
 }
 
 
@@ -854,7 +881,7 @@ function go_add_groups($group_ids, $user_id, $notify = false) {
             if(!in_array ( $group_id, $existing_array )) {
                 add_user_meta($user_id, $key, $group_id, false);
                 if ($notify === true) {
-                    go_term_notification('group', $group_id, true);
+                    go_term_notification('groups', $group_id, true);
                 }
                 $groups_added[]=$group_id;
             }
@@ -865,7 +892,7 @@ function go_add_groups($group_ids, $user_id, $notify = false) {
         if(!in_array ( $group_id, $existing_array )) {
             add_user_meta($user_id, $key, $group_id, false);
             if ($notify === true) {
-                go_term_notification('group', $group_id, true);
+                go_term_notification('groups', $group_id, true);
             }
             $groups_added[]=$group_id;
         }
@@ -897,14 +924,14 @@ function go_remove_groups($group_ids, $user_id, $notify = false) {
         foreach ($group_ids as $group_id) {
             delete_user_meta($user_id, $key, $group_id);
             if ($notify === true) {
-                go_term_notification('group', $group_id, false);
+                go_term_notification('groups', $group_id, false);
             }
         }
     }else if (is_numeric($group_ids)){
         $group_id = $group_ids;
         delete_user_meta($user_id, $key, $group_id);
         if ($notify === true) {
-            go_term_notification('group', $group_id, false);
+            go_term_notification('groups', $group_id, false);
         }
     }
     $key = 'go_get_loot_' . $user_id;
@@ -1143,12 +1170,13 @@ function go_update_totals_table($user_id, $xp, $gold, $health, $notify){
                         health = {$health} + health
                     WHERE uid= %d", $user_id));
     }else{}*/
+    $max_health = get_option('options_go_loot_health_max_health_mod');
 
     $wpdb->query($wpdb->prepare("UPDATE {$go_totals_table_name} 
                 SET 
                     xp = GREATEST(({$xp} + xp), 0),
                     gold = GREATEST(({$gold} + gold ), 0),
-                    health = GREATEST(({$health} + health ), 0)            
+                    health = LEAST(GREATEST(({$health} + health ), 0), {$max_health})            
                 WHERE uid= %d", $user_id));
 
 
@@ -1158,6 +1186,24 @@ function go_update_totals_table($user_id, $xp, $gold, $health, $notify){
         $rank_name = $new_rank['current_rank'];
         $old_rank = get_user_option("go_rank", $user_id);
         if ($rank_num > $old_rank){
+
+            $i = $rank_num - $old_rank;
+            while ($i > 0){
+                $badge_level = $rank_num - $i;//adjust for starting at row 0
+                $badge = get_option('options_go_loot_xp_levels_level_'.$badge_level.'_award_badge');
+                if(!empty($badge)){
+                    if ($user_id == get_current_user_id()) {
+                        go_add_badges($badge, $user_id, true);
+                    }else{
+                        $vars[0]['uid']= $user_id;
+                        go_send_message(true, '', '', 'message', false, 0, 0, 0, null, 'true', $badge, false, '', $vars);
+                    }
+
+                }
+                $i--;
+            }
+
+
             update_user_option($user_id, "go_rank", $rank_num);
             go_noty_level_up($rank_num, $rank_name );
             echo "<script>var audio = new Audio( PluginDir.url + 'media/sounds/milestone2.mp3' ); audio.play();</script>";
@@ -1166,6 +1212,22 @@ function go_update_totals_table($user_id, $xp, $gold, $health, $notify){
         if ($rank_num < $old_rank){
             update_user_option($user_id, "go_rank", $rank_num);
             go_noty_level_down($rank_num, $rank_name );
+
+            $i = $old_rank - $rank_num;
+            while ($i > 0){
+                $badge_level = $old_rank - $i;//adjust for starting at row 0
+                $badge = get_option('options_go_loot_xp_levels_level_'.$badge_level.'_award_badge');
+                if(!empty($badge)){
+
+                    if ($user_id == get_current_user_id()) {
+                        go_remove_badges ($badge, $user_id, true);
+                    }else{
+                        $vars[0]['uid']= $user_id;
+                        go_send_message(true, '', '', 'message', true, null, null, null, null, 'false', $badge, false, '', $vars);
+                    }
+                }
+                $i--;
+            }
         }
     }
 
@@ -1413,6 +1475,7 @@ function go_update_admin_bar($user_id) {
 function go_add_user_to_totals_table($user_id){
     global $wpdb;
     $go_totals_table_name = "{$wpdb->prefix}go_loot";
+    $default_health = get_option('options_go_loot_health_starting');
 
     //create row for user if none exists
     $row_exists = $wpdb->get_var(
@@ -1429,7 +1492,8 @@ function go_add_user_to_totals_table($user_id){
         $wpdb->insert(
             $go_totals_table_name,
             array(
-                'uid' => $user_id
+                'uid' => $user_id,
+                'health' => $default_health
             )
         );
     }
@@ -1641,6 +1705,8 @@ function go_update_bonus_loot ($post_id){
 
                 $title = $value['title'];
                 $message = $value['message'];
+                $title  = do_shortcode( $title );
+                $message  = do_shortcode( $message );
 
                 //$title = get_option('options_go_loot_bonus_loot_name');;
                 $message = $message . "<br><br>" . $xp_message .  $gold_message . $health_message;
@@ -1671,45 +1737,46 @@ function go_update_bonus_loot ($post_id){
     );
     */
     die();
-
 }
 
 
 
 function xp_progress_bar($user_id){
-    // the user's current amount of experience (points)
-    $go_current_xp = go_get_user_loot($user_id, 'xp');
 
-    $rank = go_get_rank($user_id);
-    $rank_num = $rank['rank_num'];
-    $current_rank = $rank['current_rank'];
-    $current_rank_points = $rank['current_rank_points'];
-    //$next_rank = $rank['next_rank'];
-    $next_rank_points = $rank['next_rank_points'];
-    $xp_abbr = get_option( "options_go_loot_xp_abbreviation" );
-
-    if ($next_rank_points != false) {
-        $rank_threshold_diff = $next_rank_points - $current_rank_points;
-        $pts_to_rank_threshold = $go_current_xp - $current_rank_points;
-        $pts_to_rank_up_str = "{$go_current_xp}$xp_abbr L{$rank_num} $current_rank: {$pts_to_rank_threshold}/{$rank_threshold_diff}";
-        $percentage = $pts_to_rank_threshold / $rank_threshold_diff * 100;
-        //$color = barColor( $go_current_health, 0 );
-        $color = "#39b54a";
-    } else {
-        $pts_to_rank_up_str = "$xp_abbr:$go_current_xp L:$rank_num $current_rank";;
-        $percentage = 100;
-        $color = "gold";
-    }
-    if ($percentage <= 0) {
-        $percentage = 0;
-    } else if ($percentage >= 100) {
-        $percentage = 100;
-    }
-    if (intval($user_id) < 1){
+    if (!is_user_member_of_blog()){
         $not_logged_in_class = 'not_logged_in';
         $pts_to_rank_up_str = 'Log in to see stats.';
         $color = 'grey';
+        $percentage = 100;
     }else{
+        // the user's current amount of experience (points)
+        $go_current_xp = go_get_user_loot($user_id, 'xp');
+
+        $rank = go_get_rank($user_id);
+        $rank_num = $rank['rank_num'];
+        $current_rank = $rank['current_rank'];
+        $current_rank_points = $rank['current_rank_points'];
+        //$next_rank = $rank['next_rank'];
+        $next_rank_points = $rank['next_rank_points'];
+        $xp_abbr = get_option( "options_go_loot_xp_abbreviation" );
+
+        if ($next_rank_points != false) {
+            $rank_threshold_diff = $next_rank_points - $current_rank_points;
+            $pts_to_rank_threshold = $go_current_xp - $current_rank_points;
+            $pts_to_rank_up_str = "{$go_current_xp}$xp_abbr | LEVEL {$rank_num} $current_rank | {$pts_to_rank_threshold}/{$rank_threshold_diff}";
+            $percentage = $pts_to_rank_threshold / $rank_threshold_diff * 100;
+            //$color = barColor( $go_current_health, 0 );
+            $color = "#39b54a";
+        } else {
+            $pts_to_rank_up_str = "$xp_abbr:$go_current_xp L:$rank_num $current_rank";;
+            $percentage = 100;
+            $color = "gold";
+        }
+        if ($percentage <= 0) {
+            $percentage = 0;
+        } else if ($percentage >= 100) {
+            $percentage = 100;
+        }
         $not_logged_in_class = '';
     }
     $progress_bar = '<div class="go_admin_bar_progress_bar_border '. $not_logged_in_class .' progress-bar-border"><div class="go_admin_bar_progress_bar stats_progress_bar" ' .
@@ -1726,24 +1793,49 @@ function xp_progress_bar($user_id){
 function go_health_bar($user_id){
     // the user's current amount of bonus currency,
     // also used for coloring the admin bar
-    $go_current_health = go_get_user_loot($user_id, 'health');
-    $health_percentage = intval($go_current_health);
-    if ($health_percentage <= 0) {
-        $health_percentage = 0;
-    } else if ($health_percentage >= 100) {
-        $health_percentage = 100;
-    }
-    $name = get_option("options_go_loot_health_abbreviation");
-    if (intval($user_id) < 1){
+    $text_color = 'white';
+    $class = '';
+    if (!is_user_member_of_blog()){
         //$pts_to_rank_up_str = 'Log in to see stats.';
         $color = 'grey';
         $health_string = '';
+        $health_percentage = 100;
     }else{
-        $health_string = $name . " Mod: " . $go_current_health . "%";
+        $name = strtoupper(get_option("options_go_loot_health_abbreviation"));
+        $go_current_health = go_get_user_loot($user_id, 'health');
+        $health_percentage = intval($go_current_health);
         $color = 'red';
+
+        if ($health_percentage <= 0) {
+            $health_percentage = 0;
+        } else if ($health_percentage >= 100) {
+            $health_amount= $health_percentage;
+            $health_percentage = 100;
+            $max_health = get_option('options_go_loot_health_max_health_mod');
+            $health_over = ($health_amount -100) / 100;
+            if ($health_amount == $max_health){
+                $color = '';
+                $class = 'max_health';
+            }else if($health_over < .2){
+                $color = 'orange';
+            }else if($health_over < .4){
+                $text_color = 'black';
+                $color = 'yellow';
+            }else if($health_over < .6){
+                $text_color = 'black';
+                $color = 'LightGreen ';
+            }else if($health_over < .8){
+                $color = 'PowderBlue ';
+                $text_color = 'black';
+            }else if($health_over < 1){
+                $color = 'purple';
+            }
+        }
+        $health_string = $name . " MODIFIER | " . $go_current_health . "%";
+
     }
 
-    $health_bar = '<div class="go_admin_health_bar_border progress-bar-border"><div class="go_admin_bar_health_bar stats_progress_bar progress_bar" style="width: ' . $health_percentage . '%; background-color: ' . $color .' ;">' . '</div>' . '<div class="health_bar_percentage_str go_admin_bar_text ">' . $health_string . '</div>' . '</div>';
+    $health_bar = '<div class="go_admin_health_bar_border progress-bar-border"><div class="go_admin_bar_health_bar stats_progress_bar progress_bar '.$class.'" style="width: ' . $health_percentage . '%; background-color: ' . $color .' ;">' . '</div>' . '<div class="health_bar_percentage_str go_admin_bar_text" style="color:'.$text_color.'">' . $health_string . '</div>' . '</div>';
 
     return $health_bar;
 }
@@ -1751,7 +1843,7 @@ function go_health_bar($user_id){
 function go_gold_bar($user_id){
 
     $go_current_gold = go_get_user_loot($user_id, 'gold');
-    $user_bar_coins = '<div id="go_admin_bar_gold" class="admin_bar_loot">' . go_display_longhand_currency('gold', $go_current_gold, false, true, true) . '</div>';
+    $user_bar_coins = '<div id="go_admin_bar_gold" class="admin_bar_loot" style="line-height: 1em !important; text-align: right; padding-top: 9px; ">' . go_display_shorthand_currency('gold', $go_current_gold, false, true, " " , true) . '</div>';
     //$user_bar_coins ='';
     $gold_bar = '<div id="go_user_bar_loot" class="userbar_dropdown"><div class="narrow_content">' . $user_bar_coins . '</div><div class="wide_content">' . $user_bar_coins . '</div>';
 

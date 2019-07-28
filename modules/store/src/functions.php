@@ -14,9 +14,12 @@ Creation Date: 05/09/13
 //https://stackoverflow.com/questions/25310665/wordpress-how-to-create-a-rewrite-rule-for-a-file-in-a-custom-plugin
 add_action('init', 'go_store_page');
 function go_store_page(){
-    $store_name = get_option( 'options_go_store_store_link');
-    //add_rewrite_rule( "store", 'index.php?query_type=user_blog&uname=$matches[1]', "top");
-    add_rewrite_rule( $store_name, 'index.php?' . $store_name . '=true', "top");
+    $blog_id = get_current_blog_id();
+    if ($blog_id > 1) {
+        $store_name = get_option('options_go_store_store_link');
+        //add_rewrite_rule( "store", 'index.php?query_type=user_blog&uname=$matches[1]', "top");
+        add_rewrite_rule($store_name, 'index.php?' . $store_name . '=true', "top");
+    }
 }
 
 // Query Vars
@@ -32,14 +35,16 @@ function go_store_register_query_var( $vars ) {
 add_filter('template_include', 'go_store_template_include', 1, 1);
 function go_store_template_include($template)
 {
-    global $wp_query; //Load $wp_query object
-    $store_name = get_option( 'options_go_store_store_link');
+    $blog_id = get_current_blog_id();
+    if ($blog_id > 1) {
+        global $wp_query; //Load $wp_query object
+        $store_name = get_option('options_go_store_store_link');
 
-    $page_value = ( isset($wp_query->query_vars[$store_name]) ? $wp_query->query_vars[$store_name] : false ); //Check for query var "blah"
-    if ($page_value && $page_value == "true") { //Verify "blah" exists and value is "true".
-        return plugin_dir_path(__FILE__).'templates/go_store_template.php'; //Load your template or file
+        $page_value = (isset($wp_query->query_vars[$store_name]) ? $wp_query->query_vars[$store_name] : false); //Check for query var "blah"
+        if ($page_value && $page_value == "true") { //Verify "blah" exists and value is "true".
+            return plugin_dir_path(__FILE__) . 'templates/go_store_template.php'; //Load your template or file
+        }
     }
-
     return $template; //Load normal template when $page_value != "true" as a fallback
 }
 
@@ -65,7 +70,7 @@ function go_register_store_tax_and_cpt() {
 	 */
 	$store_name = get_option( 'options_go_store_name' );
 	$cat_labels = array(
-		'name' => _x( $store_name.' Categories', 'store_types' ),
+		'name' => _x( ' Categories', 'store_types' ),
 		'singular_name' => _x( $store_name.' Item Category', 'store_types' ),
 		'search_items' =>  _x( 'Search '.$store_name.' Categories' , 'store_types'),
 		'all_items' => _x( 'All '.$store_name.' Categories', 'store_types' ),
@@ -160,13 +165,15 @@ function go_update_store_post_save( $post_id ) {
     if ( 'go_store' !== $post->post_type ) {
         return;
     }
+    //delete task data transient
+    $key = 'go_post_data_' . $post_id;
+    delete_transient($key);
+
     $html = go_make_store_html();
 
     update_option( 'go_store_html', $html );
 
-    //delete task data transient
-    $key = 'go_post_data_' . $post_id;
-    delete_transient($key);
+
 }
 
 add_action( 'wp_trash_post', 'go_update_store_post_save' );

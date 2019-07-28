@@ -8,6 +8,7 @@ add_action( 'wp_enqueue_scripts', 'go_scripts' );
 function go_scripts () {
     global $go_js_version;
     wp_register_script( 'go_wp_media', get_site_url(null, 'wp-admin/css/media.css'), null, $go_js_version );
+
 	/*
 	 * Registering Scripts For The Front-end
 	 */
@@ -66,10 +67,16 @@ function go_scripts () {
     $user_id = get_current_user_id();
     //is the current user an admin
     $is_admin = go_user_is_admin($user_id);
-
+    $blog_id = get_current_blog_id();
     wp_localize_script( 'go_frontend', 'SiteURL', get_site_url() );
-    wp_localize_script( 'go_frontend', 'MyAjax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
+    $ajaxurl =  admin_url( 'admin-ajax.php' );
+    wp_localize_script( 'go_frontend', 'MyAjax', array( 'ajaxurl' => $ajaxurl ) );
+
+    wp_localize_script( 'go_frontend', 'ajaxurl', $ajaxurl);
     wp_localize_script( 'go_frontend', 'PluginDir', array( 'url' => plugin_dir_url( dirname(__FILE__)) ) );
+    wp_localize_script( 'go_frontend', 'blog_id', strval($blog_id));
+    wp_localize_script( 'go_frontend', 'network_login', network_site_url ('login?blog_id='.$blog_id));
+
 
     wp_localize_script(
         'go_frontend',
@@ -93,6 +100,16 @@ function go_scripts () {
             'userID'	=>  $user_id
         )
     );
+
+    $page_uri = go_get_page_uri();
+    $map_url = get_option('options_go_locations_map_map_link');
+    if ($page_uri === $map_url) {
+        wp_localize_script(
+            'go_frontend',
+            'go_is_map',
+            array(true)
+        );
+    }
 
     go_localize_all_pages();
 

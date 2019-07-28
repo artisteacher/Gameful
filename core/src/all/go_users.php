@@ -44,7 +44,7 @@ function go_user_is_admin( $user_id = null ) {
         $user_id = (int) $user_id;
     }
 
-    if(user_can( $user_id, 'manage_options' )) {
+    if(user_can( $user_id, 'manage_options' ) || is_super_admin($user_id)) {
         return true;
     }
     return false;
@@ -63,9 +63,12 @@ function go_user_registration ( $user_id ) {
 
         // this should update the user's rank metadata
         //go_update_ranks( $user_id, 0 );
-
+        $default_health = get_option('options_go_loot_health_starting');
         // this should set the user's points to 0
-        $wpdb->insert( $table_name_go_totals, array( 'uid' => $user_id), array( '%s' ) );
+        $wpdb->insert( $table_name_go_totals, array( 'uid' => $user_id), array(
+
+            'health' => $default_health,
+        ) );
     }
 }
 
@@ -81,12 +84,94 @@ function go_user_delete( $user_id ) {
     $wpdb->delete( $table_name_go_actions, array( 'uid' => $user_id ) );
 }
 
-
+/*
 function go_add_user_to_totals_table_at_login($user_login, $user){
     $user_id = $user->ID;
+    if(is_user_member_of_blog()) {
+        go_add_user_to_totals_table($user_id);
+    }
+}*/
+//add_action('wp_login', 'go_add_user_to_totals_table_at_login', 10, 2);
 
-    go_add_user_to_totals_table($user_id);
+
+
+//allow site admins to edit users
+function mc_admin_users_caps( $caps, $cap, $user_id, $args ){
+
+    foreach( $caps as $key => $capability ){
+
+        if( $capability != 'do_not_allow' )
+            continue;
+
+        switch( $cap ) {
+            case 'edit_user':
+            case 'edit_users':
+                $caps[$key] = 'edit_users';
+                break;
+            case 'delete_user':
+            case 'delete_users':
+                $caps[$key] = 'delete_users';
+                break;
+            case 'create_users':
+                $caps[$key] = $cap;
+                break;
+        }
+    }
+
+    return $caps;
 }
-add_action('wp_login', 'go_add_user_to_totals_table_at_login', 10, 2);
+add_filter( 'map_meta_cap', 'mc_admin_users_caps', 1, 4 );
+remove_all_filters( 'enable_edit_any_user_configuration' );
+add_filter( 'enable_edit_any_user_configuration', '__return_true');
+
+/**
+ * Checks that both the editing user and the user being edited are
+ * members of the blog and prevents the super admin being edited.
+ */
+function mc_edit_permission_check() {
+    global $current_user, $profileuser;
+
+    $screen = get_current_screen();
+
+    wp_get_current_user();
+
+    if( ! is_super_admin( $current_user->ID ) && in_array( $screen->base, array( 'user-edit', 'user-edit-network' ) ) ) { // editing a user profile
+        if ( is_super_admin( $profileuser->ID ) ) { // trying to edit a superadmin while less than a superadmin
+            wp_die( __( 'You do not have permission to edit this user.' ) );
+        } elseif ( ! ( is_user_member_of_blog( $profileuser->ID, get_current_blog_id() ) && is_user_member_of_blog( $current_user->ID, get_current_blog_id() ) )) { // editing user and edited user aren't members of the same blog
+            wp_die( __( 'You do not have permission to edit this user.' ) );
+        }
+    }
+
+}
+add_filter( 'admin_head', 'mc_edit_permission_check', 1, 4 );
 
 
+//filters all but the subscriber role in the dropdown for all but super admin
+add_filter('editable_roles', 'allow_only_default_role', 1, 1);
+function allow_only_default_role($all_roles)
+{
+
+    if (is_super_admin()) {
+        return $all_roles;
+    }
+    else {
+        foreach ( $all_roles as $name => $role ) {
+            if($name != 'subscriber') {
+                unset($all_roles[$name]);
+            }
+        }
+
+    }
+    return $all_roles;
+}
+
+
+//make the blog the author page
+add_filter('author_link', 'remove_author_link', 10, 1 );
+function remove_author_link($link)
+{
+
+    $link = str_replace('/author/', '/user/', $link);
+    return $link;
+}

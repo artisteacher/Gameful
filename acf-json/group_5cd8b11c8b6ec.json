@@ -15,7 +15,7 @@
                 "class": "",
                 "id": ""
             },
-            "message": "Game On does not use the default Login and Registration. It has login and registration built into the frontend.  The default Wordpress login and registration is still available. \r\n\r\n<b>Security Tip<\/b>\r\nUse a plugin to change the login url of Wordpress.  This makes it harder for bots to find it.  One popular option is <a href=\"https:\/\/wordpress.org\/plugins\/wps-hide-login\/\">WPS Hide Login<\/a>.\r\n\r\n<b>Social Login<\/b>\r\nYou can use a plugin to allow for registration and login with Google or Social Media accounts.  This is particularly useful if you are using Google Apps for Education. <a href=\"https:\/\/wordpress.org\/plugins\/wordpress-social-login\/\">Wordpress Social Login<\/a> has been tested with Game On.",
+            "message": "Gameful Me does not use the default Login and Registration. It has login and registration built into the frontend.  The default Wordpress login and registration is still available. \r\n\r\n<b>Security Tip<\/b>\r\nUse a plugin to change the login url of Wordpress.  This makes it harder for bots to find it.  One popular option is <a href=\"https:\/\/wordpress.org\/plugins\/wps-hide-login\/\">WPS Hide Login<\/a>.\r\n\r\n<b>Social Login<\/b>\r\nYou can use a plugin to allow for registration and login with Google or Social Media accounts.  This is particularly useful if you are using Google Apps for Education. <a href=\"https:\/\/wordpress.org\/plugins\/wordpress-social-login\/\">Wordpress Social Login<\/a> has been tested with Game On.",
             "new_lines": "wpautop",
             "esc_html": 0
         }

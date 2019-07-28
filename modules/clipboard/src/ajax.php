@@ -413,7 +413,7 @@ function go_badges_and_groups($badge_ids, $group_ids){
  * Called by the ajax dataloaders.
  */
 function go_clipboard_stats() {
-    if ( ! current_user_can( 'manage_options' ) ) {
+    if ( ! current_user_can( 'manage_options' ) && !go_user_is_admin() ) {
         die( -1 );
     }
 
@@ -484,8 +484,15 @@ function go_clipboard_stats_dataloader_ajax(){
     $sOrder = go_sOrder('stats', $section);
 
     $lTable = "{$wpdb->prefix}go_loot";
+    if(is_multisite()) {
+        $main_site_id = get_network()->site_id;
+        switch_to_blog($main_site_id);
+    }
     $uTable = "{$wpdb->prefix}users";
     $umTable = "{$wpdb->prefix}usermeta";
+    if(is_multisite()) {
+        restore_current_blog();
+    }
 
     $sectionQuery = go_sectionQuery();
     $badgeQuery = go_badgeQuery();
@@ -497,7 +504,7 @@ function go_clipboard_stats_dataloader_ajax(){
     $group_key = go_prefix_key('go_group');
 
     $sQuery = "    
-                    SELECT
+                    SELECT SQL_CALC_FOUND_ROWS
                       t8.user_id, t1.*,
                       t3.display_name, t3.user_url, t3.user_login,
                       GROUP_CONCAT(CASE WHEN t2.meta_key = '$seat_key 'THEN meta_value END) as go_seats, 
@@ -505,7 +512,8 @@ function go_clipboard_stats_dataloader_ajax(){
                       GROUP_CONCAT(CASE WHEN t2.meta_key = '$badge_key' THEN meta_value END) as go_badges,
                       GROUP_CONCAT(CASE WHEN t2.meta_key = '$group_key' THEN meta_value END) as go_groups,
                       MAX(CASE WHEN t2.meta_key = 'first_name' THEN meta_value END) AS first_name,
-                      MAX(CASE WHEN t2.meta_key = 'last_name' THEN meta_value END) AS last_name
+                      MAX(CASE WHEN t2.meta_key = 'last_name' THEN meta_value END) AS last_name,
+                      MAX(CASE WHEN t2.meta_key = 'wp_capabilities' THEN meta_value END) AS wp_capabilities
                     FROM
                           (
                           SELECT t6.user_id
@@ -547,7 +555,7 @@ function go_clipboard_stats_dataloader_ajax(){
 
 
     ////columns that will be returned
-    $rResult = $wpdb->get_results($sQuery, ARRAY_A);
+        $rResult = $wpdb->get_results($sQuery, ARRAY_A);
 
     $sQuery = "SELECT FOUND_ROWS()";
 
@@ -566,10 +574,18 @@ function go_clipboard_stats_dataloader_ajax(){
     $iTotal = $rResultTotal [0];
     //$iFilteredTotal = number that match without limit;
     //$iTotalRecords = number in this table total (total store items/messages)
-    $output = array("iTotalRecords" => $iTotal, "iTotalDisplayRecords" => $iFilteredTotal, "aaData" => array());
 
+    $data = array();
     foreach($rResult as $action){//output a row for each action
-
+        $caps = $action['wp_capabilities'];
+        $caps = unserialize($caps);
+        if ($caps['administrator'] ===true || !$caps){
+            $total = $iTotal[0];
+            $iTotal[0] = $total -1;
+            $total = $iFilteredTotal[0];
+            $iFilteredTotal[0] = $total -1;
+            continue;
+        }
         //The message content
         $row = go_start_row($action);
         $user_id = $action['uid'];
@@ -603,9 +619,9 @@ function go_clipboard_stats_dataloader_ajax(){
             $row[] = $group_list;
         }
 
-        $output['aaData'][] = $row;
+        $data[] = $row;
     }
-
+    $output = array("iTotalRecords" => $iTotal, "iTotalDisplayRecords" => $iFilteredTotal, "aaData" => $data);
     //$output['iTotalDisplayRecords'] =  count($output['aaData']);
 
     global $go_debug;
@@ -685,8 +701,15 @@ function go_clipboard_store_dataloader_ajax(){
     $pTable = "{$wpdb->prefix}posts";
     $lTable = "{$wpdb->prefix}go_loot";
     $aTable = "{$wpdb->prefix}go_actions";
+    if(is_multisite()) {
+        $main_site_id = get_network()->site_id;
+        switch_to_blog($main_site_id);
+    }
     $uTable = "{$wpdb->prefix}users";
     $umTable = "{$wpdb->prefix}usermeta";
+    if(is_multisite()) {
+        restore_current_blog();
+    }
 
     $sOn = go_sOn('store');
     //add store items to On statement
@@ -729,7 +752,8 @@ function go_clipboard_store_dataloader_ajax(){
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$badge_key' THEN meta_value END) as go_badges,
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$group_key' THEN meta_value END) as go_groups,
                           MAX(CASE WHEN t2.meta_key = 'first_name' THEN meta_value END) AS first_name,
-                          MAX(CASE WHEN t2.meta_key = 'last_name' THEN meta_value END) AS last_name
+                          MAX(CASE WHEN t2.meta_key = 'last_name' THEN meta_value END) AS last_name,
+                          MAX(CASE WHEN t2.meta_key = 'wp_capabilities' THEN meta_value END) AS wp_capabilities
                         FROM(
                           SELECT t6.user_id
                           FROM (
@@ -784,8 +808,17 @@ function go_clipboard_store_dataloader_ajax(){
     //$iTotalRecords = number in this table total (total store items/messages)
     $output = array("iTotalRecords" => $iTotal, "iTotalDisplayRecords" => $iFilteredTotal, "aaData" => array());
 
-
+    $data = array();
     foreach($rResult as $action){//output a row for each action
+        $caps = $action['wp_capabilities'];
+        $caps = unserialize($caps);
+        if ($caps['administrator'] ===true || !$caps){
+            $total = $iTotal[0];
+            $iTotal[0] = $total -1;
+            $total = $iFilteredTotal[0];
+            $iFilteredTotal[0] = $total -1;
+            continue;
+        }
         $row = go_start_row($action);
         //The message content
         $TIMESTAMP = $action['TIMESTAMP'];
@@ -819,9 +852,9 @@ function go_clipboard_store_dataloader_ajax(){
 
 
 
-        $output['aaData'][] = $row;
+        $data[] = $row;
     }
-
+    $output = array("iTotalRecords" => $iTotal, "iTotalDisplayRecords" => $iFilteredTotal, "aaData" => $data);
     //$output['iTotalDisplayRecords'] =  count($output['aaData']);
     global $go_debug;
     if($go_debug) {
@@ -914,9 +947,15 @@ function go_clipboard_messages_dataloader_ajax(){
 
     $lTable = "{$wpdb->prefix}go_loot";
     $aTable = "{$wpdb->prefix}go_actions";
+    if(is_multisite()) {
+        $main_site_id = get_network()->site_id;
+        switch_to_blog($main_site_id);
+    }
     $uTable = "{$wpdb->prefix}users";
     $umTable = "{$wpdb->prefix}usermeta";
-
+    if(is_multisite()) {
+        restore_current_blog();
+    }
     $sectionQuery = go_sectionQuery();
     $badgeQuery = go_badgeQuery();
     $groupQuery = go_groupQuery();
@@ -941,7 +980,8 @@ function go_clipboard_messages_dataloader_ajax(){
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$badge_key' THEN meta_value END) as go_badges,
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$group_key' THEN meta_value END) as go_groups,
                           MAX(CASE WHEN t2.meta_key = 'first_name' THEN meta_value END) AS first_name,
-                          MAX(CASE WHEN t2.meta_key = 'last_name' THEN meta_value END) AS last_name
+                          MAX(CASE WHEN t2.meta_key = 'last_name' THEN meta_value END) AS last_name,
+                          MAX(CASE WHEN t2.meta_key = 'wp_capabilities' THEN meta_value END) AS wp_capabilities
                         FROM(
                           SELECT t6.user_id
                           FROM (
@@ -1003,7 +1043,17 @@ function go_clipboard_messages_dataloader_ajax(){
     $output = array("iTotalRecords" => $iTotal, "iTotalDisplayRecords" => $iFilteredTotal, "aaData" => array());
 
 
-    foreach($rResult as $action){//output a row for each message
+    $data = array();
+    foreach($rResult as $action){//output a row for each action
+        $caps = $action['wp_capabilities'];
+        $caps = unserialize($caps);
+        if ($caps['administrator'] ===true || !$caps){
+            $total = $iTotal[0];
+            $iTotal[0] = $total -1;
+            $total = $iFilteredTotal[0];
+            $iFilteredTotal[0] = $total -1;
+            continue;
+        }
 
         //The message content
         $row = go_start_row($action);
@@ -1053,8 +1103,9 @@ function go_clipboard_messages_dataloader_ajax(){
             $row[] = $groups;
         }
 
-        $output['aaData'][] = $row;
+        $data[] = $row;
     }
+    $output = array("iTotalRecords" => $iTotal, "iTotalDisplayRecords" => $iFilteredTotal, "aaData" => $data);
 
     global $go_debug;
     if($go_debug) {
@@ -1069,7 +1120,7 @@ function go_clipboard_messages_dataloader_ajax(){
  *
  */
 function go_clipboard_activity() {
-    if ( ! current_user_can( 'manage_options' ) ) {
+    if ( ! current_user_can( 'manage_options' ) && !go_user_is_admin()) {
         die( -1 );
     }
 
@@ -1160,8 +1211,15 @@ function go_clipboard_activity_dataloader_ajax(){
 
     $lTable = "{$wpdb->prefix}go_loot";
     $aTable = "{$wpdb->prefix}go_actions";
+    if(is_multisite()) {
+        $main_site_id = get_network()->site_id;
+        switch_to_blog($main_site_id);
+    }
     $uTable = "{$wpdb->prefix}users";
     $umTable = "{$wpdb->prefix}usermeta";
+    if(is_multisite()) {
+        restore_current_blog();
+    }
     $tTable = "{$wpdb->prefix}go_tasks";
     $pTable = "{$wpdb->prefix}posts";
 
@@ -1190,7 +1248,8 @@ function go_clipboard_activity_dataloader_ajax(){
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$badge_key' THEN meta_value END) as go_badges,
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$group_key' THEN meta_value END) as go_groups,
                           MAX(CASE WHEN t2.meta_key = 'first_name' THEN meta_value END) AS first_name,
-                          MAX(CASE WHEN t2.meta_key = 'last_name' THEN meta_value END) AS last_name
+                          MAX(CASE WHEN t2.meta_key = 'last_name' THEN meta_value END) AS last_name,
+                          MAX(CASE WHEN t2.meta_key = 'wp_capabilities' THEN meta_value END) AS wp_capabilities
                         FROM(
                           SELECT t6.user_id
                           FROM (
@@ -1254,7 +1313,17 @@ function go_clipboard_activity_dataloader_ajax(){
     $output = array("iTotalRecords" => $iTotal, "iTotalDisplayRecords" => $iFilteredTotal, "aaData" => array());
 
 
-    foreach($rResult as $action){//output a row for each message
+    $data = array();
+    foreach($rResult as $action){//output a row for each action
+        $caps = $action['wp_capabilities'];
+        $caps = unserialize($caps);
+        if ($caps['administrator'] ===true || !$caps){
+            $total = $iTotal[0];
+            $iTotal[0] = $total -1;
+            $total = $iFilteredTotal[0];
+            $iFilteredTotal[0] = $total -1;
+            continue;
+        }
 
         //The message content
         $row = go_start_row($action);
@@ -1334,8 +1403,10 @@ function go_clipboard_activity_dataloader_ajax(){
             $row[] = $groups;
         }
 
-        $output['aaData'][] = $row;
+        $data[] = $row;
     }
+
+    $output = array("iTotalRecords" => $iTotal, "iTotalDisplayRecords" => $iFilteredTotal, "aaData" => $data);
     //go_write_log("output: ");
     //go_write_log($output);
     //go_total_query_time();

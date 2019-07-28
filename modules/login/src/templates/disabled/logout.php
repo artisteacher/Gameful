@@ -18,10 +18,10 @@
  * @version 1.0
  */
 
-if(!is_user_logged_in()){
+/*if(!is_user_logged_in()){
     $log_in_link = get_site_url(null, 'login');
     wp_redirect($log_in_link);
-}
+}*/
 
 
 //https://codex.wordpress.org/Customizing_the_Login_Form#Make_a_Custom_Login_Page
@@ -36,7 +36,10 @@ echo "<div id='go_login_container'>";
 
 echo "Are you sure you want to leave?<br>";
 //echo "<a href='$log_out_link' class='go_logout'>Log out</a>";
-wp_loginout(home_url()); // Display "Log Out" link.
+// Display "Log Out" link.
+?>
+<a href="<?php echo wp_logout_url( home_url() ); ?>">Logout</a>
+<?php
 
 
 echo "</div></div>"
