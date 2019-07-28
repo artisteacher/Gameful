@@ -16,7 +16,9 @@ function go_sectionQuery($section = false){
     }
     if (!empty($section)) {
         global $wpdb;
+        switch_to_blog(1);
         $umTable = "{$wpdb->prefix}usermeta";
+        restore_current_blog();
         $key = go_prefix_key('go_section');
 
         $Query = "   LEFT JOIN $umTable as t3 ON t2.user_id = t3.user_id

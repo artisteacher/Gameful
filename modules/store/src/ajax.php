@@ -133,7 +133,14 @@ function go_buy_item() {
         $result[] = "";
 
         $result = serialize($result);
-        $admin_users = get_option('options_go_admin_user_notifications');
+        //$admin_users = get_option('options_go_admin_user_notifications');
+        $args = array(
+            'role'    => 'administrator',
+            'orderby' => 'user_nicename',
+            'order'   => 'ASC'
+        );
+        $admin_users = get_users( $args );
+
         foreach ($admin_users as $admin_user) {
             go_update_actions(intval($admin_user), 'admin_notification', null , 1, null, null, $result, null, null, null, null, $xp, $gold, $health, $badge_ids, $group_ids, 'admin');
             update_user_option(intval($admin_user), 'go_new_messages', true);

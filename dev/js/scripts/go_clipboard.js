@@ -521,20 +521,20 @@ function go_clipboard_stats_datatable(refresh) {
                                 text: 'Export ...',
                                 buttons: [{
                                     extend: 'pdf',
-                                    title: 'Game On Data Export',
+                                    title: 'Gameful Me Data Export',
                                     exportOptions: {
                                         columns: "thead th:not(.noExport)"
                                     },
                                     orientation: 'landscape'
                                 },{
                                     extend: 'excel',
-                                    title: 'Game On Data Export',
+                                    title: 'Gameful Me Data Export',
                                     exportOptions: {
                                         columns: "thead th:not(.noExport)"
                                     }
                                 }, {
                                     extend: 'csv',
-                                    title: 'Game On Data Export',
+                                    title: 'Gameful Me Data Export',
                                     exportOptions: {
                                         columns: "thead th:not(.noExport)"
                                     }
@@ -657,20 +657,20 @@ function go_clipboard_store_datatable(refresh) {
                                 text: 'Export ...',
                                 buttons: [{
                                     extend: 'pdf',
-                                    title: 'Game On Data Export',
+                                    title: 'Gameful Me Data Export',
                                     exportOptions: {
                                         columns: "thead th:not(.noExport)"
                                     },
                                     orientation: 'landscape'
                                 },{
                                     extend: 'excel',
-                                    title: 'Game On Data Export',
+                                    title: 'Gameful Me Data Export',
                                     exportOptions: {
                                         columns: "thead th:not(.noExport)"
                                     }
                                 }, {
                                     extend: 'csv',
-                                    title: 'Game On Data Export',
+                                    title: 'Gameful Me Data Export',
                                     exportOptions: {
                                         columns: "thead th:not(.noExport)"
                                     }
@@ -786,20 +786,20 @@ function go_clipboard_messages_datatable(refresh) {
                                 text: 'Export ...',
                                 buttons: [{
                                     extend: 'pdf',
-                                    title: 'Game On Data Export',
+                                    title: 'Gameful Me Data Export',
                                     exportOptions: {
                                         columns: "thead th:not(.noExport)"
                                     },
                                     orientation: 'landscape'
                                 },{
                                     extend: 'excel',
-                                    title: 'Game On Data Export',
+                                    title: 'Gameful Men Data Export',
                                     exportOptions: {
                                         columns: "thead th:not(.noExport)"
                                     }
                                 }, {
                                     extend: 'csv',
-                                    title: 'Game On Data Export',
+                                    title: 'Gameful Me Data Export',
                                     exportOptions: {
                                         columns: "thead th:not(.noExport)"
                                     }
@@ -941,20 +941,20 @@ function go_clipboard_activity_datatable(refresh) {
                                 text: 'Export ...',
                                 buttons: [{
                                     extend: 'pdf',
-                                    title: 'Game On Data Export',
+                                    title: 'Gameful Me Data Export',
                                     exportOptions: {
                                         columns: "thead th:not(.noExport)"
                                     },
                                     orientation: 'landscape'
                                 },{
                                     extend: 'excel',
-                                    title: 'Game On Data Export',
+                                    title: 'Gameful Me Data Export',
                                     exportOptions: {
                                         columns: "thead th:not(.noExport)"
                                     }
                                 }, {
                                     extend: 'csv',
-                                    title: 'Game On Data Export',
+                                    title: 'Gameful Me Data Export',
                                     exportOptions: {
                                         columns: "thead th:not(.noExport)"
                                     }

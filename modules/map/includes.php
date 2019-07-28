@@ -44,14 +44,3 @@ if ( !is_admin() ) {
 
 //always include
 include_once('src/functions.php');
-
-function map_localize_script(){
-
-        wp_localize_script(
-            'go_frontend',
-            'go_is_map',
-            array(true)
-        );
-
-
-}

@@ -58,7 +58,7 @@ function go_player_bar_v5() {
     $is_admin = go_user_is_admin($user_id);
 
 
-    if (is_user_member_of_blog()) {
+    if (is_user_member_of_blog() || go_user_is_admin()) {
 
 
         //displays Timer in admin bar
@@ -94,7 +94,7 @@ function go_player_bar_v5() {
         $go_home_link = get_site_url();
         echo '<div class="go_user_bar_icon go_user_bar_home"><a href="'.$go_home_link.'"><i class="fas fa-home ab-icon" aria-hidden="true"></i><br><div class="go_player_bar_text">Home</div></a></div>';
     }
-    if (is_user_member_of_blog()) {
+    if (is_user_member_of_blog() || go_user_is_admin()) {
         if ($go_stats_switch) {
             //acf_form_head();
             $stats_name = get_option('options_go_stats_name');
@@ -102,8 +102,8 @@ function go_player_bar_v5() {
         }
 
         if ($go_leaderboard_switch) {
-            $go_leaderboard_name = get_option('options_go_stats_leaderboard_name');
-            $go_leaderboard_link = get_site_url(null, 'leaderboard');
+            $go_leaderboard_name = urlencode(get_option('options_go_stats_leaderboard_name'));
+            $go_leaderboard_link = get_site_url(null, $go_leaderboard_name);
 
 
             echo "<div class='go_user_bar_icon'><a href='$go_leaderboard_link'><i class='fas fa-trophy ab-icon' aria-hidden='true'></i><br><div class='go_player_bar_text' id='go_leaderboard_page'>$go_leaderboard_name</div></a></div>";
@@ -183,8 +183,9 @@ function go_player_bar_v5() {
 
     $avatar = (is_int(get_user_option('go_avatar')) ?  wp_get_attachment_image(get_user_option('go_avatar'), array('29', '29')) : '<i class="fas fa-user ab-icon" aria-hidden="true"></i>');
     if (is_user_logged_in()) {
-        $log_out_link = get_site_url(null, 'logout');
-        if (is_user_member_of_blog()){//show profile
+        //$log_out_link = get_site_url(null, 'logout');
+        $log_out_link = home_url('signin?action=logout' );
+        if (is_user_member_of_blog() || go_user_is_admin()){//show profile
             //$avatar = get_user_option('go_avatar');
             $text = 'Profile';
             $dropdown_text = 'View Profile';
@@ -204,8 +205,12 @@ function go_player_bar_v5() {
 
     }else{//not logged in, show login and no dropdown
         $login_text = 'Login';
-        $go_login_link = get_site_url(null, 'login');
+        $blog_id = get_current_blog_id();
+        $go_login_link = get_site_url(1, 'login');
+        $go_login_link = network_site_url ('signin?redirect_to='.$go_login_link.'?blog_id='.$blog_id);
+        //$go_login_link = network_site_url ('signin?redirect_to=https://gameful.me/login?blog_id='.$blog_id);
         echo "<div class='go_user_bar_icon userbar_dropdown'><a href='$go_login_link'><i class='fas fa-user ab-icon' aria-hidden='true'></i><br><div class='go_player_bar_text' id='go_user_link'>$login_text</div></a>";
+        //echo "<div class='go_user_bar_icon userbar_dropdown'><div id='go_login_link'><i class='fas fa-user ab-icon' aria-hidden='true'></i><br><div class='go_player_bar_text' id='go_user_link'>$login_text</div></div>";
     }
 
 
@@ -316,11 +321,11 @@ function go_stats_leaderboard() {
     $section_name = " ";
     $group = 'loading';
     $group_name =  " ";
-
+    $go_leaderboard_name = ucwords(get_option('options_go_stats_leaderboard_name'));
     ?>
 
     <div id="go_leaderboard_wrapper" class="go_datatables">
-        <h2 style='padding-top:10px;'>Leaderboard</h2>
+        <h2 style='padding-top:10px;'><?php echo $go_leaderboard_name; ?></h2>
         <div id="go_leaderboard_filters">
             <span>Section:<?php go_make_tax_select('user_go_sections', false, $section, $section_name, false); ?></span>
             <span>Group:<?php go_make_tax_select('user_go_groups', false, $group, $group_name, false); ?></span>
@@ -337,8 +342,10 @@ function go_stats_leaderboard() {
                     <tr>
                         <th></th>
                         <?php
-                        if ($full_name_toggle || $is_admin){
+                        if ($full_name_toggle == 'full' || $is_admin){
                             echo "<th class='header'><a href='#'>Full Name</a></th>";
+                        }else if ($full_name_toggle == 'first'){
+                            echo "<th class='header'><a href='#'>First Name</a></th>";
                         }
                         ?>
                         <th class='header'><a href="#">Name</a></th>

@@ -596,7 +596,7 @@ final class WP_Term_Order {
             global $pagenow;
 
             $taxonomy = $taxonomies[0];
-            if ( 'edit-tags.php' !== $pagenow || ! in_array( $taxonomy, array('task_chains', 'store_types', 'go_badges', 'user_go_groups'), true )) {
+            if ( 'edit-tags.php' !== $pagenow || ! in_array( $taxonomy, array('task_chains', 'store_types', 'go_badges', 'user_go_groups', 'user_go_sections'), true )) {
                 return $args;
             }
 
@@ -679,7 +679,7 @@ final class WP_Term_Order {
 		}
 
 		// Bail if current user cannot assign terms
-		if ( ! current_user_can( $tax->cap->edit_terms ) ) {
+		if ( ! current_user_can( $tax->cap->edit_terms ) && !go_user_is_admin() ) {
 			die( -1 );
 		}
 

@@ -66,6 +66,7 @@ function go_admin_scripts ($hook) {
             'nonces' => array(
                 'go_user_map_ajax'              => wp_create_nonce('go_user_map_ajax'),//on the clipboard
                 'go_reset_all_users'			=> wp_create_nonce( 'go_reset_all_users'),//could be just on tools
+                'go_flush_all_permalinks'			=> wp_create_nonce( 'go_flush_all_permalinks'),//could be just on tools
             ),
         )
     );
@@ -142,6 +143,15 @@ function go_admin_scripts ($hook) {
                 wp_localize_script( 'go_admin_user', 'GO_EDIT_STORE_DATA', array( 'postid' => $id , 'store_name' => $store_name, 'is_store_edit' => true ));
             }
         }
+    }
+
+
+    if ($hook === 'toplevel_page_game-tools') {
+        wp_localize_script(
+            'go_admin_user',
+            'go_is_tools',
+            array(true)
+        );
     }
 
 

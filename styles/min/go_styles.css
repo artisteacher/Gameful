@@ -8,7 +8,7 @@ img {
   .go_favorite_container label input[type="checkbox"] {
     display: none; }
   .go_favorite_container label .go_favorite_label:before {
-    font-family: 'Font Awesome 5 Free' !important;
+    font-family: 'Font Awesome 5 Pro' !important;
     content: '\f004';
     speak: none;
     font-style: normal;
@@ -20,14 +20,14 @@ img {
     -webkit-font-smoothing: antialiased;
     font-size: 2em; }
   .go_favorite_container label input[type="checkbox"]:checked + .go_favorite_label:before {
-    font-family: 'Font Awesome 5 Free' !important;
+    font-family: 'Font Awesome 5 Pro' !important;
     content: "\f004";
     color: #8B0000;
     font-size: 2em;
     font-weight: 900; }
 
 .go_is_favorite_container .go_is_favorite_label:before {
-  font-family: 'Font Awesome 5 Free' !important;
+  font-family: 'Font Awesome 5 Pro' !important;
   content: '\f004';
   speak: none;
   font-style: normal;
@@ -53,7 +53,7 @@ img {
 
 .go_favorite_container span.checkbox::after {
   content: '\f00c';
-  font-family: 'Font Awesome 5 Free';
+  font-family: 'Font Awesome 5 Pro';
   left: -31px;
   top: 2px;
   color: transparent;
@@ -444,11 +444,11 @@ input[type='text'].go_error_red {
 *	Admin-Bar Styles
 ********************/
 .fas.ab-icon:before {
-  font-family: 'Font Awesome 5 Free' !important;
+  font-family: 'Font Awesome 5 Pro' !important;
   font-weight: 900; }
 
 .fas {
-  font-family: 'Font Awesome 5 Free' !important;
+  font-family: 'Font Awesome 5 Pro' !important;
   font-weight: 900; }
 
 @media screen and (max-width: 782px) {
@@ -571,9 +571,6 @@ ul#wp-admin-bar-go_add-default.ab-submenu {
 }*/
 input[name="go_admin_bar_submit"] {
   height: 40px !important; }
-
-#wp-admin-bar-site-name .ab-submenu {
-  background-color: #4B4B4B !important; }
 
 #wp-admin-bar-site-name .go_site_name_menu {
   background-color: #333 !important; }
@@ -877,62 +874,62 @@ input#go_pass_lock::-moz-placeholder {
   overflow-y: hidden !important; }
 
 #adminmenu #toplevel_page_game-on-options .wp-menu-image:before {
-  font-family: 'Font Awesome 5 Free' !important;
+  font-family: 'Font Awesome 5 Pro' !important;
   content: '\f085';
   font-weight: 900; }
 
 #adminmenu #toplevel_page_badges .wp-menu-image:before {
-  font-family: 'Font Awesome 5 Free' !important;
+  font-family: 'Font Awesome 5 Pro' !important;
   content: '\f0a3';
   font-weight: 900; }
 
 #adminmenu #toplevel_page_groups .wp-menu-image:before {
-  font-family: 'Font Awesome 5 Free' !important;
+  font-family: 'Font Awesome 5 Pro' !important;
   content: '\f0c0';
   font-weight: 900; }
 
 #adminmenu #toplevel_page_game-tools .wp-menu-image:before {
-  font-family: 'Font Awesome 5 Free' !important;
+  font-family: 'Font Awesome 5 Pro' !important;
   content: '\f7d9';
   font-weight: 900; }
 
 #adminmenu #menu-posts-tasks .wp-menu-image:before {
-  font-family: 'Font Awesome 5 Free' !important;
+  font-family: 'Font Awesome 5 Pro' !important;
   content: '\f3c5';
   font-weight: 900; }
 
 #adminmenu #menu-users .wp-menu-image:before {
-  font-family: 'Font Awesome 5 Free' !important;
+  font-family: 'Font Awesome 5 Pro' !important;
   content: '\f007';
   font-weight: 900; }
 
 #adminmenu #toplevel_page_edit-tags-taxonomy-task_chains .wp-menu-image:before {
-  font-family: 'Font Awesome 5 Free' !important;
+  font-family: 'Font Awesome 5 Pro' !important;
   content: '\f59f';
   font-weight: 900; }
 
 #adminmenu #menu-posts-go_store .wp-menu-image:before {
-  font-family: 'Font Awesome 5 Free' !important;
+  font-family: 'Font Awesome 5 Pro' !important;
   content: '\f362';
   font-weight: 900; }
 
 #adminmenu #toplevel_page_go_clipboard .wp-menu-image:before {
-  font-family: 'Font Awesome 5 Free' !important;
+  font-family: 'Font Awesome 5 Pro' !important;
   content: '\f46d';
   font-weight: 900; }
 
 #adminmenu #toplevel_page_game-on .wp-menu-image:before {
-  font-family: 'Font Awesome 5 Free' !important;
+  font-family: 'Font Awesome 5 Pro' !important;
   content: '\f059';
   font-weight: 900; }
 
 #adminmenu #toplevel_page_go_options .wp-menu-image:before {
-  font-family: 'Font Awesome 5 Free' !important;
+  font-family: 'Font Awesome 5 Pro' !important;
   content: '\f1de';
   font-weight: 900; }
 
 #adminmenu #menu-posts-go_blogs .wp-menu-image:before {
-  font-family: 'Font Awesome 5 Free' !important;
+  font-family: 'Font Awesome 5 Pro' !important;
   content: '\f08d';
   font-weight: 900; }
 
@@ -1228,13 +1225,15 @@ body.wp-admin {
     display: flex;
     justify-content: center;
     background-color: #2d2d2d; }
-  #go_user_bar #go_admin_bar_gold .coin_wrapper {
-    line-height: .5em; }
-  #go_user_bar #go_admin_bar_gold .go_coin {
-    font-size: .5em;
-    top: 5px; }
-  #go_user_bar #go_admin_bar_gold .go_amount {
-    bottom: 0px; }
+  #go_user_bar #go_admin_bar_gold {
+    font-family: 'B612 Mono', monospace; }
+    #go_user_bar #go_admin_bar_gold .coin_wrapper {
+      line-height: .5em; }
+    #go_user_bar #go_admin_bar_gold .go_coin {
+      font-size: .5em;
+      top: 5px; }
+    #go_user_bar #go_admin_bar_gold .go_amount {
+      bottom: 0px; }
   #go_user_bar #go_user_bar_inner {
     display: flex;
     white-space: nowrap;
@@ -1287,6 +1286,16 @@ body.wp-admin {
     z-index: 100001; }
   #go_user_bar .narrow_content {
     display: none; }
+  #go_user_bar .max_health {
+    background: gold;
+    /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(left, orange, yellow, green, cyan, blue, violet);
+    /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(right, orange, yellow, green, cyan, blue, violet);
+    /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(right, orange, yellow, green, cyan, blue, violet);
+    /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to right, orange, yellow, green, cyan, blue, violet); }
 
 @media screen and (max-width: 782px) {
   .admin-bar #go_user_bar {
@@ -1945,7 +1954,6 @@ store lightbox styles
     #maps .primaryNav > li p {
       padding: 10px 0;
       display: block;
-      font-size: 14px;
       font-weight: bold;
       text-align: center;
       color: black; }
@@ -2076,7 +2084,7 @@ store lightbox styles
 
 #go_Dropdown a {
   display: block;
-  font-size: 12px;
+  font-size: .9em;
   min-width: 150px;
   color: black;
   background: #bae9ff;

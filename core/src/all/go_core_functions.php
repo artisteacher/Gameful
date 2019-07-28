@@ -113,8 +113,6 @@ function go_clone_post_new($is_template = false, $print = false){
     }
 }
 
-
-
 /**
  * Called by the ajax dataloaders.
  * @param $TIMESTAMP
@@ -252,8 +250,4 @@ function go_get_page_uri(){
     return $page_uri;
 }
 
-function go_is_ms_active_network_wide(){
-    $myfile = plugin_basename(__FILE__);
-    $is_ms = is_plugin_active_for_network($myfile );
-    return $is_ms;
-}
+

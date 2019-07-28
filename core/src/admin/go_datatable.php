@@ -110,7 +110,7 @@ function go_table_totals() {
 			uid bigint(20) NOT NULL UNIQUE,
 			xp INT unsigned DEFAULT 0,
 			gold DECIMAL (10,2) unsigned DEFAULT 0,
-			health DECIMAL (10,2) unsigned DEFAULT 100,
+			health DECIMAL (10,2) unsigned DEFAULT 0, 
 			badge_count INT DEFAULT 0,
 			PRIMARY KEY (id)               
 		);
@@ -202,11 +202,6 @@ function go_set_options_autoload(){
 */
 
 function go_install_data ($reset = false) {
-    global $wpdb;
-    $table_name_user_meta = "{$wpdb->prefix}usermeta";
-    $table_name_go_totals = "{$wpdb->prefix}go_loot";
-    $table_name_go = "{$wpdb->prefix}go_tasks";
-    $table_name_users = "{$wpdb->prefix}users";
 
     $options_array = array(
         'options_go_tasks_name_singular' => 'Quest',
@@ -277,7 +272,7 @@ function go_install_data ($reset = false) {
         'options_go_images_resize_toggle' => 1,
 
         'options_go_guest_global' => 'regular',
-        'options_go_full-names_toggle' => 0,
+        'options_go_full-names_toggle' => false,
         'options_go_search_toggle' => 0,
 
         'options_go_dashboard_toggle' => 0,
@@ -339,21 +334,16 @@ function go_install_data ($reset = false) {
     $isset = get_option('options_go_feedback_canned'); //if there is no canned feedback, add the defaults
     if ($isset == false){
         add_option('options_go_feedback_canned', 3);
-        add_option('options_go_feedback_canned_0_title', 'Post has been reset');
-        add_option('options_go_feedback_canned_0_message', 'This post does not meet the minimum requirements.  Loot has been removed.');
+        add_option('options_go_feedback_canned_0_title', 'Needs revision');
+        add_option('options_go_feedback_canned_0_message', 'Please revise this post.');
         add_option('options_go_feedback_canned_0_defaults_xp', 0);
         add_option('options_go_feedback_canned_0_defaults_gold', 0);
         add_option('options_go_feedback_canned_0_defaults_health', 0);
-        add_option('options_go_feedback_canned_1_title', 'Needs revision');
-        add_option('options_go_feedback_canned_1_message', 'Please revise this post.');
-        add_option('options_go_feedback_canned_1_defaults_xp', 0);
-        add_option('options_go_feedback_canned_1_defaults_gold', 0);
+        add_option('options_go_feedback_canned_1_title', 'Great work');
+        add_option('options_go_feedback_canned_1_message', 'Great job!  Here is some extra loot.');
+        add_option('options_go_feedback_canned_1_defaults_xp', 10);
+        add_option('options_go_feedback_canned_1_defaults_gold', 10);
         add_option('options_go_feedback_canned_1_defaults_health', 0);
-        add_option('options_go_feedback_canned_2_title', 'Great work');
-        add_option('options_go_feedback_canned_2_message', 'Great job!  Here is some extra loot.');
-        add_option('options_go_feedback_canned_2_defaults_xp', 10);
-        add_option('options_go_feedback_canned_2_defaults_gold', 10);
-        add_option('options_go_feedback_canned_2_defaults_health', 0);
     }
 }
 

@@ -6,6 +6,22 @@
  * Time: 1:13 AM
  */
 
+//this downloads the xml file
+add_action('init', 'go_download_game_data');
+function go_download_game_data()
+{
+    if (isset($_GET['download'])) {
+        $pass = get_option('go_export_password');
+        if($pass == $_GET['password']) {
+            go_export_wp2();
+            die();
+        }else{
+            echo "Invalid link password.  Contact the exporting site for new link.";
+            die();
+        }
+    }
+}
+
 
 
 function go_admin_tools_menu_content() {
@@ -56,7 +72,52 @@ function go_admin_tools_menu_content() {
     }
 */
 
+    $pass = get_option('go_export_password');
+    if(empty($pass)){
+        $pass = wp_generate_password(8, false);
+        update_option('go_export_password', $pass);
+    }
+    $export_url = home_url('wp-admin/admin.php?page=game-tools&download=true&password='.$pass);
+    //<button id="go_export_game" onclick="window.location.href = 'wp-admin/admin.php?page=game-tools&download=true';">Export All Game Data</button>
+
             ?>
+        <h2>Import and Export Tools</h2>
+        <div class="go_tools_section">
+            <div class="card">
+                <h2>Export Game Data</h2>
+                <p>You can export Tasks, Maps, Store Items and Categories, Badges, Groups, and Sections.  Does not include student blogs.</p>
+                <p>The other site can retrive your export file from the following URL. Enter the link in the importer tool on the other site.</p>
+                <div id="go_export_pass"><?php echo $export_url ;?></div>
+                <button onclick="go_CopyToClipboard('go_export_pass')">Copy text</button>
+                <script>
+                    function go_CopyToClipboard(containerid) {
+                        if (document.selection) {
+                            var range = document.body.createTextRange();
+                            range.moveToElementText(document.getElementById(containerid));
+                            range.select().createTextRange();
+                            document.execCommand("copy");
+
+                        } else if (window.getSelection) {
+                            var range = document.createRange();
+                            range.selectNode(document.getElementById(containerid));
+                            window.getSelection().addRange(range);
+                            document.execCommand("copy");
+                            jQuery('#'+containerid).animate({ 'zoom': 1.1 }, 200).animate({ 'zoom': 1 }, 200);
+                            //alert("text copied")
+                        }}
+                </script>
+
+            </div>
+            <div class="card">
+                <h2>Import Game Data</h2>
+                <p>You will need the export URL from the site you wish to import from.</p>
+                <button id="go_import_game" onclick="window.location.href = 'wp-admin/admin.php?import=gameful';">Import Game Data</button>
+
+            </div>
+        </div>
+
+
+
         <h2>User Management</h2>
         <div class="go_tools_section">
             <div class="card">
@@ -65,7 +126,27 @@ function go_admin_tools_menu_content() {
                 <button id="go_reset_all_users">Reset All Users</button>
             </div>
             <?php
-            do_action('go_user_management_card');
+            do_action('go_user_management_card');//loads other user management cards from modules, i.e., archive
+            ?>
+        </div>
+
+
+    </div>
+
+
+
+    <?php
+    if(is_super_admin()){
+        ?>
+        <h2>Super Admin Tools</h2>
+        <div class="go_tools_section">
+            <div class="card">
+                <h2>Flush permalinks on all sites</h2>
+                <p>This is a maintenance task. Only run if needed--it's expensive.</p>
+                <button id="go_reset_all_users">Flush All Permalinks</button>
+            </div>
+            <?php
+            do_action('go_flush_all_permalinks');
             ?>
         </div>
         <div class="go_tools_section">
@@ -75,14 +156,13 @@ function go_admin_tools_menu_content() {
             </div
         </div>
 
-    </div>
+        </div>
 
 
 
-    <?php
-
+        <?php
+    }
 }
-
 
 function go_create_user_blog_archive(){
 
@@ -103,8 +183,6 @@ function go_create_user_blog_archive(){
 
 <?php
 }
-
-
 
 function go_update_go_to_v5(){
     /*

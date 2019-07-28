@@ -275,15 +275,17 @@ function go_post_data($post_id){
 
     }else {
         $post_data = array();
-        $post = get_post($post_id);
-        $post_title = $post->post_title;
-        $post_data[] = $post_title;//0
-        $post_status = $post->post_status;
-        $post_data[] = $post_status;//1
-        $post_permalink = get_permalink($post);
-        $post_data[] = $post_permalink;//2
-        $post_custom = get_post_meta($post_id);
-        $post_data[] = $post_custom;//3
+        if ($post_id != false) {
+            $post = get_post($post_id);
+            $post_title = $post->post_title;
+            $post_data[] = $post_title;//0
+            $post_status = $post->post_status;
+            $post_data[] = $post_status;//1
+            $post_permalink = get_permalink($post);
+            $post_data[] = $post_permalink;//2
+            $post_custom = get_post_meta($post_id);
+            $post_data[] = $post_custom;//3
+        }
         set_transient($key, $post_data, 3600 * 24);
     }
     return $post_data;

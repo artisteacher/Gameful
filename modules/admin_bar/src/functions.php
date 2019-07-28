@@ -1,7 +1,7 @@
 <?php
 
 //Redirect to homepage after logout and remove cookies
-add_action('wp_logout','auto_redirect_after_logout');
+//add_action('wp_logout','auto_redirect_after_logout');
 function auto_redirect_after_logout($k){
     $HTTP_REFERER = (isset($_SERVER['HTTP_REFERER']) ?  $_SERVER['HTTP_REFERER'] : null);//page currently being loaded
     $details  = get_blog_details();
@@ -26,14 +26,6 @@ function auto_redirect_after_logout($k){
     }
 }
 
-//remove_menu_page( 'index.php' );
-//add_action( 'admin_bar_menu', 'remove_wp_admin_items', 999 );
-function remove_wp_admin_items( $wp_admin_bar ) {
-	$wp_admin_bar->remove_node( 'wp-logo' );	
-	if ( ! get_option('go_dashboard_toggle') && ! current_user_can('administrator') && ! is_admin()){
-		$wp_admin_bar->remove_node( 'site-name' );
-	}	
-}
 
 //remove dashboard
 //add_action( 'admin_menu', 'Wps_remove_tools', 99 );
@@ -45,7 +37,9 @@ function Wps_remove_tools(){
 
 function go_display_admin_bar() {
     $is_admin = go_user_is_admin();
-	if($is_admin){
+    $blog_id = get_current_blog_id();
+$is_logged_in = is_user_logged_in();
+	if($is_admin || ($blog_id == 1 && $is_logged_in)){
 	    return true;
     }
 	else{
@@ -92,7 +86,7 @@ function go_admin_bar_v5() {
         $wp_admin_bar->remove_node('new-tasks');
         $wp_admin_bar->remove_node('new-go_store');
 
-        $wp_admin_bar->add_node(array('id' => 'go_section_pipe', 'title' => ' | ', 'href' => 'javascript:void(0)',));
+
 
 
         ///
@@ -100,11 +94,13 @@ function go_admin_bar_v5() {
         ///
         ///
         if ($is_admin ) {//only show to admin
+            $wp_admin_bar->add_node(array('id' => 'go_section_pipe', 'title' => ' | ', 'href' => 'javascript:void(0)',));
             $wp_admin_bar->add_node(
                 array(
                     'id' => 'go_options',
-                   'title' => 'Game On',
-                    'href' => get_admin_url() . 'admin.php?page=game-on'
+                   'title' => 'Gameful Me',
+                    //'href' => get_admin_url() . 'admin.php?page=game-on'
+                    'href' => ''
                 )
             );
 
@@ -122,10 +118,21 @@ function go_admin_bar_v5() {
              * Game On Links
              */
             // displays GO options page link
+            /*
+            $wp_admin_bar->add_node(
+                array(
+                    'id' => 'go_nav_help',
+                    'title' => 'Help',
+                    'href' => get_admin_url() . 'admin.php?page=game-on',
+                    'parent' => 'go_options',
+                    'meta' => array('class' => 'go_site_name_menu_item')
+                )
+            );*/
+
             $wp_admin_bar->add_node(
                 array(
                     'id' => 'go_nav_options',
-                    'title' => 'Game-On Options',
+                    'title' => 'Gameful Me Options',
                     'href' => get_admin_url() . 'admin.php?page=game-on-options',
                     'parent' => 'go_options',
                     'meta' => array('class' => 'go_site_name_menu_item')
@@ -315,7 +322,7 @@ function go_admin_bar_v5() {
 
 
         //VIEW TYPE ON QUESTS
-        if (is_user_member_of_blog()) {
+        if (is_user_member_of_blog() || go_user_is_admin()) {
            // $wp_admin_bar->remove_menu('wp-logo');
             /**
              * If is admin, show the dropdown for view type
@@ -430,10 +437,13 @@ function go_admin_bar_v5() {
 
 add_action('init', 'go_leaderboard_rewrite');
 function go_leaderboard_rewrite(){
-    $page_name = get_option( 'options_go_stats_leaderboard_name');
-    $page_name = (isset($page_name) ?  $page_name : 'leaderboard');
-    //$page_name = 'leaderboard';
-    add_rewrite_rule( $page_name, 'index.php?' . $page_name . '=true', "top");
+    $blog_id = get_current_blog_id();
+    if ($blog_id > 1) {
+        $page_name = urlencode(get_option('options_go_stats_leaderboard_name'));
+        $page_name = (isset($page_name) ? $page_name : 'leaderboard');
+        //$page_name = 'leaderboard';
+        add_rewrite_rule($page_name, 'index.php?' . $page_name . '=true', "top");
+    }
 }
 
 // Query Vars
@@ -441,7 +451,7 @@ function go_leaderboard_rewrite(){
 //this is then used in the rewrite and to load the template
 add_filter( 'query_vars', 'go_leaderboard_query_var' );
 function go_leaderboard_query_var( $vars ) {
-    $page_name = get_option( 'options_go_stats_leaderboard_name');
+    $page_name = urlencode(get_option( 'options_go_stats_leaderboard_name'));
     $page_name = (isset($page_name) ?  $page_name : 'leaderboard');
     $vars[] = $page_name;
     return $vars;
@@ -450,7 +460,7 @@ function go_leaderboard_query_var( $vars ) {
 /* LEADERBOARD Include Template*/
 add_filter('template_include', 'go_leaderboard_template_include', 1, 1);
 function go_leaderboard_template_include($template){
-    $page_name = get_option( 'options_go_stats_leaderboard_name');
+    $page_name = urlencode(get_option( 'options_go_stats_leaderboard_name'));
     $page_name = (isset($page_name) ?  $page_name : 'leaderboard');
     global $wp_query; //Load $wp_query object
 
@@ -464,4 +474,34 @@ function go_leaderboard_template_include($template){
     return $template; //Load normal template when $page_value != "true" as a fallback
 }
 
+function gf_admin_bar_remove_logo() {
+    global $wp_admin_bar;
+    $wp_admin_bar->remove_menu( 'wp-logo' );
+}
+add_action( 'wp_before_admin_bar_render', 'gf_admin_bar_remove_logo', 0 );
 
+
+add_action( 'admin_bar_menu', 'remove_howdy', 11 );
+function remove_howdy( $wp_admin_bar ) {
+    $user_id = get_current_user_id();
+    $current_user = wp_get_current_user();
+    $profile_url = get_edit_profile_url( $user_id );
+
+    if ( 0 != $user_id ) {
+        /* Add the "My Account" menu */
+        $avatar = get_avatar( $user_id, 28 );
+        $howdy = sprintf( __('Welcome, %1$s'), $current_user->display_name );
+        $class = empty( $avatar ) ? '' : 'with-avatar';
+
+        $wp_admin_bar->add_menu( array(
+            'id' => 'my-account',
+            'parent' => 'top-secondary',
+            'title' => $howdy . $avatar,
+            'href' => $profile_url,
+            'meta' => array(
+                'class' => $class,
+            ),
+        ) );
+
+    }
+}

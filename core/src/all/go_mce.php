@@ -103,8 +103,25 @@ function go_changeMceDefaults($in) {
 add_filter( 'tiny_mce_before_init', 'go_changeMceDefaults' );
 
 
+// Enable font size and font family selects in the editor
+if ( ! function_exists( 'am_add_mce_font_buttons' ) ) {
+    function am_add_mce_font_buttons( $buttons ) {
+        array_unshift( $buttons, 'fontselect' ); // Add Font Select
+        array_unshift( $buttons, 'fontsizeselect' ); // Add Font Size Select
+        return $buttons;
+    }
+}
+add_filter( 'mce_buttons_2', 'am_add_mce_font_buttons' ); // you can use mce_buttons_2 or mce_buttons_3 to change the rows where the buttons will appear
 
 
+// Add custom Fonts to the Fonts list
+if ( ! function_exists( 'am_add_google_fonts_array_to_tiny_mce' ) ) {
+    function am_add_google_fonts_array_to_tiny_mce( $initArray ) {
+        $initArray['font_formats'] = 'Lato=Lato;Andale Mono=andale mono,times;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Impact=impact,chicago;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;Times New Roman=times new roman,times;Trebuchet MS=trebuchet ms,geneva;Verdana=verdana,geneva;Webdings=webdings;Wingdings=wingdings,zapf dingbats';
+        return $initArray;
+    }
+}
+add_filter( 'tiny_mce_before_init', 'am_add_google_fonts_array_to_tiny_mce' );
 
 
 

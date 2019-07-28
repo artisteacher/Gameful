@@ -488,14 +488,14 @@ function go_feedback_input($post_id){
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            <td class="go-acf-field go-acf-field-number go_reward go_percent  data-name="
+                                                            <td class="go-acf-field go-acf-field-number go_reward go_percent"  data-name="
                                                                 %
                                                             " data-type="number">
                                                             <div class="go-acf-input">
                                                                 <div class="go-acf-input-wrap"><input
                                                                             class="feedback_percent_input go_percent_input"
                                                                             name="percent" type="number"
-                                                                            value="0" min="0" max="100' step=" 1"
+                                                                            value="0" min="0" max="100" step="1"
                                                                     oninput="validity.valid||(value='');">%
                                                                 </div>
                                                             </div>
@@ -588,7 +588,7 @@ function go_feedback_input($post_id){
                                                                 <?php
                                                                 if ($go_xp_toggle) {
                                                                     ?>
-                                                                    <td class="go-acf-field go-acf-field-number go_reward go_xp  data-name="
+                                                                    <td class="go-acf-field go-acf-field-number go_reward go_xp"  data-name="
                                                                         xp
                                                                     " data-type="number">
                                                                     <div class="go-acf-input">

@@ -27,8 +27,9 @@ if ( !is_admin() ) {
     }*/
 
 }else{
-    global $pagenow;
-    if ( 'edit-tags.php' == $pagenow) {
+    $page_uri = go_get_page_uri();
+    //global $pagenow;
+    if ( 'wp-adminedit-tags.php' == $page_uri) {
         //include_once('src/admin.php');
         include_once('src/wp-term-order.php');
     }
@@ -36,3 +37,4 @@ if ( !is_admin() ) {
 
 //always include
 //include_once('src/functions.php');
+

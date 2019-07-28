@@ -94,7 +94,7 @@ function go_new_task_from_template_as_draft()
  * Add the duplicate link to action list for post_row_actions
  */
 function go_duplicate_post_link( $actions, $post ) {
-    if (current_user_can('edit_posts')) {
+    if (current_user_can('edit_posts') || go_user_is_admin()) {
         $task_name = get_option('options_go_tasks_name_singular');
         $actions['duplicate'] = '<a href="' . wp_nonce_url('admin.php?action=go_duplicate_post_as_draft&post=' . $post->ID, basename(__FILE__), 'duplicate_nonce' ) . '" title="Duplicate this item" rel="permalink">Clone</a>';
         if ($post->post_type == 'tasks_templates') {
@@ -108,7 +108,7 @@ function go_duplicate_post_link( $actions, $post ) {
 add_filter( 'post_row_actions', 'go_duplicate_post_link', 10, 2 );
 
 function go_duplicate_post_button($post ) {
-    if (current_user_can('edit_posts')) {
+    if (current_user_can('edit_posts') || go_user_is_admin()) {
         $task_name = get_option('options_go_tasks_name_singular');
         echo '<div style="padding: 10px;"><a class="button" href="' . wp_nonce_url('admin.php?action=go_duplicate_post_as_draft&post=' . $post->ID, basename(__FILE__), 'duplicate_nonce' ) . '" title="Duplicate this item" rel="permalink">Clone</a></div>';
         if ($post->post_type == 'tasks_templates'){
@@ -128,14 +128,14 @@ function go_reorder_admin_menu( ) {
         'game-on', //GO heading
         'game-on-options', //GO options
         'go_clipboard', //GO clipboard
-        'edit.php?post_type=tasks', // Quests
-        'edit-tags.php?taxonomy=task_chains', //Maps
-        'edit.php?post_type=go_store', //store
-        'badges', //badges
         'users.php', // Users
+        'edit.php?post_type=tasks', // Quests
+        //'edit-tags.php?taxonomy=task_chains', //Maps
+        'edit.php?post_type=go_store', //store
+        'edit-tags.php?taxonomy=go_badges', //badges
         'groups',
-        'edit.php?post_type=go_blogs',
-        'go_random_events',
+        //'edit.php?post_type=go_blogs',
+        //'go_random_events',
         'game-tools',//gameon tools
         'separator1', // --Space--
         'index.php', // Dashboard
@@ -168,19 +168,20 @@ function go_add_toplevel_menu() {
 
 
     /* add a new menu item */
+    /*
     add_menu_page(
-        'Game On', // page title
-        'About Game On', // menu title
+        'Gameful Me Help', // page title
+        'Gameful Me Help', // menu title
         'manage_options', // capability
         'game-on', // menu slug
         'go_admin_game_on_menu_content', // callback function
         'dashicons-admin-home',// icon
         1
-    );
+    );*/
 
     /* add a new menu item */
     add_menu_page(
-        'Game On Options', // page title
+        'Gameful Me Options', // page title
         'Options', // menu title
         'manage_options', // capability
         'game-on-options', // menu slug
@@ -238,16 +239,18 @@ function go_add_toplevel_menu() {
     );
 
     /* add a new menu item */
+    /*
+    $map_name = get_option('options_go_locations_map_title');
     add_menu_page(
-        'Maps & Menus', // page title
-        'Maps & Menus', // menu title
+        ucwords($map_name), // page title
+        ucwords($map_name), // menu title
         'edit_posts', // capability
         'edit-tags.php?taxonomy=task_chains', // menu slug
         '', // callback function
         'dashicons-location-alt', // icon
         4 // menu position
     );
-
+*/
     $badges_toggle = get_option('options_go_badges_toggle');
     if($badges_toggle) {
         /* add a new menu item */
@@ -255,18 +258,18 @@ function go_add_toplevel_menu() {
         add_menu_page($badges_name, // page title
             $badges_name, // menu title
             'edit_posts', // capability
-            'badges' // menu slug
+            'edit-tags.php?taxonomy=go_badges' // menu slug
         //'', // callback function
         //'', // icon
         // 4 // menu position
         );
     }
 
-    $groups_toggle = get_option('options_go_groups_toggle');
-    if($groups_toggle) {
 
-        $groups_name = get_option('options_go_groups_name_plural');
-        /* add a new menu item */
+   /* if($groups_toggle) {
+
+        $groups_name = get_option('options_go_groups_name_plural') . ' & Sections';
+        // add a new menu item
         add_menu_page(
             $groups_name, // page title
             $groups_name, // Menu title
@@ -277,7 +280,7 @@ function go_add_toplevel_menu() {
             4 // menu position
         );
 
-    }
+    }*/
     /* add a new menu item */
     add_menu_page(
         'Tools',// page title
@@ -295,6 +298,19 @@ function go_add_toplevel_menu() {
 add_action( 'admin_menu', 'go_add_toplevel_menu');
 
 function go_add_submenus() {
+    remove_submenu_page( 'users.php', 'profile.php' );
+    /* add the sub menu under content for posts */
+    add_submenu_page(
+        'edit.php?post_type=tasks', // parent slug
+        'Add New', // page_title,
+        'Add New', // menu_title,
+        'edit_posts', // capability,
+        'javascript:go_new_task_from_template();' // menu_slug,
+    );
+
+    remove_submenu_page( 'edit.php?post_type=tasks', 'post-new.php?post_type=tasks' );
+
+
     /* add the sub menu under content for posts */
     add_submenu_page(
         'edit.php?post_type=tasks', // parent slug
@@ -305,15 +321,27 @@ function go_add_submenus() {
     );
 
     /* add the sub menu under content for posts */
+    $map_name = get_option('options_go_locations_map_title');
+    add_submenu_page(
+        'edit.php?post_type=tasks', // parent slug
+        'Manage ' . $map_name, // page_title,
+        'Manage ' . $map_name, // menu_title,
+        'edit_posts', // capability,
+        'edit-tags.php?taxonomy=task_chains' // menu_slug,
+    );
+
+    /*
+    // add the sub menu under content for posts
     add_submenu_page(
         'maps_menus', // parent slug
         'Maps & Menus', // page_title,
         'Maps & Menus', // menu_title,
         'edit_posts', // capability,
         'maps_menus' // menu_slug,
-    );
+    );*/
 
     // add the sub menu under content for posts */
+    /*
     $badges_name = get_option('options_go_badges_name_singular');
     add_submenu_page(
         'badges', // parent slug
@@ -321,39 +349,64 @@ function go_add_submenus() {
         'Manage ' . $badges_name, // menu_title,
         'edit_posts', // capability,
         'edit-tags.php?taxonomy=go_badges' // menu_slug,
-    );
+    );*/
 
     /* add the sub menu under content for posts */
-    add_submenu_page(
-        'groups', // parent slug
-        'Manage Groups', // page_title,
-        'Manage Groups', // menu_title,
-        'edit_posts', // capability,
-        'edit-tags.php?taxonomy=user_go_groups' // menu_slug,
-    );
+    $groups_toggle = get_option('options_go_groups_toggle');
+    if($groups_toggle) {
+        $groups_name = get_option('options_go_groups_name_plural');
 
-    // add the sub menu under content for posts */
+        add_submenu_page(
+            'users.php', // parent slug
+            'Manage '. $groups_name, // page_title,
+            'Manage '. $groups_name, // menu_title,
+            'edit_posts', // capability,
+            'edit-tags.php?taxonomy=user_go_groups' // menu_slug,
+        );
+    }
+
+    // add the sub menu under content for posts
     add_submenu_page(
-        'groups', // parent slug
+        'users.php', // parent slug
         'Manage Sections', // page_title,
         'Manage Sections', // menu_title,
         'edit_posts', // capability,
         'edit-tags.php?taxonomy=user_go_sections' // menu_slug,
     );
 
-    /* add the sub menu under content for posts */
+    // add the sub menu under content for posts
+    /*
     add_submenu_page(
         'edit-tags.php?taxonomy=task_chains', // parent slug
         'Quest Maps', // page_title,
         'Quest Maps', // menu_title,
         'edit_posts', // capability,
         'edit-tags.php?taxonomy=task_chains' // menu_slug,
-    );
+    );*/
 
 
 
 }
 add_action( 'admin_menu', 'go_add_submenus', 9 );
+
+
+//remove add new button on tasks edit page becuase it has custom button
+//and remove submenu becuase it was replaced with a pop up to select templage
+add_action('admin_menu', 'go_disable_new_tasks');
+function go_disable_new_tasks() {
+// Hide sidebar link
+    //global $submenu;
+    //unset($submenu['edit.php?post_type=tasks'][10]);
+
+// Hide link on listing page
+    if (isset($_GET['post_type']) && $_GET['post_type'] == 'tasks') {
+        echo '<style type="text/css">
+    .page-title-action { display:none; }
+    </style>';
+    }
+}
+
+
 
 /**
  * Add content to submenus
@@ -579,50 +632,50 @@ function go_options_menu_content() {
         <div class="go_tools_section">
 
             <div class="go_tools_section">
-                <div class="card">
-                    <h2><a href="<?php menu_page_url('go_options'); ?>">Set Up Options</a></h2>
+                <a href="<?php menu_page_url('go_options'); ?>"><div class="card">
+                    <h2>Set Up Options</h2>
                     <p>Here you can set your Loot Options, Map and Store Options, User Options, and Appearance</p>
-                </div>
+                </div></a>
             </div>
 
             <div class="go_tools_section">
-                <div class="card">
-                    <h2><a href="<?php menu_page_url('go_login_options'); ?>">Login and Registration</a></h2>
+                <a href="<?php menu_page_url('go_login_options'); ?>"><div class="card">
+                    <h2>Login and Registration</h2>
                     <p>Here you can set up how students will register and login to your site.</p>
-                </div>
+                </div></a>
             </div>
             <div class="go_tools_section">
-                <div class="card">
-                    <h2><a href="<?php menu_page_url('go_feedback'); ?>">Canned Feedback</a></h2>
+                <a href="<?php menu_page_url('go_feedback'); ?>"><div class="card">
+                    <h2>Canned Feedback</h2>
                     <p>Find yourself leaving the same feedback over and over again? Create a preset and save yourself time.</p>
-                </div>
+                </div></a>
             </div>
             <div class="go_tools_section">
-                <div class="card">
-                    <h2><a href="<?php menu_page_url('go_messages'); ?>">Canned Messages</a></h2>
+                <a href="<?php menu_page_url('go_messages'); ?>"><div class="card">
+                    <h2>Canned Messages</h2>
                     <p>Messages can be used to reward or provide consequences for behavior.  Set or modify the presets here for common behaviors.</p>
-                </div>
+                </div></a>
             </div>
             <div class="go_tools_section">
-                <div class="card">
-                    <h2><a href="<?php menu_page_url('go_bonus_loot'); ?>">Bonus Loot Defaults</a></h2>
+                <a href="<?php menu_page_url('go_bonus_loot'); ?>"><div class="card">
+                    <h2>Bonus Loot Defaults</h2>
                     <p>Create a default set of bonus loot that you can apply to any <?php echo $task_name; ?>.  Students have a chance to win bonus loot upon completion of a <?php echo $task_name; ?>. </p>
-                </div>
+                </div></a>
             </div>
             <div class="go_tools_section">
-                <div class="card">
-                    <h2><a href="<?php menu_page_url('go_appearance'); ?>">Game On Appearance</a></h2>
+                <a href="<?php menu_page_url('go_appearance'); ?>"><div class="card">
+                    <h2>Game On Appearance</h2>
                     <p>Adjust the appearance of game on menus and pages.</p>
-                </div>
+                </div></a>
             </div>
             <?php
             if (!is_multisite()) {
                 ?>
                 <div class="go_tools_section">
-                    <div class="card">
-                        <h2><a href="<?php menu_page_url('go_performance'); ?>">Performance</a></h2>
+                    <a href="<?php menu_page_url('go_performance'); ?>"><div class="card">
+                        <h2>Performance</h2>
                         <p>Rewrite slugs, and image resizing.</p>
-                    </div>
+                    </div></a>
                 </div>
                 <?php
             }
@@ -635,11 +688,12 @@ function go_options_menu_content() {
             <h3>Site-Wide Settings</h3>
             <div class="go_tools_section">
 
-                <div class="go_tools_section">
+                <a href="<?php menu_page_url('go_performance'); ?>"> <div class="go_tools_section">
                     <div class="card">
-                        <h2><a href="<?php menu_page_url('go_performance'); ?>">Performance</a></h2>
+                        <h2>Performance</h2>
                         <p>Rewrite slugs, and image resizing.</p>
                     </div>
+                </a>
                 </div>
             </div>
             <?php

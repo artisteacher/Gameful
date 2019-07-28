@@ -7,7 +7,7 @@
 		"uuidString": "8F58B1E5-6BDE-48ED-B36C-6D5C0D9104BE"
 		}
 	],
-"creatorBuild": "29156",
+"creatorBuild": "31491",
 "files": {
 	"/.gitattributes": {
 		"cB": 0,
@@ -111,14 +111,6 @@
 		"hM": 0,
 		"oA": 1,
 		"oAP": "/.idea/watcherTasks.xml",
-		"oF": 1
-		},
-	"/.idea/webServers.xml": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 1,
-		"oAP": "/.idea/webServers.xml",
 		"oF": 1
 		},
 	"/.idea/workspace.xml": {
@@ -562,6 +554,16 @@
 		"oF": 0,
 		"oS": 0,
 		"uL": 1
+		},
+	"/dev/css/files/go_tasks-admin-acf-min.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/dev/css/files/go_tasks-admin-acf-min-min.css",
+		"oF": 0,
+		"oS": 3
 		},
 	"/dev/css/files/go_tasks-admin-acf.css": {
 		"aP": 1,
@@ -1177,6 +1179,14 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/game-on.php",
+		"oF": 0
+		},
+	"/includes.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes.php",
 		"oF": 0
 		},
 	"/includes/ABOUT_INCLUDES.txt": {
@@ -4129,6 +4139,114 @@
 		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/readme.txt",
 		"oF": 0
 		},
+	"/includes/custom-acf-fields/acf-typography-field/acf-typography.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-typography-field/acf-typography.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-typography-field/assets/js/admin-field-group.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-typography-field/assets/js/admin-field-group-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/custom-acf-fields/acf-typography-field/fields/acf-Typography-v4.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-typography-field/fields/acf-Typography-v4.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-typography-field/fields/acf-Typography-v5.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-typography-field/fields/acf-Typography-v5.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-typography-field/google_fonts.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/includes/custom-acf-fields/acf-typography-field/google_fonts-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/includes/custom-acf-fields/acf-typography-field/includes/admin_settings.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-typography-field/includes/admin_settings.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-typography-field/includes/api-template.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-typography-field/includes/api-template.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-typography-field/includes/functions.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-typography-field/includes/functions.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-typography-field/readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-typography-field/readme.txt",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/acf-typography-field/screenshot-1.png": {
+		"ft": 32768,
+		"iS": 138606,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-typography-field/screenshot-1.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/custom-acf-fields/acf-typography-field/screenshot-2.png": {
+		"ft": 32768,
+		"iS": 38239,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-typography-field/screenshot-2.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/custom-acf-fields/acf-typography-field/screenshot-3.png": {
+		"ft": 32768,
+		"iS": 9921,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/acf-typography-field/screenshot-3.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
 	"/includes/custom-acf-fields/wp-acf-unique_id-master/acf-unique_id-v5.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -4172,13 +4290,13 @@
 		"oAP": "/includes/custom-acf-fields/wp-acf-unique_id-master/readme.txt",
 		"oF": 0
 		},
-	"/includes/fontawesome/css/all.min.css": {
+	"/includes/fontawesome/css/all.css": {
 		"aP": 1,
 		"bl": 0,
 		"ft": 16,
 		"ma": 0,
 		"oA": 0,
-		"oAP": "/includes/fontawesome/css/all.min-min.css",
+		"oAP": "/includes/fontawesome/css/all-min.css",
 		"oF": 0,
 		"oS": 3
 		},
@@ -4222,6 +4340,48 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/includes/fontawesome/webfonts/fa-brands-400.woff2",
+		"oF": 0
+		},
+	"/includes/fontawesome/webfonts/fa-light-300.eot": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/fontawesome/webfonts/fa-light-300.eot",
+		"oF": 0
+		},
+	"/includes/fontawesome/webfonts/fa-light-300.svg": {
+		"ft": 2097152,
+		"miP": 0,
+		"oA": 2,
+		"oAP": "/includes/fontawesome/webfonts/fa-light-300.svg",
+		"oF": 0,
+		"opt": 0,
+		"plM": 3758088159,
+		"prP": 0
+		},
+	"/includes/fontawesome/webfonts/fa-light-300.ttf": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/fontawesome/webfonts/fa-light-300.ttf",
+		"oF": 0
+		},
+	"/includes/fontawesome/webfonts/fa-light-300.woff": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/fontawesome/webfonts/fa-light-300.woff",
+		"oF": 0
+		},
+	"/includes/fontawesome/webfonts/fa-light-300.woff2": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/fontawesome/webfonts/fa-light-300.woff2",
 		"oF": 0
 		},
 	"/includes/fontawesome/webfonts/fa-regular-400.eot": {
@@ -4997,12 +5157,6 @@
 		"oAP": "/modules/archive/src/ajax.php",
 		"oF": 0
 		},
-	"/modules/archive/src/archive_temp": {
-		"ft": 65536,
-		"oA": 1,
-		"oAP": "/build/modules/archive/src/archive_temp",
-		"oF": 0
-		},
 	"/modules/archive/src/functions.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -5123,44 +5277,20 @@
 		"oAP": "/modules/login/src/functions.php",
 		"oF": 0
 		},
-	"/modules/login/src/templates/disabled/change_password_template.php": {
+	"/modules/login/src/templates/disabled/logout.php": {
 		"cB": 0,
 		"ft": 8192,
 		"hM": 0,
 		"oA": 0,
-		"oAP": "/modules/login/src/templates/disabled/change_password_template.php",
+		"oAP": "/modules/login/src/templates/disabled/logout.php",
 		"oF": 0
 		},
-	"/modules/login/src/templates/disabled/profile_template.php": {
+	"/modules/login/src/templates/disabled/reset_password_template.php": {
 		"cB": 0,
 		"ft": 8192,
 		"hM": 0,
 		"oA": 0,
-		"oAP": "/modules/login/src/templates/disabled/profile_template.php",
-		"oF": 0
-		},
-	"/modules/login/src/templates/disabled/register_template.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/modules/login/src/templates/disabled/register_template.php",
-		"oF": 0
-		},
-	"/modules/login/src/templates/logout.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/modules/login/src/templates/logout.php",
-		"oF": 0
-		},
-	"/modules/login/src/templates/reset_password_template.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/modules/login/src/templates/reset_password_template.php",
+		"oAP": "/modules/login/src/templates/disabled/reset_password_template.php",
 		"oF": 0
 		},
 	"/modules/login/src/templates/template.php": {
@@ -5529,6 +5659,30 @@
 		"oAP": "/modules/tools/src/ajax.php",
 		"oF": 0
 		},
+	"/modules/tools/src/go_export.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/tools/src/go_export.php",
+		"oF": 0
+		},
+	"/modules/tools/src/importer.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/tools/src/importer.php",
+		"oF": 0
+		},
+	"/modules/tools/src/parsers.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/tools/src/parsers.php",
+		"oF": 0
+		},
 	"/modules/user_blogs/includes.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -5667,13 +5821,14 @@
 	},
 "projectAttributes": {
 	"creationDate": 536785481,
-	"displayValue": "game-on-v4",
+	"displayValue": "Gameful Pro",
 	"displayValueWasSetByUser": 1,
 	"iconImageName": "meme-yesBaby",
 	"iconImageWasSetByUser": 0
 	},
 "projectSettings": {
 	"abortBuildOnError": 1,
+	"allowInjectionReloads": 1,
 	"alwaysUseExternalServer": 1,
 	"animateCSSInjections": 1,
 	"autoBuildNewItems": 1,
@@ -5685,6 +5840,7 @@
 	"babelConfigType": 0,
 	"babelCustomPluginsList": "",
 	"babelCustomPresetsList": "",
+	"babelExcludeString": "/\\/node_modules\\//, /\\/core-js\\//, /\\/bower_components\\//",
 	"babelInsertModuleIDs": 0,
 	"babelModuleID": "",
 	"babelNoComments": 0,
@@ -5824,6 +5980,9 @@
 		"modules-umd": {
 			"active": 0
 			},
+		"named-capturing-groups-regex": {
+			"active": 0
+			},
 		"new-target": {
 			"active": 0
 			},
@@ -5855,6 +6014,9 @@
 			"active": 0
 			},
 		"parameters": {
+			"active": 0
+			},
+		"partial-application": {
 			"active": 0
 			},
 		"pipeline-operator": {
@@ -5949,11 +6111,10 @@
 			}
 		},
 	"babelRetainLines": 0,
+	"babelUseBuiltInsType": 0,
 	"bowerAbbreviatedPath": "bower_components",
-	"bowerAutoCreateInfoFile": 1,
-	"bowerInstallDevDependencies": 0,
-	"bowerSaveDependencies": 1,
-	"bowerSaveDevDependencies": 0,
+	"bowerForceLatestOnConflict": 1,
+	"bowerTargetDependencyListType": 1,
 	"bowerUseExactVersion": 0,
 	"browserRefreshDelay": 0,
 	"browserslistString": ">0.2%, last 2 versions, Firefox ESR, not dead",
@@ -6958,6 +7119,10 @@
 			"active": 0,
 			"optionString": "{'array': true, 'object': true}, {'enforceForRenamedProperties': false}"
 			},
+		"prefer-named-capture-group": {
+			"active": 0,
+			"optionString": ""
+			},
 		"prefer-numeric-literals": {
 			"active": 0,
 			"optionString": ""
@@ -7711,6 +7876,11 @@
 		},
 	"languageDefaultsUserDefined": [
 		],
+	"npmAbbreviatedPath": "",
+	"npmCreatePackageLock": 1,
+	"npmInstallOptionalDependencies": 0,
+	"npmSaveExactVersion": 0,
+	"npmTargetDependencyListType": 1,
 	"overrideExternalServerCSS": 0,
 	"previewPathAddition": "/wordpress_new/wp-admin/admin.php?page=game-on-options.php",
 	"skippedFoldersString": "log, _logs, logs, _cache, cache, /storage/framework/sessions, node_modules, /modules/archive/src/archive_temp, /dev/js/scripts",

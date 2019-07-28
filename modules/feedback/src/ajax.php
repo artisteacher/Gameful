@@ -228,6 +228,8 @@ function go_send_feedback()
 
     $feedback_title = (!empty($_POST['title']) ? $_POST['title'] : "");
     $feedback_message = (!empty($_POST['message']) ? $_POST['message'] : "");
+    $feedback_title  = do_shortcode( $feedback_title );
+    $feedback_message  = do_shortcode( $feedback_message );
     $percent = (!empty($_POST['percent']) ? $_POST['percent'] : "");
     $percent_toggle = (!empty($_POST['toggle_percent']) ? $_POST['toggle_percent'] : "");
     $assign_toggle = (!empty($_POST['toggle_assign']) ? $_POST['toggle_assign'] : "");

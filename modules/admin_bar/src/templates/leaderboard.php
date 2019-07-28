@@ -12,7 +12,7 @@ get_header();
 
 
 
-if ( is_user_member_of_blog() ) {
+if ( is_user_member_of_blog() || go_user_is_admin()) {
 
 
     go_stats_leaderboard();

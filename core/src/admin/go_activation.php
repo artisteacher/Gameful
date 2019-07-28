@@ -94,8 +94,8 @@ function go_flush_rewrites() {
     go_store_page();// on init priority 10 (default), adds rewrite rule
     go_reader_page();// on init priority 10 (default), adds rewrite rule
     go_login_rewrite(); // on init priority 10 (default), adds rewrite rule
-    go_logout_rewrite();
-    go_reset_password_rewrite();// on init priority 10 (default), adds rewrite rule
+    //go_logout_rewrite();
+    //go_reset_password_rewrite();// on init priority 10 (default), adds rewrite rule
     go_profile_rewrite();// on init priority 10 (default), adds rewrite rule
     go_registration_rewrite();// on init priority 10 (default), adds rewrite rule
     go_leaderboard_rewrite();// on init priority 10 (default), adds rewrite rule
@@ -181,20 +181,30 @@ function go_reader_activate() {
  * Changes roles so subscribers can upload media
  */
 function go_media_access() {
+
     $role = get_role( 'subscriber' );
     $role->add_cap( 'upload_files' );
+
+    if(is_multisite()){
+        $blog_id = get_current_blog_id();
+        if($blog_id===1){
+            $role = get_role( 'subscriber' );
+            $role->remove_cap( 'upload_files' );
+        }
+    }
 }
 
+/*
 function go_tsk_actv_activate() {
     add_option( 'go_tsk_actv_do_activation_redirect', true );
     update_option( 'go_display_admin_explanation', true );
-}
+}*/
 
 
 
 //this is the activation notification
 function go_admin_head_notification() {
-    if ( get_option( 'go_display_admin_explanation' ) && current_user_can( 'manage_options' ) ) {
+    if ( get_option( 'go_display_admin_explanation' ) && (current_user_can( 'manage_options' ) || go_user_is_admin())) {
         $nonce = wp_create_nonce( 'go_admin_remove_notification' );
         echo "<div id='go_activation_message' class='update-nag' style='font-size: 16px; padding-right: 20px;'>
 
@@ -229,7 +239,14 @@ function go_admin_head_notification() {
 		</script>";
     }
 }
-add_action( 'admin_notices', 'go_admin_head_notification' );
+//add_action( 'admin_notices', 'go_admin_head_notification' );
+
+
+add_action( 'admin_footer', 'go_blog_id_message' );
+function go_blog_id_message(){
+    $blog_id = get_current_blog_id();
+    echo "<div style='float: right'>Current Blog ID: $blog_id</div>";
+}
 
 
 /*
