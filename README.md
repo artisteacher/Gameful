@@ -3,8 +3,10 @@
 Game-On (GO) is an educational framework that provides teachers with a vast amount of tools to create their own <a href="http://en.wikipedia.org/wiki/Gamification" target="_blank">gamified</a> learning system.
 
 ###Gameful.me--a new way to get your game on!
+
 If you are looking for the easiest way to use this plugin check out <a href="https://gameful.me">Gameful.me</a>.
 It is a managed hosting specifically for the game-on plugin. There are tools to help you migrate your existing game to the the gameful.me system. 
+
 #####If you are new to game on we highly recommend using gameful.me instead of hosting the plugin yourself. We will be focused on development and support for the new project.
 
 ### Information and Help
