@@ -4,21 +4,7 @@
     <option name="SCOPE_TYPE" value="3" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4c52fe7c-a769-413b-9a8a-3effed8b98a6" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/admin/go_activation.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/admin/go_activation.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/all/go_core_functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/all/go_core_functions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/acf-recaptcha-v5.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/acf-recaptcha-v5.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/admin_bar/src/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/admin_bar/src/functions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/admin_bar/src/public.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/admin_bar/src/public.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/admin_bar/src/public_ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/admin_bar/src/public_ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/clipboard/src/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/clipboard/src/ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/clipboard/src/public_ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/clipboard/src/public_ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/login/src/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/login/src/functions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/login/src/templates/template.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/login/src/templates/template.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/login/src/templates/user.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/login/src/templates/user.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/tools/src/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/tools/src/ajax.php" afterDir="false" />
-    </list>
+    <list default="true" id="4c52fe7c-a769-413b-9a8a-3effed8b98a6" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -632,12 +618,12 @@
       <workItem from="1561951768510" duration="1857000" />
       <workItem from="1561960133192" duration="363000" />
       <workItem from="1561960785201" duration="188568000" />
-      <workItem from="1564340783068" duration="4079000" />
+      <workItem from="1564340783068" duration="4235000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5703426000" />
+    <option name="totallyTimeSpent" value="5703582000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
