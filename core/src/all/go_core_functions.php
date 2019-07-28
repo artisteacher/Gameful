@@ -243,12 +243,9 @@ function go_get_page_uri(){
     $request_uri = (isset($_SERVER['REQUEST_URI']) ?  $_SERVER['REQUEST_URI'] : null);//page currently being loaded
     //
     //
-    if(is_multisite()){
-        $details  = get_blog_details();
-        $path = $details -> path;
-    }else{
+
         $path = '';
-    }
+
 
     $strip_path = str_replace($path, '', $request_uri);
     $strip_slashes = str_replace('/','',$strip_path);

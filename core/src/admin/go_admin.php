@@ -669,35 +669,12 @@ function go_options_menu_content() {
                 </div></a>
             </div>
             <?php
-            if (!is_multisite()) {
-                ?>
-                <div class="go_tools_section">
-                    <a href="<?php menu_page_url('go_performance'); ?>"><div class="card">
-                        <h2>Performance</h2>
-                        <p>Rewrite slugs, and image resizing.</p>
-                    </div></a>
-                </div>
-                <?php
-            }
+
             ?>
 
         </div>
         <?php
-        if (is_multisite() && get_current_blog_id() == 1) {
-            ?>
-            <h3>Site-Wide Settings</h3>
-            <div class="go_tools_section">
 
-                <a href="<?php menu_page_url('go_performance'); ?>"> <div class="go_tools_section">
-                    <div class="card">
-                        <h2>Performance</h2>
-                        <p>Rewrite slugs, and image resizing.</p>
-                    </div>
-                </a>
-                </div>
-            </div>
-            <?php
-        }
         ?>
     </div>
 

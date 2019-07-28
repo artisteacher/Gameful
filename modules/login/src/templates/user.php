@@ -144,10 +144,7 @@ get_header();
             }
         }
         //If multisite, register settings are always from blog #1. NEW combine main and sub site settings.
-        //if(is_multisite()) {
-        //            $main_site_id = get_network()->site_id;
-        //            switch_to_blog($main_site_id);
-        //        }
+
         //$restored = 0;
     }
 
@@ -318,9 +315,7 @@ echo "</div>";
 /*
 if ($this_page == 'register'){
     //  If multisite, register settings are always from blog #1, so switch back to current blog.
-    if(is_multisite()) {
-            restore_current_blog();
-        }
+
 }*/
 
 wp_footer();
