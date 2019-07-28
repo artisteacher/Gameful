@@ -3,7 +3,6 @@ go_definitions.php
 bower_components
 bower.json
 not_loaded
-/includes/acf/*
 .DS_Store
 *.DS_Store
 **/.DS_Store

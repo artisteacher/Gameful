@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4c52fe7c-a769-413b-9a8a-3effed8b98a6" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/go_enqueue_includes.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/go_enqueue_includes.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -41,11 +41,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/includes/go_enqueue_includes.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="284">
-              <caret line="44" column="104" selection-start-line="44" selection-start-column="104" selection-end-line="44" selection-end-column="104" />
+            <state relative-caret-position="194">
+              <caret line="39" column="14" selection-start-line="39" selection-start-column="14" selection-end-line="39" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -83,6 +83,15 @@
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="4" column="10" selection-start-line="4" selection-start-column="10" selection-end-line="4" selection-end-column="10" />
+            </state>
+          </provider>
+        </entry>
+      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -96,8 +105,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>store</find>
-      <find>switch_to</find>
       <find>loginLastLocationRedirect</find>
       <find>getLoginUrl</find>
       <find>url</find>
@@ -125,6 +132,8 @@
       <find>logout</find>
       <find>fontawesome</find>
       <find>$font_awesome_url</find>
+      <find>is_multisite</find>
+      <find>is</find>
       <find>font</find>
     </findStrings>
     <replaceStrings>
@@ -168,9 +177,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/core/src/public_ajax/go_checks.php" />
-        <option value="$PROJECT_DIR$/modules/quiz/src/ajax.php" />
-        <option value="$PROJECT_DIR$/modules/store/src/admin_ajax.php" />
         <option value="$PROJECT_DIR$/modules/messages/src/ajax.php" />
         <option value="$PROJECT_DIR$/modules/feedback/src/ajax.php" />
         <option value="$PROJECT_DIR$/modules/user_blogs/src/ajax.php" />
@@ -181,7 +187,6 @@
         <option value="$PROJECT_DIR$/modules/stats/src/ajax.php" />
         <option value="$PROJECT_DIR$/core/src/all/go_loot_and_updates.php" />
         <option value="$PROJECT_DIR$/modules/login/src/templates/profile_template.php" />
-        <option value="$PROJECT_DIR$/core/src/admin/go_admin.php" />
         <option value="$PROJECT_DIR$/core/src/all/go_transients.php" />
         <option value="$PROJECT_DIR$/modules/store/src/ajax.php" />
         <option value="$PROJECT_DIR$/modules/tasks/src/public_ajax.php" />
@@ -199,26 +204,30 @@
         <option value="$PROJECT_DIR$/modules/login/src/templates/logout.php" />
         <option value="$PROJECT_DIR$/dev/css/files/go_every_page.scss" />
         <option value="$PROJECT_DIR$/dev/js/scripts/user_bar.js" />
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/core/src/admin/go_datatable.php" />
         <option value="$PROJECT_DIR$/game-on.php" />
-        <option value="$PROJECT_DIR$/modules/admin_bar/src/functions.php" />
-        <option value="$PROJECT_DIR$/core/src/all/go_core_functions.php" />
-        <option value="$PROJECT_DIR$/includes/acf/includes/ajax/class-acf-ajax-upgrade.php" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/includes/go_enqueue_includes.php" />
         <option value="$PROJECT_DIR$/modules/clipboard/src/public_ajax.php" />
         <option value="$PROJECT_DIR$/modules/clipboard/src/ajax.php" />
+        <option value="$PROJECT_DIR$/modules/tools/src/go_export.php" />
         <option value="$PROJECT_DIR$/modules/tools/src/ajax.php" />
+        <option value="$PROJECT_DIR$/modules/login/src/functions.php" />
+        <option value="$PROJECT_DIR$/modules/admin_bar/src/public.php" />
         <option value="$PROJECT_DIR$/modules/admin_bar/src/public_ajax.php" />
+        <option value="$PROJECT_DIR$/core/src/admin/go_admin.php" />
+        <option value="$PROJECT_DIR$/includes/acf/includes/ajax/class-acf-ajax-upgrade.php" />
+        <option value="$PROJECT_DIR$/includes/acf/includes/admin/admin-upgrade.php" />
         <option value="$PROJECT_DIR$/modules/login/src/templates/template.php" />
+        <option value="$PROJECT_DIR$/includes/acf/includes/admin/views/html-admin-page-upgrade-network.php" />
         <option value="$PROJECT_DIR$/modules/login/src/templates/user.php" />
         <option value="$PROJECT_DIR$/core/src/admin/go_activation.php" />
-        <option value="$PROJECT_DIR$/includes/acf/includes/admin/admin-upgrade.php" />
-        <option value="$PROJECT_DIR$/includes/acf/includes/admin/views/html-admin-page-upgrade-network.php" />
+        <option value="$PROJECT_DIR$/includes/acf/includes/forms/form-user.php" />
+        <option value="$PROJECT_DIR$/modules/admin_bar/src/functions.php" />
+        <option value="$PROJECT_DIR$/includes/acf/includes/locations/class-acf-location-current-user-role.php" />
         <option value="$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/acf-recaptcha-v5.php" />
-        <option value="$PROJECT_DIR$/modules/login/src/functions.php" />
-        <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/modules/admin_bar/src/public.php" />
-        <option value="$PROJECT_DIR$/includes/go_enqueue_includes.php" />
+        <option value="$PROJECT_DIR$/core/src/all/go_core_functions.php" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -323,6 +332,12 @@
               <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
               <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
               <item name="includes" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
+              <item name="game-on-v4" type="462c0819:PsiDirectoryNode" />
+              <item name="includes" type="462c0819:PsiDirectoryNode" />
+              <item name="acf" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="game-on-v4" type="b2602c69:ProjectViewProjectNode" />
@@ -545,12 +560,12 @@
       <workItem from="1561960133192" duration="363000" />
       <workItem from="1561960785201" duration="188568000" />
       <workItem from="1564340783068" duration="5833000" />
-      <workItem from="1564348819154" duration="1797000" />
+      <workItem from="1564348819154" duration="2838000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5706977000" />
+    <option name="totallyTimeSpent" value="5708018000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -569,7 +584,7 @@
       <window_info id="Structure" order="1" sideWeight="0.5015625" side_tool="true" weight="0.19340234" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Command Line Tools Console" order="0" sideWeight="0.49939686" visible="true" weight="0.3268817" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.6778784" visible="true" weight="0.30744338" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.6778784" weight="0.30744338" />
       <window_info anchor="bottom" id="Message" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.6890287" weight="0.3106796" />
       <window_info anchor="bottom" id="Run" order="4" weight="0.3289183" />
@@ -1078,7 +1093,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/tools/src/ajax.php</url>
-          <line>301</line>
+          <line>297</line>
           <option name="timeStamp" value="2791" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1203,7 +1218,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/admin_bar/src/functions.php</url>
-          <line>312</line>
+          <line>309</line>
           <option name="timeStamp" value="3095" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1233,7 +1248,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/tools/src/ajax.php</url>
-          <line>289</line>
+          <line>285</line>
           <option name="timeStamp" value="3206" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1323,7 +1338,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/clipboard/src/ajax.php</url>
-          <line>1341</line>
+          <line>1321</line>
           <option name="timeStamp" value="3359" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1368,7 +1383,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/admin_bar/src/public_ajax.php</url>
-          <line>152</line>
+          <line>147</line>
           <option name="timeStamp" value="3499" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1428,12 +1443,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/clipboard/src/ajax.php</url>
-          <line>1287</line>
+          <line>1267</line>
           <option name="timeStamp" value="3541" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/clipboard/src/ajax.php</url>
-          <line>579</line>
+          <line>574</line>
           <option name="timeStamp" value="3542" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1443,7 +1458,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/core/src/admin/go_activation.php</url>
-          <line>28</line>
+          <line>16</line>
           <option name="timeStamp" value="3551" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1453,17 +1468,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>966</line>
+          <line>900</line>
           <option name="timeStamp" value="3590" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>936</line>
+          <line>870</line>
           <option name="timeStamp" value="3592" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>960</line>
+          <line>894</line>
           <option name="timeStamp" value="3594" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1478,12 +1493,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>926</line>
+          <line>860</line>
           <option name="timeStamp" value="3618" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/templates/user.php</url>
-          <line>189</line>
+          <line>186</line>
           <option name="timeStamp" value="3619" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1513,7 +1528,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>783</line>
+          <line>725</line>
           <option name="timeStamp" value="3658" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1583,52 +1598,47 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/core/src/admin/go_activation.php</url>
-          <line>90</line>
+          <line>76</line>
           <option name="timeStamp" value="3696" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/core/src/admin/go_activation.php</url>
-          <line>127</line>
+          <line>113</line>
           <option name="timeStamp" value="3697" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/core/src/admin/go_activation.php</url>
-          <line>148</line>
+          <line>134</line>
           <option name="timeStamp" value="3698" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/core/src/admin/go_activation.php</url>
-          <line>167</line>
+          <line>153</line>
           <option name="timeStamp" value="3699" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/core/src/admin/go_activation.php</url>
-          <line>190</line>
+          <line>176</line>
           <option name="timeStamp" value="3700" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/core/src/admin/go_activation.php</url>
-          <line>194</line>
-          <option name="timeStamp" value="3701" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/core/src/admin/go_activation.php</url>
-          <line>202</line>
+          <line>182</line>
           <option name="timeStamp" value="3702" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/core/src/admin/go_activation.php</url>
-          <line>258</line>
+          <line>238</line>
           <option name="timeStamp" value="3703" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/core/src/admin/go_activation.php</url>
-          <line>109</line>
+          <line>95</line>
           <option name="timeStamp" value="3709" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/core/src/admin/go_activation.php</url>
-          <line>108</line>
+          <line>94</line>
           <option name="timeStamp" value="3710" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1653,7 +1663,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>341</line>
+          <line>298</line>
           <option name="timeStamp" value="3728" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1663,17 +1673,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>301</line>
-          <option name="timeStamp" value="3735" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>305</line>
-          <option name="timeStamp" value="3736" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>541</line>
+          <line>485</line>
           <option name="timeStamp" value="3739" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1688,67 +1688,57 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>105</line>
-          <option name="timeStamp" value="3744" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>152</line>
+          <line>144</line>
           <option name="timeStamp" value="3745" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>172</line>
+          <line>160</line>
           <option name="timeStamp" value="3746" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>220</line>
+          <line>208</line>
           <option name="timeStamp" value="3747" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>237</line>
+          <line>225</line>
           <option name="timeStamp" value="3748" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>262</line>
+          <line>250</line>
           <option name="timeStamp" value="3749" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>337</line>
+          <line>294</line>
           <option name="timeStamp" value="3750" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>366</line>
+          <line>323</line>
           <option name="timeStamp" value="3753" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>374</line>
+          <line>331</line>
           <option name="timeStamp" value="3754" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>399</line>
+          <line>356</line>
           <option name="timeStamp" value="3757" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>506</line>
-          <option name="timeStamp" value="3758" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>536</line>
+          <line>480</line>
           <option name="timeStamp" value="3760" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>824</line>
+          <line>766</line>
           <option name="timeStamp" value="3761" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1758,28 +1748,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>315</line>
+          <line>285</line>
           <option name="timeStamp" value="3763" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>326</line>
-          <option name="timeStamp" value="3764" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/templates/template.php</url>
-          <line>17</line>
+          <line>14</line>
           <option name="timeStamp" value="3765" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/modules/login/src/templates/template.php</url>
-          <line>33</line>
-          <option name="timeStamp" value="3766" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/modules/login/src/templates/template.php</url>
-          <line>41</line>
-          <option name="timeStamp" value="3767" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/js/front/scripts/go_videos_fit_and_box.js</url>
@@ -2230,13 +2205,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="15" selection-start-line="5" selection-start-column="15" selection-end-line="5" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dev/js/scripts/archive_frontend.js">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -2388,6 +2356,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/includes/go_enqueue_includes.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="194">
+          <caret line="39" column="14" selection-start-line="39" selection-start-column="14" selection-end-line="39" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/includes/includes.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
@@ -2395,10 +2370,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/includes/go_enqueue_includes.php">
+    <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
-          <caret line="44" column="104" selection-start-line="44" selection-start-column="104" selection-end-line="44" selection-end-column="104" />
+        <state relative-caret-position="60">
+          <caret line="4" column="10" selection-start-line="4" selection-start-column="10" selection-end-line="4" selection-end-column="10" />
         </state>
       </provider>
     </entry>
