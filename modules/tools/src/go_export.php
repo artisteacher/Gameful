@@ -7,7 +7,10 @@
  */
 
 
-function go_export_wp2( $args = array() ) {
+function go_export_wp2(  ) {
+
+    $step = (isset($_GET['step']) ?  $_GET['step'] : 0);
+    $loop = (isset($_GET['loop']) ?  $_GET['loop'] : 0);
     global $wpdb, $post;
 
     /*$defaults = array(
@@ -59,79 +62,199 @@ function go_export_wp2( $args = array() ) {
         $where = $wpdb->prepare( "{$wpdb->posts}.post_type = %s", $args['content'] );
     } else {*/
     //$post_types = get_post_types( array( 'can_export' => true ) );
+
+    //step 1: get lists of how many items
+    //step 2: just loads js on exporter--no export file fetched
+    //step 3: export terms
+    //step 4: export posts in groups of 10--also reprocess terms because we need their ids
+    //step 5: export attachments in groups of 5
+
+
+    //get post types for step 1 and 4
+    //else get attachments
+    $limit = '';
     $post_types = array();
-    $post_types['store'] ='store';
-    $post_types['tasks'] ='tasks';
-    $post_types['tasks_templates'] ='tasks_templates';
-
-    $esses      = array_fill( 0, count( $post_types ), '%s' );
-    $where      = $wpdb->prepare( "{$wpdb->posts}.post_type IN (" . implode( ',', $esses ) . ')', $post_types );
-    //}
-
-    /*if ( $args['status'] && ( 'post' == $args['content'] || 'page' == $args['content'] ) ) {
-        $where .= $wpdb->prepare( " AND {$wpdb->posts}.post_status = %s", $args['status'] );
-    } else {*/
-    $where .= " AND {$wpdb->posts}.post_status != 'auto-draft'";
-    //}
-
-    $join = '';
-    /*if ( $args['category'] && 'post' == $args['content'] ) {
-        if ( $term = term_exists( $args['category'], 'category' ) ) {
-            $join   = "INNER JOIN {$wpdb->term_relationships} ON ({$wpdb->posts}.ID = {$wpdb->term_relationships}.object_id)";
-            $where .= $wpdb->prepare( " AND {$wpdb->term_relationships}.term_taxonomy_id = %d", $term['term_taxonomy_id'] );
-        }
-    }*/
-
-    /*if ( 'post' == $args['content'] || 'page' == $args['content'] || 'attachment' == $args['content'] ) {
-        if ( $args['author'] ) {
-            $where .= $wpdb->prepare( " AND {$wpdb->posts}.post_author = %d", $args['author'] );
-        }
-
-        if ( $args['start_date'] ) {
-            $where .= $wpdb->prepare( " AND {$wpdb->posts}.post_date >= %s", date( 'Y-m-d', strtotime( $args['start_date'] ) ) );
-        }
-
-        if ( $args['end_date'] ) {
-            $where .= $wpdb->prepare( " AND {$wpdb->posts}.post_date < %s", date( 'Y-m-d', strtotime( '+1 month', strtotime( $args['end_date'] ) ) ) );
-        }
-    }*/
-
-    // Grab a snapshot of post IDs, just in case it changes during the export.
-    $post_ids = $wpdb->get_col( "SELECT ID FROM {$wpdb->posts} $join WHERE $where" );
-
-    /*
-     * Get the requested terms ready, empty unless posts filtered by category
-     * or all content.
-     */
-    $cats = $tags = $terms = array();
-    /*if ( isset( $term ) && $term ) {
-        $cat  = get_term( $term['term_id'], 'category' );
-        $cats = array( $cat->term_id => $cat );
-        unset( $term, $cat );
-    } elseif ( 'tasks' == $args['content'] ) {*/
-    //$categories = (array) get_categories( array( 'get' => 'all' ) );
-    //$tags       = (array) get_tags( array( 'get' => 'all' ) );
-
-    //$custom_taxonomies = get_taxonomies( array( '_builtin' => false ) );
-    $custom_taxonomies = array();
-    $custom_taxonomies['store_types']='store_types';
-    $custom_taxonomies['task_chains']='task_chains';
-    $custom_taxonomies['go_badges']='go_badges';
-    $custom_taxonomies['user_go_groups']='user_go_groups';
-    $custom_terms      = (array) get_terms( $custom_taxonomies, array( 'get' => 'all' ) );
-
-    if(is_array($custom_terms) && !empty($custom_terms)) {
-        // Put terms in order with no child going before its parent.
-        while ($t = array_shift($custom_terms)) {
-            if ($t->parent == 0 || isset($terms[$t->parent])) {
-                $terms[$t->term_id] = $t;
-            } else {
-                $custom_terms[] = $t;
+    $steps = array( 1, 4);
+    $offset = '';
+    if (in_array($step, $steps)) {
+        $post_types['go_store'] = 'go_store';
+        $post_types['tasks'] = 'tasks';
+        $post_types['tasks_templates'] = 'tasks_templates';
+        if ($step > 1) {
+            if ($loop > 1) {
+                $offset = ($loop - 1) * 25;
+                $offset = $offset . ", ";
             }
+            $limit = 'LIMIT ' . $offset . 25;
         }
     }
-    unset( $categories, $custom_taxonomies, $custom_terms );
-//	}
+    else if ($step == 5) {
+        $post_types['attachment'] = 'attachment';
+        if($step > 1){
+            if ($loop >1) {
+                $offset = ($loop - 1) * 5;
+                $offset = $offset . ", ";
+            }
+            $limit = 'LIMIT ' . $offset  . 5;
+        }
+    }
+
+   //process posts/attachments on all steps 1, 4, 5
+    $post_ids = array();
+    $steps = array( 1, 4, 5);
+    if (in_array($step, $steps)) {
+        $esses = array_fill(0, count($post_types), '%s');
+        $where = $wpdb->prepare("{$wpdb->posts}.post_type IN (" . implode(',', $esses) . ')', $post_types);
+
+        //gameon add
+        //limit posts to those owned by admin, managers, and editors
+        //This was done for attachments, but works for all posts, cpt, and attachments
+        $args = array(
+            'role__in' => array('administrator', 'manager', 'editor'),
+            'orderby' => 'user_nicename',
+            'order' => 'ASC'
+        );
+        $users = get_users($args);
+        $user_ids = array();
+        foreach ($users as $user) {
+            $user_ids[] = $user->ID;
+        }
+        $esses = array_fill(0, count($user_ids), '%s');
+        $where .= $wpdb->prepare(" AND {$wpdb->posts}.post_author IN (" . implode(',', $esses) . ')', $user_ids);
+
+
+        //end
+
+        //}
+
+        /*if ( $args['status'] && ( 'post' == $args['content'] || 'page' == $args['content'] ) ) {
+            $where .= $wpdb->prepare( " AND {$wpdb->posts}.post_status = %s", $args['status'] );
+        } else {*/
+        $where .= " AND {$wpdb->posts}.post_status != 'auto-draft'";
+        //}
+
+        $join = '';
+        /*if ( $args['category'] && 'post' == $args['content'] ) {
+            if ( $term = term_exists( $args['category'], 'category' ) ) {
+                $join   = "INNER JOIN {$wpdb->term_relationships} ON ({$wpdb->posts}.ID = {$wpdb->term_relationships}.object_id)";
+                $where .= $wpdb->prepare( " AND {$wpdb->term_relationships}.term_taxonomy_id = %d", $term['term_taxonomy_id'] );
+            }
+        }*/
+
+        /*if ( 'post' == $args['content'] || 'page' == $args['content'] || 'attachment' == $args['content'] ) {
+            if ( $args['author'] ) {
+                $where .= $wpdb->prepare( " AND {$wpdb->posts}.post_author = %d", $args['author'] );
+            }
+
+            if ( $args['start_date'] ) {
+                $where .= $wpdb->prepare( " AND {$wpdb->posts}.post_date >= %s", date( 'Y-m-d', strtotime( $args['start_date'] ) ) );
+            }
+
+            if ( $args['end_date'] ) {
+                $where .= $wpdb->prepare( " AND {$wpdb->posts}.post_date < %s", date( 'Y-m-d', strtotime( '+1 month', strtotime( $args['end_date'] ) ) ) );
+            }
+        }*/
+
+        // Grab a snapshot of post IDs, just in case it changes during the export.
+        $post_ids = $wpdb->get_col("SELECT ID FROM {$wpdb->posts} $join WHERE $where $limit");
+    }
+
+
+
+    //get a count of attachments and posts for the list before the import is done.  Also used to calculate # of loops
+    if ($step == 1) {
+        $post_types['attachment'] = 'attachment';
+        $esses      = array_fill( 0, count( $post_types ), '%s' );
+        $where      = $wpdb->prepare( "{$wpdb->posts}.post_type IN (" . implode( ',', $esses ) . ')', $post_types );
+        $args = array(
+            'role__in'    => array('administrator', 'manager', 'editor'),
+            'orderby' => 'user_nicename',
+            'order'   => 'ASC'
+        );
+        $users = get_users( $args );
+        $user_ids = array();
+        foreach($users as $user ){
+            $user_ids[] = $user->ID;
+        }
+        $esses      = array_fill( 0, count( $user_ids ), '%s' );
+        $where .= $wpdb->prepare( " AND {$wpdb->posts}.post_author IN (" . implode( ',', $esses ) . ')', $user_ids );
+        $where .= " AND {$wpdb->posts}.post_status != 'auto-draft'";
+        $attachment_ids = $wpdb->get_col( "SELECT ID FROM {$wpdb->posts} WHERE $where $limit" );
+
+        $data= array();
+        $data['attachment_count'] = count($attachment_ids);
+        $data['step'] = $step;
+        $data['post_count'] =count($post_ids);
+    }
+
+    //only process the terms except when exporting attachments
+    $cats = $tags = $terms = array();
+    if( $step < 5){
+        /*
+         * Get the requested terms ready, empty unless posts filtered by category
+         * or all content.
+         */
+        $cats = $tags = $terms = array();
+        /*if ( isset( $term ) && $term ) {
+            $cat  = get_term( $term['term_id'], 'category' );
+            $cats = array( $cat->term_id => $cat );
+            unset( $term, $cat );
+        } elseif ( 'tasks' == $args['content'] ) {*/
+        //$categories = (array) get_categories( array( 'get' => 'all' ) );
+        //$tags       = (array) get_tags( array( 'get' => 'all' ) );
+
+        //$custom_taxonomies = get_taxonomies( array( '_builtin' => false ) );
+        $custom_taxonomies = array();
+        $custom_taxonomies['store_types']='store_types';
+        $custom_taxonomies['task_chains']='task_chains';
+        $custom_taxonomies['go_badges']='go_badges';
+        $custom_taxonomies['user_go_groups']='user_go_groups';
+        $args = array(
+            'get' => 'all',
+            'orderby' => 'meta_value_num',
+            'order' => 'ASC',
+            'meta_query' => array(
+                'relation' => 'OR',
+                array(
+                    'key' => 'go_order',
+                    'compare' => 'NOT EXISTS'
+                ),
+                array(
+                    'key' => 'go_order',
+                    'value' => 0,
+                    'compare' => '>='
+                )
+            ),
+            'hide_empty' => false
+        );
+        //$custom_terms      = (array) get_terms( $custom_taxonomies, array( 'get' => 'all' ) );
+        //$custom_terms = (array) go_get_terms_ordered($custom_taxonomies, '0');
+        $custom_terms      = (array) get_terms( $custom_taxonomies, $args );
+
+
+        //get the count of terms for list shown before import and stop the process to return the list.
+        if ($step == 1) {
+            $data['term_count'] =count($custom_terms);
+            $data = json_encode($data);
+            print_r($data);
+            die();
+        }
+
+
+        if(is_array($custom_terms) && !empty($custom_terms)) {
+            // Put terms in order with no child going before its parent.
+            while ($t = array_shift($custom_terms)) {
+                if ($t->parent == 0 || isset($terms[$t->parent])) {
+                    $terms[$t->term_id] = $t;
+                } else {
+                    $custom_terms[] = $t;
+                }
+            }
+        }
+
+        unset( $categories, $custom_taxonomies, $custom_terms );
+    }
+
 
     /**
      * Wrap given string in XML CDATA tag.
@@ -159,10 +282,13 @@ function go_export_wp2( $args = array() ) {
      * @return string Site URL.
      */
     function wxr_site_url() {
-
+        if ( is_multisite() ) {
+            // Multisite: the base URL.
+            return network_home_url();
+        } else {
             // WordPress (single site): the blog URL.
             return get_bloginfo_rss( 'url' );
-
+        }
     }
 
     /**
@@ -295,6 +421,7 @@ function go_export_wp2( $args = array() ) {
      *
      * @param int[] $post_ids Optional. Array of post IDs to filter the query by.
      */
+
     function wxr_authors_list( array $post_ids = null ) {
         global $wpdb;
 
@@ -419,7 +546,7 @@ function go_export_wp2( $args = array() ) {
             <wp:base_site_url><?php echo wxr_site_url(); ?></wp:base_site_url>
             <wp:base_blog_url><?php bloginfo_rss( 'url' ); ?></wp:base_blog_url>
 
-            <?php wxr_authors_list( $post_ids ); ?>
+            <?php //wxr_authors_list( $post_ids ); ?>
 
             <?php foreach ( $cats as $c ) : ?>
                 <wp:category>

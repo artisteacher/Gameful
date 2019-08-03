@@ -1486,7 +1486,7 @@
             {
                 "param": "post_type",
                 "operator": "==",
-                "value": "post"
+                "value": "elementor_font"
             }
         ]
     ],

@@ -80,23 +80,168 @@ if ( class_exists( 'WP_Importer' ) ) {
                     break;
                 case 1:
                     check_admin_referer( 'import-upload' );
-                    if ( $this->handle_upload() )
+                    if ( $this->get_import_data() )
                         $this->import_options();
                     break;
                 case 2:
-                    check_admin_referer( 'import-wordpress' );
-                    //$this->fetch_attachments = ( ! empty( $_POST['fetch_attachments'] ) && $this->allow_fetch_attachments() );
-                    $this->fetch_attachments = true;
-                    $file = $_POST['import_id'];
-                    //$file = get_attached_file( $this->file );
-                    set_time_limit(0);
-                    $this->import( $file );
+                    $this->go_do_a_loop($step);
+                    break;
+                case 3:
+                    $this->go_do_a_loop($step);
+                    break;
+                case 4:
+                    $this->go_do_a_loop($step);
+                    break;
+                case 5:
+                    $this->go_do_a_loop($step);
                     break;
             }
 
             $this->footer();
         }
 
+
+        function go_do_a_loop($step){
+            check_admin_referer( 'import-wordpress' );
+            $finished = false;
+            $attachment_count = (isset($_POST['attachment_count']) ?  $_POST['attachment_count'] : $_GET['attachment_count']);
+            $post_count = (isset($_POST['post_count']) ?  $_POST['post_count'] : $_GET['post_count']);
+
+            set_time_limit(0);
+            $current_loop = (isset($_GET['current_loop']) ?  $_GET['current_loop'] : 0);
+
+            $file = (isset($_POST['import_id']) ?  $_POST['import_id'] : $_GET['file']);
+            $file_query = urlencode($file);//encode the file to pass as a query arg back to this page
+            $file = add_query_arg('step',$step, $file );
+            $file = add_query_arg('loop',$current_loop, $file );
+
+            $progress = 50;
+
+            if ($step == 4){
+                $loops = ceil(($post_count/25));
+                $progress = ($current_loop/$loops) * 100;
+            }
+            else if ($step == 5){
+                $loops = ceil(($attachment_count/5));
+                $progress = ($current_loop/$loops) * 100;
+            }
+
+            if ($progress >= 100 || $step == 2 || $step == 3){
+                $next_step = $step + 1;
+                $next_loop = 1;
+            }else{
+                $next_step = $step;
+                $next_loop = $current_loop + 1;
+            }
+
+
+            //$file = $_POST['import_id'];
+
+            //$file = (isset($_POST['import_id']) ?  $_POST['import_id'] : $_GET['file']);
+            $this->fetch_attachments = true;
+
+            $nonce = wp_create_nonce( 'import-wordpress' );
+
+            //set the url that will load after the current import is complete
+            //javasscript loads the page automatically when this page is finished loading
+            $url = $_SERVER['HTTP_REFERER'];//the url of the current sites import page, has the step num and nonce as query vars
+            $url = remove_query_arg('step', $url);
+            $url = add_query_arg('step', $next_step, $url);
+            $url = remove_query_arg('_wpnonce', $url);
+            $url = add_query_arg('_wpnonce', $nonce, $url);
+            $url = add_query_arg('current_loop', $next_loop, $url);//get the url of this page and add the loop num
+            $url = add_query_arg('attachment_count',$attachment_count, $url );
+            $url = add_query_arg('post_count',$post_count, $url );
+
+            //add the export file as a query var so it is available for hte next loop
+            $url = add_query_arg('file',$file_query, $url );
+
+            //global $next_file; //FIX--send this back to the JS at the end and have it reload the browser with this page.
+            //$file = add_query_arg('loop',$current_loop, $file );
+
+
+            if($next_step == 6){//this is the script that ends the import
+                $finished = true;
+                ?>
+                <script>
+                    jQuery(document).ready(function(){
+                        //alert"clicked";
+                        Swal.fire({//sw2 OK
+                            title: "Finished Importing Game Data",
+                            showCloseButton: true,
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            allowEscapeKey: true,
+                            animation: false,
+                            allowOutsideClick: true,
+                            html: '<div id="go_archive_bar_border" class="progress-bar-border-swal" style="width: 100%"><div id="go_archive_bar_progress" class="archive_progress_bar" style="width: 100%;"></div></div>',
+                        });
+
+                    });
+                </script>
+                <?php
+            }else {
+                $progress = min(intval($progress), 100);
+
+                if ($step == 2) {
+                    $message = 'Importing terms.';
+                }
+                if($step == 3 ) {
+                    $done = 0;
+                    $progress = 0;
+                    $message = "Importing posts and quests: " . $done . " of " . $post_count ;
+                }
+                else if($step == 4 ) {
+                    $done = $current_loop * 25;
+                    $done = min(intval($done), intval($post_count));
+                    if ($done == 0 ){
+                        $progress = 0;
+                    }
+                    $message = "Importing posts and quests: " . $done . " of " . $post_count ;
+                }
+                else if($step == 5 ) {
+                    $done = $current_loop * 5;
+                    $done = min($done, $attachment_count);
+                    $message = "Importing attachments: " . $done . " of " . $attachment_count ;
+                }
+
+                ?>
+
+                <script>
+                    jQuery(document).ready(function(){
+                        //alert"clicked";
+                        Swal.fire({//sw2 OK
+                            title: "Importing Game Data . . .",
+                            showCloseButton: false,
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            allowEscapeKey: false,
+                            animation: false,
+                            allowOutsideClick: false,
+                            html: '<div id="go_archive_bar_border" class="progress-bar-border-swal" style="width: 100%"><div id="go_archive_bar_progress" class="archive_progress_bar" style="width: 0%;"></div></div><div><h3 id="archive_status_text"></h3></div>',
+                        });
+
+                        jQuery('#go_archive_bar_progress').css('width', '<?php echo $progress; ?>' + '%');
+                        let message = '<?php echo $message; ?>';
+                        jQuery("#archive_status_text").html(message);
+
+                        window.location = '<?php echo $url; ?>';
+
+
+                    });
+                </script>
+                <?php
+            }
+
+
+            if ($step != 2 && !$finished) {
+                $this->import($file);
+            }else{
+               // echo "hmm.";
+            }
+
+
+        }
         /**
          * The main controller for the actual import stage.
          *
@@ -131,14 +276,14 @@ if ( class_exists( 'WP_Importer' ) ) {
          * @param string $file Path to the WXR file for importing
          */
         function import_start( $file ) {
-            if ( ! is_file($file) ) {
+           /* if ( ! is_file($file) ) {
                 echo '<p><strong>' . __( 'Sorry, there has been an error.', 'wordpress-importer' ) . '</strong><br />';
                 echo __( 'The file does not exist, please try again.', 'wordpress-importer' ) . '</p>';
                 $this->footer();
                 die();
-            }
+            }*/
 
-            $import_data = $this->parse( $file );
+            $import_data = $this->parse( $file);
 
             if ( is_wp_error( $import_data ) ) {
                 echo '<p><strong>' . __( 'Sorry, there has been an error.', 'wordpress-importer' ) . '</strong><br />';
@@ -165,6 +310,7 @@ if ( class_exists( 'WP_Importer' ) ) {
          * Performs post-import cleanup of files and the cache
          */
         function import_end() {
+            global $next_file;
             wp_import_cleanup( $this->id );
 
             wp_cache_flush();
@@ -176,9 +322,9 @@ if ( class_exists( 'WP_Importer' ) ) {
             wp_defer_term_counting( false );
             wp_defer_comment_counting( false );
 
-            echo '<p>' . __( 'All done.', 'wordpress-importer' ) . ' <a href="' . admin_url() . '">' . __( 'Have fun!', 'wordpress-importer' ) . '</a>' . '</p>';
-            //echo '<p>' . __( 'Remember to update the passwords and roles of imported users.', 'wordpress-importer' ) . '</p>';
-
+            //echo '<p>' . __( 'All done.', 'wordpress-importer' ) . ' <a href="' . admin_url() . '">' . __( 'Have fun!', 'wordpress-importer' ) . '</a>' . '</p>';
+            echo '<p>' . __( 'Batch Complete.', 'wordpress-importer' ) . '</p>';
+           // echo "next file" . $next_file;
             do_action( 'import_end' );
         }
 
@@ -189,16 +335,19 @@ if ( class_exists( 'WP_Importer' ) ) {
          *
          * @return bool False if error uploading or invalid file, true otherwise
          */
-        function handle_upload() {
+        function get_import_data() {
             //$file = wp_import_handle_upload();
-            $file = $_POST['import_url'];
+            //$file = $_POST['import_url'];
+            $file = (isset($_POST['import_url']) ?  $_POST['import_url'] : $_GET['file']);
+
 
             $import_host = parse_url($file, PHP_URL_HOST);
             $my_host = parse_url(home_url(), PHP_URL_HOST);
 
+
             if ( $import_host == $my_host ) {
                 echo '<p><strong>' . __( 'Sorry, there has been an error.', 'wordpress-importer' ) . '</strong><br />';
-                echo ( __( 'You can not import to your own domain. This would duplicate all your content. ', 'wordpress-importer' ));
+                echo ( __( 'You can not import to your own domain. ', 'wordpress-importer' ));
                 echo '</p>';
                 return false;
             } else if ( empty($file) ) {
@@ -208,27 +357,34 @@ if ( class_exists( 'WP_Importer' ) ) {
                 return false;
             }
 
-            //$this->id = (int) $file['id'];
-            $import_data = $this->parse( $file );
+
+
+                $file2 = add_query_arg('step',1, $file );
+                $contents = file_get_contents($file2);
+                $import_data = json_decode($contents);
+
+
+
+            //echo 'done';
             if ( is_wp_error( $import_data ) ) {
                 echo '<p><strong>' . __( 'Sorry, there has been an error.', 'wordpress-importer' ) . '</strong><br />';
                 echo esc_html( $import_data->get_error_message() ) . '</p>';
                 return false;
             }
 
-            $this->version = $import_data['version'];
+           /* $this->version = $import_data['version'];
             if ( $this->version > $this->max_wxr_version ) {
                 echo '<div class="error"><p><strong>';
                 printf( __( 'This WXR file (version %s) may not be supported by this version of the importer. Please consider updating.', 'wordpress-importer' ), esc_html($import_data['version']) );
                 echo '</strong></p></div>';
-            }
+            }*/
 
-            $this->get_authors_from_import( $import_data );
-            $this->filename =$import_data['filename'];
-            $this->post_count =$import_data['posts'];
-            $this->term_count =$import_data['terms'];
-
-
+            //$this->get_authors_from_import( $import_data );
+            $this->filename =$file;
+            $this->post_count =$import_data->post_count;
+            $this->term_count =$import_data->term_count;
+            $this->attachment_count =$import_data->attachment_count;
+            //$this->term_count =$import_data['attachment_count'];
 
             return true;
         }
@@ -268,20 +424,35 @@ if ( class_exists( 'WP_Importer' ) ) {
          * fetch attachments
          */
         function import_options() {
-            $post_count = intval($this->post_count);
-            $term_count = intval($this->term_count);
+            $post_count = $this->post_count;
+            $term_count = $this->term_count;
+            $attachment_count = $this->attachment_count;
             ?>
             <form action="<?php echo admin_url( 'admin.php?import=gameful&amp;step=2' ); ?>" method="post">
-                <?php wp_nonce_field( 'import-wordpress' ); ?>
+                <?php wp_nonce_field( 'import-wordpress' );
+                //echo get_temp_dir();
+                //echo "filename:";
+                //echo $this->filename;
+                ?>
                 <input type="hidden" name="import_id" value="<?php echo $this->filename; ?>" />
+                <input type="hidden" name="attachment_count" value="<?php echo $attachment_count; ?>" />
+                <input type="hidden" name="post_count" value="<?php echo $post_count; ?>" />
 
-                <p>This import will include <?php echo $post_count; ?> posts (this includes pages, posts, store items, and quests).</p>
-                <p>This import will also include <?php echo $term_count; ?> terms (this includes maps, store categories, badges, groups, and sections).</p>
-                <p>Do not run the importer more than once. It will produce duplicate content.</p>
 
-                <p class="submit"><input type="submit" class="button" value="<?php esc_attr_e( 'Submit', 'wordpress-importer' ); ?>" /></p>
+                <p>This import will include:</p>
+                <ul>
+                    <li><?php echo $post_count; ?> posts (this includes pages, posts, store items, and quests)</li>
+                    <li><?php echo $term_count; ?> terms (this includes maps, store categories, badges, groups, and sections).</li>
+                    <li><?php echo $attachment_count; ?> attachments.  They will be copied to the new site and links in content will be updated.  If this number seems large it may include multiple sizes of the same image.</li>
+                </ul>
+
+                <p><b>THIS ACTION CAN NOT BE UNDONE.</b></p>
+
+                <p class="submit"><input id='start_import' type="submit" class="button" value="<?php esc_attr_e( 'Submit', 'wordpress-importer' ); ?>" /></p>
             </form>
+
             <?php
+
         }
 
         /**
@@ -823,6 +994,33 @@ if ( class_exists( 'WP_Importer' ) ) {
                             if ( ! $value )
                                 $value = maybe_unserialize( $meta['value'] );
 
+                            //added by game on to map new term ids to meta data
+                            //get meta fields that might contain term ids
+                            if ((strpos($key, 'badge') !== false) || (strpos($key, 'group') !== false) || $key == 'go-location_map_loc' || $key == 'go-store-location_store-sec_loc'){
+                                //check that the fields contain integers--or strings with integers
+                                if (is_int($value) || ctype_digit($value)){
+                                    //change the term ids in the metadata to the new value
+                                    $value = intval($value);//cast the value to an integer
+                                    if(isset($this->processed_terms[$value])) {
+                                        $value = $this->processed_terms[$value];//change the value to the value in the processed terms
+                                    }
+                                    //attach the post to the term
+                                    global $wpdb;
+                                    $wpdb->insert(
+                                        $wpdb->term_relationships,
+                                        array(
+                                        'object_id'        => $post_id,
+	                                    'term_taxonomy_id' => $value,
+	                                    )
+	                                );
+
+                                    //if ($key == 'go-location_map_loc') {
+                                      //  wp_set_object_terms($post_id, $value, 'task_chains', false);
+                                    //}
+                                }
+                            }
+
+
                             add_post_meta( $post_id, $key, $value );
                             do_action( 'import_post_meta', $post_id, $key, $value );
 
@@ -1091,7 +1289,16 @@ if ( class_exists( 'WP_Importer' ) ) {
                 // remap urls in post_content
                 $wpdb->query( $wpdb->prepare("UPDATE {$wpdb->posts} SET post_content = REPLACE(post_content, %s, %s)", $from_url, $to_url) );
                 // remap enclosure urls
-                $result = $wpdb->query( $wpdb->prepare("UPDATE {$wpdb->postmeta} SET meta_value = REPLACE(meta_value, %s, %s) WHERE meta_key='enclosure'", $from_url, $to_url) );
+                //$result = $wpdb->query( $wpdb->prepare("UPDATE {$wpdb->postmeta} SET meta_value = REPLACE(meta_value, %s, %s) WHERE meta_key='enclosure'", $from_url, $to_url) );
+
+                //game on--apply the remap to all meta data
+                $wpdb->query( $wpdb->prepare("UPDATE {$wpdb->postmeta} SET meta_value = REPLACE(meta_value, %s, %s)", $from_url, $to_url) );
+            }
+
+            //game on
+            //set the badge and group image ids
+            foreach ( $this->processed_posts as $from_id => $to_id){
+                $wpdb->query( $wpdb->prepare("UPDATE {$wpdb->termmeta} SET meta_value = %d WHERE meta_key='my_image' AND meta_value = %d", $to_id, $from_id) );
             }
         }
 

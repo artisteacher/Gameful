@@ -107,12 +107,12 @@ function go_stats_lightbox() {
 
         //output containers for the tab content
             //include the content that is loaded on lightbox open (
-        if ($show_about_me && ($is_admin || $about_me_is_public )){
-            echo '<div id="stats_about">';
 
-            go_stats_about($user_id,  true);
-            echo "</div>";
-        }
+        if ($show_about_me && ($is_admin || $about_me_is_public )){
+              echo '<div id="stats_about">';
+           go_stats_about($user_id,  true);
+              echo "</div>";
+      }
         else if ($is_current_user){
             ?>
             <script>
@@ -121,16 +121,7 @@ function go_stats_lightbox() {
             <?php
         }
 
-        if (!$is_current_user) {
 
-            echo '<div id="stats_badges">';
-
-                go_stats_badges_list(true, $user_id);
-
-            echo '  
-                    </div>
-                    <div id="stats_groups"></div>';
-        }
 
         if ($is_current_user || $is_admin){//is current user
             ?>
@@ -142,6 +133,15 @@ function go_stats_lightbox() {
             <div id="stats_groups"></div>
 
         <?php
+        }else  {
+
+            echo '<div id="stats_badges">';
+
+            go_stats_badges_list(true, $user_id);
+
+            echo '  
+                    </div>
+                    <div id="stats_groups"></div>';
         }
         ?>
 

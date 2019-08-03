@@ -99,15 +99,22 @@ function go_stats_leaderboard_dataloader_ajax(){
     $sOrder = "ORDER BY " . $order_col . " " . $order_dir;
 
     $lTable = "{$wpdb->prefix}go_loot";
-
+    if(is_multisite()) {
+        $main_site_id = get_network()->site_id;
+        switch_to_blog($main_site_id);
+    }
     $umTable = "{$wpdb->prefix}usermeta";
     $uTable = "{$wpdb->prefix}users";
-
+    if(is_multisite()) {
+        restore_current_blog();
+    }
 
     $sectionQuery = go_sectionQuery($section);
     //$badgeQuery = go_badgeQuery();
     $groupQuery = go_groupQuery($group);
     $badgeQuery = '';
+
+    $caps_key = "{$wpdb->prefix}capabilities";
 
     $sQuery = "    
                     SELECT SQL_CALC_FOUND_ROWS
@@ -115,7 +122,7 @@ function go_stats_leaderboard_dataloader_ajax(){
                       t3.display_name, t3.user_url, t3.user_login,
                       MAX(CASE WHEN t2.meta_key = 'first_name' THEN meta_value END) AS first_name,
                       MAX(CASE WHEN t2.meta_key = 'last_name' THEN meta_value END) AS last_name,
-                      MAX(CASE WHEN t2.meta_key = 'wp_capabilities' THEN meta_value END) AS wp_capabilities
+                      MAX(CASE WHEN t2.meta_key = '$caps_key' THEN meta_value END) AS wp_capabilities
                     FROM
                           (
                           SELECT t6.user_id
@@ -158,11 +165,12 @@ function go_stats_leaderboard_dataloader_ajax(){
 
     $iFilteredTotal = $rResultFilterTotal [0];
 
+    $caps_key = "{$wpdb->prefix}capabilities";
     $sQuery = "
      SELECT COUNT(*)
      FROM( 
       SELECT 
-          MAX(CASE WHEN t2.meta_key = 'wp_capabilities' THEN meta_value END) AS capabilities
+          MAX(CASE WHEN t2.meta_key = '$caps_key' THEN meta_value END) AS capabilities
       FROM $lTable AS t1 
           LEFT JOIN $umTable AS t2 ON t1.uid = t2.user_id
           GROUP BY t1.id

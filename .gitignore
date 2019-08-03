@@ -3,6 +3,7 @@ go_definitions.php
 bower_components
 bower.json
 not_loaded
+/dev/*
 .DS_Store
 *.DS_Store
 **/.DS_Store

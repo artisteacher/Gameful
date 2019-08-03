@@ -11,7 +11,7 @@ Version: 5.01
 
 //$go_debug = true;//set to true when coding
 
-if ($domain ==='gameondev') {
+if ($_SERVER['HTTP_HOST'] ==='gameon1') {
     $is_gameful = false;
     $go_debug = true;
 
@@ -211,6 +211,12 @@ function go_total_query_time(){
 }
 
 
+
+add_filter( 'auth_cookie_expiration', 'go_login_14_hours' );
+function go_login_14_hours( $expirein )
+{
+    return 50400; // 1 year in seconds
+}
 
 //This is the code that puts the login modal on the frontend
 //code used

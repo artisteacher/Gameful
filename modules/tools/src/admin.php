@@ -10,13 +10,14 @@
 add_action('init', 'go_download_game_data');
 function go_download_game_data()
 {
-    if (isset($_GET['download'])) {
+    if (isset($_GET['go_download'])) {
         $pass = get_option('go_export_password');
         if($pass == $_GET['password']) {
-            go_export_wp2();
+            $step = (isset($_GET['step']) ?  $_GET['step'] : 1);
+            go_export_wp2($step);
             die();
         }else{
-            echo "Invalid link password.  Contact the exporting site for new link.";
+            echo "Invalid link password. Contact the exporting site for new link.";
             die();
         }
     }
@@ -77,7 +78,7 @@ function go_admin_tools_menu_content() {
         $pass = wp_generate_password(8, false);
         update_option('go_export_password', $pass);
     }
-    $export_url = home_url('wp-admin/admin.php?page=game-tools&download=true&password='.$pass);
+    $export_url = home_url('wp-admin/admin.php?page=game-tools&go_download=true&password='.$pass);
     //<button id="go_export_game" onclick="window.location.href = 'wp-admin/admin.php?page=game-tools&download=true';">Export All Game Data</button>
 
             ?>
@@ -111,7 +112,7 @@ function go_admin_tools_menu_content() {
             <div class="card">
                 <h2>Import Game Data</h2>
                 <p>You will need the export URL from the site you wish to import from.</p>
-                <button id="go_import_game" onclick="window.location.href = 'wp-admin/admin.php?import=gameful';">Import Game Data</button>
+                <button id="go_import_game" onclick="window.location.href = 'admin.php?import=gameful';">Import Game Data</button>
 
             </div>
         </div>

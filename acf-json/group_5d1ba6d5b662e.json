@@ -1,7 +1,7 @@
 {
     "key": "group_5d1ba6d5b662e",
     "title": "Loot Settings",
-    "fields": false,
+    "fields": [],
     "location": [
         [
             {
@@ -17,8 +17,8 @@
     "label_placement": "top",
     "instruction_placement": "label",
     "hide_on_screen": "",
-    "active": 1,
+    "active": 0,
     "description": "",
     "recaptcha": 0,
-    "modified": 1562093286
+    "modified": 1564439609
 }

@@ -155,7 +155,9 @@ class ACF_Form_User {
 	function render_new() {
 		
 		// Multisite uses a different 'user-new.php' form. Don't render fields here
-
+		if( is_multisite() ) {
+			return;
+		}
 		
 		// render
 		$this->render(array(

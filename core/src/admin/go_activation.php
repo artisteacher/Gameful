@@ -13,9 +13,21 @@
  */
 function go_update_db_ms( ) {
     global $wpdb;
-
+    if ( is_multisite() ) {
+        // Get all blogs in the network and update db on each one
+        $blog_ids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
+        foreach ( $blog_ids as $blog_id ) {
+            if(is_multisite()) {
+                switch_to_blog($blog_id);
+            }
+            go_update_db_check();
+            if(is_multisite()) {
+                restore_current_blog();
+            }
+        }
+    }else{
         go_update_db_check();
-
+    }
 }
 
 /**
@@ -38,7 +50,9 @@ function go_on_create_blog( $blog_id, $user_id, $domain, $path, $site_id, $meta 
     if ( $is_ms ) {
         switch_to_blog( $blog_id );
         go_update_db();
-
+        if(is_multisite()) {
+            restore_current_blog();
+        }
     }
 }
 add_action( 'wpmu_new_blog', 'go_on_create_blog', 10, 6 );
@@ -177,7 +191,13 @@ function go_media_access() {
     $role = get_role( 'subscriber' );
     $role->add_cap( 'upload_files' );
 
-
+    if(is_multisite()){
+        $blog_id = get_current_blog_id();
+        if($blog_id===1){
+            $role = get_role( 'subscriber' );
+            $role->remove_cap( 'upload_files' );
+        }
+    }
 }
 
 /*

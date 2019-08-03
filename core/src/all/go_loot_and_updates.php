@@ -1763,7 +1763,7 @@ function xp_progress_bar($user_id){
         if ($next_rank_points != false) {
             $rank_threshold_diff = $next_rank_points - $current_rank_points;
             $pts_to_rank_threshold = $go_current_xp - $current_rank_points;
-            $pts_to_rank_up_str = "{$go_current_xp}$xp_abbr | LEVEL {$rank_num} $current_rank | {$pts_to_rank_threshold}/{$rank_threshold_diff}";
+            $pts_to_rank_up_str = "{$go_current_xp} $xp_abbr &nbsp;&nbsp;•&nbsp;&nbsp; LEVEL {$rank_num} $current_rank &nbsp;&nbsp;•&nbsp;&nbsp; {$pts_to_rank_threshold}/{$rank_threshold_diff}";
             $percentage = $pts_to_rank_threshold / $rank_threshold_diff * 100;
             //$color = barColor( $go_current_health, 0 );
             $color = "#39b54a";
@@ -1831,7 +1831,7 @@ function go_health_bar($user_id){
                 $color = 'purple';
             }
         }
-        $health_string = $name . " MODIFIER | " . $go_current_health . "%";
+        $health_string = $go_current_health . "%  " . $name . " MODIFIER";
 
     }
 
@@ -1843,7 +1843,7 @@ function go_health_bar($user_id){
 function go_gold_bar($user_id){
 
     $go_current_gold = go_get_user_loot($user_id, 'gold');
-    $user_bar_coins = '<div id="go_admin_bar_gold" class="admin_bar_loot" style="line-height: 1em !important; text-align: right; padding-top: 9px; ">' . go_display_shorthand_currency('gold', $go_current_gold, false, true, " " , true) . '</div>';
+    $user_bar_coins = '<div id="go_admin_bar_gold" class="admin_bar_loot" style="line-height: 1em !important; text-align: right; padding-top: 9px; padding-right: 10px;">' . go_display_shorthand_currency('gold', $go_current_gold, false, true, " " , true) . '</div>';
     //$user_bar_coins ='';
     $gold_bar = '<div id="go_user_bar_loot" class="userbar_dropdown"><div class="narrow_content">' . $user_bar_coins . '</div><div class="wide_content">' . $user_bar_coins . '</div>';
 

@@ -14,8 +14,13 @@ Creation Date: 05/09/13
 //https://stackoverflow.com/questions/25310665/wordpress-how-to-create-a-rewrite-rule-for-a-file-in-a-custom-plugin
 add_action('init', 'go_store_page');
 function go_store_page(){
-    $blog_id = get_current_blog_id();
-    if ($blog_id > 1) {
+    if(is_multisite() && is_main_site()){
+    	$hide = true;
+    }
+    else{
+    	$hide = false;
+    }
+    if (!$hide) {
         $store_name = get_option('options_go_store_store_link');
         //add_rewrite_rule( "store", 'index.php?query_type=user_blog&uname=$matches[1]', "top");
         add_rewrite_rule($store_name, 'index.php?' . $store_name . '=true', "top");
@@ -35,8 +40,13 @@ function go_store_register_query_var( $vars ) {
 add_filter('template_include', 'go_store_template_include', 1, 1);
 function go_store_template_include($template)
 {
-    $blog_id = get_current_blog_id();
-    if ($blog_id > 1) {
+    if(is_multisite() && is_main_site()){
+    	$hide = true;
+    }
+    else{
+    	$hide = false;
+    }
+    if (!$hide) {
         global $wp_query; //Load $wp_query object
         $store_name = get_option('options_go_store_store_link');
 

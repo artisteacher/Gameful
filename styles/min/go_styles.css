@@ -1849,6 +1849,10 @@ store lightbox styles
 #sitemap {
   margin: 10px; }
 
+#go_map_container {
+  padding: 30px;
+  background-color: white; }
+
 #maps {
   visibility: hidden;
   /* ------------------------------------------------------------
@@ -1907,6 +1911,7 @@ store lightbox styles
     margin: 0px 0 0 0;
     float: left;
     width: 100%;
+    padding-bottom: 20px;
     /* --------	grey out colors --------- */
     /* --------	available tasks colors --------- */ }
     #maps .primaryNav li ul {
@@ -1918,17 +1923,22 @@ store lightbox styles
       float: none;
       position: relative;
       z-index: 2;
-      background: #c3eafb;
-      -webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
-      -moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
-      /* FF 3.5+ */
       margin: 0px 10px 0px 10px;
       padding: 0 0 0 0;
       width: calc(100% - 20px) !important; }
       #maps .primaryNav .ParentNav p {
         margin-top: 0px;
         -webkit-box-shadow: unset;
-        -moz-box-shadow: unset; }
+        -moz-box-shadow: unset;
+        background: unset;
+        border: unset;
+        text-align: left;
+        font-size: 1.5em; }
+      #maps .primaryNav .ParentNav div {
+        display: flex; }
+      #maps .primaryNav .ParentNav .go_badge_wrap {
+        width: unset;
+        font-size: .6em; }
     #maps .primaryNav .optional_task {
       margin-top: 0px;
       border-top: 1px solid grey;
@@ -2011,7 +2021,6 @@ store lightbox styles
       float: none; }
       #maps .go_badge_wrap .go_badge_container .go_badge {
         float: unset !important;
-        width: 100%;
         margin: 0 auto;
         padding: 10px; }
         #maps .go_badge_wrap .go_badge_container .go_badge img {
@@ -2076,7 +2085,8 @@ store lightbox styles
 #go_Dropdown {
   float: left;
   max-width: 100%;
-  margin-right: 10px; }
+  margin-right: 10px;
+  margin-bottom: 40px; }
 
 #utilityNav li {
   float: left;

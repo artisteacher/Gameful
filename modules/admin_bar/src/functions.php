@@ -5,9 +5,12 @@
 function auto_redirect_after_logout($k){
     $HTTP_REFERER = (isset($_SERVER['HTTP_REFERER']) ?  $_SERVER['HTTP_REFERER'] : null);//page currently being loaded
     //for multisite
-
+    if(is_multisite()) {
+        $details  = get_blog_details();
+        $siteurl = $details -> siteurl;
+    }else{
         $siteurl = home_url();
-
+    }
 
     $strip_path = str_replace($siteurl, '', $HTTP_REFERER);
     $strip_slashes = str_replace('/','',$strip_path);
@@ -440,8 +443,13 @@ function go_admin_bar_v5() {
 
 add_action('init', 'go_leaderboard_rewrite');
 function go_leaderboard_rewrite(){
-    $blog_id = get_current_blog_id();
-    if ($blog_id > 1) {
+    if(is_multisite() && is_main_site()){
+    	$hide = true;
+    }
+    else{
+    	$hide = false;
+    }
+    if ($hide) {
         $page_name = urlencode(get_option('options_go_stats_leaderboard_name'));
         $page_name = (isset($page_name) ? $page_name : 'leaderboard');
         //$page_name = 'leaderboard';

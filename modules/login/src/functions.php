@@ -20,8 +20,7 @@ License: GPL2
 */
 
 /* http://premium.wpmudev.org/forums/topic/redirect-users-to-their-blogs-homepage */
-add_filter('login_redirect', function($redirect_to, $request_redirect_to, $user)
-{
+add_filter('login_redirect', function($redirect_to, $request_redirect_to, $user) {
     global $blog_id;
 
     $parts = parse_url($redirect_to);
@@ -85,10 +84,14 @@ function go_login_url($url) {
     $parts = parse_url($referer);
     parse_str($parts['query'], $query);
     $blog_id = (isset($query['blog_id']) ?  $query['blog_id'] : null);
-
+    if(is_multisite()) {
+        switch_to_blog($blog_id);
+    }
 
     $url = home_url();
-
+    if(is_multisite()) {
+        restore_current_blog();
+    }
     return $url;
 
 }
@@ -99,24 +102,30 @@ function my_login_logo() {
     $parts = parse_url($referer);
     parse_str($parts['query'], $query);
     $blog_id = (isset($query['blog_id']) ?  $query['blog_id'] : null);
-
+    if(is_multisite()) {
+        switch_to_blog($blog_id);
+    }
     $logo = get_option('options_go_login_logo');
     //$url = wp_get_attachment_image($logo, array('250', '250'));
     $url = wp_get_attachment_image_src($logo, 'medium');
     $url = $url[0];
     $meta =wp_get_attachment_metadata($logo);
-    $width = $meta['sizes']['medium']['width'];
-    $height = $meta['sizes']['medium']['height'];
-    if ($height > 180){
-        $scale = 180/$height;
-        $width = $width * $scale;
-        $height = 180;
-    }else{
-        $scale = 300/$width;
-        $height = $height * $scale;
+    if (!empty($meta)) {
+        $width = $meta['sizes']['medium']['width'];
+        $height = $meta['sizes']['medium']['height'];
+        if ($height > 180) {
+            $scale = 180 / $height;
+            $width = $width * $scale;
+            $height = 180;
+        } else {
+            $scale = 300 / $width;
+            $height = $height * $scale;
+        }
     }
 
-
+    if(is_multisite()) {
+        restore_current_blog();
+    }
 
     if ($url) {
         ?>
@@ -147,9 +156,13 @@ function go_bad_domain_message ($errors) {
         $parts = parse_url($referer);
         parse_str($parts['query'], $query);
         $blog_id = (isset($query['blog_id']) ?  $query['blog_id'] : null);
-
+        if(is_multisite()) {
+            switch_to_blog($blog_id);
+        }
         $errors->add('domains', go_domain_restrictions_message());
-
+        if(is_multisite()) {
+            restore_current_blog();
+        }
 }
     return $errors;
 }
@@ -261,23 +274,41 @@ function go_limit_domains($args){
     if (empty($blog_id)){
         $blog_id = 1;
     }
-
+    if(is_multisite()) {
+        switch_to_blog(intval($blog_id));
+    }
 
     $limit_toggle = get_option('options_limit_domains_toggle');
-
+    if(is_multisite()) {
+        restore_current_blog();
+    }
     
 
     if($limit_toggle){
-
+        if(is_multisite()) {
+            switch_to_blog(intval($blog_id));
+        }
 
         $is_valid = validate_email_against_domains($email);
-
+        if(is_multisite()) {
+            restore_current_blog();
+        }
 
 
 
         if(!$is_valid){
 
+            if ( is_multisite() && ($blog_id == 1) ) {
+                $go_login_link = network_site_url('signin');
+                wp_redirect($go_login_link . '?registration=disabled');
+                exit;
+            }else if( is_multisite()){
+                $go_login_link = site_url(1, 'login');
+                $go_login_link = network_site_url ('signin?redirect_to='.$go_login_link.'?blog_id='.$blog_id);
+                wp_redirect($go_login_link . '&login=bad_domain');
+                exit;
 
+            }else{
 
                 $go_login_link = get_site_url($blog_id, 'login');
 
@@ -285,10 +316,23 @@ function go_limit_domains($args){
 
                 wp_redirect($go_login_link . '?login=bad_domain');
                 exit;
-
+            }
         }
     }
 
+    //if this is the main site and this is not an existing user, don't allow registration
+    if ( is_multisite() ) {
+        if(is_main_site()){
+            if ( !email_exists( $email ) ) {
+                $go_login_link = get_site_url($blog_id, 'signin');
+                wp_redirect($go_login_link . '?registration=disabled');
+                exit;
+            }
+        }
+    }
+    if(is_multisite()) {
+        restore_current_blog();
+    }
 }
 
 function go_domain_restrictions_message($message = null ) {
@@ -370,8 +414,13 @@ add_filter('authenticate', 'go_verify_username_password', 1, 3);
 
 add_action('init', 'go_profile_rewrite');
 function go_profile_rewrite(){
-    $blog_id = get_current_blog_id();
-    if ($blog_id > 1) {
+	if(is_multisite() && is_main_site()){
+    	$hide = true;
+    }
+    else{
+    	$hide = false;
+    }
+    if (!$hide) {
         $page_name = 'profile';
         add_rewrite_rule($page_name, 'index.php?' . $page_name . '=true', "top");
     }
@@ -388,8 +437,13 @@ function go_profile_query_var( $vars ) {
 /* Template Include */
 add_filter('template_include', 'go_profile_template_include', 1, 1);
 function go_profile_template_include($template){
-    $blog_id = get_current_blog_id();
-    if ($blog_id > 1) {
+    if(is_multisite() && is_main_site()){
+    	$hide = true;
+    }
+    else{
+    	$hide = false;
+    }
+    if (!$hide) {
         $page_name = 'profile';
         global $wp_query; //Load $wp_query object
 
@@ -411,8 +465,13 @@ function go_profile_template_include($template){
 
 add_action('init', 'go_registration_rewrite');
 function go_registration_rewrite(){
-    $blog_id = get_current_blog_id();
-    if ($blog_id > 1) {
+    if(is_multisite() && is_main_site()){
+    	$hide = true;
+    }
+    else{
+    	$hide = false;
+    }
+    if (!$hide) {
         $page_name = 'register';
         add_rewrite_rule($page_name, 'index.php?' . $page_name . '=true', "top");
     }
@@ -455,7 +514,18 @@ function user_registration_login_init () {
     $interim = (isset($_GET['interim-login']) ? $_GET['interim-login'] : null);
     $test = (isset($_GET['test']) ? $_GET['test'] : null);
     $redirect = (isset($_GET['redirect']) ? $_GET['redirect'] : true);
+    if(is_multisite()) {
+        $blog_id = get_current_blog_id();
 
+        if ($blog_id > 1 && empty($action) && $redirect && empty($interim) && empty($test)) {
+            $go_login_link = get_site_url(1, 'login');
+            $go_login_link = network_site_url('signin?redirect_to=' . $go_login_link . '?blog_id=' . $blog_id);
+            wp_redirect($go_login_link);
+            exit;
+        }
+    }else{
+
+    }
 
 
     $referer = (isset( $_SERVER['HTTP_REFERER']) ?   $_SERVER['HTTP_REFERER'] : null);
@@ -472,7 +542,9 @@ function user_registration_login_init () {
 
 
     if ($blog_id > 1) {
-
+        if(is_multisite()) {
+            switch_to_blog($blog_id);
+        }
         $url = get_home_url();
         //if (!is_user_logged_in()) {
 
@@ -486,7 +558,9 @@ function user_registration_login_init () {
                 wp_redirect($url . '/signin?action=lostpassword&redirect=false');
                 exit;
             }
-
+        if(is_multisite()) {
+            restore_current_blog();
+        }
     }
 }
 
@@ -797,7 +871,12 @@ function acf_save_user( $post_id ) {
             $_POST['acf']['field_5cd3638830f17'] = '';
             $_POST['acf']['field_5cd363d130f18'] = '';//clear the confirm password field
 
-
+            //$sections_seats = $_POST['acf']['field_5cd4f7b43672b'];//sections and seats saved with own function
+            //$_POST['acf']['field_5cd4f7b43672b'] = array();//clear the field
+            //if(is_multisite()) {
+            //            $main_site_id = get_network()->site_id;
+            //            switch_to_blog($main_site_id);
+            //        }
             $user_id = wp_insert_user(
                 array(
                     'user_login'	=>	$user_name,
@@ -810,6 +889,9 @@ function acf_save_user( $post_id ) {
                     'role'		=>	'subscriber'
                 )
             );
+            //if(is_multisite()) {
+            //            restore_current_blog();
+            //        }
 
             //save sections and seats on registration
             $post_id = "user_".$user_id;
@@ -1103,9 +1185,13 @@ function go_login_message($message){
     parse_str($parts['query'], $query);
     $blog_id = (isset($query['blog_id']) ?  $query['blog_id'] : null);
 
-
+    if(is_multisite()) {
+        switch_to_blog($blog_id);
+    }
     $go_domain_restrictions_message = go_domain_restrictions_message();
-
+    if(is_multisite()) {
+            restore_current_blog();
+        }
     if ( !empty($go_domain_restrictions_message) ){
         $message .= "<div style ='background-color: white;
                                     margin-left: 0;
@@ -1135,9 +1221,14 @@ function go_sigin_ms_rewrite(){
         $query =  parse_url($_SERVER["REQUEST_URI"], PHP_URL_QUERY);
         $path_after_slash = substr($path, strrpos($path, '/') + 1);
         if ($path_after_slash === 'signin' && empty($query)) {
-
+            if(is_multisite()) {
+            $main_site_id = get_network()->site_id;
+            switch_to_blog($main_site_id);
+        }
             wp_redirect(site_url('signin'));
-
+            if(is_multisite()) {
+            restore_current_blog();
+        }
             exit;
         }
     }
@@ -1153,7 +1244,9 @@ function go_signin_success_redirect(){
     $blog_id = $query['blog_id'];
 
     if(!empty($blog_id)) {
-
+        if(is_multisite()) {
+        switch_to_blog($blog_id);
+    }
         //if (is_user_logged_in()) {
             wp_redirect(go_get_user_redirect());
             exit;
@@ -1173,9 +1266,14 @@ function go_sigin_add_blog_id(){
         $query =  parse_url($_SERVER["REQUEST_URI"], PHP_URL_QUERY);
         //$path_after_slash = substr($path, strrpos($path, '/') + 1);
         if (empty($query)) {
-
+            //if(is_multisite()) {
+            //            $main_site_id = get_network()->site_id;
+            //            switch_to_blog($main_site_id);
+            //        }
             wp_redirect($request."?blog_id=".$blog_id);
-
+            // if(is_multisite()) {
+            //            restore_current_blog();
+            //        }
             exit;
         }
     }
@@ -1194,7 +1292,10 @@ function go_get_domain_restrictions(){
                 continue;
             }
             $x++;
-
+            if(is_multisite()) {
+            $main_site_id = get_network()->site_id;
+            switch_to_blog($main_site_id);
+        }
 
         }
         $domain_count = get_option('options_limit_domains_domains');
@@ -1209,7 +1310,9 @@ function go_get_domain_restrictions(){
             $i++;
         }
 
-
+        if(is_multisite()) {
+            restore_current_blog();
+        }
     }
     return $domains;
 }*/

@@ -484,10 +484,15 @@ function go_clipboard_stats_dataloader_ajax(){
     $sOrder = go_sOrder('stats', $section);
 
     $lTable = "{$wpdb->prefix}go_loot";
-
+    if(is_multisite()) {
+        $main_site_id = get_network()->site_id;
+        switch_to_blog($main_site_id);
+    }
     $uTable = "{$wpdb->prefix}users";
     $umTable = "{$wpdb->prefix}usermeta";
-
+    if(is_multisite()) {
+        restore_current_blog();
+    }
 
     $sectionQuery = go_sectionQuery();
     $badgeQuery = go_badgeQuery();
@@ -497,6 +502,8 @@ function go_clipboard_stats_dataloader_ajax(){
     $section_key = go_prefix_key('go_section');
     $badge_key = go_prefix_key('go_badge');
     $group_key = go_prefix_key('go_group');
+
+    $caps_key = "{$wpdb->prefix}capabilities";
 
     $sQuery = "    
                     SELECT SQL_CALC_FOUND_ROWS
@@ -508,7 +515,7 @@ function go_clipboard_stats_dataloader_ajax(){
                       GROUP_CONCAT(CASE WHEN t2.meta_key = '$group_key' THEN meta_value END) as go_groups,
                       MAX(CASE WHEN t2.meta_key = 'first_name' THEN meta_value END) AS first_name,
                       MAX(CASE WHEN t2.meta_key = 'last_name' THEN meta_value END) AS last_name,
-                      MAX(CASE WHEN t2.meta_key = 'wp_capabilities' THEN meta_value END) AS wp_capabilities
+                      MAX(CASE WHEN t2.meta_key = '$caps_key' THEN meta_value END) AS wp_capabilities
                     FROM
                           (
                           SELECT t6.user_id
@@ -696,10 +703,15 @@ function go_clipboard_store_dataloader_ajax(){
     $pTable = "{$wpdb->prefix}posts";
     $lTable = "{$wpdb->prefix}go_loot";
     $aTable = "{$wpdb->prefix}go_actions";
-
+    if(is_multisite()) {
+        $main_site_id = get_network()->site_id;
+        switch_to_blog($main_site_id);
+    }
     $uTable = "{$wpdb->prefix}users";
     $umTable = "{$wpdb->prefix}usermeta";
-
+    if(is_multisite()) {
+        restore_current_blog();
+    }
 
     $sOn = go_sOn('store');
     //add store items to On statement
@@ -727,6 +739,8 @@ function go_clipboard_store_dataloader_ajax(){
     $badge_key = go_prefix_key('go_badge');
     $group_key = go_prefix_key('go_group');
 
+    $caps_key = "{$wpdb->prefix}capabilities";
+
     $sQuery = "    
                   SELECT SQL_CALC_FOUND_ROWS
                     t9.*
@@ -743,7 +757,7 @@ function go_clipboard_store_dataloader_ajax(){
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$group_key' THEN meta_value END) as go_groups,
                           MAX(CASE WHEN t2.meta_key = 'first_name' THEN meta_value END) AS first_name,
                           MAX(CASE WHEN t2.meta_key = 'last_name' THEN meta_value END) AS last_name,
-                          MAX(CASE WHEN t2.meta_key = 'wp_capabilities' THEN meta_value END) AS wp_capabilities
+                          MAX(CASE WHEN t2.meta_key = '$caps_key' THEN meta_value END) AS wp_capabilities
                         FROM(
                           SELECT t6.user_id
                           FROM (
@@ -937,10 +951,15 @@ function go_clipboard_messages_dataloader_ajax(){
 
     $lTable = "{$wpdb->prefix}go_loot";
     $aTable = "{$wpdb->prefix}go_actions";
-
+    if(is_multisite()) {
+        $main_site_id = get_network()->site_id;
+        switch_to_blog($main_site_id);
+    }
     $uTable = "{$wpdb->prefix}users";
     $umTable = "{$wpdb->prefix}usermeta";
-
+    if(is_multisite()) {
+        restore_current_blog();
+    }
     $sectionQuery = go_sectionQuery();
     $badgeQuery = go_badgeQuery();
     $groupQuery = go_groupQuery();
@@ -949,6 +968,8 @@ function go_clipboard_messages_dataloader_ajax(){
     $section_key = go_prefix_key('go_section');
     $badge_key = go_prefix_key('go_badge');
     $group_key = go_prefix_key('go_group');
+
+    $caps_key = "{$wpdb->prefix}capabilities";
 
     $sQuery = "    
                   SELECT SQL_CALC_FOUND_ROWS
@@ -966,7 +987,7 @@ function go_clipboard_messages_dataloader_ajax(){
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$group_key' THEN meta_value END) as go_groups,
                           MAX(CASE WHEN t2.meta_key = 'first_name' THEN meta_value END) AS first_name,
                           MAX(CASE WHEN t2.meta_key = 'last_name' THEN meta_value END) AS last_name,
-                          MAX(CASE WHEN t2.meta_key = 'wp_capabilities' THEN meta_value END) AS wp_capabilities
+                          MAX(CASE WHEN t2.meta_key = '$caps_key' THEN meta_value END) AS wp_capabilities
                         FROM(
                           SELECT t6.user_id
                           FROM (
@@ -1196,10 +1217,15 @@ function go_clipboard_activity_dataloader_ajax(){
 
     $lTable = "{$wpdb->prefix}go_loot";
     $aTable = "{$wpdb->prefix}go_actions";
-
+    if(is_multisite()) {
+        $main_site_id = get_network()->site_id;
+        switch_to_blog($main_site_id);
+    }
     $uTable = "{$wpdb->prefix}users";
     $umTable = "{$wpdb->prefix}usermeta";
-
+    if(is_multisite()) {
+        restore_current_blog();
+    }
     $tTable = "{$wpdb->prefix}go_tasks";
     $pTable = "{$wpdb->prefix}posts";
 
@@ -1211,6 +1237,8 @@ function go_clipboard_activity_dataloader_ajax(){
     $section_key = go_prefix_key('go_section');
     $badge_key = go_prefix_key('go_badge');
     $group_key = go_prefix_key('go_group');
+
+    $caps_key = "{$wpdb->prefix}capabilities";
 
     $sQuery = "    
                   SELECT SQL_CALC_FOUND_ROWS
@@ -1229,7 +1257,7 @@ function go_clipboard_activity_dataloader_ajax(){
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$group_key' THEN meta_value END) as go_groups,
                           MAX(CASE WHEN t2.meta_key = 'first_name' THEN meta_value END) AS first_name,
                           MAX(CASE WHEN t2.meta_key = 'last_name' THEN meta_value END) AS last_name,
-                          MAX(CASE WHEN t2.meta_key = 'wp_capabilities' THEN meta_value END) AS wp_capabilities
+                          MAX(CASE WHEN t2.meta_key = '$caps_key' THEN meta_value END) AS wp_capabilities
                         FROM(
                           SELECT t6.user_id
                           FROM (
@@ -1290,7 +1318,7 @@ function go_clipboard_activity_dataloader_ajax(){
     $iTotal = $rResultTotal [0];
     //$iFilteredTotal = number that match without limit;
     //$iTotalRecords = number in this table total (total store items/messages)
-    $output = array("iTotalRecords" => $iTotal, "iTotalDisplayRecords" => $iFilteredTotal, "aaData" => array());
+    //$output = array("iTotalRecords" => $iTotal, "iTotalDisplayRecords" => $iFilteredTotal, "aaData" => array());
 
 
     $data = array();

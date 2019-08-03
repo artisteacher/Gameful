@@ -522,6 +522,7 @@ function go_blog_user_task($not_ajax = false, $user_id = null, $post_id = null){
     $this_result = array();
     $first_loop = true;
     foreach ( $actions as $action ) {
+        $print_end = true;
         $stage_name ="";
         $action_type = $action->action_type;
         $TIMESTAMP = $action->TIMESTAMP;
@@ -632,6 +633,7 @@ function go_blog_user_task($not_ajax = false, $user_id = null, $post_id = null){
 
 
             }
+            echo "</div>";
 
             $this_result[]= ob_get_contents();
             ob_end_clean();
@@ -639,9 +641,11 @@ function go_blog_user_task($not_ajax = false, $user_id = null, $post_id = null){
 
     }
 
-    $time_on_task = go_time_on_task($current_time, $entry_time);
-    $this_result[] = $time_on_task;
-    $stage_results[] = $this_result;
+    if (isset($print_end)){
+        $time_on_task = go_time_on_task($current_time, $entry_time);
+        $this_result[] = $time_on_task;
+        $stage_results[] = $this_result;
+    }
 
     $stage_results = array_reverse($stage_results);
     foreach ($stage_results as $result){

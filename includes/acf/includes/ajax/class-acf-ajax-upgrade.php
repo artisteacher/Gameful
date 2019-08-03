@@ -24,7 +24,9 @@ class ACF_Ajax_Upgrade extends ACF_Ajax {
 		
 		// Switch blog.
 		if( isset($request['blog_id']) ) {
-
+            if(is_multisite()) {
+                switch_to_blog( $request['blog_id'] );
+            }
 		}
 		
 		// Bail early if no upgrade avaiable.

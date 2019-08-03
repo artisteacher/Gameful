@@ -16,9 +16,14 @@ function go_sectionQuery($section = false){
     }
     if (!empty($section)) {
         global $wpdb;
-
+        if(is_multisite()) {
+            $main_site_id = get_network()->site_id;
+            switch_to_blog($main_site_id);
+        }
         $umTable = "{$wpdb->prefix}usermeta";
-
+        if(is_multisite()) {
+            restore_current_blog();
+        }
         $key = go_prefix_key('go_section');
 
         $Query = "   LEFT JOIN $umTable as t3 ON t2.user_id = t3.user_id

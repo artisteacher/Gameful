@@ -104,6 +104,15 @@ class acf_location_current_user_role extends acf_location {
 		$choices = $wp_roles->get_names();
 		
 		
+		// multi-site
+		if( is_multisite() ) {
+			
+			$prepend = array( 'super_admin' => __('Super Admin', 'acf') );
+			$choices = array_merge( $prepend, $choices );
+			
+		}
+		
+		
 		// return
 		return $choices;
 		

@@ -33,7 +33,7 @@ function go_includes ($hook) {
      * Font Awesome
      * https://fontawesome.com
      */
-    wp_enqueue_script ('my_font-awesome', 'https://kit.fontawesome.com/5437e6a2c1.js', false, null, true  );
+    wp_enqueue_script ('my_font-awesome', 'https://kit.fontawesome.com/5437e6a2c1.js', false, null, false  );
     //wp_enqueue_script( 'my_font_awesome' );
     //wp_register_style( 'go_font_awesome', plugin_dir_url( __FILE__ ).'fontawesome/css/all.css', null, 5 );
     //wp_register_style( 'go_font-awesome', 'https://use.fontawesome.com/releases/v5.7.1/css/all.css', null, 5.7 );

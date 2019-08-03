@@ -518,7 +518,7 @@ function go_stats_lightbox_page_button( uid ) {//this is called from the admin b
                 jQuery('#stats_tabs').tabs();
                 jQuery( '.stats_tabs' ).click( function() {
                     console.log("tabs");
-                    tab = jQuery(this).attr('tab');
+                    var tab = jQuery(this).attr('tab');
                     switch (tab) {
                         case 'about':
                             //go_stats_about();
@@ -696,8 +696,6 @@ function go_make_select2_filter(taxonomy, is_lightbox, use_saved_value = false, 
 
 
 }
-
-
 
 function go_make_select2_cpt( my_div, cpt) {
 

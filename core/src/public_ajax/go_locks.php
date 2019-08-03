@@ -71,6 +71,8 @@ function go_task_locks ( $id, $user_id, $task_name, $custom_fields, $is_logged_i
         if ($this_lock !== false && !$check_only){
             echo $this_lock;
             $task_is_locked = true;
+        }else{
+            return true;
         }
     }
 
@@ -709,7 +711,7 @@ function go_schedule_access($user_id, $custom_fields, $is_logged_in, $check_only
                 //$dow_time = $custom_fields[$dow_time][0];
                 $dow_time = (isset($custom_fields[$dow_time][0]) ?  $custom_fields[$dow_time][0] : null);
                 if (!$dow_time) {
-                    $dow_time = array();
+                    $dow_time = '';
                 }
                 $dow_minutes = "go_sched_opt_" . $i . "_min";
                 //$dow_minutes = $custom_fields[$dow_minutes][0];
@@ -799,7 +801,7 @@ function go_prev_task($id = null, $chain_id){
 
 function go_task_chain_lock_message($prev_task, $task_name){
 
-        $task_title = go_post_title($prev_task);
+        $task_title = go_the_title($prev_task);
         $task_link = go_post_permalink($prev_task);
 
         return "<div class='go_sched_access_message'><h3 class='go_error_red'>Locked</h3>The $task_name, <a href='$task_link'>$task_title</a> must be done first</div>";
@@ -856,6 +858,7 @@ function go_task_chain_lock($id, $user_id, $task_name, $custom_fields, $is_logge
         } else {
             if (!$check_only) {
                 $this_lock = go_task_chain_lock_message($prev_task, $task_name);
+                echo $this_lock;
             }
             return true;//it is locked
         }
@@ -868,9 +871,6 @@ function go_task_chain_lock($id, $user_id, $task_name, $custom_fields, $is_logge
     else if (($is_pod || $first_in_chain) && !$locked_by_prev) {
         return false;//it is unlocked
     }
-
-
-
 
     //CHECK #3
     //THESE CHECKS ARE FOR PODS/FIRST IN CHAIN THAT ARE LOCKED BY PREVIOUS (that should be everything else)
@@ -895,10 +895,14 @@ function go_task_chain_lock($id, $user_id, $task_name, $custom_fields, $is_logge
             }
         }
 
-
         //#4.2
         // CONTINUE FOR PODS THAT DO NOT HAVE A MASTER UNLOCK ON A TASK
         //AND TASKS THAT ARE FIRST ON THEIR CHAIN
+
+        //HERE IT STILL COULD BE A POD OR REGULAR CHAIN
+        //CHECK THE LAST TASK ON PREVIOUS CHAIN
+
+
 
         $first_on_map = false;
         //if (($is_pod || $first_in_chain) && $locked_by_prev) {
@@ -924,7 +928,8 @@ function go_task_chain_lock($id, $user_id, $task_name, $custom_fields, $is_logge
             //then get the previous chain on this map
             $prev_key = (int)$this_chain_order - 1;
             $prev_chain = $sibling_chains[$prev_key];
-        } else {//this was the first chain on the map. Get the id of the previous chain
+        }
+        else {//this was the first chain on the map. Get the id of the previous chain
 
                     //$prev_chain = null;
             //get the ids of the terms on this map
@@ -953,11 +958,22 @@ function go_task_chain_lock($id, $user_id, $task_name, $custom_fields, $is_logge
             $prev_chain = $rev_children_chains[0];
         }
 
-        //CHECK IT PREVIOUS CHAIN IS DONE
+        //CHECK IF PREVIOUS CHAIN IS DONE
         $is_chain_done = is_chain_done($prev_chain, $user_id, null, null);
         if($is_chain_done){
             return false;
         }else{
+            if (!$check_only) {
+                $task_name = strtolower( get_option( 'options_go_tasks_name_plural' ) );
+
+
+                $map_url = get_option('options_go_locations_map_map_link');
+                $map_url = (string) $map_url;
+                $go_map_link = get_permalink( get_page_by_path($map_url) );
+
+                echo "<div class='go_sched_access_message'><h3 class='go_error_red'>Locked</h3>The previous group of " . $task_name . " must be done first. Please check the <a href='" . $go_map_link . "'>map</a>.</div>";
+
+            }
             return true;
         }
 

@@ -17,7 +17,7 @@ function go_filter_tasks_by_taxonomy() {
         $selected      = isset($_GET[$taxonomy]) ? $_GET[$taxonomy] : '';
         $info_taxonomy = get_taxonomy($taxonomy);
         wp_dropdown_categories(array(
-            'show_option_all' => __("Show All {$info_taxonomy->label}"),
+            'show_option_all' => sprintf( __( 'Show all %s', 'textdomain' ), $info_taxonomy->label ),
             'taxonomy'        => $taxonomy,
             'name'            => $taxonomy,
             'orderby'         => 'name',
@@ -87,13 +87,13 @@ function manage_task_chains_columns(){
         return $columns;
     });
 //remove count column
-    /*
+
     add_filter('manage_edit-go_badges_columns', function ( $columns ) {
         if( isset( $columns['posts'] ) )
             unset( $columns['posts'] );
         return $columns;
     });
-    */
+
 
 
     /**
@@ -170,8 +170,25 @@ function manage_task_chains_columns(){
     });
     //////Limits the dropdown to top level hierarchy.  Removes items that have a parent from the list.
     add_filter( 'taxonomy_parent_dropdown_args', 'go_limit_parents', 10, 2 );
+
+
+
 }
 add_action( 'admin_init', 'manage_task_chains_columns' );
+
+//add_action( 'admin_init', 'go_fix_count' );
+function go_fix_count(){
+    $terms = get_terms( array(
+        'taxonomy' => 'task_chains',
+        'hide_empty' => false,
+    ) );
+
+    $term_ids = array();
+    foreach ($terms as $term){
+        $term_ids[] = $term->term_id;
+    }
+    wp_update_term_count( $term_ids, 'task_chains', true );
+}
 
 
 /**
@@ -194,7 +211,6 @@ function task_chains_add_field_columns( $columns ) {;
 }
 
 add_filter( 'manage_edit-task_chains_columns', 'task_chains_add_field_columns' );
-
 function task_chains_add_field_column_contents( $content, $column_name, $term_id ) {
     switch( $column_name ) {
         case 'pod_toggle' :
@@ -224,7 +240,7 @@ function task_chains_add_field_column_contents( $content, $column_name, $term_id
             $term = get_term( $term_id, 'go_badges' );
             //$term = (isset(get_term( $term_id, 'go_badges' ) ?  get_term( $term_id, 'go_badges' ) : null));
 
-            if (!is_wp_error($term)) {
+            if (!is_wp_error($term) && !empty($term)) {
                 $name = $term->name;
             }
             if(!empty($name)) {
@@ -251,3 +267,4 @@ function go_add_from_template_edit_screen() {
     go_new_task_from_template(false);
         //echo '<span class="go_add_quest_from_template"><a href="javascript:void(0);">Add ' . get_option('options_go_tasks_name_singular') . ' from Template</a></span>';
 }
+

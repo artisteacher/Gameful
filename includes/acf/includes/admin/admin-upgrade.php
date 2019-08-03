@@ -73,13 +73,20 @@ class ACF_Admin_Upgrade {
 		foreach( $sites as $site ) {
 				
 			// switch blog
-
+            if(is_multisite()) {
+                switch_to_blog( $site['blog_id'] );
+            }
 
 			
 			// check for upgrade
 			if( acf_has_upgrade() ) {
 				$has_upgrade = true;
 			}
+			
+			// restore blog
+            if(is_multisite()) {
+                restore_current_blog();
+            }
 		}}
 		
 		// check if upgrade is avaialble
