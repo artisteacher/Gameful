@@ -6,6 +6,33 @@
  * Time: 1:13 AM
  */
 
+
+/**
+ * Add new top level menus
+ */
+function go_add_tools_page_when_game_disabled()
+{
+
+    $game_disabled = get_option('go_is_game_disabled');
+
+    if ($game_disabled) {
+        /* add a new menu item */
+        add_menu_page(
+            'Tools',// page title
+            'Tools',// page title
+            'manage_options',// capability
+            'game-tools',// menu slug
+            'go_admin_tools_menu_content',// callback function
+            '',// icon
+            4 // menu position
+        );
+    }
+
+}
+//add_action( 'admin_menu', 'go_add_tools_page_when_game_disabled');
+
+
+
 //this downloads the xml file
 add_action('init', 'go_download_game_data');
 function go_download_game_data()
@@ -144,19 +171,27 @@ function go_admin_tools_menu_content() {
             <div class="card">
                 <h2>Flush permalinks on all sites</h2>
                 <p>This is a maintenance task. Only run if needed--it's expensive.</p>
-                <button id="go_reset_all_users">Flush All Permalinks</button>
+                <button id="go_flush_all_permalinks">Flush All Permalinks</button>
             </div>
             <?php
-            do_action('go_flush_all_permalinks');
+            //do_action('go_flush_all_permalinks');
             ?>
         </div>
-        <div class="go_tools_section">
-            <div class="">
-                <h2>More Tools Coming Soon!</h2>
-                <p>Export/Import Tool</p>
-            </div
-        </div>
-
+        <?php
+        /*
+        if (is_multisite()) {
+            ?>
+            <div class="go_tools_section">
+                <div class="card">
+                    <h2>Disable GameOn on this site</h2>
+                    <p>Be careful! If turned on no gameon features will be available for this site. This can be undone by clicking this button again.</p>
+                    <button id="go_disable_game_on_this_site">Disable Game On</button>
+                </div
+            </div>
+            <?php
+        }
+        */
+                ?>
         </div>
 
 

@@ -114,13 +114,13 @@ function manage_task_chains_columns(){
         return $columns;
     });
 //remove count column
-    /*
+
     add_filter('manage_edit-task_focus_categories_columns', function ( $columns ) {
         if( isset( $columns['posts'] ) )
             unset( $columns['posts'] );
         return $columns;
     });
-    */
+
 
     /**
      * SIDE MENU EDIT COLUMNS AND FIELDS
@@ -166,6 +166,13 @@ function manage_task_chains_columns(){
     add_filter('manage_edit-user_go_groups_columns', function ( $columns ) {
         if( isset( $columns['slug'] ) )
             unset( $columns['slug'] );
+        return $columns;
+    });
+
+    //remove count column
+    add_filter('manage_edit-user_go_groups_columns', function ( $columns ) {
+        if( isset( $columns['posts'] ) )
+            unset( $columns['posts'] );
         return $columns;
     });
     //////Limits the dropdown to top level hierarchy.  Removes items that have a parent from the list.

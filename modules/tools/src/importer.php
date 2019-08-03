@@ -235,7 +235,7 @@ if ( class_exists( 'WP_Importer' ) ) {
 
 
             if ($step != 2 && !$finished) {
-                $this->import($file);
+                $this->import($file, $step);
             }else{
                // echo "hmm.";
             }
@@ -247,7 +247,7 @@ if ( class_exists( 'WP_Importer' ) ) {
          *
          * @param string $file Path to the WXR file for importing
          */
-        function import( $file ) {
+        function import( $file, $step ) {
             add_filter( 'import_post_meta_key', array( $this, 'is_valid_meta_key' ) );
             add_filter( 'http_request_timeout', array( &$this, 'bump_request_timeout' ) );
 
@@ -267,7 +267,7 @@ if ( class_exists( 'WP_Importer' ) ) {
             $this->backfill_attachment_urls();
             $this->remap_featured_images();
 
-            $this->import_end();
+            $this->import_end($step);
         }
 
         /**
@@ -309,7 +309,7 @@ if ( class_exists( 'WP_Importer' ) ) {
         /**
          * Performs post-import cleanup of files and the cache
          */
-        function import_end() {
+        function import_end($step) {
             global $next_file;
             wp_import_cleanup( $this->id );
 
@@ -326,6 +326,54 @@ if ( class_exists( 'WP_Importer' ) ) {
             echo '<p>' . __( 'Batch Complete.', 'wordpress-importer' ) . '</p>';
            // echo "next file" . $next_file;
             do_action( 'import_end' );
+
+
+            if($step == 3) {
+                //Update task chain counts
+                $terms = get_terms(array(
+                    'taxonomy' => 'task_chains',
+                    'hide_empty' => false,
+                ));
+                $term_ids = array();
+                foreach ($terms as $term) {
+                    $term_ids[] = $term->term_id;
+                }
+                wp_update_term_count($term_ids, 'task_chains', true);
+
+                //update store_types
+                $terms = get_terms(array(
+                    'taxonomy' => 'store_types',
+                    'hide_empty' => false,
+                ));
+                $term_ids = array();
+                foreach ($terms as $term) {
+                    $term_ids[] = $term->term_id;
+                }
+                wp_update_term_count($term_ids, 'store_types', true);
+
+                //update user_go_groups
+                $terms = get_terms(array(
+                    'taxonomy' => 'user_go_groups',
+                    'hide_empty' => false,
+                ));
+                $term_ids = array();
+                foreach ($terms as $term) {
+                    $term_ids[] = $term->term_id;
+                }
+                wp_update_term_count($term_ids, 'user_go_groups', true);
+
+                //update go_badges
+                $terms = get_terms(array(
+                    'taxonomy' => 'go_badges',
+                    'hide_empty' => false,
+                ));
+                $term_ids = array();
+                foreach ($terms as $term) {
+                    $term_ids[] = $term->term_id;
+                }
+                wp_update_term_count($term_ids, 'go_badges', true);
+            }
+
         }
 
 

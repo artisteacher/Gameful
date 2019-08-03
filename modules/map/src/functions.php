@@ -8,8 +8,7 @@
 
 //this can't be wrapped in the toggle = true because it needs to be available on activation
 add_action('init', 'go_map_page');
-function go_map_page()
-{
+function go_map_page(){
     if(is_multisite() && is_main_site()){
     	$hide = true;
     }
@@ -50,6 +49,7 @@ if ($go_map_switch) {
   	 	}
   	  	if (!$hide) {
             $map_name = get_option('options_go_locations_map_map_link');
+            $map_name = (isset($map_name) ?  $map_name : 'map');
             global $wp_query; //Load $wp_query object
 
             $page_value = (isset($wp_query->query_vars[$map_name]) ? $wp_query->query_vars[$map_name] : false); //Check for query var "blah"

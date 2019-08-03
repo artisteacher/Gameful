@@ -29,7 +29,7 @@ if ( !is_admin() ) {
 }else{
     $page_uri = go_get_page_uri();
     //global $pagenow;
-    if ( 'wp-adminedit-tags.php' == $page_uri) {
+    if ( 'edit-tags.php' == $page_uri) {
         //include_once('src/admin.php');
         include_once('src/wp-term-order.php');
     }

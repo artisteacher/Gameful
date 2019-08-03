@@ -59,8 +59,38 @@ function go_flush_all_permalinks(){
             restore_current_blog();
         }
     }
+    echo "flushed";
+    die();
 
 }
+
+
+//https://jeremyfelt.com/2015/07/17/flushing-rewrite-rules-in-wordpress-multisite-for-fun-and-profit/
+function go_disable_game_on_this_site(){
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
+    //check_ajax_referer( 'go_reset_all_users' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_disable_game_on_this_site' ) ) {
+        echo "refresh";
+        die( );
+    }
+
+    $status = get_option('go_is_game_disabled');
+    if (!$status){
+        update_option('go_is_game_disabled', true);
+    }else{
+        update_option('go_is_game_disabled', false);
+    }
+
+    echo "disabled";
+    die();
+
+}
+
+
 
 
 

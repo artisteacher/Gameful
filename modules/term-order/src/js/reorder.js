@@ -445,8 +445,6 @@ jQuery(document).ready(function(){
 		jQuery('tfoot').wrapInner('<div class="the-list-footer"></ul>');
 		jQuery('tfoot').contents().unwrap();
 
-
-
 		jQuery('.the-list-footer tr').prepend('<div class="handleLeft"></div>' );
 		jQuery('.the-list-header tr').prepend('<div class="handleLeft"></div>' );
 		jQuery('.the-list-footer tr').append('<div class="handleRight_nograb"></div>' );

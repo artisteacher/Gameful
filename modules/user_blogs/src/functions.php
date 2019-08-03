@@ -665,7 +665,7 @@ function go_blogs() {
         'hierarchical'          => false,
         'public'                => true,
         'show_ui'               => true,
-        'show_in_menu'          => true,
+        'show_in_menu'          => false,
         'menu_position'         => 20,
         'show_in_admin_bar'     => false,
         'show_in_nav_menus'     => true,

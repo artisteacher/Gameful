@@ -451,6 +451,13 @@ input[type='text'].go_error_red {
   font-family: 'Font Awesome 5 Pro' !important;
   font-weight: 900; }
 
+#wpadminbar .fas {
+  font-size: 17px !important;
+  padding-top: 7px !important; }
+
+#wpadminbar .ab-icon {
+  padding-top: 7px !important; }
+
 @media screen and (max-width: 782px) {
   #wp-admin-bar-go_map, #wp-admin-bar-go_clipboard, #wp-admin-bar-go_store, #wp-admin-bar-go_reader, #go_section_pipe {
     display: block !important;

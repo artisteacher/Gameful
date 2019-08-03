@@ -129,7 +129,7 @@ function go_register_store_tax_and_cpt() {
 		'archives'              => 'Item Archives',
 		'attributes'            => 'Item Attributes',
 		'parent_item_colon'     => 'Parent Item:',
-		'all_items'             => 'All Items',
+		'all_items'             => 'Item List',
 		'update_item'           => 'Update Item',
 		'featured_image'        => 'Featured Image',
 		'set_featured_image'    => 'Set featured image',

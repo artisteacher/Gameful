@@ -67,6 +67,7 @@ function go_admin_scripts ($hook) {
                 'go_user_map_ajax'              => wp_create_nonce('go_user_map_ajax'),//on the clipboard
                 'go_reset_all_users'			=> wp_create_nonce( 'go_reset_all_users'),//could be just on tools
                 'go_flush_all_permalinks'			=> wp_create_nonce( 'go_flush_all_permalinks'),//could be just on tools
+                'go_disable_game_on_this_site'  => wp_create_nonce( 'go_disable_game_on_this_site' )
             ),
         )
     );

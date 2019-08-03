@@ -1,12 +1,44 @@
 <?php
 /**
- * Redirect user after successful login.
- *
- * @param string $redirect_to URL to redirect to.
- * @param string $request URL the user is coming from.
- * @param object $user Logged user's data.
- * @return string
+ * Check the wp-activate key and redirect the user to the apply page
+ * based on http://www.vanbodevelops.com/tutorials/how-to-skip-the-activation-page-and-send-the-user-straight-to-the-home-page-for-wordpress-multisite
  */
+add_action( 'init', 'check_activation_key_redirect_to_page' );
+function check_activation_key_redirect_to_page() {
+    // We check if the key is not empty
+    $self = (isset($_SERVER['PHP_SELF']) ?  $_SERVER['PHP_SELF'] : null);
+    if ($self == '/wp-activate.php') {
+        if (!empty($_GET['key']) || !empty($_POST['key'])) {
+            $key = !empty($_GET['key']) ? $_GET['key'] : $_POST['key'];
+            // Activates the user and send user/pass in an email
+            $result = wpmu_activate_signup($key);
+
+            if (!is_wp_error($result)) {
+                //extract($result);
+                $user_data = get_userdata($result['user_id']);
+                $user_name = $user_data->user_login;
+                $new_password = $result['password'];
+                $creds = array();
+                $creds['user_login'] = $user_name;
+                $creds['user_password'] = $new_password;
+                $creds['remember'] = false;
+
+                $user = wp_signon( $creds, false );
+                if ( is_wp_error($user) )
+                    echo $user->get_error_message();
+                //print_r($user);
+                //exit;
+                // Save the user object to the session
+                setcookie('my_active_user_variable', json_encode($creds), time()+60);
+                // Redirect to the network home url
+                wp_redirect(site_url('profile?activated'));
+                exit;
+            }
+        }
+    }
+}
+
+
 
 
 /*
