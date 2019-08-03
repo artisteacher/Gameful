@@ -328,7 +328,7 @@ if ( class_exists( 'WP_Importer' ) ) {
             do_action( 'import_end' );
 
 
-            if($step == 3) {
+            if($step == 4) {
                 //Update task chain counts
                 $terms = get_terms(array(
                     'taxonomy' => 'task_chains',

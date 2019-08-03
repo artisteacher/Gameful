@@ -250,7 +250,7 @@ function go_admin_head_notification() {
 add_action( 'admin_footer_text', 'go_blog_id_message' );
 function go_blog_id_message(){
     $blog_id = get_current_blog_id();
-    echo "<div style='float: right'>Current Blog ID: $blog_id</div>";
+    echo "<span>Thank you for creating with <a href='https://gamefulme.com'>Gameful Me</a>. </span><span>Current Blog ID: $blog_id</span>";
 }
 
 

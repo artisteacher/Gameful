@@ -298,6 +298,14 @@ function go_add_toplevel_menu() {
 }
 add_action( 'admin_menu', 'go_add_toplevel_menu');
 
+function go_remove_toplevel_menu() {
+    if(is_multisite() && !is_super_admin()) {
+        remove_menu_page('edit.php?post_type=elementor_library');
+        remove_menu_page('elementor');
+    }
+}
+add_action( 'admin_init', 'go_remove_toplevel_menu');
+
 function go_add_submenus() {
     remove_submenu_page( 'users.php', 'profile.php' );
     /* add the sub menu under content for posts */

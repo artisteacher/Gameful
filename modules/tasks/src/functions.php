@@ -166,7 +166,8 @@ function go_register_task_tax_and_cpt() {
 		'not_found' => _x( 'No '.$tasks_name_plural.' found', 'task' ),
 		'not_found_in_trash' => _x( 'No '.$tasks_name_singular.' found in Trash', 'task' ),
 		'parent_item_colon' => _x( 'Parent '.$tasks_name_singular.':', 'task' ),
-		'menu_name' => _x( $tasks_name_plural, 'task' )
+		'menu_name' => _x( $tasks_name_plural, 'task' ),
+		'all_items'             => _x( $tasks_name_singular . " List", 'task' )
 	);
 	$args_cpt = array(
 		'labels' => $labels_cpt,
