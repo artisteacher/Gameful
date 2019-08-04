@@ -752,10 +752,10 @@ final class WP_Term_Order {
 
 			// If repositioned term has been set and new items are already in
 			// the right order, we can stop looping
-			if ( isset( $new_pos[ $term->term_id ] ) && (int) $sibling->order >= $start ) {
-				$return_data->next = false;
-				break;
-			}
+			//if ( isset( $new_pos[ $term->term_id ] ) && (int) $sibling->order >= $start ) {
+				//$return_data->next = false;
+				//break;
+			//}
 
 			// Set order of current sibling and increment the order
 			if ( $start !== (int) $sibling->order ) {

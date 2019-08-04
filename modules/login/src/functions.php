@@ -1,12 +1,44 @@
 <?php
 /**
- * Redirect user after successful login.
- *
- * @param string $redirect_to URL to redirect to.
- * @param string $request URL the user is coming from.
- * @param object $user Logged user's data.
- * @return string
+ * Check the wp-activate key and redirect the user to the apply page
+ * based on http://www.vanbodevelops.com/tutorials/how-to-skip-the-activation-page-and-send-the-user-straight-to-the-home-page-for-wordpress-multisite
  */
+add_action( 'init', 'check_activation_key_redirect_to_page' );
+function check_activation_key_redirect_to_page() {
+    // We check if the key is not empty
+    $self = (isset($_SERVER['PHP_SELF']) ?  $_SERVER['PHP_SELF'] : null);
+    if ($self == '/wp-activate.php') {
+        if (!empty($_GET['key']) || !empty($_POST['key'])) {
+            $key = !empty($_GET['key']) ? $_GET['key'] : $_POST['key'];
+            // Activates the user and send user/pass in an email
+            $result = wpmu_activate_signup($key);
+
+            if (!is_wp_error($result)) {
+                //extract($result);
+                $user_data = get_userdata($result['user_id']);
+                $user_name = $user_data->user_login;
+                $new_password = $result['password'];
+                $creds = array();
+                $creds['user_login'] = $user_name;
+                $creds['user_password'] = $new_password;
+                $creds['remember'] = false;
+
+                $user = wp_signon( $creds, false );
+                if ( is_wp_error($user) )
+                    echo $user->get_error_message();
+                //print_r($user);
+                //exit;
+                // Save the user object to the session
+                setcookie('my_active_user_variable', json_encode($creds), time()+60);
+                // Redirect to the network home url
+                wp_redirect(site_url('profile?activated'));
+                exit;
+            }
+        }
+    }
+}
+
+
 
 
 /*
@@ -20,8 +52,7 @@ License: GPL2
 */
 
 /* http://premium.wpmudev.org/forums/topic/redirect-users-to-their-blogs-homepage */
-add_filter('login_redirect', function($redirect_to, $request_redirect_to, $user)
-{
+add_filter('login_redirect', function($redirect_to, $request_redirect_to, $user) {
     global $blog_id;
 
     $parts = parse_url($redirect_to);
@@ -111,15 +142,17 @@ function my_login_logo() {
     $url = wp_get_attachment_image_src($logo, 'medium');
     $url = $url[0];
     $meta =wp_get_attachment_metadata($logo);
-    $width = $meta['sizes']['medium']['width'];
-    $height = $meta['sizes']['medium']['height'];
-    if ($height > 180){
-        $scale = 180/$height;
-        $width = $width * $scale;
-        $height = 180;
-    }else{
-        $scale = 300/$width;
-        $height = $height * $scale;
+    if (!empty($meta)) {
+        $width = $meta['sizes']['medium']['width'];
+        $height = $meta['sizes']['medium']['height'];
+        if ($height > 180) {
+            $scale = 180 / $height;
+            $width = $width * $scale;
+            $height = 180;
+        } else {
+            $scale = 300 / $width;
+            $height = $height * $scale;
+        }
     }
 
     if(is_multisite()) {
@@ -321,7 +354,7 @@ function go_limit_domains($args){
 
     //if this is the main site and this is not an existing user, don't allow registration
     if ( is_multisite() ) {
-        if($blog_id == 1){
+        if(is_main_site()){
             if ( !email_exists( $email ) ) {
                 $go_login_link = get_site_url($blog_id, 'signin');
                 wp_redirect($go_login_link . '?registration=disabled');
@@ -413,8 +446,13 @@ add_filter('authenticate', 'go_verify_username_password', 1, 3);
 
 add_action('init', 'go_profile_rewrite');
 function go_profile_rewrite(){
-    $blog_id = get_current_blog_id();
-    if ($blog_id > 1) {
+	if(is_multisite() && is_main_site()){
+    	$hide = true;
+    }
+    else{
+    	$hide = false;
+    }
+    if (!$hide) {
         $page_name = 'profile';
         add_rewrite_rule($page_name, 'index.php?' . $page_name . '=true', "top");
     }
@@ -431,8 +469,13 @@ function go_profile_query_var( $vars ) {
 /* Template Include */
 add_filter('template_include', 'go_profile_template_include', 1, 1);
 function go_profile_template_include($template){
-    $blog_id = get_current_blog_id();
-    if ($blog_id > 1) {
+    if(is_multisite() && is_main_site()){
+    	$hide = true;
+    }
+    else{
+    	$hide = false;
+    }
+    if (!$hide) {
         $page_name = 'profile';
         global $wp_query; //Load $wp_query object
 
@@ -454,8 +497,13 @@ function go_profile_template_include($template){
 
 add_action('init', 'go_registration_rewrite');
 function go_registration_rewrite(){
-    $blog_id = get_current_blog_id();
-    if ($blog_id > 1) {
+    if(is_multisite() && is_main_site()){
+    	$hide = true;
+    }
+    else{
+    	$hide = false;
+    }
+    if (!$hide) {
         $page_name = 'register';
         add_rewrite_rule($page_name, 'index.php?' . $page_name . '=true', "top");
     }

@@ -101,12 +101,35 @@ function go_admin_bar_v5() {
         ///
         if ($is_admin ) {//only show to admin
             $wp_admin_bar->add_node(array('id' => 'go_section_pipe', 'title' => ' | ', 'href' => 'javascript:void(0)',));
+
+            if(is_admin()){
+                $url = home_url();
+                $icon = '<span class="ab-icon dashicons dashicons-admin-home"></span> ';
+                $sub_title = 'View Site';
+            }else{
+                $url = get_admin_url();
+                $icon = '<span class="ab-icon dashicons dashicons-dashboard"></span> ';
+                $sub_title = 'Dashboard';
+            }
+
+
+            $site_name = get_bloginfo( 'name' );
             $wp_admin_bar->add_node(
                 array(
                     'id' => 'go_options',
-                   'title' => 'Gameful Me',
-                    //'href' => get_admin_url() . 'admin.php?page=game-on'
-                    'href' => ''
+                   'title' => $icon . $site_name,
+                    'href' => $url,
+                )
+            );
+
+
+            $wp_admin_bar->add_node(
+                array(
+                    'id' => 'site_link',
+                    'title' => $sub_title,
+                    'href' => $url,
+                    'parent' => 'go_options',
+                    'meta' => array('class' => 'go_site_name_menu_item')
                 )
             );
 
@@ -194,7 +217,7 @@ function go_admin_bar_v5() {
             if ($badges_toggle) {
                 $wp_admin_bar->add_node(array('id' => 'go_nav_badges', 'title' => ucfirst(get_option('options_go_badges_name_plural')), 'href' => esc_url(get_admin_url()) . 'edit-tags.php?taxonomy=go_badges', 'parent' => 'go_options', 'meta' => array('class' => 'go_site_name_menu_item')));
             }
-
+/*
             // displays Store Categories page link
             $wp_admin_bar->add_node(
                 array(
@@ -216,7 +239,7 @@ function go_admin_bar_v5() {
                     'meta' => array('class' => 'go_options')
                 )
             );
-
+*/
             /*
              * Default WP Links
              */
@@ -443,8 +466,13 @@ function go_admin_bar_v5() {
 
 add_action('init', 'go_leaderboard_rewrite');
 function go_leaderboard_rewrite(){
-    $blog_id = get_current_blog_id();
-    if ($blog_id > 1) {
+    if(is_multisite() && is_main_site()){
+    	$hide = true;
+    }
+    else{
+    	$hide = false;
+    }
+    if ($hide) {
         $page_name = urlencode(get_option('options_go_stats_leaderboard_name'));
         $page_name = (isset($page_name) ? $page_name : 'leaderboard');
         //$page_name = 'leaderboard';
@@ -480,11 +508,17 @@ function go_leaderboard_template_include($template){
     return $template; //Load normal template when $page_value != "true" as a fallback
 }
 
-function gf_admin_bar_remove_logo() {
+function go_admin_bar_remove_items() {
     global $wp_admin_bar;
     $wp_admin_bar->remove_menu( 'wp-logo' );
+    $wp_admin_bar->remove_menu('customize');
+    $wp_admin_bar->remove_menu('new-content');
+    $wp_admin_bar->remove_menu('site-name');
+    if(!is_super_admin()) {
+        $wp_admin_bar->remove_menu('updates');
+    }
 }
-add_action( 'wp_before_admin_bar_render', 'gf_admin_bar_remove_logo', 0 );
+add_action( 'wp_before_admin_bar_render', 'go_admin_bar_remove_items', 0 );
 
 
 add_action( 'admin_bar_menu', 'remove_howdy', 11 );

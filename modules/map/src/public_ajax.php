@@ -40,7 +40,7 @@ function go_make_map() {
             }
         }
 
-        echo "<div id='go_map_container' style='padding:10px 30px; margin: 30px 5%; background-color: white; font-family: $font_family; font-style: $font_style; font-weight: $font_weight; font-size: $font_size"."px;'>";
+        echo "<div id='go_map_container' style='font-family: $font_family; font-style: $font_style; font-weight: $font_weight; font-size: $font_size"."px;'>";
         $map_title = get_option( 'options_go_locations_map_title');
         echo "<h1 style='padding:0px 30px 30px 0px;'>{$map_title}</h1>";
         go_make_map_dropdown();
@@ -113,12 +113,12 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
         $badge_id = get_term_meta($last_map_id, "pod_achievement", true);
         echo 	"<div id='map_$last_map_id' class='map' style='overflow: auto;'>
 				<ul class='primaryNav'>
-				<li class='ParentNav'><p>$last_map_object->name</p>";
+				<li class='ParentNav'><div><div><p>$last_map_object->name</p></div>";
         //go_map_quest_badge($badge_id, $user_badges, true);
         if(intval($badge_id) > 0) {
             go_print_single_badge($badge_id, 'badge', $output = true, $user_id);
         }
-        echo "</li>";
+        echo "</div></li>";
 
         $term_ids = go_get_map_chain_term_ids($last_map_id);
 
@@ -247,6 +247,7 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
 
                     //if locked
                     $task_is_locked = go_task_locks($post_id, $user_id, false, $custom_fields, $is_logged_in, true);
+
                     //$task_is_locked = false;
                     $unlock_message = '';
                     if ($task_is_locked === 'password'){
@@ -560,7 +561,7 @@ function go_make_map_dropdown($user_id = null){
 	<div id='sitemap' style='visibility:hidden;'>   
     <div class='dropdown'>
       <button onclick='go_map_dropDown()' class='dropbtn'>Choose a Map</button>
-      <div id='go_Dropdown' class='dropdown-content'>";
+      <div id='go_Dropdown' class='dropdown-content .dropdown-menu'>";
     /* For each task chain with no parent, add to Dropdown  */
             foreach ( $tax_terms_maps as $tax_term_map ) {
 				$term_id = $tax_term_map->term_id;

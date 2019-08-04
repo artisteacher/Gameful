@@ -125,7 +125,8 @@ add_action( 'post_submitbox_misc_actions', 'go_duplicate_post_button' );
 
 function go_reorder_admin_menu( ) {
     return array(
-        'game-on', //GO heading
+        'index.php', // Dashboard
+        //'game-on', //GO heading
         'game-on-options', //GO options
         'go_clipboard', //GO clipboard
         'users.php', // Users
@@ -136,9 +137,9 @@ function go_reorder_admin_menu( ) {
         'groups',
         //'edit.php?post_type=go_blogs',
         //'go_random_events',
-        'game-tools',//gameon tools
+        //'game-tools',//gameon tools
         'separator1', // --Space--
-        'index.php', // Dashboard
+
         'edit.php?post_type=page', // Pages
         'edit.php', // Posts
         'upload.php', // Media
@@ -148,7 +149,7 @@ function go_reorder_admin_menu( ) {
         //'users.php', // Users
         'separator3', // --Space--
         'plugins.php', // Plugins
-        'go_tools.php', // Tools
+        'tools.php', // Tools
         'options-general.php', // Settings
     );
 }
@@ -281,7 +282,7 @@ function go_add_toplevel_menu() {
         );
 
     }*/
-    /* add a new menu item */
+    /* add a new menu item
     add_menu_page(
         'Tools',// page title
         'Tools',// page title
@@ -290,20 +291,29 @@ function go_add_toplevel_menu() {
         'go_admin_tools_menu_content',// callback function
         '',// icon
         4 // menu position
-    );
+    );*/
 
 
 
 }
 add_action( 'admin_menu', 'go_add_toplevel_menu');
 
+function go_remove_toplevel_menu() {
+    if(is_multisite() && !is_super_admin()) {
+        remove_menu_page('edit.php?post_type=elementor_library');
+        remove_menu_page('elementor');
+    }
+}
+add_action( 'admin_init', 'go_remove_toplevel_menu');
+
 function go_add_submenus() {
     remove_submenu_page( 'users.php', 'profile.php' );
     /* add the sub menu under content for posts */
+    $task_name = get_option('options_go_tasks_name_singular');
     add_submenu_page(
         'edit.php?post_type=tasks', // parent slug
-        'Add New', // page_title,
-        'Add New', // menu_title,
+        'New ' . $task_name, // page_title,
+        'New ' . $task_name, // menu_title,
         'edit_posts', // capability,
         'javascript:go_new_task_from_template();' // menu_slug,
     );
@@ -320,14 +330,25 @@ function go_add_submenus() {
         'edit.php?post_type=tasks_templates' // menu_slug,
     );
 
-    /* add the sub menu under content for posts */
+    /* add the sub menu under content for maps */
     $map_name = get_option('options_go_locations_map_title');
     add_submenu_page(
         'edit.php?post_type=tasks', // parent slug
         'Manage ' . $map_name, // page_title,
         'Manage ' . $map_name, // menu_title,
         'edit_posts', // capability,
-        'edit-tags.php?taxonomy=task_chains' // menu_slug,
+        'edit-tags.php?taxonomy=task_chains&post_type=tasks' // menu_slug,
+    );
+
+
+    /* add the sub menu under content for posts */
+    add_submenu_page(
+        'tools.php', // parent slug
+        'Gameful Tools', // page_title,
+        'Gameful Tools', // menu_title,
+        'edit_posts', // capability,
+        'game-tool', // menu_slug,
+        'go_admin_tools_menu_content'// callback function
     );
 
     /*
@@ -683,7 +704,7 @@ function go_options_menu_content() {
 
         </div>
         <?php
-        if (is_multisite() && get_current_blog_id() == 1) {
+        if (is_multisite() && is_main_site()) {
             ?>
             <h3>Site-Wide Settings</h3>
             <div class="go_tools_section">

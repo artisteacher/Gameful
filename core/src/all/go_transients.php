@@ -339,35 +339,52 @@ function go_post_meta($post_id, $key = '', $single = 'false'){
  * @param  integer $post_id
  */
 function go_update_task_post_save( $post_id ) {
-    $post = get_post( $post_id );
+
+
+    $post_type = (isset($_POST['post_type']) ?  $_POST['post_type'] : null);
+    if(empty($post_type)){
+        $post_type = get_post_type( $post_id );
+    }
     // Check for post type.
-    if ( 'tasks' !== $post->post_type ) {
+    if ( 'tasks' !== $post_type ) {
         return;
     }
 
-        //delete task data transient
-        $key = 'go_post_data_' . $post_id;
-        delete_transient($key);
+    //delete task chain transient for old and new task chain
+    //delete old task chain transient
+    //this is the original task_chain for this post
+    //there is an option created/updated when the transient is created
+    /*
+    $key = 'go_post_task_chain_' . $post_id;
+    $term_id = get_option($key);
+    //delete the original task chain post_ids transient
+    $key = 'go_get_chain_posts_' . $term_id;
+    delete_transient($key);*/
 
-
-        //delete task chain transient for old and new task chain
-
-        //delete old task chain transient
-        //this is the original task_chain for this post
-        //there is an option created/updated when the transient is created
-        $key = 'go_post_task_chain_' . $post_id;
-        $term_id = get_option($key);
-        //delete the original task chain post_ids transient
+    //delete OLD task chain transient
+    $term_id = go_post_meta($post_id, 'go-location_map_loc');
+    //$term_id = (isset($custom_fields['go-location_map_loc'][0]) ? $custom_fields['go-location_map_loc'][0] : null);
+    if(!empty($term_id)) {
         $key = 'go_get_chain_posts_' . $term_id;
         delete_transient($key);
+    }
 
-        //delete new task chain transient
-        $custom_fields = get_post_meta($post_id);
-        $term_id = (isset($custom_fields['go-location_map_loc'][0]) ? $custom_fields['go-location_map_loc'][0] : null);
+    //delete new task chain transient
+    //$term_id = go_post_meta($post_id, 'location_map_loc');
+    //$custom_fields = get_post_meta($post_id);
+    //$term_id = (isset($custom_fields['go-location_map_loc'][0]) ? $custom_fields['go-location_map_loc'][0] : null);
+    //$term_id = $_POST['acf']['field_5a960f458bf8c']['field_5ab197179d24a']['field_5a960f468bf8e'];
+    $term_id = (isset($_POST['acf']['field_5a960f458bf8c']['field_5ab197179d24a']['field_5a960f468bf8e']) ?  $_POST['acf']['field_5a960f458bf8c']['field_5ab197179d24a']['field_5a960f468bf8e'] : null);
+
+    if(!empty($term_id)){
         $key = 'go_get_chain_posts_' . $term_id;
         delete_transient($key);
+    }
 
 
+    //delete task data transient
+    $key = 'go_post_data_' . $post_id;
+    delete_transient($key);
 
 }
 

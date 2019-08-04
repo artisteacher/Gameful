@@ -74,6 +74,18 @@ get_header();
 <div id='go_profile_wrapper' style='max-width: 1100px; margin: 20px auto 100px auto;'>
 
     <?php
+//
+     if ( isset($_COOKIE['my_active_user_variable']) && ! empty( $_COOKIE['my_active_user_variable'] ) ) {
+        $user = json_decode(stripslashes($_COOKIE['my_active_user_variable']));
+        unset($_COOKIE['my_active_user_variable']);
+        setcookie('my_active_user_variable');
+        //print_r($user);
+        echo '<div class="acf-notice">Welcome '. $user->user_login .'.<br>Your assigned password is: ' . $user->user_password . '<br>Please change your password and complete your profile now.</div>';
+        // Unset the session variable since we don't needed anymore
+
+    }
+
+
     $block_form = false;
     if ($this_page == 'profile'){
         echo"<h3 style='padding-top:10px;'>Profile</h3>";

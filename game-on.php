@@ -11,7 +11,7 @@ Version: 5.01
 
 //$go_debug = true;//set to true when coding
 
-if ($domain ==='gameondev') {
+if ($_SERVER['HTTP_HOST'] ==='gameon1') {
     $is_gameful = false;
     $go_debug = true;
 
@@ -19,6 +19,9 @@ if ($domain ==='gameondev') {
     $go_debug = false;
     $is_gameful = true;
 }
+
+
+$game_disabled = get_option('go_is_game_disabled');
 
 global $go_debug;
 global $is_gameful;
@@ -78,8 +81,11 @@ global $go_css_version;
 //ACF is loaded conditionally below
 //Include external js and css resources from cdns
 //can these be given local fallbacks
+
 include_once('includes/go_enqueue_includes.php');
-add_action( 'wp_enqueue_scripts', 'go_includes' );
+if (!$game_disabled) {
+    add_action('wp_enqueue_scripts', 'go_includes');
+}
 add_action( 'admin_enqueue_scripts', 'go_includes' );
 
 //https://www.advancedcustomfields.com/resources/local-json/
@@ -101,48 +107,51 @@ function go_acf_json_load_point( $paths ) {
 /// CONDITIONAL INCLUDES
 /////////////////////////////
 //INCLUDE CSS AND JS FILES
-if ( !is_admin() ) { //IF PUBLIC FACING PAGE
-    include_once('js/go_enque_js.php');
-    include_once('js/localize_scripts.php');
+if (!$game_disabled) {
+    if (!is_admin()) { //IF PUBLIC FACING PAGE
+        include_once('js/go_enque_js.php');
+        include_once('js/localize_scripts.php');
 
-    include_once('styles/go_enque_styles.php');
+        include_once('styles/go_enque_styles.php');
+    } else if (defined('DOING_AJAX')) { //ELSE THIS IS AN AJAX CALL
+        //if this is an ajax call, skip the enqueue functions
+    } else {//ELSE THIS IS AN ADMIN PAGE
+
+        //admin js
+        include_once('js/go_enque_js_admin.php');
+        include_once('js/localize_scripts.php');
+
+        //admin css
+        include_once('styles/go_enque_styles_admin.php');
+    }
 }
-else if ( defined( 'DOING_AJAX' )) { //ELSE THIS IS AN AJAX CALL
-    //if this is an ajax call, skip the enqueue functions
-}
-else {//ELSE THIS IS AN ADMIN PAGE
-
-    //admin js
-    include_once('js/go_enque_js_admin.php');
-    include_once('js/localize_scripts.php');
-
-    //admin css
-    include_once('styles/go_enque_styles_admin.php');
-}
-
 //INCLUDE PHP
 //These files have their own conditional includes
 
 //Core files include the functions that are used across several modules
+if (!$game_disabled) {
 include_once('core/includes.php');
 
-include_once('includes/includes.php');
+
+    include_once('includes/includes.php');
 
 //Modules
-include_once('modules/admin_bar/includes.php');
-include_once('modules/archive/includes.php');
-include_once('modules/clipboard/includes.php');
-include_once('modules/feedback/includes.php');
-include_once('modules/login/includes.php');
-include_once('modules/map/includes.php');
-include_once('modules/messages/includes.php');
-include_once('modules/quiz/includes.php');
-include_once('modules/stats/includes.php');
-include_once('modules/store/includes.php');
-include_once('modules/tasks/includes.php');
-include_once('modules/tools/includes.php');
-include_once('modules/user_blogs/includes.php');
-include_once('modules/term-order/includes.php'); //try to load only on admin pages
+    include_once('modules/admin_bar/includes.php');
+    include_once('modules/archive/includes.php');
+    include_once('modules/clipboard/includes.php');
+    include_once('modules/feedback/includes.php');
+    include_once('modules/login/includes.php');
+    include_once('modules/map/includes.php');
+    include_once('modules/messages/includes.php');
+    include_once('modules/quiz/includes.php');
+    include_once('modules/stats/includes.php');
+    include_once('modules/store/includes.php');
+    include_once('modules/tasks/includes.php');
+    include_once('modules/tools/includes.php');
+    include_once('modules/user_blogs/includes.php');
+    include_once('modules/term-order/includes.php'); //try to load only on admin pages
+}
+
 
 
 /////
@@ -211,6 +220,12 @@ function go_total_query_time(){
 }
 
 
+
+add_filter( 'auth_cookie_expiration', 'go_login_14_hours' );
+function go_login_14_hours( $expirein )
+{
+    return 50400; // 1 year in seconds
+}
 
 //This is the code that puts the login modal on the frontend
 //code used

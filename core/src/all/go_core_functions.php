@@ -234,6 +234,7 @@ function go_get_terms_ordered($taxonomy, $parent = '', $number = ''){
         ),
         'hide_empty' => false
     );
+
     $terms = get_terms($taxonomy, $args);//the rows
 
     return $terms;
@@ -243,16 +244,30 @@ function go_get_page_uri(){
     $request_uri = (isset($_SERVER['REQUEST_URI']) ?  $_SERVER['REQUEST_URI'] : null);//page currently being loaded
     //
     //
-    if(is_multisite()){
-        $details  = get_blog_details();
-        $path = $details -> path;
-    }else{
-        $path = '';
-    }
+    //if(is_multisite()){
 
-    $strip_path = str_replace($path, '', $request_uri);
-    $strip_slashes = str_replace('/','',$strip_path);
-    $page_uri = strtok($strip_slashes,'?');
+        //$details = get_blog_details();
+       // $path = $details->path;
+
+        //$parts = parse_url($request_uri);
+        //$pos = strrpos($request_uri, '/');
+       // $id = $pos === false ? $request_uri : substr($request_uri, $pos + 1);
+        //$hmm =1;
+
+
+
+
+
+
+    //}else{
+    //    $path = '';
+   // }
+
+    $str = basename($request_uri);
+    $page_uri = strtok($str,'?');
+    //$strip_path = str_replace($path, '', $request_uri);
+    //$strip_slashes = str_replace('/','',$strip_path);
+    //$page_uri = strtok($strip_slashes,'?');
 
     return $page_uri;
 }

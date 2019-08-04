@@ -12,48 +12,56 @@
 class go_WXR_Parser {
 	function parse( $file ) {
 		// Attempt to use proper XML parsers first
-		if ( extension_loaded( 'simplexml' ) ) {
-			$parser = new go_WXR_Parser_SimpleXML;
-			$result = $parser->parse( $file );
 
-			// If SimpleXML succeeds or this is an invalid WXR file then return the results
-			if ( ! is_wp_error( $result ) || 'SimpleXML_parse_error' != $result->get_error_code() )
-				return $result;
-		} else if ( extension_loaded( 'xml' ) ) {
-			$parser = new go_WXR_Parser_XML;
-			$result = $parser->parse( $file );
 
-			// If XMLParser succeeds or this is an invalid WXR file then return the results
-			if ( ! is_wp_error( $result ) || 'XML_parse_error' != $result->get_error_code() )
-				return $result;
-		}
+        if ( extension_loaded( 'simplexml' ) ) {
 
-		// We have a malformed XML file, so display the error and fallthrough to regex
-		if ( isset($result) && defined('IMPORT_DEBUG') && IMPORT_DEBUG ) {
-			echo '<pre>';
-			if ( 'SimpleXML_parse_error' == $result->get_error_code() ) {
-				foreach  ( $result->get_error_data() as $error )
-					echo $error->line . ':' . $error->column . ' ' . esc_html( $error->message ) . "\n";
-			} else if ( 'XML_parse_error' == $result->get_error_code() ) {
-				$error = $result->get_error_data();
-				echo $error[0] . ':' . $error[1] . ' ' . esc_html( $error[2] );
-			}
-			echo '</pre>';
-			echo '<p><strong>' . __( 'There was an error when reading this WXR file', 'wordpress-importer' ) . '</strong><br />';
-			echo __( 'Details are shown above. The importer will now try again with a different parser...', 'wordpress-importer' ) . '</p>';
-		}
+            $parser = new go_WXR_Parser_SimpleXML;
+            $result = $parser->parse( $file );
 
-		// use regular expressions if nothing else available or this is bad XML
-		$parser = new go_WXR_Parser_Regex;
-		return $parser->parse( $file );
+            // If SimpleXML succeeds or this is an invalid WXR file then return the results
+            if ( ! is_wp_error( $result ) || 'SimpleXML_parse_error' == $result->get_error_code() )
+                return $result;
+        }
+        else if ( extension_loaded( 'xml' ) ) {
+
+            $parser = new go_WXR_Parser_XML;
+            $result = $parser->parse( $file );
+
+            // If XMLParser succeeds or this is an invalid WXR file then return the results
+            if ( ! is_wp_error( $result ) || 'XML_parse_error' == $result->get_error_code() )
+                return $result;
+        }
+
+        // We have a malformed XML file, so display the error and fallthrough to regex
+        if ( isset($result) && defined('IMPORT_DEBUG') && IMPORT_DEBUG ) {
+            echo '<pre>';
+            if ( 'SimpleXML_parse_error' == $result->get_error_code() ) {
+                foreach  ( $result->get_error_data() as $error )
+                    echo $error->line . ':' . $error->column . ' ' . esc_html( $error->message ) . "\n";
+            } else if ( 'XML_parse_error' == $result->get_error_code() ) {
+                $error = $result->get_error_data();
+                echo $error[0] . ':' . $error[1] . ' ' . esc_html( $error[2] );
+            }
+            echo '</pre>';
+            echo '<p><strong>' . __( 'There was an error when reading this WXR file', 'wordpress-importer' ) . '</strong><br />';
+            echo __( 'Details are shown above. The importer will now try again with a different parser...', 'wordpress-importer' ) . '</p>';
+        }
+
+        // use regular expressions if nothing else available or this is bad XML
+        $parser = new go_WXR_Parser_Regex;
+        return $parser->parse( $file );
+
 	}
 }
 
 /**
  * WXR Parser that makes use of the SimpleXML PHP extension.
  */
+
 class go_WXR_Parser_SimpleXML {
-	function parse( $file ) {
+	function parse( $file) {
+	    echo " SimpleXML ";
 		$authors = $posts = $categories = $tags = $terms = array();
 
 		$internal_errors = libxml_use_internal_errors(true);
@@ -63,26 +71,22 @@ class go_WXR_Parser_SimpleXML {
 		if ( function_exists( 'libxml_disable_entity_loader' ) ) {
 			$old_value = libxml_disable_entity_loader( true );
 		}
+		//$file = add_query_var('step',$upload_num, $file );
 		$contents = file_get_contents( $file );
 		$success = $dom->loadXML( $contents );
+
 		if ( ! is_null( $old_value ) ) {
 			libxml_disable_entity_loader( $old_value );
 		}
 
 		if ( ! $success || isset( $dom->doctype ) ) {
+		    echo "SimpleXML_parse_error";
 			return new WP_Error( 'SimpleXML_parse_error', __( 'There was an error when reading this WXR file', 'wordpress-importer' ), libxml_get_errors() );
 		}
 
 		$xml = simplexml_import_dom( $dom );
 		unset( $dom );
 
-		//added by gameful to save file
-        $upload_dir = get_temp_dir();
-        //$filename = trailingslashit($upload_dir).'import.xml';
-        $tempname = wp_tempnam('import');
-        file_put_contents($tempname, $contents);
-
-        //end added by gameful
 
 		// halt if loading produces an error
 		if ( ! $xml )
@@ -269,7 +273,6 @@ class go_WXR_Parser_SimpleXML {
 			'terms' => $terms,
 			'base_url' => $base_url,
 			'version' => $wxr_version,
-            'filename' => $tempname,
 		);
 	}
 }
@@ -277,6 +280,7 @@ class go_WXR_Parser_SimpleXML {
 /**
  * WXR Parser that makes use of the XML Parser PHP extension.
  */
+
 class go_WXR_Parser_XML {
 	var $wp_tags = array(
 		'wp:post_id', 'wp:post_date', 'wp:post_date_gmt', 'wp:comment_status', 'wp:ping_status', 'wp:attachment_url',
@@ -292,9 +296,13 @@ class go_WXR_Parser_XML {
 		'wp:comment_approved', 'wp:comment_type', 'wp:comment_parent', 'wp:comment_user_id',
 	);
 
-	function parse( $file ) {
+	function parse( $file, $upload_num ) {
+        echo " WXR_Parser_XML ";
 		$this->wxr_version = $this->in_post = $this->cdata = $this->data = $this->sub_data = $this->in_tag = $this->in_sub_tag = false;
 		$this->authors = $this->posts = $this->term = $this->category = $this->tag = array();
+
+
+        $contents = file_get_contents( $file );
 
 		$xml = xml_parser_create( 'UTF-8' );
 		xml_parser_set_option( $xml, XML_OPTION_SKIP_WHITE, 1 );
@@ -303,7 +311,7 @@ class go_WXR_Parser_XML {
 		xml_set_character_data_handler( $xml, 'cdata' );
 		xml_set_element_handler( $xml, 'tag_open', 'tag_close' );
 
-		if ( ! xml_parse( $xml, file_get_contents( $file ), true ) ) {
+		if ( ! xml_parse( $xml, $contents, true ) ) {
 			$current_line = xml_get_current_line_number( $xml );
 			$current_column = xml_get_current_column_number( $xml );
 			$error_code = xml_get_error_code( $xml );
@@ -314,6 +322,7 @@ class go_WXR_Parser_XML {
 
 		if ( ! preg_match( '/^\d+\.\d+$/', $this->wxr_version ) )
 			return new WP_Error( 'WXR_parse_error', __( 'This does not appear to be a WXR file, missing/invalid WXR version number', 'wordpress-importer' ) );
+
 
 		return array(
 			'authors' => $this->authors,
@@ -431,9 +440,14 @@ class go_WXR_Parser_XML {
 	}
 }
 
+
+
+
+
 /**
  * WXR Parser that uses regular expressions. Fallback for installs without an XML parser.
  */
+
 class go_WXR_Parser_Regex {
 	var $authors = array();
 	var $posts = array();
@@ -447,6 +461,13 @@ class go_WXR_Parser_Regex {
 	}
 
 	function parse( $file ) {
+        //echo " go_WXR_Parser_Regex ";
+
+
+            $contents = file_get_contents( $file );
+            //$file = wp_tempnam('import');
+            //$result = file_put_contents($file, $contents);
+
 		$wxr_version = $in_multiline = false;
 
 		$multiline_content = '';
@@ -510,6 +531,8 @@ class go_WXR_Parser_Regex {
 
 		if ( ! $wxr_version )
 			return new WP_Error( 'WXR_parse_error', __( 'This does not appear to be a WXR file, missing/invalid WXR version number', 'wordpress-importer' ) );
+
+
 
 		return array(
 			'authors' => $this->authors,

@@ -8,10 +8,14 @@
 
 //this can't be wrapped in the toggle = true because it needs to be available on activation
 add_action('init', 'go_map_page');
-function go_map_page()
-{
-    $blog_id = get_current_blog_id();
-    if ($blog_id > 1) {
+function go_map_page(){
+    if(is_multisite() && is_main_site()){
+    	$hide = true;
+    }
+    else{
+    	$hide = false;
+    }
+    if (!$hide) {
         $map_name = get_option('options_go_locations_map_map_link');
         //add_rewrite_rule( "store", 'index.php?query_type=user_blog&uname=$matches[1]', "top");
         add_rewrite_rule($map_name, 'index.php?' . $map_name . '=true', "top");
@@ -37,9 +41,15 @@ if ($go_map_switch) {
     add_filter('template_include', 'go_map_template_include', 1, 1);
     function go_map_template_include($template)
     {
-        $blog_id = get_current_blog_id();
-        if ($blog_id > 1) {
+        if(is_multisite() && is_main_site()){
+    		$hide = true;
+    	}
+    	else{
+    		$hide = false;
+  	 	}
+  	  	if (!$hide) {
             $map_name = get_option('options_go_locations_map_map_link');
+            $map_name = (isset($map_name) ?  $map_name : 'map');
             global $wp_query; //Load $wp_query object
 
             $page_value = (isset($wp_query->query_vars[$map_name]) ? $wp_query->query_vars[$map_name] : false); //Check for query var "blah"

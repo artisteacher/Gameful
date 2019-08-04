@@ -131,6 +131,7 @@ function go_toggle( source ) {
 }
 
 function go_clipboard_callback() {
+    console.log('go_clipboard_callback');
     //*******************//
     // ALL TABS
     //*******************//
@@ -430,6 +431,7 @@ function go_filter_clipboard_datatables(filter_badges) { //function that filters
 
 
 function go_clipboard_stats_datatable(refresh) {
+    console.log('go_clipboard_stats_datatable');
 	if (jQuery("#go_clipboard_stats_datatable").length == 0  || refresh == true) {
         jQuery("#clipboard_stats_datatable_container").html("<h2>Loading . . .</h2>");
         var nonce = GO_CLIPBOARD_DATA.nonces.go_clipboard_stats;
@@ -453,7 +455,8 @@ function go_clipboard_stats_datatable(refresh) {
                 }
             },
             success: function( res ) {
-                console.log("success");
+                console.log("success: go_clipboard_stats_datatable");
+                //console.log(res);
                 //console.log(res);
                 if (-1 !== res) {
                     jQuery('#clipboard_stats_datatable_container').html(res);
