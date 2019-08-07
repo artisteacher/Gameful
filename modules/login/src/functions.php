@@ -132,10 +132,12 @@ add_filter( 'login_headerurl', 'go_login_url', 999 );
 function my_login_logo() {
     $referer = $_SERVER['REDIRECT_QUERY_STRING'];
     $parts = parse_url($referer);
-    parse_str($parts['query'], $query);
-    $blog_id = (isset($query['blog_id']) ?  $query['blog_id'] : null);
-    if(is_multisite()) {
-        switch_to_blog($blog_id);
+    if(!empty($parts['query'])) {
+        parse_str($parts['query'], $query);
+        $blog_id = (isset($query['blog_id']) ?  $query['blog_id'] : null);
+        if(is_multisite()) {
+            switch_to_blog($blog_id);
+        }
     }
     $logo = get_option('options_go_login_logo');
     //$url = wp_get_attachment_image($logo, array('250', '250'));
@@ -383,30 +385,32 @@ function go_domain_restrictions_message($message = null ) {
 /**
  * ADD LOGIN PAGE
  */
-
+/*
 add_action('init', 'go_login_rewrite');
 function go_login_rewrite(){
     //$blog_id = get_current_blog_id();
-    //if ($blog_id > 1) {
+    //if (!is_main_site() || !is_multisite()) {
     $page_name = 'login';
     add_rewrite_rule($page_name, 'index.php?' . $page_name . '=true', "top");
     //add_rewrite_rule( $page_name, 'wp-login.php?' . $page_name . '=true', "top");
     //}
-}
+}*/
 
 // Query Vars
+/*
 add_filter( 'query_vars', 'go_login_query_var' );
 function go_login_query_var( $vars ) {
     $page_name = 'login';
     $vars[] = $page_name;
     return $vars;
-}
+}*/
 
 /* Template Include */
+/*
 add_filter('template_include', 'go_login_template_include', 1, 1);
 function go_login_template_include($template){
     $blog_id = get_current_blog_id();
-    // if ($blog_id > 1) {
+    // if (!is_main_site() || !is_multisite()) {
     $page_name = 'login';
     global $wp_query; //Load $wp_query object
 
@@ -419,7 +423,7 @@ function go_login_template_include($template){
 
 
     return $template; //Load normal template when $page_value != "true" as a fallback
-}
+}*/
 
 function go_verify_username_password($user, $username, $password){
     $is_gameon = (isset($_POST['go_frontend_login']) ? $_POST['go_frontend_login'] : false);
@@ -521,8 +525,8 @@ function go_registration_query_var( $vars ) {
 /* Template Include */
 add_filter('template_include', 'go_registration_template_include', 1, 1);
 function go_registration_template_include($template){
-    $blog_id = get_current_blog_id();
-    if ($blog_id > 1) {
+
+    if (!is_main_site() || !is_multisite()) {
         $page_name = 'register';
         global $wp_query; //Load $wp_query object
 
@@ -549,7 +553,7 @@ function user_registration_login_init () {
     if(is_multisite()) {
         $blog_id = get_current_blog_id();
 
-        if ($blog_id > 1 && empty($action) && $redirect && empty($interim) && empty($test)) {
+        if ((!is_main_site() || !is_multisite()) && empty($action) && $redirect && empty($interim) && empty($test)) {
             $go_login_link = get_site_url(1, 'login');
             $go_login_link = network_site_url('signin?redirect_to=' . $go_login_link . '?blog_id=' . $blog_id);
             wp_redirect($go_login_link);
@@ -562,18 +566,21 @@ function user_registration_login_init () {
 
     $referer = (isset( $_SERVER['HTTP_REFERER']) ?   $_SERVER['HTTP_REFERER'] : null);
     $parts = parse_url($referer);
-    parse_str($parts['query'], $query);
-    $redirect_to = (isset($query['redirect_to']) ?  $query['redirect_to'] : null);
-    if(!empty($redirect_to)) {
-        $parts = parse_url($redirect_to);
+    if(!empty($parts['query'])){
         parse_str($parts['query'], $query);
+        $redirect_to = (isset($query['redirect_to']) ?  $query['redirect_to'] : null);
+        if(!empty($redirect_to)) {
+            $parts = parse_url($redirect_to);
+            parse_str($parts['query'], $query);
+        }
+        $blog_id = (isset($query['blog_id']) ?  $query['blog_id'] : null);
     }
-    $blog_id = (isset($query['blog_id']) ?  $query['blog_id'] : null);
 
 
 
 
-    if ($blog_id > 1) {
+
+    if (!empty($blog_id) || !is_multisite()) {
         if(is_multisite()) {
             switch_to_blog($blog_id);
         }
@@ -604,7 +611,7 @@ function user_registration_login_init () {
 add_action('init', 'go_join_rewrite', 0);
 function go_join_rewrite(){
     //$blog_id = get_current_blog_id();
-    //if ($blog_id > 1) {
+    //if (!is_main_site() || !is_multisite()) {
     $page_name = 'join';
     add_rewrite_rule($page_name, 'index.php?' . $page_name . '=true', "top");
     //add_rewrite_rule( 'wp-login.php\?action\=register', 'index.php?' . $page_name . '=true', "top");
@@ -625,7 +632,7 @@ function go_join_query_var( $vars ) {
 add_filter('template_include', 'go_join_template_include', 1, 1);
 function go_join_template_include($template){
     //$blog_id = get_current_blog_id();
-    //if ($blog_id > 1) {
+    //if (!is_main_site() || !is_multisite()) {
     $page_name = 'join';
     global $wp_query; //Load $wp_query object
 
@@ -1057,7 +1064,7 @@ add_action( 'login_enqueue_scripts', 'go_login_logo' );
 function my_login_redirect( $redirect_to, $request, $user ) {
     //is there a user to check?
     $blog_id = get_current_blog_id();
-    if ($blog_id > 1) {
+    if (!is_main_site() || !is_multisite()) {
         $request = $_SERVER["REQUEST_URI"];
         //$path =  parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
         $redirect_to = $request."?blog_id=".$blog_id;
@@ -1105,7 +1112,7 @@ function get_error_message( $error_code ) {
 add_action('init', 'go_reset_password_rewrite');
 function go_reset_password_rewrite(){
     $blog_id = get_current_blog_id();
-    if ($blog_id > 1) {
+    if (!is_main_site() || !is_multisite()) {
         $page_name = 'lostpassword';
         add_rewrite_rule($page_name, 'index.php?' . $page_name . '=true', "top");
     }
@@ -1124,7 +1131,7 @@ function go_reset_password_query_var( $vars ) {
 add_filter('template_include', 'go_reset_password_template_include', 1, 1);
 function go_reset_password_template_include($template){
     $blog_id = get_current_blog_id();
-    if ($blog_id > 1) {
+    if (!is_main_site() || !is_multisite()) {
         $page_name = 'lostpassword';
         global $wp_query; //Load $wp_query object
 
@@ -1248,7 +1255,7 @@ function go_login_message($message){
 /*
 function go_sigin_ms_rewrite(){
     $blog_id = get_current_blog_id();
-    if ($blog_id > 1) {
+    if (!is_main_site() || !is_multisite()) {
         $path =  parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
         $query =  parse_url($_SERVER["REQUEST_URI"], PHP_URL_QUERY);
         $path_after_slash = substr($path, strrpos($path, '/') + 1);
@@ -1292,7 +1299,7 @@ function go_signin_success_redirect(){
 /*
 function go_sigin_add_blog_id(){
     $blog_id = get_current_blog_id();
-    if ($blog_id > 1) {
+    if (!is_main_site() || !is_multisite()) {
         $request = $_SERVER["REQUEST_URI"];
         //$path =  parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
         $query =  parse_url($_SERVER["REQUEST_URI"], PHP_URL_QUERY);

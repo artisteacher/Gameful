@@ -32,7 +32,7 @@ function go_user_bar_dynamic_styles() {
 
 $is_multisite = is_multisite();
 $blog_id = get_current_blog_id();
-if($blog_id > 1 || !$is_multisite){
+if(!is_main_site() || !$is_multisite){
     add_action('wp_head', 'go_player_bar_v5');
 }
 

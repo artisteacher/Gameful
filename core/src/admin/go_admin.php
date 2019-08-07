@@ -117,6 +117,7 @@ function go_duplicate_post_button($post ) {
     }
 }
 
+
 add_action( 'post_submitbox_misc_actions', 'go_duplicate_post_button' );
 
 /**
@@ -302,6 +303,13 @@ function go_remove_toplevel_menu() {
     if(is_multisite() && !is_super_admin()) {
         remove_menu_page('edit.php?post_type=elementor_library');
         remove_menu_page('elementor');
+        remove_menu_page('w3tc_dashboard');
+
+        global $submenu;
+        // Still need to update cap requirements even when hidden
+        if(isset($submenu['w3tc_dashboard'])) foreach( $submenu['w3tc_dashboard'] as $position => $data ) {
+            $submenu['w3tc_dashboard'][$position][1] = 'manage_network';
+        }
     }
 }
 add_action( 'admin_init', 'go_remove_toplevel_menu');

@@ -516,6 +516,7 @@ function go_admin_bar_remove_items() {
     $wp_admin_bar->remove_menu('site-name');
     if(!is_super_admin()) {
         $wp_admin_bar->remove_menu('updates');
+        $wp_admin_bar->remove_menu( 'w3tc' );
     }
 }
 add_action( 'wp_before_admin_bar_render', 'go_admin_bar_remove_items', 0 );

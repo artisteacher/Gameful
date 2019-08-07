@@ -207,7 +207,7 @@ function go_tsk_actv_activate() {
 }*/
 
 
-
+/*
 //this is the activation notification
 function go_admin_head_notification() {
     if ( get_option( 'go_display_admin_explanation' ) && (current_user_can( 'manage_options' ) || go_user_is_admin())) {
@@ -246,6 +246,7 @@ function go_admin_head_notification() {
     }
 }
 //add_action( 'admin_notices', 'go_admin_head_notification' );
+*/
 
 add_action( 'admin_footer_text', 'go_blog_id_message' );
 function go_blog_id_message(){
