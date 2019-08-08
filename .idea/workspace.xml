@@ -4,10 +4,7 @@
     <option name="SCOPE_TYPE" value="3" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4c52fe7c-a769-413b-9a8a-3effed8b98a6" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/login/src/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/modules/login/src/functions.php" afterDir="false" />
-    </list>
+    <list default="true" id="4c52fe7c-a769-413b-9a8a-3effed8b98a6" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -122,8 +119,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/modules/login/src/functions.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="993">
-              <caret line="179" column="74" lean-forward="true" selection-start-line="179" selection-start-column="74" selection-end-line="179" selection-end-column="74" />
+            <state relative-caret-position="-12">
+              <caret line="164" column="74" lean-forward="true" selection-start-line="164" selection-start-column="74" selection-end-line="164" selection-end-column="74" />
               <folding>
                 <element signature="e#6#289#0#PHP" />
                 <element signature="n#style#0;n#ul#0;n#!!top" expanded="true" />
@@ -655,12 +652,12 @@
       <workItem from="1561960133192" duration="363000" />
       <workItem from="1561960785201" duration="188568000" />
       <workItem from="1564340783068" duration="5833000" />
-      <workItem from="1564348819154" duration="44844000" />
+      <workItem from="1564348819154" duration="45198000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5750024000" />
+    <option name="totallyTimeSpent" value="5750378000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1563,17 +1560,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>1056</line>
+          <line>1041</line>
           <option name="timeStamp" value="3590" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>1026</line>
+          <line>1011</line>
           <option name="timeStamp" value="3592" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>1050</line>
+          <line>1035</line>
           <option name="timeStamp" value="3594" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1618,7 +1615,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>865</line>
+          <line>850</line>
           <option name="timeStamp" value="3658" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1743,37 +1740,37 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>203</line>
+          <line>188</line>
           <option name="timeStamp" value="3745" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>225</line>
+          <line>210</line>
           <option name="timeStamp" value="3746" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>273</line>
+          <line>258</line>
           <option name="timeStamp" value="3747" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>290</line>
+          <line>275</line>
           <option name="timeStamp" value="3748" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>313</line>
+          <line>298</line>
           <option name="timeStamp" value="3749" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>914</line>
+          <line>899</line>
           <option name="timeStamp" value="3761" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>393</line>
+          <line>378</line>
           <option name="timeStamp" value="3763" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1873,17 +1870,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>437</line>
+          <line>422</line>
           <option name="timeStamp" value="3803" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>436</line>
+          <line>421</line>
           <option name="timeStamp" value="3807" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>428</line>
+          <line>413</line>
           <option name="timeStamp" value="3809" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
@@ -2490,8 +2487,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/modules/login/src/functions.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="993">
-          <caret line="179" column="74" lean-forward="true" selection-start-line="179" selection-start-column="74" selection-end-line="179" selection-end-column="74" />
+        <state relative-caret-position="-12">
+          <caret line="164" column="74" lean-forward="true" selection-start-line="164" selection-start-column="74" selection-end-line="164" selection-end-column="74" />
           <folding>
             <element signature="e#6#289#0#PHP" />
             <element signature="n#style#0;n#ul#0;n#!!top" expanded="true" />

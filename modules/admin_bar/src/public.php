@@ -351,11 +351,12 @@ function go_stats_leaderboard() {
                     <tr>
                         <th></th>
                         <?php
+                        /*
                         if ($full_name_toggle == 'full' || $is_admin){
                             echo "<th class='header'><a href='#'>Full Name</a></th>";
                         }else if ($full_name_toggle == 'first'){
                             echo "<th class='header'><a href='#'>First Name</a></th>";
-                        }
+                        }*/
                         ?>
                         <th class='header'><a href="#">Name</a></th>
                         <th class='header'><a href="#">Links</a></th>
