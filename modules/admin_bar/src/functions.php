@@ -466,18 +466,11 @@ function go_admin_bar_v5() {
 
 add_action('init', 'go_leaderboard_rewrite');
 function go_leaderboard_rewrite(){
-    if(is_multisite() && is_main_site()){
-    	$hide = true;
-    }
-    else{
-    	$hide = false;
-    }
-    if ($hide) {
         $page_name = urlencode(get_option('options_go_stats_leaderboard_name'));
         $page_name = (isset($page_name) ? $page_name : 'leaderboard');
         //$page_name = 'leaderboard';
         add_rewrite_rule($page_name, 'index.php?' . $page_name . '=true', "top");
-    }
+
 }
 
 // Query Vars
@@ -485,26 +478,30 @@ function go_leaderboard_rewrite(){
 //this is then used in the rewrite and to load the template
 add_filter( 'query_vars', 'go_leaderboard_query_var' );
 function go_leaderboard_query_var( $vars ) {
-    $page_name = urlencode(get_option( 'options_go_stats_leaderboard_name'));
-    $page_name = (isset($page_name) ?  $page_name : 'leaderboard');
-    $vars[] = $page_name;
+    if(!is_multisite() || !is_main_site()) {
+        $page_name = urlencode(get_option('options_go_stats_leaderboard_name'));
+        $page_name = (isset($page_name) ? $page_name : 'leaderboard');
+        $vars[] = $page_name;
+    }
     return $vars;
+
 }
 
 /* LEADERBOARD Include Template*/
 add_filter('template_include', 'go_leaderboard_template_include', 1, 1);
 function go_leaderboard_template_include($template){
-    $page_name = urlencode(get_option( 'options_go_stats_leaderboard_name'));
-    $page_name = (isset($page_name) ?  $page_name : 'leaderboard');
-    global $wp_query; //Load $wp_query object
+    if(!is_multisite() || !is_main_site()) {
+        $page_name = urlencode(get_option('options_go_stats_leaderboard_name'));
+        $page_name = (isset($page_name) ? $page_name : 'leaderboard');
+        global $wp_query; //Load $wp_query object
 
-    $page_value = ( isset($wp_query->query_vars[$page_name]) ? $wp_query->query_vars[$page_name] : false ); //Check for query var "blah"
+        $page_value = (isset($wp_query->query_vars[$page_name]) ? $wp_query->query_vars[$page_name] : false); //Check for query var "blah"
 
-    if ($page_value && ($page_value == "true" )) { //Verify "blah" exists and value is "true".
+        if ($page_value && ($page_value == "true")) { //Verify "blah" exists and value is "true".
 
-        return plugin_dir_path(__FILE__).'templates/leaderboard.php'; //Load your template or file
+            return plugin_dir_path(__FILE__) . 'templates/leaderboard.php'; //Load your template or file
+        }
     }
-
     return $template; //Load normal template when $page_value != "true" as a fallback
 }
 
@@ -516,6 +513,7 @@ function go_admin_bar_remove_items() {
     $wp_admin_bar->remove_menu('site-name');
     if(!is_super_admin()) {
         $wp_admin_bar->remove_menu('updates');
+        $wp_admin_bar->remove_menu( 'w3tc' );
     }
 }
 add_action( 'wp_before_admin_bar_render', 'go_admin_bar_remove_items', 0 );

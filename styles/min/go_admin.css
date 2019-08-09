@@ -57,6 +57,9 @@
   left: 0;
   background-color: #3085d6; }
 
+.edit-tags-php #col-right {
+  overflow-x: hidden; }
+
 .go_rewards {
   background-color: #c9fbc9; }
 
@@ -89,7 +92,8 @@ table tbody tr td.go_acf_header {
   text-align: center;
   flex: none !important;
   display: block;
-  width: 40px; }
+  width: auto;
+  padding: 0 8px; }
 
 .pod_achievement.column-pod_achievement,
 .manage-column.column-pod_achievement,
@@ -102,14 +106,16 @@ table tbody tr td.go_acf_header {
   text-align: center;
   flex: none !important;
   display: block;
-  width: 100px; }
+  width: auto;
+  padding: 0 8px; }
 
 .pod_done_num.column-pod_done_num,
 .manage-column.column-pod_done_num {
   text-align: center;
   flex: none !important;
   display: block;
-  width: 75px; }
+  width: auto;
+  padding: 0 8px; }
 
 /********************
 *	Edit term tables

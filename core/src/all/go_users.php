@@ -53,6 +53,7 @@ function go_user_is_admin( $user_id = null ) {
 
 
 // Adds user id to the totals table upon user creation.
+/*
 function go_user_registration ( $user_id ) {
     global $wpdb;
     $table_name_go_totals = "{$wpdb->prefix}go_loot";
@@ -70,7 +71,7 @@ function go_user_registration ( $user_id ) {
             'health' => $default_health,
         ) );
     }
-}
+}*/
 
 // Deletes all rows related to a user in the individual and total tables upon deleting said user.
 function go_user_delete( $user_id ) {

@@ -1551,15 +1551,15 @@ function go_get_bonus_loot_rows($custom_fields, $health_mod = false, $user_id = 
                 if ($bonus_radio == "1") {
                     $title = (isset($custom_fields[$title][0]) ? $custom_fields[$title][0] : null);
                     $message = (isset($custom_fields[$message][0]) ? $custom_fields[$message][0] : null);
-                    $xp = (isset($custom_fields[$xp][0]) ? $custom_fields[$xp][0] : null) * $health_mod;
+                    $xp = (isset($custom_fields[$xp][0]) ? $custom_fields[$xp][0] : null);
                     $gold = (isset($custom_fields[$gold][0]) ? $custom_fields[$gold][0] : null) * $health_mod;
                     $health = (isset($custom_fields[$health][0]) ? $custom_fields[$health][0] : null);
                     $drop = (isset($custom_fields[$drop][0]) ? $custom_fields[$drop][0] : null);
                 }else if($bonus_radio == "default"){
                     $title = get_option($title);
                     $message = get_option($message);
-                    $xp = get_option($xp);;
-                    $gold = get_option($gold);
+                    $xp = get_option($xp);
+                    $gold = get_option($gold) * $health_mod;
                     $health = get_option($health);
                     $drop = get_option($drop);
                 }

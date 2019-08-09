@@ -11,7 +11,7 @@ Version: 5.01
 
 //$go_debug = true;//set to true when coding
 
-if ($_SERVER['HTTP_HOST'] ==='gameon1') {
+if ($domain ==='gameondev' || $_SERVER['HTTP_HOST'] ==='gameon1') {
     $is_gameful = false;
     $go_debug = true;
 

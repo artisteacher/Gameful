@@ -208,7 +208,7 @@ function go_stats_leaderboard_dataloader_ajax(){
 
         //set full name
         $full_name_toggle = get_option('options_go_full-names_toggle');
-        $user_fullname = $user_firstname.' '.$user_lastname;
+        //$user_fullname = $user_firstname.' '.$user_lastname;
 
         $num++;
 
@@ -218,11 +218,13 @@ function go_stats_leaderboard_dataloader_ajax(){
 
         $row[] = "{$num}";
         if ($full_name_toggle == 'full' || $is_admin){
-            $row[] = $user_fullname;
+            $row[] = $user_firstname . ' "' . $user_display_name .'" ' .$user_lastname;
         }else if ($full_name_toggle == 'first'){
-            $row[] = $user_firstname;
+            $row[] = $user_firstname . ' "' . $user_display_name .'"' ;
+
+        }else{
+            $row[] = "{$user_display_name}";
         }
-        $row[] = "{$user_display_name}";
         $row[] = "{$links}";//user period
 
         $xp_toggle = get_option('options_go_loot_xp_toggle');

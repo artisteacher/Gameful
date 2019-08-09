@@ -81,7 +81,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/term-order/src/wp-term-order.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="258">
@@ -112,20 +112,33 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modules/login/includes.php">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/login/src/templates/user.php">
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/modules/login/src/functions.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1268">
-              <caret line="489" column="5" selection-start-line="489" selection-start-column="5" selection-end-line="489" selection-end-column="5" />
+            <state relative-caret-position="-12">
+              <caret line="164" column="74" lean-forward="true" selection-start-line="164" selection-start-column="74" selection-end-line="164" selection-end-column="74" />
+              <folding>
+                <element signature="e#6#289#0#PHP" />
+                <element signature="n#style#0;n#ul#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modules/login/src/templates/template.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="19" column="1" lean-forward="true" selection-start-line="16" selection-end-line="19" selection-end-column="1" />
+              <folding>
+                <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#img#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -143,9 +156,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>f</find>
-      <find>handle_upload</find>
-      <find>parse</find>
       <find>tempname</find>
       <find>$tempname</find>
       <find>game on</find>
@@ -173,6 +183,9 @@
       <find>col-right</find>
       <find>enque</find>
       <find>reorder.js</find>
+      <find>$blog_id &gt; 1</find>
+      <find>wp-login</find>
+      <find>go_get_user_redirect</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -261,11 +274,11 @@
         <option value="$PROJECT_DIR$/modules/admin_bar/src/public_ajax.php" />
         <option value="$PROJECT_DIR$/modules/admin_bar/src/functions.php" />
         <option value="$PROJECT_DIR$/modules/admin_bar/src/templates/leaderboard.php" />
-        <option value="$PROJECT_DIR$/modules/login/src/functions.php" />
         <option value="$PROJECT_DIR$/modules/map/src/functions.php" />
         <option value="$PROJECT_DIR$/modules/store/src/functions.php" />
         <option value="$PROJECT_DIR$/modules/tools/src/go_export.php" />
         <option value="$PROJECT_DIR$/modules/term-order/src/wp-term-order.php" />
+        <option value="$PROJECT_DIR$/modules/login/src/functions.php" />
       </list>
     </option>
   </component>
@@ -306,9 +319,9 @@
       <path value="$PROJECT_DIR$" />
     </include_path>
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
-    <option name="x" value="162" />
-    <option name="y" value="49" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="1854" />
+    <option name="y" value="61" />
     <option name="width" value="1746" />
     <option name="height" value="1019" />
   </component>
@@ -639,12 +652,12 @@
       <workItem from="1561960133192" duration="363000" />
       <workItem from="1561960785201" duration="188568000" />
       <workItem from="1564340783068" duration="5833000" />
-      <workItem from="1564348819154" duration="38683000" />
+      <workItem from="1564348819154" duration="45198000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5743863000" />
+    <option name="totallyTimeSpent" value="5750378000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -656,16 +669,16 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="162" y="49" width="1746" height="1019" extended-state="1" />
+    <frame x="1854" y="61" width="1746" height="1019" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4984375" visible="true" weight="0.19366197" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4984375" visible="true" weight="0.19366197" />
       <window_info id="Structure" order="1" sideWeight="0.5015625" side_tool="true" weight="0.19340234" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Command Line Tools Console" order="0" sideWeight="0.49939686" visible="true" weight="0.3268817" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.6778784" weight="0.30744338" />
       <window_info anchor="bottom" id="Message" order="2" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.6890287" visible="true" weight="0.3106796" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.6890287" visible="true" weight="0.3106796" />
       <window_info anchor="bottom" id="Run" order="4" weight="0.3289183" />
       <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3289183" />
@@ -1547,17 +1560,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>1079</line>
+          <line>1041</line>
           <option name="timeStamp" value="3590" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>1049</line>
+          <line>1011</line>
           <option name="timeStamp" value="3592" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>1073</line>
+          <line>1035</line>
           <option name="timeStamp" value="3594" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1569,11 +1582,6 @@
           <url>file://$PROJECT_DIR$/includes/custom-acf-fields/acf-recaptcha-master/acf-recaptcha-v5.php</url>
           <line>143</line>
           <option name="timeStamp" value="3613" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>1039</line>
-          <option name="timeStamp" value="3618" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/templates/user.php</url>
@@ -1607,7 +1615,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>888</line>
+          <line>850</line>
           <option name="timeStamp" value="3658" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1697,7 +1705,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/core/src/admin/go_activation.php</url>
-          <line>257</line>
+          <line>258</line>
           <option name="timeStamp" value="3703" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1712,12 +1720,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/tasks/src/functions.php</url>
-          <line>266</line>
+          <line>267</line>
           <option name="timeStamp" value="3711" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>4</line>
+          <line>5</line>
           <option name="timeStamp" value="3721" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1732,77 +1740,37 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>414</line>
-          <option name="timeStamp" value="3728" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>646</line>
-          <option name="timeStamp" value="3739" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>55</line>
-          <option name="timeStamp" value="3742" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>93</line>
-          <option name="timeStamp" value="3743" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>190</line>
+          <line>188</line>
           <option name="timeStamp" value="3745" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>214</line>
+          <line>210</line>
           <option name="timeStamp" value="3746" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>262</line>
+          <line>258</line>
           <option name="timeStamp" value="3747" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>279</line>
+          <line>275</line>
           <option name="timeStamp" value="3748" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>304</line>
+          <line>298</line>
           <option name="timeStamp" value="3749" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>410</line>
-          <option name="timeStamp" value="3750" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>483</line>
-          <option name="timeStamp" value="3757" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>641</line>
-          <option name="timeStamp" value="3760" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>937</line>
+          <line>899</line>
           <option name="timeStamp" value="3761" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>83</line>
-          <option name="timeStamp" value="3762" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>388</line>
+          <line>378</line>
           <option name="timeStamp" value="3763" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1896,14 +1864,24 @@
           <option name="timeStamp" value="3797" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
-          <line>455</line>
-          <option name="timeStamp" value="3798" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/modules/term-order/src/wp-term-order.php</url>
           <line>154</line>
           <option name="timeStamp" value="3799" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
+          <line>422</line>
+          <option name="timeStamp" value="3803" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
+          <line>421</line>
+          <option name="timeStamp" value="3807" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/modules/login/src/functions.php</url>
+          <line>413</line>
+          <option name="timeStamp" value="3809" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/js/front/scripts/go_videos_fit_and_box.js</url>
@@ -2096,17 +2074,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="342">
           <caret line="1017" selection-start-line="1017" selection-end-line="1017" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/login/src/templates/template.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="39">
-          <caret line="79" lean-forward="true" selection-start-line="79" selection-end-line="79" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#img#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2448,13 +2415,6 @@
     <entry file="file://$PROJECT_DIR$/modules/login/src/templates/user.php">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/login/src/functions.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1268">
-          <caret line="489" column="5" selection-start-line="489" selection-start-column="5" selection-end-line="489" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/modules/map/src/functions.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="689">
@@ -2511,6 +2471,29 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="258">
           <caret line="161" column="8" selection-start-line="161" selection-start-column="8" selection-end-line="161" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/login/src/templates/template.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="19" column="1" lean-forward="true" selection-start-line="16" selection-end-line="19" selection-end-column="1" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#img#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/login/src/functions.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-12">
+          <caret line="164" column="74" lean-forward="true" selection-start-line="164" selection-start-column="74" selection-end-line="164" selection-end-column="74" />
+          <folding>
+            <element signature="e#6#289#0#PHP" />
+            <element signature="n#style#0;n#ul#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

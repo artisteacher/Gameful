@@ -489,7 +489,7 @@ if ( class_exists( 'WP_Importer' ) ) {
 
                 <p>This import will include:</p>
                 <ul>
-                    <li><?php echo $post_count; ?> posts (this includes pages, posts, store items, and quests)</li>
+                    <li><?php echo $post_count; ?> posts (this includes store items and quests)</li>
                     <li><?php echo $term_count; ?> terms (this includes maps, store categories, badges, groups, and sections).</li>
                     <li><?php echo $attachment_count; ?> attachments.  They will be copied to the new site and links in content will be updated.  If this number seems large it may include multiple sizes of the same image.</li>
                 </ul>

@@ -111,6 +111,16 @@ function go_scripts () {
         );
     }
 
+    $page_uri = go_get_page_uri();
+    $store_url = get_option('options_go_store_store_link');
+    if ($page_uri === $store_url) {
+        wp_localize_script(
+            'go_frontend',
+            'go_is_store',
+            array(true)
+        );
+    }
+
     go_localize_all_pages();
 
 }
