@@ -39,7 +39,7 @@ if(is_multisite()) {
 
 }
 
-if($go_load) {
+
 
 //$go_domain = $_SERVER['HTTP_HOST'];
     $go_domain = $_SERVER['HTTP_HOST'];
@@ -330,7 +330,7 @@ if($go_load) {
         return $go_login_link;
     }
 
-    
+
     function is_gameful()
     {
         $is_gameful = false;
@@ -346,5 +346,4 @@ if($go_load) {
     }
 
 
-}
 

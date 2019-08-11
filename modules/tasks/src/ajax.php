@@ -189,9 +189,11 @@ function go_task_change_stage() {
 
             $task_badge_id = (isset($custom_fields['go_badges'][0]) ?  $custom_fields['go_badges'][0] : null);//badge awarded on this task
             $term_badge_ids = go_badges_task_chains($post_id, $user_id, $custom_fields);//badges awarded on this term
-            if (!empty($term_badge_ids) && (!empty($task_badge_id) && is_numeric($task_badge_id))){//combine the term and task badges before adding them
-                $term_badge_ids[] = intval($task_badge_id);
-                $badge_ids = $term_badge_ids;
+            if (!empty($term_badge_ids)){
+               if (!empty($task_badge_id) && is_numeric($task_badge_id)){//combine the term and task badges before adding them
+                    $term_badge_ids[] = intval($task_badge_id);
+                }
+                   $badge_ids = $term_badge_ids;
             }
             else if (is_numeric($task_badge_id)  && !empty($task_badge_id)){
                 $badge_ids[] = $task_badge_id;

@@ -128,7 +128,7 @@ class go_acf_field_quiz extends acf_field {
         $prefix = $field['prefix'];
 
         $stage_num = trim($prefix, "]");
-        $stage_num = substr($stage_num, strpos($stage_num, ']') + 2);
+        $stage_num = substr($stage_num, strpos($stage_num, ']') + 6);
         if ($stage_num != 'acfcloneindex') {
             $stage_num = (int)$stage_num;
             //$custom = go_post_meta();
