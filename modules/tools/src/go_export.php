@@ -282,7 +282,7 @@ function go_export_wp2(  ) {
      * @return string Site URL.
      */
     function wxr_site_url() {
-        if ( is_multisite() ) {
+        if ( is_gameful() ) {
             // Multisite: the base URL.
             return network_home_url();
         } else {

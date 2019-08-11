@@ -8,23 +8,54 @@ Author URI: https://github.com/mcmick/Gameful
 Version: 5.01
 */
 
+$not_multisite = true;
+if(is_multisite()) {
+    $not_multisite = false;
+    $go_domain = $_SERVER['HTTP_HOST'];
+    if (strpos($go_domain, 'gameful.me') !== false) {
+        $not_multisite = true;
+    }
+    if (strpos($go_domain, 'gamefultesting') !== false) {
+        $not_multisite = true;
+    }
+    if (strpos($go_domain, 'gameondev') !== false) {
+        $not_multisite = true;
+    }
+    if($not_multisite == true) {
+    //this is the multisite not gameful notification
+        function go_admin_head_notification() {
+                    echo "<div id='go_mutisite_message' class='update-nag' style='font-size: 16px; padding-right: 20px;'>
+    
+                <div style='position: relative; padding: 10px 30px; clear:both;'>
+                 You are running the Game On (Gameful) plugin on a multisite install. The plugin does not support multisite.
+                </div>
+                
+            </div>";
 
-//$go_debug = true;//set to true when coding
+        }
+        add_action( 'admin_notices', 'go_admin_head_notification' );
+    }
 
-if ($domain ==='gameondev' || $_SERVER['HTTP_HOST'] ==='gameon1') {
-    $is_gameful = false;
+
+//$go_domain = $_SERVER['HTTP_HOST'];
+$go_domain = $_SERVER['HTTP_HOST'];
+//echo $go_domain;
+$local_domains =  array('gameon1', 'gameondev');
+
+//if ($domain ==='gameondev' || $_SERVER['HTTP_HOST'] ==='gameon1') {
+if(in_array($go_domain, $local_domains)){
+    //$go_debug = true;//set to true when coding
     $go_debug = true;
-
-}else{
+}
+else{
     $go_debug = false;
-    $is_gameful = true;
 }
 
 
 $game_disabled = get_option('go_is_game_disabled');
 
 global $go_debug;
-global $is_gameful;
+
 
 //stop the heartbeat when testing
 if ($go_debug){
@@ -130,7 +161,7 @@ if (!$game_disabled) {
 
 //Core files include the functions that are used across several modules
 if (!$game_disabled) {
-include_once('core/includes.php');
+    include_once('core/includes.php');
 
 
     include_once('includes/includes.php');
@@ -292,5 +323,16 @@ function go_login_url_filter($login_url, $redirect, $force_reauth){
     return $go_login_link;
 }
 
+function is_gameful(){
+    $is_gameful = false;
+    $go_domain = $_SERVER['HTTP_HOST'];
+    if (strpos($go_domain, 'gameful.me') !== false) {
+        $is_gameful = true;
+    }
 
+    if ($go_domain ==='gameondev') {
+        $is_gameful = true;
+    }
+    return $is_gameful;
+}
 

@@ -99,13 +99,13 @@ function go_stats_leaderboard_dataloader_ajax(){
     $sOrder = "ORDER BY " . $order_col . " " . $order_dir;
 
     $lTable = "{$wpdb->prefix}go_loot";
-    if(is_multisite()) {
+    if(is_gameful()) {
         $main_site_id = get_network()->site_id;
         switch_to_blog($main_site_id);
     }
     $umTable = "{$wpdb->prefix}usermeta";
     $uTable = "{$wpdb->prefix}users";
-    if(is_multisite()) {
+    if(is_gameful()) {
         restore_current_blog();
     }
 

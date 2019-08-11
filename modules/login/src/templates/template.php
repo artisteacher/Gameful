@@ -5,7 +5,7 @@
  * Date: 7/31/18
  * Time: 12:25 PM
  */
-//if(is_multisite()) {
+//if(is_gameful()) {
 //            $main_site_id = get_network()->site_id;
 //            switch_to_blog($main_site_id);
 //        }
@@ -18,15 +18,15 @@ if(is_user_logged_in()){
     wp_redirect(go_get_user_redirect());
     exit;
 }
-if(is_multisite()) {
+if(is_gameful()) {
     restore_current_blog();
 }
 
 //this form always prints as site 1
 //do someredirects for situations
-$is_multisite = is_multisite();
+$is_gameful = is_gameful();
 $current_blog_id = get_current_blog_id();
-if($is_multisite) {
+if($is_gameful) {
     //redirect to site 1 if this isn't site1
     if ($current_blog_id > 1) {
         //$main_login_url = get_site_url(1, 'login?blog_id=' . $current_blog_id )  ;
@@ -36,8 +36,13 @@ if($is_multisite) {
     }
     //redirect to signin if this is a login page
     else{
-        //if this didn't originate iwth a sub site, and this is gameful, redirect to signin
-        global $is_gameful;
+        //if this didn't originate with a sub site, and this is gameful, redirect to signin
+        $go_domain = $_SERVER['HTTP_HOST'];
+        if (strpos($go_domain, 'gameful.me') !== false) {
+            $is_gameful = true;
+        }else{
+            $is_gameful = false;
+        }
         if ($source_blog_id === null && $is_gameful){
             wp_redirect(site_url('signin'));
             exit;
@@ -45,7 +50,7 @@ if($is_multisite) {
 
     }
 }
-if($is_multisite) {
+if($is_gameful) {
     switch_to_blog($source_blog_id);
 }
 
@@ -168,12 +173,12 @@ if($limit_domains_toggle && $registration_allowed) {
     );
 
     //switch to main blog to print the form
-if($is_multisite) {
+if($is_gameful) {
     restore_current_blog();
 }
     wp_login_form( $args );
 
-if($is_multisite) {
+if($is_gameful) {
     switch_to_blog($source_blog_id);
 }
  if ($registration_allowed) {
@@ -193,7 +198,7 @@ if($is_multisite) {
 
 }
 
-if($is_multisite) {
+if($is_gameful) {
     restore_current_blog();
 }
 

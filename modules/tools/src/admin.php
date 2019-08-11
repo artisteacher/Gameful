@@ -179,7 +179,7 @@ function go_admin_tools_menu_content() {
         </div>
         <?php
         /*
-        if (is_multisite()) {
+        if (is_gameful()) {
             ?>
             <div class="go_tools_section">
                 <div class="card">

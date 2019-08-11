@@ -50,12 +50,12 @@ function go_flush_all_permalinks(){
 // ...and we're probably still friends.
     $sites = wp_get_sites( array( 'network' => 1, 'limit' => 5000 ) );
     foreach( $sites as $site ) {
-        if(is_multisite()) {
+        if(is_gameful()) {
             switch_to_blog( $site->blog_id );
         }
 
         delete_option( 'rewrite_rules' );
-        if(is_multisite()) {
+        if(is_gameful()) {
             restore_current_blog();
         }
     }

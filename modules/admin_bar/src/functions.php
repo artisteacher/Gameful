@@ -5,7 +5,7 @@
 function auto_redirect_after_logout($k){
     $HTTP_REFERER = (isset($_SERVER['HTTP_REFERER']) ?  $_SERVER['HTTP_REFERER'] : null);//page currently being loaded
     //for multisite
-    if(is_multisite()) {
+    if(is_gameful()) {
         $details  = get_blog_details();
         $siteurl = $details -> siteurl;
     }else{
@@ -478,7 +478,7 @@ function go_leaderboard_rewrite(){
 //this is then used in the rewrite and to load the template
 add_filter( 'query_vars', 'go_leaderboard_query_var' );
 function go_leaderboard_query_var( $vars ) {
-    if(!is_multisite() || !is_main_site()) {
+    if(!is_gameful() || !is_main_site()) {
         $page_name = urlencode(get_option('options_go_stats_leaderboard_name'));
         $page_name = (isset($page_name) ? $page_name : 'leaderboard');
         $vars[] = $page_name;
@@ -490,7 +490,7 @@ function go_leaderboard_query_var( $vars ) {
 /* LEADERBOARD Include Template*/
 add_filter('template_include', 'go_leaderboard_template_include', 1, 1);
 function go_leaderboard_template_include($template){
-    if(!is_multisite() || !is_main_site()) {
+    if(!is_gameful() || !is_main_site()) {
         $page_name = urlencode(get_option('options_go_stats_leaderboard_name'));
         $page_name = (isset($page_name) ? $page_name : 'leaderboard');
         global $wp_query; //Load $wp_query object

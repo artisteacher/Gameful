@@ -14,7 +14,7 @@ Creation Date: 05/09/13
 //https://stackoverflow.com/questions/25310665/wordpress-how-to-create-a-rewrite-rule-for-a-file-in-a-custom-plugin
 add_action('init', 'go_store_page');
 function go_store_page(){
-    if(is_multisite() && is_main_site()){
+    if(is_gameful() && is_main_site()){
     	$hide = true;
     }
     else{
@@ -40,7 +40,7 @@ function go_store_register_query_var( $vars ) {
 add_filter('template_include', 'go_store_template_include', 1, 1);
 function go_store_template_include($template)
 {
-    if(is_multisite() && is_main_site()){
+    if(is_gameful() && is_main_site()){
     	$hide = true;
     }
     else{

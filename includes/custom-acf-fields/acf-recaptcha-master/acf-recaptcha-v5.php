@@ -161,7 +161,7 @@ class acf_field_recaptcha extends acf_field {
             $settings = get_option('acf_recaptcha');
             $site_key = $settings['site_key'];
             $secret_key = $settings['secret_key'];
-            if(is_multisite()) {
+            if(is_gameful()) {
                 restore_current_blog();
             }
         }

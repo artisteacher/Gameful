@@ -30,9 +30,9 @@ function go_user_bar_dynamic_styles() {
 
 }
 
-$is_multisite = is_multisite();
+$is_gameful = is_gameful();
 $blog_id = get_current_blog_id();
-if(!is_main_site() || !$is_multisite){
+if(!is_main_site() || !$is_gameful){
     add_action('wp_head', 'go_player_bar_v5');
 }
 
@@ -184,7 +184,7 @@ function go_player_bar_v5() {
     $avatar = (is_int(get_user_option('go_avatar')) ?  wp_get_attachment_image(get_user_option('go_avatar'), array('29', '29')) : '<i class="fas fa-user ab-icon" aria-hidden="true"></i>');
     if (is_user_logged_in()) {
         //$log_out_link = get_site_url(null, 'logout');
-        if(is_multisite()){
+        if(is_gameful()){
             $log_out_link = home_url('signin?action=logout' );
         }else{
             $log_out_link = wp_logout_url();
@@ -210,7 +210,7 @@ function go_player_bar_v5() {
 
     }else{//not logged in, show login and no dropdown
         $login_text = 'Login';
-        if(is_multisite()) {
+        if(is_gameful()) {
             $blog_id = get_current_blog_id();
             $go_login_link = get_site_url(1, 'login');
             $go_login_link = network_site_url('signin?redirect_to=' . $go_login_link . '?blog_id=' . $blog_id);
