@@ -244,7 +244,7 @@ function go_get_page_uri(){
     $request_uri = (isset($_SERVER['REQUEST_URI']) ?  $_SERVER['REQUEST_URI'] : null);//page currently being loaded
     //
     //
-    //if(is_multisite()){
+    //if(is_gameful()){
 
         //$details = get_blog_details();
        // $path = $details->path;

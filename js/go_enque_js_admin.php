@@ -144,6 +144,14 @@ function go_admin_scripts ($hook) {
                 wp_localize_script( 'go_admin_user', 'GO_EDIT_STORE_DATA', array( 'postid' => $id , 'store_name' => $store_name, 'is_store_edit' => true ));
             }
         }
+        if ( $hook == 'edit.php' ) {
+            if ( 'tasks' === $_GET['post_type']) {
+                //wp_enqueue_script('go_edit_store');
+                //$id = get_the_ID();
+               // $store_name = get_option( 'options_go_store_name');
+                wp_localize_script( 'go_admin_user', 'GO_TASK_LIST', true);
+            }
+        }
     }
 
 

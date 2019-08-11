@@ -9,7 +9,7 @@
 //this can't be wrapped in the toggle = true because it needs to be available on activation
 add_action('init', 'go_map_page');
 function go_map_page(){
-    if(is_multisite() && is_main_site()){
+    if(is_gameful() && is_main_site()){
     	$hide = true;
     }
     else{
@@ -41,7 +41,7 @@ if ($go_map_switch) {
     add_filter('template_include', 'go_map_template_include', 1, 1);
     function go_map_template_include($template)
     {
-        if(is_multisite() && is_main_site()){
+        if(is_gameful() && is_main_site()){
     		$hide = true;
     	}
     	else{

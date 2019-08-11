@@ -13,15 +13,15 @@
  */
 function go_update_db_ms( ) {
     global $wpdb;
-    if ( is_multisite() ) {
+    if ( is_gameful() ) {
         // Get all blogs in the network and update db on each one
         $blog_ids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
         foreach ( $blog_ids as $blog_id ) {
-            if(is_multisite()) {
+            if(is_gameful()) {
                 switch_to_blog($blog_id);
             }
             go_update_db_check();
-            if(is_multisite()) {
+            if(is_gameful()) {
                 restore_current_blog();
             }
         }
@@ -50,7 +50,7 @@ function go_on_create_blog( $blog_id, $user_id, $domain, $path, $site_id, $meta 
     if ( $is_ms ) {
         switch_to_blog( $blog_id );
         go_update_db();
-        if(is_multisite()) {
+        if(is_gameful()) {
             restore_current_blog();
         }
     }
@@ -191,7 +191,7 @@ function go_media_access() {
     $role = get_role( 'subscriber' );
     $role->add_cap( 'upload_files' );
 
-    if(is_multisite()){
+    if(is_gameful()){
         $blog_id = get_current_blog_id();
         if($blog_id===1){
             $role = get_role( 'subscriber' );

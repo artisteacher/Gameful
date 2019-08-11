@@ -33,7 +33,7 @@ function go_includes ($hook) {
      * Font Awesome
      * https://fontawesome.com
      */
-	if(is_multisite()){
+	if(is_gameful()){
     	wp_register_style( 'go_font_awesome', plugin_dir_url( __FILE__ ).'fontawesome/css/all.css', null, 5 );
     	wp_enqueue_style( 'go_font_awesome' );
     }else{

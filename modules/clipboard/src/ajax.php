@@ -484,13 +484,13 @@ function go_clipboard_stats_dataloader_ajax(){
     $sOrder = go_sOrder('stats', $section);
 
     $lTable = "{$wpdb->prefix}go_loot";
-    if(is_multisite()) {
+    if(is_gameful()) {
         $main_site_id = get_network()->site_id;
         switch_to_blog($main_site_id);
     }
     $uTable = "{$wpdb->prefix}users";
     $umTable = "{$wpdb->prefix}usermeta";
-    if(is_multisite()) {
+    if(is_gameful()) {
         restore_current_blog();
     }
 
@@ -703,13 +703,13 @@ function go_clipboard_store_dataloader_ajax(){
     $pTable = "{$wpdb->prefix}posts";
     $lTable = "{$wpdb->prefix}go_loot";
     $aTable = "{$wpdb->prefix}go_actions";
-    if(is_multisite()) {
+    if(is_gameful()) {
         $main_site_id = get_network()->site_id;
         switch_to_blog($main_site_id);
     }
     $uTable = "{$wpdb->prefix}users";
     $umTable = "{$wpdb->prefix}usermeta";
-    if(is_multisite()) {
+    if(is_gameful()) {
         restore_current_blog();
     }
 
@@ -951,13 +951,13 @@ function go_clipboard_messages_dataloader_ajax(){
 
     $lTable = "{$wpdb->prefix}go_loot";
     $aTable = "{$wpdb->prefix}go_actions";
-    if(is_multisite()) {
+    if(is_gameful()) {
         $main_site_id = get_network()->site_id;
         switch_to_blog($main_site_id);
     }
     $uTable = "{$wpdb->prefix}users";
     $umTable = "{$wpdb->prefix}usermeta";
-    if(is_multisite()) {
+    if(is_gameful()) {
         restore_current_blog();
     }
     $sectionQuery = go_sectionQuery();
@@ -1217,13 +1217,13 @@ function go_clipboard_activity_dataloader_ajax(){
 
     $lTable = "{$wpdb->prefix}go_loot";
     $aTable = "{$wpdb->prefix}go_actions";
-    if(is_multisite()) {
+    if(is_gameful()) {
         $main_site_id = get_network()->site_id;
         switch_to_blog($main_site_id);
     }
     $uTable = "{$wpdb->prefix}users";
     $umTable = "{$wpdb->prefix}usermeta";
-    if(is_multisite()) {
+    if(is_gameful()) {
         restore_current_blog();
     }
     $tTable = "{$wpdb->prefix}go_tasks";

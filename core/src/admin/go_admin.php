@@ -300,7 +300,7 @@ function go_add_toplevel_menu() {
 add_action( 'admin_menu', 'go_add_toplevel_menu');
 
 function go_remove_toplevel_menu() {
-    if(is_multisite() && !is_super_admin()) {
+    if(is_gameful() && !is_super_admin()) {
         remove_menu_page('edit.php?post_type=elementor_library');
         remove_menu_page('elementor');
         remove_menu_page('w3tc_dashboard');
@@ -698,7 +698,7 @@ function go_options_menu_content() {
                 </div></a>
             </div>
             <?php
-            if (!is_multisite()) {
+            if (!is_gameful()) {
                 ?>
                 <div class="go_tools_section">
                     <a href="<?php menu_page_url('go_performance'); ?>"><div class="card">
@@ -712,7 +712,7 @@ function go_options_menu_content() {
 
         </div>
         <?php
-        if (is_multisite() && is_main_site()) {
+        if (is_gameful() && is_main_site()) {
             ?>
             <h3>Site-Wide Settings</h3>
             <div class="go_tools_section">
@@ -735,6 +735,7 @@ function go_options_menu_content() {
     <?php
 
 }
+
 
 
 
