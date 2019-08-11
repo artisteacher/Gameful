@@ -90,6 +90,8 @@ input[type="checkbox"]:checked + label span.checkbox::after {
   border-radius: 3px;
   padding: 15px;
   background-color: white; }
+  #go_leaderboard_filters > span {
+    margin-right: 20px; }
 
 /**VIDEOS EMBEDED WITH MEDIA MANAGER
 https://cfxdesign.com/how-to-make-the-wordpress-video-shortcode-responsive/
@@ -1567,7 +1569,6 @@ END TOOLTIP
   font-size: .9em; }
 
 .go_leaderboard_layer {
-  padding: 10px;
   flex-grow: 1;
   flex-basis: 0; }
 
@@ -1595,18 +1596,37 @@ END TOOLTIP
 .featherlight.store .featherlight-content {
   min-width: 70%; }
 
+#store {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center; }
+  #store ul {
+    margin: 0px !important; }
+
+#go_store_container h1 {
+  text-align: center !important;
+  padding: unset; }
+
 /*
 store categories styles
  */
+.store_row_container {
+  margin: 10px;
+  background-color: white;
+  background-color: #f8f8f8; }
+  .store_row_container h2 {
+    margin: 10px 0  0 10px; }
+
 .store_row {
   display: flex;
   flex-wrap: wrap; }
 
 .store_cats {
-  float: left;
+  width: 250px;
   padding: 10px 30px;
   margin: 10px;
-  background-color: #f8f8f8; }
+  background-color: white; }
 
 .store_items li {
   display: flex;
@@ -1858,7 +1878,8 @@ store lightbox styles
 
 #go_map_container {
   padding: 30px;
-  background-color: white; }
+  background-color: white;
+  text-align: center; }
 
 #maps {
   visibility: hidden;
@@ -1939,10 +1960,7 @@ store lightbox styles
         -moz-box-shadow: unset;
         background: unset;
         border: unset;
-        text-align: left;
         font-size: 1.5em; }
-      #maps .primaryNav .ParentNav div {
-        display: flex; }
       #maps .primaryNav .ParentNav .go_badge_wrap {
         width: unset;
         font-size: .6em; }

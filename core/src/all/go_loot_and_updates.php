@@ -134,6 +134,13 @@ function go_get_loot_toggle ($loot_type ){
  * @return mixed
  */
 function go_get_loot_short_name($loot_type){
+    if($loot_type === 'gold'){
+        $coins_currency = get_option("options_go_loot_gold_currency");
+        if ($coins_currency === 'coins'){
+            $name = get_option('options_go_loot_gold_coin_names_gold_coin_abbreviation');
+            return $name;
+        }
+    }
     $name = get_option('options_go_loot_' . $loot_type . '_abbreviation');
     return $name;
 }
@@ -205,13 +212,13 @@ function go_display_longhand_currency ( $currency_type, $amount, $output = false
         else{*/
             if ($gold_amount !=  0 || $show_empty) {
 
-                $str .= "{$gold_amount} {$gold_name} ({$gold_suffix})&nbsp;&nbsp;&nbsp;";
+                $str .= "{$gold_amount} {$gold_name}({$gold_suffix})&nbsp;";
             }
             if ($silver_amount !=  0 || $show_empty) {
-                $str .= "{$silver_amount} {$silver_name} ({$silver_suffix})&nbsp;&nbsp;&nbsp;";
+                $str .= "{$silver_amount} {$silver_name}({$silver_suffix})&nbsp;";
             }
             if ($copper_amount !=  0 || $show_empty) {
-                $str .= "{$copper_amount} {$copper_name} ({$copper_suffix})&nbsp;&nbsp;&nbsp;";
+                $str .= "{$copper_amount} {$copper_name}({$copper_suffix})&nbsp;";
             }
        // }
         if (empty($str)){

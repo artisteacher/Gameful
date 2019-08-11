@@ -319,10 +319,10 @@
       <path value="$PROJECT_DIR$" />
     </include_path>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="1854" />
-    <option name="y" value="61" />
-    <option name="width" value="1746" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="240" />
+    <option name="y" value="23" />
+    <option name="width" value="1680" />
     <option name="height" value="1019" />
   </component>
   <component name="ProjectView">
@@ -652,12 +652,12 @@
       <workItem from="1561960133192" duration="363000" />
       <workItem from="1561960785201" duration="188568000" />
       <workItem from="1564340783068" duration="5833000" />
-      <workItem from="1564348819154" duration="45198000" />
+      <workItem from="1564348819154" duration="45208000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5750378000" />
+    <option name="totallyTimeSpent" value="5750388000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -669,16 +669,16 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1854" y="61" width="1746" height="1019" extended-state="0" />
+    <frame x="0" y="31" width="1680" height="1019" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4984375" visible="true" weight="0.19366197" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4984375" visible="true" weight="0.2014652" />
       <window_info id="Structure" order="1" sideWeight="0.5015625" side_tool="true" weight="0.19340234" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Command Line Tools Console" order="0" sideWeight="0.49939686" visible="true" weight="0.3268817" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.6778784" weight="0.30744338" />
       <window_info anchor="bottom" id="Message" order="2" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.6890287" visible="true" weight="0.3106796" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.6890287" weight="0.3106796" />
       <window_info anchor="bottom" id="Run" order="4" weight="0.3289183" />
       <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3289183" />

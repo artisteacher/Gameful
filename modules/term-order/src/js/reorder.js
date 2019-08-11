@@ -458,6 +458,30 @@ jQuery(document).ready(function(){
 
 		jQuery("#col-right").css("display", "block");
 
+		//set width of columns on term list pages (edit-tags.php)
+		var posts_width = jQuery('#posts').width();
+		var pod_toggle_width = jQuery('#pod_toggle').width();
+		var pod_needed_width = jQuery('#pod_done_num').width();
+		var achievement_width = jQuery('#pod_achievement').width();
+		var description_width = jQuery('#description').width();
+		var slug_width = jQuery('#slug').width();
+
+		jQuery( "<style>" +
+			".posts { width: " + posts_width + "px; }" +
+			".pod_toggle { width: " + pod_toggle_width + "px; }" +
+			".pod_done_num { width: " + pod_needed_width + "px; }" +
+			".pod_achievement { width: " + achievement_width + "px; }" +
+			".description { width: " + description_width + "px; }" +
+			".slug { width: " + slug_width + "px; }" +
+			"</style>" ).appendTo( "head" );
+
+		jQuery('.posts').css('width', posts_width + "px");
+		jQuery('.pod_toggle').css('width', pod_toggle_width + "px");
+		jQuery('.pod_done_num').css('width', pod_needed_width + "px");
+		jQuery('.pod_achievement').css('width', achievement_width + "px");
+		jQuery('.description').css('width', description_width + "px");
+		jQuery('.slug').css('width', slug_width + "px");
+
 		///if submit button is pressed, reload content and redo list from table
 		jQuery("#submit").click(function() {
 			jQuery("#col-right").css("display", "none");

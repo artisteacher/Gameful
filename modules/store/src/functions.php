@@ -63,7 +63,7 @@ function go_make_store_new() {
 
     echo "<div id='go_store_container' style='padding:30px;  background-color: white;'>";
     $store_title = get_option( 'options_go_store_title');
-    echo "<h1 style='padding:0px 30px 30px 0px;'>{$store_title}</h1>";
+    echo "<h1>{$store_title}</h1>";
 
     $html = get_option('go_store_html');
     echo $html;

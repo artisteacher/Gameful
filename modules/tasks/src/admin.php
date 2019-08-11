@@ -266,12 +266,13 @@ add_filter( 'manage_task_chains_custom_column', 'task_chains_add_field_column_co
 
 
 # Called only in /wp-admin/edit.php pages
-add_action( 'load-edit.php', function() {
-    add_filter( 'views_edit-tasks', 'go_add_from_template_edit_screen' ); // talk is my custom post type
-});
+//add_action( 'load-edit.php', function() {
+    //add_filter( 'views_edit-tasks', 'go_add_from_template_edit_screen' ); // tasks is my custom post type
+//});
 # echo the tabs
 function go_add_from_template_edit_screen() {
     go_new_task_from_template(false);
         //echo '<span class="go_add_quest_from_template"><a href="javascript:void(0);">Add ' . get_option('options_go_tasks_name_singular') . ' from Template</a></span>';
 }
+
 

@@ -88,7 +88,7 @@ get_header();
 
     $block_form = false;
     if ($this_page == 'profile'){
-        echo"<h3 style='padding-top:10px;'>Profile</h3>";
+        echo"<h2 style='padding-top:10px;'>Profile</h2>";
 
         $updated  = (isset($_GET['updated']) ) ? $_GET['updated'] : 0;
         if ($updated === "true") {

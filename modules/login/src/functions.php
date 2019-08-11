@@ -42,7 +42,9 @@ function check_activation_key_redirect_to_page() {
 
 /** Change default error messages **/
 function go_custom_error_messages($errors) {
-    $errors->errors['failed_login'][0] = '<strong>ERROR</strong>: There was a problem with your username or password.';
+    if (!empty($_GET['login'])) {
+        $errors->errors['failed_login'][0] = '<strong>ERROR</strong>: There was a problem with your username or password.';
+    }
 
     return $errors;
 }

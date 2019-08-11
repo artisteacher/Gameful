@@ -42,7 +42,7 @@ function go_make_map() {
 
         echo "<div id='go_map_container' style='font-family: $font_family; font-style: $font_style; font-weight: $font_weight; font-size: $font_size"."px;'>";
         $map_title = get_option( 'options_go_locations_map_title');
-        echo "<h1 style='padding:0px 30px 30px 0px;'>{$map_title}</h1>";
+        echo "<h1>{$map_title}</h1>";
         go_make_map_dropdown();
         go_make_single_map($last_map_id, false);// do your thing
         echo "</div>";
