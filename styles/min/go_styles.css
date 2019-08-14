@@ -1870,7 +1870,6 @@ store lightbox styles
 /* Center the loader */
 #loader {
   position: relative;
-  left: 50%;
   z-index: 1; }
 
 #sitemap {

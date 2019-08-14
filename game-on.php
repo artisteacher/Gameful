@@ -8,10 +8,10 @@ Author URI: https://github.com/mcmick/Gameful
 Version: 5.14
 */
 
-$go_js_version = 5.14;
+$go_js_version = 5.141;
 global $go_js_version;
 
-$go_css_version = 5.14;
+$go_css_version = 5.141;
 global $go_css_version;
 
 $go_load = true;
