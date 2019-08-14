@@ -298,7 +298,7 @@ function generate_single_archive($show_loot = false, $user_id,  $is_admin_archiv
 
 
 
-    $user_display_name = $user_obj->display_name;
+    $user_display_name = go_get_user_display_name($user_id);
     $page_title = $user_display_name . "'s Blog";
 
     ?>

@@ -226,7 +226,11 @@ function go_sOn($action_type){
 function go_start_row($action){
     $row = array();
     $user_id = $action['user_id'];
-    $user_display_name = $action['display_name'];
+
+    $user_display_name = $action['site_name'];
+    if(empty($user_display_name)){
+        $user_display_name = $action['display_name'];
+    }
     $user_firstname = $action['first_name'];
     $user_lastname = $action['last_name'];
     $sections = $action['go_sections'];
@@ -505,6 +509,8 @@ function go_clipboard_stats_dataloader_ajax(){
 
     $caps_key = "{$wpdb->prefix}capabilities";
 
+    $site_display_name_key = go_prefix_key('display_name');
+
     $sQuery = "    
                     SELECT SQL_CALC_FOUND_ROWS
                       t8.user_id, t1.*,
@@ -513,6 +519,7 @@ function go_clipboard_stats_dataloader_ajax(){
                       GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END) as go_sections, 
                       GROUP_CONCAT(CASE WHEN t2.meta_key = '$badge_key' THEN meta_value END) as go_badges,
                       GROUP_CONCAT(CASE WHEN t2.meta_key = '$group_key' THEN meta_value END) as go_groups,
+                      MAX(CASE WHEN t2.meta_key = '$site_display_name_key' THEN meta_value END) AS site_name,
                       MAX(CASE WHEN t2.meta_key = 'first_name' THEN meta_value END) AS first_name,
                       MAX(CASE WHEN t2.meta_key = 'last_name' THEN meta_value END) AS last_name,
                       MAX(CASE WHEN t2.meta_key = '$caps_key' THEN meta_value END) AS wp_capabilities
@@ -741,6 +748,8 @@ function go_clipboard_store_dataloader_ajax(){
 
     $caps_key = "{$wpdb->prefix}capabilities";
 
+    $site_display_name_key = go_prefix_key('display_name');
+
     $sQuery = "    
                   SELECT SQL_CALC_FOUND_ROWS
                     t9.*
@@ -755,6 +764,7 @@ function go_clipboard_store_dataloader_ajax(){
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END) as go_sections, 
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$badge_key' THEN meta_value END) as go_badges,
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$group_key' THEN meta_value END) as go_groups,
+                          MAX(CASE WHEN t2.meta_key = '$site_display_name_key' THEN meta_value END) AS site_name,
                           MAX(CASE WHEN t2.meta_key = 'first_name' THEN meta_value END) AS first_name,
                           MAX(CASE WHEN t2.meta_key = 'last_name' THEN meta_value END) AS last_name,
                           MAX(CASE WHEN t2.meta_key = '$caps_key' THEN meta_value END) AS wp_capabilities
@@ -971,6 +981,8 @@ function go_clipboard_messages_dataloader_ajax(){
 
     $caps_key = "{$wpdb->prefix}capabilities";
 
+    $site_display_name_key = go_prefix_key('display_name');
+
     $sQuery = "    
                   SELECT SQL_CALC_FOUND_ROWS
                     t9.*
@@ -985,6 +997,7 @@ function go_clipboard_messages_dataloader_ajax(){
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END) as go_sections, 
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$badge_key' THEN meta_value END) as go_badges,
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$group_key' THEN meta_value END) as go_groups,
+                          MAX(CASE WHEN t2.meta_key = '$site_display_name_key' THEN meta_value END) AS site_name,
                           MAX(CASE WHEN t2.meta_key = 'first_name' THEN meta_value END) AS first_name,
                           MAX(CASE WHEN t2.meta_key = 'last_name' THEN meta_value END) AS last_name,
                           MAX(CASE WHEN t2.meta_key = '$caps_key' THEN meta_value END) AS wp_capabilities
@@ -1240,6 +1253,8 @@ function go_clipboard_activity_dataloader_ajax(){
 
     $caps_key = "{$wpdb->prefix}capabilities";
 
+    $site_display_name_key = go_prefix_key('display_name');
+
     $sQuery = "    
                   SELECT SQL_CALC_FOUND_ROWS
                     t9.*
@@ -1255,6 +1270,7 @@ function go_clipboard_activity_dataloader_ajax(){
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END) as go_sections, 
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$badge_key' THEN meta_value END) as go_badges,
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$group_key' THEN meta_value END) as go_groups,
+                          MAX(CASE WHEN t2.meta_key = '$site_display_name_key' THEN meta_value END) AS site_name,
                           MAX(CASE WHEN t2.meta_key = 'first_name' THEN meta_value END) AS first_name,
                           MAX(CASE WHEN t2.meta_key = 'last_name' THEN meta_value END) AS last_name,
                           MAX(CASE WHEN t2.meta_key = '$caps_key' THEN meta_value END) AS wp_capabilities

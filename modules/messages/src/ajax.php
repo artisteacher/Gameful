@@ -43,7 +43,8 @@ function go_get_user_names($uniqueUsers, $user_count){
         $this_user_name = $user->first_name . ' ' . $user->last_name;
         if (empty($this_user_name) || $this_user_name == ' ') {
             $this_user_name = '';
-            $user_name = $user->display_name;
+
+            $user_name = go_get_user_display_name($user_id);
         }
         $user_name = $user_name . $this_user_name;
         $is_first = false;
@@ -450,7 +451,7 @@ function go_create_admin_message ()
                                                 }
                                                 $user_fullname = $user->first_name . ' ' . $user->last_name;
                                                 if (empty($user_fullname) || $user_fullname = ' ') {
-                                                    $user_fullname = $user->display_name;
+                                                    $user_fullname = go_get_user_display_name($user_id);
                                                 }
                                                 echo $user_fullname;
                                                 $is_first = false;

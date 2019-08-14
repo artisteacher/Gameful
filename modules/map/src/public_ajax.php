@@ -551,8 +551,9 @@ function go_make_map_dropdown($user_id = null){
     $tax_terms_maps = go_get_terms_ordered($taxonomy, '0');
 
 	if($user_id != null){
-	    $user_data = get_userdata($user_id );
-	    $user_name = $user_data->display_name;
+
+
+	    $user_name = go_get_user_display_name($user_id);
 	    echo "<h1 id='go_map_user' data-uid='".intval($user_id)."'>Viewing map as ". $user_name . "</h1>";
 
     }

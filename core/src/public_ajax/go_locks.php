@@ -271,7 +271,8 @@ function go_after_lock($id, $user_id, $task_name, $custom_fields, $i, $k, $is_lo
  */
 function go_badge_lock($id, $user_id, $task_name, $custom_fields, $i, $k, $is_logged_in, $check_only ){
 
-    $badge_name = get_option( 'options_go_naming_other_badges' );
+    //$badge_name = get_option( 'options_go_naming_other_badges' );
+    $badges_name = get_option('options_go_badges_name_plural');
     $this_lock = false;
     if ($is_logged_in) {
         $option = "go_locks_" . $i . "_keys_" . $k . "_options_0_badge";
@@ -314,7 +315,7 @@ function go_badge_lock($id, $user_id, $task_name, $custom_fields, $i, $k, $is_lo
             $term_diff = array_diff($terms_needed, $intersection);
             if (!empty($term_diff)) {
                 if (!$check_only) {
-                    $this_lock = "<li class='go_error_red'>You are in the possession of one of these " . $badge_name . ":</li>";
+                    $this_lock = "<li class='go_error_red'>You are in the possession of one of these " . $badges_name . ":</li>";
                     $this_lock .= "<ul class='go_term_list go_error_red'>";
                     foreach ($term_diff as $term_id) {
                         $term_object = get_term($term_id);

@@ -872,6 +872,15 @@ function go_acf_update_registration( $value, $post_id, $field  ) {
     return $value;
 }
 
+add_filter('acf/load_field/key=field_5cd1d13769aa9', 'go_acf_load_display_name');
+function go_acf_load_display_name( $field ) {
+    $user_display_name = get_user_option( 'display_name' );
+    if(!empty($user_display_name)){
+        $field['value'] = $user_display_name;
+    }
+    return $field;
+}
+
 // set ACF pre-save stuff for the user profile/registration pages
 add_filter('acf/pre_save_post' , 'acf_save_user' );
 function acf_save_user( $post_id ) {
@@ -894,6 +903,8 @@ function acf_save_user( $post_id ) {
 
         $wp_user_id = str_replace("user_", "", $post_id);
 
+        $display = (isset($_POST['acf']['field_5cd1d13769aa9']) ?  $_POST['acf']['field_5cd1d13769aa9'] : null);
+        $display = sanitize_text_field($display);//display name
         //REGISTER A NEW USER
         //if ($post_id === 'register'){
         if ($wp_user_id == 0){
@@ -925,8 +936,7 @@ function acf_save_user( $post_id ) {
             $last = sanitize_text_field($last);//last name
             //$_POST['acf']['field_5cd1d21168754'] = '';
 
-            $display = (isset($_POST['acf']['field_5cd1d13769aa9']) ?  $_POST['acf']['field_5cd1d13769aa9'] : null);
-            $display = sanitize_text_field($display);//display name
+
             //$_POST['acf']['field_5cd1d13769aa9'] = '';
 
             $new_password = (isset($_POST['acf']['field_5cd3638830f17']) ?  $_POST['acf']['field_5cd3638830f17'] : null);
@@ -969,7 +979,10 @@ function acf_save_user( $post_id ) {
             if ( is_wp_error($user) )
                 echo $user->get_error_message();
         }
-        else {
+        else {//this is an existing user
+
+            update_user_option( $wp_user_id, 'display_name', $display, false );
+
             $email = (isset($_POST['acf']['field_5cd4be08e7077']) ? $_POST['acf']['field_5cd4be08e7077'] : null);
             if(!empty($email)) {
                 $emailField = sanitize_email($_POST['acf']['field_5cd4be08e7077']);
@@ -998,6 +1011,7 @@ function acf_save_user( $post_id ) {
             if($page_uri === 'join' && !is_user_member_of_blog()){
                 $blog_id = get_current_blog_id();
                 add_user_to_blog( $blog_id, $wp_user_id, 'subscriber' );
+
             }
         }
     }

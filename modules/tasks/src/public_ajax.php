@@ -60,7 +60,8 @@ function go_task_shortcode($atts, $content = null ) {
      */
     $task_name = strtolower( get_option( 'options_go_tasks_name_singular' ) );
     $uc_task_name = ucwords($task_name);
-    $badge_name = get_option( 'options_go_naming_other_badges' );
+    $badges_name = get_option('options_go_badges_name_plural');
+    //$badge_name = get_option( 'options_go_naming_other_badges' );
     $go_lightbox_switch = get_option( 'options_go_video_lightbox' );
     $go_video_unit = get_option ('options_go_video_width_unit');
     if ($go_video_unit == 'px'){

@@ -62,8 +62,8 @@ add_shortcode( 'go_lightbox_url','go_lightbox_url' );
 //Gets the user's display name
 function go_get_displayname_function( $atts, $content = null ) {
 	if ( is_user_logged_in() ) {
-		$current_user = wp_get_current_user();
-		return "<span id='go-displayname'>{$current_user->display_name}</span>";
+		$name = go_get_user_display_name();
+		return "<span id='go-displayname'>{$name}</span>";
 	} else { 
 		return '<span id="go-visitor">Visitor</span>'; 
 	}

@@ -212,14 +212,22 @@ function go_display_longhand_currency ( $currency_type, $amount, $output = false
         else{*/
             if ($gold_amount !=  0 || $show_empty) {
 
-                $str .= "{$gold_amount} {$gold_name}({$gold_suffix})&nbsp;";
+                $str .= "{$gold_amount} {$gold_name} ({$gold_suffix})";
             }
             if ($silver_amount !=  0 || $show_empty) {
-                $str .= "{$silver_amount} {$silver_name}({$silver_suffix})&nbsp;";
+                if(!empty($str)){
+                    $str .= ", ";
+                }
+                $str .= "{$silver_amount} {$silver_name} ({$silver_suffix})";
             }
             if ($copper_amount !=  0 || $show_empty) {
-                $str .= "{$copper_amount} {$copper_name}({$copper_suffix})&nbsp;";
+                if(!empty($str)){
+                    $str .= ", ";
+                }
+                $str .= "{$copper_amount} {$copper_name} ({$copper_suffix})";
             }
+
+        $str .= ' ';
        // }
         if (empty($str)){
             $str = false;
@@ -1745,8 +1753,6 @@ function go_update_bonus_loot ($post_id){
     */
     die();
 }
-
-
 
 function xp_progress_bar($user_id){
 

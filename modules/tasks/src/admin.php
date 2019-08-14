@@ -184,6 +184,7 @@ function manage_task_chains_columns(){
 add_action( 'admin_init', 'manage_task_chains_columns' );
 
 //add_action( 'admin_init', 'go_fix_count' );
+/*
 function go_fix_count(){
     $terms = get_terms( array(
         'taxonomy' => 'task_chains',
@@ -195,8 +196,23 @@ function go_fix_count(){
         $term_ids[] = $term->term_id;
     }
     wp_update_term_count( $term_ids, 'task_chains', true );
-}
+}*/
 
+
+function go_fix_task_count( $post_id ) {
+    $post = get_post( $post_id );
+    // Check for post type.
+    if ( 'tasks' !== $post->post_type ) {
+        return;
+    }
+
+    $term_ids = wp_get_object_terms( $post_id, 'task_chains', 'ids' );
+    wp_delete_object_term_relationships($post_id, 'task_chains');
+    wp_update_term_count( $term_ids, 'task_chains', true );
+
+
+}
+add_action( 'deleted_post', 'go_fix_task_count' );
 
 /**
  * @param $args
@@ -213,7 +229,8 @@ function go_limit_parents($args, $taxonomy ) {
 function task_chains_add_field_columns( $columns ) {;
     $columns['pod_toggle'] = __( 'Pod', 'my-plugin' );
     $columns['pod_done_num'] = __( '# Needed', 'my-plugin' );
-    $columns['pod_achievement'] = __( 'Achievements', 'my-plugin' );
+    $badge_name = ucwords(get_option('options_go_badges_name_plural'));
+    $columns['pod_achievement'] = __( $badge_name, 'my-plugin' );
     return $columns;
 }
 

@@ -109,6 +109,8 @@ function go_stats_leaderboard_dataloader_ajax(){
         restore_current_blog();
     }
 
+    $site_display_name_key = go_prefix_key('display_name');
+
     $sectionQuery = go_sectionQuery($section);
     //$badgeQuery = go_badgeQuery();
     $groupQuery = go_groupQuery($group);
@@ -119,7 +121,8 @@ function go_stats_leaderboard_dataloader_ajax(){
     $sQuery = "    
                     SELECT SQL_CALC_FOUND_ROWS
                       t1.*,
-                      t3.display_name, t3.user_url, t3.user_login,
+                      t3.display_name, t3.user_url, t3.user_login, 
+                      MAX(CASE WHEN t2.meta_key = '$site_display_name_key' THEN meta_value END) AS site_name,
                       MAX(CASE WHEN t2.meta_key = 'first_name' THEN meta_value END) AS first_name,
                       MAX(CASE WHEN t2.meta_key = 'last_name' THEN meta_value END) AS last_name,
                       MAX(CASE WHEN t2.meta_key = '$caps_key' THEN meta_value END) AS wp_capabilities
@@ -195,7 +198,11 @@ function go_stats_leaderboard_dataloader_ajax(){
         $gold = $action['gold'];
         $health = $action['health'];
         $badge_count = $action['badge_count'];
-        $user_display_name = $action['display_name'];
+        $user_display_name = $action['site_name'];
+        if(empty($user_display_name)){
+            $user_display_name = $action['display_name'];
+        }
+
         $user_firstname = $action['first_name'];
         $user_lastname = $action['last_name'];
 

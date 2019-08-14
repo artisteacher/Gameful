@@ -355,7 +355,7 @@ function go_add_submenus() {
         'Gameful Tools', // page_title,
         'Gameful Tools', // menu_title,
         'edit_posts', // capability,
-        'game-tool', // menu_slug,
+        'game-tools', // menu_slug,
         'go_admin_tools_menu_content'// callback function
     );
 

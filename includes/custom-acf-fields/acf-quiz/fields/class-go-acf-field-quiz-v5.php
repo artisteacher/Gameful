@@ -129,7 +129,7 @@ class go_acf_field_quiz extends acf_field {
 
         $stage_num = trim($prefix, "]");
         $stage_num = substr($stage_num, strpos($stage_num, ']') + 6);
-        if ($stage_num != 'acfcloneindex') {
+        if (is_numeric($stage_num)) {
             $stage_num = (int)$stage_num;
             //$custom = go_post_meta();
 

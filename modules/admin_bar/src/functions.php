@@ -528,7 +528,8 @@ function remove_howdy( $wp_admin_bar ) {
     if ( 0 != $user_id ) {
         /* Add the "My Account" menu */
         $avatar = get_avatar( $user_id, 28 );
-        $howdy = sprintf( __('Welcome, %1$s'), $current_user->display_name );
+        $user_display_name = go_get_user_display_name($user_id);
+        $howdy = sprintf( __('Welcome, %1$s'), $user_display_name );
         $class = empty( $avatar ) ? '' : 'with-avatar';
 
         $wp_admin_bar->add_menu( array(

@@ -25,7 +25,8 @@ function go_get_users_name( $user_id = null ) {
         }
         return $user_info->first_name;
     }
-    return $user_info->display_name;
+    $user_id = $user_info->ID;
+    return go_get_user_display_name($user_id);
 }
 
 /**

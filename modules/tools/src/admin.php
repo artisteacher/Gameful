@@ -159,12 +159,12 @@ function go_admin_tools_menu_content() {
         </div>
 
 
-    </div>
+
 
 
 
     <?php
-    if(is_super_admin()){
+    if(is_super_admin() && is_gameful()){
         ?>
         <h2>Super Admin Tools</h2>
         <div class="go_tools_section">

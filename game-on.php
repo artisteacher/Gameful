@@ -5,8 +5,14 @@ Plugin URI: http://gameful.me
 Description: Gamification tools for teachers. Forked from the Game On Project.
 Author: Gameful.me
 Author URI: https://github.com/mcmick/Gameful
-Version: 5.01
+Version: 5.14
 */
+
+$go_js_version = 5.14;
+global $go_js_version;
+
+$go_css_version = 5.14;
+global $go_css_version;
 
 $go_load = true;
 if(is_multisite()) {
@@ -108,11 +114,7 @@ if(is_multisite()) {
         add_action('admin_init', 'redirect_acf_admin');
     }
 
-    $go_js_version = 5.04;
-    global $go_js_version;
 
-    $go_css_version = 5.04;
-    global $go_css_version;
 
 //////
     //INCLUDE DEPENDENCIES
@@ -340,6 +342,10 @@ if(is_multisite()) {
         }
 
         if ($go_domain === 'gameondev') {
+            $is_gameful = true;
+        }
+
+        if (strpos($go_domain, 'gamefulmetesting.com`') !== false) {
             $is_gameful = true;
         }
         return $is_gameful;

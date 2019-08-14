@@ -273,3 +273,14 @@ function go_get_page_uri(){
 }
 
 
+function go_get_user_display_name($user_id = ''){
+    if(empty($user_id)){
+        $user_id = get_current_user_id();
+    }
+    $user_display_name = get_user_option( 'display_name', $user_id );
+    if(empty($user_display_name)){
+        $current_user = get_userdata($user_id);
+        $user_display_name = $current_user->display_name;
+    }
+    return $user_display_name;
+}

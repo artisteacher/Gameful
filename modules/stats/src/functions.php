@@ -33,7 +33,8 @@ function go_stats_header($user_id, $show_stats_link = true, $show_internal_links
     $user_fullname = $user_data->first_name.' '.$user_data->last_name;
 
     $user_login =  $user_data->user_login;
-    $user_display_name = $user_data->display_name;
+
+    $user_display_name = go_get_user_display_name($user_id);
     $user_website = $user_data->user_url;
 
 

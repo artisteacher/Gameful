@@ -149,13 +149,13 @@ function go_admin_scripts ($hook) {
                 //wp_enqueue_script('go_edit_store');
                 //$id = get_the_ID();
                // $store_name = get_option( 'options_go_store_name');
-                wp_localize_script( 'go_admin_user', 'GO_TASK_LIST', true);
+                wp_localize_script( 'go_admin_user', 'GO_TASK_LIST', array('is_task_list' => true));
             }
         }
     }
 
 
-    if ($hook === 'toplevel_page_game-tools') {
+    if ($hook === 'tools_page_game-tools') {
         wp_localize_script(
             'go_admin_user',
             'go_is_tools',

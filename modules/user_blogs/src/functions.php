@@ -428,7 +428,10 @@ function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_underst
     if ($show_author) {
         $user_data = get_userdata($author_id);
         $blogURL = get_site_url() . "/user/" . $user_data->user_login;
-        echo "<span id='go-name'>Author: {$user_data->first_name} {$user_data->last_name} (<a href='{$blogURL}'>{$user_data->display_name}</a>)</span><br>";
+
+        $user_display_name = go_get_user_display_name($author_id);
+
+        echo "<span id='go-name'>Author: {$user_data->first_name} {$user_data->last_name} (<a href='{$blogURL}'>{$user_display_name}</a>)</span><br>";
     }
 
     echo "post date: " . date("M d, Y H:i a", strtotime($post_date));
