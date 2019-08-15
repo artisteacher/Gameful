@@ -12,7 +12,7 @@
  */
 function go_sectionQuery($section = false){
     if ($section === false) {
-        $section = (isset($_GET['section']) ? $_GET['section'] : null);
+        $section = (isset($_REQUEST['section']) ? $_REQUEST['section'] : null);
     }
     if (!empty($section)) {
         global $wpdb;

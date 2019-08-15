@@ -740,6 +740,3 @@ function go_options_menu_content() {
 
 
 
-
-
-?>

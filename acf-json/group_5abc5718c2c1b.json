@@ -763,7 +763,7 @@
             "key": "field_5abc9250b16a9",
             "label": "Master Password",
             "name": "go_masterpass",
-            "type": "password",
+            "type": "text",
             "instructions": "",
             "required": 0,
             "conditional_logic": 0,
@@ -772,9 +772,11 @@
                 "class": "",
                 "id": ""
             },
+            "default_value": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "maxlength": ""
         },
         {
             "key": "field_5afe0c56ad661",
@@ -1953,5 +1955,5 @@
     "active": 1,
     "description": "",
     "recaptcha": 0,
-    "modified": 1563821235
+    "modified": 1565551877
 }

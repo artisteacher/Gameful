@@ -183,16 +183,26 @@ function go_update_store_post_save( $post_id ) {
 
     update_option( 'go_store_html', $html );
 
-    $term_ids = wp_get_object_terms( $post_id, 'store_types', 'ids' );
-    wp_delete_object_term_relationships($post_id, 'store_types');
-    wp_update_term_count( $term_ids, 'store_types', true );
-
-
 }
 
 add_action( 'wp_trash_post', 'go_update_store_post_save' );
 add_action( 'deleted_post', 'go_update_store_post_save' );
 add_action( 'save_post', 'go_update_store_post_save');
+
+
+function go_fix_store_item_count( $post_id ) {
+    $post = get_post( $post_id );
+    // Check for post type.
+    if ( 'go_store' !== $post->post_type ) {
+        return;
+    }
+
+    $term_ids = wp_get_object_terms( $post_id, 'store_types', 'ids' );
+    wp_delete_object_term_relationships($post_id, 'store_types');
+    wp_update_term_count( $term_ids, 'store_types', true );
+
+}
+add_action( 'deleted_post', 'go_fix_store_item_count' );
 
 
 /**

@@ -78,7 +78,8 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
     $last_map_object = get_term_by( 'id' , $last_map_id, 'task_chains');//Query 1 - get the map
     $is_hidden = get_term_meta( $last_map_id, 'go_hide_map', true );
     if ($is_hidden){
-        return;
+        //return;
+        $last_map_id = '';
     }
     if ($user_id == null) {
         $user_id = get_current_user_id();

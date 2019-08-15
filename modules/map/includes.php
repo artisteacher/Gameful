@@ -21,7 +21,8 @@ if ( !is_admin() ) {
         $is_admin = is_admin();
         $default_map = get_option('options_go_locations_map_default', '');
         $user_id = $user->ID;
-        if ($default_map) {
+        $is_hidden = get_term_meta( $default_map, 'go_hide_map', true );
+        if ($default_map && $is_hidden != true) {
             update_user_option($user_id, 'go_last_map', $default_map);
         }
     }
