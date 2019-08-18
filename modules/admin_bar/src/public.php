@@ -180,8 +180,11 @@ function go_player_bar_v5() {
     }*/
 
     //$go_login_link = wp_login_url( get_site_url(null, 'login'));
-
-    $avatar = (is_int(get_user_option('go_avatar')) ?  wp_get_attachment_image(get_user_option('go_avatar'), array('29', '29')) : '<i class="fas fa-user ab-icon" aria-hidden="true"></i>');
+    $avatar = go_get_avatar($user_id, false, array(29, 29));
+    if(empty($avatar)){
+        $avatar = '<i class="fas fa-user ab-icon" aria-hidden="true"></i>';
+    }
+   // $avatar = (is_int(get_user_option('go_avatar')) ?  wp_get_attachment_image(get_user_option('go_avatar'), array('29', '29')) : '<i class="fas fa-user ab-icon" aria-hidden="true"></i>');
     if (is_user_logged_in()) {
         //$log_out_link = get_site_url(null, 'logout');
         if(is_gameful()){

@@ -162,7 +162,8 @@ function go_stats_lightbox() {
 
 function go_loot_headers($totals = null){
     $xp_abbr = get_option( "options_go_loot_xp_abbreviation" );
-    $gold_abbr = get_option( "options_go_loot_gold_abbreviation" );
+    //$gold_abbr = get_option( "options_go_loot_gold_abbreviation" );
+    $gold_abbr = go_gold_abbreviation();
     $health_abbr = get_option( "options_go_loot_health_abbreviation" );
 
     $xp_toggle = get_option('options_go_loot_xp_toggle');
@@ -721,14 +722,6 @@ function go_stats_store_list() {
         die( );
     }
 
-    $xp_abbr = get_option( "options_go_loot_xp_abbreviation" );
-    $gold_abbr = get_option( "options_go_loot_gold_abbreviation" );
-    $health_abbr = get_option( "options_go_loot_health_abbreviation" );
-
-    $xp_toggle = get_option('options_go_loot_xp_toggle');
-    $gold_toggle = get_option('options_go_loot_gold_toggle');
-    $health_toggle = get_option('options_go_loot_health_toggle');
-
     echo "<div id='go_store_list' class='go_datatables'><table id='go_store_datatable' class='pretty display'>
                    <thead>
 						<tr>
@@ -875,14 +868,6 @@ function go_stats_messages() {
         die( );
     }
 
-    $xp_abbr = get_option( "options_go_loot_xp_abbreviation" );
-    $gold_abbr = get_option( "options_go_loot_gold_abbreviation" );
-    $health_abbr = get_option( "options_go_loot_health_abbreviation" );
-
-    $xp_toggle = get_option('options_go_loot_xp_toggle');
-    $gold_toggle = get_option('options_go_loot_gold_toggle');
-    $health_toggle = get_option('options_go_loot_health_toggle');
-
     echo "<div id='go_messages' class='go_datatables'><table id='go_messages_datatable' class='pretty display'>
                    <thead>
 						<tr>
@@ -1023,14 +1008,6 @@ function go_stats_activity_list() {
         echo "refresh";
         die( );
     }
-
-    $xp_abbr = get_option( "options_go_loot_xp_abbreviation" );
-    $gold_abbr = get_option( "options_go_loot_gold_abbreviation" );
-    $health_abbr = get_option( "options_go_loot_health_abbreviation" );
-
-    $xp_toggle = get_option('options_go_loot_xp_toggle');
-    $gold_toggle = get_option('options_go_loot_gold_toggle');
-    $health_toggle = get_option('options_go_loot_health_toggle');
 
     echo "<div id='go_activity_list' class='go_datatables'><table id='go_activity_datatable' class='pretty display'>
                    <thead>

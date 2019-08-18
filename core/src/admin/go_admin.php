@@ -77,7 +77,7 @@ function go_duplicate_post_as_draft(){
 function go_new_task_from_template_as_draft()
 {
     if (!(isset($_GET['post']) || isset($_POST['post']) || (isset($_REQUEST['action']) && 'go_new_task_from_template_as_draft' == $_REQUEST['action']))) {
-        wp_die('No post to duplicate has been supplied!');
+       // wp_die('No post to duplicate has been supplied!');
     }
 
     /*

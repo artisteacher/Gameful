@@ -611,6 +611,9 @@ input#go-button-clone {
   cursor: -webkit-grab;
   cursor: -moz-grab; }
 
+.single-tasks #nav-below {
+  display: none; }
+
 .go_sortable_item {
   cursor: -webkit-grabbing;
   cursor: -moz-grabbing; }

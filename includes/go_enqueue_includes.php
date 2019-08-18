@@ -28,7 +28,7 @@ function go_includes ($hook) {
     // Bring variables from beginning of file into function scope
     global $js_in_footer;
     global $go_pdfmake_js_url, $go_pdfmake_fonts_js_url;
-    
+
     /**
      * Font Awesome
      * https://fontawesome.com

@@ -159,328 +159,6 @@
             ]
         },
         {
-            "key": "field_5af83c5379518",
-            "label": "Timer and Due Date",
-            "name": "",
-            "type": "accordion",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "open": 0,
-            "multi_expand": 0,
-            "endpoint": 0
-        },
-        {
-            "key": "field_5ac1342c1f5c4",
-            "label": "Due Date Loot Modifiers",
-            "name": "go_due_dates",
-            "type": "group",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "go-due-date",
-                "id": ""
-            },
-            "layout": "table",
-            "sub_fields": [
-                {
-                    "key": "field_5ac1342c1f5c5",
-                    "label": "Toggle",
-                    "name": "toggle",
-                    "type": "true_false",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "go_toggle",
-                        "id": ""
-                    },
-                    "message": "",
-                    "default_value": 0,
-                    "ui": 1,
-                    "ui_on_text": "On",
-                    "ui_off_text": "Off"
-                },
-                {
-                    "key": "field_5ac1342c1f5c6",
-                    "label": "Modifier",
-                    "name": "mod_settings",
-                    "type": "repeater",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": [
-                        [
-                            {
-                                "field": "field_5ac1342c1f5c5",
-                                "operator": "==",
-                                "value": "1"
-                            }
-                        ]
-                    ],
-                    "wrapper": {
-                        "width": "",
-                        "class": "go-modifiers",
-                        "id": ""
-                    },
-                    "collapsed": "",
-                    "min": 1,
-                    "max": 5,
-                    "layout": "table",
-                    "button_label": "",
-                    "sub_fields": [
-                        {
-                            "key": "field_5ac1342c1f5c7",
-                            "label": "Date",
-                            "name": "date",
-                            "type": "date_time_picker",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "display_format": "F j, Y g:i a",
-                            "return_format": "Y-m-d H:i:s",
-                            "first_day": 0
-                        },
-                        {
-                            "key": "field_5ac1342c1f5c8",
-                            "label": "Modifier",
-                            "name": "mod",
-                            "type": "number",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": 50,
-                            "placeholder": "%",
-                            "prepend": "",
-                            "append": "% Reduction",
-                            "min": 0,
-                            "max": 100,
-                            "step": ""
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "key": "field_5ac1347d44c0a",
-            "label": "Timer",
-            "name": "go_timer",
-            "type": "group",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "go-timer",
-                "id": ""
-            },
-            "layout": "table",
-            "sub_fields": [
-                {
-                    "key": "field_5ac1347d44c0b",
-                    "label": "Toggle",
-                    "name": "toggle",
-                    "type": "true_false",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "go_toggle",
-                        "id": ""
-                    },
-                    "message": "",
-                    "default_value": 0,
-                    "ui": 1,
-                    "ui_on_text": "On",
-                    "ui_off_text": "Off"
-                },
-                {
-                    "key": "field_5ac1347d44c0c",
-                    "label": "settings",
-                    "name": "settings",
-                    "type": "group",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": [
-                        [
-                            {
-                                "field": "field_5ac1347d44c0b",
-                                "operator": "==",
-                                "value": "1"
-                            }
-                        ]
-                    ],
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "layout": "row",
-                    "sub_fields": [
-                        {
-                            "key": "field_5ac1347d44c0d",
-                            "label": "Days",
-                            "name": "days",
-                            "type": "range",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": [
-                                [
-                                    {
-                                        "field": "field_5ac1347d44c0b",
-                                        "operator": "==",
-                                        "value": "1"
-                                    }
-                                ]
-                            ],
-                            "wrapper": {
-                                "width": "",
-                                "class": "go-timer-input",
-                                "id": ""
-                            },
-                            "default_value": "",
-                            "min": "",
-                            "max": "",
-                            "step": "",
-                            "prepend": "",
-                            "append": ""
-                        },
-                        {
-                            "key": "field_5ac1347d44c0e",
-                            "label": "Hours",
-                            "name": "hours",
-                            "type": "range",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": [
-                                [
-                                    {
-                                        "field": "field_5ac1347d44c0b",
-                                        "operator": "==",
-                                        "value": "1"
-                                    }
-                                ]
-                            ],
-                            "wrapper": {
-                                "width": "",
-                                "class": "go-timer-input",
-                                "id": ""
-                            },
-                            "default_value": "",
-                            "min": "",
-                            "max": 23,
-                            "step": "",
-                            "prepend": "",
-                            "append": ""
-                        },
-                        {
-                            "key": "field_5ac1347d44c0f",
-                            "label": "Minutes",
-                            "name": "minutes",
-                            "type": "range",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": [
-                                [
-                                    {
-                                        "field": "field_5ac1347d44c0b",
-                                        "operator": "==",
-                                        "value": "1"
-                                    }
-                                ]
-                            ],
-                            "wrapper": {
-                                "width": "",
-                                "class": "go-timer-input",
-                                "id": ""
-                            },
-                            "default_value": "",
-                            "min": "",
-                            "max": 59,
-                            "step": "",
-                            "prepend": "",
-                            "append": ""
-                        },
-                        {
-                            "key": "field_5ac1347d44c10",
-                            "label": "Seconds",
-                            "name": "seconds",
-                            "type": "range",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": [
-                                [
-                                    {
-                                        "field": "field_5ac1347d44c0b",
-                                        "operator": "==",
-                                        "value": "1"
-                                    }
-                                ]
-                            ],
-                            "wrapper": {
-                                "width": "",
-                                "class": "go-timer-input",
-                                "id": ""
-                            },
-                            "default_value": "",
-                            "min": "",
-                            "max": 59,
-                            "step": "",
-                            "prepend": "",
-                            "append": ""
-                        },
-                        {
-                            "key": "field_5ac1347d44c11",
-                            "label": "Modifier",
-                            "name": "timer_mod",
-                            "type": "number",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": [
-                                [
-                                    {
-                                        "field": "field_5ac1347d44c0b",
-                                        "operator": "==",
-                                        "value": "1"
-                                    }
-                                ]
-                            ],
-                            "wrapper": {
-                                "width": "",
-                                "class": "go-number",
-                                "id": ""
-                            },
-                            "default_value": "",
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": "% Reduction",
-                            "min": 0,
-                            "max": 100,
-                            "step": 1
-                        }
-                    ]
-                }
-            ]
-        },
-        {
             "key": "access-locks",
             "label": "Access Locks",
             "name": "",
@@ -1153,6 +831,328 @@
             "default_value": "global",
             "layout": "horizontal",
             "return_format": "value"
+        },
+        {
+            "key": "field_5af83c5379518",
+            "label": "Timer and Due Date",
+            "name": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 0,
+            "multi_expand": 0,
+            "endpoint": 0
+        },
+        {
+            "key": "field_5ac1342c1f5c4",
+            "label": "Due Date Loot Modifiers",
+            "name": "go_due_dates",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "go-due-date",
+                "id": ""
+            },
+            "layout": "table",
+            "sub_fields": [
+                {
+                    "key": "field_5ac1342c1f5c5",
+                    "label": "Toggle",
+                    "name": "toggle",
+                    "type": "true_false",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "go_toggle",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 0,
+                    "ui": 1,
+                    "ui_on_text": "On",
+                    "ui_off_text": "Off"
+                },
+                {
+                    "key": "field_5ac1342c1f5c6",
+                    "label": "Modifier",
+                    "name": "mod_settings",
+                    "type": "repeater",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5ac1342c1f5c5",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "go-modifiers",
+                        "id": ""
+                    },
+                    "collapsed": "",
+                    "min": 1,
+                    "max": 5,
+                    "layout": "table",
+                    "button_label": "",
+                    "sub_fields": [
+                        {
+                            "key": "field_5ac1342c1f5c7",
+                            "label": "Date",
+                            "name": "date",
+                            "type": "date_time_picker",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "display_format": "F j, Y g:i a",
+                            "return_format": "Y-m-d H:i:s",
+                            "first_day": 0
+                        },
+                        {
+                            "key": "field_5ac1342c1f5c8",
+                            "label": "Modifier",
+                            "name": "mod",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": 50,
+                            "placeholder": "%",
+                            "prepend": "",
+                            "append": "% Reduction",
+                            "min": 0,
+                            "max": 100,
+                            "step": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "field_5ac1347d44c0a",
+            "label": "Timer",
+            "name": "go_timer",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "go-timer",
+                "id": ""
+            },
+            "layout": "table",
+            "sub_fields": [
+                {
+                    "key": "field_5ac1347d44c0b",
+                    "label": "Toggle",
+                    "name": "toggle",
+                    "type": "true_false",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "go_toggle",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 0,
+                    "ui": 1,
+                    "ui_on_text": "On",
+                    "ui_off_text": "Off"
+                },
+                {
+                    "key": "field_5ac1347d44c0c",
+                    "label": "settings",
+                    "name": "settings",
+                    "type": "group",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5ac1347d44c0b",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "row",
+                    "sub_fields": [
+                        {
+                            "key": "field_5ac1347d44c0d",
+                            "label": "Days",
+                            "name": "days",
+                            "type": "range",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_5ac1347d44c0b",
+                                        "operator": "==",
+                                        "value": "1"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "",
+                                "class": "go-timer-input",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "min": "",
+                            "max": "",
+                            "step": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_5ac1347d44c0e",
+                            "label": "Hours",
+                            "name": "hours",
+                            "type": "range",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_5ac1347d44c0b",
+                                        "operator": "==",
+                                        "value": "1"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "",
+                                "class": "go-timer-input",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "min": "",
+                            "max": 23,
+                            "step": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_5ac1347d44c0f",
+                            "label": "Minutes",
+                            "name": "minutes",
+                            "type": "range",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_5ac1347d44c0b",
+                                        "operator": "==",
+                                        "value": "1"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "",
+                                "class": "go-timer-input",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "min": "",
+                            "max": 59,
+                            "step": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_5ac1347d44c10",
+                            "label": "Seconds",
+                            "name": "seconds",
+                            "type": "range",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_5ac1347d44c0b",
+                                        "operator": "==",
+                                        "value": "1"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "",
+                                "class": "go-timer-input",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "min": "",
+                            "max": 59,
+                            "step": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_5ac1347d44c11",
+                            "label": "Modifier",
+                            "name": "timer_mod",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_5ac1347d44c0b",
+                                        "operator": "==",
+                                        "value": "1"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "",
+                                "class": "go-number",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "% Reduction",
+                            "min": 0,
+                            "max": 100,
+                            "step": 1
+                        }
+                    ]
+                }
+            ]
         },
         {
             "key": "stages",
@@ -2688,5 +2688,5 @@
     "active": 1,
     "description": "",
     "recaptcha": 0,
-    "modified": 1562433932
+    "modified": 1565905062
 }

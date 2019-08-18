@@ -6,17 +6,7 @@
  * Time: 6:07 AM
  */
 
-function go_section(){
-    $section = $_GET['section'];
-    if ($section == ""){
-        $section = 0;
-    }
-    //if (is_array($sections) && count($sections) === 1){
-    //    $section = $sections[0];
-    //}
 
-    return $section;
-}
 
 function go_sWhere($sColumns){
 
@@ -38,7 +28,7 @@ function go_sWhere($sColumns){
     return $sWhere;
 }
 
-function go_sOrder($tab = null, $section = 0){
+function go_sOrder($tab = null){
     if ($tab === null){
         return "";
     }
@@ -49,21 +39,24 @@ function go_sOrder($tab = null, $section = 0){
     $badges_toggle = get_option('options_go_badges_toggle');
     $groups_toggle = get_option('options_go_groups_toggle');
 
+    /*
     $section = $_GET['section'];
     if ($section == "none"){
         $section = 0;
-    }
+    }*/
 
     $order_dir = $_GET['order'][0]['dir'];
+    //$order_dir = '';
     $order_col = $_GET['order'][0]['column'];
     $order_var = "";
     //column 7 is not sortable (it's the link icons)
     $loot_sort = false;
     if ($order_col == 2){
-        $order_var = 'go_sections';//first
+        $order_var = 'go_sections';//sections
     }
     if ($order_col == 3){
-        $order_var = 'go_seats';//first
+        //$order_var = 'go_seats';//seat
+        $order_var =  'go_seats';
     }
     else if ($order_col == 4){
         $order_var = 'first_name';//first
@@ -242,6 +235,7 @@ function go_start_row($action){
 
     if(!empty($sections)){
         $sections = explode(',', $sections);
+        $sections = array_unique($sections);
         $sections = go_print_term_list($sections);
     }
 
@@ -253,7 +247,7 @@ function go_start_row($action){
             if (!$first){
                 $seats_list .= '<br>';
             }
-            $seat = substr($seat, 0, strpos($seat, "_"));
+           // $seat = substr($seat, 0, strpos($seat, "_"));
             $seats_list .= $seat;
             $first = false;
         }
@@ -472,20 +466,48 @@ function go_clipboard_stats() {
  *
  */
 function go_clipboard_stats_dataloader_ajax(){
+
+    //Move this to a database maintenance tool
+    //but add function to remove user from Loot table on removing from site
+    //it doesn't need to run everytime
+    //Remove users that don't exist from Loot Table
+    global $wpdb;
+    $args = array(
+        'fields'       => 'ID',
+    );
+    $user_ids = get_users( $args );
+    global $wpdb;
+    $lTable = "{$wpdb->prefix}go_loot";
+    $sQuery = "    
+                   SELECT t1.uid AS user_id
+                                  FROM $lTable AS t1       
+        ";
+
+    $rResult = $wpdb->get_results($sQuery, ARRAY_A);
+    $loot_ids = array_column($rResult, 'user_id');
+
+    $remove_ids = array_diff($loot_ids, $user_ids);
+
+    foreach ($remove_ids as $remove_id){
+
+        $wpdb->delete( $lTable, array( 'uid' => $remove_id ) );
+    }
+
+    //END MAINTENANCE TOOL
+
     global $wpdb;
     $sColumns = array('first_name', 'last_name', 'display_name');
     $xp_toggle = get_option('options_go_loot_xp_toggle');
     $badges_toggle = get_option('options_go_badges_toggle');
     $groups_toggle = get_option('options_go_groups_toggle');
 
-    $section = go_section();// the section number from AJAX
     $sWhere = go_sWhere( $sColumns);
     $sLimit = '';
     if (isset($_GET['start']) && $_GET['length'] != '-1') {
         $sLimit = "LIMIT " . intval($_GET['start']) . ", " . intval($_GET['length']);
     }
 
-    $sOrder = go_sOrder('stats', $section);
+    $sOrder = go_sOrder('stats');
 
     $lTable = "{$wpdb->prefix}go_loot";
     if(is_gameful()) {
@@ -511,12 +533,24 @@ function go_clipboard_stats_dataloader_ajax(){
 
     $site_display_name_key = go_prefix_key('display_name');
 
+
+    $section = (isset($_GET['section']) ?  $_GET['section'] : null);
+    //if filtered by period, only get the seat for that period
+    if(!empty($section)){
+        $get_seat = "CAST(GROUP_CONCAT(CASE WHEN t2.meta_key = '".$seat_key."' AND ".$section." = (SUBSTRING_INDEX(t2.meta_value,'_',-1)) THEN (SUBSTRING_INDEX(t2.meta_value,'_',1)) END) as UNSIGNED INTEGER)";
+        $get_section = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' AND ".$section." = (SUBSTRING_INDEX(t2.meta_value,'_',-1)) THEN meta_value END)";
+    }
+    else {//if not, get all seats
+        $get_seat = "GROUP_CONCAT(CASE WHEN t2.meta_key = '".$seat_key."' THEN (SUBSTRING_INDEX(t2.meta_value,'_',1)) END)";
+        $get_section = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END)";
+    }
+
     $sQuery = "    
                     SELECT SQL_CALC_FOUND_ROWS
                       t8.user_id, t1.*,
                       t3.display_name, t3.user_url, t3.user_login,
-                      GROUP_CONCAT(CASE WHEN t2.meta_key = '$seat_key 'THEN meta_value END) as go_seats, 
-                      GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END) as go_sections, 
+                      $get_seat as go_seats,
+                      $get_section as go_sections, 
                       GROUP_CONCAT(CASE WHEN t2.meta_key = '$badge_key' THEN meta_value END) as go_badges,
                       GROUP_CONCAT(CASE WHEN t2.meta_key = '$group_key' THEN meta_value END) as go_groups,
                       MAX(CASE WHEN t2.meta_key = '$site_display_name_key' THEN meta_value END) AS site_name,
@@ -693,9 +727,6 @@ function go_clipboard_store() {
 function go_clipboard_store_dataloader_ajax(){
     global $wpdb;
 
-    //Get the search value
-    $section = go_section();
-
     $sColumns = array('first_name', 'last_name', 'display_name', 'result', 'post_title');
     $sWhere = go_sWhere($sColumns);
 
@@ -704,7 +735,7 @@ function go_clipboard_store_dataloader_ajax(){
         $sLimit = "LIMIT " . intval($_GET['start']) . ", " . intval($_GET['length']);
     }
 
-    $sOrder = go_sOrder('store', $section);
+    $sOrder = go_sOrder('store');
     $sType = go_sType();
 
     $pTable = "{$wpdb->prefix}posts";
@@ -750,6 +781,17 @@ function go_clipboard_store_dataloader_ajax(){
 
     $site_display_name_key = go_prefix_key('display_name');
 
+    $section = (isset($_GET['section']) ?  $_GET['section'] : null);
+    //if filtered by period, only get the seat for that period
+    if(!empty($section)){
+        $get_seat = "CAST(GROUP_CONCAT(CASE WHEN t2.meta_key = '".$seat_key."' AND ".$section." = (SUBSTRING_INDEX(t2.meta_value,'_',-1)) THEN (SUBSTRING_INDEX(t2.meta_value,'_',1)) END) as UNSIGNED INTEGER)";
+        $get_section = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' AND ".$section." = (SUBSTRING_INDEX(t2.meta_value,'_',-1)) THEN meta_value END)";
+    }
+    else {//if not, get all seats
+        $get_seat = "GROUP_CONCAT(CASE WHEN t2.meta_key = '".$seat_key."' THEN (SUBSTRING_INDEX(t2.meta_value,'_',1)) END)";
+        $get_section = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END)";
+    }
+
     $sQuery = "    
                   SELECT SQL_CALC_FOUND_ROWS
                     t9.*
@@ -760,8 +802,8 @@ function go_clipboard_store_dataloader_ajax(){
                         SELECT
                           t8.user_id,
                           t3.display_name, t3.user_url, t3.user_login,
-                          GROUP_CONCAT(CASE WHEN t2.meta_key = '$seat_key 'THEN meta_value END) as go_seats, 
-                          GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END) as go_sections, 
+                          $get_seat as go_seats,
+                          $get_section as go_sections, 
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$badge_key' THEN meta_value END) as go_badges,
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$group_key' THEN meta_value END) as go_groups,
                           MAX(CASE WHEN t2.meta_key = '$site_display_name_key' THEN meta_value END) AS site_name,
@@ -894,17 +936,6 @@ function go_clipboard_messages() {
         die( );
     }
 
-    $xp_abbr = get_option( "options_go_loot_xp_abbreviation" );
-    $gold_abbr = get_option( "options_go_loot_gold_abbreviation" );
-    $health_abbr = get_option( "options_go_loot_health_abbreviation" );
-
-    $xp_toggle = get_option('options_go_loot_xp_toggle');
-    $gold_toggle = get_option('options_go_loot_gold_toggle');
-    $health_toggle = get_option('options_go_loot_health_toggle');
-
-    $badges_toggle = get_option('options_go_badges_toggle');
-    $groups_toggle = get_option('options_go_groups_toggle');
-
     $seats_name = get_option( 'options_go_seats_name' );
 
     echo "<div id='go_clipboard_messages' class='go_datatables'><table id='go_clipboard_messages_datatable' class='pretty display'>
@@ -940,10 +971,6 @@ function go_clipboard_messages() {
 function go_clipboard_messages_dataloader_ajax(){
     global $wpdb;
 
-    //Get the search value
-    //$search_val = $_GET['search']['value'];
-    $section = go_section();
-
     $sColumns = array('first_name', 'last_name', 'display_name', 'result');
     $sWhere = go_sWhere($sColumns);
 
@@ -952,7 +979,7 @@ function go_clipboard_messages_dataloader_ajax(){
         $sLimit = "LIMIT " . intval($_GET['start']) . ", " . intval($_GET['length']);
     }
 
-    $sOrder = go_sOrder('messages', $section);
+    $sOrder = go_sOrder('messages');
 
     $sType = go_sType();
     $sOn = go_sOn('message');
@@ -983,6 +1010,17 @@ function go_clipboard_messages_dataloader_ajax(){
 
     $site_display_name_key = go_prefix_key('display_name');
 
+    $section = (isset($_GET['section']) ?  $_GET['section'] : null);
+    //if filtered by period, only get the seat for that period
+    if(!empty($section)){
+        $get_seat = "CAST(GROUP_CONCAT(CASE WHEN t2.meta_key = '".$seat_key."' AND ".$section." = (SUBSTRING_INDEX(t2.meta_value,'_',-1)) THEN (SUBSTRING_INDEX(t2.meta_value,'_',1)) END) as UNSIGNED INTEGER)";
+        $get_section = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' AND ".$section." = (SUBSTRING_INDEX(t2.meta_value,'_',-1)) THEN meta_value END)";
+    }
+    else {//if not, get all seats
+        $get_seat = "GROUP_CONCAT(CASE WHEN t2.meta_key = '".$seat_key."' THEN (SUBSTRING_INDEX(t2.meta_value,'_',1)) END)";
+        $get_section = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END)";
+    }
+
     $sQuery = "    
                   SELECT SQL_CALC_FOUND_ROWS
                     t9.*
@@ -993,8 +1031,8 @@ function go_clipboard_messages_dataloader_ajax(){
                         SELECT
                           t8.user_id,
                           t3.display_name, t3.user_url, t3.user_login,
-                          GROUP_CONCAT(CASE WHEN t2.meta_key = '$seat_key 'THEN meta_value END) as go_seats, 
-                          GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END) as go_sections, 
+                          $get_seat as go_seats,
+                          $get_section as go_sections, 
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$badge_key' THEN meta_value END) as go_badges,
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$group_key' THEN meta_value END) as go_groups,
                           MAX(CASE WHEN t2.meta_key = '$site_display_name_key' THEN meta_value END) AS site_name,
@@ -1196,7 +1234,6 @@ function go_clipboard_activity() {
  */
 function go_clipboard_activity_dataloader_ajax(){
     global $wpdb;
-    $section = go_section();
 
     $sColumns = array('first_name', 'last_name', 'display_name', 'post_title');
     $sWhere = go_sWhere( $sColumns);
@@ -1206,7 +1243,7 @@ function go_clipboard_activity_dataloader_ajax(){
         $sLimit = "LIMIT " . intval($_GET['start']) . ", " . intval($_GET['length']);
     }
 
-    $sOrder = go_sOrder('tasks', $section);
+    $sOrder = go_sOrder('tasks');
 
     $sType = go_sType();
     $sOn = go_sOn('tasks');
@@ -1255,6 +1292,17 @@ function go_clipboard_activity_dataloader_ajax(){
 
     $site_display_name_key = go_prefix_key('display_name');
 
+    $section = (isset($_GET['section']) ?  $_GET['section'] : null);
+    //if filtered by period, only get the seat for that period
+    if(!empty($section)){
+        $get_seat = "CAST(GROUP_CONCAT(CASE WHEN t2.meta_key = '".$seat_key."' AND ".$section." = (SUBSTRING_INDEX(t2.meta_value,'_',-1)) THEN (SUBSTRING_INDEX(t2.meta_value,'_',1)) END) as UNSIGNED INTEGER)";
+        $get_section = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' AND ".$section." = (SUBSTRING_INDEX(t2.meta_value,'_',-1)) THEN meta_value END)";
+    }
+    else {//if not, get all seats
+        $get_seat = "GROUP_CONCAT(CASE WHEN t2.meta_key = '".$seat_key."' THEN (SUBSTRING_INDEX(t2.meta_value,'_',1)) END)";
+        $get_section = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END)";
+    }
+
     $sQuery = "    
                   SELECT SQL_CALC_FOUND_ROWS
                     t9.*
@@ -1266,8 +1314,8 @@ function go_clipboard_activity_dataloader_ajax(){
                         SELECT
                           t8.user_id,
                           t3.display_name, t3.user_url, t3.user_login,
-                          GROUP_CONCAT(CASE WHEN t2.meta_key = '$seat_key 'THEN meta_value END) as go_seats, 
-                          GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END) as go_sections, 
+                          $get_seat as go_seats,
+                          $get_section as go_sections, 
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$badge_key' THEN meta_value END) as go_badges,
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$group_key' THEN meta_value END) as go_groups,
                           MAX(CASE WHEN t2.meta_key = '$site_display_name_key' THEN meta_value END) AS site_name,

@@ -14,20 +14,8 @@ global $go_js_version;
 $go_css_version = 5.141;
 global $go_css_version;
 
-$go_load = true;
-if(is_multisite()) {
-    $go_load = false;
-    $go_domain = $_SERVER['HTTP_HOST'];
-    if (strpos($go_domain, 'gameful.me') !== false) {
-        $go_load = true;
-    }
-    if (strpos($go_domain, 'gamefultesting') !== false) {
-        $go_load = true;
-    }
-    if (strpos($go_domain, 'gameondev') !== false) {
-        $go_load = true;
-    }
-    if($go_load == false) {
+
+if(is_gameful() === false && is_multisite()) {
     //this is the multisite not gameful notification
         function go_admin_head_notification() {
                     echo "<div id='go_mutisite_message' class='update-nag' style='font-size: 16px; padding-right: 20px;'>
@@ -40,7 +28,7 @@ if(is_multisite()) {
 
         }
         add_action( 'admin_notices', 'go_admin_head_notification' );
-    }
+
 }
 
 //$go_domain = $_SERVER['HTTP_HOST'];
@@ -333,21 +321,18 @@ if(is_multisite()) {
     {
         $is_gameful = false;
         $go_domain = $_SERVER['HTTP_HOST'];
-        if (strpos($go_domain, 'gameful.me') !== false) {
-            if (is_multisite()) {
-                $is_gameful = true;
-            }
-        }
 
-        if ($go_domain === 'gameondev') {
-            if (is_multisite()) {
-                $is_gameful = true;
+        if (is_multisite()) {
+            if (strpos($go_domain, 'gameful.me') !== false) {
+                    $is_gameful = true;
             }
-        }
 
-        if (strpos($go_domain, 'gamefulmetesting.com`') !== false) {
-            if (is_multisite()) {
-                $is_gameful = true;
+            if ($go_domain === 'gameondev') {
+                    $is_gameful = true;
+            }
+
+            if (strpos($go_domain, 'gamefulmetesting') !== false) {
+                    $is_gameful = true;
             }
         }
         return $is_gameful;
