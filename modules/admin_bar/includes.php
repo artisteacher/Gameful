@@ -42,9 +42,10 @@ if ( !is_admin() ) {
 
     add_action( 'wp_ajax_go_new_task_from_template', 'go_new_task_from_template');
     add_action( 'wp_ajax_go_clone_post_new_menu_bar', 'go_clone_post_new_menu_bar');
-    add_action( 'admin_action_go_new_task_from_template_as_draft', 'go_new_task_from_template_as_draft' );
+
 
 }else{
+    add_action( 'admin_action_go_new_task_from_template_as_draft', 'go_new_task_from_template_as_draft' );
     /*global $pagenow;
     if ( 'xxx.php' == $pagenow) {
         include_once('src/admin.php');

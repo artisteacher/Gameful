@@ -146,7 +146,7 @@ function go_task_change_stage() {
         //Print comments
         if ( get_post_type() == 'tasks' ) {
             comments_template();
-            wp_list_comments();
+            //wp_list_comments();
         }
 
     }

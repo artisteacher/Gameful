@@ -131,7 +131,7 @@ function go_task_shortcode($atts, $content = null ) {
      * then calls function to print guest content
      */
     if ($is_logged_in == false) {
-        go_display_visitor_content( $custom_fields, $post_id, $task_name, $badge_name, $uc_task_name);
+        go_display_visitor_content( $custom_fields, $post_id, $task_name, $badges_name, $uc_task_name);
         echo "</div>";
         return null;
     }
@@ -139,7 +139,7 @@ function go_task_shortcode($atts, $content = null ) {
     /**
      * Admin Views & Locks
      */
-    $admin_flag = go_admin_content($post_id, $is_admin, $admin_view, $custom_fields, $is_logged_in, $task_name, $status, $user_id, $post_id, $badge_name);
+    $admin_flag = go_admin_content($post_id, $is_admin, $admin_view, $custom_fields, $is_logged_in, $task_name, $status, $user_id, $post_id, $badges_name);
 
     if ($admin_flag == 'stop') {
         echo "</div>";
@@ -151,7 +151,7 @@ function go_task_shortcode($atts, $content = null ) {
      */
     if (!$is_unlocked) { //if not previously unlocked with a password
         if (!$is_admin || $admin_flag == 'locks') {
-            $task_is_locked = go_display_locks($post_id, $user_id, $is_admin, $task_name, $badge_name, $custom_fields, $is_logged_in, $uc_task_name);
+            $task_is_locked = go_display_locks($post_id, $user_id, $is_admin, $task_name, $badges_name, $custom_fields, $is_logged_in, $uc_task_name);
             if ($task_is_locked) {
                 //Print the bottom of the page
                 go_task_render_chain_pagination( $post_id, $custom_fields );
@@ -247,7 +247,7 @@ function go_task_shortcode($atts, $content = null ) {
     //Print comments
     if ( get_post_type() == 'tasks' ) {
         comments_template();
-        wp_list_comments();
+        //wp_list_comments();
     }
 }
 add_shortcode( 'go_task','go_task_shortcode' );

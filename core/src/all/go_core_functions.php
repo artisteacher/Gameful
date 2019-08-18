@@ -284,3 +284,51 @@ function go_get_user_display_name($user_id = ''){
     }
     return $user_display_name;
 }
+
+function go_get_avatar($user_id = false, $avatar_html = false, $size = 'thumbnail'){
+    if(!$user_id){
+        $user_id =  get_current_user_id();
+    }
+    $user_avatar_id = get_user_option( 'go_avatar', $user_id );
+    if (wp_attachment_is_image($user_avatar_id)  ) {
+
+        $user_avatar = wp_get_attachment_image($user_avatar_id, $size);
+    }else{
+        if ($avatar_html) {
+            $user_avatar = $avatar_html;
+        }else{
+            get_avatar($user_id);
+        }
+    }
+    return $user_avatar;
+}
+
+function go_override_avatar ($avatar_html, $id_or_email, $size, $default, $alt) {
+    $user = false;
+
+    if ( is_numeric( $id_or_email ) ) {
+
+        $id = (int) $id_or_email;
+        $user = get_user_by( 'id' , $id );
+
+    } elseif ( is_object( $id_or_email ) ) {
+
+        if ( ! empty( $id_or_email->user_id ) ) {
+            $id = (int) $id_or_email->user_id;
+            $user = get_user_by( 'id' , $id );
+        }
+
+    } else {
+        $user = get_user_by( 'email', $id_or_email );
+    }
+
+    if ( $user && is_object( $user ) ) {
+        $user_id = $user->ID;
+        $avatar = go_get_avatar($user_id, $avatar_html);
+
+    }
+
+    return $avatar;
+}
+
+add_filter ('get_avatar', 'go_override_avatar', 1, 5);

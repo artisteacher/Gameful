@@ -50,7 +50,7 @@ function go_clipboard_filters(){
     $task_name = ucfirst(get_option( 'options_go_tasks_name_plural'  ));
     $badges_name = ucfirst(get_option('options_go_badges_name_singular'));
     ?>
-    <div id="go_leaderboard_filters" style="display: flex; flex-wrap: wrap ;">
+    <div id="go_leaderboard_filters" style="display: flex; flex-wrap: wrap ; margin-right:20px;">
         <div style="padding: 0 20px 20px 20px;">
             <h3>User Filter</h3>
 
@@ -60,7 +60,7 @@ function go_clipboard_filters(){
             <br>
         </div>
         <div id="go_action_filters" style="padding: 0 20px 20px 20px; display:none;">
-            <h3>Action Filters</h3>
+            <h3>Action Filter</h3>
             <div id="go_datepicker_container" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%; ">
                 <div id="go_datepicker_clipboard">
                     <i class="fa fa-calendar" style="float: left;"></i>&nbsp;

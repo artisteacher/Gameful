@@ -7,12 +7,6 @@ function go_make_store_html() {
     /* Get all task chains with no parents--these are the sections of the store.  */
     $taxonomy = 'store_types';
 
-    //$xp_abbr = get_option( "options_go_loot_xp_abbreviation" );
-    //$gold_abbr = get_option( "options_go_loot_gold_abbreviation" );
-    //$health_abbr = get_option( "options_go_loot_health_abbreviation" );
-
-    //$rows = get_terms($taxonomy, $args);//the rows
-
     $rows = go_get_terms_ordered($taxonomy, '0');
     ob_start();
     echo '

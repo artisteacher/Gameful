@@ -55,7 +55,7 @@ function go_reader_header() {
             </div>
                 <div id="go_action_filters" style="display: flex; flex-wrap: wrap ;">
                  <div id="go_action_filters_1" style="padding: 0px 20px 20px 20px;">
-                     <h3>Blog Post Filters</h3>
+                     <h3>Blog Post Filter</h3>
                      <div id="go_datepicker_container" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
                          <div id="go_datepicker_clipboard">
                              <i class="fa fa-calendar" style="float: left;"></i>&nbsp;

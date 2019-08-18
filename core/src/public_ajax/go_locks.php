@@ -72,7 +72,7 @@ function go_task_locks ( $id, $user_id, $task_name, $custom_fields, $is_logged_i
             echo $this_lock;
             $task_is_locked = true;
         }else{
-            return true;
+            return false;
         }
     }
 

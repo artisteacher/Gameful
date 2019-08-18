@@ -243,6 +243,19 @@ function go_display_longhand_currency ( $currency_type, $amount, $output = false
 
 }
 
+
+function go_gold_abbreviation(){
+    $coins_currency = get_option("options_go_loot_gold_currency");
+    if ($coins_currency != 'coins') {
+        $gold_suffix = get_option("options_go_loot_gold_abbreviation");
+
+
+    } else if($coins_currency === 'coins'){
+        $gold_suffix = get_option("options_go_loot_gold_coin_names_gold_coin_abbreviation");
+    }
+    return $gold_suffix;
+}
+
 /**
  * @param $currency_type
  * @param $amount
@@ -1703,7 +1716,7 @@ function go_update_bonus_loot ($post_id){
             $rand = mt_rand(0, $drop_total);
             if ( $rand <= $drop) {
                 $xp_abbr = get_option( "options_go_loot_xp_abbreviation" );
-                $gold_abbr = get_option( "options_go_loot_gold_abbreviation" );
+                $gold_abbr = go_gold_abbreviation();
                 $health_abbr = get_option( "options_go_loot_health_abbreviation" );
                 $xp = $value['xp'];
                 if ($xp > 0){
@@ -1727,7 +1740,7 @@ function go_update_bonus_loot ($post_id){
                 $message = $message . "<br><br>" . $xp_message .  $gold_message . $health_message;
                 go_noty_message_generic('success', $title, $message);
                 //go_noty_loot_success($title,$message );
-                go_update_actions($user_id, 'bonus_loot', $post_id, null, null, null, 'Bonus Loot Winner', null, null, null, $health_mod, $xp, $gold, $health, null, null, true);
+                go_update_actions($user_id, 'bonus_loot', $post_id, null, null, null, 'Bonus Loot Winner: '. $title, null, null, null, $health_mod, $xp, $gold, $health, null, null, true);
                 $winner = true;
                 break;
             }
