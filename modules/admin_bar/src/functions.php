@@ -43,9 +43,10 @@ function Wps_remove_tools(){
 
 function go_display_admin_bar() {
     $is_admin = go_user_is_admin();
-    $blog_id = get_current_blog_id();
-$is_logged_in = is_user_logged_in();
-	if($is_admin || ($blog_id == 1 && $is_logged_in)){
+    $is_gameful = is_gameful();
+    //$blog_id = get_current_blog_id();
+    $is_logged_in = is_user_logged_in();
+	if($is_admin || ($is_gameful && $is_logged_in)){
 	    return true;
     }
 	else{
