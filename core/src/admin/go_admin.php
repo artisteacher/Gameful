@@ -294,12 +294,32 @@ function go_add_toplevel_menu() {
         4 // menu position
     );*/
 
+    //remove menu items for non admins
+    if ( !current_user_can('manage_options') ) { // ONLY DO THIS FOR ADMIN
+        global  $menu;
+        foreach ($menu as $this_menu){
+
+            $slug = $this_menu[2];
+            $menus_to_keep = array('upload.php', 'edit.php', 'edit.php?post_type=tasks', );
+            if(!in_array($slug, $menus_to_keep) ) {
+                remove_menu_page($slug);
+            }
+        }
+        global  $submenu;
+        remove_submenu_page( 'edit.php?post_type=tasks', 'edit.php?post_type=tasks_templates' );
+        remove_submenu_page( 'edit.php?post_type=tasks', 'edit-tags.php?taxonomy=task_chains&post_type=tasks' );
+
+
+    }
 
 
 }
 add_action( 'admin_menu', 'go_add_toplevel_menu');
 
+
+
 function go_remove_toplevel_menu() {
+    //remove for all non super admin
     if(is_gameful() && !is_super_admin()) {
         remove_menu_page('edit.php?post_type=elementor_library');
         remove_menu_page('elementor');

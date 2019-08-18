@@ -63,13 +63,15 @@ img {
 input[type="checkbox"]:checked + label span.checkbox::after {
   color: #62AFFF; }
 
+/*
 .go_blog_stage {
-  border: solid 1px;
-  padding: 10px 20px 10px 20px;
-  border-radius: 5px;
-  background-color: #ededed;
-  margin-bottom: 10px; }
-
+	border: solid 1px;
+	padding: 10px 20px 10px 20px;
+	border-radius: 5px;
+	background-color: #ededed;
+	margin-bottom: 10px;
+}
+*/
 #go_datepicker_container {
   text-align: right; }
 
@@ -373,12 +375,17 @@ video.wp-video-shortcode {
   margin: 10px;
   background-color: #ddd; }
 
-.go_lock, .go_late_mods, .go_sched_access_message, .go_timer_message, .go_checks_and_buttons {
+.go_lock, .go_late_mods, .go_sched_access_message, .go_timer_message {
   border: solid 1px;
   border-radius: 5px;
   padding: 10px;
   margin: 10px;
-  background-color: #f5b3bd; }
+  background-color: #f5b3bd;
+}
+
+.go_checks_and_buttons {
+  padding: 10px;
+}
 
 .go_lock .go_error_red {
   color: unset; }
@@ -1003,8 +1010,7 @@ input#go_pass_lock::-moz-placeholder {
   max-width: 850px; }
 
 #go_blog_container {
-  width: 100%;
-  max-width: 800px; }
+  width: 100%; }
 
 /********************
 *	Login Modal

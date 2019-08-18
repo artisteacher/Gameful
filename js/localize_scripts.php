@@ -30,6 +30,7 @@ function go_localize_all_pages(){
         array(
             'nonces' => array(
                 'go_stats_lightbox'             => wp_create_nonce( 'go_stats_lightbox' ), //Most of the stats nonces could be loaded in the lightbox
+                'go_update_last_map'            => wp_create_nonce('go_update_last_map'),//at login and on map
                 'go_stats_about'                => wp_create_nonce( 'go_stats_about' ),
                 'go_stats_task_list'            => wp_create_nonce( 'go_stats_task_list' ),
                 'go_stats_store_list'           => wp_create_nonce( 'go_stats_store_list' ),

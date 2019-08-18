@@ -600,7 +600,7 @@ function go_blog_user_task($not_ajax = false, $user_id = null, $post_id = null){
 
             ob_start();
             $stage_name = ucfirst($stage_name);
-            echo  "<div class='go_blog_stage'><h3>". $stage_name . " " . $current_stage .": ";
+            echo  "<span class='go_blog_stage'><h3>". $stage_name . " " . $current_stage .": ";
             if ($check_type == "blog"){
                 echo "Blog Post</h3>";
                 //go_print_blog_check_result($result, false);
@@ -633,7 +633,7 @@ function go_blog_user_task($not_ajax = false, $user_id = null, $post_id = null){
 
 
             }
-            echo "</div>";
+            echo "</span>";
 
             $this_result[]= ob_get_contents();
             ob_end_clean();

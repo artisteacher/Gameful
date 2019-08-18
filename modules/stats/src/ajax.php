@@ -1207,10 +1207,12 @@ function go_activity_dataloader_ajax(){
             $action_title =' <span class="tooltip" data-tippy-content="'. $message .'">See Message</span>';
         }
         else if ($action_type == 'bonus_loot'){
-            $action_title = "Bonus Loot";
+            $type = "Bonus Loot";
+            $action_title = $result;
         }
         else if ($action_type == 'undo_bonus_loot'){
-            $action_title = "Undo Bonus Loot";
+            $type = "Undo Bonus Loot";
+            $action_title = $result;
         }
 
         if ($result == 'undo_bonus'){

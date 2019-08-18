@@ -244,7 +244,7 @@ function go_task_shortcode($atts, $content = null ) {
     go_task_render_chain_pagination( $post_id, $custom_fields );//3 Queries
     go_hidden_footer();
 
-    //Print comments
+    //Print comments//
     if ( get_post_type() == 'tasks' ) {
         comments_template();
         //wp_list_comments();

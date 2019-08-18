@@ -84,7 +84,6 @@ function go_scripts () {
         array(
             'nonces' => array(
                 'go_update_admin_view'          => wp_create_nonce( 'go_update_admin_view' ),//on task pages only
-                'go_update_last_map'            => wp_create_nonce('go_update_last_map'),//at login and on map
                 'go_blog_opener'                => wp_create_nonce('go_blog_opener'),//this is the form, needed all over the place on front end
                 'go_blog_submit'                => wp_create_nonce('go_blog_submit'),
                 'go_blog_trash'                 => wp_create_nonce('go_blog_trash'),//on reader, blog, tasks

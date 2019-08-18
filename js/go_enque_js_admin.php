@@ -101,7 +101,7 @@ function go_admin_scripts ($hook) {
             )
         );
 
-        wp_enqueue_script( 'go_admin_user' );
+
 
         if ( 'toplevel_page_go_clipboard' === $hook ) {
 
@@ -153,7 +153,7 @@ function go_admin_scripts ($hook) {
             }
         }
     }
-
+    wp_enqueue_script( 'go_admin_user' );
 
     if ($hook === 'tools_page_game-tools') {
         wp_localize_script(

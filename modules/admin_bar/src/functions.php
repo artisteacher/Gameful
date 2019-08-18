@@ -46,12 +46,20 @@ function go_display_admin_bar() {
     $is_gameful = is_gameful();
     //$blog_id = get_current_blog_id();
     $is_logged_in = is_user_logged_in();
+    $show = false;
 	if($is_admin || ($is_gameful && $is_logged_in)){
-	    return true;
+        if (current_user_can( 'edit_posts')){
+            $show =  true;
+        }else {
+            $user_id = get_current_user_id();
+            $blogs = get_blogs_of_user($user_id);
+            if(count($blogs) > 1){
+                $show = true;
+            }
+        }
+
     }
-	else{
-	    return false;
-    }
+	return $show;
 }
 add_filter( 'show_admin_bar', 'go_display_admin_bar' );
 
@@ -92,6 +100,13 @@ function go_admin_bar_v5() {
 
         $wp_admin_bar->remove_node('new-tasks');
         $wp_admin_bar->remove_node('new-go_store');
+
+        if ( !current_user_can('manage_options') ) { // ONLY DO THIS FOR ADMIN
+            $wp_admin_bar->remove_node('comments');
+            $wp_admin_bar->remove_node('archive');
+            $wp_admin_bar->remove_node('wu-my-account');
+            $wp_admin_bar->remove_node('my-account');
+        }
 
 
 

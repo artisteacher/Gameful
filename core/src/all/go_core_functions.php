@@ -297,7 +297,7 @@ function go_get_avatar($user_id = false, $avatar_html = false, $size = 'thumbnai
         if ($avatar_html) {
             $user_avatar = $avatar_html;
         }else{
-            get_avatar($user_id);
+            $user_avatar = false;
         }
     }
     return $user_avatar;
@@ -305,7 +305,7 @@ function go_get_avatar($user_id = false, $avatar_html = false, $size = 'thumbnai
 
 function go_override_avatar ($avatar_html, $id_or_email, $size, $default, $alt) {
     $user = false;
-
+    $avatar = $avatar_html;
     if ( is_numeric( $id_or_email ) ) {
 
         $id = (int) $id_or_email;
@@ -324,7 +324,10 @@ function go_override_avatar ($avatar_html, $id_or_email, $size, $default, $alt) 
 
     if ( $user && is_object( $user ) ) {
         $user_id = $user->ID;
-        $avatar = go_get_avatar($user_id, $avatar_html);
+        $new_avatar = go_get_avatar($user_id, $avatar_html, array(29, 29));
+        if(!empty($new_avatar)){
+            $avatar = $new_avatar;
+        }
 
     }
 

@@ -102,7 +102,7 @@ function go_time_on_task($current_time, $TIMESTAMP =false){
     if ($TIMESTAMP != false) {
         $result .= "<div style='text-align:right;'>Time Submitted: " . $time . "</div>";
     }
-    $result .= "<div style='text-align:right;'>". $title .$time_on_task . "</div></div>";
+    $result .= "<div style='text-align:right;'>". $title .$time_on_task . "</div>";
     return $result;
 }
 

@@ -159,7 +159,7 @@ function allow_only_default_role($all_roles)
     }
     else {
         foreach ( $all_roles as $name => $role ) {
-            if($name != 'subscriber') {
+            if($name != 'subscriber' && $name != 'contributor' ) {
                 unset($all_roles[$name]);
             }
         }
@@ -167,6 +167,20 @@ function allow_only_default_role($all_roles)
     }
     return $all_roles;
 }
+
+function posts_for_current_author($query) {
+    global $pagenow;
+
+    if( 'edit.php' != $pagenow || !$query->is_admin )
+        return $query;
+
+    if( !current_user_can( 'edit_others_posts' ) ) {
+        global $user_ID;
+        $query->set('author', $user_ID );
+    }
+    return $query;
+}
+add_filter('pre_get_posts', 'posts_for_current_author');
 
 
 //make the blog the author page

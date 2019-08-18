@@ -14,16 +14,16 @@ function go_sWhere($sColumns){
     $sWhere = "";
     if ( isset($search_val) && $search_val != "" )
     {
-        $sWhere = "WHERE  ";
-        $sWhere .= "";
+        $sWhere = "HAVING ";
+        //$sWhere .= "";
 
         //search these columns
         for ( $i=0 ; $i<count($sColumns) ; $i++ )
         {
             $sWhere .= "`".$sColumns[$i]."` LIKE '%".esc_sql( $search_val )."%' OR ";
         }
-        $sWhere = substr_replace( $sWhere, "", -3 );
-        $sWhere .= '';
+        $sWhere = substr_replace( $sWhere, "", -4 );
+        //$sWhere .= '';
     }
     return $sWhere;
 }
@@ -633,7 +633,6 @@ function go_clipboard_stats_dataloader_ajax(){
         $row = go_start_row($action);
         $user_id = $action['uid'];
         $xp = $action['xp'];
-
 
         $rank = go_get_rank ( $user_id, $xp );
         $current_rank_name = $rank['current_rank'];

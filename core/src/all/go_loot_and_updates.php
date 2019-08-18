@@ -1748,7 +1748,7 @@ function go_update_bonus_loot ($post_id){
         }
         if (!$winner) {//NOT winner
             //add update here for no winner
-            go_update_actions($user_id, 'bonus_loot', $post_id, null, null, null, 'Bonus Loot Not Winner', null, null, null, null, null, null, null, null, null, null);
+            go_update_actions($user_id, 'bonus_loot', $post_id, null, null, null, 'Bonus Loot Attempt - Not Winner', null, null, null, null, null, null, null, null, null, null);
             go_noty_message_generic('warning', "", "Better luck next time!");
         }
     }

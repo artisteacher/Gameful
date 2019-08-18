@@ -16,8 +16,9 @@
  * @param $bonus
  * @param $check_for_understanding
  * @param $all_content
+ * @param $instructions
  */
-function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $check_for_understanding, $all_content = false){
+function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $check_for_understanding, $all_content = false, $instructions = ''){
     //save draft button for drafts
     //print saved info for all
     ob_start();
@@ -238,6 +239,7 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
         //set the title on blog post forms attached to quests
         $title = get_the_title($go_blog_task_id);
         $title = $title . " - " . $blog_title;
+
     }else{
         $is_private = get_post_meta($blog_post_id, 'go_blog_private_post', true) ? get_post_meta($blog_post_id, 'go_blog_private_post', true) : false;
     }
@@ -247,8 +249,9 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
     ob_end_clean();
 
     echo "<div class='go_blog_div'>";
+
     if( !empty($go_blog_task_id) && $is_private) {
-        echo "<div ><h3>This post is private. Only you and the site administrators/instructors will be able to see it.</h3></div>";
+        echo "<div ><i>This post is private. Only you and the site administrators/instructors will be able to see it.</i></div>";
     }
     if($go_blog_task_id) {
         echo "<div><h3 style='width: 100%;' data-blog_post_title='fixed' data-blog_post_id ='{$blog_post_id}' id='go_blog_title{$suffix}'>" . $title . "</h3> </div>";
@@ -256,6 +259,7 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
         echo "<div>Title:<div><input style='width: 100%;' data-blog_post_title='custom' id='go_blog_title".$suffix."' type='text' placeholder='' value ='{$title}' data-blog_post_id ='{$blog_post_id}' ></div> </div>";
 
     }
+    echo "<p>".$instructions."</p>";
     echo $buffer;
 
 
@@ -357,7 +361,7 @@ function go_blog_form($blog_post_id, $suffix, $go_blog_task_id, $i, $bonus, $che
  * @param bool $bonus_status //only needed for old style URL and File print outs (v4)
  * @param bool $status
  */
-function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_understanding = false, $with_feedback = false, $show_author = false, $show_edit = false, $task_stage_num = null, $bonus_stage_num = null, $is_revision = false, $is_archive  = false)
+function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_understanding = false, $with_feedback = false, $show_author = false, $show_edit = false, $task_stage_num = null, $bonus_stage_num = null, $is_revision = false, $is_archive  = false, $instructions = '')
 {
     $current_user = get_current_user_id();
     $is_admin = go_user_is_admin();
@@ -409,7 +413,7 @@ function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_underst
     }
 
     ob_start();
-    echo "<div class='go_blog_post_wrapper go_blog_post_wrapper_$blog_post_id' style='padding: 20px;margin: 10px; background-color: white; border: 1px solid;' data-postid ='{$blog_post_id}'>";
+    echo "<div class='go_blog_post_wrapper go_blog_post_wrapper_$blog_post_id' style='padding: 20px;margin: 10px; background-color: white;' data-postid ='{$blog_post_id}'>";
 
     $status = get_post_status($blog_post_id);
     if ($status == 'draft') {
@@ -423,6 +427,8 @@ function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_underst
         echo "<h2>" . $title . "</a></h2>";
     }
     echo "</div>";
+
+    echo "Instructions: " . $instructions;
 
     echo "<div class='go_blog_meta' style='font-size: .9em;'>";
     if ($show_author) {
