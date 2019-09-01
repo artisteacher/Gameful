@@ -55,67 +55,72 @@ function go_download_game_data()
 function go_admin_tools_menu_content() {
     global $go_js_version;
 
-    ?>
+    $is_admin = go_user_is_admin();
+    if($is_admin) {
+        ?>
 
-    <div id="go_tools_wrapper" class="wrap">
+
+        <div id="go_tools_wrapper" class="wrap">
 
         <h2>Tools</h2>
-    <?php
-
-    //This should run automatically if needed.
-    /*
-    if($go_js_version >= 4) {
-        ?>
-
-        <div class="go_tools_section">
-            <div class="card">
-                <h2>Update v4 to v5</h2>
-                <p>This will update your v4 tasks to v5. The v4 content will be left unchanged and new post metadata
-                    will be created.</p>
-                <button id="go_tool_update_v5">Update</button>
-            </div>
-        </div>
         <?php
-    }*/
 
-    /*
-    if($go_js_version < 5) {
-        ?>
-        <div class="go_tools_section">
-            <div class="card">
-                <h2>Update v3 to v4</h2>
-                <p>This will update your v3 posts and store items to v4. It's not perfect, but it's better then
-                    starting from scratch. The v3 content will be left unchanged and new post metadata will be
-                    created.</p>
-                <button id="go_tool_update">Update</button>
-            </div>
-            <div class="card">
-                <h2>Update v3 to v4--but don't update the quest loot.</h2>
-                <p>This is just like the other v3 upgrade tool, but it does not copy any of the rewards. This is if
-                    you want all your old quests for reference, but don't want them playable for rewards. </p>
-                <button id="go_tool_update_no_loot">Update-No Loot</button>
-            </div>
-        </div>
-        <?php
-    }
-*/
-
-    $pass = get_option('go_export_password');
-    if(empty($pass)){
-        $pass = wp_generate_password(8, false);
-        update_option('go_export_password', $pass);
-    }
-    $export_url = home_url('wp-admin/admin.php?page=game-tools&go_download=true&password='.$pass);
-    //<button id="go_export_game" onclick="window.location.href = 'wp-admin/admin.php?page=game-tools&download=true';">Export All Game Data</button>
-
+        //This should run automatically if needed.
+        /*
+        if($go_js_version >= 4) {
             ?>
+
+            <div class="go_tools_section">
+                <div class="card">
+                    <h2>Update v4 to v5</h2>
+                    <p>This will update your v4 tasks to v5. The v4 content will be left unchanged and new post metadata
+                        will be created.</p>
+                    <button id="go_tool_update_v5">Update</button>
+                </div>
+            </div>
+            <?php
+        }*/
+
+        /*
+        if($go_js_version < 5) {
+            ?>
+            <div class="go_tools_section">
+                <div class="card">
+                    <h2>Update v3 to v4</h2>
+                    <p>This will update your v3 posts and store items to v4. It's not perfect, but it's better then
+                        starting from scratch. The v3 content will be left unchanged and new post metadata will be
+                        created.</p>
+                    <button id="go_tool_update">Update</button>
+                </div>
+                <div class="card">
+                    <h2>Update v3 to v4--but don't update the quest loot.</h2>
+                    <p>This is just like the other v3 upgrade tool, but it does not copy any of the rewards. This is if
+                        you want all your old quests for reference, but don't want them playable for rewards. </p>
+                    <button id="go_tool_update_no_loot">Update-No Loot</button>
+                </div>
+            </div>
+            <?php
+        }
+        */
+
+        $pass = get_option('go_export_password');
+        if (empty($pass)) {
+            $pass = wp_generate_password(8, false);
+            update_option('go_export_password', $pass);
+        }
+        $export_url = home_url('wp-admin/admin.php?page=game-tools&go_download=true&password=' . $pass);
+        //<button id="go_export_game" onclick="window.location.href = 'wp-admin/admin.php?page=game-tools&download=true';">Export All Game Data</button>
+
+        ?>
         <h2>Import and Export Tools</h2>
         <div class="go_tools_section">
             <div class="card">
                 <h2>Export Game Data</h2>
-                <p>You can export Tasks, Maps, Store Items and Categories, Badges, Groups, and Sections.  Does not include student blogs.</p>
-                <p>The other site can retrive your export file from the following URL. Enter the link in the importer tool on the other site.</p>
-                <div id="go_export_pass"><?php echo $export_url ;?></div>
+                <p>You can export Tasks, Maps, Store Items and Categories, Badges, Groups, and Sections. Does not
+                    include student blogs.</p>
+                <p>The other site can retrive your export file from the following URL. Enter the link in the importer
+                    tool on the other site.</p>
+                <div id="go_export_pass"><?php echo $export_url; ?></div>
                 <button onclick="go_CopyToClipboard('go_export_pass')">Copy text</button>
                 <script>
                     function go_CopyToClipboard(containerid) {
@@ -130,20 +135,22 @@ function go_admin_tools_menu_content() {
                             range.selectNode(document.getElementById(containerid));
                             window.getSelection().addRange(range);
                             document.execCommand("copy");
-                            jQuery('#'+containerid).animate({ 'zoom': 1.1 }, 200).animate({ 'zoom': 1 }, 200);
+                            jQuery('#' + containerid).animate({'zoom': 1.1}, 200).animate({'zoom': 1}, 200);
                             //alert("text copied")
-                        }}
+                        }
+                    }
                 </script>
 
             </div>
             <div class="card">
                 <h2>Import Game Data</h2>
                 <p>You will need the export URL from the site you wish to import from.</p>
-                <button id="go_import_game" onclick="window.location.href = 'admin.php?import=gameful';">Import Game Data</button>
+                <button id="go_import_game" onclick="window.location.href = 'admin.php?import=gameful';">Import Game
+                    Data
+                </button>
 
             </div>
         </div>
-
 
 
         <h2>User Management</h2>
@@ -157,13 +164,9 @@ function go_admin_tools_menu_content() {
             do_action('go_user_management_card');//loads other user management cards from modules, i.e., archive
             ?>
         </div>
+        <?php
 
-
-
-
-
-
-    <?php
+    }
     if(is_super_admin() && is_gameful()){
         ?>
         <h2>Super Admin Tools</h2>

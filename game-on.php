@@ -8,12 +8,11 @@ Author URI: https://github.com/mcmick/Gameful
 Version: 5.15
 */
 
-$go_js_version = 5.15;
+$go_js_version = 5.16;
 global $go_js_version;
 
-$go_css_version = 5.15;
+$go_css_version = 5.16;
 global $go_css_version;
-
 
 if(is_gameful() === false && is_multisite()) {
     //this is the multisite not gameful notification

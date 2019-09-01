@@ -7,7 +7,7 @@
             "label": "Feature Setup",
             "name": "",
             "type": "accordion",
-            "instructions": "",
+            "instructions": "<div class=\"go_help_vid\" data-video=\"CE60Lu7j17g\"><\/div>",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -24,7 +24,7 @@
             "label": "Stats Panel",
             "name": "go_stats",
             "type": "group",
-            "instructions": "",
+            "instructions": "<div class=\"go_help_vid\" data-video=\"lieAg9rWRgc\"><\/div>\r\n\r\n<span class=\"tooltip\" data-tippy-content=\"This will be the name of the menu item for the stats panel.\"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -68,7 +68,7 @@
             "label": "Show Home Link in Player Bar",
             "name": "go_home_toggle",
             "type": "true_false",
-            "instructions": "",
+            "instructions": "<div class=\"go_help_vid\" data-video=\"tW3zpJEzK2s\"><\/div>\r\n\r\n<span class=\"tooltip\" data-tippy-content=\"Include the link to the home page in the menu bar.\"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -87,7 +87,7 @@
             "label": "Tasks",
             "name": "go_tasks",
             "type": "group",
-            "instructions": "",
+            "instructions": "<div class=\"go_help_vid\" data-video=\"RBx_cKZq6I8\"><\/div>\r\n\r\n<span class=\"tooltip\" data-tippy-content=\"These are the names for the assignment pages.  Tasks are the page and stages are the page sections.\"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -252,7 +252,7 @@
             "label": "Map",
             "name": "go_locations_map",
             "type": "group",
-            "instructions": "",
+            "instructions": "<div class=\"go_help_vid\" data-video=\"uzzPv33ahyI\"><\/div>\r\n\r\n<span class=\"tooltip\" data-tippy-content=\"You can toggle the map page on and off and choose the page title and the link.\"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -386,7 +386,7 @@
             "label": "Store",
             "name": "go_store",
             "type": "group",
-            "instructions": "",
+            "instructions": "<div class=\"go_help_vid\" data-video=\"mUq-PAJEl_I\"><\/div>\r\n\r\n<span class=\"tooltip\" data-tippy-content=\"You can toggle the map page on and off and choose the page title and the link.\"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -495,7 +495,7 @@
             "label": "Badges",
             "name": "go_badges",
             "type": "group",
-            "instructions": "",
+            "instructions": "<div class=\"go_help_vid\" data-video=\"vtIZ5a0NL-s\"><\/div>\r\n\r\n<span class=\"tooltip\" data-tippy-content=\"Here you can turn on badges and set the name that students see throughout the game for these awards. Badges are a hierarchy with categories and then the actual badges. This means you can create multiple badge categories to keep the badges organized.\"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -594,7 +594,7 @@
             "label": "Groups",
             "name": "go_groups",
             "type": "group",
-            "instructions": "",
+            "instructions": "<div class=\"go_help_vid\" data-video=\"F3m1cruCqA0\"><\/div>\r\n\r\n<span class=\"tooltip\" data-tippy-content=\"Here you can turn on groups and set the name that students see for this feature. Groups are a hierarchy like maps and badges. This means you can create multiple types of groups and students can belong to multiple groups.  For example you can have table groups, professions, and roles as separate group categories and then create the actual groups in each category.\"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -693,12 +693,12 @@
             "label": "Leaderboard",
             "name": "go_stats_leaderboard",
             "type": "group",
-            "instructions": "",
+            "instructions": "<div class=\"go_help_vid\" data-video=\"1ozlJ4woETY\"><\/div>\r\n\r\n<span class=\"tooltip\" data-tippy-content=\"Here you can turn on the leaderboard and set the name of the page\/toolbar link.\"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
             "required": 0,
             "conditional_logic": [
                 [
                     {
-                        "field": "field_5b0f93c92e512",
+                        "field": "field_5abc8e474b1ad",
                         "operator": "==",
                         "value": "1"
                     }
@@ -764,7 +764,7 @@
             "label": "Master Password",
             "name": "go_masterpass",
             "type": "text",
-            "instructions": "",
+            "instructions": "<div class=\"go_help_vid\" data-video=\"LQAgsU2vhU8\"><\/div>\r\n\r\n<span class=\"tooltip\" data-tippy-content=\"This password unlocks all locks and password fields in the game.  Each lock can have a unique password just for it as well.\"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -783,7 +783,7 @@
             "label": "Show Search Box",
             "name": "go_search_toggle",
             "type": "true_false",
-            "instructions": "",
+            "instructions": "<span class=\"tooltip\" data-tippy-content=\"Add a search bar to the toolbar.  Be careful with this if you are using hidden quests--it will find them as well.\"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -802,7 +802,7 @@
             "label": "Guest Access Global Setting",
             "name": "go_guest_global",
             "type": "radio",
-            "instructions": "",
+            "instructions": "<div class=\"go_help_vid\" data-video=\"F3m1cruCqA0\"><\/div>\r\n\r\n<span class=\"tooltip\" data-tippy-content=\"Set how you want visitors that are not logged in to view the content.  By default not logged in users can see content that once logged in might be hidden.  There is an override on each quest if you have specific content you want hidden until the players achieve the unlock condition. \"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -817,17 +817,17 @@
             },
             "allow_null": 0,
             "other_choice": 0,
-            "save_other_choice": 0,
             "default_value": "regular",
             "layout": "horizontal",
-            "return_format": "value"
+            "return_format": "value",
+            "save_other_choice": 0
         },
         {
             "key": "field_5adc010641915",
             "label": "Loot Options",
             "name": "",
             "type": "accordion",
-            "instructions": "",
+            "instructions": "<div class=\"go_help_vid\" data-video=\"oooxUh-lYR4\"><\/div>",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -844,7 +844,7 @@
             "label": "Experience",
             "name": "go_loot_xp",
             "type": "group",
-            "instructions": "",
+            "instructions": "<div class=\"go_help_vid\" data-video=\"WvrL5doJAqs\"><\/div>\r\n\r\n<span class=\"tooltip\" data-tippy-content=\"Experience (XP) tracks how much progress a player has in the game.  It works with levels to 'level up' and can be used to lock quests and store items.\"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -934,7 +934,7 @@
             "label": "Currency",
             "name": "go_loot_gold",
             "type": "group",
-            "instructions": "",
+            "instructions": "<div class=\"go_help_vid\" data-video=\"k0q1jJL8i9Y\"><\/div>\r\n\r\n<span class=\"tooltip\" data-tippy-content=\"Currency can be a single denomination with decimals (e.g., $12.42) or coins (12 gold, 4 silver, and 2 copper). This is the spendable loot store and can also be used as a lock.\"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1256,7 +1256,7 @@
             "label": "Reputation",
             "name": "go_loot_health",
             "type": "group",
-            "instructions": "",
+            "instructions": "<div class=\"go_help_vid\" data-video=\"Sr4kuaV2Qeo\"><\/div>\r\n\r\n<span class=\"tooltip\" data-tippy-content=\"Reputation modifies the amount of currency awarded on quests. 100 reputation gives 100%. This is designed to be a behavior modifier. Taken all together this means that do you work and do the expected behaviors (which includes doing work) and you will get more gold.\"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1425,7 +1425,7 @@
             "label": "Levels",
             "name": "",
             "type": "accordion",
-            "instructions": "",
+            "instructions": "<div class=\"go_help_vid\" data-video=\"ehm7lJDhBOA\"><\/div>",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1686,7 +1686,7 @@
             "label": "Sections",
             "name": "sections",
             "type": "repeater",
-            "instructions": "",
+            "instructions": "<span class=\"tooltip\" data-tippy-content=\"These are the different classes periods that are taught (i.e., period 1, period 2, etc.)\"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1747,7 +1747,7 @@
             "label": "Seats",
             "name": "go_seats",
             "type": "group",
-            "instructions": "",
+            "instructions": "<span class=\"tooltip\" data-tippy-content=\"These are useful as a type of seating chart.  There is no visual seating chart, but this does allow students to be sorted on the clipboard tool by their seat number. Examples of other names: stations, computer, star-base) \"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1804,7 +1804,7 @@
             "label": "User Blogs",
             "name": "go_blogs_toggle",
             "type": "true_false",
-            "instructions": "Show blogs link on Stats Panel and Clipboard.",
+            "instructions": "<span class=\"tooltip\" data-tippy-content=\"Show blogs link on Stats Panel and Clipboard.\"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1823,7 +1823,7 @@
             "label": "Real Name Filter",
             "name": "go_full-names_toggle",
             "type": "radio",
-            "instructions": "This controls how users see each others names. Admin always see the full name on the stats panel and leaderboard.",
+            "instructions": "<span class=\"tooltip\" data-tippy-content=\"This controls how players see each others names. Admin always see the full name on the stats panel and leaderboard.\"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1848,7 +1848,7 @@
             "label": "About Me Quest",
             "name": "about_me",
             "type": "group",
-            "instructions": "Set a quest where students answers will be output on a tab in the stats panel. This is like having students fill out an information card that you have quick access to.  You can change this card out throughout the year here.",
+            "instructions": "<span class=\"tooltip\" data-tippy-content=\"Set a quest where students answers will be output on a tab in the stats panel. This is like having students fill out an information card that you have quick access to.  You can change this card out throughout the year here.\"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1955,5 +1955,5 @@
     "active": 1,
     "description": "",
     "recaptcha": 0,
-    "modified": 1565551877
+    "modified": 1566937840
 }

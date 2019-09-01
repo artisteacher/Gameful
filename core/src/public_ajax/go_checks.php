@@ -303,7 +303,7 @@ function go_blog_check ($custom_fields, $i, $status, $go_actions_table_name, $us
         }
 
         if ($i != $status && !$all_content){//if this is a complete stage, print the result
-            go_blog_post($blog_post_id, $post_id, true, true, false, true, $i, null, $instructions);
+            go_blog_post($blog_post_id, $post_id, true, true, false, true, $i, null, false, false, $instructions);
         }
         else{//this is the current stage and print the form (or all content is on)
             go_blog_form($blog_post_id, '', $post_id, $i, $bonus_status, true, $all_content, $instructions);
@@ -331,7 +331,7 @@ function go_blog_check ($custom_fields, $i, $status, $go_actions_table_name, $us
 
         if ($bonus_status >= $go_bonus_count && !$all_content) {//if this is a complete stage
             $blog_post_id = go_get_bonus_blog_post_id($post_id,$user_id, $go_print_next, false );
-            go_blog_post($blog_post_id, $post_id, true, true, false, true, null, $go_bonus_count, $instructions);
+            go_blog_post($blog_post_id, $post_id, true, true, false, true, null, $go_bonus_count, false, false, $instructions);
             if($bonus_status == $go_bonus_count){
                 go_buttons($user_id, $custom_fields, $i, $stage_count, $status, $check_type, $bonus, $bonus_status, $repeat_max, false, $blog_post_id);
 

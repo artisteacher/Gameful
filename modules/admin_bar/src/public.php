@@ -296,6 +296,13 @@ function go_stats_leaderboard() {
     // prepares tab titles
     $xp_name = get_option("options_go_loot_xp_name");
     $gold_name = get_option("options_go_loot_gold_name");
+
+    $coins_currency = get_option("options_go_loot_gold_currency");
+    if($coins_currency === 'coins') {
+        $gold_name = get_option("options_go_loot_gold_coin_names_gold_coin_name");
+    }
+
+
     $health_name = get_option("options_go_loot_health_name");
     $badges_name = get_option('options_go_badges_name_singular') . " Count";
 

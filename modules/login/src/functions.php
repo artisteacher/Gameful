@@ -9,36 +9,18 @@ function check_activation_key_redirect_to_page() {
     // We check if the key is not empty
     $self = (isset($_SERVER['PHP_SELF']) ?  $_SERVER['PHP_SELF'] : null);
     if ($self == '/wp-activate.php') {
+        //redirect to profile page, with key in query var
+        //show a form to choose a password
+        //then do the activation
         if (!empty($_GET['key']) || !empty($_POST['key'])) {
             $key = !empty($_GET['key']) ? $_GET['key'] : $_POST['key'];
             // Activates the user and send user/pass in an email
-            $result = wpmu_activate_signup($key);
 
-            if (!is_wp_error($result)) {
-                //extract($result);
-                $user_data = get_userdata($result['user_id']);
-                $user_name = $user_data->user_login;
-                $new_password = $result['password'];
-                $creds = array();
-                $creds['user_login'] = $user_name;
-                $creds['user_password'] = $new_password;
-                $creds['remember'] = false;
-
-                $user = wp_signon( $creds, false );
-                if ( is_wp_error($user) )
-                    echo $user->get_error_message();
-                //print_r($user);
-                //exit;
-                // Save the user object to the session
-                setcookie('my_active_user_variable', json_encode($creds), time()+60);
-                // Redirect to the network home url
-                wp_redirect(site_url('profile?activated'));
-                exit;
-            }
+            wp_redirect(site_url('register?activate=true&key='.$key));
+            exit;
         }
     }
 }
-
 
 /** Change default error messages **/
 function go_custom_error_messages($errors) {
@@ -130,6 +112,30 @@ function go_login_redirect_queries($redirect_to, $request_redirect_to, $user) {
 
 //resets the social login cookie
 function go_login_footer(){
+    $referer = $_SERVER['REDIRECT_QUERY_STRING'];
+    $referer = urldecode($referer);
+    $parts = parse_url($referer);
+
+    if(!empty($parts['query'])) {
+        parse_str($parts['query'], $query);
+        $blog_id = (isset($query['blog_id']) ?  $query['blog_id'] : null);
+        //echo $blog_id;
+        //$gameful = is_gameful();
+        //echo $gameful;
+        if(is_gameful()) {
+            switch_to_blog($blog_id);
+            // echo 'switch';
+        }
+    }
+
+    //$url = 'google.com';
+    $url = site_url();
+    //echo $url;
+    //print_r($url);
+
+    if(is_gameful()) {
+        restore_current_blog();
+    }
     ?>
     <script>
     jQuery(window).load(function(){
@@ -142,24 +148,18 @@ function go_login_footer(){
 
         }, 100);
 
+        jQuery(".login h1 a").attr('href', "<?php echo $url; ?>");
         //alert (host);
     });
+
     </script>
     <?php
 }
 add_action('login_footer', 'go_login_footer');
 
 // changing the logo link from wordpress.org to your site
+/*
 function go_login_url($url) {
-    /*
-
-    $referer = $_SERVER['REDIRECT_QUERY_STRING'];
-    $parts = parse_url($referer);
-    parse_str($parts['query'], $query);
-    $blog_id = (isset($query['blog_id']) ?  $query['blog_id'] : null);
-    if(is_gameful()) {
-        switch_to_blog($blog_id);
-    }*/
 
 
     $referer = $_SERVER['REDIRECT_QUERY_STRING'];
@@ -169,13 +169,18 @@ function go_login_url($url) {
     if(!empty($parts['query'])) {
         parse_str($parts['query'], $query);
         $blog_id = (isset($query['blog_id']) ?  $query['blog_id'] : null);
-
+        //echo $blog_id;
+        //$gameful = is_gameful();
+        //echo $gameful;
         if(is_gameful()) {
             switch_to_blog($blog_id);
+           // echo 'switch';
         }
     }
 
-    $url = home_url();
+    //$url = 'google.com';
+    $url = site_url();
+    //echo $url;
     //print_r($url);
 
     if(is_gameful()) {
@@ -184,10 +189,10 @@ function go_login_url($url) {
 
     return $url;
 
-}
-add_filter( 'login_headerurl', 'go_login_url', 999 );
+}*/
+//add_filter( 'login_headerurl', 'go_login_url', 999 );
 
-function my_login_logo() {
+function go_login_logo() {
     $referer = $_SERVER['REDIRECT_QUERY_STRING'];
     $referer = urldecode($referer);
     $parts = parse_url($referer);
@@ -233,15 +238,17 @@ function my_login_logo() {
 
             #backtoblog {display:none !important;}
         </style>
+
         <?php
 
-    }}
-add_action( 'login_enqueue_scripts', 'my_login_logo', 999 );
+    }
+
+}
+add_action( 'login_enqueue_scripts', 'go_login_logo', 999 );
 
 //USE THIS FOR INSTUCTIONS ABOUT DOMAINS
 //* Add custom message to WordPress login page
 function go_bad_domain_message ($errors) {
-
     if ('bad_domain' === $_GET['login']) {
         $referer = $_SERVER['REDIRECT_QUERY_STRING'];
         $parts = parse_url($referer);
@@ -258,7 +265,6 @@ function go_bad_domain_message ($errors) {
     return $errors;
 }
 add_filter('wp_login_errors', 'go_bad_domain_message');
-
 
 //determine the correct login redirect page based on status and options
 function go_get_user_redirect($user_id = null){
@@ -348,7 +354,6 @@ function validate_email_against_domains($email){
  */
 add_action('nsl_limit_domains', 'go_limit_domains');
 function go_limit_domains($args){
-
     $email = $args[0];
     $blog_url = $args[1];
 
@@ -519,6 +524,45 @@ function go_profile_template_include($template){
     return $template; //Load normal template when $page_value != "true" as a fallback
 }
 
+
+/**
+ * ADD New AVATAR PAGE
+ */
+
+add_action('init', 'go_new_avatar_rewrite');
+function go_new_avatar_rewrite(){
+        $page_name = 'new_avatar';
+        add_rewrite_rule($page_name, 'index.php?' . $page_name . '=true', "top");
+}
+
+// Query Vars
+add_filter( 'query_vars', 'go_new_avatar_query_var' );
+function go_new_avatar_query_var( $vars ) {
+    $page_name = 'new_avatar';
+    $vars[] = $page_name;
+    return $vars;
+}
+
+/* Template Include */
+add_filter('template_include', 'go_new_avatar_template_include', 1, 1);
+function go_new_avatar_template_include($template){
+
+    if (!is_main_site() || !is_gameful()) {
+        $page_name = 'new_avatar';
+        global $wp_query; //Load $wp_query object
+
+        $page_value = (isset($wp_query->query_vars[$page_name]) ? $wp_query->query_vars[$page_name] : false); //Check for query var "blah"
+
+        if ($page_value && $page_value == "true") { //Verify "blah" exists and value is "true".
+
+            acf_form_head();
+            return plugin_dir_path(__FILE__) . 'templates/user.php'; //Load your template or file
+
+        }
+    }
+    return $template; //Load normal template when $page_value != "true" as a fallback
+}
+
 /************************
  * ADD Registration PAGE
  */
@@ -557,7 +601,7 @@ function go_registration_template_include($template){
         $page_value = (isset($wp_query->query_vars[$page_name]) ? $wp_query->query_vars[$page_name] : false); //Check for query var "blah"
 
         if ($page_value && $page_value == "true") { //Verify "blah" exists and value is "true".
-            acf_form_head();
+
             return plugin_dir_path(__FILE__) . 'templates/user.php'; //Load your template or file
         }
     }
@@ -669,6 +713,7 @@ function go_join_template_include($template){
     }
     return $template; //Load normal template when $page_value != "true" as a fallback
 }
+
 
 function go_include_password_checker(){
     $minPassword = get_option('options_minimum_password_strength');
@@ -830,15 +875,11 @@ function go_validate_password($valid, $value, $field, $input){
 
 //prints the form for changing the password
 function go_update_password_lightbox(){
-
-    echo "<div style='display: none;'><div class='go_password_change_container'>";
-
+    echo "<div style='display: none;'><div class='go_password_change_container' style='min-width: 300px;'>";
     $groups = array();
     $fields = array('field_5cd3640730f19', 'field_5cd3638830f17', 'field_5cd363d130f18', 'field_5cd52c8f46296');
     $form =  go_acf_user_form_func($groups, $fields, 'password_reset', get_site_url(null, '/profile'));
     echo $form;
-    //echo '<span class="password-strength"></span>';
-
     echo "</div></div>";
     die();
 }
@@ -890,14 +931,84 @@ function acf_save_user( $post_id ) {
     //RESET PASSWORDS
     if ($post_id === 'password_reset'){
         $user_id = get_current_user_id();
-        $newpassword = (isset($_POST['acf']['field_5cd3638830f17']) ?  $_POST['acf']['field_5cd3638830f17'] : null);
+        $new_password = (isset($_POST['acf']['field_5cd3638830f17']) ?  $_POST['acf']['field_5cd3638830f17'] : null);
 
-        wp_set_password( $newpassword, $user_id );
+        wp_set_password( $new_password, $user_id );
         wp_clear_auth_cookie();
         wp_set_current_user ( $user_id );
         wp_set_auth_cookie  ( $user_id );
     }
+    if ($post_id === 'activate_user'){
+        //activate the user
 
+        $key = !empty($_GET['key']) ? $_GET['key'] : null;
+        if(is_gameful()){
+            $primary_blog_id = get_main_site_id();
+            switch_to_blog(intval($primary_blog_id));
+        }
+
+        $result = wpmu_activate_signup($key);
+
+        if (is_wp_error( $result )){
+            echo "There was an error with your activation.";
+            exit;
+        }
+
+
+        $user_id = !empty($result['user_id']) ? $result['user_id'] : null;
+
+        if(is_gameful()){
+            restore_current_blog();
+        }
+
+        if ($user_id != null) {
+            //$user_id = get_current_user_id();
+            $new_password = (isset($_POST['acf']['field_5cd3638830f17']) ?  $_POST['acf']['field_5cd3638830f17'] : null);
+            //extract($result);
+            $user_data = get_userdata($result['user_id']);
+            $user_name = $user_data->user_login;
+            $user_id = $user_data->ID;
+            //$new_password = $result['password'];
+
+            //set the new password
+            wp_set_password( $new_password, $user_id );
+            wp_clear_auth_cookie();
+            wp_set_current_user ( $user_id );
+            wp_set_auth_cookie  ( $user_id );
+
+/*
+            print_r($result);
+            echo $user_id;
+            echo $user_name;
+            exit;
+*/
+            /*
+            //login with the new password
+            $creds = array();
+            $creds['user_login'] = $user_name;
+            $creds['user_password'] = $new_password;
+            $creds['remember'] = false;
+            $user = wp_signon( $creds, false );
+            if ( is_wp_error($user) ) {
+                echo $user->get_error_message();
+                exit;
+            }
+            //print_r($user);
+            //exit;
+            // Save the user object to the session
+            //setcookie('my_active_user_variable', json_encode($creds), time()+60);
+            // Redirect to the network home url
+            */
+            wp_redirect(site_url('profile'));
+
+            exit;
+        }
+        else{
+            echo "ERROR:";
+            print_r($result);
+            exit;
+        }
+    }
     //UPDATE A PROFILE
     if (substr($post_id, 0 , 5) === 'user_') {
 
@@ -1070,6 +1181,7 @@ add_filter('acf/update_value/name=user-seat', 'go_update_seats', 10, 3);
 //add_filter('acf/update_value/key=field_5cd5031deb293', 'go_update_seats', 10, 3);
 
 //this changes the logo on the default wordpress login
+/*
 function go_login_logo()
 {
     $logo = get_option('options_go_login_logo');
@@ -1079,6 +1191,7 @@ function go_login_logo()
         //$url = wp_get_attachment_image_src($logo, '250, 250');
         $url = wp_get_attachment_image_src($logo, 'medium');
         $url = $url[0];
+        $site_url = site_url();
         ?>
         <style type="text/css">
             #login h1 a, .login h1 a {
@@ -1089,13 +1202,18 @@ function go_login_logo()
                 background-size: unset;
                 background-size: auto 150px;;
             }
+
         </style>
+
+        <script>
+            jQuery("#login h1 a").attr("href", "<?php echo $site_url; ?>");
+        </script>
 
         <?php
 
     }
-}
-add_action( 'login_enqueue_scripts', 'go_login_logo' );
+}*/
+//add_action( 'login_enqueue_scripts', 'go_login_logo' );
 
 
 

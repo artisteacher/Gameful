@@ -186,16 +186,21 @@ function go_reader_activate() {
 /**
  * Changes roles so subscribers can upload media
  */
+//add_action('admin_init', 'go_media_access');//this can be removed later
 function go_media_access() {
+    $roles = array('subscriber', 'contributor');
+    foreach($roles as $role) {
+        $role = get_role($role);
+        $role->add_cap('upload_files');
 
-    $role = get_role( 'subscriber' );
-    $role->add_cap( 'upload_files' );
-
-    if(is_gameful()){
-        $blog_id = get_current_blog_id();
-        if($blog_id===1){
-            $role = get_role( 'subscriber' );
-            $role->remove_cap( 'upload_files' );
+        if (is_gameful()) {
+            $blog_id = get_current_blog_id();
+            if ($blog_id === 1) {
+                foreach($roles as $role) {
+                    $role = get_role($role);
+                    $role->remove_cap('upload_files');
+                }
+            }
         }
     }
 }

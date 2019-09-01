@@ -168,10 +168,18 @@ function go_buy_item() {
 
     ob_end_clean();
 
+    ob_start();
+    //load custom content here
+    //Make a page for custom content--content that is locked until purchased.  Options include:
+    //new avatar, content with videos, css for custom background/admin-bar colors
+    $buffer2 = ob_get_contents();
+
+    ob_end_clean();
     echo json_encode(
         array(
             'json_status' => 'success',
-            'html' => $buffer
+            'html' => $buffer,
+            'unlocked_content' => $buffer2,
         )
     );
     die();

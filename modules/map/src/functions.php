@@ -23,6 +23,7 @@ function go_map_page(){
 }
 
 
+
 $go_map_switch = get_option( 'options_go_locations_map_toggle' );
 
 if ($go_map_switch) {

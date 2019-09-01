@@ -79,9 +79,7 @@ function go_stats_leaderboard_dataloader_ajax(){
 
     $order_dir = $_GET['order'][0]['dir'];
     $order_col = $_GET['order'][0]['column'];
-    if($is_admin){
-        $order_col--;
-    }
+
     if ($order_col == 3){
         $order_col = 'xp';//xp
     }

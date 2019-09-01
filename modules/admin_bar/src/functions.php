@@ -101,14 +101,31 @@ function go_admin_bar_v5() {
         $wp_admin_bar->remove_node('new-tasks');
         $wp_admin_bar->remove_node('new-go_store');
 
-        if ( !current_user_can('manage_options') ) { // ONLY DO THIS FOR ADMIN
+        if ( !current_user_can('manage_options') ) { // IF NOT AN ADMIN (Contributors)
             $wp_admin_bar->remove_node('comments');
             $wp_admin_bar->remove_node('archive');
             $wp_admin_bar->remove_node('wu-my-account');
             $wp_admin_bar->remove_node('my-account');
+            $wp_admin_bar->remove_node('search');
+            $wp_admin_bar->remove_node('search');
+
         }
 
-
+        //remove the comments and new post from the "My Sites"
+        if (is_gameful()) {
+            $nodes = $wp_admin_bar->get_nodes();
+            foreach ($nodes as $node) {
+                $node = $node->id;
+                if (strpos($node, 'blog') !== false) {
+                    if (strpos($node, '-c') !== false) {
+                        $wp_admin_bar->remove_node($node);
+                    }
+                    if (strpos($node, '-n') !== false) {
+                        $wp_admin_bar->remove_node($node);
+                    }
+                }
+            }
+        }
 
 
         ///
@@ -531,6 +548,8 @@ function go_admin_bar_remove_items() {
         $wp_admin_bar->remove_menu('updates');
         $wp_admin_bar->remove_menu( 'w3tc' );
     }
+
+
 }
 add_action( 'wp_before_admin_bar_render', 'go_admin_bar_remove_items', 0 );
 

@@ -295,7 +295,7 @@ function go_add_toplevel_menu() {
     );*/
 
     //remove menu items for non admins
-    if ( !current_user_can('manage_options') ) { // ONLY DO THIS FOR ADMIN
+    if ( !current_user_can('manage_options') ) { // IF NOT AN ADMIN
         global  $menu;
         foreach ($menu as $this_menu){
 
@@ -308,11 +308,7 @@ function go_add_toplevel_menu() {
         global  $submenu;
         remove_submenu_page( 'edit.php?post_type=tasks', 'edit.php?post_type=tasks_templates' );
         remove_submenu_page( 'edit.php?post_type=tasks', 'edit-tags.php?taxonomy=task_chains&post_type=tasks' );
-
-
     }
-
-
 }
 add_action( 'admin_menu', 'go_add_toplevel_menu');
 

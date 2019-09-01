@@ -3,6 +3,16 @@ img {
   max-width: 100%;
   height: auto; }
 
+.go_help_vid {
+  float: left;
+  padding: 0 8px; }
+
+.go_display_flex {
+  display: flex; }
+
+.go_help_info_icon {
+  font-size: 1.2em; }
+
 .go_favorite_container label {
   cursor: pointer; }
   .go_favorite_container label input[type="checkbox"] {
@@ -148,6 +158,9 @@ video.wp-video-shortcode {
 .featherlight {
   z-index: 100002 !important;
   background: rgba(0, 0, 0, 0.8) !important; }
+
+.featherlight.help {
+  z-index: 999999 !important; }
 
 #__wp-uploader-id-2 {
   z-index: 100003 !important; }
@@ -375,17 +388,12 @@ video.wp-video-shortcode {
   margin: 10px;
   background-color: #ddd; }
 
-.go_lock, .go_late_mods, .go_sched_access_message, .go_timer_message {
+.go_lock, .go_late_mods, .go_sched_access_message, .go_timer_message, .go_checks_and_buttons {
   border: solid 1px;
   border-radius: 5px;
   padding: 10px;
   margin: 10px;
-  background-color: #f5b3bd;
-}
-
-.go_checks_and_buttons {
-  padding: 10px;
-}
+  background-color: #f5b3bd; }
 
 .go_lock .go_error_red {
   color: unset; }

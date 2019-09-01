@@ -131,7 +131,7 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
 
             $is_hidden = (isset($term_custom['go_hide_map'][0]) ?  $term_custom['go_hide_map'][0] : null);
             if ($is_hidden){
-                return;
+                continue;
             }
 
             //$term_object = get_term($term_id);

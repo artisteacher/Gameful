@@ -16,7 +16,7 @@ if ( !is_admin() ) {
     //$request_uri = str_replace('?updated=true', '', $request_uri);
 
 
-    if ($page_uri == 'profile' || $page_uri == 'register' || $page_uri == 'join' || $page_uri == 'bad_domain') {
+    if ($page_uri == 'profile' || $page_uri == 'register' || $page_uri == 'join' || $page_uri == 'bad_domain' || $page_uri == 'new_avatar') {
         $acf_location = dirname(__DIR__) . '/../includes/acf/acf.php';
         include($acf_location);
 
@@ -43,6 +43,7 @@ if ( !is_admin() ) {
 
     add_action( 'wp_ajax_go_update_password', 'go_update_password' ); //OK
     add_action( 'wp_ajax_go_update_password_lightbox', 'go_update_password_lightbox' ); //OK
+    add_action( 'wp_ajax_go_activate_password_lightbox', 'go_activate_password_lightbox' ); //OK
     $action  = (isset($_POST['action']) ?  $_POST['action'] : null);
     if ($action==='go_update_password_lightbox') {
         $acf_location = dirname(__FILE__) . '/../../includes/acf/acf.php';

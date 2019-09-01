@@ -82,4 +82,5 @@ function go_clipboard_filters(){
 }
 
 
-?>
+
+

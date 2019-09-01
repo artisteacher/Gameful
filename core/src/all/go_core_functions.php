@@ -264,6 +264,11 @@ function go_get_page_uri(){
    // }
 
     $str = basename($request_uri);
+    $sub = substr($str, 0, 1);
+    if ($sub == '?'){
+        $request_uri = str_replace($str, '', $request_uri);
+        $str = basename($request_uri);
+    }
     $page_uri = strtok($str,'?');
     //$strip_path = str_replace($path, '', $request_uri);
     //$strip_slashes = str_replace('/','',$strip_path);
