@@ -313,12 +313,13 @@ function go_add_from_template_edit_screen() {
 // hide certain meta boxes on the 'YOUR_CUSTOM_POST_TYPE' custom post type
 add_filter('add_meta_boxes', 'hide_meta_boxes_tasks', 99, 3);
 function hide_meta_boxes_tasks() {
+    remove_meta_box('postimagediv', 'tasks', 'normal');
+    remove_meta_box('postimagediv', 'tasks', 'side');
     remove_meta_box('postexcerpt', 'tasks', 'normal');
     remove_meta_box('trackbacksdiv', 'tasks', 'normal');
     remove_meta_box('postcustom', 'tasks', 'normal');
     remove_meta_box('slugdiv', 'tasks', 'normal');
     remove_meta_box('generate_layout_options_meta_box', 'tasks', 'normal');
-    remove_meta_box('postimagediv', 'tasks', 'normal');
     ////remove_meta_box('commentstatusdiv', 'tasks', 'normal');
     //remove_meta_box('commentsdiv', 'tasks', 'normal');
     //remove_meta_box('revisionsdiv', 'tasks', 'normal');
@@ -335,5 +336,6 @@ function hide_meta_boxes_tasks_templates() {
     remove_meta_box('commentsdiv', 'tasks_templates', 'normal');
     remove_meta_box('generate_layout_options_meta_box', 'tasks', 'normal');
     remove_meta_box('postimagediv', 'tasks', 'normal');
+    remove_meta_box('postimagediv', 'tasks', 'side');
     //remove_meta_box('revisionsdiv', 'tasks', 'normal');
 }
