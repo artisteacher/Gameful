@@ -336,7 +336,6 @@ function multisite_custom_css_map_meta_cap( $caps, $cap ) {
 }
 
 
-
 function add_defer_attribute($tag, $handle) {
     // add script handles to the array below
     $scripts_to_skip = array('jquery-core',
@@ -444,8 +443,6 @@ function temp_convert_all_featured_images(){
         go_delete_transient($key);
 
     }
-
-
     //if it has featured image
     //set new featured image
     //remove old retured image
