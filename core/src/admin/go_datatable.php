@@ -2,8 +2,11 @@
 //https://codex.wordpress.org/Creating_Tables_with_Plugins
 global $wpdb;
 
+
+go_update_db_check();
+
 function go_update_db_check() {
-    $go_db_version = 5.1;
+    $go_db_version = 5.2;
     $old_version = get_option( 'go_db_version' );
 
     if ( $old_version != $go_db_version ) {
@@ -26,6 +29,7 @@ function go_update_db() {
     go_table_actions();
     go_install_data();
     //go_set_options_autoload(); //legacy function
+    go_convert_all_featured_images();
 }
 
 function go_table_tasks() {
@@ -354,6 +358,36 @@ function go_open_comments() {
 }
 
 
+function go_convert_all_featured_images(){
+    //get all posts
+    //for each post
+    $args = array(
+        'post_type' => 'tasks',
+        'meta_query' => array(
+            array(
+                'key' => '_thumbnail_id',
+            )
+        )
+    );
+    $query = new WP_Query($args);
+
+    $posts = $query->posts;
+    foreach($posts as $post){
+        $image_id = get_post_meta($post->ID,'_thumbnail_id');
+        $image_id = $image_id[0];
+        $post_id = $post->ID;
+        update_post_meta( $post_id, 'go_featured_image', $image_id );
+        //delete_post_meta( $post_id, '_thumbnail_id' );
+        $key = 'go_post_data_' . $post_id;
+        go_delete_transient($key);
+
+    }
+
+
+    //if it has featured image
+    //set new featured image
+    //remove old retured image
+}
 
 
 

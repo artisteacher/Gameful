@@ -80,28 +80,37 @@ function go_task_change_stage() {
 
     if ($button_type == 'continue_bonus' || $button_type == 'complete_bonus' || $button_type == 'undo_bonus' || $button_type == 'undo_last_bonus' || $button_type == 'abandon_bonus') {
         $db_status = go_get_bonus_status($post_id, $user_id);
-
+        $db_check_type = (isset($custom_fields['go_bonus_stage_check_v5'][0]) ?  $custom_fields['go_bonus_stage_check_v5'][0] : null);
         if ($button_type == 'continue_bonus' || $button_type == 'complete_bonus' ) {
-            global $go_print_next;//the bonus stage to be printed, sometimes they print out of order if posts were trashed
-            $go_print_next = (isset($go_print_next) ?  $go_print_next : $next_bonus  );
-            global $go_bonus_count;//the bonus stage to be printed, sometimes they print out of order if posts were trashed
-            $go_bonus_count = (isset($go_bonus_count) ?  $go_bonus_count : $status );
+           // global $go_print_next;//the bonus stage to be printed, sometimes they print out of order if posts were trashed
+           // $go_print_next = (isset($go_print_next) ?  $go_print_next : $next_bonus  );
+           // global $go_bonus_count;//the bonus stage to be printed, sometimes they print out of order if posts were trashed
+           // $go_bonus_count = (isset($go_bonus_count) ?  $go_bonus_count : $status );
+            global $go_bonus_direction;
+            $go_bonus_direction = 'up';
 
         }
         if ($button_type == 'undo_bonus' || $button_type == 'undo_last_bonus') {
-            global $go_print_next;//the offset for the post search, they print in order of post modified
-            $go_print_next = (isset($go_print_next) ?  $go_print_next : $next_bonus - 2);
-            global $go_bonus_count;//the bonus stage to be printed
-            $go_bonus_count = (isset($go_bonus_count) ?  $go_bonus_count : $status );
+           // global $go_print_next;//the offset for the post search, they print in order of post_date
+           // $go_print_next = (isset($go_print_next) ?  $go_print_next : $next_bonus - 2);
+           // global $go_bonus_count;//the bonus stage to be printed
+            //$go_bonus_count = (isset($go_bonus_count) ?  $go_bonus_count : $status );
+            global $go_bonus_direction;
+            $go_bonus_direction = 'down';
 
         }
     }
     else{
         $db_status = go_get_status($post_id, $user_id);
+
+        $db_check_type = 'go_stages_' . $db_status . '_check_v5'; //which type of check to print
+        //$check_type = $custom_fields[$check_type][0];
+        $db_check_type = (isset($custom_fields[$db_check_type][0]) ?  $custom_fields[$db_check_type][0] : null);
+
     }
 
     //this makes sure the action wasn't done twice (perhaps two windows open) and refreshed page if it appears that is the case.
-    if ($status != $db_status && $check_type != 'unlock'){
+    if (($status != $db_status && $check_type != 'unlock') || ($db_check_type != $check_type && $check_type != 'show_bonus' && $check_type != 'unlock')){
         echo json_encode(
             array(
                 'json_status' => 'refresh'
@@ -186,7 +195,9 @@ function go_task_change_stage() {
         //if task is complete, award badges and groups
         if ($button_type == 'complete') {
             $group_ids = (isset($custom_fields['go_groups'][0]) ?  $custom_fields['go_groups'][0] : null);
-
+            if(empty($group_ids)){
+                $group_ids = null;
+            }
             $task_badge_id = (isset($custom_fields['go_badges'][0]) ?  $custom_fields['go_badges'][0] : null);//badge awarded on this task
             $term_badge_ids = go_badges_task_chains($post_id, $user_id, $custom_fields);//badges awarded on this term
             if (!empty($term_badge_ids)){
@@ -282,8 +293,9 @@ function go_task_change_stage() {
             $xp = ($row->xp) * -1;
             $gold = ($row->gold) * -1;
             $health = ($row->health) * -1;
-            go_update_actions( $user_id, 'undo_bonus_loot',  $post_id, null, null, null, $result, null, null, null, null,  $xp, $gold, $health, null, null, true);
-
+            if(!empty($xp) || !empty($gold) || !empty($health) || !empty($badge_ids) || !empty($group_ids)) {
+                go_update_actions($user_id, 'undo_bonus_loot', $post_id, null, null, null, $result, null, null, null, null, $xp, $gold, $health, null, null, true);
+            }
             ///////
         }
 
@@ -386,6 +398,17 @@ function go_task_change_stage() {
     // stores the contents of the buffer and then clears it
     $buffer = ob_get_contents();
     ob_end_clean();
+
+    //apply the breeze cache plugin to ajax content
+/*
+    if (function_exists('breeze_ob_start_callback')) {
+        //$buffer = breeze_ob_start_callback($buffer);
+        $buffer = apply_filters('breeze_cdn_content_return',$buffer);
+        //$buffer .= '<div>yes breeze</div>';
+    }else{
+       // $buffer .= '<div>no breeze</div>';
+    }*/
+
     // constructs the JSON response
     echo json_encode(
         array(
@@ -541,7 +564,7 @@ function go_badges_task_chain_undo($post_id, $custom_fields, $user_id){
     }
     return $badges;
     }
-};
+}
 
 
 

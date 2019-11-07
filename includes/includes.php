@@ -24,6 +24,7 @@ if ( defined( 'DOING_AJAX' )) {
     include_once('custom-acf-fields/acf-level2-taxonomy/acf-level2-taxonomy.php');
     include_once('custom-acf-fields/acf-quiz/acf-quiz.php');
     include_once('custom-acf-fields/acf-typography-field/acf-typography.php');
+    include_once('custom-acf-fields/advanced-custom-fields-font-awesome/acf-font-awesome.php');
 
     //Allows uploading on frontend
     include( 'wp-frontend-media-master/frontend-media.php' );
@@ -39,6 +40,7 @@ else if ( is_admin() ) {
     include_once('custom-acf-fields/acf-level2-taxonomy/acf-level2-taxonomy.php');
     include_once('custom-acf-fields/acf-quiz/acf-quiz.php');
     include_once('custom-acf-fields/acf-typography-field/acf-typography.php');
+    include_once('custom-acf-fields/advanced-custom-fields-font-awesome/acf-font-awesome.php');
 
 }
 else{

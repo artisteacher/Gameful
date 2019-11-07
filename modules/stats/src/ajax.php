@@ -158,12 +158,10 @@ function go_stats_lightbox() {
     die();
 }
 
-
-
 function go_loot_headers($totals = null){
     $xp_abbr = get_option( "options_go_loot_xp_abbreviation" );
     //$gold_abbr = get_option( "options_go_loot_gold_abbreviation" );
-    $gold_abbr = go_gold_abbreviation();
+    $gold_abbr = go_get_loot_short_name('gold');
     $health_abbr = get_option( "options_go_loot_health_abbreviation" );
 
     $xp_toggle = get_option('options_go_loot_xp_toggle');
@@ -216,7 +214,6 @@ function go_loot_headers($totals = null){
  * @param null $user_id
  * @param bool $not_ajax
  */
-//THIS CAN BE REMOVED FOR v5--or changed to show about blog post?
 function go_stats_about($user_id, $not_ajax = false) {
 
     if (!$not_ajax){
@@ -771,10 +768,11 @@ function go_stats_store_item_dataloader(){
     $user_id = $_GET['user_id'];
 
     $sWhere = "WHERE uid = ".$user_id . " AND (action_type = 'store') ";
+    $sWhere2 = '';
 
     if ( isset($search_val) && $search_val != "" )
     {
-
+/*
         $sWhere .= " AND (";
         for ( $i=0 ; $i<count($aColumns) ; $i++ )
         {
@@ -784,6 +782,8 @@ function go_stats_store_item_dataloader(){
 
 
         $sWhere .= ')';
+*/
+        $sWhere2 = " WHERE `post_title` LIKE '%".esc_sql( $search_val )."%'";
 
     }
 
@@ -799,9 +799,10 @@ function go_stats_store_item_dataloader(){
           FROM   $sTable
           $sWhere
           $sOrder
-          $sLimit
         ) AS t1
       INNER JOIN $pTable AS t2 ON t1.source_id = t2.ID
+      $sWhere2
+      $sLimit
       ";
 
     $rResult = $wpdb->get_results($sQuery, ARRAY_A);
@@ -1213,6 +1214,8 @@ function go_activity_dataloader_ajax(){
         else if ($action_type == 'undo_bonus_loot'){
             $type = "Undo Bonus Loot";
             $action_title = $result;
+        }else{
+            continue;
         }
 
         if ($result == 'undo_bonus'){
@@ -1413,5 +1416,3 @@ function go_stats_groups_list() {
     echo "</div></div>";
     die();
 }
-
-?>

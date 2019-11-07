@@ -12,10 +12,10 @@
 if ( !is_admin() ) {
     $page_uri = go_get_page_uri();
     $map_name = get_option( 'options_go_locations_map_map_link');
-    if ($page_uri == $map_name) {
+    //if ($page_uri == $map_name) {
         add_action('wp_enqueue_scripts', 'go_scripts');
         include_once('src/public_ajax.php');
-    }
+   // }
     //set the default map on login
     function go_default_map($user_login, $user){
         $is_admin = is_admin();

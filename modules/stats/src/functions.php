@@ -23,7 +23,7 @@ function go_stats_header($user_id, $show_stats_link = true, $show_internal_links
     $user_login =  $user_data->user_login;
 
     $user_display_name = go_get_user_display_name($user_id);
-    $user_website = $user_data->user_url;
+    //$user_website = $user_data->user_url;
 
 
     //$user_avatar_id = get_user_option( 'go_avatar', $user_id );
@@ -70,13 +70,50 @@ function go_stats_header($user_id, $show_stats_link = true, $show_internal_links
                     echo "<h2>{$user_display_name}</h2>";
 
                     if ($full_name_toggle == 'full' || $is_admin){
-                        echo "<h3>{$user_fullname}</h3><br>";
+                        echo "<h3>{$user_fullname}</h3>";
                     }else if ($full_name_toggle == 'first'){
-                        echo "<h3>{$user_data->first_name}</h3><br>";
+                        echo "<h3>{$user_data->first_name}</h3>";
                     }
 
+                    if($is_admin){
 
-                    go_user_links($user_id, $show_stats_link, $show_internal_links, $show_blog_link);
+                        $seat_key = go_prefix_key('go_seat');
+                        $section_key = go_prefix_key('go_section');
+                        $sections = get_user_meta($user_id, $section_key, false);
+                        $seats = get_user_meta($user_id, $seat_key, false);
+
+                        if(!empty($sections)){
+
+                            if (!empty($sections)) {
+                                $i = 0;
+                                foreach ($sections as $section) {
+                                    $term = get_term($section);
+                                    if (!empty($term)) {
+                                        //$name = $term->name;
+                                        $name = (isset($term->name) ?  $term->name : null);
+                                        echo $name;
+                                        if(!empty($seats)) {
+                                            $name = get_option('options_go_seats_name');
+                                            $seat = $seats[$i];
+                                            $arr = explode("_", $seat, 2);
+                                            $first = $arr[0];
+                                            if(!empty($first)) {
+                                                echo ": $name " . $first ;
+                                            }
+                                            $i++;
+
+                                        }
+                                        echo "<br>";
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                    //echo "<br>";
+
+
+                    go_user_links($user_id, $show_stats_link, $show_internal_links, $show_blog_link, null, null, null, true );
                     ?>
 
                 </div>
@@ -88,29 +125,32 @@ function go_stats_header($user_id, $show_stats_link = true, $show_internal_links
                ?>
                <div class="go_stats_bars">
                    <?php
-                   if ($xp_toggle) {
-                       $rank = go_get_rank($user_id);
-                       $rank_num = $rank['rank_num'];
-                       $current_rank = $rank['current_rank'];
-                       $go_option_ranks = get_option('options_go_loot_xp_levels_name_singular');
+                   if(is_user_logged_in()) {
+                      /* if ($xp_toggle) {
+                           $rank = go_get_rank($user_id);
+                           $rank_num = $rank['rank_num'];
+                           $current_rank = $rank['current_rank'];
+                           $go_option_ranks = get_option('options_go_loot_xp_levels_name_singular');
 
-                       echo '<div class="go_stats_rank"><h3>' . $go_option_ranks . ' ' . $rank_num . ": " . $current_rank . '</h3></div>';
-                   }
-                   echo $progress_bar;
-                   //echo "<div id='go_stats_user_points'><span id='go_stats_user_points_value'>{$current_points}</span> {$points_name}</div><div id='go_stats_user_currency'><span id='go_stats_user_currency_value'>{$current_currency}</span> {$currency_name}</div><div id='go_stats_user_bonus_currency'><span id='go_stats_user_bonus_currency_value'>{$current_bonus_currency}</span> {$bonus_currency_name}</div>{$current_penalty} {$penalty_name}<br/>{$current_minutes} {$minutes_name}";
-                   echo $health_bar;
+                           echo '<div class="go_stats_rank"><h3>' . $go_option_ranks . ' ' . $rank_num . ": " . $current_rank . '</h3></div>';
+                       }*/
+                       echo $progress_bar;
+                       //echo "<div id='go_stats_user_points'><span id='go_stats_user_points_value'>{$current_points}</span> {$points_name}</div><div id='go_stats_user_currency'><span id='go_stats_user_currency_value'>{$current_currency}</span> {$currency_name}</div><div id='go_stats_user_bonus_currency'><span id='go_stats_user_bonus_currency_value'>{$current_bonus_currency}</span> {$bonus_currency_name}</div>{$current_penalty} {$penalty_name}<br/>{$current_minutes} {$minutes_name}";
+                       echo $health_bar;
 
 
-                   if ($xp_toggle) {
-                       //echo '<div class="go_stats_xp">' . go_display_longhand_currency('xp', $go_current_xp) . '</div>';
-                   }
-                   if ($gold_toggle) {
-                       echo '<div class="go_stats_gold" style="display: flex; padding: 10px;">' . go_display_longhand_currency('gold', $go_current_gold) . '</div>';
-                   }
-                   if ($health_toggle) {
-                      // echo '<div class="go_stats_health">' . go_display_longhand_currency('health', $go_current_health) . '</div>';
+                       if ($xp_toggle) {
+                           //echo '<div class="go_stats_xp">' . go_display_longhand_currency('xp', $go_current_xp) . '</div>';
+                       }
+                       if ($gold_toggle) {
+                           echo '<div class="go_stats_gold">' . go_display_longhand_currency('gold', $go_current_gold) . '</div>';
+                       }
+                       if ($health_toggle) {
+                           // echo '<div class="go_stats_health">' . go_display_longhand_currency('health', $go_current_health) . '</div>';
+                       }
                    }
                    ?>
+
                </div>
 
                <?php

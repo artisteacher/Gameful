@@ -551,7 +551,7 @@ function go_gold_lock($id, $user_id, $task_name, $custom_fields, $i, $k, $is_log
         $user_gold = go_get_user_loot ($user_id, 'gold');
         $loot = go_get_loot($user_id);
         $user_gold = $loot['gold'];
-        $gold_name = get_option('options_go_loot_gold_name');
+        $gold_name = go_get_gold_name();
         if ($user_gold < $gold_needed){
             if (!$check_only) {
                 $this_lock = "<br><span class='go_error_red'>You must have {$gold_needed} {$gold_name} to access this {$task_name}.</span></br>";
@@ -694,9 +694,10 @@ function go_schedule_access($user_id, $custom_fields, $is_logged_in, $check_only
                     foreach ($dow_sections as $dow_term) {
                         if (!empty($dow_term)) {
                             $term = get_term($dow_term);
-                            $term_name = $term->name;
-                            $dow_section[] = $term_name;
-
+                            if(!empty($term)) {
+                                $term_name = $term->name;
+                                $dow_section[] = $term_name;
+                            }
                         }
                     }
                 }

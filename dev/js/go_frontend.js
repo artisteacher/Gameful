@@ -1,5 +1,5 @@
+// @codekit-prepend 'scripts/user_bar.js'
 // @codekit-prepend 'scripts/archive_frontend.js'
 // @codekit-prepend 'scripts/go_load_more.js'
 // @codekit-prepend 'scripts/go_tasks.js'
 // @codekit-prepend 'scripts/leaderboard.js'
-// @codekit-prepend 'scripts/user_bar.js'

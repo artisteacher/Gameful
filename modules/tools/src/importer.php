@@ -68,7 +68,7 @@ if ( class_exists( 'WP_Importer' ) ) {
         /**
          * Registered callback function for the WordPress Importer
          *
-         * Manages the three separate stages of the WXR import process
+         * Manages the five separate stages of the WXR import process
          */
         function dispatch() {
             $this->header();
@@ -123,7 +123,11 @@ if ( class_exists( 'WP_Importer' ) ) {
             }
             else if ($step == 5){
                 $loops = ceil(($attachment_count/5));
-                $progress = ($current_loop/$loops) * 100;
+                if($loops == 0){
+                    $progress = 100;
+                }else {
+                    $progress = ($current_loop / $loops) * 100;
+                }
             }
 
             if ($progress >= 100 || $step == 2 || $step == 3){
@@ -180,7 +184,8 @@ if ( class_exists( 'WP_Importer' ) ) {
                     });
                 </script>
                 <?php
-            }else {
+            }
+            else {
                 $progress = min(intval($progress), 100);
 
                 if ($step == 2) {
@@ -1486,3 +1491,4 @@ function gameful_importer_init() {
     register_importer( 'gameful', 'Gameful', __('Import <strong>posts, pages, comments, custom fields, categories, and tags</strong> from a WordPress export file.', 'wordpress-importer'), array( $GLOBALS['wp_import'], 'dispatch' ) );
 }
 add_action( 'admin_init', 'gameful_importer_init' );
+

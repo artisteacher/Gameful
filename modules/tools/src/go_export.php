@@ -99,7 +99,7 @@ function go_export_wp2(  ) {
         }
     }
 
-   //process posts/attachments on all steps 1, 4, 5
+   //process posts/attachments on steps 1, 4, 5
     $post_ids = array();
     $steps = array( 1, 4, 5);
     if (in_array($step, $steps)) {
@@ -688,7 +688,8 @@ function go_export_wp2(  ) {
                             <?php
                             endforeach;
 
-                            $_comments = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->comments WHERE comment_post_ID = %d AND comment_approved <> 'spam'", $post->ID ) );
+                            //$_comments = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->comments WHERE comment_post_ID = %d AND comment_approved <> 'spam'", $post->ID ) );
+                            $_comments = array();
                             $comments  = array_map( 'get_comment', $_comments );
                             foreach ( $comments as $c ) :
                                 ?>
@@ -742,6 +743,7 @@ function go_export_wp2(  ) {
     <?php
 }
 
+/*
 function gzCompressFile($source, $level = 9){
     $dest = $source . '.gz';
     $mode = 'wb' . $level;
@@ -762,4 +764,4 @@ function gzCompressFile($source, $level = 9){
         return false;
     else
         return $dest;
-}
+}*/

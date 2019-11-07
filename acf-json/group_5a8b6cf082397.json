@@ -135,7 +135,7 @@
         },
         {
             "key": "field_5b7d69b4bd34c",
-            "label": "Shortcode",
+            "label": "Shortcode and Link",
             "name": "",
             "type": "message",
             "instructions": "",
@@ -146,8 +146,8 @@
                 "class": "",
                 "id": "go_map_shortcode_id"
             },
-            "message": "",
-            "new_lines": "wpautop",
+            "message": "Place this code in a content area to link directly to this map: [copy_to_clipboard content='%5Bgo_single_map_link+map_id%3D%22%7Bmap_id%7D%22%5D%7Bmap_name%7D%5B%2Fgo_single_map_link%5D']\r\n<br><br>\r\n<br><br>\r\n\r\nUrl link to this map: [copy_to_clipboard content='{map_url}?map_id={map_id}']",
+            "new_lines": "",
             "esc_html": 0
         },
         {
@@ -184,8 +184,24 @@
     "style": "seamless",
     "label_placement": "top",
     "instruction_placement": "label",
-    "hide_on_screen": "",
+    "hide_on_screen": [
+        "permalink",
+        "the_content",
+        "excerpt",
+        "discussion",
+        "comments",
+        "revisions",
+        "slug",
+        "author",
+        "format",
+        "page_attributes",
+        "featured_image",
+        "categories",
+        "tags",
+        "send-trackbacks"
+    ],
     "active": 1,
     "description": "",
-    "modified": 1554173237
+    "recaptcha": 0,
+    "modified": 1570631491
 }

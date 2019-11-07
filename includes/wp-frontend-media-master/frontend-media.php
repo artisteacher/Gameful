@@ -51,9 +51,9 @@ class Front_End_Media {
      */
 	function enqueue_scripts() {
 		wp_enqueue_media();
-
-
-        wp_register_script( 'go_frontend_media', plugin_dir_url( __FILE__ ).'wp-frontend-media-master/js/frontend.js', array( 'jquery' ),
+        wp_register_script(
+            'go_frontend_media',
+            plugin_dir_url( __FILE__ ).'wp-frontend-media-master/js/frontend.js', array( 'jquery' ),
             '2015-05-07', true);
         wp_enqueue_script( 'go_frontend_media' );
 	}
@@ -66,6 +66,7 @@ class Front_End_Media {
 		if ( ! current_user_can( 'manage_options' ) ) {
             $query['author'] = get_current_user_id();
         }
+
 		return $query;
 	}
 
@@ -78,17 +79,25 @@ class Front_End_Media {
         ), $atts);
         $div_id = $atts['div_id'];
         $mime_types = $atts['mime_types'];
+        if(!empty($mime_types)) {
+            $mime_types_message = "Allowed file types: " . $mime_types;
+        }else{
+            $mime_types_message ='';
+        }
         $uniqueid = $atts['uniqueid'];
 		// check if user can upload files
         $role = get_role( 'subscriber' );
         $role->add_cap( 'upload_files' );
+        $role = get_role( 'contributor' );
+        $role->add_cap( 'upload_files' );
 		if ( current_user_can( 'read' ) ) {
 			$str = __( 'Select File', 'frontend-media' );
-			return '<img id="'.$div_id.'" style="width: 300px;" class="go_blog_element_input" data-type="file" data-uniqueID="'.$uniqueid.'"  /><div id="go_upload_button"><input class="go_frontend-button" type="button" onclick="go_upload_frontend(\''.$div_id.'\', \''.$mime_types.'\');" value="' . $str . '" class="button"  style="position: relative; z-index: 1;"></div>';
+			return '<img id="'.$div_id.'" class="go_blog_element_input" data-type="file" data-uniqueID="'.$uniqueid.'"  /><div class="file_title"></div><div id="go_upload_button"><button class="go_frontend-button" type="button" onclick="go_upload_frontend(\''.$div_id.'\', \''.$mime_types.'\');" value="' . $str . '" class="button"  style="position: relative; z-index: 1;">'.$str.'</button><p style="font-size: .8em;">'.$mime_types_message.'</p></div>';
 		}
 
 		return __( 'Please Login To Upload', 'frontend-media' );
 	}
+
     function frontend_shortcode_submitted( $atts ) {
 
         $atts = shortcode_atts( array(
@@ -101,10 +110,17 @@ class Front_End_Media {
         $div_id = $atts['div_id'];
         $media_id = $atts['id'];
         $mime_types = $atts['mime_types'];
+        if(!empty($mime_types)) {
+            $mime_types_message = "Allowed file types: " . $mime_types;
+        }else{
+            $mime_types_message ='';
+        }
         $class = $atts['class'];
         $uniqueid = $atts['uniqueid'];
         // check if user can upload files
         $role = get_role( 'subscriber' );
+        $role->add_cap( 'upload_files' );
+        $role = get_role( 'contributor' );
         $role->add_cap( 'upload_files' );
 
 
@@ -127,7 +143,7 @@ class Front_End_Media {
                 $med = wp_get_attachment_image_src( $media_id, 'medium' );
                 $full = wp_get_attachment_image_src( $media_id, 'full' );
                 $str = __( 'Change File', 'frontend-media' );
-                echo '<a href="#" data="1" data-featherlight="' . $full[0] . '"><img id="'.$div_id.'" class="'.$class.'" data-type="file" data-uniqueID="' . $uniqueid . '" src="' . $med[0] . '" value="'.$media_id.'" style="width: 300px;"></a>';
+                echo '<a href="#" data="1" data-featherlight="' . $full[0] . '"><img id="'.$div_id.'" class="'.$class.'" data-type="file" data-uniqueID="' . $uniqueid . '" src="' . $med[0] . '" value="'.$media_id.'" ></a>';
                 //return '<img id="'.$div_id.'" src="'.$attachment_url.'" value="'.$media_id.'" /><div id="go_upload_button"><input id="frontend-button" type="button" onclick="go_upload_frontend(\''.$div_id.'\', \''.$mime_types.'\');" value="' . $str . '" class="button" style="position: relative; z-index: 1;"></div>';
             }
             else{
@@ -136,12 +152,13 @@ class Front_End_Media {
                 $url = wp_get_attachment_url( $media_id );
                 $thumb = wp_get_attachment_image_src( $media_id, 'thumbnail',true );
                 $str = __( 'Change File', 'frontend-media' );
-                echo "<img id='".$div_id."' src='" . $thumb[0] . "' value='".$media_id."' >" ;
-                echo "<div>" . get_the_title($media_id) . "</div>" ;
+                echo "<img id='".$div_id."' class='go_blog_element_input' data-type='file' data-uniqueid='".$div_id."' src='" . $thumb[0] . "' value='".$media_id."' >" ;
+                //<img id="5d7d39872f0ee" style="width: 300px;" class="go_blog_element_input" data-type="file" data-uniqueid="5d7d39872f0ee" src="http://gameondev/site3/wp-includes/images/media/video.png" value="17558">
+                echo "<div class='file_title'>" . get_the_title($media_id) . "</div>" ;
 
             }
 
-            return '<div id="go_upload_button"><input class="go_frontend-button" type="button" onclick="go_upload_frontend(\''.$div_id.'\', \''.$mime_types.'\');" value="' . $str . '" class="button" style="position: relative; z-index: 1;"></div></div>';
+            return '<div id="go_upload_button"><button class="go_frontend-button" type="button" onclick="go_upload_frontend(\''.$div_id.'\', \''.$mime_types.'\');" value="' . $str . '" class="button" style="position: relative; z-index: 1;">'.$str.'.</div><p style="font-size: .8em;">'.$mime_types_message.'</p></div>';
 
         }
 
@@ -155,7 +172,10 @@ new Front_End_Media();
 function go_media_filter_ajax(){
     $user_id = get_current_user_id();
     $mime_types = !empty($_POST['mime_types']) ? (string)$_POST['mime_types'] : '';
-    update_user_option( $user_id, 'go_media_filter', $mime_types );
+    //update_user_option( $user_id, 'go_media_filter', $mime_types );
+
+   // $mime_types = !empty($_POST['mime_types']) ? (string)$_POST['mime_types'] : '';
+    setcookie("mime_type_allowed", $mime_types);
 
 }
 
@@ -163,10 +183,11 @@ add_filter('wp_handle_upload_prefilter', 'go_import_upload_prefilter');
 function go_import_upload_prefilter($file)
 {
     //$ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-    if(!is_admin()) {
+   // if(!is_admin()) {
         $type = $file['type'];
-        $user_id = get_current_user_id();
-        $mime_types = get_user_option('go_media_filter', $user_id);
+        $mime_types = $_COOKIE['mime_type_allowed'];
+        //$user_id = get_current_user_id();
+        //$mime_types = get_user_option('go_media_filter', $user_id);
         $mime_types_array = explode(",", $mime_types);
         $mime_types_pretty = implode(", ", $mime_types_array);
 
@@ -183,6 +204,6 @@ function go_import_upload_prefilter($file)
             $file['error'] = "The uploaded file is not supported. Allowed file types: " . $mime_types_pretty;
         }
 
-    }
+  //  }
     return $file;
 }

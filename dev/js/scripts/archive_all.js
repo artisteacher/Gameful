@@ -33,7 +33,6 @@ function go_zip_archive(){
     var gotoSend = {
         action:"go_zip_archive",
         _ajax_nonce: nonce,
-
     };
 
     jQuery.ajax({
@@ -60,6 +59,7 @@ function go_zip_archive(){
                 //delete archive folder
                 go_delete_temp_archive();
             }else {
+                console.log(raw);
                 window.location = raw;
                 Swal.fire({//sw2 OK
                     title: "Success",

@@ -8,6 +8,7 @@ jQuery(document).ready(function(){
         go_acf_repeater_accordion();
     });
 
+    //add only run on term.php or edit-tags.php
     go_hide_child_tax_acfs();
     jQuery('.taxonomy-task_chains #parent, .taxonomy-go_badges #parent, .taxonomy-user_go_groups #parent').change(function(){
         go_hide_child_tax_acfs();

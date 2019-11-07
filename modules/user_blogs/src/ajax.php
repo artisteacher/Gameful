@@ -34,6 +34,8 @@ function go_blog_opener(){
     $go_blog_task_id = null;
     $bonus = false;
 
+    $is_admin = go_user_is_admin();
+
     if ($blog_post_id != 0) { //if opening an existing post
         //get the minimum character count to add to the button
         $blog_meta = get_post_meta($blog_post_id);
@@ -45,7 +47,7 @@ function go_blog_opener(){
         if(!empty($go_blog_task_id)) {
             $custom_fields = get_post_meta($go_blog_task_id);
             $task_is_locked = go_task_locks($go_blog_task_id, null, false, $custom_fields, $is_logged_in, true);
-            if ( $task_is_locked === true ) {
+            if ( $task_is_locked === true && !$is_admin ) {
                 echo "locked";
                 die();
             }
@@ -55,8 +57,8 @@ function go_blog_opener(){
                 //$url_toggle = (isset($custom_fields['go_stages_' . $i . '_blog_options_url_toggle'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_url_toggle'][0] : null);
                 //$file_toggle = (isset($custom_fields['go_stages_' . $i . '_blog_options_attach_file_toggle'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_attach_file_toggle'][0] : null);
                 //$video_toggle = (isset($custom_fields['go_stages_' . $i . '_blog_options_video'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_video'][0] : null);
-                $text_toggle = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_blog_text_toggle'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_blog_text_toggle'][0] : null);
-                $min_words = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_blog_text_minimum_length'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_blog_text_minimum_length'][0] : null);
+                //$text_toggle = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_blog_text_toggle'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_blog_text_toggle'][0] : null);
+               // $min_words = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_blog_text_minimum_length'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_blog_text_minimum_length'][0] : null);
                 //$required_string = (isset($custom_fields['go_stages_'.$i.'_blog_options_url_url_validation'][0]) ?  $custom_fields['go_stages_'.$i.'_blog_options_url_url_validation'][0] : null);
                 $bonus = false;
             }
@@ -64,8 +66,8 @@ function go_blog_opener(){
                 //$url_toggle = (isset($custom_fields['go_bonus_stage_blog_options_bonus_url_toggle'][0]) ? $custom_fields['go_bonus_stage_blog_options_bonus_url_toggle'][0] : null);
                 //$file_toggle = (isset($custom_fields['go_bonus_stage_blog_options_bonus_attach_file_toggle'][0]) ? $custom_fields['go_bonus_stage_blog_options_bonus_attach_file_toggle'][0] : null);
                 //$video_toggle = (isset($custom_fields['go_bonus_stage_blog_options_bonus_video'][0]) ? $custom_fields['go_bonus_stage_blog_options_bonus_video'][0] : null);
-                $text_toggle = (isset($custom_fields['go_bonus_stage_blog_options_v5_blog_text_toggle'][0]) ? $custom_fields['go_bonus_stage_blog_options_v5_blog_text_toggle'][0] : null);
-                $min_words = (isset($custom_fields['go_bonus_stage_blog_options_v5_blog_text_minimum_length'][0]) ? $custom_fields['go_bonus_stage_blog_options_v5_blog_text_minimum_length'][0] : null);
+                //$text_toggle = (isset($custom_fields['go_bonus_stage_blog_options_v5_blog_text_toggle'][0]) ? $custom_fields['go_bonus_stage_blog_options_v5_blog_text_toggle'][0] : null);
+               // $min_words = (isset($custom_fields['go_bonus_stage_blog_options_v5_blog_text_minimum_length'][0]) ? $custom_fields['go_bonus_stage_blog_options_v5_blog_text_minimum_length'][0] : null);
                 //$required_string = (isset($custom_fields['go_bonus_stage_blog_options_url_url_validation'][0]) ?  $custom_fields['go_stages_'.$stage.'_blog_options_url_url_validation'][0] : null);
                 $bonus = true;
             }
@@ -293,6 +295,15 @@ function go_blog_submit(){
 
     if ($button == 'submit'){
         $post_status = 'unread';//if submit was pressed, set status as unread
+
+        //if this is an existing post, check if it is being edited by admin and set to read
+        if (go_post_exists($blog_post_id)){
+            $user_id = get_current_user_id();
+            $author_id = get_post_field( 'post_author', $blog_post_id );
+            if($user_id != $author_id){
+                $post_status = 'read';//if submit was pressed by admin on another's post, set to read
+            }
+        }
     }
 
     if($blog_post_id) {//if this blog post already exists
@@ -316,8 +327,8 @@ function go_blog_submit(){
 
     ob_start();
     if ($button == 'submit'){
-
         go_noty_message_generic('success', 'Post Saved Successfully', '', 2000);
+
     }else{
         go_noty_message_generic('success', 'Draft Saved Successfully', '', 2000);
     }
@@ -325,11 +336,15 @@ function go_blog_submit(){
 
     ob_end_clean();
 
-    ob_start();
-    go_blog_post($blog_post_id, $post_id, $check_for_understanding, true, false, true, $go_blog_task_stage, $go_blog_task_bonus);
-    $wrapper = ob_get_contents();
 
+    ob_start();
+    if($button == 'submit') {
+
+        go_blog_post($blog_post_id, $post_id, $check_for_understanding, true, false, true, $go_blog_task_stage);
+    }
+    $wrapper = ob_get_contents();
     ob_end_clean();
+
 
     echo json_encode(
         array(
@@ -344,25 +359,34 @@ function go_blog_submit(){
 }
 
 function go_save_blog_post($post_id = null, $stage = null, $bonus_status = null, $post_status, $is_private = 0){
-
-    $user_id = get_current_user_id();
     $result = (!empty($_POST['result']) ? (string)$_POST['result'] : ''); // Contains the result from the check for understanding
     $result_title = (!empty($_POST['result_title']) ? (string)$_POST['result_title'] : '');// Contains the result from the check for understanding
     $blog_post_id = intval(!empty($_POST['blog_post_id']) ? (string)$_POST['blog_post_id'] : null);
     if (go_post_exists($blog_post_id) == false){
         $blog_post_id = null;
+        $user_id = get_current_user_id();
+    }else{
+        $user_id = get_post_field( 'post_author', $blog_post_id );
+
     }
+
     $uniqueid = null;
     if (is_int($post_id) and $post_id > 0) {//if this is attached to a quest
+        //update_post_meta( $post_id, 'go_is_reset', false );
         //stage uniqueid
         $uniqueid = go_post_meta($post_id, 'go_stages_' . $stage . '_uniqueid', true);
+        global $wpdb;
+        $go_task_table_name = "{$wpdb->prefix}go_tasks";
+
+
 
         //check if there is an existing post from this quest and stage
 
-        $args = array('meta_key' => 'go_stage_uniqueid', 'meta_value' => $uniqueid, 'post_type' => 'go_blogs', 'post_parent' => $post_id, 'author' => $user_id, 'post_status' => 'read, unread, reset, draft, trash');
-        $go_blog_post_ids = get_posts($args);
-        if(!empty($go_blog_post_ids)){
-            $post = $go_blog_post_ids[0];
+       // $args = array('meta_key' => 'go_stage_uniqueid', 'meta_value' => $uniqueid, 'post_type' => 'go_blogs', 'post_parent' => $post_id, 'author' => $user_id, 'post_status' => 'read, unread, reset, draft, trash');
+        //$go_blog_post_ids = get_posts($args);
+
+        if(!empty($go_blog_post_id)){
+            $post = $go_blog_post_id;
             $db_id = $post->ID;
             if (is_int($db_id)){
                 $blog_post_id = $db_id;
@@ -403,12 +427,17 @@ function go_save_blog_post($post_id = null, $stage = null, $bonus_status = null,
     //$blog_url = (!empty($_POST['blog_url']) ? (string)$_POST['blog_url'] : '');
    // $blog_media = (!empty($_POST['blog_media']) ? (string)$_POST['blog_media'] : '');
     //$blog_video = (!empty($_POST['blog_video']) ? (string)$_POST['blog_video'] : '');
-    $required_elements = (!empty($_POST['required_elements']) ? (string)$_POST['required_elements'] : '');
 
-    //this is a string of the unique Ids and the element contents.
-    $required_elements = str_replace("\\", "",$required_elements);
-   // $required_elements = json_decode($required_elements);
-    $required_elements = json_decode($required_elements, true);
+    if(!is_array($_POST['required_elements'])){
+         $required_elements = (!empty($_POST['required_elements']) ? (string)$_POST['required_elements'] : '');
+         //this is a string of the unique Ids and the element contents.
+        $required_elements = str_replace("\\", "", $required_elements);
+        // $required_elements = json_decode($required_elements);
+        $required_elements = json_decode($required_elements, true);
+    }
+    else{
+        $required_elements = $_POST['required_elements'];
+    }
     $required_elements['go_blog_task_stage'] = $status;
     $required_elements['go_blog_bonus_stage'] = $bonus_status;
     $required_elements['go_blog_private_post'] = $is_private;
@@ -614,6 +643,9 @@ function go_blog_user_task($not_ajax = false, $user_id = null, $post_id = null){
             }else if($check_type == "password"){
                 echo "Password</h3>";
                 go_print_password_check_result($result);
+            }else if($check_type == "text"){
+                echo "Text</h3>";
+                go_print_text_check_result($result);
             }else if($check_type == "none"){
                 echo "No Check for Understanding</h3>";
             }
@@ -681,7 +713,3 @@ function go_show_private(){
     die();
 
 }
-
-
-
-

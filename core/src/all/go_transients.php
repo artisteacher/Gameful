@@ -5,6 +5,73 @@
  * Date: 9/9/18
  * Time: 9:32 PM
  */
+
+
+
+function go_set_transient($key, $data, $expiration){
+    if(is_gameful()){
+        $blog_id = get_current_blog_id();
+        $key = $blog_id . "_" . $key;
+    }
+    // set_transient($key, $data, $expiration );
+    // return;
+
+    //wp_cache_set($key, $data);
+    if (  extension_loaded( 'apc' ) && ini_get( 'apc.enabled' )  ) {
+        //set_transient($key, $data, $expiration );
+        //echo ('setTRUE');
+        // wp_cache_set( $key, $data, 'transient', $expiration );
+        apc_store($key, $data, $expiration);
+        // set_transient($key, $data, $expiration );
+    }else{
+        set_transient($key, $data, $expiration );
+        //echo ('setFLASE');
+    }
+}
+
+function go_get_transient($key){
+    if(is_gameful()){
+        $blog_id = get_current_blog_id();
+        $key = $blog_id . "_" . $key;
+    }
+
+    // $data = get_transient($key);
+    // return $data;
+    if (  extension_loaded( 'apc' ) && ini_get( 'apc.enabled' )  ) {
+        //set_transient($key, $data, $expiration );
+        //echo ('getTRUE');
+        //wp_cache_set( $key, $data, 'transient', $expiration );
+        $data = apc_fetch( $key );
+        //$data = get_transient($key);
+    }else {
+        //try to get from
+        // echo ('getFALSE');
+        $data = get_transient($key);
+    }
+    return $data;
+}
+
+function go_delete_transient($key){
+    if(is_gameful()){
+        $blog_id = get_current_blog_id();
+        $key = $blog_id . "_" . $key;
+    }
+
+    // $data = get_transient($key);
+    // return $data;
+    if (  extension_loaded( 'apc' ) && ini_get( 'apc.enabled' )  ) {
+        //set_transient($key, $data, $expiration );
+        //echo ('getTRUE');
+        //wp_cache_set( $key, $data, 'transient', $expiration );
+        apc_delete( $key );
+        //$data = get_transient($key);
+    }else {
+        //try to get from
+        // echo ('getFALSE');
+        delete_transient($key);
+    }
+    //return $data;
+}
 /**
  * Get/set transient of user_id totals
  *
@@ -17,30 +84,29 @@
 function go_get_loot($user_id){
     global $wpdb;
     $key = 'go_get_loot_' . $user_id;
-    $data = wp_cache_get( $key, 'go_single' );
+
+    $data = go_get_transient($key);
     if ($data === false){
-        $data = get_transient($key);
-        if ($data === false || empty($data)) {
-            $go_loot_table_name = "{$wpdb->prefix}go_loot";
+
+        $go_loot_table_name = "{$wpdb->prefix}go_loot";
+        $loot = $wpdb->get_results("SELECT * FROM {$go_loot_table_name} WHERE uid = {$user_id}");
+        if (!empty($loot)){
+            $loot = $loot[0];
+        }else{
+            go_add_user_to_totals_table($user_id);
             $loot = $wpdb->get_results("SELECT * FROM {$go_loot_table_name} WHERE uid = {$user_id}");
             if (!empty($loot)){
                 $loot = $loot[0];
-            }else{
-                go_add_user_to_totals_table($user_id);
-                $loot = $wpdb->get_results("SELECT * FROM {$go_loot_table_name} WHERE uid = {$user_id}");
-                if (!empty($loot)){
-                    $loot = $loot[0];
-                }
             }
-            $data = json_decode(json_encode($loot), True);
-            wp_cache_set($key, $data, 'go_single');
-            set_transient($key, $data, 3600 );
-        }else{
-            wp_cache_set($key, $data, 'go_single');
         }
+        $data = json_decode(json_encode($loot), True);
+
+        go_set_transient($key, $data, 3600 );
     }
+
     return $data;
 }
+
 
 /**
  * Get/set transient of term_ids of chains on a map by map term_id
@@ -59,43 +125,17 @@ function go_get_map_chain_term_ids($term_id) {
     $key = 'go_get_map_chain_term_ids_' . $term_id;
 
 
-    $data = get_transient($key);
+    $data = go_get_transient($key);
 
     if ($data === false) {
 
-        /*$args=array(
-            'hide_empty' => false,
-            'orderby' => 'order',
-            'order' => 'ASC',
-            'parent' => $term_id,
-        );*/
 
-        /*
-        $args = array(
-            'parent' => $term_id,
-            'orderby' => 'meta_value_num',
-            'order' => 'ASC',
-            'meta_query' => array(
-                'relation' => 'OR',
-                array(
-                    'key' => 'go_order',
-                    'compare' => 'NOT EXISTS'
-                ),
-                array(
-                    'key' => 'go_order',
-                    'value' => 0,
-                    'compare' => '>='
-                )
-            ),
-            'hide_empty' => false,
-        );*/
-       // $includes = get_terms( $taxonomy, $query );
 
         $data = go_get_terms_ordered($taxonomy, $term_id);
         //$data = get_terms($taxonomy,$args); //query 1 --get the chains
         $data = wp_list_pluck( $data, 'term_id' );
 
-        set_transient($key, $data, 3600 * 24);
+        go_set_transient($key, $data, 3600 * 24);
     }
 
     return $data;
@@ -103,13 +143,18 @@ function go_get_map_chain_term_ids($term_id) {
 }
 
 function go_reset_map_transient($term_id){
+
     $term = get_term($term_id, 'task_chains');
     //Get the parent object
-    $termParent = ($term->parent == 0) ? $term : get_term($term->parent, 'task_chains');
-    //GET THE ID FROM THE MAP OBJECT
-    $term_id = $termParent->term_id;
+    if($term) {
+        $termParent = ($term->parent == 0) ? $term : get_term($term->parent, 'task_chains');
+        //GET THE ID FROM THE MAP OBJECT
+        $term_id = $termParent->term_id;
+    }
     $key = 'go_get_map_chain_term_ids_' . $term_id;
-    delete_transient($key);
+
+    go_delete_transient($key);
+
 }
 
 /**
@@ -120,7 +165,7 @@ function go_reset_map_transient($term_id){
  */
 function go_get_parent_map_id($term_id){
     $key = 'go_get_parent_map_id_' . $term_id;
-    $data = get_transient($key);
+    $data = go_get_transient($key);
     //$data = false;
     if ($data === false) {
         //find if term is a map
@@ -131,7 +176,7 @@ function go_get_parent_map_id($term_id){
         //GET THE ID FROM THE MAP OBJECT
         $data = $termParent->term_id;
 
-        set_transient($key, $data, 3600 * 24);
+        go_set_transient($key, $data, 3600 * 24);
     }
 
     return $data;
@@ -146,7 +191,7 @@ function go_get_parent_map_id($term_id){
 function go_get_maps_term_ids(){
     $key = 'go_get_maps_term_ids';
 
-    $data = get_transient($key);
+    $data = go_get_transient($key);
     //$data = false;
     if ($data === false) {
         //$args = array('hide_empty' => false, 'orderby' => 'order', 'order' => 'ASC', 'parent' => 0, 'fields' => 'ids');
@@ -155,7 +200,7 @@ function go_get_maps_term_ids(){
         $taxonomy = 'task_chains';
         $data = go_get_terms_ordered($taxonomy, '0');
 
-        set_transient($key, $data, 3600 * 24);
+        go_set_transient($key, $data, 3600 * 24);
     }
 
     return $data;
@@ -172,7 +217,7 @@ function go_get_maps_term_ids(){
  */
 function go_term_data($term_id){
     $key = 'go_term_data_' . $term_id;
-    $data = get_transient($key);
+    $data = go_get_transient($key);
     //$data = false;
     if ($data !== false){
         $term_data = $data;
@@ -184,7 +229,7 @@ function go_term_data($term_id){
         $term_data[] = $term_name;
         $term_custom = get_term_meta($term_id, '', true);
         $term_data[] = $term_custom;
-        set_transient($key, $term_data, 3600 * 24);
+        go_set_transient($key, $term_data, 3600 * 24);
     }
     return $term_data;
 
@@ -208,7 +253,7 @@ function go_get_chain_posts($term_id, $is_map = false ){
 
     $key = 'go_get_chain_posts_' . $term_id;
 
-    $data = get_transient($key);
+    $data = go_get_transient($key);
     //$data = false;
     if ($data !== false){
         $data_ids = $data;
@@ -229,7 +274,13 @@ function go_get_chain_posts($term_id, $is_map = false ){
             'posts_per_page'   => -1,
             'meta_key'         => 'go-location_map_order_item',
             'post_status'      => 'publish',
-            'suppress_filters' => true
+            'suppress_filters' => true,
+            'meta_query' => array(
+                array(
+                    'key'     => 'go-location_map_toggle',
+                    'value'   => 1,
+                )
+            ),
 
         );
 
@@ -243,7 +294,7 @@ function go_get_chain_posts($term_id, $is_map = false ){
         }
 
         $data_ids = wp_list_pluck( $data, 'ID' );
-        set_transient($key, $data_ids, 3600 * 24);
+        go_set_transient($key, $data_ids, 3600 * 24);
         foreach ($data_ids as $post_id){
             $key = 'go_post_task_chain_' . $post_id;
             update_option( $key, $term_id, false );
@@ -268,7 +319,7 @@ function go_get_chain_posts($term_id, $is_map = false ){
  */
 function go_post_data($post_id){
     $key = 'go_post_data_' . $post_id;
-    $data = get_transient($key);
+    $data = go_get_transient($key);
 
     if ($data !== false){
         $post_data = $data;
@@ -286,7 +337,7 @@ function go_post_data($post_id){
             $post_custom = get_post_meta($post_id);
             $post_data[] = $post_custom;//3
         }
-        set_transient($key, $post_data, 3600 * 24);
+        go_set_transient($key, $post_data, 3600 * 24);
     }
     return $post_data;
 
@@ -359,14 +410,14 @@ function go_update_task_post_save( $post_id ) {
     $term_id = get_option($key);
     //delete the original task chain post_ids transient
     $key = 'go_get_chain_posts_' . $term_id;
-    delete_transient($key);*/
+    go_delete_transient($key);*/
 
     //delete OLD task chain transient
     $term_id = go_post_meta($post_id, 'go-location_map_loc');
     //$term_id = (isset($custom_fields['go-location_map_loc'][0]) ? $custom_fields['go-location_map_loc'][0] : null);
     if(!empty($term_id)) {
         $key = 'go_get_chain_posts_' . $term_id;
-        delete_transient($key);
+        go_delete_transient($key);
     }
 
     //delete new task chain transient
@@ -378,13 +429,12 @@ function go_update_task_post_save( $post_id ) {
 
     if(!empty($term_id)){
         $key = 'go_get_chain_posts_' . $term_id;
-        delete_transient($key);
+        go_delete_transient($key);
     }
-
 
     //delete task data transient
     $key = 'go_post_data_' . $post_id;
-    delete_transient($key);
+    go_delete_transient($key);
 
 }
 
@@ -400,19 +450,18 @@ add_action( 'save_post', 'go_update_task_post_save' );//after save
 function go_update_task_chain_term_save( $term_id ) {
 
     $key = 'go_get_map_chain_term_ids_' . $term_id;
-    delete_transient( $key );
+    go_delete_transient( $key );
 
     $key = 'go_term_data_' . $term_id;
-    delete_transient( $key );
+    go_delete_transient( $key );
 
     $key = 'go_get_parent_map_id_' . $term_id;
-    delete_transient( $key );
+    go_delete_transient( $key );
 
     $key = 'go_get_maps_term_ids';
-    delete_transient( $key );
+    go_delete_transient( $key );
 
     go_reset_map_transient($term_id);
-
 
 }
 

@@ -1,54 +1,6 @@
 <?php
 
 
-/**
- *
- */
-function go_make_map() {
-    if ( ! is_admin() ) {
-        $user_id = get_current_user_id();
-        $last_map_id = get_user_option('go_last_map', $user_id);
-
-        $font = get_option('options_map_font');
-        $font_size = $font['font_size'];
-        $font_family = $font['font_family'];
-        $font_weight = $font['font_weight'];
-        $font_style = $font['font_style'];
-
-        $get_font = $font_family . ":" . $font_weight .$font_style;
-
-        wp_enqueue_style( 'acft-gf', 'https://fonts.googleapis.com/css?family='.$get_font );
-
-
-        if(!$last_map_id){
-            $last_map_id = get_option('options_go_locations_map_default', '');
-        }
-        if(!$last_map_id){
-            $taxonomy = 'task_chains';
-            /*$term_args0=array(
-                'hide_empty' => false,
-                'order' => 'ASC',
-                'parent' => '0',
-                'number' => 1
-            );
-            $firstmap = get_terms($taxonomy,$term_args0);*/
-            $firstmap = go_get_terms_ordered($taxonomy, '0', 1);
-            if (!empty($firstmap)) {
-                $last_map_id = $firstmap[0]->term_id;
-            }else{
-                $last_map_id = null;
-            }
-        }
-
-        echo "<div id='go_map_container' style='font-family: $font_family; font-style: $font_style; font-weight: $font_weight; font-size: $font_size"."px;'>";
-        $map_title = get_option( 'options_go_locations_map_title');
-        echo "<h1>{$map_title}</h1>";
-        go_make_map_dropdown();
-        go_make_single_map($last_map_id, false);// do your thing
-        echo "</div>";
-    }
-}
-add_shortcode('go_make_map', 'go_make_map');
 
 /**
  * @param $last_map_id
@@ -58,12 +10,6 @@ add_shortcode('go_make_map', 'go_make_map');
 function go_make_single_map($last_map_id, $reload, $user_id = null){
     ?>
     <script>
-        jQuery( document ).ready(function() {
-            console.log("ready1");
-            go_resizeMap();
-        });
-
-
         jQuery( window ).resize(function() {
             console.log("resize1");
             go_resizeMap();
@@ -87,6 +33,18 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
     }else{
         $task_links = false;
     }
+
+
+    $show_clone = false;
+    if(go_user_is_admin()){
+        $admin_view = get_user_option('go_admin_view', $user_id);
+        if($admin_view === 'clone'){
+            $show_clone = true;
+        }
+    }else{
+        $show_clone = true;
+    }
+
     $is_logged_in = ! empty( $user_id ) && $user_id > 0 ? true : false;
     //$taxonomy_name = 'task_chains';
 
@@ -102,22 +60,55 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
     }
 
     if ($reload == false) {echo "<div id='mapwrapper' style='overflow: auto; '>";}
-    echo "<div id='loader_container' style='display:none; height: 250px; width: 100%; padding-top: 30px; '>
-                <div id='loader'>
-                <i class='fas fa-spinner fa-pulse fa-4x'></i>
-                </div>
-          </div>
-            <div id='maps' data-mapid='$last_map_id' style='overflow: auto;'>";
-    if(!empty($last_map_id)){
+    $loader_url = plugin_dir_url((dirname(dirname(dirname(__FILE__)))));
+    $loader_url = $loader_url . "media/images/spinner-solid.svg";
+    echo "<div id='loader_container' style='display:none; height: 250px; padding: 40px; text-align: center;'><div id='loader'><img style='height: 75px;' class='go_loader fa-pulse' src='$loader_url'></div></div>";
+    if(empty($last_map_id)){
+        echo "<div id='maps' data-mapid='$last_map_id' style='overflow: auto;'>";
+    }
+    else{
+        echo "<span style='float:right; position: relative; left: -20px; z-index: 10'>";
+        if(go_user_is_admin()) {
+            $map_link = go_get_link_from_option('options_go_locations_map_map_link');
+            $map_link = add_query_arg('map_id', $last_map_id, $map_link);
+            //echo "<span style='font-size: .8em;' onclick='go_copy_to_clipboard(\"$map_link\")'><i class='fas fa-clipboard-list'></i></span>";
+
+            echo go_copy_var_to_clipboard($map_link, 'Copy direct link to this map to clipboard.', true);
+
+        }
+        /*
+                if (function_exists ( 'wu_is_active_subscriber' )){
+                    if(wu_is_active_subscriber($user_id) && is_gameful()){
+                        echo "<a data-type='term' data-item='$last_map_id' onclick='go_importer(this);this.disabled = true;' style='float: left;'>Import</a>";
+                    }
+                }*/
+
+
+        if ($show_clone) {
+            do_action('gop_add_importer_icon', $last_map_id, 'term', $user_id, false);
+        }
+
+        echo "</span>";
+
+
+
+        echo "<div id='maps' data-mapid='$last_map_id' style='overflow: auto; clear: both;'>";
+
 
 
         $badge_id = get_term_meta($last_map_id, "pod_achievement", true);
+
+
         echo 	"<div id='map_$last_map_id' class='map' style='overflow: auto;'>
 				<ul class='primaryNav'>
 				<li class='ParentNav'><div><div><p>$last_map_object->name</p></div>";
+
+
+
+
         //go_map_quest_badge($badge_id, $user_badges, true);
         if(intval($badge_id) > 0) {
-            go_print_single_badge($badge_id, 'badge', $output = true, $user_id);
+            go_print_single_badge($badge_id, 'badge', $output = true, $user_id, 'go_map_badge');
         }
         echo "</div></li>";
 
@@ -141,7 +132,11 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
             $go_post_ids = go_get_chain_posts($term_id, true);
 
             //echo "<li><p>$term_object->name";
-            echo "<li><p>$term_name";
+            echo "<li><div class='go_task_chain_map_box'>";
+            if ($show_clone) {
+                do_action('gop_add_importer_icon', $term_id, 'term', $user_id, false);
+            }
+            echo "<p style='clear:both;' id='go_map_chain_title'>$term_name</p></div>";
 
             $is_pod = (isset($term_custom['pod_toggle'][0]) ?  $term_custom['pod_toggle'][0] : null);
 
@@ -163,6 +158,7 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
                     echo "<br><span style='padding-top: 10px; font-size: .9em;'>Complete at least $pod_min $task_name. </span>";
                 }
             }
+
 
             //START: The list of tasks in the chain
 
@@ -218,8 +214,16 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
                         $this_task = $user_tasks[$key];
                         $status = $this_task['status'];
                         $class = $this_task['class'];
-                        if ($status == -2){
-                            $class = 'reset';
+                        if(!empty($class)){
+                            if(is_serialized($class)){
+                                $class = unserialize($class);
+                            }
+                            if(is_array($class)){
+                                $class = implode(" ",$class);
+                            }
+                        }
+                        if ($status == -2){//if the entire task was reset
+                            $class .= ' reset';
                         }
                     }else{
                         $status = 0;
@@ -287,6 +291,7 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
 
                     if ($stage_count <= $status){
                         $task_color = 'done';
+                        $class = str_replace('reset', 'resetted', $class);
                     }else if ($task_is_locked){
                         $task_color = 'locked';
                     }
@@ -294,12 +299,14 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
                         $task_color = 'available';
                     }
 
-
-
+                    echo "<li class='$task_color $optional $class'>";
+                    if ($show_clone) {
+                        do_action('gop_add_importer_icon', $post_id, 'post', $user_id, false);
+                    }
                     if ($task_links === true) {
-                        echo "<li class='$task_color $optional $class'><a href='$task_link'><span style='font-size: .9em;'>$bonus_task $task_name <br>$unlock_message</span>";
+                        echo "<a href='$task_link'><span style='font-size: .9em;'>$bonus_task $task_name <br>$unlock_message</span>";
                     }else{
-                        echo "<li class='$task_color $optional $class'><a href='javascript:;' class='go_blog_user_task' data-UserId='".$user_id."' onclick='go_blog_user_task(".$user_id.", ".$post_id.");'><span style='font-size: .9em;'>$bonus_task $task_name <br>$unlock_message</span>";
+                        echo "<a href='javascript:;' class='go_blog_user_task' data-UserId='".$user_id."' onclick='go_blog_user_task(".$user_id.", ".$post_id.");'><span style='font-size: .9em;'>$bonus_task $task_name <br>$unlock_message</span>";
                         //echo "<li class='$task_color $optional '><a href='$task_link'><span style='font-size: .8em;'>$bonus_task $task_name <br>$unlock_message</span>";
                         }
                     //<a href="javascript:;" class="go_blog_user_task" data-UserId="'.$user_id.'" onclick="go_blog_user_task('.$user_id.', '.$post_id.');">
@@ -310,7 +317,7 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
                     if($badge_ids) {//if there are badges awarded on this task
                         if (!empty($badge_ids)) {
                             //go_map_badge($badge_ids, $user_badges, false, $user_id);
-                            go_print_single_badge( $badge_ids, 'badge', $output = true, $user_id );
+                            go_print_single_badge( $badge_ids, 'badge', $output = true, $user_id, 'go_map_badge' );
                         }
                     }
 
@@ -349,6 +356,7 @@ function go_make_single_map($last_map_id, $reload, $user_id = null){
 
 
                     echo"</a>";
+
 
                     if ($bonus_stage_toggle == true){
                         $percentage = $bonus_status / $repeat_max * 100;
@@ -560,7 +568,7 @@ function go_make_map_dropdown($user_id = null){
     }
 	
 	echo"
-	<div id='sitemap' style='visibility:hidden;'>   
+	<div id='sitemap' >   
     <div class='dropdown'>
       <button onclick='go_map_dropDown()' class='dropbtn'>Choose a Map</button>
       <div id='go_Dropdown' class='dropdown-content .dropdown-menu'>";
@@ -576,9 +584,3 @@ function go_make_map_dropdown($user_id = null){
             }
         echo"</div></div></div> ";
 }
-
-
-
-
-         
-?>

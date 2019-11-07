@@ -3,6 +3,65 @@
     "title": "Additional User Info",
     "fields": [
         {
+            "key": "field_5d86690decc57",
+            "label": "Display Name",
+            "name": "go_nickname",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": 50
+        },
+        {
+            "key": "field_5cd5030feb290",
+            "label": "Avatar",
+            "name": "go_avatar",
+            "type": "image",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": "go_local_avatar"
+            },
+            "return_format": "id",
+            "preview_size": "thumbnail",
+            "library": "uploadedTo",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": ""
+        },
+        {
+            "key": "field_5d8674ff61b2c",
+            "label": "Website",
+            "name": "go_website",
+            "type": "url",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": ""
+        },
+        {
             "key": "field_5cd5031deb291",
             "label": "Section and Seat",
             "name": "go_section_and_seat",
@@ -16,7 +75,7 @@
                 "id": ""
             },
             "collapsed": "",
-            "min": 0,
+            "min": 1,
             "max": 6,
             "layout": "table",
             "button_label": "",
@@ -108,30 +167,6 @@
                     "placeholder": "Select"
                 }
             ]
-        },
-        {
-            "key": "field_5cd5030feb290",
-            "label": "Avatar",
-            "name": "go_avatar",
-            "type": "image",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": "go_local_avatar"
-            },
-            "return_format": "id",
-            "preview_size": "thumbnail",
-            "library": "uploadedTo",
-            "min_width": "",
-            "min_height": "",
-            "min_size": "",
-            "max_width": "",
-            "max_height": "",
-            "max_size": "",
-            "mime_types": ""
         }
     ],
     "location": [
@@ -152,5 +187,5 @@
     "active": 1,
     "description": "",
     "recaptcha": 0,
-    "modified": 1562654892
+    "modified": 1569094139
 }

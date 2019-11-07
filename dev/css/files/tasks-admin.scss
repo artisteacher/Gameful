@@ -1,5 +1,9 @@
+//fix the scroll behavior on edit-tags pages when using pro themes
+.edit-tags-php #col-right {overflow-x: hidden;}
+
+
 .go_rewards {
-	background-color: #c9fbc9;
+	//background-color: #c9fbc9;
 }
 
 .go_call_to_action{
@@ -7,7 +11,7 @@
 }
 
 .go_acf_header{
-	background-color: lightblue;
+	background-color: linen;
 }
 
 table tbody tr td.go_acf_header { top-padding: 10em; }
@@ -28,36 +32,49 @@ table tbody tr td.go_acf_header { top-padding: 10em; }
 .column-primary {
 	flex: 1 !important; }
 
+
 .posts.column-posts,
 .manage-column.column-posts,
+.manage-column.column-hidden_term,
+.hidden_term.column-hidden_term,
 .pod_toggle.column-pod_toggle,
 .manage-column.column-pod_toggle{
 	text-align: center;
 	flex: none !important;
 	display: block;
-	width: 40px;
+	width: 60px;
+	padding: 0 8px;
 }
 
 .pod_achievement.column-pod_achievement,
-.manage-column.column-pod_achievement,
+.manage-column.column-pod_achievement
+{
+	text-align: center;
+	flex: none !important;
+	display: block;
+	width: 15% !important;
+	padding: 0 8px;
+}
+
+.description.column-description,
+.manage-column.column-description
+{
+	text-align: center;
+	flex: none !important;
+	display: block;
+	width: 25% !important;;
+	padding: 0 8px;
+}
+
 .pod_done_num.column-pod_done_num,
 .manage-column.column-pod_done_num,
-.description.column-description,
-.manage-column.column-description,
 .slug.column-slug,
 .manage-column.column-slug{
 	text-align: center;
 	flex: none !important;
 	display: block;
-	width: 100px;
-}
-
-.pod_done_num.column-pod_done_num,
-.manage-column.column-pod_done_num{
-	text-align: center;
-	flex: none !important;
-	display: block;
-	width: 75px;
+	width: auto;
+	padding: 0 8px;
 }
 
 
@@ -86,3 +103,8 @@ ul .row-actions {display:none;}
 .wp-has-submenu.toplevel_page_maps_menus .wp-first-item {
   display: none; }
 
+
+.term-php .term-parent-wrap,
+.term-php .go_child_term{
+	display: none;
+}

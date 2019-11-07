@@ -1,4 +1,106 @@
 <?php
+
+/**
+ * redirect on /login path
+ * This is after login happens
+ */
+add_action('init', 'go_login_rewrite');
+function go_login_rewrite(){
+    $page_uri = go_get_page_uri();
+    if($page_uri == 'login' && is_user_logged_in()){
+        $redirect_blog_id = $_COOKIE['redirect_blog_id'];
+        switch_to_blog($redirect_blog_id);
+        //wp_redirect($redirect_to);
+        wp_redirect(go_get_user_redirect());
+        exit;
+    }
+}
+
+//determine the correct login redirect page based on status and options
+function go_get_user_redirect($user_id = null){
+    $page = '';
+    if ($user_id == null){
+        $user_id = get_current_user_id();
+    }
+    if (!empty($user_id)) {
+        $primary_blog_id = get_network()->site_id;
+        if (is_user_member_of_blog($user_id) || go_user_is_admin($user_id)) {
+            $redirect_to = get_option('options_go_landing_page_radio', 'home');
+            //$page = get_option('options_go_landing_page_on_login', '');
+
+            if ($redirect_to == 'store') {
+                $page = get_option('options_go_store_store_link', 'store');
+            } else if ($redirect_to == 'map') {
+                $page = get_option('options_go_locations_map_map_link', 'map');
+            } else if ($redirect_to == 'custom') {
+                $page = get_option('options_go_landing_page_on_login', '');
+            } else if ($redirect_to == 'home'){
+                $page = '';
+            } else if ($redirect_to == 'default') {
+                //return null;
+            }
+
+        } else if(is_main_site()){
+            $page = '';
+        } else{
+            $page = 'join';
+        }
+    }else{
+        $page = 'login';
+    }
+
+    //this sets the default map on login
+    if ($user_id != null) {
+        $default_map = get_option('options_go_locations_map_default', '');
+        if ($default_map !== '') {
+            update_user_option($user_id, 'go_last_map', $default_map);
+        }
+    }
+
+    return home_url($page);
+}
+
+
+
+add_action(  'login_init', 'user_registration_login_init', 0  );
+function user_registration_login_init () {
+    //$blog_id = get_current_blog_id();
+    // $referer = $_SERVER['HTTP_REFERER'];
+
+    //$thiss = "http://gameondev";
+    //$go_site_url = site_url('login');
+
+    $go_site_id = get_current_blog_id();
+    $primary_blog_id = get_main_site_id();
+    $main_domain = get_site_url($primary_blog_id);
+    $protocols = array('http://', 'http://www.', 'www.', 'https://', 'https://www.');
+    $main_domain = str_replace($protocols, '', $main_domain);
+
+    $referrer = (isset($_GET['loginSocial']) ?  $_GET['loginSocial'] : null);
+    setcookie("SESSnsl", '', time()-3600, '/', $main_domain);//this resets the social login cookie
+
+    $action =(isset($_GET['action']) ?  $_GET['action'] : null);
+    if($action === 'logout' ){
+        wp_logout();
+        wp_redirect(site_url('signin'));
+        exit;
+    }
+
+    if(is_user_logged_in()){
+        //$redirect = (isset($_COOKIE['redirect_blog_id']) ?  $_COOKIE['redirect_blog_id'] : $primary_blog_id);
+        wp_redirect(go_get_user_redirect());
+        exit;
+    }
+
+    //if we were not redirected from loginSocial (this isn't part of the Google login
+    if(empty($referrer)){
+        //set the redirect_blog_id cookie to the site id
+        setcookie("redirect_blog_id", $go_site_id, time() + 60 * 60 * 24 * 30, '/', $main_domain);
+
+    }
+}
+
+
 /**
  * THIS FUNCTION IS FOR WHEN A USER IS INVITED BY EMAIL
  * Check the wp-activate key and redirect the user to the apply page
@@ -32,6 +134,84 @@ function go_custom_error_messages($errors) {
 }
 add_filter( 'wp_login_errors', 'go_custom_error_messages');
 
+add_filter( 'register', 'go_custom_registration_link');
+function go_custom_registration_link($registration_url){
+   if(is_gameful()){
+
+       if(!is_main_site()) {
+            $registration_url = '<a href ="';
+            $registration_url .= site_url('register');
+            $registration_url .= '">Register</a>';
+       }else{
+           $registration_url = '<a href ="';
+           $registration_url .= site_url('/registration/1/single-teacher');
+           $registration_url .= '">Register</a>';
+           //$registration_url = null;
+       }
+   }
+    return $registration_url;
+}
+
+add_filter('pre_option_users_can_register', 'go_registration_form_allowed');
+function go_registration_form_allowed($value) {
+    if(!is_main_site() || !is_gameful()) {
+        if(!get_option('options_allow_registration')){
+            $value = 0;
+        };
+        $google_only = intval(get_option('options_google-only'));
+        //$registration_options = get_option('options_signup_options');
+        if($google_only){
+            $value = 0;
+        };
+
+    }
+
+    return $value; // We need to return an int since get_option does not like false return values
+}
+
+add_action('login_form', 'go_remove_login_fields');
+function go_remove_login_fields(){
+    $google_only = intval(get_option('options_google-only'));
+    if($google_only){
+        //echo "Google Only";
+        ?>
+        <script>
+            jQuery(document).ready(function() {
+                jQuery("#loginform p").remove();
+            });
+
+        </script>
+        <style>
+            #nsl-custom-login-form-main{
+                margin-top: 0px !important;
+            }
+            .nsl-container{
+                padding: 0px !important;
+            }
+        </style>
+        <?php
+        //
+
+        function remove_lostpassword_text ( $text ) {
+            if ($text == 'Lost your password?'){$text = '';}
+            return $text;
+        }
+        add_filter( 'gettext', 'remove_lostpassword_text' );
+    };
+}
+
+//add_filter( 'register_url', 'go_register_page', 100);
+function go_register_page( $register_url ) {
+    if(is_gameful()) {
+        //$blog_id = $_COOKIE['redirect_blog_id'];
+        //$primary_blog_id = get_main_site_id();
+        //if($blog_id != $primary_blog_id ){
+        if(is_main_site()) {
+            return home_url('/registration/1/single-teacher');
+        }
+    }
+}
+
 
 /*
 part of this from: https://profiles.wordpress.org/khromov
@@ -41,77 +221,24 @@ add_filter('login_redirect', 'go_login_redirect_queries', 100, 3);
 function go_login_redirect_queries($redirect_to, $request_redirect_to, $user) {
     global $blog_id;
 
-    $parts = parse_url($redirect_to);
-    parse_str($parts['query'], $query);
-    if(is_gameful()) {
-        $redirect_blog_id = (isset($query['blog_id']) ?  $query['blog_id'] : false);
-        $primary_blog_id = get_network()->site_id;
-    }
+    $redirect_to = site_url('login');
+    return $redirect_to;
+    //$redirect_to = $_COOKIE['redirect_domain'];
+    $redirect_blog_id = $_COOKIE['redirect_blog_id'];
+    switch_to_blog($redirect_blog_id);
+    //wp_redirect($redirect_to);
+    $redirect_to = go_get_user_redirect();
+    restore_current_blog();
 
-    //if this was a successful login then do this redirect
-    //based on user role on blog
-    if (!is_wp_error($user) && $user->ID != 0) {
-        //redirect to site login page on successful redirect
-        if(is_gameful()) {
-            if ($redirect_blog_id != $primary_blog_id) {
-                switch_to_blog($redirect_blog_id);
-                $go_login_link = site_url('login');
-                restore_current_blog();
-                //return $go_login_link;
-                wp_redirect($go_login_link);
-                die();
-            }
-        }else{
-            $go_login_link = site_url('login');
-            //return $go_login_link;
-            wp_redirect($go_login_link);
-            die();
-        }
-
-        $user_info = get_userdata($user->ID);
-        if ($user_info->primary_blog)
-        {
-            $primary_url = get_blogaddress_by_id($user_info->primary_blog) . 'wp-admin/';
-            $user_blogs = get_blogs_of_user($user->ID);
-
-            //Loop and see if user has access
-            $allowed = false;
-            foreach($user_blogs as $user_blog)
-            {
-                if($user_blog->userblog_id == $blog_id)
-                {
-                    $allowed = true;
-                    break;
-                }
-            }
-
-            //Let users login to others blog IF we can get their primary blog URL and they are not allowed on this blog
-            if ($primary_url && !$allowed)
-            {
-                wp_redirect($primary_url);
-                die();
-            }
-        }
-    }
-    else if(is_wp_error($user) && empty($_GET['login'])  && !empty($request_redirect_to)){//there was an error
-        $referrer = $_SERVER['HTTP_REFERER'];
-        $referrer = urldecode($referrer);
-        if (strpos($referrer, $request_redirect_to) !== false) {
-            // $referrer =  remove_query_arg('error', $referrer);
-            //$errors = $user->errors;
-            //$keys = array_keys($errors);
-            // $value = $keys[0];
-            //$referrer = add_query_arg('error', $value, $referrer);
-            $referrer = add_query_arg('login', 'failed', $referrer);
-            wp_redirect($referrer);
-            die();
-        }
-    }
     return $redirect_to;
 }
 
 //resets the social login cookie
+//add_action('login_footer', 'go_login_footer');
+/*
 function go_login_footer(){
+
+
     $referer = $_SERVER['REDIRECT_QUERY_STRING'];
     $referer = urldecode($referer);
     $parts = parse_url($referer);
@@ -154,55 +281,18 @@ function go_login_footer(){
 
     </script>
     <?php
-}
-add_action('login_footer', 'go_login_footer');
+}*/
+
 
 // changing the logo link from wordpress.org to your site
-/*
+add_filter( 'login_headerurl', 'go_login_url', 999 );
 function go_login_url($url) {
-
-
-    $referer = $_SERVER['REDIRECT_QUERY_STRING'];
-    $referer = urldecode($referer);
-    $parts = parse_url($referer);
-
-    if(!empty($parts['query'])) {
-        parse_str($parts['query'], $query);
-        $blog_id = (isset($query['blog_id']) ?  $query['blog_id'] : null);
-        //echo $blog_id;
-        //$gameful = is_gameful();
-        //echo $gameful;
-        if(is_gameful()) {
-            switch_to_blog($blog_id);
-           // echo 'switch';
-        }
-    }
-
-    //$url = 'google.com';
     $url = site_url();
-    //echo $url;
-    //print_r($url);
-
-    if(is_gameful()) {
-        restore_current_blog();
-    }
-
     return $url;
+}
 
-}*/
-//add_filter( 'login_headerurl', 'go_login_url', 999 );
-
+add_action( 'login_enqueue_scripts', 'go_login_logo', 999 );
 function go_login_logo() {
-    $referer = $_SERVER['REDIRECT_QUERY_STRING'];
-    $referer = urldecode($referer);
-    $parts = parse_url($referer);
-    if(!empty($parts['query'])) {
-        parse_str($parts['query'], $query);
-        $blog_id = (isset($query['blog_id']) ?  $query['blog_id'] : null);
-        if(is_gameful()) {
-            switch_to_blog($blog_id);
-        }
-    }
     $logo = get_option('options_go_login_logo');
     //$url = wp_get_attachment_image($logo, array('250', '250'));
     $url = wp_get_attachment_image_src($logo, 'medium');
@@ -219,11 +309,6 @@ function go_login_logo() {
             $height = 180;
         }
     }
-
-    if(is_gameful()) {
-        restore_current_blog();
-    }
-
     if ($url) {
         ?>
         <style type="text/css">
@@ -244,7 +329,7 @@ function go_login_logo() {
     }
 
 }
-add_action( 'login_enqueue_scripts', 'go_login_logo', 999 );
+
 
 //USE THIS FOR INSTUCTIONS ABOUT DOMAINS
 //* Add custom message to WordPress login page
@@ -266,47 +351,6 @@ function go_bad_domain_message ($errors) {
 }
 add_filter('wp_login_errors', 'go_bad_domain_message');
 
-//determine the correct login redirect page based on status and options
-function go_get_user_redirect($user_id = null){
-    $page = '';
-    if ($user_id == null){
-        $user_id = get_current_user_id();
-    }
-    if (!empty($user_id)) {
-
-        if (is_user_member_of_blog($user_id) || go_user_is_admin($user_id)) {
-            $redirect_to = get_option('options_go_landing_page_radio', 'home');
-            //$page = get_option('options_go_landing_page_on_login', '');
-
-            if ($redirect_to == 'store') {
-                $page = get_option('options_go_store_store_link', 'store');
-            } else if ($redirect_to == 'map') {
-                $page = get_option('options_go_locations_map_map_link', 'map');
-            } else if ($redirect_to == 'custom') {
-                $page = get_option('options_go_landing_page_on_login', '');
-            } else if ($redirect_to == 'home'){
-                $page = '';
-            } else if ($redirect_to == 'default') {
-                //return null;
-            }
-
-        } else {
-            $page = 'join';
-        }
-    }else{
-        $page = 'login';
-    }
-
-    //this sets the default map on login
-    if ($user_id != null) {
-        $default_map = get_option('options_go_locations_map_default', '');
-        if ($default_map !== '') {
-            update_user_option($user_id, 'go_last_map', $default_map);
-        }
-    }
-
-    return home_url($page);
-}
 
 /**
  * DOMAIN VALIDATION
@@ -352,32 +396,46 @@ function validate_email_against_domains($email){
  * get getLastLocationRedirectTo in the provider.php must also be made a public function
  * $blog_url =  $this->provider->getLastLocationRedirectTo();$args = array($email, $blog_url);do_action('nsl_limit_domains', $args);
  */
-add_action('nsl_limit_domains', 'go_limit_domains');
-function go_limit_domains($args){
-    $email = $args[0];
-    $blog_url = $args[1];
+//add_action('nsl_limit_domains', 'go_limit_domains');
+function go_limit_domains($email){
+    //$email = $args[0];
+    //$blog_url = $args[1];
 
-    $parts = parse_url($blog_url);
-    parse_str($parts['query'], $query);
+    //$parts = parse_url($blog_url);
+    //parse_str($parts['query'], $query);
     //$blog_id = $query['blog_id'];
-    $blog_id = (isset($query['blog_id']) ?  $query['blog_id'] : null);
+    //$blog_id = (isset($query['blog_id']) ?  $query['blog_id'] : null);
+
+    $blog_id = $_COOKIE['redirect_blog_id'];
     $primary_blog_id = get_main_site_id();
 
 
     if (empty($blog_id)){
         $blog_id = $primary_blog_id;
     }
-    if(is_gameful()) {
-        switch_to_blog(intval($blog_id));
-    }
 
-    $limit_toggle = get_option('options_limit_domains_toggle');
-    if(is_gameful()) {
-        restore_current_blog();
-    }
-    
+    switch_to_blog($blog_id);
 
-    if($limit_toggle){
+
+    $registration_allowed = intval(get_option('options_allow_registration'));
+
+    if(!$registration_allowed){
+        if(!is_main_site($blog_id) || !is_gameful()) {
+            $go_login_link = get_site_url($blog_id, 'signin');
+            wp_redirect($go_login_link . '?registration=disabled');
+            return false;
+        }
+
+
+    };
+
+    //$limit_toggle = get_option('options_limit_domains_toggle');
+    //if($limit_toggle){
+    $security_options = get_option('options_security');
+    if(!is_array($security_options)){
+        $security_options = array();
+    }
+    if(in_array('domains', $security_options)){
         if(is_gameful()) {
             switch_to_blog(intval($blog_id));
         }
@@ -393,21 +451,15 @@ function go_limit_domains($args){
             if ( is_gameful() && ($blog_id == $primary_blog_id ) ) {
                 $go_login_link = network_site_url('signin');
                 wp_redirect($go_login_link . '?registration=disabled');
-                exit;
-            }else if( is_gameful()){
-                $primary_blog_id = get_network()->site_id;
-                $go_login_link = site_url($primary_blog_id, 'login');
-                $go_login_link = network_site_url ('signin?redirect_to='.$go_login_link.'?blog_id='.$blog_id);
-                wp_redirect($go_login_link . '&login=bad_domain');
-                exit;
-
-            }else{
-                $go_login_link = get_site_url($blog_id, 'login');
+                return false;
+            } else{
+                $go_login_link = get_site_url($blog_id, 'signin');
                 wp_redirect($go_login_link . '?login=bad_domain');
-                exit;
+                return false;
             }
         }
     }
+
 
     //if this is the main site and this is not an existing user, don't allow registration
     if ( is_gameful() ) {
@@ -415,15 +467,13 @@ function go_limit_domains($args){
             if ( !email_exists( $email ) ) {
                 $go_login_link = get_site_url($blog_id, 'signin');
                 wp_redirect($go_login_link . '?registration=disabled');
-                exit;
+                return false;
             }
         }
     }
+    restore_current_blog();
 
-    if(is_gameful()) {
-        restore_current_blog();
-    }
-
+    return true;
 }
 
 function go_domain_restrictions_message($message = null ) {
@@ -437,27 +487,6 @@ function go_domain_restrictions_message($message = null ) {
     }
     return $message;
 }
-
-
-/**
- * redirect on /login path
- * This is after login happens
- */
-add_action('init', 'go_login_rewrite');
-function go_login_rewrite(){
-    //$blog_id = get_current_blog_id();
-    //if (!is_main_site() || !is_gameful()) {
-    //$page_name = 'login';
-    $page_uri = go_get_page_uri();
-    if($page_uri == 'login' && is_user_logged_in()){
-        wp_redirect(go_get_user_redirect());
-        exit;
-    }
-    // add_rewrite_rule($page_name, 'index.php?' . $page_name . '=true', "top");
-    //add_rewrite_rule( $page_name, 'wp-login.php?' . $page_name . '=true', "top");
-    //}
-}
-
 
 function go_verify_username_password($user, $username, $password){
     $is_gameon = (isset($_POST['go_frontend_login']) ? $_POST['go_frontend_login'] : false);
@@ -474,7 +503,7 @@ function go_verify_username_password($user, $username, $password){
         }
     }
 }
-add_filter('authenticate', 'go_verify_username_password', 1, 3);
+//add_filter('authenticate', 'go_verify_username_password', 1, 3);
 
 
 
@@ -510,45 +539,6 @@ function go_profile_template_include($template){
 
     if (!is_main_site() || !is_gameful()) {
         $page_name = 'profile';
-        global $wp_query; //Load $wp_query object
-
-        $page_value = (isset($wp_query->query_vars[$page_name]) ? $wp_query->query_vars[$page_name] : false); //Check for query var "blah"
-
-        if ($page_value && $page_value == "true") { //Verify "blah" exists and value is "true".
-
-            acf_form_head();
-            return plugin_dir_path(__FILE__) . 'templates/user.php'; //Load your template or file
-
-        }
-    }
-    return $template; //Load normal template when $page_value != "true" as a fallback
-}
-
-
-/**
- * ADD New AVATAR PAGE
- */
-
-add_action('init', 'go_new_avatar_rewrite');
-function go_new_avatar_rewrite(){
-        $page_name = 'new_avatar';
-        add_rewrite_rule($page_name, 'index.php?' . $page_name . '=true', "top");
-}
-
-// Query Vars
-add_filter( 'query_vars', 'go_new_avatar_query_var' );
-function go_new_avatar_query_var( $vars ) {
-    $page_name = 'new_avatar';
-    $vars[] = $page_name;
-    return $vars;
-}
-
-/* Template Include */
-add_filter('template_include', 'go_new_avatar_template_include', 1, 1);
-function go_new_avatar_template_include($template){
-
-    if (!is_main_site() || !is_gameful()) {
-        $page_name = 'new_avatar';
         global $wp_query; //Load $wp_query object
 
         $page_value = (isset($wp_query->query_vars[$page_name]) ? $wp_query->query_vars[$page_name] : false); //Check for query var "blah"
@@ -610,67 +600,6 @@ function go_registration_template_include($template){
 
 
 
-add_action(  'login_init', 'user_registration_login_init', 0  );
-function user_registration_login_init () {
-    //$blog_id = get_current_blog_id();
-   // $referer = $_SERVER['HTTP_REFERER'];
-    $action = (isset($_GET['action']) ? $_GET['action'] : null);
-    $interim = (isset($_GET['interim-login']) ? $_GET['interim-login'] : null);
-    $test = (isset($_GET['test']) ? $_GET['test'] : null);
-    $redirect = (isset($_GET['redirect']) ? $_GET['redirect'] : true);
-    if(is_gameful()) {
-        $blog_id = get_current_blog_id();
-
-        if ((!is_main_site() || !is_gameful()) && empty($action) && $redirect && empty($interim) && empty($test)) {
-            $go_login_link = get_site_url(1, 'login');
-            $go_login_link = network_site_url('signin?redirect_to=' . $go_login_link . '?blog_id=' . $blog_id);
-            wp_redirect($go_login_link);
-            exit;
-        }
-    }else{
-
-    }
-
-
-    $referer = (isset( $_SERVER['HTTP_REFERER']) ?   $_SERVER['HTTP_REFERER'] : null);
-    $parts = parse_url($referer);
-    if(!empty($parts['query'])){
-        parse_str($parts['query'], $query);
-        $redirect_to = (isset($query['redirect_to']) ?  $query['redirect_to'] : null);
-        if(!empty($redirect_to)) {
-            $parts = parse_url($redirect_to);
-            parse_str($parts['query'], $query);
-        }
-        $blog_id = (isset($query['blog_id']) ?  $query['blog_id'] : null);
-    }
-
-
-
-
-
-    if (!empty($blog_id) || !is_gameful()) {
-        if(is_gameful()) {
-            switch_to_blog($blog_id);
-        }
-        $url = get_home_url();
-        //if (!is_user_logged_in()) {
-
-
-            if ($action == 'register') {
-                wp_redirect($url . '/register');
-                exit;
-            }
-            else if($action == 'lostpassword' && $redirect === true){//the redirect =false stops the redirect loop
-                $_SERVER['HTTP_REFERER'] = null;
-                wp_redirect($url . '/signin?action=lostpassword&redirect=false');
-                exit;
-            }
-        if(is_gameful()) {
-            restore_current_blog();
-        }
-    }
-}
-
 
 /************************
  * ADD Join PAGE
@@ -695,7 +624,6 @@ function go_join_query_var( $vars ) {
     return $vars;
 }
 
-
 /* Template Include */
 add_filter('template_include', 'go_join_template_include', 1, 1);
 function go_join_template_include($template){
@@ -714,20 +642,25 @@ function go_join_template_include($template){
     return $template; //Load normal template when $page_value != "true" as a fallback
 }
 
-
 function go_include_password_checker(){
-    $minPassword = get_option('options_minimum_password_strength');
+    $minPassword = get_site_option('options_minimum_password_strength');
     wp_localize_script( 'go_frontend', 'hasPassword', 'true' );
     wp_localize_script( 'go_frontend', 'minPassword', $minPassword );
 }
-
-
+//
 //prints a afc form on the front end
-function go_acf_user_form_func( $groups = array(), $fields = array(), $post_id = false, $return = '' ) {
+function go_acf_user_form_func( $groups = array(), $fields = array(), $redirect = false, $post_id, $button_text = 'Update' ) {
 
-    if (!$post_id){
-        $uid = get_current_user_id();
-        $post_id = 'user_'.$uid;
+
+    //set the return path for successful completion of the form
+    //for profile pages, add the updated=true query variable
+    //if this is a registration page, redirect to the default game on page on success
+    if($redirect){
+        $return = go_get_user_redirect();
+    }
+    else{
+        $return = (site_url('profile'));
+        $return = add_query_arg( 'updated', 'true', $return );
     }
 
 
@@ -737,7 +670,8 @@ function go_acf_user_form_func( $groups = array(), $fields = array(), $post_id =
             'post_id' => $post_id,
             'field_groups' => $groups,
             //'fields' => array('field_5cd3638830f17'),
-            'return' => add_query_arg( 'updated', 'true', $return )
+            'return' => $return,
+            'submit_value' => $button_text
         );
 
         ob_start();
@@ -755,19 +689,10 @@ function go_acf_user_form_func( $groups = array(), $fields = array(), $post_id =
         $options = array(
             'post_id' => $post_id,
             //'field_groups' => $groups,
-            'fields' => $fields
+            'fields' => $fields,
+            'return' => $return,
+            'submit_value' => $button_text
         );
-
-        //set the return path for successful completion of the form
-        //for profile pages, add the updated=true query variable
-        //if this is a registration page, redirect to the default game on page on success
-        if ($post_id ==='profile'){
-            $options['return'] = add_query_arg('updated', 'true', $return);
-        }
-        else {
-            $options['return'] = go_get_user_redirect();
-        }
-
 
         ob_start();
 
@@ -802,20 +727,27 @@ function go_validate_email($valid, $value, $field, $input){
     $user_id_email = email_exists($value);//returns the user_id of this email address, or false
     $user_id = get_current_user_id();
 
-    if (!empty($user_id_email)) {//if this user id exists in the database
-        if ($user_id != $user_id_email) {//if this $user_id is not the current user, return an error
-            $valid = 'An account with this email already exists.';
-            return $valid;
-        }
-    }
+    $referer = rtrim($_SERVER['HTTP_REFERER'], '/');
+    $page = substr($referer, strrpos($referer, '/') + 1);
 
-    $limit_domains_toggle = get_option('options_limit_domains_toggle');
-    if ($limit_domains_toggle) {
-        $email = $value;
-        $is_valid_email = validate_email_against_domains($email);
-        if (!$is_valid_email) {
-            $valid = go_domain_restrictions_message();
-            return $valid;
+    if($page != 'profile') {
+        if (!empty($user_id_email)) {//if this user id exists in the database
+            if ($user_id != $user_id_email) {//if this $user_id is not the current user, return an error
+                $valid = 'An account with this email already exists.';
+                return $valid;
+            }
+        }
+
+        //$limit_domains_toggle = get_option('options_limit_domains_toggle');
+        //if ($limit_domains_toggle) {
+        $security_options = get_option('options_security');
+        if(in_array('domains', $security_options)){
+            $email = $value;
+            $is_valid_email = validate_email_against_domains($email);
+            if (!$is_valid_email) {
+                $valid = go_domain_restrictions_message();
+                return $valid;
+            }
         }
     }
     //else this is a new email and is a valid for saving
@@ -878,7 +810,7 @@ function go_update_password_lightbox(){
     echo "<div style='display: none;'><div class='go_password_change_container' style='min-width: 300px;'>";
     $groups = array();
     $fields = array('field_5cd3640730f19', 'field_5cd3638830f17', 'field_5cd363d130f18', 'field_5cd52c8f46296');
-    $form =  go_acf_user_form_func($groups, $fields, 'password_reset', get_site_url(null, '/profile'));
+    $form =  go_acf_user_form_func($groups, $fields, false, 'password_reset' );
     echo $form;
     echo "</div></div>";
     die();
@@ -911,15 +843,6 @@ function go_acf_update_registration( $value, $post_id, $field  ) {
         update_option('users_can_register', false);
     }
     return $value;
-}
-
-add_filter('acf/load_field/key=field_5cd1d13769aa9', 'go_acf_load_display_name');
-function go_acf_load_display_name( $field ) {
-    $user_display_name = get_user_option( 'display_name' );
-    if(!empty($user_display_name)){
-        $field['value'] = $user_display_name;
-    }
-    return $field;
 }
 
 // set ACF pre-save stuff for the user profile/registration pages
@@ -1092,8 +1015,6 @@ function acf_save_user( $post_id ) {
         }
         else {//this is an existing user
 
-            update_user_option( $wp_user_id, 'display_name', $display, false );
-
             $email = (isset($_POST['acf']['field_5cd4be08e7077']) ? $_POST['acf']['field_5cd4be08e7077'] : null);
             if(!empty($email)) {
                 $emailField = sanitize_email($_POST['acf']['field_5cd4be08e7077']);
@@ -1107,7 +1028,7 @@ function acf_save_user( $post_id ) {
                     wp_update_user($args);
                 }
             }
-
+            /*
             $website = (isset($_POST['acf']['field_5cd4f996c0d86']) ? $_POST['acf']['field_5cd4f996c0d86'] : null);
             //$website = (isset($_POST['acf']['field_5cd4f996c0d86']) ?  $_POST['acf']['field_5cd4f996c0d86'] : null);
             if (!empty($website)) {
@@ -1117,7 +1038,7 @@ function acf_save_user( $post_id ) {
                     'user_url' => esc_attr($website)
                 );
                 wp_update_user($args);
-            }
+            }*/
 
             if($page_uri === 'join' && !is_user_member_of_blog()){
                 $blog_id = get_current_blog_id();
@@ -1131,6 +1052,77 @@ function acf_save_user( $post_id ) {
     return $post_id;
 }
 
+function go_update_display_name( $value, $post_id, $field  ) {
+   if (substr($post_id, 0 , 5) === 'user_') {
+        $user_id = str_replace("user_", "", $post_id);
+        update_user_option( $user_id, 'go_nickname', $value, false );
+    }
+    return $value;
+
+}
+add_filter('acf/update_value/name=go_nickname', 'go_update_display_name', 5, 3);
+
+function go_display_display_name( $value, $post_id, $field  ) {
+    if (substr($post_id, 0 , 5) === 'user_') {
+        $user_id = str_replace("user_", "", $post_id);
+        $value = go_get_user_display_name(  $user_id );
+    }
+    return $value;
+
+}
+add_filter('acf/load_value/name=go_nickname', 'go_display_display_name', 10, 3);
+
+/**
+ * WEBSITE
+ */
+function go_update_website( $value, $post_id, $field  ) {
+    if (substr($post_id, 0 , 5) === 'user_') {
+        $user_id = str_replace("user_", "", $post_id);
+        update_user_option( $user_id, 'go_website', $value, false );
+    }
+    return $value;
+}
+//add_filter('acf/update_value/name=go_website', 'go_update_website', 5, 3);
+add_filter('acf/update_value/key=field_5d1aeb63330ce', 'go_update_website', 5, 3);
+add_filter('acf/update_value/key=field_5cd4f996c0d86', 'go_update_website', 5, 3);
+add_filter('acf/update_value/key=field_5d8674ff61b2c', 'go_update_website', 5, 3);
+
+function go_display_website( $value, $post_id, $field  ) {
+    echo "<span id='go_display_website' style='display: none;'>$post_id</span>";
+    if (substr($post_id, 0 , 5) === 'user_') {
+        $user_id = str_replace("user_", "", $post_id);
+        $value = get_user_option( 'go_website', $user_id );
+    }
+    if(!$value){
+        $value = '';
+    }
+    return $value;
+}
+//add_filter('acf/load_value/name=go_website', 'go_display_website', 10, 3);
+add_filter('acf/load_value/key=field_5d1aeb63330ce', 'go_display_website', 10, 3);
+add_filter('acf/load_value/key=field_5cd4f996c0d86', 'go_display_website', 10, 3);
+add_filter('acf/load_value/key=field_5d8674ff61b2c', 'go_display_website', 10, 3);
+
+function go_update_avatar( $value, $post_id, $field  ) {
+    if (substr($post_id, 0 , 5) === 'user_') {
+        $user_id = str_replace("user_", "", $post_id);
+        update_user_option( $user_id, 'go_avatar', $value, false );
+    }
+    return $value;
+
+}
+add_filter('acf/update_value/name=go_avatar', 'go_update_avatar', 5, 3);
+
+function go_display_avatar( $value, $post_id, $field  ) {
+    if (substr($post_id, 0 , 5) === 'user_') {
+        $user_id = str_replace("user_", "", $post_id);
+        $value = get_user_option( 'go_avatar', $user_id );
+    }
+    return $value;
+
+}
+add_filter('acf/load_value/name=go_avatar', 'go_display_avatar', 10, 3);
+
 //removes sections and seats from metadata before resaving them
 function go_remove_sections_and_seats($user_id) {
     $key = go_prefix_key('go_section');
@@ -1139,12 +1131,14 @@ function go_remove_sections_and_seats($user_id) {
     $key = go_prefix_key('go_seat');
     delete_user_meta($user_id, $key);
 }
+add_action('edit_user_profile_update', 'go_remove_sections_and_seats');
 
 function go_update_sections( $value, $post_id, $field  ) {
     global $sections_cleared;
 
     if (substr($post_id, 0 , 5) === 'user_') {
         $user_id = str_replace("user_", "", $post_id);
+
 
         //remove sections and seats previously saved
         if(empty($sections_cleared)) {
@@ -1158,12 +1152,11 @@ function go_update_sections( $value, $post_id, $field  ) {
         //update_user_option($user_id, 'go_section', $value);//update option adds prefix, but only can save one option
     }
     $GLOBALS['section'] = $value;
-    return $value;
+    return '';
 
 }
 add_filter('acf/update_value/name=user-section', 'go_update_sections', 5, 3);
 //add_filter('acf/update_value/key=field_5cd5031deb292', 'go_update_sections', 5, 3);
-
 
 function go_update_seats( $value, $post_id, $field  ) {
 
@@ -1175,457 +1168,76 @@ function go_update_seats( $value, $post_id, $field  ) {
         //update_user_option($user_id, 'go_seat', $myvalue);//update option adds prefix, but only can save one option
         add_user_meta( $user_id, $key, $myvalue, false );//need to use add user meta with prefix added so multiple options can be added
     }
-    return $value;
+    return '';
 }
 add_filter('acf/update_value/name=user-seat', 'go_update_seats', 10, 3);
-//add_filter('acf/update_value/key=field_5cd5031deb293', 'go_update_seats', 10, 3);
 
-//this changes the logo on the default wordpress login
-/*
-function go_login_logo()
-{
-    $logo = get_option('options_go_login_logo');
+function go_display_sections_and_seats( $value, $post_id, $field  ) {
+    if (substr($post_id, 0 , 5) === 'user_') {
+        $user_id = str_replace("user_", "", $post_id);
 
-    if ($logo) {
+        $seat_key = go_prefix_key('go_seat');
+        $section_key = go_prefix_key('go_section');
 
-        //$url = wp_get_attachment_image_src($logo, '250, 250');
-        $url = wp_get_attachment_image_src($logo, 'medium');
-        $url = $url[0];
-        $site_url = site_url();
-        ?>
-        <style type="text/css">
-            #login h1 a, .login h1 a {
-                background-image: url(<?php echo $url; ?>);
-                width: 100%;
-                height: 150px;
-                margin: 0 auto;
-                background-size: unset;
-                background-size: auto 150px;;
+        $sections = get_user_meta($user_id, $section_key, false);
+        $seats = get_user_meta($user_id, $seat_key, false);
+
+
+        $hook = (isset($GLOBALS['hook_suffix']) ?  $GLOBALS['hook_suffix'] : null);
+        if($hook === 'user-edit.php'){
+            $section_fields = array("field_5cd5031deb292");//backend editing
+            $seat_fields = array("field_5cd5031deb293");
+        }else{
+           // $section_field = "field_5d1bca2e8c585";//multiple, no repeats
+           // $seat_field = "field_5d1bca2e8c586";
+
+            $section_fields = array("field_5cd4f7b4498dd", "field_5d1bca108c582", "field_5d1bc17d82db9",
+                "field_5d1bcaa48c58b", "field_5d1bca2e8c585", "field_5d1bc9e48c57e", "field_5d1bd3f76f8a4", "field_5d1bd3f46f8a1",
+                "field_5d1bc8bf8c577", "field_5d1bd3f26f89e", "field_5d1bd3ee6f89b", "field_5d1bc9fa8c580");
+
+            $seat_fields = array("field_5cd4f7b449909", "field_5d1bca108c583", "field_5d1bcaa48c58c", "field_5d1bca2e8c586",
+                "field_5d1bd3f76f8a5", "field_5d1bd3f46f8a2", "field_5d1bd3f26f89f", "field_5d1bd3ee6f89c", "field_5d1bc9918c57a", "field_5d1bc9ae8c57c");
+        }
+        if (!empty($sections)) {
+            $value = array();
+            $i = 0;
+            foreach ($sections as $section) {
+                if(!empty($section)) {
+                    $term = get_term($section);
+                    if (!empty($term)) {
+                        foreach ($section_fields as $section_field) {
+                            $value[$i][$section_field] = $section;
+                        }
+                        //$name = $term->name;
+                        //echo 'Section: ' . $name;
+                        if (!empty($seats)) {
+                            //$name = get_option('options_go_seats_name');
+                            $seat = $seats[$i];
+                            $arr = explode("_", $seat, 2);
+                            $first = $arr[0];
+                            if (!empty($first)) {
+                                //echo ": $name " . $first;
+                                foreach ($seat_fields as $seat_field) {
+                                    $value[$i][$seat_field] = $first;
+                                }
+                            }
+                            $i++;
+
+                        }
+                        // echo "<br>";
+                    }
+                }
             }
-
-        </style>
-
-        <script>
-            jQuery("#login h1 a").attr("href", "<?php echo $site_url; ?>");
-        </script>
-
-        <?php
-
+        }
     }
-}*/
-//add_action( 'login_enqueue_scripts', 'go_login_logo' );
-
-
-
-
-// Query Vars
-/*
-add_filter( 'query_vars', 'go_login_query_var' );
-function go_login_query_var( $vars ) {
-    $page_name = 'login';
-    $vars[] = $page_name;
-    return $vars;
+    return $value;
 }
-*/
-/* Template Include */
-/*
-add_filter('template_include', 'go_login_template_include', 1, 1);
-function go_login_template_include($template){
-    $blog_id = get_current_blog_id();
-    // if (!is_main_site() || !is_gameful()) {
-    $page_name = 'login';
-    global $wp_query; //Load $wp_query object
+add_filter('acf/load_value/name=go_section_and_seat', 'go_display_sections_and_seats', 10, 3);
 
-    $page_value = (isset($wp_query->query_vars[$page_name]) ? $wp_query->query_vars[$page_name] : false); //Check for query var
-
-    if ($page_value && ($page_value == "true" || $page_value == "failed" || $page_value == "empty" || $page_value == "checkemail" || $page_value == "bad_domain")) { //Verify "blah" exists and value is "true".
-        return plugin_dir_path(__FILE__) . 'templates/template.php'; //Load your template or file
-    }
-    //}
-
-
-    return $template; //Load normal template when $page_value != "true" as a fallback
+//for debugging
+function go_display_post_id( $value, $post_id, $field  ) {
+    $name = $field['name'];
+    echo "<span id='go_display_post_id' style='display: none;'>$post_id $name</span>";
+    return $value;
 }
-*/
-
-
-/*
-//add_filter( 'login_redirect', 'my_login_redirect', 10, 3 );
-function my_login_redirect( $redirect_to, $request, $user ) {
-    //is there a user to check?
-    $blog_id = get_current_blog_id();
-    if (!is_main_site() || !is_gameful()) {
-        $request = $_SERVER["REQUEST_URI"];
-        //$path =  parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
-        $redirect_to = $request."?blog_id=".$blog_id;
-    }
-
-    return $redirect_to;
-}
-*/
-
-/*
-function get_error_message( $error_code ) {
-    switch ( $error_code ) {
-        case 'empty_username':
-            return __( 'You do have an email address, right?', 'personalize-login' );
-
-        case 'empty_password':
-            return __( 'You need to enter a password to login.', 'personalize-login' );
-
-        case 'invalid_username':
-            return __(
-                "We don't have any users with that email address. Maybe you used a different one when signing up?",
-                'personalize-login'
-            );
-
-        case 'incorrect_password':
-            $err = __(
-                "The password you entered wasn't quite right. <a href='%s'>Did you forget your password</a>?",
-                'personalize-login'
-            );
-            return sprintf( $err, wp_lostpassword_url() );
-
-        default:
-            break;
-    }
-
-    return __( 'An unknown error occurred. Please try again later.', 'personalize-login' );
-}
-*/
-
-/**
- * ADD RESET PASSWORD PAGE
- */
-
-/*
-add_action('init', 'go_reset_password_rewrite');
-function go_reset_password_rewrite(){
-    $blog_id = get_current_blog_id();
-    if (!is_main_site() || !is_gameful()) {
-        $page_name = 'lostpassword';
-        add_rewrite_rule($page_name, 'index.php?' . $page_name . '=true', "top");
-    }
-}
-
-// Query Vars
-add_filter( 'query_vars', 'go_reset_password_query_var' );
-function go_reset_password_query_var( $vars ) {
-    $page_name = 'lostpassword';
-    $vars[] = $page_name;
-    return $vars;
-}
-
-
-//Template Include
-add_filter('template_include', 'go_reset_password_template_include', 1, 1);
-function go_reset_password_template_include($template){
-    $blog_id = get_current_blog_id();
-    if (!is_main_site() || !is_gameful()) {
-        $page_name = 'lostpassword';
-        global $wp_query; //Load $wp_query object
-
-        $page_value = (isset($wp_query->query_vars[$page_name]) ? $wp_query->query_vars[$page_name] : false); //Check for query var "blah"
-
-        if ($page_value && ($page_value == "true" || $page_value == "invalid")) { //Verify "blah" exists and value is "true".
-            return plugin_dir_path(__FILE__) . 'templates/reset_password_template.php'; //Load your template or file
-        }
-    }
-    return $template; //Load normal template when $page_value != "true" as a fallback
-}
-
-//Redirect on submit a lostpassword form
-add_action( 'login_form_lostpassword', 'do_password_lost' );
-function do_password_lost() {
-    if ( 'POST' == $_SERVER['REQUEST_METHOD'] ) {
-        $errors = retrieve_password();
-        $page_name = 'lostpassword';
-        $login_page = get_home_url( $page_name);
-        if ( is_wp_error( $errors ) ) {
-            // Errors found
-            //$redirect_url = home_url( 'member-password-lost' );
-            //$redirect_url = add_query_arg( 'errors', join( ',', $errors->get_error_codes() ), $redirect_url );
-            $page_name = 'lostpassword';
-            $login_page = get_home_url( $page_name);
-            wp_redirect($login_page . '?'.$page_name. '=invalid');
-            exit;
-        } else {
-            // Email sent
-            //$redirect_url = home_url( 'member-login' );
-            // $redirect_url = add_query_arg( 'checkemail', 'confirm', $redirect_url );
-            $page_name = 'login';
-            $login_page = get_home_url( $page_name);
-            wp_redirect($login_page . '?'.$page_name. '=checkemail');
-            exit;
-        }
-
-        //wp_redirect( $redirect_url );
-        //exit;
-    }
-}*/
-
-
-/*add_filter('login_form_middle','go_added_login_field');
-function go_added_login_field(){
-    //Output your HTML
-    //this adds the lost password field
-    //and a hidden input field that is used to show the error messages
-    $this_blog_id = (isset($_GET['blog_id']) ? $_GET['blog_id'] : null);
-    $link = get_site_url($this_blog_id, 'lostpassword');
-    $additional_field = "<div style='    margin-top: -20px; float: right; font-size: .8em;'><a href='$link'>Lost Password?</a></div>
-                        <div class='login-custom-field-wrapper' style='display: none;'>
-         <input type='text' tabindex='20' size='20' value='true' class='input' id='go_frontend_login' name='go_frontend_login'>
-     </div>";
-
-    return $additional_field;
-}*/
-
-/*
- * Following 2 functions used to show login error message in same page
- */
-
-/*function go_login_failed() {
-    $is_gameon = (isset($_POST['go_frontend_login']) ? $_POST['go_frontend_login'] : false);
-    if ($is_gameon) {
-        $page_name = 'login';
-        //$login_page = get_home_url($page_name);
-        //$go_login_link = network_site_url('login');
-        //$blog_id = (isset($_GET['blog_id']) ? $_GET['blog_id'] : null);
-        $redirect_to = $_POST['redirect_to'];
-        $redirect_info = $redirect_to . '&' . $page_name . '=failed';
-        wp_redirect($redirect_info);
-
-
-        //wp_redirect($go_login_link . '?blog_id='.$blog_id.'&' . $page_name . '=failed');
-        //$go_login_link = get_site_url(null, 'login');
-        //wp_redirect($go_login_link . '?' . $page_name . '=failed');
-        //add_rewrite_rule( $page_name, 'index.php?' . $page_name . '=true&login=failed', "top");
-        exit;
-    }
-}*/
-//add_action('wp_login_failed', 'go_login_failed');
-
-
-//add_filter( 'login_message', 'go_login_message' );
-/*
-function go_login_message($message){
-    $referer = $_SERVER['REDIRECT_QUERY_STRING'];
-    $parts = parse_url($referer);
-    parse_str($parts['query'], $query);
-    $blog_id = (isset($query['blog_id']) ?  $query['blog_id'] : null);
-
-    if(is_gameful()) {
-        switch_to_blog($blog_id);
-    }
-    $go_domain_restrictions_message = go_domain_restrictions_message();
-    if(is_gameful()) {
-            restore_current_blog();
-        }
-    if ( !empty($go_domain_restrictions_message) ){
-        $message .= "<div style ='background-color: white;
-                                    margin-left: 0;
-                                    padding: 26px 24px 46px;
-                                    font-size: .9em;
-                                    overflow: hidden;
-                                    background: #fff;
-                                    box-shadow: 0 1px 3px rgba(0,0,0,.13);'>";
-        $message .= "<br>$go_domain_restrictions_message";
-        $message .= "</div>";
-
-
-    }
-    return $message;
-}*/
-
-
-//if on a multisite and the signup page is the destination
-//this will redirect to the login page on the main blog
-//this is based on using a plugin to change the login page url to /signin
-//add_action('init', 'go_sigin_ms_rewrite');
-/*
-function go_sigin_ms_rewrite(){
-    $blog_id = get_current_blog_id();
-    if (!is_main_site() || !is_gameful()) {
-        $path =  parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
-        $query =  parse_url($_SERVER["REQUEST_URI"], PHP_URL_QUERY);
-        $path_after_slash = substr($path, strrpos($path, '/') + 1);
-        if ($path_after_slash === 'signin' && empty($query)) {
-            if(is_gameful()) {
-            $main_site_id = get_network()->site_id;
-            switch_to_blog($main_site_id);
-        }
-            wp_redirect(site_url('signin'));
-            if(is_gameful()) {
-            restore_current_blog();
-        }
-            exit;
-        }
-    }
-}*/
-
-//add_action('wp_login', 'go_signin_success_redirect');
-/*
-function go_signin_success_redirect(){
-    //$source_blog_id = (isset($_GET['blog_redirect']) ? $_GET['blog_redirect'] : null);
-    $referer = $_SERVER['HTTP_REFERER'];
-    $parts = parse_url($referer);
-    parse_str($parts['query'], $query);
-    $blog_id = $query['blog_id'];
-
-    if(!empty($blog_id)) {
-        if(is_gameful()) {
-        switch_to_blog($blog_id);
-    }
-        //if (is_user_logged_in()) {
-            wp_redirect(go_get_user_redirect());
-            exit;
-        //}
-
-    }
-
-}*/
-
-//add_action('init', 'go_sigin_add_blog_id');
-/*
-function go_sigin_add_blog_id(){
-    $blog_id = get_current_blog_id();
-    if (!is_main_site() || !is_gameful()) {
-        $request = $_SERVER["REQUEST_URI"];
-        //$path =  parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
-        $query =  parse_url($_SERVER["REQUEST_URI"], PHP_URL_QUERY);
-        //$path_after_slash = substr($path, strrpos($path, '/') + 1);
-        if (empty($query)) {
-            //if(is_gameful()) {
-            //            $main_site_id = get_network()->site_id;
-            //            switch_to_blog($main_site_id);
-            //        }
-            wp_redirect($request."?blog_id=".$blog_id);
-            // if(is_gameful()) {
-            //            restore_current_blog();
-            //        }
-            exit;
-        }
-    }
-}*/
-
-/*
-function go_get_domain_restrictions(){
-    $current_blog_id = get_current_blog_id();
-    $blog_ids = array($current_blog_id, 1);
-    $domains = array();
-    $x = 0;
-    foreach ($blog_ids as $blog_id) {
-
-        if ($blog_id == 1) {//adding blog 1 domains to the list, but only once if current blog is blog 1
-            if ($x> 0){
-                continue;
-            }
-            $x++;
-            if(is_gameful()) {
-            $main_site_id = get_network()->site_id;
-            switch_to_blog($main_site_id);
-        }
-
-        }
-        $domain_count = get_option('options_limit_domains_domains');
-        //$domains = get_field('options_limit_domains_domains');
-        $i = 0;
-
-        while ($domain_count > $i) {
-            $domain = get_option('options_limit_domains_domains_' . $i . '_domain');
-            if (!empty($domain)) {
-                $domains[] = $domain;
-            }
-            $i++;
-        }
-
-        if(is_gameful()) {
-            restore_current_blog();
-        }
-    }
-    return $domains;
-}*/
-
-
-/**
- * SET LOGIN REDIRECT BASED ON OPTIONS
- */
-
-
-//This is done on the template
-/*add_filter('init', 'go_user_page_redirect');
-function go_user_page_redirect(){
-    $this_page =  go_get_page_uri();
-
-    if ($this_page === 'join' || $this_page === 'register' || $this_page === 'profile') {
-        if (is_user_logged_in()) {
-
-            if (is_user_member_of_blog()) {
-                $redirect_path = 'profile';//if logged in this is a profile page
-            } else {
-                $redirect_path = 'join';//if logged in, but not a member of this blog, this is a join page
-            }
-        } else {
-            $redirect_path = 'register';//else not logged in and this is a register page.
-        }
-
-        $updated = (isset($_GET['updated'])) ? $_GET['updated'] : 0;
-        if ($updated && $this_page === 'join') {
-            $user_id = get_current_user_id();
-            $landing_page = go_get_user_redirect($user_id);
-            wp_redirect($landing_page);
-            exit;
-        }
-
-        if ($this_page !== $redirect_path) {
-            wp_redirect(site_url($redirect_path));
-            exit;
-        }
-    }
-}
-*/
-
-//add_action('wp_login', 'go_close_modal');
-/*
-function go_close_modal($template){
-    $doing_cron = (isset($_REQUEST['doing_wp_cron']) ?  true : false);
-    if ($doing_cron){
-        echo "close_me";
-        exit;
-    }
-}*/
-
-/**
- *  ADD LOG OUT PAGE
- */
-/*
-add_action('init', 'go_logout_rewrite');
-function go_logout_rewrite(){
-    $page_name = 'logout';
-    add_rewrite_rule( $page_name, 'index.php?' . $page_name . '=true', "top");
-    //add_rewrite_rule( $page_name, 'wp-login.php?' . $page_name . '=true', "top");
-}
-
-// Query Vars
-add_filter( 'query_vars', 'go_logout_query_var' );
-function go_logout_query_var( $vars ) {
-    $page_name = 'logout';
-    $vars[] = $page_name;
-    return $vars;
-}
-
-// Template Include
-add_filter('template_include', 'go_logout_template_include', 1, 1);
-function go_logout_template_include($template){
-    $page_name = 'logout';
-    global $wp_query; //Load $wp_query object
-
-    $page_value = ( isset($wp_query->query_vars[$page_name]) ? $wp_query->query_vars[$page_name] : false ); //Check for query var "blah"
-
-    if ($page_value && ($page_value == "true" || $page_value == "invalid") ) { //Verify "blah" exists and value is "true".
-        return plugin_dir_path(__FILE__).'templates/logout.php'; //Load your template or file
-    }
-
-    return $template; //Load normal template when $page_value != "true" as a fallback
-}
-*/
+add_filter('acf/load_value', 'go_display_post_id', 10, 3);

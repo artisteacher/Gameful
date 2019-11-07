@@ -9,7 +9,15 @@
             "type": "image",
             "instructions": "",
             "required": 0,
-            "conditional_logic": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5d9ad6e22129d",
+                        "operator": "!=",
+                        "value": "1"
+                    }
+                ]
+            ],
             "wrapper": {
                 "width": "",
                 "class": "go_child_term",
@@ -25,6 +33,84 @@
             "max_height": "",
             "max_size": "",
             "mime_types": ""
+        },
+        {
+            "key": "field_5d9ad6e22129d",
+            "label": "Use Font Awesome Icon",
+            "name": "image_source",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "go_child_term",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_5d92d6111bcb6",
+            "label": "icon",
+            "name": "icon",
+            "type": "font-awesome",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5d9ad6e22129d",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "go_child_term",
+                "id": ""
+            },
+            "icon_sets": [
+                "fas",
+                "far",
+                "fal"
+            ],
+            "custom_icon_set": "",
+            "default_label": "<i class=\"fas\"><\/i> user",
+            "default_value": "fas fa-user",
+            "save_format": "element",
+            "allow_null": 0,
+            "show_preview": 1,
+            "enqueue_fa": 0,
+            "fa_live_preview": "",
+            "choices": []
+        },
+        {
+            "key": "field_5d9ad7962129f",
+            "label": "Icon Color",
+            "name": "icon_color",
+            "type": "color_picker",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5d9ad6e22129d",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "go_child_term",
+                "id": ""
+            },
+            "default_value": "#444444"
         }
     ],
     "location": [
@@ -51,5 +137,6 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1560873401
+    "recaptcha": 0,
+    "modified": 1570430753
 }

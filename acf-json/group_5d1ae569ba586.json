@@ -7,7 +7,7 @@
             "label": "User Name",
             "name": "user_name",
             "type": "text",
-            "instructions": "",
+            "instructions": "This is your login name. Lowercase letters and numbers only.  No special characters, spaces, or capital letters.",
             "required": 1,
             "conditional_logic": 0,
             "wrapper": {
@@ -80,9 +80,9 @@
         {
             "key": "field_5cd1d13769aa9",
             "label": "Display Name",
-            "name": "nickname",
+            "name": "go_nickname",
             "type": "text",
-            "instructions": "",
+            "instructions": "Name shown to other players of the game.",
             "required": 1,
             "conditional_logic": 0,
             "wrapper": {
@@ -94,12 +94,12 @@
             "placeholder": "",
             "prepend": "",
             "append": "",
-            "maxlength": ""
+            "maxlength": 40
         },
         {
             "key": "field_5cd4f996c0d86",
             "label": "Website",
-            "name": "website",
+            "name": "go_swsebsite",
             "type": "url",
             "instructions": "",
             "required": 0,
@@ -115,7 +115,7 @@
         {
             "key": "field_5d1aeb63330ce",
             "label": "Website",
-            "name": "website",
+            "name": "go_website",
             "type": "url",
             "instructions": "",
             "required": 1,
@@ -1499,5 +1499,5 @@
     "active": 0,
     "description": "",
     "recaptcha": 0,
-    "modified": 1564439756
+    "modified": 1571800808
 }

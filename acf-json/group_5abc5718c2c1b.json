@@ -926,6 +926,103 @@
                     "prepend": "",
                     "append": "",
                     "maxlength": ""
+                },
+                {
+                    "key": "field_5da26e16e4e67",
+                    "label": "Notifications",
+                    "name": "icon",
+                    "type": "group",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_5da26e2ae4e68",
+                            "label": "Use Icon",
+                            "name": "toggle",
+                            "type": "true_false",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "message": "",
+                            "default_value": 0,
+                            "ui": 1,
+                            "ui_on_text": "",
+                            "ui_off_text": ""
+                        },
+                        {
+                            "key": "field_5da267ba66e7d",
+                            "label": "Icon",
+                            "name": "icon",
+                            "type": "font-awesome",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_5da26e2ae4e68",
+                                        "operator": "==",
+                                        "value": "1"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "icon_sets": [
+                                "fas",
+                                "far",
+                                "fal",
+                                "fad",
+                                "fab"
+                            ],
+                            "custom_icon_set": "",
+                            "default_label": "<i class=\"fas\"><\/i> battery-half",
+                            "default_value": "fas fa-brain",
+                            "save_format": "element",
+                            "allow_null": 0,
+                            "show_preview": 1,
+                            "enqueue_fa": 0,
+                            "fa_live_preview": "",
+                            "choices": []
+                        },
+                        {
+                            "key": "field_5da2736d923f2",
+                            "label": "Color",
+                            "name": "color",
+                            "type": "color_picker",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_5da26e2ae4e68",
+                                        "operator": "==",
+                                        "value": "1"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "#FFFFFF"
+                        }
+                    ]
                 }
             ]
         },
@@ -1055,6 +1152,38 @@
                     "maxlength": ""
                 },
                 {
+                    "key": "field_5d79ac8e9f75d",
+                    "label": "Abbreviation Display",
+                    "name": "abbreviation_display",
+                    "type": "radio",
+                    "instructions": "<span class=\"tooltip\" data-tippy-content=\"Set which side of the loot the abbreviation is on. (e.g., $1.56 or 1.56 G)\"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5cb92fed8af66",
+                                "operator": "==",
+                                "value": "currency"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "choices": {
+                        "left": "left",
+                        "right": "right"
+                    },
+                    "allow_null": 0,
+                    "other_choice": 0,
+                    "default_value": "left",
+                    "layout": "vertical",
+                    "return_format": "value",
+                    "save_other_choice": 0
+                },
+                {
                     "key": "field_5cb930998af68",
                     "label": "Coin Names",
                     "name": "coin_names",
@@ -1133,7 +1262,7 @@
                                     "placeholder": "G",
                                     "prepend": "",
                                     "append": "",
-                                    "maxlength": 1
+                                    "maxlength": 5
                                 }
                             ]
                         },
@@ -1188,7 +1317,7 @@
                                     "placeholder": "S",
                                     "prepend": "",
                                     "append": "",
-                                    "maxlength": 1
+                                    "maxlength": 5
                                 }
                             ]
                         },
@@ -1243,9 +1372,183 @@
                                     "placeholder": "B",
                                     "prepend": "",
                                     "append": "",
-                                    "maxlength": 1
+                                    "maxlength": 5
                                 }
                             ]
+                        }
+                    ]
+                },
+                {
+                    "key": "field_5da26e6de4e69",
+                    "label": "Notifications",
+                    "name": "icon",
+                    "type": "group",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_5da2686a66e7e",
+                            "label": "Icon",
+                            "name": "option",
+                            "type": "button_group",
+                            "instructions": "Icon to show when earning or loosing loot.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "none": "None",
+                                "default": "Coin",
+                                "custom": "Single Icon"
+                            },
+                            "allow_null": 0,
+                            "default_value": "none",
+                            "layout": "horizontal",
+                            "return_format": "value"
+                        },
+                        {
+                            "key": "field_5da268be66e7f",
+                            "label": "Icon",
+                            "name": "icon",
+                            "type": "font-awesome",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_5da2686a66e7e",
+                                        "operator": "==",
+                                        "value": "custom"
+                                    }
+                                ],
+                                [
+                                    {
+                                        "field": "field_5da2686a66e7e",
+                                        "operator": "==",
+                                        "value": "default"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "icon_sets": [
+                                "fas",
+                                "far",
+                                "fal",
+                                "fad"
+                            ],
+                            "custom_icon_set": "",
+                            "default_label": "<i class=\"fas\"><\/i> battery-half",
+                            "default_value": "fas fa-coin",
+                            "save_format": "element",
+                            "allow_null": 0,
+                            "show_preview": 1,
+                            "enqueue_fa": 0,
+                            "fa_live_preview": "",
+                            "choices": []
+                        },
+                        {
+                            "key": "field_5da2827a9a26a",
+                            "label": "Back Icon",
+                            "name": "icon_back",
+                            "type": "font-awesome",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_5da2686a66e7e",
+                                        "operator": "==",
+                                        "value": "default"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "icon_sets": [
+                                "fas",
+                                "far",
+                                "fal",
+                                "fad"
+                            ],
+                            "custom_icon_set": "",
+                            "default_label": "<i class=\"fas\"><\/i> battery-half",
+                            "default_value": "fas fa-coin",
+                            "save_format": "element",
+                            "allow_null": 0,
+                            "show_preview": 1,
+                            "enqueue_fa": 0,
+                            "fa_live_preview": "",
+                            "choices": []
+                        },
+                        {
+                            "key": "field_5da27326923f0",
+                            "label": "Icon Color",
+                            "name": "color",
+                            "type": "color_picker",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_5da2686a66e7e",
+                                        "operator": "==",
+                                        "value": "default"
+                                    }
+                                ],
+                                [
+                                    {
+                                        "field": "field_5da2686a66e7e",
+                                        "operator": "==",
+                                        "value": "custom"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "#888"
+                        },
+                        {
+                            "key": "field_5da4fa1ead622",
+                            "label": "Coin Color",
+                            "name": "coin_color",
+                            "type": "color_picker",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_5da2686a66e7e",
+                                        "operator": "==",
+                                        "value": "default"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "#ffd700"
                         }
                     ]
                 }
@@ -1417,6 +1720,102 @@
                     "min": 0,
                     "max": 100,
                     "step": ""
+                },
+                {
+                    "key": "field_5da26e92e4e6a",
+                    "label": "Notificaitons",
+                    "name": "icon",
+                    "type": "group",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_5da26eaae4e6b",
+                            "label": "Use Icon",
+                            "name": "toggle",
+                            "type": "true_false",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "message": "",
+                            "default_value": 0,
+                            "ui": 1,
+                            "ui_on_text": "",
+                            "ui_off_text": ""
+                        },
+                        {
+                            "key": "field_5da268fa66e80",
+                            "label": "Icon",
+                            "name": "icon",
+                            "type": "font-awesome",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_5da26eaae4e6b",
+                                        "operator": "==",
+                                        "value": "1"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "icon_sets": [
+                                "fas",
+                                "far",
+                                "fal",
+                                "fad"
+                            ],
+                            "custom_icon_set": "",
+                            "default_label": "<i class=\"fas\"><\/i> battery-half",
+                            "default_value": "fas fa-battery-half",
+                            "save_format": "element",
+                            "allow_null": 0,
+                            "show_preview": 1,
+                            "enqueue_fa": 0,
+                            "fa_live_preview": "",
+                            "choices": []
+                        },
+                        {
+                            "key": "field_5da2734c923f1",
+                            "label": "Color",
+                            "name": "color",
+                            "type": "color_picker",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_5da26eaae4e6b",
+                                        "operator": "==",
+                                        "value": "1"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "#FFFFFF"
+                        }
+                    ]
                 }
             ]
         },
@@ -1955,5 +2354,5 @@
     "active": 1,
     "description": "",
     "recaptcha": 0,
-    "modified": 1566937840
+    "modified": 1571093283
 }

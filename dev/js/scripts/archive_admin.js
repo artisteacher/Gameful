@@ -1,6 +1,4 @@
 jQuery(document).ready(function(){
-
-
     if (typeof (is_tools_archive_page) !== 'undefined') {
         if (jQuery('#records_tabs').length) {
             jQuery('#records_tabs').tabs();
@@ -18,7 +16,6 @@ jQuery(document).ready(function(){
         });
     }
 });
-
 
 function go_save_admin_archive(){
     console.log('go_save_admin_archive');
@@ -86,7 +83,6 @@ function go_save_admin_archive(){
             go_create_user_list(archive_type, archive_vars);
         })
 }
-
 
 function go_create_user_list(archive_type, archive_vars){
     console.log('go_create_user_list');
@@ -214,7 +210,6 @@ function go_generate_user_archive(archive_type, archive_vars, i, total_users, er
                 go_generate_user_archive(archive_type, archive_vars, i, total_users)
             }else{
                 go_zip_archive();
-
                 //reactivate button
                 jQuery(".go_save_icon_multiple_clipboard").parent().off().one("click", function(e){
                     go_save_admin_archive();

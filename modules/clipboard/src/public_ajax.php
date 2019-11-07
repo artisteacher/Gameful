@@ -44,7 +44,14 @@ function go_badgeQuery(){
     if (!empty($badge)) {
 
         global $wpdb;
+        if(is_gameful()){
+            $primary_blog_id = get_main_site_id();
+            switch_to_blog(intval($primary_blog_id));
+        }
         $umTable = "{$wpdb->prefix}usermeta";
+        if(is_gameful()){
+           restore_current_blog();
+        }
         $key = go_prefix_key('go_badge');
 
         $Query = "   LEFT JOIN $umTable as t5 ON t4.user_id = t5.user_id
@@ -67,7 +74,14 @@ function go_groupQuery($group = false){
     if (!empty($group)) {
 
         global $wpdb;
+        if(is_gameful()){
+            $primary_blog_id = get_main_site_id();
+            switch_to_blog(intval($primary_blog_id));
+        }
         $umTable = "{$wpdb->prefix}usermeta";
+        if(is_gameful()){
+            restore_current_blog();
+        }
         $key = go_prefix_key('go_group');
 
         $Query = "   LEFT JOIN $umTable AS t7 ON t6.user_id = t7.user_id

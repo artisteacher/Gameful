@@ -139,6 +139,7 @@ function go_make_user_archive_zip(){
         $show_loot = false;
     }
 
+
     $current_user_id = get_current_user_id();
     $destination = plugin_dir_path( __FILE__ )  . 'archive_temp/' . $current_user_id .'/temp/';
 
@@ -156,7 +157,7 @@ function go_make_user_archive_zip(){
         $destination = $destination . 'users/' . $username .'/';
         mkdir($destination, 0777, 1);
     }else {
-        go_clean_up_archive_temp_folder();//clean up old files in the archive_temp_folder
+
 
         //make temp directory if it doesn't already exist
         mkdir($destination, 0777, 1);
@@ -191,7 +192,9 @@ function go_zip_archive(){
     $zip_dir = plugin_dir_path( __FILE__ )  . 'archive_temp/' . $current_user_id . "/zip/";
     mkdir( $zip_dir,0777,1  );
     //$dir = plugin_dir_path( __FILE__ ) . 'temp/';
-    $zip_file = $zip_dir . "MyBlogArchive.zip";
+    $time = current_time('timestamp');
+    $zip_file_name = "MyBlogArchive_".$time.".zip";
+    $zip_file = $zip_dir . $zip_file_name;
 
 // Get real path for our folder
     $rootPath = realpath($destination);
@@ -224,7 +227,7 @@ function go_zip_archive(){
 
     $success = $zip->close();
     if($success) {
-        $zip_url = plugin_dir_url(__FILE__)  . 'archive_temp/' . $current_user_id . "/zip/MyBlogArchive.zip";
+        $zip_url = plugin_dir_url(__FILE__)  . 'archive_temp/' . $current_user_id . "/zip/". $zip_file_name;
         echo $zip_url;
     }else{
         echo 0;
@@ -369,7 +372,8 @@ function go_create_user_list(){
 
     $current_user_id = get_current_user_id();
     $destination = plugin_dir_path( __FILE__ )  . 'archive_temp/' . $current_user_id .'/temp/';
-
+    //go_clean_up_archive_temp_folder();//clean up old files in the archive_temp_folder
+    go_delete_temp_archive_helper();
     ob_start();
     go_generate_user_list();
     $content = ob_get_contents();
@@ -606,6 +610,3 @@ function convert_urls($content, $destination){
 
     return $content;
 }
-
-
-

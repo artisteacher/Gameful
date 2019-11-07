@@ -20,10 +20,12 @@ if ( !is_admin() ) {
     add_action( 'wp_ajax_go_flush_all_permalinks', 'go_flush_all_permalinks' ); //OK
     add_action( 'wp_ajax_go_disable_game_on_this_site', 'go_disable_game_on_this_site' ); //OK
     add_action( 'wp_ajax_go_import_game_data', 'go_import_game_data' ); //OK
+    add_action( 'wp_ajax_go_importer', 'go_importer' ); //OK
 }else{
     include_once('src/go_export.php');
     include_once('src/admin.php');
-    include_once('src/importer.php');
+    //include_once('src/go_map_importer.php');
+    //
 
 }
 

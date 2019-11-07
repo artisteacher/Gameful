@@ -1,4 +1,3 @@
-
 function go_reset_opener(message_type){
     console.log("go_reset_opener");
     if (message_type == "multiple_messages" || message_type == null ) {
@@ -35,8 +34,8 @@ function go_reset_opener(message_type){
 
     if (message_type == "reset_stage" || message_type == null) {
         //apply on click to the individual task reset icons
-        jQuery('.go_reset_task_clipboard').prop('onclick', null).off('click');
-        jQuery(".go_reset_task_clipboard").one("click", function () {
+        jQuery('.go_reset_task_stage_blog').prop('onclick', null).off('click');
+        jQuery(".go_reset_task_stage_blog").one("click", function () {
             go_messages_opener(this.getAttribute('data-uid'), this.getAttribute('data-task'), 'reset_stage', this);
         });
     }
@@ -69,8 +68,8 @@ function go_messages_opener( user_id, post_id, message_type, target ) {
         reset_vars.push({uid:user_id, task:post_id});
         if (message_type == 'reset_stage'){
             console.log("target: " + target);
-                jQuery(target).find('.go_round_inner').html("<i class='fas fa-spinner fa-pulse'></i>")
-            }
+            jQuery(target).find('.go_round_inner').html("<i class='fas fa-spinner fa-pulse'></i>")
+        }
     }
 
 
@@ -143,6 +142,7 @@ function go_messages_opener( user_id, post_id, message_type, target ) {
                     showCancelButton: show_cancel,
                     showConfirmButton: showConfirmButton,
                     reverseButtons: true,
+                    customClass: "go_wide_swal",
                     confirmButtonColor: confirmButtonColor,
                     confirmButtonText: confirmButtonText,
                     cancelButtonText: cancelButtonText,
@@ -176,61 +176,6 @@ function go_messages_opener( user_id, post_id, message_type, target ) {
             go_make_select2_filter('go_badges', true, false);
             go_make_select2_filter('user_go_groups', true, false);
 
-            /*
-            jQuery('#go_lightbox_go_badges_select').select2({
-                ajax: {
-                    url: MyAjax.ajaxurl, // AJAX URL is predefined in WordPress admin
-                    dataType: 'json',
-                    delay: 400, // delay in ms while typing when to perform a AJAX search
-                    data: function (params) {
-                        return {
-                            q: params.term, // search query
-                            action: 'go_make_taxonomy_dropdown_ajax', // AJAX action for admin-ajax.php
-                            taxonomy: 'go_badges',
-                            is_hier: true
-                        };
-                    },
-                    processResults: function( data ) {
-
-                        return {
-                            results: data
-                        };
-                    },
-                    cache: false
-                },
-                minimumInputLength: 0, // the minimum of symbols to input before perform a search
-                multiple: true,
-                placeholder: "Show All",
-                allowClear: true
-            });
-
-            jQuery('#go_lightbox_user_go_groups_select').select2({
-                ajax: {
-                    url: MyAjax.ajaxurl, // AJAX URL is predefined in WordPress admin
-                    dataType: 'json',
-                    delay: 400, // delay in ms while typing when to perform a AJAX search
-                    data: function (params) {
-                        return {
-                            q: params.term, // search query
-                            action: 'go_make_taxonomy_dropdown_ajax', // AJAX action for admin-ajax.php
-                            taxonomy: 'user_go_groups',
-                            is_hier: true
-                        };
-                    },
-                    processResults: function( data ) {
-                        return {
-                            results: data
-                        };
-                    },
-                    cache: true
-                },
-                minimumInputLength: 0, // the minimum of symbols to input before perform a search
-                multiple: true,
-                placeholder: "Show All",
-                allowClear: true
-            });
-            */
-
             go_activate_tippy();
 
             jQuery('#go_additional_penalty_toggle').change(function () {
@@ -252,6 +197,77 @@ function go_messages_opener( user_id, post_id, message_type, target ) {
                     jQuery("#go_custom_message_table").css('display', 'none');
                 }
             });
+
+            jQuery('.summernote').summernote({
+                toolbar: [
+                    // [groupName, [list of button]]
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    //['font', ['strikethrough', 'superscript', 'subscript']],
+                    ['fontsize', ['fontsize']],
+                    // ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    //['height', ['height']]
+                    ['insert', ['link']],
+                ]
+            });
+
+            var fullId = 'go_message_text_area_id';
+            //tinymce.execCommand('mceRemoveEditor', true, 'go_blog_post_lightbox');
+            tinymce.execCommand('mceRemoveEditor', true, fullId);
+            //quicktags({id :'go_blog_post_lightbox'});
+
+            quicktags({id : fullId});
+            // use wordpress settings
+            tinymce.init({
+                selector: fullId,
+                branding: false,
+                theme:"modern",
+                skin:"lightgray",
+                language:"en",
+                formats:{
+                    alignleft: [
+                        {selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li', styles: {textAlign:'left'}},
+                        {selector: 'img,table,dl.wp-caption', classes: 'alignleft'}
+                    ],
+                    aligncenter: [
+                        {selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li', styles: {textAlign:'center'}},
+                        {selector: 'img,table,dl.wp-caption', classes: 'aligncenter'}
+                    ],
+                    alignright: [
+                        {selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li', styles: {textAlign:'right'}},
+                        {selector: 'img,table,dl.wp-caption', classes: 'alignright'}
+                    ],
+                    strikethrough: {inline: 'del'}
+                },
+                relative_urls:false,
+                remove_script_host:false,
+                convert_urls:false,
+                browser_spellcheck:true,
+                fix_list_elements:true,
+                entities:"38,amp,60,lt,62,gt",
+                entity_encoding:"raw",
+                keep_styles:false,
+                paste_webkit_styles:"font-weight font-style color",
+                preview_styles:"font-family font-size font-weight font-style text-decoration text-transform",
+                wpeditimage_disable_captions:false,
+                wpeditimage_html5_captions:true,
+                plugins:"charmap,hr,lists,media,paste,tabfocus,textcolor,fullscreen,wordpress,wpeditimage,wpgallery,wplink,wpdialogs,wpview,go_shortcode_button",
+                selector:"#" + fullId,
+                resize:"vertical",
+                menubar:false,
+                wpautop:true,
+                wordpress_adv_hidden:false,
+                indent:false,
+                toolbar1:"formatselect,bold,italic,bullist,numlist,blockquote,alignleft,aligncenter,alignright,link,wp_more,spellchecker,fullscreen,wp_adv,go_shortcode_button",
+                toolbar2:"strikethrough,hr,forecolor,pastetext,removeformat,charmap,outdent,indent,undo,redo,wp_help",
+                toolbar3:"",
+                toolbar4:"",
+                tabfocus_elements:":prev,:next",
+                body_class:"id post-type-post post-status-publish post-format-standard",
+                height : "125"
+            });
+            // this is needed for the editor to initiate
+            tinyMCE.execCommand('mceAddEditor', false, fullId);
 
 
 
@@ -280,42 +296,50 @@ function go_send_message(reset_vars, message_type, post_id) {
     }
 
     if (message_type == "message" || ((message_type == "reset" || message_type == "reset_stage") && message_toggle == true ) ){
-            var message = jQuery('.go_messages_message_input').val();
+        var message = jQuery('.go_messages_message_input').val();
+        var message = go_tmce_getContent('go_message_text_area_id');
+        //console.log("message: "+ message);
     }
     else{
         message = "";
+       // console.log("no message");
     }
 
     console.log("1:" + message_type);
     if (message_type == "message" || ((message_type == "reset" || message_type == "reset_stage") && additional_penalty_toggle == true ) ){
         if (message_type == "message" ){
-            var xp_toggle = (jQuery('#messages_form .xp_toggle_messages').siblings().hasClass("-on")) ? 1 : -1;
-            var gold_toggle = (jQuery('#messages_form .gold_toggle_messages').siblings().hasClass("-on")) ? 1 : -1;
-            var health_toggle = (jQuery('#messages_form .health_toggle_messages').siblings().hasClass("-on")) ? 1 : -1;
-            var badges_toggle = jQuery('#messages_form .badges_toggle_messages').siblings().hasClass("-on");
-            var groups_toggle = jQuery('#messages_form .groups_toggle_messages').siblings().hasClass("-on");
-            console.log("2:" + xp_toggle);
+            var loot_toggle =( jQuery('#messages_form .go-acf-switch').hasClass("-on")) ? 1 : -1;
+
         }else{
-            var xp_toggle = -1;
-            var gold_toggle = -1;
-            var health_toggle = -1;
-            var badges_toggle = false;
-            var groups_toggle = false;
+            var loot_toggle = -1;
+
         }
-        console.log("xp: " + jQuery('#messages_form .xp_messages').val());
-        var xp = jQuery('#messages_form .xp_messages').val() * xp_toggle;
-        console.log("3:" + xp);
-        var gold = jQuery('#messages_form .gold_messages').val() * gold_toggle;
-        var health = jQuery('#messages_form .health_messages').val() * health_toggle;
+
+        //calculate loot up or down
+        //console.log("xp: " + jQuery('#messages_form .xp_messages').val());
+        var xp = jQuery('#messages_form .xp_messages').val() * loot_toggle;
+        //console.log("3:" + xp);
+        var gold = jQuery('#messages_form .gold_messages').val() * loot_toggle;
+        var health = jQuery('#messages_form .health_messages').val() * loot_toggle;
+
 
         var badges = jQuery('#messages_form #go_lightbox_go_badges_select').val();
         var groups = jQuery('#messages_form #go_lightbox_user_go_groups_select').val();
-        console.log("badges:");
-        console.log(badges);
+       /* if(loot_toggle == 1){
+            var badges_toggle = true
+            var groups_toggle = true;
+        }else{
+            var badges_toggle = false
+            var groups_toggle = false;
+        }*/
+
+        //console.log("badges:");
+        //console.log(badges);
     }
     else if ((message_type == "reset" || message_type == "reset_stage") && additional_penalty_toggle == false ){
-        var badges_toggle = false;
-        var groups_toggle = false;
+        //var badges_toggle = false;
+        //var groups_toggle = false;
+        var loot_toggle = -1;
         var xp = 0;
         var gold = 0;
         var health = 0;
@@ -327,7 +351,6 @@ function go_send_message(reset_vars, message_type, post_id) {
     var gotoSend = {
         action:"go_send_message",
         _ajax_nonce: nonce,
-        //post_id: post_id,
         reset_vars: reset_vars,
         message_type: message_type,
         title: title,
@@ -335,9 +358,9 @@ function go_send_message(reset_vars, message_type, post_id) {
         xp: xp,
         gold: gold,
         health: health,
-        badges_toggle: badges_toggle,
+        loot_toggle: loot_toggle,
         badges: badges,
-        groups_toggle: groups_toggle,
+       // groups_toggle: groups_toggle,
         groups: groups,
         penalty: additional_penalty_toggle
 
@@ -359,9 +382,11 @@ function go_send_message(reset_vars, message_type, post_id) {
             // show success or error message
             console.log("my send successful");
             Swal.fire(//sw2 OK
-                'Success!',
-                '',
-                'success'
+                {
+                    type: 'success',
+                    showConfirmButton: false,
+                    timer: 1500
+                }
             );
 
 
@@ -390,8 +415,11 @@ function go_send_message(reset_vars, message_type, post_id) {
             if(message_type == 'reset_stage'){
                 var post_wrapper_class = ".go_blog_post_wrapper_" + post_id;
                 //jQuery(post_wrapper_class).hide();
-                jQuery(post_wrapper_class + " .go_reset_task_clipboard").hide();
-                jQuery(post_wrapper_class + " .go_status_icon").html('<i class="fas fa-times-circle fa-2x"></i>');
+                jQuery(post_wrapper_class + " .go_reset_task_stage_blog").hide();
+                jQuery(post_wrapper_class).addClass('reset');
+
+               // jQuery(post_wrapper_class + " .go_status_icon").html('<i class="fas fa-times-circle fa-2x"></i>');
+                jQuery(post_wrapper_class + " .go_status_icon").html('');
             }else{
                 go_toggle_off();
             }
@@ -420,6 +448,7 @@ function go_messages_canned(target){
     jQuery(target).closest('.swal2-container').find('.go_messages_title_input').val(title);
     //jQuery(target).closest('.go_feedback_form').find('.go_message_input').html($message);
     jQuery(target).closest('.swal2-container').find('.go_messages_message_input').val(message);
+    jQuery(target).closest('.swal2-container').find('.note-editable').html(message);
     jQuery(target).closest('.swal2-container').find('.go_messages_toggle_input').val(toggle);
     jQuery(target).closest('.swal2-container').find('.go_messages_xp_input').val(xp);
     jQuery(target).closest('.swal2-container').find('.go_messages_gold_input').val(gold);

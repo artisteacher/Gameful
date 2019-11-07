@@ -76,6 +76,3 @@ if (!is_admin()) {//is the frontend
         }
     }
 }
-
-
-

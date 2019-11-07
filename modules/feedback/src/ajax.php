@@ -12,7 +12,7 @@ function go_blog_revision(){
     }
 
     $post_id = (isset($_POST['post_id']) ? $_POST['post_id'] : null);
-    go_blog_post($post_id, null, false,false , false,false , null,null ,true);
+    go_blog_post($post_id, null, false,false , false,false ,null ,true);
 
     die();
 }
@@ -34,7 +34,7 @@ function go_restore_revision(){
     $post_id = (isset($_POST['post_id']) ? $_POST['post_id'] : null);
     $parent_id = (isset($_POST['parent_id']) ? $_POST['parent_id'] : null);
     wp_restore_post_revision($post_id);
-    go_blog_post($parent_id, null, false,true , true,false , null,null ,false);
+    go_blog_post($parent_id, null, false,true , true,false,null ,false);
 
     die();
 }
@@ -50,7 +50,7 @@ function go_filter_reader(){
         echo "refresh";
         die( );
     }
-    go_reader_get_posts();
+    go_reader_get_posts(false);
     die();
 }
 
@@ -130,11 +130,13 @@ function go_reader_read_printed(){
 
 
     foreach($post_ids as $post_id){
-        $query = array(
-            'ID' => $post_id,
-            'post_status' => 'read',
-        );
-        wp_update_post($query, true);
+        if(get_post_status($post_id) == 'unread') {
+            $query = array(
+                'ID' => $post_id,
+                'post_status' => 'read',
+            );
+            wp_update_post($query, true);
+        }
     }
     //echo ("Posts were marked as read.");
     die();
@@ -191,11 +193,11 @@ function go_num_posts()
         echo "refresh";
         die();
     }
-    $where = (isset($_POST['where']) ? $_POST['where'] : null);
+    $where = (isset($_GET['where']) ? $_GET['where'] : null);
     $where = stripslashes($where);
-    $order = (isset($_POST['order']) ? $_POST['order'] : null);
+    $order = (isset($_GET['order']) ? $_GET['order'] : null);
 
-    $squery = (isset($_POST['query']) ? $_POST['query'] : null);
+    $squery = (isset($_GET['query']) ? $_GET['query'] : null);
     $sQuery = stripslashes($squery);
 
     //$tQuery = (isset($_POST['tQuery']) ? $_POST['tQuery'] : null);
@@ -203,7 +205,7 @@ function go_num_posts()
 
 
 
-    go_reader_get_posts($sQuery, $where, $order);
+    go_reader_get_posts(false, $sQuery, $where, $order);
 
 
     //echo "Posts were marked as read.";
@@ -227,7 +229,9 @@ function go_send_feedback()
     //$go_task_table_name = "{$wpdb->prefix}go_tasks";
 
     $feedback_title = (!empty($_POST['title']) ? $_POST['title'] : "");
+    $feedback_title = stripslashes($feedback_title);
     $feedback_message = (!empty($_POST['message']) ? $_POST['message'] : "");
+    $feedback_message = stripslashes($feedback_message);
     $feedback_title  = do_shortcode( $feedback_title );
     $feedback_message  = do_shortcode( $feedback_message );
     $percent = (!empty($_POST['percent']) ? $_POST['percent'] : "");
@@ -435,6 +439,12 @@ function go_send_feedback()
         );
 
     }
+
+    $query = array(
+        'ID' => $blog_post_id,
+        'post_status' => 'read',
+    );
+    wp_update_post($query, true);
     die();
 }
 

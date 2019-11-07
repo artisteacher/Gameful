@@ -144,417 +144,9 @@
                 "class": "",
                 "id": "go_store_item_id"
             },
-            "message": "Item ID #",
-            "new_lines": "wpautop",
+            "message": "[copy_to_clipboard content='%5Bgo_store id%3D%7Bitem_id%7D%5D']",
+            "new_lines": "",
             "esc_html": 0
-        },
-        {
-            "key": "field_5abde7f93047f",
-            "label": "Store Item",
-            "name": "",
-            "type": "accordion",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "open": 0,
-            "multi_expand": 0,
-            "endpoint": 0
-        },
-        {
-            "key": "field_5abde8006d5d5",
-            "label": "Description",
-            "name": "go_store_item_desc",
-            "type": "wysiwyg",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "go-content",
-                "id": ""
-            },
-            "default_value": "",
-            "tabs": "all",
-            "toolbar": "full",
-            "media_upload": 1,
-            "delay": 0
-        },
-        {
-            "key": "field_5b13f57337e2e",
-            "label": "Loot",
-            "name": "go_loot",
-            "type": "group",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": "go_loot_table"
-            },
-            "layout": "block",
-            "sub_fields": [
-                {
-                    "key": "field_5b13743aaf283",
-                    "label": "Reward",
-                    "name": "reward_toggle",
-                    "type": "group",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "acf-hide-label acf-no-padding acf-table-no-border",
-                        "id": ""
-                    },
-                    "layout": "table",
-                    "sub_fields": [
-                        {
-                            "key": "field_5b13743aaf285",
-                            "label": "XP",
-                            "name": "xp",
-                            "type": "true_false",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "go_reward go_xp",
-                                "id": ""
-                            },
-                            "message": "",
-                            "default_value": 0,
-                            "ui": 1,
-                            "ui_on_text": "award",
-                            "ui_off_text": "cost"
-                        },
-                        {
-                            "key": "field_5b137505a413b",
-                            "label": "Gold",
-                            "name": "gold",
-                            "type": "true_false",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "go_reward go_gold",
-                                "id": ""
-                            },
-                            "message": "",
-                            "default_value": 0,
-                            "ui": 1,
-                            "ui_on_text": "award",
-                            "ui_off_text": "cost"
-                        },
-                        {
-                            "key": "field_5b13743aaf286",
-                            "label": "Health",
-                            "name": "health",
-                            "type": "true_false",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "go_reward go_health",
-                                "id": ""
-                            },
-                            "message": "",
-                            "default_value": 0,
-                            "ui": 1,
-                            "ui_on_text": "award",
-                            "ui_off_text": "cost"
-                        }
-                    ]
-                },
-                {
-                    "key": "field_5abde7f930512",
-                    "label": "loot",
-                    "name": "loot",
-                    "type": "group",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "acf-hide-label acf-no-padding acf-hide-table-header acf-table-no-border ",
-                        "id": ""
-                    },
-                    "layout": "table",
-                    "sub_fields": [
-                        {
-                            "key": "field_5abde803a07d4",
-                            "label": "XP",
-                            "name": "xp",
-                            "type": "number",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "go_reward go_xp acf-hide-label",
-                                "id": ""
-                            },
-                            "default_value": 0,
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": "",
-                            "min": 0,
-                            "max": "",
-                            "step": 1
-                        },
-                        {
-                            "key": "field_5abde803a0718",
-                            "label": "Gold",
-                            "name": "gold",
-                            "type": "number",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "go_reward go_gold acf-hide-label",
-                                "id": ""
-                            },
-                            "default_value": 0,
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": "",
-                            "min": 0,
-                            "max": "",
-                            "step": ".01"
-                        },
-                        {
-                            "key": "field_5abde803a0864",
-                            "label": "Reputation",
-                            "name": "health",
-                            "type": "number",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "go_reward go_health acf-hide-label",
-                                "id": ""
-                            },
-                            "default_value": 0,
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": "",
-                            "min": 0,
-                            "max": "",
-                            "step": ".01"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "key": "field_5abdea4f9f680",
-            "label": "Purchases",
-            "name": "go_purch_reward",
-            "type": "group",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "layout": "block",
-            "sub_fields": [
-                {
-                    "key": "field_5abde7f930610",
-                    "label": "Badges",
-                    "name": "badges",
-                    "type": "level2_taxonomy",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "go_badges",
-                        "id": ""
-                    },
-                    "taxonomy": "go_badges"
-                },
-                {
-                    "key": "field_5abdea789f681",
-                    "label": "Group Membership",
-                    "name": "groups",
-                    "type": "level2_taxonomy",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "taxonomy": "user_go_groups"
-                }
-            ]
-        },
-        {
-            "key": "field_5abdeadc9f682",
-            "label": "Options",
-            "name": "go-store-options",
-            "type": "group",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "layout": "block",
-            "sub_fields": [
-                {
-                    "key": "field_5add12bad4178",
-                    "label": "Limit",
-                    "name": "limit",
-                    "type": "group",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "layout": "row",
-                    "sub_fields": [
-                        {
-                            "key": "field_5b1b205bce525",
-                            "label": "",
-                            "name": "toggle",
-                            "type": "true_false",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "message": "",
-                            "default_value": 0,
-                            "ui": 1,
-                            "ui_on_text": "On",
-                            "ui_off_text": "Off"
-                        },
-                        {
-                            "key": "field_5abde7f93081a",
-                            "label": "Number",
-                            "name": "num",
-                            "type": "number",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": [
-                                [
-                                    {
-                                        "field": "field_5b1b205bce525",
-                                        "operator": "==",
-                                        "value": "1"
-                                    }
-                                ]
-                            ],
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": 1,
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": "",
-                            "min": 1,
-                            "max": "",
-                            "step": ""
-                        },
-                        {
-                            "key": "field_5add1262d4177",
-                            "label": "Frequency",
-                            "name": "frequency",
-                            "type": "radio",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": [
-                                [
-                                    {
-                                        "field": "field_5b1b205bce525",
-                                        "operator": "==",
-                                        "value": "1"
-                                    }
-                                ]
-                            ],
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "choices": {
-                                "total": "Total",
-                                "day": "per Day",
-                                "week": "per Week",
-                                "month": "per Month"
-                            },
-                            "allow_null": 0,
-                            "other_choice": 0,
-                            "save_other_choice": 0,
-                            "default_value": "",
-                            "layout": "horizontal",
-                            "return_format": "value"
-                        }
-                    ]
-                },
-                {
-                    "key": "field_5b333a08800c5",
-                    "label": "Buy Multiple at Once",
-                    "name": "multiple",
-                    "type": "true_false",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "message": "",
-                    "default_value": 0,
-                    "ui": 1,
-                    "ui_on_text": "On",
-                    "ui_off_text": "Off"
-                },
-                {
-                    "key": "field_5b79d691e865c",
-                    "label": "Admin Notifications",
-                    "name": "admin_notifications",
-                    "type": "true_false",
-                    "instructions": "Message will show in browser window for admin.",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "message": "",
-                    "default_value": 0,
-                    "ui": 1,
-                    "ui_on_text": "",
-                    "ui_off_text": ""
-                }
-            ]
         },
         {
             "key": "field_5abde7f92ffdb",
@@ -862,11 +454,11 @@
                             "choices": {
                                 "go_until_lock": "Lock Until Date",
                                 "go_after_lock": "Lock After Date",
-                                "go_badge_lock": "Badges - 1 of these",
-                                "go_user_lock": "User Groups - 1 of these",
-                                "go_health_lock": "Minimum Reputation Level",
+                                "go_badge_lock": "[Badges] - 1 of these",
+                                "go_user_lock": "User [Groups] - 1 of these",
+                                "go_health_lock": "Minimum [Reputation] Level",
                                 "go_period_lock": "Class Section - 1 of these",
-                                "go_xp_levels_lock": "XP Minimum"
+                                "go_xp_levels_lock": "Minimum [XP] Level"
                             },
                             "default_value": [],
                             "allow_null": 1,
@@ -972,7 +564,7 @@
                                 },
                                 {
                                     "key": "field_5b1b1f4210e04",
-                                    "label": "Badges",
+                                    "label": "[Badges]",
                                     "name": "badge",
                                     "type": "level2_taxonomy",
                                     "instructions": "",
@@ -995,7 +587,7 @@
                                 },
                                 {
                                     "key": "field_5b1b1f4210e05",
-                                    "label": "User Groups",
+                                    "label": "User [Groups]",
                                     "name": "group",
                                     "type": "level2_taxonomy",
                                     "instructions": "",
@@ -1018,7 +610,7 @@
                                 },
                                 {
                                     "key": "field_5b1b1f4210e06",
-                                    "label": "Minimum Reputation Level",
+                                    "label": "Minimum [Reputation] Level",
                                     "name": "health",
                                     "type": "number",
                                     "instructions": "",
@@ -1080,7 +672,7 @@
                                 },
                                 {
                                     "key": "field_5b52731ddd4f7",
-                                    "label": "XP Level",
+                                    "label": "Minimum [XP] Level",
                                     "name": "xp_level",
                                     "type": "select",
                                     "instructions": "",
@@ -1112,8 +704,8 @@
                                     "allow_null": 0,
                                     "multiple": 0,
                                     "ui": 0,
-                                    "ajax": 0,
                                     "return_format": "value",
+                                    "ajax": 0,
                                     "placeholder": "Select"
                                 }
                             ]
@@ -1176,6 +768,464 @@
             "prepend": "",
             "append": "",
             "maxlength": ""
+        },
+        {
+            "key": "field_5abde7f93047f",
+            "label": "Store Item",
+            "name": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 0,
+            "multi_expand": 0,
+            "endpoint": 0
+        },
+        {
+            "key": "field_5abde8006d5d5",
+            "label": "Description",
+            "name": "go_store_item_desc",
+            "type": "wysiwyg",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "go-content",
+                "id": ""
+            },
+            "default_value": "",
+            "tabs": "all",
+            "toolbar": "full",
+            "media_upload": 1,
+            "delay": 0
+        },
+        {
+            "key": "field_5b13f57337e2e",
+            "label": "Loot",
+            "name": "go_loot",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": "go_loot_table"
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_5b13743aaf283",
+                    "label": "Reward",
+                    "name": "reward_toggle",
+                    "type": "group",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "acf-hide-label acf-no-padding acf-table-no-border",
+                        "id": ""
+                    },
+                    "layout": "table",
+                    "sub_fields": [
+                        {
+                            "key": "field_5b13743aaf285",
+                            "label": "[Experience] ([XP])",
+                            "name": "xp",
+                            "type": "true_false",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "go_reward go_xp",
+                                "id": ""
+                            },
+                            "message": "",
+                            "default_value": 0,
+                            "ui": 1,
+                            "ui_on_text": "award",
+                            "ui_off_text": "cost"
+                        },
+                        {
+                            "key": "field_5b137505a413b",
+                            "label": "[Gold] ([G])",
+                            "name": "gold",
+                            "type": "true_false",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "go_reward go_gold",
+                                "id": ""
+                            },
+                            "message": "",
+                            "default_value": 0,
+                            "ui": 1,
+                            "ui_on_text": "award",
+                            "ui_off_text": "cost"
+                        },
+                        {
+                            "key": "field_5b13743aaf286",
+                            "label": "[Reputation] ([Rep])",
+                            "name": "health",
+                            "type": "true_false",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "go_reward go_health",
+                                "id": ""
+                            },
+                            "message": "",
+                            "default_value": 0,
+                            "ui": 1,
+                            "ui_on_text": "award",
+                            "ui_off_text": "cost"
+                        }
+                    ]
+                },
+                {
+                    "key": "field_5abde7f930512",
+                    "label": "loot",
+                    "name": "loot",
+                    "type": "group",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "acf-hide-label acf-no-padding acf-hide-table-header acf-table-no-border ",
+                        "id": ""
+                    },
+                    "layout": "table",
+                    "sub_fields": [
+                        {
+                            "key": "field_5abde803a07d4",
+                            "label": "[Experience] ([XP])",
+                            "name": "xp",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "go_reward go_xp acf-hide-label",
+                                "id": ""
+                            },
+                            "default_value": 0,
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "min": 0,
+                            "max": "",
+                            "step": 1
+                        },
+                        {
+                            "key": "field_5abde803a0718",
+                            "label": "[Gold] ([G])",
+                            "name": "gold",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "go_reward go_gold acf-hide-label",
+                                "id": ""
+                            },
+                            "default_value": 0,
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "min": 0,
+                            "max": "",
+                            "step": ".01"
+                        },
+                        {
+                            "key": "field_5abde803a0864",
+                            "label": "[Reputation] ([Rep])",
+                            "name": "health",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "go_reward go_health acf-hide-label",
+                                "id": ""
+                            },
+                            "default_value": 0,
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "min": 0,
+                            "max": "",
+                            "step": ".01"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "field_5abdea4f9f680",
+            "label": "Purchases",
+            "name": "go_purch_reward",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_5da0a1f216dbf",
+                    "label": "Purchase Content",
+                    "name": "go_locked_content",
+                    "type": "button_group",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "choices": {
+                        "0": "None",
+                        "avatar": "Avatar",
+                        "custom": "Custom"
+                    },
+                    "allow_null": 0,
+                    "default_value": "false",
+                    "layout": "horizontal",
+                    "return_format": "value"
+                },
+                {
+                    "key": "field_5da0a22216dc0",
+                    "label": "Purchased Message",
+                    "name": "purchased_message",
+                    "type": "wysiwyg",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5da0a1f216dbf",
+                                "operator": "==",
+                                "value": "custom"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "tabs": "all",
+                    "toolbar": "full",
+                    "media_upload": 1,
+                    "delay": 0
+                },
+                {
+                    "key": "field_5abde7f930610",
+                    "label": "[Badges]",
+                    "name": "badges",
+                    "type": "level2_taxonomy",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "go_badges",
+                        "id": ""
+                    },
+                    "taxonomy": "go_badges"
+                },
+                {
+                    "key": "field_5abdea789f681",
+                    "label": "User [Group] Membership",
+                    "name": "groups",
+                    "type": "level2_taxonomy",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "taxonomy": "user_go_groups"
+                }
+            ]
+        },
+        {
+            "key": "field_5abdeadc9f682",
+            "label": "Options",
+            "name": "go-store-options",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_5add12bad4178",
+                    "label": "Limit",
+                    "name": "limit",
+                    "type": "group",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "row",
+                    "sub_fields": [
+                        {
+                            "key": "field_5b1b205bce525",
+                            "label": "",
+                            "name": "toggle",
+                            "type": "true_false",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "message": "",
+                            "default_value": 0,
+                            "ui": 1,
+                            "ui_on_text": "On",
+                            "ui_off_text": "Off"
+                        },
+                        {
+                            "key": "field_5abde7f93081a",
+                            "label": "Number",
+                            "name": "num",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_5b1b205bce525",
+                                        "operator": "==",
+                                        "value": "1"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": 1,
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "min": 1,
+                            "max": "",
+                            "step": ""
+                        },
+                        {
+                            "key": "field_5add1262d4177",
+                            "label": "Frequency",
+                            "name": "frequency",
+                            "type": "radio",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_5b1b205bce525",
+                                        "operator": "==",
+                                        "value": "1"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "total": "Total",
+                                "day": "per Day",
+                                "week": "per Week",
+                                "month": "per Month"
+                            },
+                            "allow_null": 0,
+                            "other_choice": 0,
+                            "save_other_choice": 0,
+                            "default_value": "",
+                            "layout": "horizontal",
+                            "return_format": "value"
+                        }
+                    ]
+                },
+                {
+                    "key": "field_5b333a08800c5",
+                    "label": "Buy Multiple at Once",
+                    "name": "multiple",
+                    "type": "true_false",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 0,
+                    "ui": 1,
+                    "ui_on_text": "On",
+                    "ui_off_text": "Off"
+                },
+                {
+                    "key": "field_5b79d691e865c",
+                    "label": "Admin Notifications",
+                    "name": "admin_notifications",
+                    "type": "true_false",
+                    "instructions": "Message will show in browser window for admin.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 0,
+                    "ui": 1,
+                    "ui_on_text": "",
+                    "ui_off_text": ""
+                }
+            ]
         }
     ],
     "location": [
@@ -1195,5 +1245,6 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1560904637
+    "recaptcha": 0,
+    "modified": 1571540272
 }

@@ -440,10 +440,6 @@ class go_WXR_Parser_XML {
 	}
 }
 
-
-
-
-
 /**
  * WXR Parser that uses regular expressions. Fallback for installs without an XML parser.
  */

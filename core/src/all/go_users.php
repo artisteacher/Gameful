@@ -6,9 +6,30 @@
  * Time: 8:06 PM
  */
 
+/**
+ * Filters the comment author to show the gameon display name
+ */
+add_filter('get_comment_author', 'go_comment_author', 10, 3);
+function go_comment_author(  $author,  $comment_id,  $comment  ) {
+    // Get the comment ID from WP_Query
+    $user_id = $comment->user_id;
+    return go_get_user_display_name($user_id);
+}
 
+add_filter('get_comment_author_url', 'go_comment_author_url', 10, 3);
+function go_comment_author_url(  $author,  $comment_id,  $comment  ) {
+    // Get the comment ID from WP_Query
 
-
+    //$user_id = $comment->user_id;
+    $user_blog_link = '';
+    $user_id = (isset($comment->user_id) ?  $comment->user_id : null);
+    if(!empty($user_id)) {
+        $user_info = get_userdata($user_id);
+        $info_login = $user_info->user_login;
+        $user_blog_link = get_site_url(null, '/user/' . $info_login);
+    }
+    return $user_blog_link;
+}
 
 /**
  * Get user's first and last name, else just their first name, else their
@@ -53,27 +74,6 @@ function go_user_is_admin( $user_id = null ) {
 
 
 
-// Adds user id to the totals table upon user creation.
-/*
-function go_user_registration ( $user_id ) {
-    global $wpdb;
-    $table_name_go_totals = "{$wpdb->prefix}go_loot";
-    $table_name_capabilities = "{$wpdb->prefix}capabilities";
-    $role = get_option( 'go_role', 'subscriber' );
-    $user_role = get_user_option("{$table_name_capabilities}", $user_id);
-    if ( array_search( 1, $user_role ) == $role || array_search( 1, $user_role ) == 'administrator' ) {
-
-        // this should update the user's rank metadata
-        //go_update_ranks( $user_id, 0 );
-        $default_health = get_option('options_go_loot_health_starting');
-        // this should set the user's points to 0
-        $wpdb->insert( $table_name_go_totals, array( 'uid' => $user_id), array(
-
-            'health' => $default_health,
-        ) );
-    }
-}*/
-
 // Deletes all rows related to a user in the individual and total tables upon deleting said user.
 function go_user_delete( $user_id ) {
     global $wpdb;
@@ -85,16 +85,6 @@ function go_user_delete( $user_id ) {
     $wpdb->delete( $table_name_go_tasks, array( 'uid' => $user_id ) );
     $wpdb->delete( $table_name_go_actions, array( 'uid' => $user_id ) );
 }
-
-/*
-function go_add_user_to_totals_table_at_login($user_login, $user){
-    $user_id = $user->ID;
-    if(is_user_member_of_blog()) {
-        go_add_user_to_totals_table($user_id);
-    }
-}*/
-//add_action('wp_login', 'go_add_user_to_totals_table_at_login', 10, 2);
-
 
 
 //allow site admins to edit users
@@ -149,7 +139,7 @@ function mc_edit_permission_check() {
 add_filter( 'admin_head', 'mc_edit_permission_check', 1, 4 );
 
 
-//filters all but the subscriber role in the dropdown for all but super admin
+//filters all but the subscriber and contributor role in the dropdown for all but super admin
 add_filter('editable_roles', 'allow_only_default_role', 1, 1);
 function allow_only_default_role($all_roles)
 {
@@ -191,3 +181,38 @@ function remove_author_link($link)
     $link = str_replace('/author/', '/user/', $link);
     return $link;
 }
+
+
+
+// Adds user id to the totals table upon user creation.
+/*
+function go_user_registration ( $user_id ) {
+    global $wpdb;
+    $table_name_go_totals = "{$wpdb->prefix}go_loot";
+    $table_name_capabilities = "{$wpdb->prefix}capabilities";
+    $role = get_option( 'go_role', 'subscriber' );
+    $user_role = get_user_option("{$table_name_capabilities}", $user_id);
+    if ( array_search( 1, $user_role ) == $role || array_search( 1, $user_role ) == 'administrator' ) {
+
+        // this should update the user's rank metadata
+        //go_update_ranks( $user_id, 0 );
+        $default_health = get_option('options_go_loot_health_starting');
+        // this should set the user's points to 0
+        $wpdb->insert( $table_name_go_totals, array( 'uid' => $user_id), array(
+
+            'health' => $default_health,
+        ) );
+    }
+}*/
+
+
+
+/*
+function go_add_user_to_totals_table_at_login($user_login, $user){
+    $user_id = $user->ID;
+    if(is_user_member_of_blog()) {
+        go_add_user_to_totals_table($user_id);
+    }
+}*/
+//add_action('wp_login', 'go_add_user_to_totals_table_at_login', 10, 2);
+

@@ -1,6 +1,7 @@
 // @codekit-prepend 'js/moment.min.js'
 // @codekit-prepend 'js/daterangepicker.min.js'
 // @codekit-prepend 'js/featherlight.min.js'
+// @codekit-prepend 'js/featherlight.gallery.min.js'
 // @codekit-prepend 'js/noty.min.js'
 // @codekit-prepend 'js/sweetalert2@8.js'
 // @codekit-prepend 'js/tippy.all.min.js'

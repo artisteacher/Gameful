@@ -6,7 +6,6 @@
  * Time: 20:13
  */
 
-
 function go_make_leaderboard_filter(){
     $current_id = get_current_user_id();
 
@@ -37,10 +36,10 @@ function go_stats_leaderboard_dataloader_ajax(){
     //needs nonce
     global $wpdb;
     $current_id = get_current_user_id();
-    $is_admin = go_user_is_admin($current_id);
+    $is_admin = go_user_is_admin();
 
     //set the last searched leaderboard as an user option
-    if(is_user_member_of_blog() || go_user_is_admin()) {
+    if(is_user_member_of_blog() || $is_admin) {
         $section = $_GET['section'];
         $group = $_GET['group'];
 
@@ -107,7 +106,7 @@ function go_stats_leaderboard_dataloader_ajax(){
         restore_current_blog();
     }
 
-    $site_display_name_key = go_prefix_key('display_name');
+    $site_display_name_key = go_prefix_key('go_nickname');
 
     $sectionQuery = go_sectionQuery($section);
     //$badgeQuery = go_badgeQuery();
@@ -119,7 +118,8 @@ function go_stats_leaderboard_dataloader_ajax(){
     $sQuery = "    
                     SELECT SQL_CALC_FOUND_ROWS
                       t1.*,
-                      t3.display_name, t3.user_url, t3.user_login, 
+                      t3.display_name, t3.user_url, t3.user_login,
+                      MAX(CASE WHEN t2.meta_key = 'nickname' THEN meta_value END) AS nickname, 
                       MAX(CASE WHEN t2.meta_key = '$site_display_name_key' THEN meta_value END) AS site_name,
                       MAX(CASE WHEN t2.meta_key = 'first_name' THEN meta_value END) AS first_name,
                       MAX(CASE WHEN t2.meta_key = 'last_name' THEN meta_value END) AS last_name,
@@ -196,11 +196,14 @@ function go_stats_leaderboard_dataloader_ajax(){
         $gold = $action['gold'];
         $health = $action['health'];
         $badge_count = $action['badge_count'];
+
         $user_display_name = $action['site_name'];
         if(empty($user_display_name)){
-            $user_display_name = $action['display_name'];
+            $user_display_name = $action['nickname'];
+            if(empty($user_display_name)){
+                $user_display_name = $action['display_name'];
+            }
         }
-
         $user_firstname = $action['first_name'];
         $user_lastname = $action['last_name'];
 

@@ -57,9 +57,7 @@
 		foreach( $sites as $i => $site ): 
 			
 			// switch blog
-            if(is_multisite()) {
-                switch_to_blog( $site['blog_id'] );
-            }
+			switch_to_blog( $site['blog_id'] );
 		
 			?>
 			<tr<?php if( $i % 2 == 0 ): ?> class="alternate"<?php endif; ?>>
@@ -82,9 +80,7 @@
 			<?php
 			
 			// restore
-            if(is_multisite()) {
-                restore_current_blog();
-            }
+			restore_current_blog();
 	
 		endforeach;
 		endif;

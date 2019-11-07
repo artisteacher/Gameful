@@ -61,6 +61,28 @@ function go_store_template_include($template)
 
 function go_make_store_new() {
 
+    $user_id = get_current_user_id();
+    $admin_view = null;
+    if (function_exists ( 'wu_is_active_subscriber' )){
+        if(wu_is_active_subscriber($user_id) && is_gameful()){
+            if ( is_user_member_of_blog() || go_user_is_admin()) {
+                $admin_view = get_user_option('go_admin_view', $user_id);
+            }else {
+                $admin_view = 'player';
+            }
+        }
+    }
+    ?>
+    <script>
+        jQuery(document).ready(function() {
+            jQuery('#go_store_container').addClass('<?php echo $admin_view; ?>')
+        });
+    </script>
+
+
+
+<?php
+
     echo "<div id='go_store_container' style='padding:30px;  background-color: white;'>";
     $store_title = get_option( 'options_go_store_title');
     echo "<h1>{$store_title}</h1>";
@@ -108,7 +130,7 @@ function go_register_store_tax_and_cpt() {
         'rewrite' => true,
         'query_var' => true
     );
-    register_taxonomy( 'store_types', array( 'go_store' ), $cat_args );
+    register_taxonomy( 'store_types', array(''  ), $cat_args );
 
 
 	/*
@@ -182,7 +204,7 @@ function go_update_store_post_save( $post_id ) {
     }
     //delete task data transient
     $key = 'go_post_data_' . $post_id;
-    delete_transient($key);
+    go_delete_transient($key);
 
     $html = go_make_store_html();
 
@@ -264,7 +286,9 @@ function go_make_store_html() {
         }
 
 
-        echo "<div id='row_$chainParentNum' class='store_row_container'>
+        echo "<div id='row_$chainParentNum' class='store_row_container'>";
+        do_action( 'gop_add_importer_icon', $row_id, 'term', null, true);
+        echo "
                             <div class='parent_cat'><h2>$row->name</h2></div>
                             <div class='store_row'>
                             ";//row title and row container
@@ -284,7 +308,9 @@ function go_make_store_html() {
             }
 
 
-            echo "<div class ='store_cats'><h3>$column->name</h3><ul class='store_items'>";
+            echo "<div class ='store_cats'>";
+            do_action( 'gop_add_importer_icon', $column_id, 'term', null, true);
+            echo "<h3>$column->name</h3><ul class='store_items'>";
             /*Gets a list of store items that are assigned to each chain as array. Ordered by post ID */
 
             ///////////////
@@ -326,7 +352,9 @@ function go_make_store_html() {
 
                     $store_item_name = get_the_title($go_store_obj);
                     //echo "<li><a id='$row' class='go_str_item' onclick='go_lb_opener(this.id);'>$store_item_name</a></li> ";
-                    echo "<li><div><a id='$store_item_id' class='go_str_item' >$store_item_name</a></div>";
+                    echo "<li><div>";
+                    do_action( 'gop_add_importer_icon', $store_item_id, 'post', null, true);
+                    echo "<a id='$store_item_id' class='go_str_item' >$store_item_name</a></div>";
                     echo "<div class='go_store_loot_list'>";
                     if (!empty($xp_value)){
                         if ($xp_toggle == 1 ){

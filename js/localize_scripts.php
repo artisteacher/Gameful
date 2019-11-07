@@ -53,6 +53,7 @@ function go_localize_all_pages(){
                 'go_blog_revision'              => wp_create_nonce('go_blog_revision'),
                 'go_restore_revision'           => wp_create_nonce('go_restore_revision'),
                 'go_clone_post_new_menu_bar'    => wp_create_nonce('go_clone_post_new_menu_bar'),//all pages for admin users
+                'go_user_map_ajax'              => wp_create_nonce('go_user_map_ajax'),
             ),
             'go_lightbox_switch'            => $go_lightbox_switch,
             'go_fitvids_maxwidth'           => $go_fitvids_maxwidth

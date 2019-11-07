@@ -35,6 +35,18 @@ function go_update_db_ms( ) {
  * https://sudarmuthu.com/blog/how-to-properly-create-tables-in-wordpress-multisite-plugins/
  */
 
+// Makes sure the plugin is defined before trying to use it
+if (!function_exists('is_plugin_active_for_network')) {
+    require_once(ABSPATH . '/wp-admin/includes/plugin.php');
+}
+
+function go_is_ms_active_network_wide()
+{
+    $myfile = plugin_basename(__FILE__);
+    $is_ms = is_plugin_active_for_network($myfile);
+    return $is_ms;
+}
+
 /**
  * Creating table whenever a new blog is created
  * Only do this if plugin is active network wide
@@ -56,6 +68,8 @@ function go_on_create_blog( $blog_id, $user_id, $domain, $path, $site_id, $meta 
     }
 }
 add_action( 'wpmu_new_blog', 'go_on_create_blog', 10, 6 );
+
+
 
 /**
  * // Deleting the tables whenever a blog is deleted
@@ -123,7 +137,8 @@ function go_flush_rewrites() {
 
 
 
-//creates a page for the store on activation of plugin
+//creates a page for the store on activation of plugin\
+/*
 function go_store_activate() {
     $my_post = array(
         'post_title'    => 'Store',
@@ -139,12 +154,13 @@ function go_store_activate() {
     if ( ! isset($page) ){
         wp_insert_post( $my_post );
     }
-}
+}*/
 
 
 /**
  *
  */
+/*
 function go_map_activate() {
     $my_post = array(
         'post_title'    => 'Map',
@@ -159,11 +175,12 @@ function go_map_activate() {
     if ( ! isset($page) ){
         wp_insert_post( $my_post );
     }
-}
+}*/
 
 /**
  *
  */
+/*
 function go_reader_activate() {
     $my_post = array(
         'post_title'    => 'Reader',
@@ -178,7 +195,7 @@ function go_reader_activate() {
     if ( ! isset($page) ){
         wp_insert_post( $my_post );
     }
-}
+}*/
 
 
 
@@ -191,8 +208,9 @@ function go_media_access() {
     $roles = array('subscriber', 'contributor');
     foreach($roles as $role) {
         $role = get_role($role);
-        $role->add_cap('upload_files');
-
+        $role =$role;
+        //$role->add_cap('upload_files');
+/*
         if (is_gameful()) {
             $blog_id = get_current_blog_id();
             if ($blog_id === 1) {
@@ -201,8 +219,9 @@ function go_media_access() {
                     $role->remove_cap('upload_files');
                 }
             }
-        }
+        }*/
     }
+
 }
 
 /*
@@ -274,6 +293,25 @@ function go_upgrade_notification() {
 }
 add_action( 'admin_notices', 'go_upgrade_notification' );
 */
+
+
+//this is the activation notification
+function go_fontawesome_notification() {
+    $font_awesome_kit = get_site_option( 'options_font_awesome_kit');
+    if(empty($font_awesome_kit) && current_user_can( 'manage_options' ) ) {
+
+        $perf_url = get_admin_url(null, '/admin.php?page=go_performance');
+
+        echo "<div id='go_activation_message' class='update-nag' style='font-size: 16px; padding-right: 50px;'>.
+            <h2>Game On site icons require a Font Awesome kit</h2>
+            <p>Please create an account at Font Awesome to receive your free kit. <a href='https://fontawesome.com/start'>Get kit now.</a></p>
+            <p>Once you have created your kit, you can <a href='{$perf_url}'>enter the code here.</a></p>
+			
+		</div>";
+    }
+}
+add_action( 'admin_notices', 'go_fontawesome_notification' );
+
 
 
 

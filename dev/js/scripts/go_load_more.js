@@ -1,7 +1,10 @@
-jQuery(document).ready(function() {
-    go_loadmore_blog();
-    go_loadmore_reader();
-});
+if (typeof (go_is_reader_or_blog) !== 'undefined') {
+    jQuery(document).ready(function() {
+        go_loadmore_blog();
+        go_loadmore_reader();
+    });
+}
+
 
 function go_loadmore_blog(){
     jQuery(function($){ // use jQuery code inside this to avoid "$ is not defined" error

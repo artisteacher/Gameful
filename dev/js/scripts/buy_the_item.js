@@ -1,8 +1,25 @@
 //Add an on click to all store items
+
+jQuery(window).load(function () {
+//alert("store_ready");
+
+        jQuery('.go_str_item').off().one("click", function (e) {
+            go_lb_opener(this.id);
+        });
+
+});
+
 jQuery(document).ready(function(){
+    //alert("store_ready");
+    /*
     jQuery('.go_str_item').off().one("click", function(e){
+        console.log("item_clicked");
         go_lb_opener( this.id );
     });
+    */
+    if (typeof (go_is_store) !== 'undefined') {
+        jQuery('#page').css("width", "100%").css('max-width', 'unset');
+    }
 });
 
 // Makes it so you can press return and enter content in a field
@@ -18,6 +35,15 @@ function go_make_store_clickable() {
 
 //open the lightbox for the store items
 function go_lb_opener( id ) {
+    console.log("go_lb_opener");
+    console.log(jQuery('.featherlight.store').length);
+    if(jQuery('.featherlight.store').length > 0) {
+        console.log('already open');
+        jQuery('.go_str_item').off().one("click", function(e){
+            go_lb_opener( this.id );
+        });
+        return;
+    }
     jQuery( '#light' ).css( 'display', 'block' );
     jQuery('.go_str_item').prop('onclick',null).off('click');
 
@@ -48,7 +74,7 @@ function go_lb_opener( id ) {
             },
             success: function( raw) {
                 console.log('success');
-                console.log(raw);
+                //console.log(raw);
                 var res = JSON.parse( raw );
 
                 try {
@@ -141,13 +167,24 @@ function goBuytheItem( id, count ) {
                 } catch (e) {
                     res = {
                         json_status : '101',
-                        html : '101 Error: Please try again.'
+                        html : '101 Error: Please try again.',
+                        unlocked_content: ''
                     };
                 }
 				if ( -1 !== raw.indexOf( 'Error' ) ) {
 					jQuery( '#light').html(raw);
 				} else {
+				    console.log('show_content');
+                    //console.log(res.unlocked_content);
                     jQuery( '#light').html(res.html);
+
+                    //testing this
+                    if(res.unlocked_content != '') {
+
+                            jQuery.featherlight(res.unlocked_content);
+
+                    }
+
 				}
 			}
 		});
@@ -314,3 +351,40 @@ function go_count_item( item_id ) {
 	});
 }
 
+function go_change_avatar( target ){
+    console.log("go_change_avatar");
+    console.log( target );
+    go_enable_loading( target );
+    jQuery(target).prop("onclick", null).off("click");
+    let media_id = jQuery('#go_this_avatar').val();
+    var nonce = GO_FRONTEND_DATA.nonces.go_change_avatar;
+    jQuery.ajax({
+        url: MyAjax.ajaxurl,
+        type: 'POST',
+        data: {
+            _ajax_nonce: nonce,
+            action: 'go_change_avatar',
+            media_id: media_id
+        },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
+        success: function( res ) {
+            if ( -1 !== res ) {
+                swal.fire({//sw2 OK
+                    text: "Your avatar was changed."
+                });
+
+                jQuery.featherlight.close();
+                jQuery('.avatar-64').attr('src', res);
+            }
+        }
+    });
+
+}

@@ -12,8 +12,8 @@ function go_register_task_tax_and_cpt() {
         'search_items' => _x('Search '. get_option( 'options_go_tasks_name_singular' ) . ' Maps', 'task_chains' ),
         'popular_items' => _x('Popular '. get_option( 'options_go_tasks_name_singular' ) . ' Maps', 'task_chains' ),
         'all_items' => _x('All '. get_option( 'options_go_tasks_name_singular' ) . ' Maps', 'task_chains' ),
-        'parent_item' => 'Map (Set as none to create a new map)',
-        'parent_item_colon' => 'Map (Set as none to create a new map):',
+        'parent_item' => 'Map',
+        'parent_item_colon' => 'Map:',
         'edit_item' => _x('Edit '. get_option( 'options_go_tasks_name_singular' ) . ' Maps', 'task_chains' ),
         'update_item' => _x('Update '. get_option( 'options_go_tasks_name_singular' ) . ' Maps', 'task_chains' ),
         'add_new_item' => _x('Add New '. get_option( 'options_go_tasks_name_singular' ) . ' Map/Map Section', 'task_chains' ),
@@ -86,22 +86,24 @@ function go_register_task_tax_and_cpt() {
 
 
 // Register User Groups
+	$group = ucwords(get_option('options_go_groups_name_singular'));
+	$groups = ucwords(get_option('options_go_groups_name_plural'));
     $focus_labels = array(
-        'name' => _x( 'User Groups', 'user_go_groups' ),
-        'singular_name' => _x( 'User Group', 'user_go_groups' ),
-        'search_items' => _x( 'Search User Groups', 'user_go_groups' ),
-        'popular_items' => _x( 'Popular User Groups', 'user_go_groups' ),
-        'all_items' => _x( 'All User Groups', 'user_go_groups' ),
-        'parent_item' => _x('User Group Parent', 'user_go_groups' ),
-        'parent_item_colon' => _x( 'User Group Parent: ', 'user_go_groups' ),
-        'edit_item' => _x( 'Edit User Groups', 'user_go_groups' ),
-        'update_item' => _x( 'Update User Groups', 'user_go_groups' ),
-        'add_new_item' => _x( 'Add New User Group', 'user_go_groups' ),
-        'new_item_name' => _x( 'New User Group', 'user_go_groups' ),
-        'separate_items_with_commas' => _x( 'Separate User Groups with commas', 'user_go_groups' ),
-        'add_or_remove_items' => _x( 'Add or remove User Group ', 'user_go_groups' ),
-        'choose_from_most_used' => _x( 'Choose from the most used User Groups', 'user_go_groups' ),
-        'menu_name' => _x( 'User Groups', 'user_go_groups' ),
+        'name' => _x( $groups, 'user_go_groups' ),
+        'singular_name' => _x( $group, 'user_go_groups' ),
+        'search_items' => _x( 'Search '.$groups, 'user_go_groups' ),
+        'popular_items' => _x( 'Popular '.$groups, 'user_go_groups' ),
+        'all_items' => _x( $groups, 'user_go_groups' ),
+        'parent_item' => _x($group.' Parent', 'user_go_groups' ),
+        'parent_item_colon' => _x( $group.' Parent: ', 'user_go_groups' ),
+        'edit_item' => _x( 'Edit '.$groups, 'user_go_groups' ),
+        'update_item' => _x( 'Update '.$groups, 'user_go_groups' ),
+        'add_new_item' => _x( 'Add New '.$group, 'user_go_groups' ),
+        'new_item_name' => _x( 'New '.$group, 'user_go_groups' ),
+        'separate_items_with_commas' => _x( 'Separate '.$groups.' with commas', 'user_go_groups' ),
+        'add_or_remove_items' => _x( 'Add or remove User '.$group, 'user_go_groups' ),
+        'choose_from_most_used' => _x( 'Choose from the most used '.$groups, 'user_go_groups' ),
+        'menu_name' => _x( $groups, 'user_go_groups' ),
     );
     $focus_args = array(
         'labels' => $focus_labels,
@@ -173,7 +175,7 @@ function go_register_task_tax_and_cpt() {
 		'labels' => $labels_cpt,
 		'hierarchical' => false,
 		'description' => $tasks_name_plural,
-        'supports'              => array( 'title', 'comments', 'thumbnail', 'revisions' ),
+        'supports' => array( 'title', 'comments', 'thumbnail', 'revisions' ),
 		'taxonomies' => array(''),
 		'public' => true,
 		'show_ui' => true,
@@ -240,11 +242,8 @@ add_filter( 'template_include', 'go_tasks_template_function', 1 );
 function go_tasks_template_function( $template_path ) {
     if ( get_post_type() == 'tasks' ) {
         if ( is_single() ) {
-            // checks if the file exists in the theme first,
-            // otherwise serve the file from the plugin
-            if ( $theme_file = locate_template( array (  'index.php' ) )
-                //$theme_file =	get_page_template()
-            ) {
+            // checks if the file exists in the theme first
+            if ( $theme_file = locate_template( array (  'index.php' ) )) {
                 $template_path = $theme_file;
                 add_filter( 'the_content', 'go_tasks_filter_content' );
             }
@@ -272,6 +271,19 @@ function go_new_task_from_template($admin_bar=true){
 		'numberposts' => -1
 		// 'order'    => 'ASC'
 	]);
+    $global_templates = false;
+	if(is_gameful()){
+        $primary_blog_id = get_main_site_id();
+        switch_to_blog($primary_blog_id);
+        $global_templates = get_posts([
+            'post_type' => 'tasks_templates',
+            'post_status' => 'any',
+            'numberposts' => -1
+            // 'order'    => 'ASC'
+        ]);
+        restore_current_blog();
+    }
+
 
 		//create a select dropdown
 		if($admin_bar) {
@@ -280,12 +292,25 @@ function go_new_task_from_template($admin_bar=true){
 
 		echo '<select class="go_new_task_from_template" name="new_task"><option value="0">New Empty '.$task_name.'</option>';
 		if ($templates) {
+            echo "<optgroup label='My Templates'>";
 			foreach ($templates as $template){
 				$post_id = $template->ID;
 				$title = $template->post_title;
 				echo '<option value="' .$post_id.'">' .$title.'</option>';
 			}
+			echo "</optgroup>";
 		}
+		if($global_templates){
+            echo "<optgroup label='Global Templates'>";
+            foreach ($global_templates as $template){
+                switch_to_blog($primary_blog_id);
+                $post_id = $template->ID;
+                $title = $template->post_title;
+                restore_current_blog();
+                echo '<option value="' .$post_id.'">' .$title.'</option>';
+            }
+            echo "</optgroup>";
+        }
 		echo '</select>';
 		if($admin_bar) {
 			echo '<br>';
@@ -308,8 +333,25 @@ function go_new_task_from_template($admin_bar=true){
 	}
 }
 
+//File types originally was saved as a array, but is now a single value
+//if array is in database and has single value, convert to single value
+//otherwise, clear it out
+function go_fix_file_types_allowed( $value, $post_id, $field )
+{
+	// run the_content filter on all textarea values
+	//$value = apply_filters('the_content',$value);
+	if(is_array($value)){
+		$count = count($value);
+		if ($count == 1){
+			$value = $value[0];
+		}else{
+			$value = 'all';
+		}
 
+	}
+	return $value;
+}
 
-
-
-?>
+// acf/load_value/key={$field_key} - filter for a specific field based on it's name
+add_filter('acf/load_value/key=field_5cba487b9f582', 'go_fix_file_types_allowed', 10, 3);
+add_filter('acf/load_value/key=field_5cbad9e8eb513', 'go_fix_file_types_allowed', 10, 3);

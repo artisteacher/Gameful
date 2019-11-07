@@ -12,7 +12,6 @@
 /* Center the loader */
 #loader {
 	position: relative;
-	left: 50%;
 	z-index: 1;
 }
 
@@ -22,8 +21,16 @@
 	//width: 100%;
 }
 
+#go_map_container {
+	padding:30px;
+	background-color: white;
+	text-align: center;
+
+
+}
+
 #maps {
-	visibility: hidden;
+	//visibility: hidden;
 	//font-family: 'Teko', sans-serif;
 
 	/* ------------------------------------------------------------
@@ -94,6 +101,7 @@
 		margin: 0px 0 0 0;
 		float: left;
 		width: 100%;
+		padding-bottom: 20px;
 
 		li {
 			//width: 90%;
@@ -113,23 +121,37 @@
 			float: none;
 			position: relative;
 			z-index: 2;
-			background: #c3eafb;
-			-webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
-			-moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px; /* FF 3.5+ */
+			//background: #c3eafb;
+			//-webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
+			//-moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px; /* FF 3.5+ */
 			margin: 0px 10px 0px 10px;
 			padding: 0 0 0 0;
 			width: calc(100% - 20px) !important;
-			p{ margin-top: 0px;
+			p{
+				margin-top: 0px;
 				-webkit-box-shadow: unset;
 				-moz-box-shadow: unset;
+				background: unset;
+				border: unset;
+				//text-align: left;
+				font-size: 1.5em;
+			}
+			div{
+				//display: flex;
+			}
+			.go_badge_wrap{
+				width: unset;
+				font-size: .6em;
+				width: 100%;
 			}
 		}
 
 		.optional_task {
 			margin-top: 0px;
 			border-top: 1px solid grey;
-			border-left: 10px solid grey;
+			//border-left: 10px solid grey;
 			display: none;
+			box-shadow: 10px 0px 0px 0px #e3ca4b inset;
 		}
 
 		.go_optional_toggle, .go_optional_toggle:hover {
@@ -139,6 +161,8 @@
 			height: 19px;
 		}
 
+
+
 		.optional_task a {
 			//font-size: 1em !important;
 			font-style: italic;
@@ -146,7 +170,7 @@
 		}
 
 		> li {//task chains
-			p,//task chains names
+			.go_task_chain_map_box,//task chains names
 			li//tasks
 			{
 				background: #c3eafb;
@@ -159,7 +183,7 @@
 
 			//clickable area inside of tasks
 			a,
-			p{
+			.go_task_chain_map_box{
 				//margin: 0 10px;
 				padding: 10px 0;
 				display: block;
@@ -222,16 +246,28 @@
 
 		/* --------	available tasks colors --------- */
 		.up a{
-			border: 2px solid mediumturquoise;
+			border-color: mediumturquoise;
+			border-width: 4px 4px 4px 4px;
+			border-style: solid;
 		}
 
 		.down a{
-			border: 2px solid indianred;
+			border-color: indianred;
+			border-width: 4px 4px 4px 4px;
+			border-style: solid;
 		}
 
 		.reset a{
-			border: 2px solid indianred;
+			border-color: indianred;
+			border-width: 2px 2px 2px 2px;
+			border-style: solid;
 			background-color: pink;
+		}
+
+		.resetted a{
+			border-color: #F4B400;
+			border-width: 4px 4px 4px 4px;
+			border-style: solid;
 		}
 
 		li .available {
@@ -271,7 +307,7 @@
 
 			.go_badge{
 				float: unset !important;
-				width: 100%;
+				//width: 100%;
 				margin: 0 auto;
 				padding: 10px;
 
@@ -319,6 +355,7 @@
 	5px 5px,
 	2.5em 2.5em;
 	background-repeat: no-repeat;
+	width: 300px;
 
 }
 
@@ -365,6 +402,7 @@
 	float: left;
 	max-width: 100%;
 	margin-right: 10px;
+	margin-bottom: 40px;
 }
 #utilityNav li {
 	float: left;

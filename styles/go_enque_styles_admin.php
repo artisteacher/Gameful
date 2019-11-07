@@ -4,6 +4,12 @@
 add_action( 'admin_enqueue_scripts', 'go_admin_styles' );
 function go_admin_styles () {
     global $go_css_version;
+
+    if(is_gameful() && is_main_site() && !is_user_logged_in()  && is_front_page()){
+        return;
+    }
+
+
     /*
      * Registering Styles For Admin Pages
      */

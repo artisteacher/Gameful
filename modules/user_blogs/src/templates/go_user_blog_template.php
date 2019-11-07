@@ -18,12 +18,12 @@
  * @version 1.0
  */
 
-get_header();
 
+get_header();
 
 /////////////////////USER HEADER
     $user = get_query_var('uname');
-    $user_obj = get_user_by('login',$user);
+    $user_obj = get_user_by('id',$user);
     if($user_obj) {
         $user_id = $user_obj->ID;
 
@@ -34,8 +34,12 @@ get_header();
 
         $user_fullname = $user_obj->first_name . ' ' . $user_obj->last_name;
         $user_login = $user_obj->user_login;
-        $user_display_name = $user_obj->display_name;
-        $user_website = $user_obj->user_url;
+
+        //$user_display_name = $user_obj->display_name;
+        $user_display_name = go_get_user_display_name(  $user_id );
+        //$user_website = $user_obj->user_url;
+        //$user_website = go_get_website( $user_id );
+
         $page_title = $user_display_name . "'s Blog";
 
 
@@ -70,7 +74,7 @@ get_header();
     echo "<div style='padding:30px;'>This user does not exist.</div>";
     }
 
-    go_hidden_footer();
+    //go_hidden_footer();
 ?>
  <script>
 

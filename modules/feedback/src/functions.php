@@ -83,14 +83,15 @@ function go_blog_post_feedback_table($post_id){
     global $wpdb;
     $aTable = "{$wpdb->prefix}go_actions";
     //check last feedback, and if it exists, remove it
-    $all_feedback = $wpdb->get_results($wpdb->prepare("SELECT id, result, xp, gold, health
+    $all_feedback = $wpdb->get_results($wpdb->prepare("SELECT id, action_type, result, xp, gold, health
                 FROM {$aTable} 
-                WHERE source_id = %d AND (action_type = %s OR action_type = %s OR action_type = %s)
+                WHERE source_id = %d AND (action_type = %s OR action_type = %s OR action_type = %s OR action_type = %s)
                 ORDER BY id DESC",
         $post_id,
         'feedback',
         'feedback_percent',
-        'feedback_loot'
+        'feedback_loot',
+            'reset'
     ), ARRAY_A);
 
 
@@ -109,13 +110,13 @@ function go_blog_post_feedback_table($post_id){
 }
 
 function go_feedback_table($all_feedback){
-    $xp_name = get_option('options_go_loot_xp_name');
-    $gold_name = get_option('options_go_loot_gold_name');
-    $health_name = get_option('options_go_loot_health_name');
+    $xp_name = get_option('options_go_loot_xp_abbreviation');
+    //$gold_name = get_option('options_go_loot_gold_abbreviation');
+    $health_name = get_option('options_go_loot_health_abbreviation');
 
-    $gold_name = get_option("options_go_loot_gold_coin_names_gold_coin_name");
-    $silver_name = get_option("options_go_loot_gold_coin_names_silver_name");
-    $copper_name = get_option("options_go_loot_gold_coin_names_copper_name");
+    $gold_name = go_get_loot_short_name('gold');
+    //$silver_name = get_option("options_go_loot_gold_coin_names_silver_name");
+    //$copper_name = get_option("options_go_loot_gold_coin_names_copper_name");
     ?>
      <div class="go_feedback_table_container">
                         <table class='go_feedback_table go_blog_footer_table' class='pretty display'>
@@ -123,17 +124,25 @@ function go_feedback_table($all_feedback){
                             <tr>
                                 <th class='header' id='go_stats_time'>Title</th>
                                 <th class='header' id='go_stats_mods'>Message</th>
-                                <th class='header' id='go_stats_mods'>Percent</th>
+                                <th class='header' id='go_stats_mods'>%</th>
                                 <th class='header' id='go_stats_mods'><?php echo $xp_name; ?></th>
                                 <th class='header' id='go_stats_mods'><?php echo $gold_name; ?></th>
                                 <th class='header' id='go_stats_mods'><?php echo $health_name; ?></th>
                                 <?php
                                 foreach($all_feedback as $feedback){
+                                    $action_type = $feedback['action_type'];
                                     $result = $feedback['result'];
                                     $result = unserialize($result);
-                                    $title = $result[2];
-                                    $message = $result[3];
-                                    $percent = $result[5];
+                                    if($action_type === 'reset'){
+                                        $title = $result[0];
+                                        $message = $result[1];
+                                        $percent = '';
+                                    }else {
+                                        $title = $result[2];
+                                        $message = $result[3];
+                                        //$percent = ;
+                                        $percent = (isset($result[5]) ?  $result[5] : '');
+                                    }
                                 $xp = $feedback['xp'];
                                 $gold = $feedback['gold'];
                                 $health = $feedback['health'];
@@ -176,21 +185,21 @@ function go_feedback_form($post_id){
     <?php
 }
 
-function go_post_status_icon($post_id, $is_archive = false){
+function go_post_status_icon($post_id, $is_archive = false, $top = false){
     $status = get_post_status($post_id);
     $is_admin = go_user_is_admin();
     $icon =false;
     if ($post_id) {
-        if ($status == 'read' && !$is_archive ) {
+        if ($status == 'read' && !$is_archive && !$top ) {
             if ($is_admin) {
                 $icon = '<a href="javascript:;" class="go_status_read_toggle" data-postid="' . $post_id . '"><span class="tooltip"  data-tippy-content="Status is read. Click to mark this post as unread."><i class="far fa-eye fa-2x" aria-hidden="true"></i><i class="fa fa-eye-slash fa-2x" aria-hidden="true" style="display: none;"></i></span></a>';
             }
             else{
                 $icon = '<span class="tooltip"  data-tippy-content="Status is read."><i class="far fa-eye fa-2x" aria-hidden="true"></i><i class="fa fa-eye-slash fa-2x" aria-hidden="true" style="display: none;"></i></span>';
             }
-        } else if ($status == 'reset') {
-            $icon = '<span class="tooltip" data-tippy-content="This post has been reset."><i class="fas fa-times-circle fa-2x" aria-hidden="true"></i></span>';
-        } else if ($status == 'unread' && $is_admin == true && !$is_archive) {
+        } else if ($status == 'reset'  && $top) {
+            $icon = '<span class="tooltip" data-tippy-content="This post has been reset."><i class="fas fa-times-circle fa-1x" aria-hidden="true"></i> <span style=\'color: red;\'>RESET</span></span>';
+        } else if ($status == 'unread' && $is_admin == true && !$is_archive && !$top ) {
             if ($is_admin) {
                 $icon = '<a href="javascript:;" class="go_status_read_toggle" data-postid="' . $post_id . '" ><span class="tooltip" data-tippy-content="Status is unread. Click to mark this post as read."><i class="far fa-eye-slash fa-2x" aria-hidden="true"></i><i class="fa fa-eye fa-2x" aria-hidden="true" style="display: none;"></i></span></a>';
             }
@@ -198,10 +207,10 @@ function go_post_status_icon($post_id, $is_archive = false){
                 $icon = '<span class="tooltip" data-tippy-content="Status is unread."><i class="far fa-eye-slash fa-2x" aria-hidden="true"></i><i class="fa fa-eye fa-2x" aria-hidden="true" style="display: none;"></i></span>';
 
             }
-        } else if ($status == 'draft') {
-            $icon = '<span class="tooltip" data-tippy-content="This post is a draft."><i class="fas fa-pencil-alt fa-2x" aria-hidden="true"></i></span>';
-        } else if ($status == 'trash') {
-            $icon = '<span class="tooltip" data-tippy-content="This post is in the trash."><i class="fas fa-trash fa-2x" aria-hidden="true"></i></span>';
+        } else if ($status == 'draft' && $top) {
+            $icon = '<span class="tooltip" data-tippy-content="This post is a draft."><i class="fas fa-pencil-alt fa-1x" aria-hidden="true"></i> <span style=\'color: red;\'>DRAFT</span></span>';
+        } else if ($status == 'trash' && $top) {
+            $icon = '<span class="tooltip" data-tippy-content="This post is in the trash."><i class="fas fa-trash fa-1x" aria-hidden="true"></i> <span style=\'color: black;\'>TRASH</span></span>';
         }
 
         $user_statuses = array("read", "reset", "draft", "trash");
@@ -221,7 +230,7 @@ function go_blog_is_private($post_id){
     if ($status) {
 
         //$status = get_post_status($post_id);
-        return '<div class="go_blog_visibility" ><span class="tooltip" data-tippy-content="This is a private post.  It is only viewable by the author and site administrators."><i class="fas fa-user-secret fa-2x" aria-hidden="true"></i></span></div>';
+        return '<div class="go_blog_visibility" ><span class="tooltip" data-tippy-content="This is a private post.  It is only viewable by the author and site administrators."><i class="fas fa-user-secret fa-1x" aria-hidden="true"></i></span> <span style=\'color: black;\'>Private Post</span></div>';
     }
 }
 
@@ -257,7 +266,16 @@ function go_blog_favorite_toggle(){
     $post_id = !empty($_POST['blog_post_id']) ? intval($_POST['blog_post_id']) : false;
     $status = !empty($_POST['checked']) ? $_POST['checked'] : false;
     update_post_meta( $post_id, 'go_blog_favorite', $status);
-
+    $key = 'go_post_data_' . $post_id;
+    go_delete_transient($key);
+    if($status === 'true') {
+        $message = '<i class="fas fa-heart fa-4x" style="color:#8B0000"></i>';
+        $post_author_id = get_post_field('post_author', $post_id);
+        $vars[0]['uid']= $post_author_id;
+        $post_title = get_post_field('post_title', $post_id);
+        $current_user_name = ucwords(go_get_user_display_name());
+        go_send_message(true, $current_user_name .' liked your post "'.$post_title.'."', $message, 'message', true, 0, 0, 0, 0, false, '', '', $vars);
+    }
 
 }
 
@@ -316,7 +334,7 @@ function go_feedback_canned(){
         $title = get_option('options_go_feedback_canned_'.$i.'_title');
         $title = htmlspecialchars($title);
         $message = get_option('options_go_feedback_canned_'.$i.'_message');
-        $message = htmlspecialchars($message);
+        $message = htmlspecialchars($message, ENT_QUOTES);
         $radio = get_option('options_go_feedback_canned_'.$i.'_adjust');
         $toggle_assign = get_option('options_go_feedback_canned_'.$i.'_defaults_toggle');
         $xp = get_option('options_go_feedback_canned_'.$i.'_assign_loot_xp');
@@ -351,7 +369,10 @@ function go_feedback_input($post_id){
                         </tr>
                         <tr valign="top">
                             <th scope="row">Message</th>
-                            <td><textarea name="message" class="widefat go_message_input" cols="50" rows="5"></textarea></td>
+
+                            <td><textarea name="message" class="widefat go_message_input summernote" cols="50" rows="5"></textarea>
+
+                            </td>
                         </tr>
                         <?php
                         //get the current % and the latest loot awarded.
@@ -495,7 +516,7 @@ function go_feedback_input($post_id){
                                                                 <div class="go-acf-input-wrap"><input
                                                                             class="feedback_percent_input go_percent_input"
                                                                             name="percent" type="number"
-                                                                            value="0" min="0" max="100" step="1"
+                                                                            value="" min="0" max="100" step="1"
                                                                     oninput="validity.valid||(value='');">%
                                                                 </div>
                                                             </div>
@@ -673,4 +694,3 @@ function go_feedback_input($post_id){
 
     <?php
 }
-?>

@@ -1,6 +1,11 @@
 
 jQuery( document ).ready( function() {
-
+    go_activate_tippy();
+    if (typeof (GO_TASK_LIST) !== 'undefined'){
+        jQuery('.page-title-action').removeAttr("href").css("cursor","pointer").on("click", function(e){
+            go_new_task_from_template();
+        });
+    }
 
     //jQuery('#go_user_link').on("click", function(e){
     //    go_login_lightbox();
@@ -32,7 +37,6 @@ jQuery( document ).ready( function() {
         go_new_task_from_template();
     });
 
-
     jQuery(".go_password_change_modal").one("click", function(e){
         go_update_password_lightbox();
     });
@@ -45,13 +49,23 @@ jQuery( document ).ready( function() {
     if (typeof (hideFooterWidgets) !== 'undefined') {
         jQuery('#footer-widgets').hide();
     }
-
-
-
 });
 
 function go_activate_tippy(){
+    console.log('go_activate_tippy');
     tippy('.tooltip', {
+        delay: 0,
+        arrow: true,
+        arrowType: 'round',
+        size: 'large',
+        duration: 300,
+        animation: 'scale',
+        zIndex: 999999,
+        placement: 'top',
+    });
+
+    tippy('.tooltip_click', {
+        trigger: 'click',
         delay: 0,
         arrow: true,
         arrowType: 'round',
@@ -111,7 +125,7 @@ function go_new_task_from_template(){
 //sends the selected post_id to the clone function
 //there should be no return--just a redirect
 function go_clone_post_new_menu_bar() {
-console.log('go_clone_post_new_menu_bar');
+    console.log('go_clone_post_new_menu_bar');
     let post_id = jQuery('.go_new_task_from_template').val();
 
     var nonce = GO_EVERY_PAGE_DATA.nonces.go_clone_post_new_menu_bar;
@@ -154,8 +168,20 @@ console.log('go_clone_post_new_menu_bar');
 }
 
 function go_activate_password_checker(){
+    console.log('go_activate_password_checker');
+
+
+    jQuery( document ).ready( function() {
+        //your code here
+        //jQuery('.acf-form-submit .acf-button').hide();
+        if(jQuery("#acf-field_5cd3638830f17").length){
+            jQuery('.acf-form-submit .acf-button').attr('disabled', true).css( 'cursor', 'default' ).css('opacity', '.5');
+        }
+
+    });
+
     jQuery( 'body' ).on( 'keyup', '.newpassword, .confirmpassword', function( event ) {
-        console.log('wdmChkPwdStrength');
+
         wdmChkPwdStrength(
             // password field   2
             jQuery('#newpassword input'),
@@ -171,7 +197,7 @@ function go_activate_password_checker(){
     });
 }
 
-function go_update_password_lightbox(){//this is only needed on the frontend
+function go_update_password_lightbox(){//this is only needed on the frontend profile page
     console.log('go_update_password_lightbox');
     jQuery.ajax({
         type: "post",
@@ -256,12 +282,12 @@ function go_update_password_lightbox(){//this is only needed on the frontend
     });
 }
 
-
 //https://stackoverflow.com/questions/24602343/wordpress-custom-change-password-page
 //
 // https://wisdmlabs.com/blog/how-to-add-a-password-strength-meter-in-wordpress/
 
 function wdmChkPwdStrength( $pwd,  $confirmPwd, $strengthStatus, $submitBtn, blacklistedWords ) {
+    console.log("wdmChkPwdStrength");
     var pwd = $pwd.val();
     var confirmPwd = $confirmPwd.val();
 
@@ -279,7 +305,7 @@ function wdmChkPwdStrength( $pwd,  $confirmPwd, $strengthStatus, $submitBtn, bla
 
     // calculate the password strength
     var pwdStrength = wp.passwordStrength.meter( pwd, blacklistedWords, confirmPwd );
-    let requiredStrength = minPassword;
+    let requiredStrength = 4;
 
     // check the password strength
     switch ( pwdStrength ) {
@@ -410,6 +436,7 @@ function go_ajax_error_checker(raw){
 }
 
 function go_user_profile_link(uid){
+    console.log('go_user_profile_link');
     jQuery.ajax({
         type: "post",
         url: MyAjax.ajaxurl,
@@ -428,6 +455,8 @@ function go_user_profile_link(uid){
             }
         },
         success: function (url) {
+            //console.log(url);
+            //console.log('go_user_profile_link_success');
             window.open(url);
         }
     })
@@ -447,22 +476,22 @@ function go_noty_close_oldest(){
 function go_lightbox_blog_img(){
     jQuery('[class*= wp-image]').each(function(  ) {
         var fullSize = jQuery( this ).hasClass( "size-full" );
-        //console.log("fullsize:" + fullSize);
+        console.log("fullsize:" + fullSize);
         if (fullSize == true) {
             var imagesrc = jQuery(this).attr('src');
         }else{
 
             var class1 = jQuery(this).attr('class');
-            //console.log(class1);
+            console.log(class1);
             //var patt = /w3schools/i;
             var regEx = /.*wp-image/;
             var imageID = class1.replace(regEx, 'wp-image');
             //console.log(imageID);
 
             var src1 = jQuery(this).attr('src');
-            //console.log(src1);
-            //var patt = /w3schools/i;
+            console.log(src1);
             var regEx2 = /-([^-]+).$/;
+
 
 
             //var regEx3 = /\.[0-9a-z]+$/i;
@@ -471,10 +500,78 @@ function go_lightbox_blog_img(){
 
             //var imagesrc = src1.replace(regEx2, regEx3);
             var imagesrc = src1.replace(regEx2, m1);
-            //console.log(imagesrc);
+            console.log(imagesrc);
         }
         jQuery(this).featherlight(imagesrc);
     });
+
+
+    //lightbox gallery
+    jQuery('.gallery img').each(function(  ) {
+        var fullSize = jQuery( this ).hasClass( "size-full" );
+        //console.log("fullsize:" + fullSize);
+        if (fullSize == true) {
+            var imagesrc = jQuery(this).attr('src');
+        }else{
+
+            //var class1 = jQuery(this).attr('class');
+            //console.log(class1);
+            //var patt = /w3schools/i;
+            //var regEx = /.*wp-image/;
+            //var imageID = class1.replace(regEx, 'wp-image');
+            //console.log(imageID);
+
+            var src = jQuery(this).attr('src');//the link to the thumbnail or original file if it is small
+            console.log(src);
+            var src2 = src.substr(0, src.lastIndexOf("/")); //string before last slash
+
+            var src3 = src.substring(src.lastIndexOf("/") + 1); //string after last slash
+            //console.log(src3);
+            //var patt = /w3schools/i;
+            var regEx2 = /-([^-]+).$/;
+            //var regEx3 = /\.[0-9a-z]+$/i;
+            var patt1 = /\.[0-9a-z]+$/i;
+            var m1 = (src3).match(patt1);
+            //console.log('m1');
+            //console.log(m1);
+
+            //var imagesrc = src1.replace(regEx2, regEx3);
+            var imagename = src3.replace(regEx2, m1); //string minus the file dimensions (the original file for the lightbox)
+            //console.log("img");
+            //console.log(imagename);
+
+            var imagesrc = src2 + "/" + imagename;
+        }
+
+        var attr = jQuery(this).parent().attr('href');
+
+// For some browsers, `attr` is undefined; for others, `attr` is false. Check for both.
+        if (typeof attr !== typeof undefined && attr !== false) {
+            // Element has this attrib
+            jQuery(this).parent().attr('href', imagesrc);
+        }else{
+            jQuery(this).parent().wrap("<a href='"+ imagesrc +"'></a>");
+        }
+        //console.log('make href');
+        //jQuery(this).featherlight(imagesrc);
+    });
+
+
+
+    //console.log('gallery');
+    var num_variant = 0;
+    var variant_name = 'gallery';
+    var this_variant = '';
+    jQuery('.gallery').each(function( index, element  ) {
+        num_variant++;
+        this_variant = variant_name +"_"+ num_variant
+        jQuery(element).find('a').featherlightGallery({
+        });
+    });
+
+
+
+
 }
 
 function go_stats_lightbox_page_button( uid ) {//this is called from the admin bar
@@ -518,7 +615,7 @@ function go_stats_lightbox_page_button( uid ) {//this is called from the admin b
                 jQuery('#stats_tabs').tabs();
                 jQuery( '.stats_tabs' ).click( function() {
                     console.log("tabs");
-                    var tab = jQuery(this).attr('tab');
+                    tab = jQuery(this).attr('tab');
                     switch (tab) {
                         case 'about':
                             //go_stats_about();
@@ -738,7 +835,8 @@ function go_make_select2_cpt( my_div, cpt) {
 function go_stats_task_list() {
 
     if (jQuery("#go_tasks_datatable").length == 0) {
-        jQuery("#stats_tasks").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px 30px;'><div id='loader' <i class='fas fa-spinner fa-pulse fa-4x'></i></div></div>");
+        var url = ( PluginDir.url + 'media/images/spinner-solid.svg' );
+        jQuery("#stats_tasks").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px; text-align: center'><div id='loader'><img style='height: 75px;' class='go_loader fa-pulse' src='"+url+"'></div></div>");
         var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_task_list;
         jQuery.ajax({
             type: 'post',
@@ -886,7 +984,8 @@ function go_stats_store_list() {
     //jQuery(".go_datatables").hide();
 
     if (jQuery("#go_store_datatable").length == 0 ) {
-        jQuery("#stats_store").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px 30px;'><div id='loader' <i class='fas fa-spinner fa-pulse fa-4x'></i></div></div>");
+        var url = ( PluginDir.url + 'media/images/spinner-solid.svg' );
+        jQuery("#stats_store").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px; text-align: center'><div id='loader'><img style='height: 75px;' class='go_loader fa-pulse' src='"+url+"'></div></div>");
 
         var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_store_list;
         jQuery.ajax({
@@ -934,7 +1033,8 @@ function go_stats_store_list() {
 function go_stats_activity_list() {
     console.log("go_stats_activity_list");
     if (jQuery("#go_activity_datatable").length == 0) {
-        jQuery("#stats_history").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px 30px;'><div id='loader' <i class='fas fa-spinner fa-pulse fa-4x'></i></div></div>");
+        var url = ( PluginDir.url + 'media/images/spinner-solid.svg' );
+        jQuery("#stats_history").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px; text-align: center'><div id='loader'><img style='height: 75px;' class='go_loader fa-pulse' src='"+url+"'></div></div>");
 
         var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_activity_list;
         jQuery.ajax({
@@ -989,7 +1089,8 @@ function go_stats_activity_list() {
 function go_stats_messages() {
 
     if (jQuery("#go_messages_datatable").length == 0) {
-        jQuery("#stats_messages").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px 30px;'><div id='loader' <i class='fas fa-spinner fa-pulse fa-4x'></i></div></div>");
+        var url = ( PluginDir.url + 'media/images/spinner-solid.svg' );
+        jQuery("#stats_messages").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px; text-align: center'><div id='loader'><img style='height: 75px;' class='go_loader fa-pulse' src='"+url+"'></div></div>");
 
         var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_messages;
         jQuery.ajax({
@@ -1026,8 +1127,12 @@ function go_stats_messages() {
                             { targets: '_all', "orderable": false }
                         ],
                         "searching": true,
-                        "order": [[0, "desc"]]
+                        "order": [[0, "desc"]],
+                        "drawCallback": function( settings ) {
+                            go_lightbox_blog_img();
+                        },
                     });
+
                 }
             }
         });
@@ -1038,7 +1143,8 @@ function go_stats_badges_list() {
 
     if (jQuery("#go_badges_list").length === 0) {
         var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_badges_list;
-        jQuery("#stats_badges").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px 30px;'><div id='loader' <i class='fas fa-spinner fa-pulse fa-4x'></i></div></div>");
+        var url = ( PluginDir.url + 'media/images/spinner-solid.svg' );
+        jQuery("#stats_badges").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px; text-align: center'><div id='loader'><img style='height: 75px;' class='go_loader fa-pulse' src='"+url+"'></div></div>");
 
         console.log("go_stats_badges_list");
         jQuery.ajax({
@@ -1074,7 +1180,8 @@ function go_stats_groups_list() {
     console.log("go_stats_groups_list");
     if (jQuery("#go_groups_list").length == 0) {
         var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_groups_list;
-        jQuery("#stats_groups").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px 30px;'><div id='loader' <i class='fas fa-spinner fa-pulse fa-4x'></i></div></div>");
+        var url = ( PluginDir.url + 'media/images/spinner-solid.svg' );
+        jQuery("#stats_groups").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px; text-align: center'><div id='loader'><img style='height: 75px;' class='go_loader fa-pulse' src='"+url+"'></div></div>");
 
         jQuery.ajax({
             type: 'post',
@@ -1229,3 +1336,33 @@ function go_daterange_clear(){
 function go_clear_daterange(){
 }
 
+function go_copy_to_clipboard(event){
+    console.log("go_copy_to_clipboard");
+
+    var copyText = jQuery(event).find('.go_copy_this').html();
+
+
+    var dummy = document.createElement("textarea");
+    // to avoid breaking orgain page when copying more words
+    // cant copy when adding below this code
+    // dummy.style.display = 'none'
+    document.body.appendChild(dummy);
+    //Be careful if you use texarea. setAttribute('value', value), which works with "input" does not work with "textarea". – Eduard
+    dummy.value = copyText;
+    dummy.select();
+    document.execCommand("copy");
+    document.body.removeChild(dummy);
+
+    document.querySelectorAll('.tippy-popper').forEach(popper => {
+       // if (popper !== instance.popper) {
+        setTimeout(function() {
+            //your code to be executed after 1 second
+            popper._tippy.hide();
+        }, 1000);
+
+       // }
+    })
+
+
+
+}

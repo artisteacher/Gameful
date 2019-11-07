@@ -33,6 +33,7 @@
 .go-stages .acf-field:before { background: none !important; border: none !important}
 .go-stages .go-content .acf-input { width:100% !important}
 .go-stages .go-content .acf-label { display:none !important}
+.go-stages .acf-accordion {margin: 3px 10px !important; border: solid 1px #dddddd;}
 
 .acf-accordion-title {background: lightblue !important;}
 
@@ -126,3 +127,12 @@
 
 .go_test_field_input_rm_row_button {
     margin-left: -2px !important; }
+
+
+/*
+ACF Registration Page styles
+ */
+
+.go_profile_fields .acf-switch{
+    overflow: hidden;
+}

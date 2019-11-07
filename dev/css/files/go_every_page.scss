@@ -1,8 +1,227 @@
+
+/********************
+*	User Bar
+********************/
+
+/* Here's the new CSS to add... */
+.admin-bar #go_user_bar {
+	top: 32px;
+}
+
+body:not(.wp-admin){
+	display:none;
+	//margin-top: 91px !important;
+}
+
+body.wp-customizer{
+	display: block;
+}
+
+body.wp-admin {
+	margin-top: unset;
+	display: block;
+
+}
+#wpadminbar{
+	z-index: 100000 !important;
+}
+
+#go_user_bar {
+	position: fixed;
+	top: 0px;
+	width: 100%;
+	z-index: 100000;
+	height: 91px;
+	font-family: sans-serif;
+	font-size: 14px;
+
+	.progress-bar-border {
+		width: 100%;
+		margin-top: -1px;
+	}
+
+	#go_user_bar_top {
+		display: flex;
+		justify-content: center;
+		background-color: #2d2d2d;
+		height: 55px;
+	}
+
+	#go_admin_bar_gold {
+		font-family: 'B612 Mono', monospace;
+		.coin_wrapper {
+			line-height: .5em;
+		}
+
+		.go_coin {
+			font-size: .5em;
+			top: 5px;
+		}
+
+		.go_amount {
+			bottom: 0px;
+			//font-size: 13px ;
+		}
+
+	}
+
+	#go_user_bar_inner {
+		display: flex;
+		white-space: nowrap;
+		padding: 0 40px;
+	}
+
+
+	.go_user_bar_icon {
+		text-align: center;
+		line-height: .8em;
+		padding: 5px 10px;
+
+		.ab-icon, img {
+			font-size: 23px;
+			margin: 3px 0px 8px 0px;
+		}
+
+		img {
+			margin-top: 0px;
+			margin-bottom: 4px;
+		}
+
+
+		.go_player_bar_text {
+			font-size: 14px;
+		}
+	}
+
+	#go_user_bar_loot {
+		text-align: center;
+		display: block;
+		height: 48px;
+
+		.wide_content {
+			margin: 0px 15px 0px 0px;
+			//font-size: .8em;
+
+			p {
+				margin: 0;
+			}
+
+			display: table-cell;
+			vertical-align: middle;
+			height: 48px;
+		}
+
+
+		.narrow_content {
+			font-size: .8em;
+			vertical-align: middle;
+			height: 48px;
+		}
+	}
+
+	.userbar_dropbtn {
+		display: flex;
+	}
+
+	.userbar_dropdown,
+	.userbar_dropdown_toggle{
+		position: relative;
+		display: inline-block;
+	}
+
+	.userbar_dropdown-content{
+		display: none;
+		position: absolute;
+		background-color: #2d2d2d;
+		//min-width: 300px;
+		box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+		z-index: 1;
+		padding: 30px;
+		top: 54px;
+	}
+
+	.userbar_dropdown-content.search {
+		margin-left: -250px;
+	}
+
+	.userbar_dropdown:hover .userbar_dropdown-content {
+		display: block;
+		z-index: 100001;
+
+	}
+
+	.narrow_content {
+		display: none;
+	}
+
+
+
+}
+
+.max_health{
+	background: gold; /* For browsers that do not support gradients */
+	background: -webkit-linear-gradient(left, red, orange , yellow, green, cyan, blue, violet); /* For Safari 5.1 to 6.0 */
+	background: -o-linear-gradient(right, red, orange, yellow, green, cyan, blue, violet); /* For Opera 11.1 to 12.0 */
+	background: -moz-linear-gradient(right, red, orange, yellow, green, cyan, blue, violet); /* For Firefox 3.6 to 15 */
+	background: linear-gradient(to right, red, orange , yellow, green, cyan, blue, violet);
+}
+
+
+@media screen and (max-width: 782px) {
+	//move the payerbar down when the admin bar is shown
+	.admin-bar #go_user_bar { top: 46px;}
+
+	/*
+	body.blog{margin-top: 39px !important;}
+	html #go_user_bar {
+		.narrow_content {
+			display: block;
+		}
+		.wide_content {
+			display: none;
+		}
+		.go_player_bar_text{
+			display: none;
+		}
+	}*/
+}
+
+@media screen and (max-width: 600px)
+{
+	#go_user_bar {
+		position: absolute;
+		top: 0px;
+	}
+
+	body { margin-top:0px;}
+
+}
+
+
+.go_loader_container{
+	width: 100%;
+	text-align: center;
+	margin: 60px 0px;
+}
+
 img{
 	max-width: 100%;
 	height: auto;
 }
 
+.go_help_vid{
+	float: left;
+	padding: 0 8px;
+}
+
+//wordpress strips some css, but not classes.  This is a fix.
+.go_display_flex{
+	display:flex;
+}
+
+.go_help_info_icon{
+	font-size: 1.2em;
+}
 .go_favorite_container {
 
 	label {
@@ -34,9 +253,6 @@ img{
 			font-size: 2em;
 			font-weight: 900;
 		}
-
-
-
 	}
 
 }
@@ -82,6 +298,7 @@ input[type="checkbox"]:checked + label span.checkbox::after {
 	color: #62AFFF;
 }
 
+/*
 .go_blog_stage {
 	border: solid 1px;
 	padding: 10px 20px 10px 20px;
@@ -89,6 +306,7 @@ input[type="checkbox"]:checked + label span.checkbox::after {
 	background-color: #ededed;
 	margin-bottom: 10px;
 }
+*/
 
 #go_datepicker_container {
 	text-align: right;
@@ -114,6 +332,10 @@ input[type="checkbox"]:checked + label span.checkbox::after {
 	border-radius: 3px;
 	padding: 15px;
 	background-color: white;
+
+	> span{
+		margin-right: 20px;
+	}
 }
 
 /**VIDEOS EMBEDED WITH MEDIA MANAGER
@@ -155,6 +377,12 @@ video.wp-video-shortcode {
 /**
  *for the media modal
  */
+//hide gallery options--GO uses a lightbox
+.media-modal .gallery-settings .setting:first-of-type {
+	display: none;
+}
+
+
 /* Text meant only for screen readers. */
 .screen-reader-text {
 	border: 0;
@@ -171,8 +399,17 @@ video.wp-video-shortcode {
 
 .featherlight {
 	z-index: 100002 !important;
-	background: rgba(0,0,0,.8) !important}
-#__wp-uploader-id-2 {z-index: 100003 !important;}
+	background: rgba(0,0,0,.8) !important;
+}
+
+.featherlight.help {
+	z-index: 999999 !important;
+}
+
+body:not(.wp-customizer) #__wp-uploader-id-2,
+body:not(.wp-customizer) .media-modal {
+	z-index: 160000 !important; //can't go below because it shows in customizer
+}
 
 .swal-overlay {
 	z-index: 100005 !important;
@@ -224,13 +461,9 @@ video.wp-video-shortcode {
 	border: none;
 }
 
-
-
-
 .go_reset_task_message .go_pink{
 	background-color: pink;
 }
-
 
 #go_messages .go-acf-fields.-border {
 	border: none;
@@ -270,6 +503,7 @@ video.wp-video-shortcode {
 		float: unset;
 	}
 }
+/*
 .go_messages_rewards{
 	background-color: lightgreen;
 }
@@ -277,11 +511,13 @@ video.wp-video-shortcode {
 .go_messages_penalties{
 	background-color: pink;
 }
-
+*/
+/*
 .go_blog_elements {
 	display: flex;
 	flex-wrap: wrap;
-}
+}*/
+
 .go_required_blog_content.width100 {
 	width: 100%;
 }
@@ -423,12 +659,13 @@ video.wp-video-shortcode {
 	cursor: pointer;
 }
 
+/*
 #go_upload_button {
 	margin: auto;
 	font-size: 1.4em;
 	padding: 6px;
 
-}
+}*/
 
 #go_button.show_bonus {
 	background-color: gold;
@@ -454,10 +691,10 @@ video.wp-video-shortcode {
 	background-color: #ddd;
 }
 .go_lock, .go_late_mods, .go_sched_access_message, .go_timer_message, .go_checks_and_buttons {
-	border: solid 1px;
-	border-radius: 5px;
+	//border: solid 1px;
+	border-radius: 3px;
 	padding: 10px;
-	margin: 10px;
+	margin: 10px 0;
 	background-color: #f5b3bd;
 }
 
@@ -472,6 +709,12 @@ video.wp-video-shortcode {
 
 .go_checks_and_buttons.active{
 	background-color: cornsilk;
+	padding: 20px;
+
+	hr {
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
 }
 
 .go_lock ul ul {
@@ -502,7 +745,7 @@ video.wp-video-shortcode {
 #wp-featherlight-enable-wrap {display: none;}
 
 /********************
-*	???
+*	???ss
 ********************/
 
 .go_notification {
@@ -520,7 +763,20 @@ video.wp-video-shortcode {
 	border-radius: 3px;
 	background: #111111;
 	opacity: 0.9;
-	z-index: 9999999;
+	z-index: 100001;
+}
+
+.noty_layout,
+.noty_modal{
+	z-index: 100001 !important;//bring notifications under lightbox
+}
+
+.noty_modal {
+	opacity: .6 !important;
+}
+
+.go_wide_swal{
+	width: 90% !important;
 }
 
 .go_error {
@@ -531,7 +787,15 @@ video.wp-video-shortcode {
 	color: red;
 }
 
-
+.go-error-message {
+	position: relative;
+	display: block;
+	background: pink;
+	margin: 5px 0 15px;
+	padding: 1px 12px;
+	min-height: 0px;
+	border-left: #dd4232 solid 4px;
+}
 
 input[type='text'].go_error_red {
 	border: 2px solid red;
@@ -547,6 +811,16 @@ input[type='text'].go_error_red {
 ********************/
 .fas.ab-icon:before {font-family: 'Font Awesome 5 Pro' !important; font-weight: 900;}
 .fas {font-family: 'Font Awesome 5 Pro' !important; font-weight: 900;}
+
+#wpadminbar .fas{
+	font-size: 17px !important;
+	padding-top: 7px !important;
+}
+
+#wpadminbar .ab-icon
+{
+	padding-top: 7px !important;
+}
 
 @media screen and (max-width: 782px){
   	#wp-admin-bar-go_map, #wp-admin-bar-go_clipboard, #wp-admin-bar-go_store, #wp-admin-bar-go_reader, #go_section_pipe {
@@ -579,6 +853,11 @@ input[type='text'].go_error_red {
 	background-color: black;
 	font-size: 14px;
 	box-sizing: unset;
+}
+
+.progress-bar-border.bonus{
+	background-image: linear-gradient(45deg, #454545 25%, #333333 25%, #333333 50%, #454545 50%, #454545 75%, #333333 75%, #333333 100%);
+	background-size: 28.28px 28.28px;
 }
 
 .admin_bar_loot {
@@ -726,6 +1005,25 @@ input[name="go_admin_bar_submit"] {
 
 /* Tasks Style | Back-end */
 
+#go_task_top {
+	padding: 20px;
+	border: 1px solid;
+	-webkit-box-shadow: 6px 6px 23px -9px rgba(0,0,0,0.68);
+	-moz-box-shadow: 6px 6px 23px -9px rgba(0,0,0,0.68);
+	box-shadow: 6px 6px 23px -9px rgba(0,0,0,0.68);
+	background-color: white;
+}
+.go_call_to_action {
+	margin: 10px;
+}
+
+#outro.go_checks_and_buttons{
+	padding: 20px;
+}
+
+.go_blog_title_container{
+	margin: 20px 0 20px 0;
+}
 div.misc-pub-section-clone {
 	border-top: 1px solid #eee;
 }
@@ -739,6 +1037,11 @@ input#go-button-clone {
 	cursor: -webkit-grab;
 	cursor: -moz-grab;
 }
+
+.single-tasks #nav-below {
+	display: none;
+}
+
 
 .go_sortable_item {
 	cursor: -webkit-grabbing;
@@ -949,8 +1252,8 @@ ul#go_bonus_loot_wrap li.go_error {
 }
 
 .go_stage_message {
-	border-top: 1px solid;
-	border-top-color: inherit;
+	border-bottom: 1px solid;
+	border-bottom-color: inherit;
 	padding: 20px 0 20px 0;
 }
 
@@ -1123,6 +1426,12 @@ input#go_pass_lock::-moz-placeholder {
 	font-weight: 900;
 }
 
+#adminmenu #toplevel_page_edit-tags-taxonomy-go_badges .wp-menu-image:before {
+	font-family: 'Font Awesome 5 Pro' !important;
+	content: '\f559';
+	font-weight: 900;
+}
+
 #adminmenu #menu-posts-go_store .wp-menu-image:before {
 	font-family: 'Font Awesome 5 Pro' !important;
 	content: '\f362';
@@ -1185,7 +1494,7 @@ input#go_pass_lock::-moz-placeholder {
 	}
 }
 #go_task_rewards > *{
-	padding: 20px;
+	padding: 5px 0 5px 0;
 }
 
 
@@ -1219,7 +1528,7 @@ input#go_pass_lock::-moz-placeholder {
 
 #go_blog_container{
 	width: 100%;
-	max-width: 800px;
+	//max-width: 800px;
 }
 
 /********************
@@ -1356,6 +1665,171 @@ input#go_pass_lock::-moz-placeholder {
 .go_admin_bar_gold_2 .go_coin {
 	font-size:.5em;
 }
+////////////NEW COIN
+
+$coin-diameter: 50px;
+$coin-thickness: 5px;
+//$coin-color: #ffd700;
+$coin-color: #8c8c8c;
+// dime
+// $coin-front: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Dime_Obverse_13.png/440px-Dime_Obverse_13.png";
+// $coin-back: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Dime_Reverse_13.png/440px-Dime_Reverse_13.png";
+// penny
+$coin-front: "../../media/go_coin_face.png";
+$coin-back: "../../media/go_coin_face.png";;
+$edge-faces: 80;
+$edge-face-length: 3.14*$coin-diameter/$edge-faces;
+$turn-time: 3s;
+
+.coin {
+	position: relative;
+	width: $coin-diameter;
+	height: $coin-diameter;
+	margin: 0px auto;
+	transform-style: preserve-3d;
+	animation: rotate3d $turn-time linear infinite;
+	transition: all .3s;
+}
+
+.coin__front,
+.coin__back {
+	position: absolute;
+	width: $coin-diameter;
+	height: $coin-diameter;
+	border-radius: 50%;
+	overflow: hidden;
+	background-color: $coin-color;
+	display: table;
+	font-size:50px;
+	color: #606060;
+	text-align: center;
+	font-size: 1.5em;
+
+	&:after {
+		content: "";
+		position: absolute;
+		left: -$coin-diameter/2;
+		bottom: 100%;
+		display: block;
+		height: $coin-diameter/1.5;
+		width: $coin-diameter*2;
+		background: #fff;
+		opacity: 0.3;
+		animation: shine linear $turn-time/2 infinite;
+	}
+}
+
+.coin__front {
+	background-image: url($coin-front);
+	background-size: cover;
+	transform: translateZ($coin-thickness/2);
+}
+.coin__back {
+	background-image: url($coin-back);
+	background-size: cover;
+	transform: translateZ(-$coin-thickness/2) rotateY(180deg);
+}
+
+.coin__edge {
+	@for $i from 1 through $edge-faces {
+		div:nth-child(#{$i}) {
+			position: absolute;
+			height: $edge-face-length;
+			width: $coin-thickness;
+			background: darken( $coin-color, ( ($i - $edge-faces/2) * ($i - $edge-faces/2)) / ($edge-faces*$edge-faces/4) * 100 * 0.7 );
+			transform:
+							translateY(#{$coin-diameter/2-$edge-face-length/2})
+							translateX(#{$coin-diameter/2-$coin-thickness/2})
+							rotateZ(360deg/$edge-faces*$i+90)
+							translateX(#{$coin-diameter/2})
+							rotateY(90deg);
+		}
+	}
+}
+
+.coin__shadow {
+	position: absolute;
+	width: $coin-diameter;
+	height: $coin-thickness;
+	border-radius: 50%;
+	background: #000;
+	box-shadow: 0 0 $coin-thickness*5 $coin-thickness*5 #000;
+	opacity: 0.125;
+	transform: rotateX(90deg) translateZ(-$coin-diameter*1.1) scale(.5);
+}
+
+@keyframes rotate3d {
+	0% {
+		transform: perspective(1000px) rotateY(0deg);
+	}
+
+	100% {
+		transform: perspective(1000px) rotateY(360deg);
+	}
+}
+
+@keyframes shine {
+	0%, 15% {
+		transform: translateY($coin-diameter*2) rotate(-40deg);
+	}
+	50% {
+		transform: translateY(-$coin-diameter) rotate(-40deg);
+	}
+}
+
+
+.noty_theme__sunset.noty_bar .noty_body{
+	padding:20px !important;
+}
+
+
+.noty_theme__sunset.noty_type__success{
+	background-color: #1bb15a !important;
+//text-shadow: -1px -1px 0 #008000, 1px -1px 0 #008000, -1px 1px 0 #008000, 1px 1px 0 #008000;
+
+}
+
+
+
+.noty_theme__sunset.noty_type__error{
+	background-color: #cf343a !important;
+//text-shadow: -1px -1px 0 #800311, 1px -1px 0 #800311, -1px 1px 0 #800311, 1px 1px 0 #800311;
+}
+
+.noty_theme__sunset.noty_type__warning{
+	color: black !important;
+	background-color: #ffe400 !important;
+	//text-shadow: -1px -1px 0 #800311, 1px -1px 0 #800311, -1px 1px 0 #800311, 1px 1px 0 #800311;
+}
+
+.noty_theme__sunset.noty_type__info{
+	background-color: #4a84ef !important;
+	//text-shadow: -1px -1px 0 #800311, 1px -1px 0 #800311, -1px 1px 0 #800311, 1px 1px 0 #800311;
+}
+
+.noty_theme__sunset.noty_type__success,
+.noty_theme__sunset.noty_type__error{
+	//background-color: unset !important;
+	//color: #unset;
+	border-color: unset !important;
+	border: unset !important;
+	-webkit-border-radius: unset !important;
+	-moz-border-radius: unset !important;
+	border-radius: unset !important;
+	text-align: center;
+	text-shadow: 0px 0px 9px rgba(89, 89, 89, .25);
+	color: #ffffff !important;
+	.noty_progressbar {
+		display: none !important;
+	}
+
+	.noty_body{
+		padding:10px !important;
+	}
+}
+
+
+
 
 
 /********************
@@ -1384,6 +1858,26 @@ input#go_pass_lock::-moz-placeholder {
 /********************
 *	Feedback and blog
 ********************/
+
+.go_blog_post_wrapper.reset{
+	background-color: #fff3f3 !important;
+	border: 1px solid;
+	border-color: red;
+}
+
+.go_blog_post_wrapper.draft{
+	background-color: #ffffe9 !important;
+	border: 1px solid;
+	border-color: darkgray;
+}
+
+.go_blog_post_wrapper.trash{
+	background-color: #cacaca !important;
+	border: 1px solid;
+	border-color: darkgray;
+}
+
+
 .feedback_accordion{
 	font-size: .9em !important;
 
@@ -1473,194 +1967,6 @@ input#go_pass_lock::-moz-placeholder {
 	font-size: 1.2em;
 }
 
-/********************
-*	User Bar
-********************/
-
-/* Here's the new CSS to add... */
-.admin-bar #go_user_bar {
-	top: 32px;
-}
-
-body{
-	//margin-top: 91px;
-}
-
-body.wp-admin {
-	margin-top: unset;
-
-}
-#wpadminbar{
-	z-index: 101000 !important;
-}
-
-#go_user_bar {
-	position: fixed;
-	top: 0px;
-	width: 100%;
-	z-index: 100000;
-	height: 91px;
-	font-family: sans-serif;
-	font-size: 14px;
-
-	.progress-bar-border {
-		width: 100%;
-		margin-top: -1px;
-	}
-
-	#go_user_bar_top {
-		display: flex;
-		justify-content: center;
-		background-color: #2d2d2d;
-	}
-
-	#go_admin_bar_gold {
-		font-family: 'B612 Mono', monospace;
-		.coin_wrapper {
-			line-height: .5em;
-		}
-
-		.go_coin {
-			font-size: .5em;
-			top: 5px;
-		}
-
-		.go_amount {
-			bottom: 0px;
-			//font-size: 13px ;
-		}
-
-	}
-
-	#go_user_bar_inner {
-		display: flex;
-		white-space: nowrap;
-		padding: 0 40px;
-	}
-
-
-	.go_user_bar_icon {
-		text-align: center;
-		line-height: .8em;
-		padding: 5px 10px;
-
-		.ab-icon, img {
-			font-size: 23px;
-			margin: 3px 0px 8px 0px;
-		}
-
-		img {
-			margin-top: 0px;
-			margin-bottom: 4px;
-		}
-
-
-		.go_player_bar_text {
-			font-size: 14px;
-		}
-	}
-
-	#go_user_bar_loot {
-		text-align: center;
-		display: block;
-		height: 48px;
-
-		.wide_content {
-			margin: 0px 15px 0px 0px;
-			//font-size: .8em;
-
-			p {
-				margin: 0;
-			}
-
-			display: table-cell;
-			vertical-align: middle;
-			height: 48px;
-		}
-
-
-		.narrow_content {
-			font-size: .8em;
-			vertical-align: middle;
-			height: 48px;
-		}
-	}
-
-	.userbar_dropbtn {
-		display: flex;
-	}
-
-	.userbar_dropdown,
-	.userbar_dropdown_toggle{
-		position: relative;
-		display: inline-block;
-	}
-
-	.userbar_dropdown-content{
-		display: none;
-		position: absolute;
-		background-color: #2d2d2d;
-		//min-width: 300px;
-		box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-		z-index: 1;
-		padding: 30px;
-		top: 54px;
-	}
-
-	.userbar_dropdown-content.search {
-		margin-left: -250px;
-	}
-
-	.userbar_dropdown:hover .userbar_dropdown-content {
-		display: block;
-		z-index: 100001;
-
-	}
-
-	.narrow_content {
-		display: none;
-	}
-
-	.max_health{
-		background: gold; /* For browsers that do not support gradients */
-		background: -webkit-linear-gradient(left, orange , yellow, green, cyan, blue, violet); /* For Safari 5.1 to 6.0 */
-		background: -o-linear-gradient(right, orange, yellow, green, cyan, blue, violet); /* For Opera 11.1 to 12.0 */
-		background: -moz-linear-gradient(right, orange, yellow, green, cyan, blue, violet); /* For Firefox 3.6 to 15 */
-		background: linear-gradient(to right, orange , yellow, green, cyan, blue, violet);
-	}
-
-}
-
-
-@media screen and (max-width: 782px) {
-	//move the payerbar down when the admin bar is shown
-	.admin-bar #go_user_bar { top: 46px;}
-
-	/*
-	body.blog{margin-top: 39px !important;}
-	html #go_user_bar {
-		.narrow_content {
-			display: block;
-		}
-		.wide_content {
-			display: none;
-		}
-		.go_player_bar_text{
-			display: none;
-		}
-	}*/
-}
-
-@media screen and (max-width: 600px)
-{
-	#go_user_bar {
-	position: absolute;
-	top: 0px;
-	}
-
-	body { margin-top:0px;}
-
-}
 
 //used on registration and password reset
 
@@ -1681,3 +1987,18 @@ body.wp-admin {
 .password-strength.strong{
 		background-color: lightgreen;
 	}
+
+
+/********************
+*	Icon for Admin COmment plugin for tiny mce
+********************/
+i.mce-i-go_admin_comment:before {   // FONT-AWESOME-CLASSNAME e.g. "icon-youtube"
+	content: "\f075";       // FONT-AWESOME-CONTENT e.g. "\f166"
+	display: inline-block;
+	font: normal normal normal 14px/1 FontAwesome;
+	font-size: inherit;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-family: 'Font Awesome 5 Pro' !important;
+}

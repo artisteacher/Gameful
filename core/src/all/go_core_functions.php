@@ -187,9 +187,13 @@ function go_print_term_list($term_ids){
                 }
             }
         }
-        $list = implode("<br>", $list);
-        //$list = '<span class="tooltip" data-tippy-content="'. $list .'">'. $list . '</span>';
-        $list = '<span>'. $list . '</span>';
+        if(!empty($list)) {
+            $list = implode("<br>", $list);
+            //$list = '<span class="tooltip" data-tippy-content="'. $list .'">'. $list . '</span>';
+            $list = '<span>' . $list . '</span>';
+        }else{
+            $list = '';
+        }
 
     }
     else{
@@ -242,26 +246,6 @@ function go_get_terms_ordered($taxonomy, $parent = '', $number = ''){
 
 function go_get_page_uri(){
     $request_uri = (isset($_SERVER['REQUEST_URI']) ?  $_SERVER['REQUEST_URI'] : null);//page currently being loaded
-    //
-    //
-    //if(is_gameful()){
-
-        //$details = get_blog_details();
-       // $path = $details->path;
-
-        //$parts = parse_url($request_uri);
-        //$pos = strrpos($request_uri, '/');
-       // $id = $pos === false ? $request_uri : substr($request_uri, $pos + 1);
-        //$hmm =1;
-
-
-
-
-
-
-    //}else{
-    //    $path = '';
-   // }
 
     $str = basename($request_uri);
     $sub = substr($str, 0, 1);
@@ -270,9 +254,7 @@ function go_get_page_uri(){
         $str = basename($request_uri);
     }
     $page_uri = strtok($str,'?');
-    //$strip_path = str_replace($path, '', $request_uri);
-    //$strip_slashes = str_replace('/','',$strip_path);
-    //$page_uri = strtok($strip_slashes,'?');
+
 
     return $page_uri;
 }
@@ -282,12 +264,31 @@ function go_get_user_display_name($user_id = ''){
     if(empty($user_id)){
         $user_id = get_current_user_id();
     }
-    $user_display_name = get_user_option( 'display_name', $user_id );
-    if(empty($user_display_name)){
-        $current_user = get_userdata($user_id);
-        $user_display_name = $current_user->display_name;
+        $user_display_name = '';
+    if(!empty($user_id)) {
+        $user_display_name = get_user_option('go_nickname', $user_id);
+        if (empty($user_display_name)) {
+            $user_display_name = get_user_meta($user_id, 'nickname', true);
+            if (empty($user_display_name)) {
+                $current_user = get_userdata($user_id);
+
+                $user_display_name = $current_user->display_name;
+            }
+        }
     }
     return $user_display_name;
+}
+
+function go_get_website($user_id = ''){
+    if(empty($user_id)){
+        $user_id = get_current_user_id();
+    }
+    $website = get_user_option( 'go_website', $user_id );
+    if(empty($website)){
+        $current_user = get_userdata($user_id);
+        $website = $current_user->user_url;
+    }
+    return $website;
 }
 
 function go_get_avatar($user_id = false, $avatar_html = false, $size = 'thumbnail'){
@@ -297,7 +298,7 @@ function go_get_avatar($user_id = false, $avatar_html = false, $size = 'thumbnai
     $user_avatar_id = get_user_option( 'go_avatar', $user_id );
     if (wp_attachment_is_image($user_avatar_id)  ) {
 
-        $user_avatar = wp_get_attachment_image($user_avatar_id, $size);
+        $user_avatar = wp_get_attachment_image($user_avatar_id, $size, false, array( "class" => "avatar avatar-64 photo" ));
     }else{
         if ($avatar_html) {
             $user_avatar = $avatar_html;
@@ -329,7 +330,7 @@ function go_override_avatar ($avatar_html, $id_or_email, $size, $default, $alt) 
 
     if ( $user && is_object( $user ) ) {
         $user_id = $user->ID;
-        $new_avatar = go_get_avatar($user_id, $avatar_html, array(29, 29));
+        $new_avatar = go_get_avatar($user_id, $avatar_html, array(64, 64));
         if(!empty($new_avatar)){
             $avatar = $new_avatar;
         }
@@ -338,5 +339,212 @@ function go_override_avatar ($avatar_html, $id_or_email, $size, $default, $alt) 
 
     return $avatar;
 }
-
 add_filter ('get_avatar', 'go_override_avatar', 1, 5);
+
+
+function go_acf_labels( $field ) {
+    //badges
+    //groups
+    $text = $field['label'];
+    preg_match_all("/\[[^\]]*\]/", $text, $matches);
+    $my_matches = $matches[0];
+
+    foreach($my_matches as $match){
+        if($match === '[Experience]'){
+            $replace_with = get_option("options_go_loot_xp_name");
+        }
+        else if($match === '[XP]'){
+            $replace_with = get_option("options_go_loot_xp_abbreviation");
+        }
+        else if($match === '[Gold]'){
+            $replace_with = go_get_gold_name();
+        }
+        else if($match === '[G]'){
+            $replace_with =  go_get_loot_short_name('gold');
+        }
+        else if($match === '[Reputation]'){
+            $replace_with = get_option("options_go_loot_health_name");
+        }
+        else if($match === '[Rep]'){
+            $replace_with = get_option("options_go_loot_health_abbreviation");
+        }
+        else if($match === '[Badges]'){
+            $replace_with = ucwords(get_option('options_go_badges_name_plural'));
+        }
+        else if($match === '[Badge]'){
+            $replace_with = ucwords(get_option('options_go_badges_name_singular'));
+        }
+        else if($match === '[Group]'){
+            $replace_with = ucwords(get_option('options_go_groups_name_singular'));
+        }
+        else if($match === '[Groups]'){
+            $replace_with = ucwords(get_option('options_go_groups_name_plural'));
+        }
+        if(!empty($replace_with)){
+            $field['label'] = str_replace($match, $replace_with, $field['label']);
+        }
+    }
+
+    return $field;
+
+}
+add_filter('acf/prepare_field', 'go_acf_labels');
+
+
+function go_acf_select_labels( $field ) {
+    //badges
+    //groups
+    $choices = $field['choices'];
+    foreach ($choices as $key => $value){
+        $text = $value;
+        if(is_string($text)) {
+            preg_match_all("/\[[^\]]*\]/", $text, $matches);
+            $my_matches = $matches[0];
+
+            foreach ($my_matches as $match) {
+                if ($match === '[Experience]') {
+                    $replace_with = get_option("options_go_loot_xp_name");
+                } else if ($match === '[XP]') {
+                    $replace_with = get_option("options_go_loot_xp_abbreviation");
+                } else if ($match === '[Gold]') {
+                    $replace_with = go_get_gold_name();
+                } else if ($match === '[G]') {
+                    $replace_with = go_get_loot_short_name('gold');
+                } else if ($match === '[Reputation]') {
+                    $replace_with = get_option("options_go_loot_health_name");
+                } else if ($match === '[Rep]') {
+                    $replace_with = get_option("options_go_loot_health_abbreviation");
+                } else if ($match === '[Badges]') {
+                    $replace_with = ucwords(get_option('options_go_badges_name_plural'));
+                } else if ($match === '[Badge]') {
+                    $replace_with = ucwords(get_option('options_go_badges_name_singular'));
+                } else if ($match === '[Group]') {
+                    $replace_with = ucwords(get_option('options_go_groups_name_singular'));
+                } else if ($match === '[Groups]') {
+                    $replace_with = ucwords(get_option('options_go_groups_name_plural'));
+                }
+
+                if (!empty($replace_with)) {
+                    $text = str_replace($match, $replace_with, $text);
+                    $field['choices'][$key] = $text;
+                }
+            }
+        }
+    }
+
+    return $field;
+
+}
+add_filter('acf/prepare_field/type=select', 'go_acf_select_labels');
+
+
+add_filter( 'generate_404_text','generate_custom_404_text' );
+function generate_custom_404_text()
+{
+    return '';
+}
+add_filter( 'get_search_form','go_remove_search_form' );
+function go_remove_search_form()
+{
+    $template = $GLOBALS['template'];
+    $template_file = substr($template, strrpos($template, '/') + 1);
+    if ($template_file === '404.php') {
+        return '';
+    }
+}
+
+add_action( 'edit_terms', 'go_before_update_terms', 10, 2 );
+
+function go_before_update_terms( $term_id, $taxonomy ) {
+    // do something after update
+
+    $term = get_term($term_id, $taxonomy);
+    $termParent = ($term->parent == 0) ? $term : $term->parent;
+    $newParent = $_POST['parent'];
+    if($termParent != $newParent){
+        $children = get_term_children( $newParent, $taxonomy );
+        $count = count($children);
+        update_term_meta($term_id, 'go_order', $count+1);
+    }
+}
+
+
+function go_get_all_admin(){
+    $users = get_users( 'role=administrator' );
+    $user_ids = array();
+    foreach($users as $user){
+        $user_ids[] = $user->id;
+    }
+    return $user_ids;
+}
+
+function go_get_gold_name(){
+    $gold_name = get_option('options_go_loot_gold_name');
+    $coins_currency = get_option("options_go_loot_gold_currency");
+    if($coins_currency === 'coins') {
+        $gold_name = get_option("options_go_loot_gold_coin_names_gold_coin_name");
+    }
+    return $gold_name;
+}
+
+function go_get_link_from_option($option_name){
+    $option = get_option($option_name);
+    $option = urlencode((string)$option);
+    $link = get_site_url(null, $option);
+    return $link;
+}
+
+
+/**
+ * Can be called as a function or shortcode
+ * @param $var //can be an array of atts if shortcode, or just a single variable
+ * @param null $message
+ * @param false $icon_only
+ * @return string
+ */
+function go_copy_var_to_clipboard($var, $message = null, $icon_only = false){
+    if(is_array($var)){
+        //$var = $var['content'];
+        $var = (isset($var['content']) ?  $var['content'] : null);
+        if(empty($var)){
+           return;
+        }
+        $message = (isset($var['message']) ?  $var['message'] : null);
+        $icon_only = (isset($var['icon_only']) ?  $var['icon_only'] : false);
+    }
+    if(empty($message)){
+        $message = 'Copy to Clipboard';
+    }
+    if($icon_only){
+        $copy_icon = "  <span onclick='go_copy_to_clipboard(this)' class='tooltip' data-tippy-content='$message'>
+                            <span class='tooltip_click' data-tippy-content='Copied!'>
+                                <span  style='background-color: white; padding:5px; display:none;' class='go_copy_this'>$var</span> 
+                                <i style='font-size: 1em; ' class='fas fa-1x fa-clipboard-list'></i>
+                            </span>
+                    </span>";
+    }else {
+        $copy_icon = "  <span onclick='go_copy_to_clipboard(this)' class='tooltip' data-tippy-content='$message'>
+                            <span class='tooltip_click' data-tippy-content='Copied!'>
+                                <span class='go_copy_this' style='background-color: white; padding:5px;'>$var</span> 
+                                <i style='font-size: 1.3em;' class='fas fa-1x fa-clipboard-list'></i>
+                            </span>
+                    </span>";
+    }
+    return $copy_icon;
+}
+add_shortcode ( 'copy_to_clipboard', 'go_copy_var_to_clipboard' );
+
+
+// Allow for shortcodes in messages
+function go_acf_load_field_message($field  ) {
+    $type = get_post_type();
+    if ($type !== "acf-field-group") {
+        //$field['message'] = do_shortcode($field['message']);
+        $field['message'] = apply_filters( 'go_awesome_text', $field['message'] );
+        $field['message'] = urldecode($field['message']);
+
+    }
+    return $field;
+}
+
+add_filter('acf/load_field/type=message', 'go_acf_load_field_message', 10, 3);

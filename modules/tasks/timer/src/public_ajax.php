@@ -50,7 +50,7 @@ function go_timer( $custom_fields, $user_id, $id, $task_name ) {
             $db_status = go_get_status($id, $user_id);
 			echo "<div id='go_buttons' style='overflow: auto;'>";
             echo "<a id='go_abandon_task' onclick='go_timer_abandon();this.disabled = true;' style='float: left;'>Abandon</a>";
-            echo "<button id='go_button' status='" . $db_status . "'  timer='true' button_type='timer' style='float: right;'>Start</button> ";
+            echo "<button id='go_button' status='" . $db_status . "'  timer='true' button_type='timer' style='float: right;'>Start</button>";
 
 			echo "</div>";
             echo "</div>";

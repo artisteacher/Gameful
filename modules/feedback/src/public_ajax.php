@@ -8,12 +8,12 @@
 
 
 //saved queries are passed back from JS to make the readmore functions
-function go_reader_get_posts($sQuery2 = null, $pWhere = null, $order = null){
+function go_reader_get_posts($initial = false, $sQuery2 = null, $pWhere = null, $order = null){
     global $wpdb;
 
 
     if (!isset($pWhere)) {
-        $pWhere = go_reader_pWhere();
+        $pWhere = go_reader_pWhere($initial);
     }
 
     //$sOrder = go_sOrder('tasks', $section);
@@ -25,21 +25,17 @@ function go_reader_get_posts($sQuery2 = null, $pWhere = null, $order = null){
 
     //$order = $_POST['order'];
     if (!isset($order)) {
-        $order = (isset($_POST['order']) ? $_POST['order'] : 'ASC');
+        $order = (isset($_GET['order']) ? $_GET['order'] : 'ASC');
     }
 
-    //$limit = intval($_POST['limit']);
-    $limit = (isset($_POST['limit']) ? $_POST['limit'] : 10);
-
+    $limit = (isset($_GET['limit']) ? $_GET['limit'] : 10);
 
     $sectionQuery = go_sectionQuery();
     $badgeQuery = go_badgeQuery();
     $groupQuery = go_groupQuery();
 
-
     $sQuery1 = "SELECT SQL_CALC_FOUND_ROWS
             t4.ID, t4.post_status";
-
 
     if (!isset($sQuery2)) {
         $sQuery2 = "
@@ -93,11 +89,16 @@ function go_reader_get_posts($sQuery2 = null, $pWhere = null, $order = null){
 
     //$posts_serialized = json_encode($posts_array);
     //$posts_array = json_decode($posts_serialized);
+    if(!empty($posts)) {
+        $fQuery = "SELECT FOUND_ROWS()";
 
-    $fQuery = "SELECT FOUND_ROWS()";
+        $rResultFilterTotal = $wpdb->get_results($fQuery, ARRAY_N);
+        $iFilteredTotal = $rResultFilterTotal [0][0];
+    }else{
+        $iFilteredTotal = 0;
+    }
 
-    $rResultFilterTotal = $wpdb->get_results($fQuery, ARRAY_N);
-    $iFilteredTotal = $rResultFilterTotal [0][0];
+
 
     $include_unread = (isset($_POST['unread']) ?  $_POST['unread'] : 'true');
     if ($include_unread === 'true') {
@@ -124,7 +125,7 @@ function go_reader_get_posts($sQuery2 = null, $pWhere = null, $order = null){
         echo "<div style='padding: 30px;'>No posts match the filter.</div>";//data-post_ids='$posts_serialized
     }
 
-    echo "</div>";
+    echo "end posts found</div>";
     //$sQuerynoLimit = $totalQuery;
     //$sQuerynoLimit = 5;
     ?>
@@ -161,14 +162,12 @@ function go_reader_get_posts($sQuery2 = null, $pWhere = null, $order = null){
         //$blog_post_id = $post['ID'];
         go_blog_post($post, null, false, true, true, false);
     }
-
-    echo "<div class='go_reader_footer'><div class='go_read_printed'>
-                <button id='go_read_printed_button'  style='float: right; margin: 20px;'>Mark all <i class=\"far fa-eye-slash\"></i> posts on this page as <i class=\"fas fa-eye\"></i>.</button>
-            </div>";
+    echo "<div class='go_reader_footer' style='height: 160px;'>
+                <div class='go_read_printed' style='overflow: auto;'>
+                    <button id='go_read_printed_button'  style='float: right; margin: 20px;'>Mark all <i class=\"far fa-eye-slash\"></i> posts on this page as <i class=\"fas fa-eye\"></i>.</button>
+                </div>";
     if ($iFilteredTotal > $limit){
-
-        echo "<div style='clear:both;' class='misha_loadmore go_loadmore_reader' data-offset='1' data-limit='".$limit."' data-query='".$localize."'>More posts</div>";
-
+        echo "<div class='misha_loadmore go_loadmore_reader' data-offset='1' data-limit='".$limit."' data-query='".$localize."'>More posts</div>";
         $remaining = $iFilteredTotal - $limit;
         if ($remaining === 1){
             echo "<div style='width: 100%; text-align: center;' class='go_remaining'>{$remaining} Post remaining</div>";
@@ -189,11 +188,10 @@ function go_reader_get_posts($sQuery2 = null, $pWhere = null, $order = null){
     //die();
 }
 
-
 function go_reader_sOn(){
     $sOn = "";
     //$date = $_POST['date'];
-    $date = (isset($_POST['date']) ?  $_POST['date'] : '');
+    $date = (isset($_GET['date']) ?  $_GET['date'] : '');
 
 
     if (isset($date) && $date != "") {
@@ -212,7 +210,7 @@ function go_reader_sOn(){
         $sOn .= " AND (";
         for ($i = 0; $i < count($tasks); $i++) {
             $task = intval($tasks[$i]);
-            $sOn .= "t4.post_id = " . $task . " OR ";
+            $sOn .= "t4.post_parent = " . $task . " OR ";
         }
         $sOn = substr_replace($sOn, "", -3);
         $sOn .= ")";
@@ -221,13 +219,17 @@ function go_reader_sOn(){
     return $sOn;
 }
 
-function go_reader_pWhere(){
+function go_reader_pWhere($initial = false){
 
-    $include_read = (isset($_POST['read']) ?  $_POST['read'] : 'false');
-    $include_unread = (isset($_POST['unread']) ?  $_POST['unread'] : 'true');
-    $include_reset = (isset($_POST['reset']) ?  $_POST['reset'] : 'false');
-    $include_trash = (isset($_POST['trash']) ?  $_POST['trash'] : 'false');
-    $include_draft = (isset($_POST['draft']) ?  $_POST['draft'] : 'false');
+    $include_read = (isset($_GET['read']) ?  $_GET['read'] : 'false');
+    $include_unread = (isset($_GET['unread']) ?  $_GET['unread'] : 'false');
+    $include_reset = (isset($_GET['reset']) ?  $_GET['reset'] : 'false');
+    $include_trash = (isset($_GET['trash']) ?  $_GET['trash'] : 'false');
+    $include_draft = (isset($_GET['draft']) ?  $_GET['draft'] : 'false');
+
+    if($initial){
+        $include_unread = 'true';
+    }
 
     //$include_read = $_POST['read'];
     //$include_unread = $_POST['unread'];

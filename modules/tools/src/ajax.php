@@ -91,9 +91,6 @@ function go_disable_game_on_this_site(){
 }
 
 
-
-
-
 /*
 function go_upgade4 (){
     if ( !is_user_logged_in() ) {

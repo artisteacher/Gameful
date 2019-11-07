@@ -95,7 +95,7 @@
                     "sub_fields": [
                         {
                             "key": "field_5cc0ba56364ba",
-                            "label": "XP",
+                            "label": "[XP]",
                             "name": "xp",
                             "type": "number",
                             "instructions": "",
@@ -116,7 +116,7 @@
                         },
                         {
                             "key": "field_5cc0ba56364bb",
-                            "label": "Gold",
+                            "label": "[Gold]",
                             "name": "gold",
                             "type": "number",
                             "instructions": "",
@@ -137,7 +137,7 @@
                         },
                         {
                             "key": "field_5cc0ba56364bc",
-                            "label": "Reputation",
+                            "label": "[Reputation]",
                             "name": "health",
                             "type": "number",
                             "instructions": "",
@@ -178,5 +178,6 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1560904813
+    "recaptcha": 0,
+    "modified": 1568264835
 }

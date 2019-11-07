@@ -193,21 +193,23 @@ function go_save_sections($value, $post_id, $field){
         $old_terms[] = $term->term_id;
     }
     $new_terms = array();
-    foreach ($section_fields as $section_field){
+    if(is_array($section_fields)) {
+        foreach ($section_fields as $section_field) {
             $section_name = $section_field['field_5d34f49cb1400'];
             $section_id = $section_field['field_5d35279fb1592'];
-            $new_terms[]=$section_id;
+            $new_terms[] = $section_id;
             $args = array(
                 'name' => $section_name,
             );
-            if(empty($section_id)) {
+            if (empty($section_id)) {
                 $term_id = wp_insert_term($section_name, 'user_go_sections');
-            }else{
+            } else {
                 $term_id = wp_update_term($section_id, 'user_go_sections', $args);
             }
             $order++;
             update_term_meta($term_id['term_id'], 'go_order', $order);
 
+        }
     }
 
     $deleted_terms = array_diff($old_terms, $new_terms);

@@ -26,6 +26,11 @@ function go_get_task_names($uniqueTasks, $quest_count){
     return $task_title;
 }
 
+/**
+ * @param $uniqueUsers
+ * @param $user_count
+ * @return string
+ */
 function go_get_user_names($uniqueUsers, $user_count){
     $is_first = true;
     $user_name = "";
@@ -53,6 +58,9 @@ function go_get_user_names($uniqueUsers, $user_count){
     return $user_name;
 }
 
+/**
+ * @param $reset_vars
+ */
 function go_get_reset_mixed($reset_vars){
 
     $uniqueTasks = array_unique(array_map(function ($i) { return $i['task']; }, $reset_vars));
@@ -80,6 +88,9 @@ function go_get_reset_mixed($reset_vars){
 
 }
 
+/**
+ *
+ */
 function go_create_admin_message ()
 {
     if (!is_user_logged_in()) {
@@ -126,6 +137,10 @@ function go_create_admin_message ()
                 $task_name = get_option('options_go_tasks_name_plural');
             } else {
                 $task_name = get_option('options_go_tasks_name_singular');
+            }
+
+            if($message_type === 'reset_stage'){
+                $task_name .= " to this stage.";
             }
             $title = 'Reset ' . $task_name . ' <span class="tooltip" data-tippy-content="Resetting removes all loot and rewards. <br> <br>If the bonus loot had already been awarded, it is also removed and the user will not have another attempt." style="font-size: .6em;"> <span><i class="fa fa-info-circle"></i></span></span>';
 
@@ -207,8 +222,31 @@ function go_create_admin_message ()
                                             class="fa fa-info-circle"></i></span> </span>
                             <table id="go_custom_message_table" class="form-table" style="display: none;">
                                 <tr valign="top">
-                                    <th scope="row">Message</th>
-                                    <td><textarea name="message" class="widefat" cols="50" rows="5"></textarea></td>
+                                    <td><?php
+                                        $settings = array(
+                                            //'tinymce'=> array( 'menubar'=> false, 'toolbar1' => 'undo,redo', 'toolbar2' => ''),
+                                            'tinymce'=>true,
+                                            //'wpautop' =>false,
+                                            'textarea_name' => 'go_message_text_area',
+                                            'media_buttons' => true,
+                                            //'teeny' => true,
+                                            'menubar' => false,
+                                            'drag_drop_upload' => true);
+
+                                        //echo "<button id='go_save_button' class='progress left'  check_type='blog' button_type='save'  admin_lock='true' >Save Draft</button> ";
+
+                                        //$id = $_POST['editorID'];
+                                        //$content = $_POST['content'];
+
+                                        //wp_editor( $content, $id );
+                                        wp_editor('', 'go_message_text_area_id', $settings);
+
+                                        /*<textarea class="go_messages_message_input summernote" name="message" class="widefat"
+                                                  cols="50"
+                                                  rows="5" style="width: 100%"></textarea>*/
+                                        ?>
+
+                                    </td>
                                 </tr>
 
                             </table>
@@ -385,7 +423,7 @@ function go_create_admin_message ()
                                                             <td class="go-acf-field go-acf-field-true-false go_reward go_groups"
                                                                 data-name="groups" data-type="true_false"
                                                                 class="go_pink">
-                                                                <?php go_make_tax_select('go_groups', true); ?>
+                                                                <?php go_make_tax_select('user_go_groups', true); ?>
                                                             </td>
                                                             <?php
                                                         }
@@ -476,15 +514,46 @@ function go_create_admin_message ()
                                 </tr>
                                 <tr valign="top">
                                     <th scope="row">Message</th>
-                                    <td><textarea class="go_messages_message_input" name="message" class="widefat"
+                                    <td><?php
+                                        $settings = array(
+                                            //'tinymce'=> array( 'menubar'=> false, 'toolbar1' => 'undo,redo', 'toolbar2' => ''),
+                                            'tinymce'=>true,
+                                            //'wpautop' =>false,
+                                            'textarea_name' => 'go_message_text_area',
+                                            'media_buttons' => true,
+                                            //'teeny' => true,
+                                            'menubar' => false,
+                                            'drag_drop_upload' => true);
+
+                                        //echo "<button id='go_save_button' class='progress left'  check_type='blog' button_type='save'  admin_lock='true' >Save Draft</button> ";
+
+                                        //$id = $_POST['editorID'];
+                                        //$content = $_POST['content'];
+
+                                        //wp_editor( $content, $id );
+                                        wp_editor('', 'go_message_text_area_id', $settings);
+
+                                        /*<textarea class="go_messages_message_input summernote" name="message" class="widefat"
                                                   cols="50"
-                                                  rows="5" style="width: 100%"></textarea></td>
+                                                  rows="5" style="width: 100%"></textarea>*/
+                                        ?></td>
                                 </tr>
 
                             </table>
                             <?php
                             if ($go_xp_toggle || $go_gold_toggle || $go_health_toggle || $go_badges_toggle || $go_groups_toggle) {
                                 ?>
+                                <div class="go-acf-input go_loot_table">
+                                    <div class="go-acf-true-false">
+                                        <input value="0" type="hidden">
+                                        <label>
+                                            <input name="loot_toggle" type="checkbox" class="go-acf-switch-input go_messages_toggle_input">
+                                           <div class="go-acf-switch"><span class="go-acf-switch-on" style="min-width: 36px;">Award</span><span class="go-acf-switch-off" style="min-width: 36px;">Penalty</span>
+                                                <div class="go-acf-switch-slider"></div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
                                 <div id="go_loot_table" class="go-acf-field go-acf-field-group" data-type="group">
                                     <div class="go-acf-input">
                                         <div class="go-acf-fields -top -border">
@@ -533,85 +602,6 @@ function go_create_admin_message ()
 
                                                             </thead>
                                                             <tbody>
-                                                            <tr class="go-acf-row">
-                                                                <?php
-                                                                if ($go_xp_toggle) {
-                                                                    ?>
-                                                                    <td class="go-acf-field go-acf-field-true-false go_reward go_xp"
-                                                                        data-name="xp" data-type="true_false">
-                                                                        <div class="go-acf-input">
-                                                                            <div class="go-acf-true-false">
-                                                                                <input value="0" type="hidden">
-                                                                                <label>
-                                                                                    <input name="xp_toggle"
-                                                                                           type="checkbox"
-                                                                                           value="1"
-                                                                                           class="go-acf-switch-input go_messages_toggle_input xp_toggle_messages">
-                                                                                    <div class="go-acf-switch"><span
-                                                                                                class="go-acf-switch-on"
-                                                                                                style="min-width: 36px;">+</span><span
-                                                                                                class="go-acf-switch-off"
-                                                                                                style="min-width: 36px;">-</span>
-                                                                                        <div class="go-acf-switch-slider"></div>
-                                                                                    </div>
-                                                                                </label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <?php
-                                                                }
-                                                                if ($go_gold_toggle) {
-                                                                    ?>
-                                                                    <td class="go-acf-field go-acf-field-true-false go_reward go_gold"
-                                                                        data-name="gold" data-type="true_false">
-                                                                        <div class="go-acf-input">
-                                                                            <div class="go-acf-true-false">
-                                                                                <input value="0" type="hidden">
-                                                                                <label>
-                                                                                    <input name="gold_toggle"
-                                                                                           type="checkbox"
-                                                                                           class="go-acf-switch-input go_messages_toggle_input gold_toggle_messages">
-                                                                                    <div class="go-acf-switch"><span
-                                                                                                class="go-acf-switch-on"
-                                                                                                style="min-width: 36px;">+</span><span
-                                                                                                class="go-acf-switch-off"
-                                                                                                style="min-width: 36px;">-</span>
-                                                                                        <div class="go-acf-switch-slider"></div>
-                                                                                    </div>
-                                                                                </label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <?php
-                                                                }
-                                                                if ($go_health_toggle) {
-                                                                    ?>
-
-                                                                    <td class="go-acf-field go-acf-field-true-false go_reward go_health"
-                                                                        data-name="health" data-type="true_false">
-                                                                        <div class="go-acf-input">
-                                                                            <div class="go-acf-true-false">
-                                                                                <input value="0" type="hidden">
-                                                                                <label>
-                                                                                    <input name="health_toggle"
-                                                                                           type="checkbox"
-                                                                                           value="1"
-                                                                                           class="go-acf-switch-input go_messages_toggle_input health_toggle_messages">
-                                                                                    <div class="go-acf-switch"><span
-                                                                                                class="go-acf-switch-on"
-                                                                                                style="min-width: 36px;">+</span><span
-                                                                                                class="go-acf-switch-off"
-                                                                                                style="min-width: 36px;">-</span>
-                                                                                        <div class="go-acf-switch-slider"></div>
-                                                                                    </div>
-                                                                                </label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <?php
-                                                                }
-                                                                ?>
-                                                            </tr>
 
                                                             <tr class="go-acf-row">
                                                                 <?php
@@ -714,62 +704,6 @@ function go_create_admin_message ()
                                                                 <?php
                                                                 if ($go_badges_toggle) {
                                                                     ?>
-                                                                    <td class="go-acf-field go-acf-field-true-false go_reward go_xp"
-                                                                        data-name="xp" data-type="true_false">
-                                                                        <div class="go-acf-input">
-                                                                            <div class="go-acf-true-false">
-                                                                                <input value="0" type="hidden">
-                                                                                <label>
-                                                                                    <input name="badges_toggle"
-                                                                                           type="checkbox"
-                                                                                           value="1"
-                                                                                           class="go-acf-switch-input badges_toggle_messages">
-                                                                                    <div class="go-acf-switch"><span
-                                                                                                class="go-acf-switch-on"
-                                                                                                style="min-width: 36px;">+</span><span
-                                                                                                class="go-acf-switch-off"
-                                                                                                style="min-width: 36px;">-</span>
-                                                                                        <div class="go-acf-switch-slider"></div>
-                                                                                    </div>
-                                                                                </label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <?php
-                                                                }
-                                                                if ($go_groups_toggle) {
-                                                                    ?>
-
-                                                                    <td class="go-acf-field go-acf-field-true-false go_reward go_gold"
-                                                                        data-name="gold" data-type="true_false">
-                                                                        <div class="go-acf-input">
-                                                                            <div class="go-acf-true-false">
-                                                                                <input value="0" type="hidden">
-                                                                                <label>
-                                                                                    <input name="groups_toggle"
-                                                                                           type="checkbox"
-                                                                                           value="1"
-                                                                                           class="go-acf-switch-input groups_toggle_messages">
-                                                                                    <div class="go-acf-switch"><span
-                                                                                                class="go-acf-switch-on"
-                                                                                                style="min-width: 36px;">+</span><span
-                                                                                                class="go-acf-switch-off"
-                                                                                                style="min-width: 36px;">-</span>
-                                                                                        <div class="go-acf-switch-slider"></div>
-                                                                                    </div>
-                                                                                </label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <?php
-                                                                }
-                                                                ?>
-
-                                                            </tr>
-                                                            <tr class="go-acf-row">
-                                                                <?php
-                                                                if ($go_badges_toggle) {
-                                                                    ?>
                                                                     <td class="go-acf-field go-acf-field-true-false go_reward go_gold"
                                                                         data-name="gold" data-type="true_false">
                                                                         <?php go_make_tax_select('go_badges', true); ?>
@@ -843,79 +777,126 @@ function go_admin_messages(){
     die();
 }
 
-function go_reset_message($this_message, $message, $penalty, $xp, $gold, $health, $xp_task, $gold_task, $health_task, $badge_array, $group_array, $badge_array_task, $group_array_task ){
-    $xp_message = '';
-    $gold_message = '';
-    $health_message = '';
-    $badge_message = '';
-    $group_message = '';
-
+/**
+ * Constructs the text of the message shown to students when a task/stage is reset
+ * @param $this_message
+ * @param $message
+ * @param $penalty
+ * @param $xp
+ * @param $gold
+ * @param $health
+ * @param $xp_task
+ * @param $gold_task
+ * @param $health_task
+ * @param $badge_array
+ * @param $group_array
+ * @param $badge_array_task
+ * @param $group_array_task
+ * @return string
+ */
+function go_reset_message($message, $penalty, $xp, $gold, $health, $xp_task, $gold_task, $health_task, $badge_array, $group_array, $badge_array_task, $group_array_task ){
     $loot_message = '';
+    $p_message = '';
 
-    $xp_p_message = '';
-    $gold_p_message = '';
-    $health_p_message = '';
-    $badge_p_message = '';
-    $group_p_message = '';
-
-    $penalty_message = '';
 //reset stage
-    if($xp_task != 0){
-        $xp_message = go_display_longhand_currency('xp',$xp_task,false );
+    if (!empty($xp_task) || !empty($gold_task) || !empty($health_task) || !empty($badge_array_task) || !empty($group_array_task)) {
+        $loot_message = "<ul>";
+
+        if ($xp_task != 0) {
+            $loot_message .= "<li>";
+            $loot_message .= go_display_shorthand_currency('xp', $xp_task, false);
+            $loot_message .= "</li>";
+        }
+        if ($gold_task != 0) {
+            //$gold_message = "<br>" . go_get_loot_short_name('gold').":".$gold_task;
+            $loot_message .= "<li>";
+            $loot_message .= go_display_shorthand_currency('gold', $gold_task, false, false );
+            $loot_message .= "</li>";
+        }
+        if ($health_task != 0) {
+            $loot_message .= "<li>";
+            //$health_message = "<br>" . go_get_loot_short_name('health').":".$health_task;
+            $loot_message .= go_display_shorthand_currency('health', $health_task, false);
+            $loot_message .= "</li>";
+        }
+
+
+        
+        if (count($badge_array_task)) {
+            //$badge_name = get_option('options_go_badges_name_plural');
+            $loot_message .= "<li>";
+            $loot_message .= get_option('options_go_badges_name_plural') . ": " . go_print_term_list($badge_array_task);
+            $loot_message .= "</li>";
+        }
+        if (count($group_array_task)) {
+            $loot_message .= "<li>";
+            $loot_message .= get_option('options_go_groups_name_plural') . ": " . go_print_term_list($group_array_task);
+            $loot_message .= "</li>";
+        }
+        $loot_message .= "</ul>";
+
     }
-    if($gold_task != 0){
-        //$gold_message = "<br>" . go_get_loot_short_name('gold').":".$gold_task;
-        $gold_message = go_display_longhand_currency('gold',$gold_task,false, true);
-    }
-    if($health_task != 0){
-        //$health_message = "<br>" . go_get_loot_short_name('health').":".$health_task;
-        $health_message = go_display_longhand_currency('health',$health_task,false);
-    }
-    if (count($badge_array_task)){
-        //$badge_name = get_option('options_go_badges_name_plural');
-        $badge_message = "<br>" . get_option('options_go_badges_name_plural') . ": ". go_print_term_list($badge_array_task);
-    }
-    if (count($group_array_task)){
-        $group_message = "<br>Groups: ". go_print_term_list($group_array_task);
-    }
-    if (($xp_task != 0) || ($gold_task != 0) || ($health_task != 0) || count($badge_array_task) > 0 || count($group_array_task) > 0) {
-        $loot_message = "<br><br>Loot Removed:" . $xp_message . $gold_message . $health_message . $badge_message . $group_message;
-    }
+   // if (($xp_task != 0) || ($gold_task != 0) || ($health_task != 0) || count($badge_array_task) > 0 || count($group_array_task) > 0) {
+        //$loot_message = "<br><br>Loot Removed:" . $xp_message . $gold_message . $health_message . $badge_message . $group_message;
+    //}
 
     //$message = $this_message . $message . $loot_message ;
     if($penalty == 'true') {
-        if ($xp != 0) {
-            $xp_p_message = "<br>" . go_get_loot_short_name('xp') . ":" . $xp;
-        }
-        if ($gold != 0) {
-            $gold_p_message = "<br>" . go_get_loot_short_name('gold') . ":" . $gold;
-        }
-        if ($health != 0) {
-            $health_p_message = "<br>" . go_get_loot_short_name('health') . ":" . $health;
-        }
-        if (count($badge_array)) {
-            //$badge_name = get_option('options_go_badges_name_plural');
+        if (!empty($xp) || !empty($gold) || !empty($health) || !empty($badge_array) || !empty($group_array)) {
+            $p_message = "Consequence:";
+            $p_message .= "<ul>";
+            if ($xp != 0) {
+                $p_message .= "<li>";
+                $p_message .= go_display_shorthand_currency('xp', $xp, false);
+                $p_message .= "</li>";
+            }
+            if ($gold != 0) {
+                $p_message .= "<li>";
+                $p_message .= go_display_shorthand_currency('gold', $gold, false, false );
+                $p_message .= "</li>";
+            }
+            if ($health != 0) {
+                $p_message .= "<li>";
+                $p_message .= go_display_shorthand_currency('health', $health, false);
+                $p_message .= "</li>";
+            }
 
-            $badge_p_message = "<br>" . get_option('options_go_badges_name_plural') . ": " . go_print_term_list($badge_array);
 
+            if (count($badge_array)) {
+                //$badge_name = get_option('options_go_badges_name_plural');
+                $p_message .= "<li>";
+                $p_message .= get_option('options_go_badges_name_plural') . ": " . go_print_term_list($badge_array);
+                $p_message .= "</li>";
+            }
+            if (count($group_array)) {
+                $p_message .= "<li>";
+                $p_message .= get_option('options_go_groups_name_plural') . ": " . go_print_term_list($group_array);
+                $p_message .= "</li>";
+            }
+            $p_message .= "</ul>";
         }
-        if (count($group_array)) {
-            $group_p_message = "<br>Groups: " . go_print_term_list($group_array);
-        }
-        if (($xp != 0) || ($gold != 0) || ($health != 0) || count($badge_array) > 0 || count($group_array) > 0) {
-            $penalty_message = "<br><br>Consequence:" . $xp_p_message . $gold_p_message . $health_p_message . $badge_p_message . $group_p_message;
-        }
-        //add the task loot removed to the additional penalties
-        $xp = $xp + $xp_task;
-        $gold = $gold + $gold_task;
-        $health = $health + $health_task;
     }
 
-    $message = $this_message . $message . $loot_message . $penalty_message ;
+    $message = $message . $loot_message . $p_message ;
     return $message;
 }
 
-function go_send_message($skip_ajax = false, $title = '', $message = '', $type = '', $penalty = '', $xp = '', $gold = '', $health = '', $go_blog_task_id = '', $badges_toggle = '', $badge_id = '', $groups_toggle = '', $group_id = '', $reset_vars = ''){
+/**
+ * @param bool $skip_ajax
+ * @param string $title
+ * @param string $sent_message
+ * @param string $type
+ * @param string $penalty
+ * @param int $sent_xp
+ * @param int $sent_gold
+ * @param int $sent_health
+ * @param null $task_id //only sent from when undo causes bankruptcy and a rep penalty is applied
+ * @param bool $loot_toggle
+ * @param string $sent_badge_id
+ * @param string $sent_group_id
+ * @param string $reset_vars
+ */
+function go_send_message($skip_ajax = false, $title = '', $sent_message = '', $type = '', $penalty = '', $sent_xp = 0, $sent_gold = 0, $sent_health = 0, $task_id = null, $loot_toggle = false, $sent_badge_id = '', $sent_group_id = '', $reset_vars = ''){
 
     if(!$skip_ajax) {
         if (!is_user_logged_in()) {
@@ -931,285 +912,337 @@ function go_send_message($skip_ajax = false, $title = '', $message = '', $type =
 
         $title = (!empty($_POST['title']) ? $_POST['title'] : "");
         $title  = do_shortcode( $title );
-        $message = stripslashes(!empty($_POST['message']) ? $_POST['message'] : "");
-        $message  = do_shortcode( $message );
+        $sent_message = stripslashes(!empty($_POST['message']) ? $_POST['message'] : "");
+        $sent_message  = do_shortcode( $sent_message );
         $type = (!empty($_POST['message_type']) ? $_POST['message_type'] : "message");// can be message, or reset
 
         $penalty = (!empty($_POST['penalty']) ? $_POST['penalty'] : false);// can be message, or reset
 
-        $xp = ($_POST['xp']);
-        $gold = ($_POST['gold']);
-        $health = ($_POST['health']);
-        $go_blog_task_id = null;
+        $sent_xp = ($_POST['xp']);
+        $sent_gold = ($_POST['gold']);
+        $sent_health = ($_POST['health']);
 
-        $badges_toggle = $_POST['badges_toggle'];
-        $badge_id = $_POST['badges'];
+        $loot_toggle = $_POST['loot_toggle'];
+        if($loot_toggle == '1'){
+            $loot_toggle = true;
+        }else{
+            $loot_toggle = false;
+        }
+        $sent_badge_id = $_POST['badges'];
 
-        $groups_toggle = $_POST['groups_toggle'];
-        $group_id = $_POST['groups'];
+        //$groups_toggle = $_POST['groups_toggle'];
+        $sent_group_id = $_POST['groups'];
 
         $reset_vars = $_POST['reset_vars'];
     }
 
-    if (!empty($message) && empty($title)) {
-        $title = "view message";
-    }
 
     global $wpdb;
     $go_task_table_name = "{$wpdb->prefix}go_tasks";
 
-    if(is_numeric($badge_id)){
-        $badge_ids[]=$badge_id;
-    }
-
-
-    if(is_numeric($group_id)){
-        $group_ids[]=$group_id;
-    }
-
-
-
     $task_name = get_option('options_go_tasks_name_singular');
 
-    $uniqueUsers = array_unique(array_map(function ($i) { return $i['uid']; }, $reset_vars));
-    if ($type == "message") {
-    $reset_vars = $uniqueUsers;
-    }
-    if ($type == "reset_stage") {
-       $task_t= $reset_vars[0]['task'];
-       $user_t= get_post_field( 'post_author', $task_t );
-       $uniqueUsers = array($user_t);
-    }
-
     foreach ($reset_vars as $vars){
-        if ($type == "reset"){
-            $task_id = $vars['task'];
-            $user_id = $vars['uid'];
-            $task_title = get_the_title($task_id);
-            $title = "The following " .$task_name . " has been reset: ". $task_title .".";
-            $this_message = "All loot and rewards earned have been removed.";
-
-            if(!empty($message)) {
-                $message = "<br><br>" . $message;
-            }
-
-            //get task table name if this is a reset
-
-            $tasks = $wpdb->get_results($wpdb->prepare("SELECT *
-			FROM {$go_task_table_name}
-			WHERE uid = %d and post_id = %d
-			ORDER BY last_time DESC", $user_id, $task_id
-            ));
-            $task = $tasks[0];
-            $xp_task = ($task->xp * -1);
-            $gold_task = ($task->gold * -1);
-            $health_task = ($task->health * -1);
-            $badge_task = unserialize($task->badges);
-            $group_task = unserialize($task->groups);
-            if (!is_array($badge_task)){
-                $badge_task = array();
-            }
-            if (!is_array($group_task)){
-                $group_task = array();
-            }
-
-            $message = go_reset_message($this_message, $message, $penalty, $xp, $gold, $health, $xp_task, $gold_task, $health_task, $badge_ids, $group_ids, $badge_task, $group_task );
-
-
-
-            //update task table
-            $wpdb->update($go_task_table_name, array('status' => -2,// integer (number)
-                'bonus_status' => 0, 'xp' => 0, 'gold' => 0, 'health' => 0, 'badges' => null, 'groups' => null), array('uid' => $user_id, 'post_id' => $task_id), array('%d', '%d', '%d', '%d', '%d', '%d', '%s', '%s'), array('%d', '%d'));
-
-
-
-            $xp = $xp + $xp_task;
-            $gold = $gold + $gold_task;
-            $health = $health + $health_task;
-
-
-            if (!empty($badge_task)) {//if badges were earned, remove them
-                //$badge_ids = serialize($badge_array);
-                //go_remove_badges($badge_ids, $uid, false);//remove badges
-                $badge_ids = array_merge($badge_task, $badge_ids);
-            }
-
-            if (!empty($group_task)) {//if groups were earned, remove them
-                //$group_ids = serialize($group_array);
-                //go_remove_groups($group_ids, $uid, false);//remove groups
-                $group_ids = array_merge($group_task, $group_ids);
-            }
-
-
-
-        }
-        else if($type == 'reset_stage'){
-            $type = 'reset';
-
-            $blog_post_id = $vars['task'];
-            //$user_id = $vars['uid'];
-            $user_id = get_post_field( 'post_author', $blog_post_id );
-
-
-            if ($blog_post_id != 0 && !empty($blog_post_id)) {
-
-                $blog_meta = get_post_meta($blog_post_id);
-                $stage_num = (isset($blog_meta['go_blog_task_stage'][0]) ? $blog_meta['go_blog_task_stage'][0] : null);
-                $bonus_stage_num = (isset($blog_meta['go_blog_bonus_stage'][0]) ? $blog_meta['go_blog_bonus_stage'][0] : null);
-                $aTable = "{$wpdb->prefix}go_actions";
-                //$go_blog_task_id =
-
-                //get task_id from the blog post id
-                $go_blog_task_id = go_get_task_id($blog_post_id);
-
-                if(empty($go_blog_task_id)) {//this post is not associated with a task
-                    die();//put error message here
+        $user_id = $vars['uid'];
+        $message = '';
+        $xp_task = 0;
+        $gold_task = 0;
+        $health_task = 0;
+        $badge_array = array();
+        $group_array = array();
+        $status = 0;
+        $bonus_status = 0;
+        $last_time = current_time('mysql');
+        if ($type == "reset" || $type == "reset_stage") {
+            if ($type == "reset") {//set the reset variables for a full quest reset
+                $task_id = $vars['task'];
+                $task_title = get_the_title($task_id);
+                $title = "The following " . $task_name . " has been reset: " . $task_title . ".";
+                $message = "All loot and rewards earned have been removed.";
+                if (!empty($sent_message)) {      //if there is a custom message
+                    $message = $sent_message."<br><br>".$message;
                 }
-                else{
-                    $task_title = get_the_title($go_blog_task_id);
-                    $title = "A blog post from the following " .$task_name . " has been reset: ". $task_title .".";
-                    $this_message = "All loot and rewards earned on this ". $task_name. " from this point forward have been removed.";
 
-                    if ($stage_num !== null) {//if a stage number was sent (it is not a bonus stage)
-                        $stage_type = 'stage';
-                        $new_status_task = $stage_num;
-                        $stage_num = $stage_num + 1 ;
+                //get task table info
+                $tasks = $wpdb->get_results($wpdb->prepare("SELECT *
+                    FROM {$go_task_table_name}
+                    WHERE uid = %d and post_id = %d
+                    ORDER BY last_time DESC", $user_id, $task_id
+                ));
 
-                        $new_bonus_status_task = null;
+                $task = $tasks[0];//the array of task info for this user
 
+                $xp_task = ($task->xp * -1);
+                $gold_task = ($task->gold * -1);
+                $health_task = ($task->health * -1);
 
-                        //get all tasks with a ID that is greater and add loot then subtract
-                        //get all blog post IDs and set as trash
-
+                //this info is a serialized array--convert it to an array or create an empty array
+                $badge_array = unserialize($task->badges);
+                $group_array = unserialize($task->groups);
+                if (!is_array($badge_array)) {
+                    if(is_numeric($badge_array)){
+                        $badge_array = array($badge_array);
+                    }else{
+                        $badge_array = array();
                     }
-                    else{//if it is a bonus only mark that one and remove the loot
-                        $stage_type = 'bonus_status';
-                        $new_status_task = null;
-                        $new_bonus_status_task = $bonus_stage_num;
+                }
+                if (!is_array($group_array)) {
+                    if(is_numeric($group_array)) {
+                        $group_array = array($group_array);
+                    }else{
+                        $group_array = array();
+                    }
+                }
+
+            }
+            else if ($type == 'reset_stage') {//set the reset variables for a stage reset by resetting a blog post
+                $type = 'reset';
+                $blog_post_id = $vars['task'];//this variable is not a task_id, but is the blog_id--we use that to find the task_id
+                //$user_id = $vars['uid'];
+                //$user_id = get_post_field('post_author', $blog_post_id);
+                if ($blog_post_id != 0 && !empty($blog_post_id)) {
+                    //get task_id from the blog post id
+                    $task_id = go_get_task_id($blog_post_id);
+                    //ERROR CHECK
+                    if (empty($task_id)) {//this post is not associated with a task
+                        die();//maybe put error message here
                     }
 
-                    ////////////////////
-                    ///
-                    ///
-                    //get the first time this task is in the actions table
+                    $task_title = get_the_title($task_id);
+                    $task_url = get_permalink($task_id);
+                    $title = "A blog post from the following " . $task_name . " has been reset: <a href='{$task_url}'>" . $task_title . "</a>.";
+                    $message = "All loot and rewards earned on this " . $task_name . " from this point forward have been removed.";
+                    if (!empty($sent_message)) {
+                        $message = $sent_message."<br><br>".$message;
+                    }
+
+                    //get info about when this blog post was submitted
+
+                    //get the last time this task is in the actions table
                     //this gives the first row because it is searching for the blog post id and sorted by id
-                    $result = $wpdb->get_results($wpdb->prepare("SELECT id, uid, xp, gold, health, badges, groups, check_type, result
-                    FROM {$aTable} 
-                    WHERE result = %d AND source_id = %d AND action_type = %s
-                    ORDER BY id DESC LIMIT 1",
-                    $blog_post_id,
-                    $go_blog_task_id,
-                    'task'), ARRAY_A);
+                    $aTable = "{$wpdb->prefix}go_actions";
+                    $result = $wpdb->get_results($wpdb->prepare("SELECT id, stage, bonus_status
+                        FROM {$aTable} 
+                        WHERE result = %d AND source_id = %d AND action_type = 'task'
+                        ORDER BY id DESC LIMIT 1",
+                        $blog_post_id,
+                        $task_id
+                        ), ARRAY_A
+                    );
 
-                    $loot = $result;
-                    $result = $result[0];
+                    $first_row = $result[0];
                     //$result = json_decode(json_encode($result), true);
-                    $id = $result['id'];
-                    $uid = $result['uid'];
+                    $id = $first_row['id'];//this row ID of the last time this blog post was submitted.
+                    $status = $first_row['stage'];//the stage this was submitted on--empty if it was a bonus task
 
-                    if ($stage_type === 'stage'){ //remove all loot since this stage, including this stage and mark all other blog posts deleted
+                    //get task table info
+                    $bonus_status = $wpdb->get_var($wpdb->prepare("SELECT bonus_status
+                        FROM {$go_task_table_name}
+                        WHERE uid = %d and post_id = %d
+                        ORDER BY id DESC", $user_id, $task_id
+                    ));
 
+                    //$current_bonus_status = $tasks[0]->bonus_status;
+
+                    //get all loot on this stage since the last time this blog post was submitted
+                    if (!empty($status)) {//remove all loot since this stage, including this stage and (maybe?) mark all other blog posts deleted
+                        $status = intval($status) -1;
+                        $bonus_status = 0;
                         //get all actions on this stage so the loot can be added up
                         $loot = $wpdb->get_results($wpdb->prepare("SELECT xp, gold, health, badges, groups, check_type, result
-                            FROM {$aTable} 
-                            WHERE uid = %d AND source_id = %d AND action_type = %s AND id >= %d
-                            ORDER BY id ", $uid, $go_blog_task_id, 'task', $id), ARRAY_A);
+                        FROM {$aTable} 
+                        WHERE uid = %d AND source_id = %d AND id >= %d
+                        ORDER BY id ", $user_id, $task_id, $id), ARRAY_A);
+
+
+                        foreach ($loot as $loot_row) {
+                            $xp_task = $loot_row['xp'] + $xp_task;
+                            $gold_task = $loot_row['gold'] + $gold_task;
+                            $health_task = $loot_row['health'] + $health_task;
+                            $badges_task = $loot_row['badges'];
+                            $groups_task = $loot_row['groups'];
+                            $check_type = $loot_row['check_type'];
+                            $result = $loot_row['result'];
+
+                            //set all posts submitted after this post to reset
+                            if ($check_type === "blog") {
+                                if(is_numeric($result)) {
+                                    $post = array('ID' => intval($result), 'post_status' => 'reset');
+                                    wp_update_post($post);
+                                }
+                            }
+
+                            //combine any badges and groups earned into an array.  This should only be one badge.
+                            $badge_task = unserialize($badges_task);
+                            $group_task = unserialize($groups_task);
+
+                            if (!is_array($badge_task)) {
+                                if (is_numeric($badge_task)) {
+                                    $badge_task = array($badge_task);
+                                } else {
+                                    $badge_task = array();
+                                }
+                            }
+                            if (!is_array($group_task)) {
+                                if (is_numeric($group_task)) {
+                                    $group_task = array($group_task);
+                                } else {
+                                    $group_task = array();
+                                }
+                            }
+
+                            $badge_array = array_unique(array_merge($badge_task, $badge_array));
+                            $group_array = array_unique(array_merge($group_task, $group_array));
+                            //END combine badges and groups
+                        }
                     }
-                    $xp_task = 0;
-                    $gold_task = 0;
-                    $health_task = 0;
-                    $badge_array = array();
-                    $group_array = array();
+                    else if (!empty($bonus_status)) {
+                        $bonus_status = $bonus_status -1;
 
-                    foreach($loot as $loot_row){
-                        $xp_task = $loot_row['xp'] + $xp_task;
-                        $gold_task = $loot_row['gold'] + $gold_task;
-                        $health_task = $loot_row['health'] + $health_task;
-                        $badges_task = $loot_row['badges'];
-                        $groups_task = $loot_row['groups'];
-                        $check_type = $loot_row['check_type'];
-                        $result = $loot_row['result'];
+                        //get status--don't change it because this is a bonus stage reset
+                        $status = $wpdb->get_var($wpdb->prepare("SELECT status
+                        FROM {$go_task_table_name}
+                        WHERE uid = %d and post_id = %d
+                        ORDER BY id DESC", $user_id, $task_id
+                        ));
 
-                        if ($check_type === "blog"){
-                            $post = array( 'ID' => intval($result ), 'post_status' => 'reset' );
-                            wp_update_post($post);
-                            //wp_trash_post( intval($result ) );
-                        }
 
-                        $badges_task = unserialize($badges_task);
-                        $groups_task = unserialize($groups_task);
-                        if (!is_array($badges_task)){
-                            $badges_task = array();
-                        }
-                        if (!is_array($groups_task)){
-                            $groups_task = array();
-                        }
-                        $badge_array = array_merge($badges_task, $badge_array);
-                        $group_array = array_merge($groups_task, $group_array);
+                        $bonus_stage_loot = $wpdb->get_results($wpdb->prepare("SELECT xp, gold, health, check_type
+                        FROM {$aTable} 
+                        WHERE uid = %d AND source_id = %d AND id >= %d AND result = %d
+                        ORDER BY id DESC LIMIT 1", $user_id, $task_id, $id, $blog_post_id), ARRAY_A);
+
+
+                            $xp_task = $bonus_stage_loot[0]['xp'];
+                            $gold_task = $bonus_stage_loot[0]['gold'];
+                            $health_task = $bonus_stage_loot[0]['health'];
+                            /*
+                            $gold_task = $loot_row['gold'] + $gold_task;
+                            $health_task = $loot_row['health'] + $health_task;
+                            $badges_task = $loot_row['badges'];
+                            $groups_task = $loot_row['groups'];
+                            $check_type = $loot_row['check_type'];
+                            $result = $loot_row['result'];
+
+
+                            //set all posts submitted after this post to reset
+                            if ($check_type === "blog") {
+                                if(is_numeric($result)) {
+                                    $post = array('ID' => intval($result), 'post_status' => 'reset');
+                                    wp_update_post($post);
+                                }
+                            }
+
+                            //combine any badges and groups earned into an array.  This should only be one badge.
+                            $badge_task = unserialize($badges_task);
+                            $group_task = unserialize($groups_task);
+
+                            if (!is_array($badge_task)) {
+                                if (is_numeric($badge_task)) {
+                                    $badge_task = array($badge_task);
+                                } else {
+                                    $badge_task = array();
+                                }
+                            }
+                            if (!is_array($group_task)) {
+                                if (is_numeric($group_task)) {
+                                    $group_task = array($group_task);
+                                } else {
+                                    $group_task = array();
+                                }
+                            }
+
+                            $badge_array = array_unique(array_merge($badge_task, $badge_array));
+                            $group_array = array_unique(array_merge($group_task, $group_array));
+                            //END combine badges and groups
+                            */
+                        //}
+
+
+                        $post = array('ID' => intval($blog_post_id), 'post_status' => 'reset');
+                        wp_update_post($post);
+                    }else{
+                        die();
                     }
-
-
-
-                    $time = current_time('mysql');
-                    $last_time = $time;
 
                     //loot to be removed
                     $xp_task = ($xp_task) * -1;
                     $gold_task = ($gold_task) * -1;
-                    $task_health = ($health_task) * -1;
-
-                    $message = go_reset_message($this_message, $message, $penalty, $xp, $gold, $health, $xp_task, $gold_task, $health_task, $badge_ids, $group_ids, $badge_array, $group_array );
+                    $health_task = ($health_task) * -1;
 
 
 
-                    if (!empty($badge_array)) {//if badges were earned, remove them
-                        //$badge_ids = serialize($badge_array);
-                        //go_remove_badges($badge_ids, $uid, false);//remove badges
-                        $badge_ids = array_merge($badge_array, $badge_ids);
-                    }
-
-                    if (!empty($group_array)) {//if groups were earned, remove them
-                        //$group_ids = serialize($group_array);
-                        //go_remove_groups($group_ids, $uid, false);//remove groups
-                        $group_ids = array_merge($group_array, $group_ids);
-                    }
-
-                    $xp = $xp + $xp_task;
-                    $gold = $gold + $gold_task;
-                    $health = $health + $health_task;
-
-
-                    $new_status_task = intval($new_status_task);
-                    $new_bonus_status_task = intval($new_bonus_status_task);
-                    if ($stage_type === 'bonus_status'){
-                        $update_col = "bonus_status = -1 + bonus_status ";
-                        $update_col = max($update_col,0);
-                    }else{
-                        $update_col = "status = {$new_status_task}, bonus_status = 0";
-                    }
-
-                    $wpdb->query(
-                        $wpdb->prepare(
-                            "UPDATE {$go_task_table_name} 
-                    SET 
-                        {$update_col},
-                        xp = {$xp_task} + xp,
-                        gold = {$gold_task} + gold,
-                        health = {$task_health} + health,
-                        last_time = IFNULL('{$last_time}', last_time)         
-                    WHERE uid= %d AND post_id=%d ",
-                            intval($uid),
-                            intval($go_blog_task_id)
-                        )
-                    );
 
                 }
+
             }
+            //below is for both resets and reset_stage
+
+            //set class
+            $class = array('reset');
+            if (!empty($sent_xp) || !empty($sent_gold) || !empty($sent_health)) {
+                $class[] = 'down';
+            }
+
+            $class = serialize($class);
+
+            //update task table
+            /*
+            $wpdb->update($go_task_table_name,
+                array('status' => $status, 'bonus_status' => $bonus_status, 'xp' => $xp_task, 'gold' => $gold_task, 'health' => $health_task, 'badges' => null, 'groups' => null, 'last_time' => $last_time, 'class' => $class ),//data
+                array('uid' => $user_id, 'post_id' => $task_id),//where
+                array('%d', '%d', '%d', '%d', '%d', '%d', '%s', '%s'),//data format
+                array('%d', '%d')//where data format
+            );*/
+
+            $wpdb->query(
+                $wpdb->prepare(
+                    "UPDATE {$go_task_table_name} 
+                    SET 
+                        status = {$status}, 
+                        bonus_status = {$bonus_status},
+                        xp = GREATEST(({$xp_task} + xp), 0),
+                        gold = GREATEST(({$gold_task} + gold ), 0),
+                        health = GREATEST(({$health_task} + health ), 0),
+                        last_time = '{$last_time}',
+                        class = '{$class}'     
+                    WHERE uid= %d AND post_id=%d ",
+                    intval($user_id),
+                    intval($task_id)
+                )
+            );
+
+            //This returns the string that is sent as a message.  It doesn't do the database changes.
+            $message = go_reset_message($message, $penalty, $sent_xp, $sent_gold, $sent_health, $xp_task, $gold_task, $health_task, $sent_badge_id, $sent_group_id, $badge_array, $group_array);
+
+            //combine the penalty loot and task loot. This is what will be removed
+            $xp = $sent_xp + $xp_task;
+            $gold = $sent_gold + $gold_task;
+            $health = $sent_health + $health_task;
+
+            //if (!empty($badge_task)) {//if a badge was earned, merge them with the sent badge to be removed later
+                $badge_ids = array_merge($badge_array, array($sent_badge_id));
+           // }
+
+           // if (!empty($group_task)) {//if a group was earned, merge it with the sent group to be removed later
+                $group_ids = array_merge($group_array, array($sent_group_id));
+           // }
 
         }
         else {//this is a regular message
-            $go_blog_task_id = null;
-            $user_id = $vars;
+            if(!empty($sent_badge_id)) {
+                $badge_ids = array($sent_badge_id);
+            }else{ $badge_ids = array();}
+
+            if(!empty($sent_group_id)) {
+                $group_ids = array($sent_group_id);
+            }else{ $group_ids = array();}
+
+            $xp = $sent_xp;
+            $gold = $sent_gold;
+            $health = $sent_health;
+
+            $message = $sent_message;
 
         }
 
@@ -1221,13 +1254,13 @@ function go_send_message($skip_ajax = false, $title = '', $message = '', $type =
         $result[] = $message;
 
         //store the badge and group toggles so later we know if they were awarded or taken.
-        if ($badges_toggle == "true" && !empty($badge_id)) {//if badges toggle is true and badges exist
+        if ($loot_toggle && !empty($badge_ids)) {//if badges toggle is true and badges exist
             $result[] = "badges+";
-            $badge_ids = go_add_badges($badge_ids, $user_id, false);//add badges
+            $badge_ids = go_add_badges($badge_ids, $user_id, true);//add badges
             $badge_ids = serialize($badge_ids);
-        }else if ($badges_toggle == "false" && !empty($badge_id)) {//else if badges toggle is false and badges exist
+        }else if (!$loot_toggle && !empty($badge_ids)) {//else if badges toggle is false and badges exist
             $result[] = "badges-";
-            $badge_ids = go_remove_badges($badge_id, $user_id, false);//remove badges
+            $badge_ids = go_remove_badges($badge_ids, $user_id, true);//remove badges
             $badge_ids = serialize($badge_ids);
         }else {
             $result[] = "badges0";
@@ -1235,34 +1268,37 @@ function go_send_message($skip_ajax = false, $title = '', $message = '', $type =
         }
 
         //add to DB and then serialize for storage with the message
-        if ($groups_toggle == "true" && !empty($group_id)) {//if groups toggle is true and groups exist
+        if ($loot_toggle  && !empty($group_ids)) {//if groups toggle is true and groups exist
             $result[] = "groups+";
-            go_add_groups($group_id, $user_id, false);//add groups
-            $group_ids = serialize($group_id);
-        }else if ($groups_toggle == "false" && !empty($group_id)) {//else if groups toggle is false and groups exist
+            go_add_groups($group_ids, $user_id, true);//add groups
+            $group_ids = serialize($group_ids);
+        }else if (!$loot_toggle && !empty($group_ids)) {//else if groups toggle is false and groups exist
             $result[] = "groups-";
-            go_remove_groups($group_id, $user_id, false);//remove groups
-            $group_ids = serialize($group_id);
+            go_remove_groups($group_ids, $user_id, true);//remove groups
+            $group_ids = serialize($group_ids);
         }else{
             $result[] = "groups0";
             $group_ids = null;
         }
         $result = serialize($result);
 
+        if(empty($title) && empty($message) && empty($badge_ids) && empty($group_ids) && empty($xp) && empty($gold) && empty($health)){
+            die();
+        }
+
         //update actions
-        go_update_actions($user_id, $type, null, 1, null, null, $result, null, null, null, null, $xp, $gold, $health, $badge_ids, $group_ids, true);
+        go_update_actions($user_id, $type, $task_id, 1, null, null, $result, null, null, null, null, $xp, $gold, $health, $badge_ids, $group_ids, true);
+        update_user_option($user_id, 'go_new_messages', true);
     }
 
-    //set new message user option to true so each user gets the message
-    foreach ($uniqueUsers as $user_id) {
-        $user_id = intval($user_id);
-        update_user_option($user_id, 'go_new_messages', true);
-    } //end foreach user
 }
 
+/**
+ *
+ */
 function go_messages_canned(){
     echo "<select class='go_messages_canned'>";
-    echo "<option>Canned Feedback</option>";
+    echo "<option>Canned Messages</option>";
     $num_preset = get_option('options_go_messages_canned');
     $i = 0;
     while ($i < $num_preset){

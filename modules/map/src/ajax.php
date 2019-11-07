@@ -10,11 +10,9 @@
  * @param bool $map_id
  */
 function go_update_last_map($map_id = false) {
-
-
     //check_ajax_referer( 'go_update_last_map' );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_update_last_map' ) ) {
-        echo "refresh";
+        echo "There was an error.  Please refresh the page.";
         die( );
     }
     if(empty($_POST) || !isset($_POST)) {
@@ -43,7 +41,7 @@ function go_update_last_map($map_id = false) {
 function go_to_this_map(){
     //check_ajax_referer( 'go_to_this_map');
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_to_this_map' ) ) {
-        echo "refresh";
+        echo "There was an error.  Please refresh the page.";
         die( );
     }
     $user_id = get_current_user_id();
@@ -65,7 +63,7 @@ function go_user_map_ajax(){
 
     //check_ajax_referer( 'go_user_map_ajax');
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_user_map_ajax' ) ) {
-        echo "refresh";
+        echo "There was an error.  Please refresh the page.";
         die( );
     }
     $user_id = intval($_POST['uid']);

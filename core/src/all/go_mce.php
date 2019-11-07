@@ -143,3 +143,33 @@ function go_tinymce_wordcount($plugins_array = array())
 }
 
 
+
+function go_mce_add_button( $buttons ) {
+    if(go_user_is_admin()) {
+        array_push($buttons, "separator", "go_shortcode_button");
+        array_push($buttons, "separator", "go_admin_comment");
+    }
+    return $buttons;
+}
+add_filter( 'mce_buttons', 'go_mce_add_button', 0);
+
+function go_shortcode_button_register( $plugin_array ) {
+    $url = plugin_dir_url(dirname(dirname(dirname(__FILE__))));
+    if(go_user_is_admin()) {
+        $url .= "js/scripts/go_shortcode_mce.js";
+        $plugin_array['go_shortcode_button'] = $url;
+    }
+    return $plugin_array;
+}
+add_filter( 'mce_external_plugins', 'go_shortcode_button_register' );
+
+function go_comments_button_register( $plugin_array ) {
+    $url = plugin_dir_url(dirname(dirname(dirname(__FILE__))));
+    if(go_user_is_admin()) {
+        $url .= "js/scripts/go_admin_comments_mce.js";
+        $plugin_array['go_admin_comment'] = $url;
+    }
+    return $plugin_array;
+}
+add_filter( 'mce_external_plugins', 'go_comments_button_register' );
+

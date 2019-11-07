@@ -56,8 +56,4 @@ echo "</div></div>"
     </script>
 <?php
 
-
-
-
 wp_footer();
-

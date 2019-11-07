@@ -35,7 +35,7 @@ function go_upload_frontend(div_id, mime_types) {
             multiple: false, // set this to true for multiple file selection
             library: {
                 type: mime_types
-            },
+            }
         });
 
     }
@@ -54,21 +54,46 @@ function go_upload_frontend(div_id, mime_types) {
 
     file_frame.on('select', function () {
         const attachment = file_frame.state().get('selection').first().toJSON();
-        //console.log ("here");
-        //console.log (attachment);
-
-
         // do something with the file here
         $('#frontend-button').attr('value', 'Change File');
         $('#go_stage_error_msg').hide();
         if (attachment.type == 'image') {
-            $(val).attr('src', attachment.url);
-            $(val).closest('a').attr('data-featherlight', attachment.url);
+            console.log('image');
+            var url = '';
+
+            if(val === "#go_this_avatar"){//if this is a change avatar store item
+                if (typeof attachment.sizes.thumbnail !== 'undefined') {
+                    // your code here
+                    url = attachment.sizes.thumbnail.url;
+
+                }else{
+                    url = attachment.url;
+                }
+                $('#go_change_avatar').show();
+                $(val).attr('src', url);
+                $(val).css('max-width', '150px');
+                $(val).closest('a').attr('data-featherlight', url);
+            }else {
+                if (typeof attachment.sizes.medium !== 'undefined') {
+                    // your code here
+                    url = attachment.sizes.medium.url;
+
+                }else{
+                    url = attachment.url;
+                }
+                $(val).attr('src', url);
+                $(val).css('max-width', '300px');
+                $(val).closest('a').attr('data-featherlight', attachment.url);
+            }
+
         }
         else{
+            console.log('other');
             $(val).attr('src', attachment.icon);
         }
         $(val).attr('value', attachment.id);
+        $(val).next().html(attachment.title);
+        //$(val).closest('.go_checks_and_buttons').find('.file_title').html(attachment.title);
         //$('#go_result_media_name').html(attachment.title);
 
     });

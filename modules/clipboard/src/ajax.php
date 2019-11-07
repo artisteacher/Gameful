@@ -8,25 +8,31 @@
 
 
 
-function go_sWhere($sColumns){
+function go_sHaving($sColumns){
 
     $search_val = $_GET['search']['value'];
-    $sWhere = "";
+    $sHaving = "";
     if ( isset($search_val) && $search_val != "" )
     {
-        $sWhere = "HAVING ";
+        $sHaving = "HAVING ";
         //$sWhere .= "";
 
         //search these columns
         for ( $i=0 ; $i<count($sColumns) ; $i++ )
         {
-            $sWhere .= "`".$sColumns[$i]."` LIKE '%".esc_sql( $search_val )."%' OR ";
+            $sHaving .= "`".$sColumns[$i]."` LIKE '%".esc_sql( $search_val )."%' OR ";
         }
-        $sWhere = substr_replace( $sWhere, "", -4 );
+        $sHaving = substr_replace( $sHaving, "", -4 );
         //$sWhere .= '';
     }
-    return $sWhere;
+    return $sHaving;
 }
+
+function go_alpha_sort($a, $b)
+{
+    return strcmp($a->name, $b->name);
+}
+
 
 function go_sOrder($tab = null){
     if ($tab === null){
@@ -52,7 +58,27 @@ function go_sOrder($tab = null){
     //column 7 is not sortable (it's the link icons)
     $loot_sort = false;
     if ($order_col == 2){
-        $order_var = 'go_sections';//sections
+        $terms = get_terms( array(
+            'taxonomy' => 'user_go_sections',
+            'hide_empty' => false,
+        ) );
+        usort($terms, "go_alpha_sort");
+        if(!empty($terms)){
+            $order_var = "(CASE";
+            $i =0;
+            foreach($terms as $term){
+                $i++;
+                $term_id = $term->term_id;
+
+                $order_var .= " WHEN  go_section = '".$term_id."' THEN ".$i;
+            }
+            $order_var .= ' END)';
+            //$order_dir = '';
+        }
+        else {
+            $order_var = 'go_section';//sections
+        }
+        //$order_var = 'go_sections';
     }
     if ($order_col == 3){
         //$order_var = 'go_seats';//seat
@@ -173,7 +199,17 @@ function go_sOrder($tab = null){
 }
 
 function go_sType(){
-    $unmatched = (isset($_GET['unmatched']) ? $_GET['unmatched'] : false);
+    $user_id = get_current_user_id();
+    $unmatched_saved = get_user_meta($user_id, 'unmatched_toggle', true);//saved value
+    $unmatched = (isset($_GET['unmatched']) ? $_GET['unmatched'] : $unmatched_saved);//sent value
+
+    if(empty($unmatched_saved)){//if this user has never viewed the clipboard set the value to true
+        $unmatched = true;
+        update_user_meta( $user_id, 'unmatched_toggle', true );
+    }else if($unmatched_saved != $unmatched){//else if the sent value is different than the saved value, update the saved value
+        update_user_meta( $user_id, 'unmatched_toggle', $unmatched );
+    }
+
     if ($unmatched === true || $unmatched == 'true' ) {
         $sType = "LEFT";//add switch for "show unmatched users" toggle
     }else{
@@ -222,14 +258,22 @@ function go_start_row($action){
 
     $user_display_name = $action['site_name'];
     if(empty($user_display_name)){
-        $user_display_name = $action['display_name'];
+        $user_display_name = $action['nickname'];
+        if(empty($user_display_name)){
+            $user_display_name = $action['display_name'];
+        }
     }
     $user_firstname = $action['first_name'];
     $user_lastname = $action['last_name'];
     $sections = $action['go_sections'];
     //$the_section = intval($action['the_section']);
     $seats = $action['go_seats'];
-    $website = $action['user_url'];
+
+    $website = $action['site_url'];
+    if(empty($website)){
+        $website = $action['user_url'];
+    }
+
     $login = $action['user_login'];
 
 
@@ -317,10 +361,10 @@ function go_badges_list($badge_ids, $dir = null){
     if (!empty($badge_ids)) {
         $badges = go_print_term_list($badge_ids);
         if (!empty($badges)) {
-            if ($dir == "badges+"){
+            if ($dir == "badges+" && !empty($badge_ids)){
                 $badges = "Added: $badges";
                 //$bg_links .= '+';
-            }else if ($dir == "badges-"){
+            }else if ($dir == "badges-" && !empty($badge_ids)){
                 $badges = "Removed: $badges";
             }
         }
@@ -335,9 +379,9 @@ function go_groups_list($group_ids, $dir = null){
         $groups = go_print_term_list($group_ids);
 
         if (!empty($groups)) {
-            if ($dir == "groups+") {
+            if ($dir == "groups+" && !empty($groups)) {
                 $groups = "Added: $groups";
-            } else if ($dir == "groups-") {
+            } else if ($dir == "groups-" && !empty($groups)) {
                 $groups = "Removed: $groups";
             }
         }
@@ -501,7 +545,7 @@ function go_clipboard_stats_dataloader_ajax(){
     $badges_toggle = get_option('options_go_badges_toggle');
     $groups_toggle = get_option('options_go_groups_toggle');
 
-    $sWhere = go_sWhere( $sColumns);
+    $sHaving = go_sHaving( $sColumns);
     $sLimit = '';
     if (isset($_GET['start']) && $_GET['length'] != '-1') {
         $sLimit = "LIMIT " . intval($_GET['start']) . ", " . intval($_GET['length']);
@@ -516,10 +560,11 @@ function go_clipboard_stats_dataloader_ajax(){
     }
     $uTable = "{$wpdb->prefix}users";
     $umTable = "{$wpdb->prefix}usermeta";
+
     if(is_gameful()) {
         restore_current_blog();
     }
-
+    $blog_id = get_current_blog_id();
     $sectionQuery = go_sectionQuery();
     $badgeQuery = go_badgeQuery();
     $groupQuery = go_groupQuery();
@@ -531,29 +576,40 @@ function go_clipboard_stats_dataloader_ajax(){
 
     $caps_key = "{$wpdb->prefix}capabilities";
 
-    $site_display_name_key = go_prefix_key('display_name');
+    $site_display_name_key = go_prefix_key('go_nickname');
+    $site_url_name_key = go_prefix_key('go_website');
 
 
     $section = (isset($_GET['section']) ?  $_GET['section'] : null);
     //if filtered by period, only get the seat for that period
     if(!empty($section)){
         $get_seat = "CAST(GROUP_CONCAT(CASE WHEN t2.meta_key = '".$seat_key."' AND ".$section." = (SUBSTRING_INDEX(t2.meta_value,'_',-1)) THEN (SUBSTRING_INDEX(t2.meta_value,'_',1)) END) as UNSIGNED INTEGER)";
-        $get_section = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' AND ".$section." = (SUBSTRING_INDEX(t2.meta_value,'_',-1)) THEN meta_value END)";
+        $get_sections = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' AND ".$section." = (SUBSTRING_INDEX(t2.meta_value,'_',-1)) THEN meta_value END)";
+        $get_section = "MAX(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END)";
     }
     else {//if not, get all seats
         $get_seat = "GROUP_CONCAT(CASE WHEN t2.meta_key = '".$seat_key."' THEN (SUBSTRING_INDEX(t2.meta_value,'_',1)) END)";
-        $get_section = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END)";
+        $get_sections = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END)";
+        $get_section = "MAX(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END)";
     }
 
-    $sQuery = "    
-                    SELECT SQL_CALC_FOUND_ROWS
+    $admin_ids = go_get_all_admin();
+    $admin_ids = implode( "', '" , $admin_ids );
+
+    $sQuery = "    SELECT SQL_CALC_FOUND_ROWS 
+                      t9.*
+                      FROM
+                    (SELECT 
                       t8.user_id, t1.*,
                       t3.display_name, t3.user_url, t3.user_login,
                       $get_seat as go_seats,
-                      $get_section as go_sections, 
+                      $get_sections as go_sections,
+                      $get_section as go_section,
                       GROUP_CONCAT(CASE WHEN t2.meta_key = '$badge_key' THEN meta_value END) as go_badges,
                       GROUP_CONCAT(CASE WHEN t2.meta_key = '$group_key' THEN meta_value END) as go_groups,
+                      MAX(CASE WHEN t2.meta_key = 'nickname' THEN meta_value END) AS nickname,
                       MAX(CASE WHEN t2.meta_key = '$site_display_name_key' THEN meta_value END) AS site_name,
+                      MAX(CASE WHEN t2.meta_key = '$site_url_name_key' THEN meta_value END) AS site_url,
                       MAX(CASE WHEN t2.meta_key = 'first_name' THEN meta_value END) AS first_name,
                       MAX(CASE WHEN t2.meta_key = 'last_name' THEN meta_value END) AS last_name,
                       MAX(CASE WHEN t2.meta_key = '$caps_key' THEN meta_value END) AS wp_capabilities
@@ -567,7 +623,7 @@ function go_clipboard_stats_dataloader_ajax(){
                                 (
                                 SELECT t2.*
                                 FROM
-                                  (
+                                    (
                                   SELECT t1.uid AS user_id
                                   FROM $lTable AS t1
                                   ) AS t2
@@ -580,10 +636,12 @@ function go_clipboard_stats_dataloader_ajax(){
                       LEFT JOIN $lTable AS t1 ON t8.user_id = t1.uid
                       LEFT JOIN $umTable AS t2 ON t8.user_id = t2.user_id
                       LEFT JOIN $uTable AS t3 ON t8.user_id = t3.ID
+                      WHERE t8.user_id NOT IN ( '$admin_ids' ) 
                       GROUP BY t1.id
-                      $sWhere
-                      $sOrder
-                      $sLimit       
+                      $sHaving
+                      )  AS t9
+                        $sOrder
+                        $sLimit
         ";
 
     //WHERE will always start with the current course
@@ -609,7 +667,8 @@ function go_clipboard_stats_dataloader_ajax(){
     $sQuery = "
     SELECT COUNT(`uid`)
     FROM   $lTable
-    
+    WHERE uid NOT IN ( '$admin_ids' ) 
+
     ";
 
     $rResultTotal = $wpdb->get_results($sQuery, ARRAY_N);
@@ -620,7 +679,7 @@ function go_clipboard_stats_dataloader_ajax(){
 
     $data = array();
     foreach($rResult as $action){//output a row for each action
-        $caps = $action['wp_capabilities'];
+       /* $caps = $action['wp_capabilities'];
         $caps = unserialize($caps);
         if ($caps['administrator'] ===true || !$caps){
             $total = $iTotal[0];
@@ -628,7 +687,7 @@ function go_clipboard_stats_dataloader_ajax(){
             $total = $iFilteredTotal[0];
             $iFilteredTotal[0] = $total -1;
             continue;
-        }
+        }*/
         //The message content
         $row = go_start_row($action);
         $user_id = $action['uid'];
@@ -727,7 +786,7 @@ function go_clipboard_store_dataloader_ajax(){
     global $wpdb;
 
     $sColumns = array('first_name', 'last_name', 'display_name', 'result', 'post_title');
-    $sWhere = go_sWhere($sColumns);
+    $sHaving = go_sHaving($sColumns);
 
     $sLimit = '';
     if (isset($_GET['start']) && $_GET['length'] != '-1') {
@@ -778,18 +837,23 @@ function go_clipboard_store_dataloader_ajax(){
 
     $caps_key = "{$wpdb->prefix}capabilities";
 
-    $site_display_name_key = go_prefix_key('display_name');
+    $site_display_name_key = go_prefix_key('go_nickname');
 
     $section = (isset($_GET['section']) ?  $_GET['section'] : null);
     //if filtered by period, only get the seat for that period
     if(!empty($section)){
         $get_seat = "CAST(GROUP_CONCAT(CASE WHEN t2.meta_key = '".$seat_key."' AND ".$section." = (SUBSTRING_INDEX(t2.meta_value,'_',-1)) THEN (SUBSTRING_INDEX(t2.meta_value,'_',1)) END) as UNSIGNED INTEGER)";
-        $get_section = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' AND ".$section." = (SUBSTRING_INDEX(t2.meta_value,'_',-1)) THEN meta_value END)";
+        $get_sections = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' AND ".$section." = (SUBSTRING_INDEX(t2.meta_value,'_',-1)) THEN meta_value END)";
+        $get_section = "MAX(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END)";
     }
     else {//if not, get all seats
         $get_seat = "GROUP_CONCAT(CASE WHEN t2.meta_key = '".$seat_key."' THEN (SUBSTRING_INDEX(t2.meta_value,'_',1)) END)";
-        $get_section = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END)";
+        $get_sections = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END)";
+        $get_section = "MAX(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END)";
     }
+
+    $admin_ids = go_get_all_admin();
+    $admin_ids = implode( "', '" , $admin_ids );
 
     $sQuery = "    
                   SELECT SQL_CALC_FOUND_ROWS
@@ -802,9 +866,11 @@ function go_clipboard_store_dataloader_ajax(){
                           t8.user_id,
                           t3.display_name, t3.user_url, t3.user_login,
                           $get_seat as go_seats,
-                          $get_section as go_sections, 
+                          $get_sections as go_sections, 
+                          $get_section as go_section, 
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$badge_key' THEN meta_value END) as go_badges,
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$group_key' THEN meta_value END) as go_groups,
+                          MAX(CASE WHEN t2.meta_key = 'nickname' THEN meta_value END) AS nickname,
                           MAX(CASE WHEN t2.meta_key = '$site_display_name_key' THEN meta_value END) AS site_name,
                           MAX(CASE WHEN t2.meta_key = 'first_name' THEN meta_value END) AS first_name,
                           MAX(CASE WHEN t2.meta_key = 'last_name' THEN meta_value END) AS last_name,
@@ -827,11 +893,12 @@ function go_clipboard_store_dataloader_ajax(){
                           )AS t8
                         LEFT JOIN $umTable AS t2 ON t8.user_id = t2.user_id
                         LEFT JOIN $uTable AS t3 ON t8.user_id = t3.ID
+                        WHERE t8.user_id NOT IN ( '$admin_ids' ) 
                         GROUP BY t8.user_id 
                         ) AS t9
                       $sType JOIN $aTable AS t4 ON t9.user_id = t4.uid $sOn
                       $sType JOIN $pTable AS t6 ON t4.source_id = t6.ID
-                      $sWhere
+                      $sHaving
                   ) AS t9
                   $sOrder
                   $sLimit     
@@ -849,7 +916,7 @@ function go_clipboard_store_dataloader_ajax(){
 
     $iFilteredTotal = $rResultFilterTotal [0];
 
-    $totalWhere = " WHERE (action_type = 'store') ";
+    $totalWhere = " WHERE (action_type = 'store') AND uid NOT IN ( '$admin_ids' )  ";
     $sQuery = "
     SELECT COUNT(`" . $sIndexColumn . "`)
     FROM   $aTable
@@ -865,7 +932,7 @@ function go_clipboard_store_dataloader_ajax(){
 
     $data = array();
     foreach($rResult as $action){//output a row for each action
-        $caps = $action['wp_capabilities'];
+        /*$caps = $action['wp_capabilities'];
         $caps = unserialize($caps);
         if ($caps['administrator'] ===true || !$caps){
             $total = $iTotal[0];
@@ -873,7 +940,7 @@ function go_clipboard_store_dataloader_ajax(){
             $total = $iFilteredTotal[0];
             $iFilteredTotal[0] = $total -1;
             continue;
-        }
+        }*/
         $row = go_start_row($action);
         //The message content
         $TIMESTAMP = $action['TIMESTAMP'];
@@ -971,7 +1038,7 @@ function go_clipboard_messages_dataloader_ajax(){
     global $wpdb;
 
     $sColumns = array('first_name', 'last_name', 'display_name', 'result');
-    $sWhere = go_sWhere($sColumns);
+    $sHaving = go_sHaving($sColumns);
 
     $sLimit = '';
     if (isset($_GET['start']) && $_GET['length'] != '-1') {
@@ -1007,18 +1074,23 @@ function go_clipboard_messages_dataloader_ajax(){
 
     $caps_key = "{$wpdb->prefix}capabilities";
 
-    $site_display_name_key = go_prefix_key('display_name');
+    $site_display_name_key = go_prefix_key('go_nickname');
 
     $section = (isset($_GET['section']) ?  $_GET['section'] : null);
     //if filtered by period, only get the seat for that period
     if(!empty($section)){
         $get_seat = "CAST(GROUP_CONCAT(CASE WHEN t2.meta_key = '".$seat_key."' AND ".$section." = (SUBSTRING_INDEX(t2.meta_value,'_',-1)) THEN (SUBSTRING_INDEX(t2.meta_value,'_',1)) END) as UNSIGNED INTEGER)";
-        $get_section = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' AND ".$section." = (SUBSTRING_INDEX(t2.meta_value,'_',-1)) THEN meta_value END)";
+        $get_sections = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' AND ".$section." = (SUBSTRING_INDEX(t2.meta_value,'_',-1)) THEN meta_value END)";
+        $get_section = "MAX(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END)";
     }
     else {//if not, get all seats
         $get_seat = "GROUP_CONCAT(CASE WHEN t2.meta_key = '".$seat_key."' THEN (SUBSTRING_INDEX(t2.meta_value,'_',1)) END)";
-        $get_section = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END)";
+        $get_sections = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END)";
+        $get_section = "MAX(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END)";
     }
+
+    $admin_ids = go_get_all_admin();
+    $admin_ids = implode( "', '" , $admin_ids );
 
     $sQuery = "    
                   SELECT SQL_CALC_FOUND_ROWS
@@ -1031,9 +1103,11 @@ function go_clipboard_messages_dataloader_ajax(){
                           t8.user_id,
                           t3.display_name, t3.user_url, t3.user_login,
                           $get_seat as go_seats,
-                          $get_section as go_sections, 
+                          $get_sections as go_sections, 
+                          $get_section as go_section, 
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$badge_key' THEN meta_value END) as go_badges,
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$group_key' THEN meta_value END) as go_groups,
+                          MAX(CASE WHEN t2.meta_key = 'nickname' THEN meta_value END) AS nickname,
                           MAX(CASE WHEN t2.meta_key = '$site_display_name_key' THEN meta_value END) AS site_name,
                           MAX(CASE WHEN t2.meta_key = 'first_name' THEN meta_value END) AS first_name,
                           MAX(CASE WHEN t2.meta_key = 'last_name' THEN meta_value END) AS last_name,
@@ -1056,10 +1130,11 @@ function go_clipboard_messages_dataloader_ajax(){
                           )AS t8
                         LEFT JOIN $umTable AS t2 ON t8.user_id = t2.user_id
                         LEFT JOIN $uTable AS t3 ON t8.user_id = t3.ID
+                        WHERE t8.user_id NOT IN ( '$admin_ids' ) 
                         GROUP BY t8.user_id 
                         ) AS t9
                       $sType JOIN $aTable AS t4 ON t9.user_id = t4.uid $sOn
-                      $sWhere
+                      $sHaving
                   ) AS t9
                   $sOrder
                   $sLimit     
@@ -1084,7 +1159,7 @@ function go_clipboard_messages_dataloader_ajax(){
 
     $iFilteredTotal = $rResultFilterTotal [0];
 
-    $totalWhere = " WHERE (action_type = 'message') ";
+    $totalWhere = " WHERE (action_type = 'message') AND uid NOT IN ( '$admin_ids' )  ";
     $sQuery = "
     SELECT COUNT(`" . $sIndexColumn . "`)
     FROM   $aTable
@@ -1101,7 +1176,7 @@ function go_clipboard_messages_dataloader_ajax(){
 
     $data = array();
     foreach($rResult as $action){//output a row for each action
-        $caps = $action['wp_capabilities'];
+        /*$caps = $action['wp_capabilities'];
         $caps = unserialize($caps);
         if ($caps['administrator'] ===true || !$caps){
             $total = $iTotal[0];
@@ -1109,7 +1184,7 @@ function go_clipboard_messages_dataloader_ajax(){
             $total = $iFilteredTotal[0];
             $iFilteredTotal[0] = $total -1;
             continue;
-        }
+        }*/
 
         //The message content
         $row = go_start_row($action);
@@ -1121,8 +1196,15 @@ function go_clipboard_messages_dataloader_ajax(){
         //unserialize the message and set the results
         $result_array = unserialize($result);
         $title = $result_array[0];
+
         $message = $result_array[1];
 
+        if(empty($title) && !empty($message)){
+            $title = 'View Message';
+        }
+        if($message == '<i class="fas fa-heart fa-4x" style="color:#8B0000"></i>'){//don't show message if was marked as favorite heart
+            $message = '';
+        }
 
 
 
@@ -1235,7 +1317,7 @@ function go_clipboard_activity_dataloader_ajax(){
     global $wpdb;
 
     $sColumns = array('first_name', 'last_name', 'display_name', 'post_title');
-    $sWhere = go_sWhere( $sColumns);
+    $sHaving = go_sHaving( $sColumns);
 
     $sLimit = '';
     if (isset($_GET['start']) && $_GET['length'] != '-1') {
@@ -1289,19 +1371,22 @@ function go_clipboard_activity_dataloader_ajax(){
 
     $caps_key = "{$wpdb->prefix}capabilities";
 
-    $site_display_name_key = go_prefix_key('display_name');
+    $site_display_name_key = go_prefix_key('go_nickname');
 
     $section = (isset($_GET['section']) ?  $_GET['section'] : null);
     //if filtered by period, only get the seat for that period
     if(!empty($section)){
         $get_seat = "CAST(GROUP_CONCAT(CASE WHEN t2.meta_key = '".$seat_key."' AND ".$section." = (SUBSTRING_INDEX(t2.meta_value,'_',-1)) THEN (SUBSTRING_INDEX(t2.meta_value,'_',1)) END) as UNSIGNED INTEGER)";
-        $get_section = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' AND ".$section." = (SUBSTRING_INDEX(t2.meta_value,'_',-1)) THEN meta_value END)";
+        $get_sections = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' AND ".$section." = (SUBSTRING_INDEX(t2.meta_value,'_',-1)) THEN meta_value END)";
+        $get_section = "MAX(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END)";
     }
     else {//if not, get all seats
         $get_seat = "GROUP_CONCAT(CASE WHEN t2.meta_key = '".$seat_key."' THEN (SUBSTRING_INDEX(t2.meta_value,'_',1)) END)";
-        $get_section = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END)";
+        $get_sections = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END)";
+        $get_section = "MAX(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END)";
     }
-
+    $admin_ids = go_get_all_admin();
+    $admin_ids = implode( "', '" , $admin_ids );
     $sQuery = "    
                   SELECT SQL_CALC_FOUND_ROWS
                     t9.*
@@ -1314,9 +1399,11 @@ function go_clipboard_activity_dataloader_ajax(){
                           t8.user_id,
                           t3.display_name, t3.user_url, t3.user_login,
                           $get_seat as go_seats,
-                          $get_section as go_sections, 
+                          $get_sections as go_sections, 
+                          $get_section as go_section, 
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$badge_key' THEN meta_value END) as go_badges,
                           GROUP_CONCAT(CASE WHEN t2.meta_key = '$group_key' THEN meta_value END) as go_groups,
+                          MAX(CASE WHEN t2.meta_key = 'nickname' THEN meta_value END) AS nickname,
                           MAX(CASE WHEN t2.meta_key = '$site_display_name_key' THEN meta_value END) AS site_name,
                           MAX(CASE WHEN t2.meta_key = 'first_name' THEN meta_value END) AS first_name,
                           MAX(CASE WHEN t2.meta_key = 'last_name' THEN meta_value END) AS last_name,
@@ -1339,11 +1426,12 @@ function go_clipboard_activity_dataloader_ajax(){
                           )AS t8
                         LEFT JOIN $umTable AS t2 ON t8.user_id = t2.user_id
                         LEFT JOIN $uTable AS t3 ON t8.user_id = t3.ID
+                        WHERE t8.user_id NOT IN ( '$admin_ids' ) 
                         GROUP BY t8.user_id 
                         ) AS t9
                       $sType JOIN $tTable AS t4 ON t9.user_id = t4.uid $sOn
                       $sType JOIN $pTable AS t6 ON t4.post_id = t6.ID
-                      $sWhere
+                      $sHaving
                   ) AS t9
                   $sOrder
                   $sLimit     
@@ -1374,6 +1462,7 @@ function go_clipboard_activity_dataloader_ajax(){
     $sQuery3 = "
     SELECT COUNT(`" . $sIndexColumn . "`)
     FROM   $tTable
+    WHERE uid NOT IN ( '$admin_ids' ) 
     ";
 
     $rResultTotal = $wpdb->get_results($sQuery3, ARRAY_N);
@@ -1386,7 +1475,7 @@ function go_clipboard_activity_dataloader_ajax(){
 
     $data = array();
     foreach($rResult as $action){//output a row for each action
-        $caps = $action['wp_capabilities'];
+        /*$caps = $action['wp_capabilities'];
         $caps = unserialize($caps);
         if ($caps['administrator'] ===true || !$caps){
             $total = $iTotal[0];
@@ -1394,7 +1483,7 @@ function go_clipboard_activity_dataloader_ajax(){
             $total = $iFilteredTotal[0];
             $iFilteredTotal[0] = $total -1;
             continue;
-        }
+        }*/
 
         //The message content
         $row = go_start_row($action);

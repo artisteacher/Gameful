@@ -22,8 +22,8 @@ function go_filter_tasks_by_taxonomy() {
             'name'            => $taxonomy,
             'orderby'         => 'name',
             'selected'        => $selected,
-            'show_count'      => true,
-            'hide_empty'      => true,
+            'show_count'      => false,
+            'hide_empty'      => false,
         ));
     };
 }
@@ -52,7 +52,19 @@ function go_convert_task_id_to_term_in_query($query) {
 /**
  *
  */
-function manage_task_chains_columns(){
+function manage_term_columns(){
+
+
+    add_filter( 'manage_edit-task_chains_columns', function ( $columns ) {
+        $columns['hidden_term'] = __( 'Hidden', 'my-plugin' );
+        $columns['pod_toggle'] = __( 'Pod', 'my-plugin' );
+        $columns['pod_done_num'] = __( '# Needed', 'my-plugin' );
+        $badge_name = ucwords(get_option('options_go_badges_name_plural'));
+        $columns['pod_achievement'] = __( $badge_name, 'my-plugin' );
+        return $columns;
+    });
+
+
     /**
      * TASK CHAINS EDIT COLUMNS AND FIELDS
      *
@@ -61,10 +73,6 @@ function manage_task_chains_columns(){
     add_filter('manage_edit-task_chains_columns', function ( $columns ) {
         if( isset( $columns['description'] ) )
             unset( $columns['description'] );
-        return $columns;
-    });
-//remove slug column
-    add_filter('manage_edit-task_chains_columns', function ( $columns ) {
         if( isset( $columns['slug'] ) )
             unset( $columns['slug'] );
         return $columns;
@@ -78,21 +86,50 @@ function manage_task_chains_columns(){
     add_filter('manage_edit-go_badges_columns', function ( $columns ) {
         if( isset( $columns['description'] ) )
             unset( $columns['description'] );
+        if( isset( $columns['slug'] ) )
+            unset( $columns['slug'] );
+        if( isset( $columns['posts'] ) )
+            unset( $columns['posts'] );
         return $columns;
     });
-//remove slug column
-    add_filter('manage_edit-go_badges_columns', function ( $columns ) {
+
+    /**
+     * Groups EDIT COLUMNS AND FIELDS
+     *
+     */
+//remove description column
+    add_filter('manage_edit-user_go_sections_columns', function ( $columns ) {
+        if( isset( $columns['description'] ) )
+            unset( $columns['description'] );
         if( isset( $columns['slug'] ) )
             unset( $columns['slug'] );
         return $columns;
     });
 //remove count column
 
-    add_filter('manage_edit-go_badges_columns', function ( $columns ) {
+    add_filter('manage_edit-user_go_sections_columns', function ( $columns ) {
         if( isset( $columns['posts'] ) )
             unset( $columns['posts'] );
         return $columns;
     });
+
+    /**
+     * STORE ITEMS EDIT COLUMNS AND FIELDS
+     *
+     */
+//remove description column
+
+//remove slug column
+    add_filter('manage_edit-store_types_columns', function ( $columns ) {
+        if( isset( $columns['slug'] ) )
+            unset( $columns['slug'] );
+        if( isset( $columns['description'] ) )
+            unset( $columns['description'] );
+        $columns['hidden_term'] = __( 'Hidden', 'my-plugin' );
+        return $columns;
+        return $columns;
+    });
+//remove count column
 
 
 
@@ -105,17 +142,8 @@ function manage_task_chains_columns(){
     add_filter('manage_edit-task_focus_categories_columns', function ( $columns ) {
         if( isset( $columns['description'] ) )
             unset( $columns['description'] );
-        return $columns;
-    });
-//remove slug column
-    add_filter('manage_edit-task_focus_categories_columns', function ( $columns ) {
         if( isset( $columns['slug'] ) )
             unset( $columns['slug'] );
-        return $columns;
-    });
-//remove count column
-
-    add_filter('manage_edit-task_focus_categories_columns', function ( $columns ) {
         if( isset( $columns['posts'] ) )
             unset( $columns['posts'] );
         return $columns;
@@ -130,10 +158,6 @@ function manage_task_chains_columns(){
     add_filter('manage_edit-task_categories_columns', function ( $columns ) {
         if( isset( $columns['description'] ) )
             unset( $columns['description'] );
-        return $columns;
-    });
-//remove slug column
-    add_filter('manage_edit-task_categories_columns', function ( $columns ) {
         if( isset( $columns['slug'] ) )
             unset( $columns['slug'] );
         return $columns;
@@ -148,10 +172,6 @@ function manage_task_chains_columns(){
     add_filter('manage_edit-task_menus_columns', function ( $columns ) {
         if( isset( $columns['description'] ) )
             unset( $columns['description'] );
-        return $columns;
-    });
-//remove slug column
-    add_filter('manage_edit-task_menus_columns', function ( $columns ) {
         if( isset( $columns['slug'] ) )
             unset( $columns['slug'] );
         return $columns;
@@ -166,11 +186,6 @@ function manage_task_chains_columns(){
     add_filter('manage_edit-user_go_groups_columns', function ( $columns ) {
         if( isset( $columns['slug'] ) )
             unset( $columns['slug'] );
-        return $columns;
-    });
-
-    //remove count column
-    add_filter('manage_edit-user_go_groups_columns', function ( $columns ) {
         if( isset( $columns['posts'] ) )
             unset( $columns['posts'] );
         return $columns;
@@ -181,23 +196,7 @@ function manage_task_chains_columns(){
 
 
 }
-add_action( 'admin_init', 'manage_task_chains_columns' );
-
-//add_action( 'admin_init', 'go_fix_count' );
-/*
-function go_fix_count(){
-    $terms = get_terms( array(
-        'taxonomy' => 'task_chains',
-        'hide_empty' => false,
-    ) );
-
-    $term_ids = array();
-    foreach ($terms as $term){
-        $term_ids[] = $term->term_id;
-    }
-    wp_update_term_count( $term_ids, 'task_chains', true );
-}*/
-
+add_action( 'admin_init', 'manage_term_columns' );
 
 function go_fix_task_count( $post_id ) {
     $post = get_post( $post_id );
@@ -226,17 +225,16 @@ function go_limit_parents($args, $taxonomy ) {
 }
 
 
-function task_chains_add_field_columns( $columns ) {;
-    $columns['pod_toggle'] = __( 'Pod', 'my-plugin' );
-    $columns['pod_done_num'] = __( '# Needed', 'my-plugin' );
-    $badge_name = ucwords(get_option('options_go_badges_name_plural'));
-    $columns['pod_achievement'] = __( $badge_name, 'my-plugin' );
-    return $columns;
-}
-
-add_filter( 'manage_edit-task_chains_columns', 'task_chains_add_field_columns' );
 function task_chains_add_field_column_contents( $content, $column_name, $term_id ) {
     switch( $column_name ) {
+        case 'hidden_term' :
+            $content = get_term_meta( $term_id, 'go_hide_map', true );
+            if ($content == true){
+                $content = '<i class="fas fa-eye-slash"></i>';
+            }
+            else {
+                $content = '';}
+            break;
         case 'pod_toggle' :
             $content = get_term_meta( $term_id, 'pod_toggle', true );
             if ($content == true){
@@ -282,6 +280,24 @@ function task_chains_add_field_column_contents( $content, $column_name, $term_id
 add_filter( 'manage_task_chains_custom_column', 'task_chains_add_field_column_contents', 10, 3 );
 
 
+function store_types_add_field_column_contents($content, $column_name, $term_id){
+    switch( $column_name ) {
+        case 'hidden_term' :
+            $content = get_term_meta( $term_id, 'go_hide_store_cat', true );
+            if ($content == true){
+                $content = '<i class="fas fa-eye-slash"></i>';
+            }
+            else {
+                $content = '';}
+            break;
+
+    }
+
+    return $content;
+}
+add_filter( 'manage_store_types_custom_column', 'store_types_add_field_column_contents', 10, 3 );
+
+
 # Called only in /wp-admin/edit.php pages
 //add_action( 'load-edit.php', function() {
     //add_filter( 'views_edit-tasks', 'go_add_from_template_edit_screen' ); // tasks is my custom post type
@@ -293,3 +309,31 @@ function go_add_from_template_edit_screen() {
 }
 
 
+
+// hide certain meta boxes on the 'YOUR_CUSTOM_POST_TYPE' custom post type
+add_filter('add_meta_boxes', 'hide_meta_boxes_tasks', 99, 3);
+function hide_meta_boxes_tasks() {
+    remove_meta_box('postexcerpt', 'tasks', 'normal');
+    remove_meta_box('trackbacksdiv', 'tasks', 'normal');
+    remove_meta_box('postcustom', 'tasks', 'normal');
+    remove_meta_box('slugdiv', 'tasks', 'normal');
+    remove_meta_box('generate_layout_options_meta_box', 'tasks', 'normal');
+    remove_meta_box('postimagediv', 'tasks', 'normal');
+    ////remove_meta_box('commentstatusdiv', 'tasks', 'normal');
+    //remove_meta_box('commentsdiv', 'tasks', 'normal');
+    //remove_meta_box('revisionsdiv', 'tasks', 'normal');
+}
+
+// hide certain meta boxes on the 'YOUR_CUSTOM_POST_TYPE' custom post type
+add_filter('add_meta_boxes', 'hide_meta_boxes_tasks_templates');
+function hide_meta_boxes_tasks_templates() {
+    remove_meta_box('postexcerpt', 'tasks_templates', 'normal');
+    remove_meta_box('trackbacksdiv', 'tasks_templates', 'normal');
+    remove_meta_box('postcustom', 'tasks_templates', 'normal');
+    remove_meta_box('slugdiv', 'tasks_templates', 'normal');
+    remove_meta_box('commentstatusdiv', 'tasks_templates', 'normal');
+    remove_meta_box('commentsdiv', 'tasks_templates', 'normal');
+    remove_meta_box('generate_layout_options_meta_box', 'tasks', 'normal');
+    remove_meta_box('postimagediv', 'tasks', 'normal');
+    //remove_meta_box('revisionsdiv', 'tasks', 'normal');
+}

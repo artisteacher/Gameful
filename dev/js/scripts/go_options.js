@@ -1,9 +1,3 @@
-
-/**
- * This next section makes sure the levels on the options page proceed in ascending order.
- */
-
-//get it set up on page load
 jQuery(document).ready(function(){
     //get the growth level from options
     //var growth = levelGrowth*1;
@@ -13,6 +7,9 @@ jQuery(document).ready(function(){
         console.log(is_options_page);
     }
     if (is_options_page) {
+        /**
+         * This next section makes sure the levels on the options page proceed in ascending order.
+         */
         console.log('is_options_page2');
         Go_orgGrowth = jQuery('#go_levels_growth').find('input').val();
 
@@ -60,7 +57,6 @@ jQuery(document).ready(function(){
         });
     }
 });
-
 
 function go_validate_growth() {
     var NewGrowth = jQuery('#go_levels_growth').find('input').val();

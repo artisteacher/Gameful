@@ -6,6 +6,62 @@
  * Time: 12:51 AM
  */
 
+
+/**
+ *
+ */
+function go_make_map() {
+    if ( ! is_admin() ) {
+        $user_id = get_current_user_id();
+        //$last_map_id = get_user_option('go_last_map', $user_id);
+        $last_map_id = (isset($_GET['map_id']) ?  $_GET['map_id'] : get_user_option('go_last_map', $user_id));
+
+        $font = get_option('options_map_font');
+        $font_size = $font['font_size'];
+        $font_family = $font['font_family'];
+        $font_weight = $font['font_weight'];
+        $font_style = $font['font_style'];
+
+        $get_font = $font_family . ":" . $font_weight .$font_style;
+
+        wp_enqueue_style( 'acft-gf', 'https://fonts.googleapis.com/css?family='.$get_font );
+
+
+        if(!$last_map_id){
+            $last_map_id = get_option('options_go_locations_map_default', '');
+        }
+        if(!$last_map_id){
+            $taxonomy = 'task_chains';
+            /*$term_args0=array(
+                'hide_empty' => false,
+                'order' => 'ASC',
+                'parent' => '0',
+                'number' => 1
+            );
+            $firstmap = get_terms($taxonomy,$term_args0);*/
+            $firstmap = go_get_terms_ordered($taxonomy, '0', 1);
+            if (!empty($firstmap)) {
+                $last_map_id = $firstmap[0]->term_id;
+            }else{
+                $last_map_id = null;
+            }
+        }
+
+        echo "<div id='go_map_container' style='font-family: $font_family; font-style: $font_style; font-weight: $font_weight; font-size: $font_size"."px;'>";
+        $map_title = get_option( 'options_go_locations_map_title');
+        echo "<h1>{$map_title}</h1>";
+        go_make_map_dropdown();
+        go_make_single_map($last_map_id, false);// do your thing
+        echo "</div>";
+        ?>
+<script>
+
+</script>
+        <?php
+    }
+}
+add_shortcode('go_make_map', 'go_make_map');
+
 //this can't be wrapped in the toggle = true because it needs to be available on activation
 add_action('init', 'go_map_page');
 function go_map_page(){

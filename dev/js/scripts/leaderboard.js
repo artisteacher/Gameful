@@ -94,45 +94,11 @@ function go_stats_leaderboard_page() {
             go_stats_links();
         },
         "searching": false,
-        "columnDefs": [
-            { type: 'natural', targets: '_all'},
-            {
-                "targets": [0],
-                sortable: false
-            },
-            {
-                "targets": [1],
-                sortable: false
-            },
-            {
-                "targets": [2],
-                sortable: false
-            },
-            {
-                "targets": [3],
-                sortable: false
-            },
-            {
-                "targets": [4],
-                sortable: true,
-                "orderSequence": [ "desc" ]
-            },
-            {
-                "targets": [5],
-                sortable: true,
-                "orderSequence": [ "desc" ]
-            },
-            {
-                "targets": [6],
-                sortable: true,
-                "orderSequence": [ "desc" ]
-            },
-            {
-                "targets": [7],
-                sortable: true,
-                "orderSequence": [ "desc" ]
-            },
+        columnDefs: [
+            { targets: [0, 1, 2], sortable: false},
+            { targets: '_all', type: 'natural', sortable: true, "orderSequence": [ "desc" ] }
         ],
+
     });
 
     // Event listener to the range filtering inputs to redraw on input

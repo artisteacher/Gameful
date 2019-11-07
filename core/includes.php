@@ -44,10 +44,20 @@ include_once('src/all/go-acf-functions.php');
 /**
  * This places the mce in in hidden footer. Loads all of the scripts and styles that allow mce to be loaded later.
  */
+add_action('admin_footer','go_hidden_footer');
+add_action('wp_footer','go_hidden_footer');
 function go_hidden_footer(){
+
     ?>
 <div style="display: none;">
     <?php
+    /*
+    $settings = array(//'tinymce'=> array( 'menubar'=> true, 'toolbar1' => 'undo,redo', 'toolbar2' => ''),
+        'tinymce'=>true,
+        'media_buttons' => true,
+        'menubar' => false,
+        'drag_drop_upload' => true);
+    //wp_editor('', 'initialize', $settings);*/
     wp_editor('', 'initialize');
     ?>
 </div>

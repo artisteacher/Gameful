@@ -1,4 +1,6 @@
 <?php
+
+
 /**
  * Auto update slugs
  * @author  Mick McMurray
@@ -6,7 +8,7 @@
  * @link http://thestizmedia.com/custom-post-type-filter-admin-custom-taxonomy/
  */
 function go_update_slug( $data, $postarr ) {
-    $slug_toggle = get_option( 'options_go_slugs_toggle');
+    $slug_toggle = get_site_option( 'options_go_slugs_toggle');
     if ($slug_toggle) {
         $post_type = $data['post_type'];
         if ($post_type == 'tasks' || $post_type == 'go_store') {
@@ -26,7 +28,7 @@ add_filter( 'wp_insert_post_data', 'go_update_slug', 99, 2 );
  * @return mixed
  */
 function go_update_term_slug($data, $term_id, $taxonomy, $args ) {
-    $slug_toggle = get_option( 'options_go_slugs_toggle');
+    $slug_toggle = get_site_option( 'options_go_slugs_toggle');
     if ($slug_toggle) {
         $no_space_slug = sanitize_title($data['name']);
         $data['slug'] = wp_unique_term_slug($no_space_slug, (object)$args);
@@ -39,7 +41,7 @@ add_filter( 'wp_update_term_data', 'go_update_term_slug', 10, 4 );
  *
  */
 function hide_all_slugs() {
-    $slug_toggle = get_option( 'options_go_slugs_toggle');
+    $slug_toggle = get_site_option( 'options_go_slugs_toggle');
     if ($slug_toggle) {
         global $post;
         $post_type = get_post_type( get_the_ID() );
@@ -89,7 +91,6 @@ function go_new_task_from_template_as_draft()
 }
 
 
-
 /*
  * Add the duplicate link to action list for post_row_actions
  */
@@ -104,7 +105,6 @@ function go_duplicate_post_link( $actions, $post ) {
     }
     return $actions;
 }
-
 add_filter( 'post_row_actions', 'go_duplicate_post_link', 10, 2 );
 
 function go_duplicate_post_button($post ) {
@@ -116,8 +116,6 @@ function go_duplicate_post_button($post ) {
         }
     }
 }
-
-
 add_action( 'post_submitbox_misc_actions', 'go_duplicate_post_button' );
 
 /**
@@ -156,7 +154,6 @@ function go_reorder_admin_menu( ) {
 }
 add_filter( 'custom_menu_order', 'go_reorder_admin_menu' );
 add_filter( 'menu_order', 'go_reorder_admin_menu' );
-
 
 /**
  * Add new top level menus
@@ -217,7 +214,7 @@ function go_add_toplevel_menu() {
             'parent_slug' 	=> 'game-on-options',
         ));
 
-        if( get_current_blog_id() == 1 ) {
+        if( (is_gameful() && is_main_site()) || !is_gameful()  ) {
 
 
             acf_add_options_page(array('page_title' => 'Performance', 'menu_slug' => 'go_performance', 'autoload' => true, 'capability' => 'edit_posts', 'icon_url' => 'dashicons-admin-settings',
@@ -312,8 +309,6 @@ function go_add_toplevel_menu() {
 }
 add_action( 'admin_menu', 'go_add_toplevel_menu');
 
-
-
 function go_remove_toplevel_menu() {
     //remove for all non super admin
     if(is_gameful() && !is_super_admin()) {
@@ -362,6 +357,16 @@ function go_add_submenus() {
         'Manage ' . $map_name, // menu_title,
         'edit_posts', // capability,
         'edit-tags.php?taxonomy=task_chains&post_type=tasks' // menu_slug,
+    );
+
+    /* add the sub menu under content for maps */
+    $store_name = get_option('options_go_store_store_link');
+    add_submenu_page(
+        'edit.php?post_type=go_store', // parent slug
+        'Manage ' . ucwords($store_name)." Categories", // page_title,
+        ucwords($store_name)." Categories", // menu_title,
+        'edit_posts', // capability,
+        'edit-tags.php?taxonomy=store_types&post_type=go_store' // menu_slug,
     );
 
 
@@ -434,7 +439,6 @@ function go_add_submenus() {
 }
 add_action( 'admin_menu', 'go_add_submenus', 9 );
 
-
 //remove add new button on tasks edit page becuase it has custom button
 //and remove submenu becuase it was replaced with a pop up to select templage
 add_action('admin_menu', 'go_disable_new_tasks');
@@ -450,8 +454,6 @@ function go_disable_new_tasks() {
     </style>';
     }
 }
-
-
 
 /**
  * Add content to submenus
@@ -535,7 +537,6 @@ function go_menu_hierarchy_correction( $parent_file ) {
 
     global $current_screen;
 
-
     /* get the base of the current screen */
     $screenbase = $current_screen->base;
     $taxonomy = $current_screen->taxonomy;
@@ -593,24 +594,6 @@ function go_menu_hierarchy_correction( $parent_file ) {
 }
 add_action( 'parent_file', 'go_menu_hierarchy_correction', 999 );
 
-function go_shortcode_button_add_button( $buttons ) {
-
-    array_push($buttons, "separator", "go_shortcode_button");
-    return $buttons;
-}
-add_filter( 'mce_buttons', 'go_shortcode_button_add_button', 0);
-
-function go_shortcode_button_register( $plugin_array ) {
-    $is_admin = go_user_is_admin();
-    if($is_admin) {
-        $url = plugin_dir_url(dirname(dirname(dirname(__FILE__))));
-        $url = $url . "js/scripts/go_shortcode_mce.js";
-        $plugin_array['go_shortcode_button'] = $url;
-        return $plugin_array;
-    }
-}
-add_filter( 'mce_external_plugins', 'go_shortcode_button_register' );
-
 
 /**
  * Return to taxonomy page after updating a term
@@ -620,9 +603,19 @@ add_filter( 'mce_external_plugins', 'go_shortcode_button_register' );
 add_filter( 'wp_redirect',
     function( $location ){
         $mytaxonomy = (isset($_POST['taxonomy']) ?  $_POST['taxonomy'] : null);
-        if( $mytaxonomy ){
+        $orig_referer = (isset($_POST['_wp_original_http_referer']) ?  $_POST['_wp_original_http_referer'] : false);
+        parse_str($orig_referer, $output);
+        //$post_type = $output['post_type'];
+        $post_type = (isset($output['post_type']) ?  $output['post_type'] : null);
+        if(empty($post_type)) {
+            $referer = (isset($_POST['_wp_original_http_referer']) ? $_POST['_wp_original_http_referer'] : false);
+            parse_str($referer, $output);
+            $post_type = (isset($output['post_type']) ?  $output['post_type'] : null);
+        }
+        if( !empty($mytaxonomy) && !empty($post_type) ){
+
             //$location = add_query_arg( 'action',   'edit',               $location );
-            $location = '?taxonomy=' . $mytaxonomy;
+            $location = '?taxonomy=' . $mytaxonomy . '&post_type=' . $post_type;
             //$location = add_query_arg( 'tag_ID',   $_inputs['tag_ID'],   $location );
             return $location;
         }
@@ -631,9 +624,6 @@ add_filter( 'wp_redirect',
         return $location;
     }
 );
-
-
-
 
 
 // define the after-<taxonomy>-table callback
@@ -677,38 +667,47 @@ function go_options_menu_content() {
         <div class="go_tools_section">
 
             <div class="go_tools_section">
-                <a href="<?php menu_page_url('go_options'); ?>"><div class="card">
+                <a href="<?php menu_page_url('go_options'); ?>" style="text-decoration: none;"><div class="card">
                     <h2>Set Up Options</h2>
-                    <p>Here you can set your Loot Options, Map and Store Options, User Options, and Appearance</p>
+                        <ul>
+                            <li>Enable game features (loot, maps, store, badges, and groups)</li>
+                            <li>Set Custom Names for Loot and features</li>
+                            <li>Set-up levels</li>
+                            <li>User Options</li>
+                        </ul>
                 </div></a>
             </div>
 
             <div class="go_tools_section">
-                <a href="<?php menu_page_url('go_login_options'); ?>"><div class="card">
+                <a href="<?php menu_page_url('go_login_options'); ?>" style="text-decoration: none;"><div class="card">
                     <h2>Login and Registration</h2>
-                    <p>Here you can set up how students will register and login to your site.</p>
+                        <ul>
+                            <li>Enable limits on registration</li>
+                            <li>Set membership code</li>
+                            <li>Choose what user information to collect on registration and profile pages</li>
+                        </ul>
                 </div></a>
             </div>
             <div class="go_tools_section">
-                <a href="<?php menu_page_url('go_feedback'); ?>"><div class="card">
+                <a href="<?php menu_page_url('go_feedback'); ?>" style="text-decoration: none;"><div class="card">
                     <h2>Canned Feedback</h2>
                     <p>Find yourself leaving the same feedback over and over again? Create a preset and save yourself time.</p>
                 </div></a>
             </div>
             <div class="go_tools_section">
-                <a href="<?php menu_page_url('go_messages'); ?>"><div class="card">
+                <a href="<?php menu_page_url('go_messages'); ?>" style="text-decoration: none;"><div class="card">
                     <h2>Canned Messages</h2>
-                    <p>Messages can be used to reward or provide consequences for behavior.  Set or modify the presets here for common behaviors.</p>
+                    <p>Messages can be used to reward or provide consequences for behavior.  <br><br>Set or modify the presets here for common behaviors.</p>
                 </div></a>
             </div>
             <div class="go_tools_section">
-                <a href="<?php menu_page_url('go_bonus_loot'); ?>"><div class="card">
+                <a href="<?php menu_page_url('go_bonus_loot'); ?>" style="text-decoration: none;"><div class="card">
                     <h2>Bonus Loot Defaults</h2>
-                    <p>Create a default set of bonus loot that you can apply to any <?php echo $task_name; ?>.  Students have a chance to win bonus loot upon completion of a <?php echo $task_name; ?>. </p>
+                    <p>Students have a chance to win bonus loot upon completion of a <?php echo $task_name; ?>. <br><br> Create a default set of bonus loot that you can apply to any <?php echo $task_name; ?>.   </p>
                 </div></a>
             </div>
             <div class="go_tools_section">
-                <a href="<?php menu_page_url('go_appearance'); ?>"><div class="card">
+                <a href="<?php menu_page_url('go_appearance'); ?>" style="text-decoration: none;"><div class="card">
                     <h2>Game On Appearance</h2>
                     <p>Adjust the appearance of game on menus and pages.</p>
                 </div></a>
@@ -717,7 +716,7 @@ function go_options_menu_content() {
             if (!is_gameful()) {
                 ?>
                 <div class="go_tools_section">
-                    <a href="<?php menu_page_url('go_performance'); ?>"><div class="card">
+                    <a href="<?php menu_page_url('go_performance'); ?>" style="text-decoration: none;"><div class="card">
                         <h2>Performance</h2>
                         <p>Rewrite slugs, and image resizing.</p>
                     </div></a>
@@ -753,6 +752,84 @@ function go_options_menu_content() {
 }
 
 
+/*
+if ( ! function_exists( 'cor_remove_personal_options' ) ) {
+
+     //Removes the leftover 'Visual Editor', 'Keyboard Shortcuts' and 'Toolbar' options.
+
+    function cor_remove_personal_options( $subject ) {
+        //$subject = preg_replace( '#<h2>Personal Options</h2>.+?table>#s', '', $subject, 1 );
+        //$subject = preg_replace( '#<h2>About the user</h2>.+?h2>#s', '<h2>', $subject, 1 );
+        //$subject = preg_replace( '#<h2>About Yourself</h2>.+?h2>#s', '<h2>', $subject, 1 );
+        //$subject = preg_replace( '#<tr class="user-display-name-wrap">.+?tr>#s', '', $subject, 1 );
+        //$subject = preg_replace( '#<tr class="user-url-wrap">.+?tr>#s', '', $subject, 1 );
+        //$subject = preg_replace( '#<tr class="user-nickname-wrap">.+?tr>#s', '', $subject, 1 );
+
+        return $subject;
+    }
+
+    function cor_profile_subject_start() {
+        ob_start( 'cor_remove_personal_options' );
+    }
+
+    function cor_profile_subject_end() {
+        ob_end_flush();
+    }
+}*/
+/*
+add_action( 'admin_head-user-edit.php', 'cor_profile_subject_start' );
+add_action( 'admin_footer-user-edit.php', 'cor_profile_subject_end' );
+add_action( 'admin_head-profile.php', 'cor_profile_subject_start' );
+add_action( 'admin_footer-profile.php', 'cor_profile_subject_end' );*/
 
 
 
+function go_update_network_options( $value, $post_id, $field  ) {
+
+    //save as network option in multisite
+    if(is_gameful()) {
+        $option = "options_".$field['name'];
+        update_site_option($option, $value);
+    }
+
+    // do something else to the $post object via the $post_id
+
+    // return
+    return $value;
+
+}
+add_filter('acf/update_value/key=field_5cda44a3285da', 'go_update_network_options', 10, 3);
+add_filter('acf/update_value/key=field_5d16871d14236', 'go_update_network_options', 10, 3);
+add_filter('acf/update_value/key=field_5abc9707c66ea', 'go_update_network_options', 10, 3);
+add_filter('acf/update_value/key=field_5d943730bc96f', 'go_update_network_options', 10, 3);
+add_filter('acf/update_value/key=field_5d9ac4f0599f0', 'go_update_network_options', 10, 3);
+
+/*
+// add_action('user_register', 'set_user_metaboxes');
+add_action('admin_init', 'set_user_metaboxes');
+function set_user_metaboxes($user_id=NULL) {
+
+    // These are the metakeys we will need to update
+    $meta_key['order'] = 'meta-box-order_post';
+    $meta_key['hidden'] = 'metaboxhidden_post';
+
+    // So this can be used without hooking into user_register
+    if ( ! $user_id)
+        $user_id = get_current_user_id();
+
+    // Set the default order if it has not been set yet
+    $cvalue = get_user_meta( $user_id, $meta_key['order'], true);
+        $meta_value = array(
+            'side' => 'submitdiv,formatdiv,categorydiv,postimagediv',
+            'normal' => 'postexcerpt,tagsdiv-post_tag,postcustom,commentstatusdiv,commentsdiv,trackbacksdiv,slugdiv,authordiv,revisionsdiv',
+            'advanced' => '',
+        );
+        update_user_meta( $user_id, $meta_key['order'], $meta_value );
+
+
+    // Set the default hiddens if it has not been set yet
+    $cvalue  = get_user_meta( $user_id, $meta_key['hidden'], true);
+        $meta_value = array('layoutdiv', 'commentstatusdiv','commentsdiv', 'revisionsdiv');
+        update_user_meta( $user_id, $meta_key['hidden'], $meta_value );
+
+}*/

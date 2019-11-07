@@ -30,7 +30,8 @@ function go_users_own_attachments( $wp_query_obj ) {
 }
 
 
-$resize = get_option( 'options_go_images_resize_toggle' );
+$resize = get_site_option( 'options_go_images_resize_toggle' );
+
 if ($resize) {
 
     add_filter('plupload_default_settings', function ($settings) {
@@ -43,4 +44,9 @@ if ($resize) {
         );
         return $settings;
     });
+}
+
+add_filter('gallery_style', 'go_filter_default_gallery');
+function go_filter_default_gallery($style){
+    return $style;
 }

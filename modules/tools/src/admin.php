@@ -31,8 +31,6 @@ function go_add_tools_page_when_game_disabled()
 }
 //add_action( 'admin_menu', 'go_add_tools_page_when_game_disabled');
 
-
-
 //this downloads the xml file
 add_action('init', 'go_download_game_data');
 function go_download_game_data()
@@ -48,9 +46,19 @@ function go_download_game_data()
             die();
         }
     }
+    else if (isset($_GET['go_download_map'])) {
+        $pass = get_option('go_export_password');
+        if($pass == $_GET['password']) {
+            $step = (isset($_GET['step']) ?  $_GET['step'] : 1);
+            $map_id = (isset($_GET['go_download_map']) ?  $_GET['go_download_map'] : null);
+            go_export_wp2_map($step, $map_id);
+            die();
+        }else{
+            echo "Invalid link password. Contact the exporting site for new link.";
+            die();
+        }
+    }
 }
-
-
 
 function go_admin_tools_menu_content() {
     global $go_js_version;
@@ -421,7 +429,7 @@ function go_update_go_to_v5(){
             update_post_meta($post_id, 'go_bonus_stage_blog_options_v5_blog_elements_' . $bonus_element_count . '_uniqueid', $post_id."_v4_bonus_url");
         }
         $key = 'go_post_data_' . $post_id;
-        delete_transient($key);
+        go_delete_transient($key);
     }
     wp_reset_query();
 

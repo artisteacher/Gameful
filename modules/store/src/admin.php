@@ -56,4 +56,16 @@ function go_update_store_html( ) {
     }
 }
 
-?>
+// hide certain meta boxes on the 'YOUR_CUSTOM_POST_TYPE' custom post type
+add_filter('add_meta_boxes', 'hide_meta_boxes_go_store', 99, 3);
+function hide_meta_boxes_go_store() {
+    remove_meta_box('postexcerpt', 'go_store', 'normal');
+    remove_meta_box('trackbacksdiv', 'go_store', 'normal');
+    remove_meta_box('postcustom', 'go_store', 'normal');
+    remove_meta_box('slugdiv', 'go_store', 'normal');
+    remove_meta_box('commentstatusdiv', 'go_store', 'normal');
+    remove_meta_box('commentsdiv', 'go_store', 'normal');
+    remove_meta_box('revisionsdiv', 'go_store', 'normal');
+    remove_meta_box('generate_layout_options_meta_box', 'go_store', 'normal');
+
+}

@@ -15,7 +15,7 @@
  * @param $website_link
  * @param $login
  */
-function go_user_links($user_id, $show_stats_link = false, $show_internal_links = false, $show_blog_link = false, $is_clipboard = false, $website_link = null, $login = null ) {
+function go_user_links($user_id, $show_stats_link = false, $show_internal_links = false, $show_blog_link = false, $is_clipboard = false, $website_link = null, $login = null, $map = null ) {
     //if current user is admin, set all to true
     global $wpdb;
     $is_admin = false;
@@ -23,29 +23,29 @@ function go_user_links($user_id, $show_stats_link = false, $show_internal_links 
         $current_id = get_current_user_id();
         $is_admin = go_user_is_admin($current_id);
         //if this is an admin
-       if ($current_id == $user_id) {//if this is the current user
-           $is_current_user = true;
-        }
+      // if ($current_id == $user_id) {//if this is the current user
+           //$is_current_user = true;
+      //  }
     }
 
     echo" <div class='go_user_links'>";
 
 
 
-    if (($show_stats_link) || $is_clipboard){//show the stats link
+    if (($show_stats_link || $is_clipboard) && is_user_logged_in()){//show the stats link
             echo "<div class='go_user_link_stats go_user_link' uid='{$user_id}'><a href='javascript:void(0);';'><i class='fas fa-chart-area ' aria-hidden='true'></i></a></div>";
     }
 
     //show the map on the clipboard
-    if ($is_clipboard){
+    if ($is_clipboard || ($map & $is_admin & $show_internal_links)){
         echo "<div class='go_user_link go_user_map' name='{$user_id}'><a onclick='go_user_map({$user_id})' href='javascript:void(0);'><i class='fas fa-sitemap' aria-hidden='true'></i></a></div>";
     }
 
     //show profile link to admin unless it is an archive
     if ($show_internal_links && ($is_admin || $is_clipboard)) {
         if($is_clipboard){
-            echo "<div class='go_user_link'><a onclick='go_user_profile_link({$user_id})' href='javascript:void(0);' target='_blank'><i class='fas fa-user' aria-hidden='true'></i></a></div>";
-        }else {
+            echo "<div class='go_user_link'><a onclick='go_user_profile_link({$user_id})' href='javascript:void(0);'><i class='fas fa-user' aria-hidden='true'></i></a></div>";
+        }else if($is_admin) {
             $user_edit_link = get_edit_user_link($user_id);
             echo "<div class='go_user_link'><a href='$user_edit_link' target='_blank'><i class='fas fa-user' aria-hidden='true'></i></a></div>";
         }
@@ -55,13 +55,13 @@ function go_user_links($user_id, $show_stats_link = false, $show_internal_links 
     if ($show_blog_link) {
         $blog_toggle = get_option('options_go_blogs_toggle');
         if ($blog_toggle) {
-            if ($is_clipboard) {
+            /*if ($is_clipboard) {
                 $info_login = $login;
             } else {
                 $user_info = get_userdata($user_id);
                 $info_login = $user_info->user_login;
-            }
-            $user_blog_link = get_site_url(null, '/user/' . $info_login);
+            }*/
+            $user_blog_link = get_site_url(null, '/user/' . $user_id);
             echo " <div class='go_user_link'><a href='$user_blog_link' target='_blank'><span class='dashicons dashicons-admin-post'></span></a></div>";
         }
     }
@@ -75,8 +75,7 @@ function go_user_links($user_id, $show_stats_link = false, $show_internal_links 
 
     //show the website link
     if (is_null($website_link)) {
-        $user_obj = get_userdata($user_id);
-        $website_link = $user_obj->user_url;//user website
+        $website_link = go_get_website($user_id);
     }
     if (!empty($website_link)) {
         echo " <div class='go_user_link'><a href='$website_link' target='_blank'><span class='dashicons dashicons-admin-site'></span></a></div>";

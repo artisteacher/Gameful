@@ -20,23 +20,33 @@
             "esc_html": 0
         },
         {
-            "key": "field_5d16871d14236",
-            "label": "Resize Images",
-            "name": "go_images_resize",
-            "type": "true_false",
-            "instructions": "Resizes all images to HD quality (1920w x 1080h) before uploading to the server. This improves server performance because it works with a smaller original file when resizing for display and can improve user performance on upload particularly on slow connections and mobile devices.",
-            "required": 1,
+            "key": "field_5cda44a3285da",
+            "label": "Minimum password strength",
+            "name": "minimum_password_strength",
+            "type": "select",
+            "instructions": "Set the minimum password strength for registration and password resets  The password checker is not looking for a certain type of character (capital letters, symbols, etc.).  It looks at the overall strength including length and variety.",
+            "required": 0,
             "conditional_logic": 0,
             "wrapper": {
                 "width": "",
                 "class": "",
                 "id": ""
             },
-            "message": "",
-            "default_value": 1,
+            "choices": {
+                "0": "Any",
+                "2": "Weak",
+                "3": "Medium",
+                "4": "Strong"
+            },
+            "default_value": [
+                "strong"
+            ],
+            "allow_null": 0,
+            "multiple": 0,
             "ui": 0,
-            "ui_on_text": "",
-            "ui_off_text": ""
+            "return_format": "value",
+            "ajax": 0,
+            "placeholder": ""
         },
         {
             "key": "field_5abc9707c66ea",
@@ -56,6 +66,60 @@
             "ui": 1,
             "ui_on_text": "On",
             "ui_off_text": "Off"
+        },
+        {
+            "key": "field_5d16871d14236",
+            "label": "Resize Images",
+            "name": "go_images_resize",
+            "type": "true_false",
+            "instructions": "Resizes all images to HD quality (1920w x 1080h) before uploading to the server. This improves server performance because it works with a smaller original file when resizing for display and can improve user performance on upload particularly on slow connections and mobile devices.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 1,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_5d943730bc96f",
+            "label": "Font Awesome Kit",
+            "name": "font_awesome_kit",
+            "type": "url",
+            "instructions": "Visit https:\/\/fontawesome.com to get your free kit url to show icons on this site. \r\n\r\nOnly enter the URL to the JavaScript file.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "https:\/\/kit.fontawesome.com\/############.js"
+        },
+        {
+            "key": "field_5d9ac4f0599f0",
+            "label": "Font Awesome Pro",
+            "name": "font_awesome_is_pro",
+            "type": "true_false",
+            "instructions": "Check this box if you are including a kit for Font Awesome Pro.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
         }
     ],
     "location": [
@@ -75,5 +139,6 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1561757558
+    "recaptcha": 0,
+    "modified": 1573081140
 }

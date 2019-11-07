@@ -98,24 +98,42 @@ END TOOLTIP
 }
 
 .go_stats_bars{
-	width: 220px;
+	max-width: 600px;
+	flex-grow: 2;
+	align-items: center;
+
+	.go_admin_bar_text,
+	.go_stats_gold
+	{
+		font-size: 1.1em;
+		line-height: 31px !important;
+	}
+
+
+}
+
+.go_stats_user_info{
+	h2, h3{
+		margin-bottom: 0px;
+	}
 }
 
 .go_stats_id_card {
 	display: flex;
+	align-items: flex-end;
 }
 .go_stats_gravatar {
 	width: 150px;
 	height: 150px;
-	border: 2px solid #BBB;
+	//border: 2px solid #BBB;
 	position: relative;
-	margin: 0px 10px 0px 20px;
+	margin: 0px 20px 0px 20px;
 }
 
 #go_stats_header .progress-bar-border{
 	height: 30px;
 	width: 100%;
-	max-width: 300px;
+	max-width: 500px;
 	border-color: black;
 	background-color: black;
 	border: solid 1px;
@@ -167,26 +185,29 @@ END TOOLTIP
 	display: flex;
 	flex-wrap: wrap;
 	padding: 10px;
-	max-width: 850px;
+	max-width: 1200px;
 	margin: auto;
 
 }
 
 #go_stats_header{
-	justify-content: space-evenly;
+	justify-content: flex-start;
+	align-items: flex-end;
 
 	.go_stats_gravatar, .go_stats_gravatar img{
-	 height: 100px;
-	 width: 100px;
+	 height: 150px;
+	 width: 150px;
  }
 	.progress-bar-border{
-		height: 20px;
+		height: 30px;
 	}
 
 }
 
 #go_blog_actions{
 	justify-content: space-between;
+	display: flex;
+	align-items: flex-end;
 }
 
 .go_stats_rank h3{
@@ -261,7 +282,7 @@ END TOOLTIP
 }
 
 .go_leaderboard_layer {
-	padding: 10px;
+	//padding: 10px;
 	flex-grow: 1;
 	flex-basis: 0;
 }

@@ -25,14 +25,16 @@ function go_make_reader() {
     }
     echo "<div id='go_wrapper' data-lightbox='{$go_lightbox_switch}' data-maxwidth='{$go_fitvids_maxwidth}' >";
 
-    echo "<div id='loader_container' style='display:none; height: 250px; width: 100%; padding: 10px 30px; '>
+    echo "<div id='loader_container' class='go_loader_container' style='display:none;'>
                 <div id='loader'>
-                <i class='fas fa-spinner fa-pulse fa-4x'></i>
+                    <i class='fas fa-spinner fa-pulse fa-4x'></i>
                 </div>
           </div>
-           <div id='go_posts_wrapper' >";
-                go_reader_get_posts();
+          <div id='go_posts_wrapper' >";
+                go_reader_get_posts(true);
     echo "</div></div>";
+
+    //go_hidden_footer();
     //get_sidebar();
 }
 add_shortcode( 'go_make_reader','go_make_reader' );
@@ -95,13 +97,4 @@ function go_reader_header() {
 
         <?php
 
-
-
-
 }
-
-
-
-
-
-?>

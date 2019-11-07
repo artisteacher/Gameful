@@ -60,14 +60,11 @@
 .edit-tags-php #col-right {
   overflow-x: hidden; }
 
-.go_rewards {
-  background-color: #c9fbc9; }
-
 .go_call_to_action {
   background-color: cornsilk; }
 
 .go_acf_header {
-  background-color: lightblue; }
+  background-color: linen; }
 
 table tbody tr td.go_acf_header {
   top-padding: 10em; }
@@ -87,30 +84,36 @@ table tbody tr td.go_acf_header {
 
 .posts.column-posts,
 .manage-column.column-posts,
+.manage-column.column-hidden_term,
+.hidden_term.column-hidden_term,
 .pod_toggle.column-pod_toggle,
 .manage-column.column-pod_toggle {
   text-align: center;
   flex: none !important;
   display: block;
-  width: auto;
+  width: 60px;
   padding: 0 8px; }
 
 .pod_achievement.column-pod_achievement,
-.manage-column.column-pod_achievement,
-.pod_done_num.column-pod_done_num,
-.manage-column.column-pod_done_num,
-.description.column-description,
-.manage-column.column-description,
-.slug.column-slug,
-.manage-column.column-slug {
+.manage-column.column-pod_achievement {
   text-align: center;
   flex: none !important;
   display: block;
-  width: auto;
+  width: 15% !important;
+  padding: 0 8px; }
+
+.description.column-description,
+.manage-column.column-description {
+  text-align: center;
+  flex: none !important;
+  display: block;
+  width: 25% !important;
   padding: 0 8px; }
 
 .pod_done_num.column-pod_done_num,
-.manage-column.column-pod_done_num {
+.manage-column.column-pod_done_num,
+.slug.column-slug,
+.manage-column.column-slug {
   text-align: center;
   flex: none !important;
   display: block;
@@ -140,6 +143,10 @@ ul .row-actions {
 *
 ********************/
 .wp-has-submenu.toplevel_page_maps_menus .wp-first-item {
+  display: none; }
+
+.term-php .term-parent-wrap,
+.term-php .go_child_term {
   display: none; }
 
 .go-acf-locks .acf-fields.-left > .acf-field:before {
@@ -208,6 +215,10 @@ ul .row-actions {
 
 .go-stages .go-content .acf-label {
   display: none !important; }
+
+.go-stages .acf-accordion {
+  margin: 3px 10px !important;
+  border: solid 1px #dddddd; }
 
 .acf-accordion-title {
   background: lightblue !important; }
@@ -302,3 +313,9 @@ ul .row-actions {
 
 .go_test_field_input_rm_row_button {
   margin-left: -2px !important; }
+
+/*
+ACF Registration Page styles
+ */
+.go_profile_fields .acf-switch {
+  overflow: hidden; }

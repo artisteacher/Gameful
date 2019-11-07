@@ -414,13 +414,13 @@ final class WP_Term_Order {
             go_reset_map_transient($term_id);
 
             $key = 'go_term_data_' . $term_id;
-            delete_transient( $key );
+            go_delete_transient( $key );
 
             $key = 'go_get_parent_map_id_' . $term_id;
-            delete_transient( $key );
+            go_delete_transient( $key );
 
             $key = 'go_get_maps_term_ids';
-            delete_transient( $key );
+            go_delete_transient( $key );
 
         }
 

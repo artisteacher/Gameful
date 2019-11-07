@@ -95,8 +95,8 @@ function go_update_bonus_loot(){
         success: function( res ) {
             console.log("Bonus Loot");
             //console.log(res);
-            jQuery("#go_bonus_loot").remove();
-            jQuery("#go_wrapper").append(res);
+            jQuery("#go_bonus_loot").html(res);
+            //jQuery("#go_wrapper").append(res);
 
         }
     });
@@ -224,9 +224,9 @@ function task_stage_change( target, required_elements = null ) {
 
     //const required_elements = go_get_blog_required_elements();
     console.log("required_elements");
-    //console.log(required_elements);
+    console.log(required_elements);
     const json = JSON.stringify(required_elements );
-   // console.log(json);
+    console.log(json);
 
     jQuery.ajax({
         type: "POST",
@@ -259,7 +259,7 @@ function task_stage_change( target, required_elements = null ) {
             }
         },
         success: function( raw ) {
-            //console.log(raw);
+            console.log(raw);
             var error = go_ajax_error_checker(raw);
             if (error == 'true') return;
 
@@ -638,7 +638,6 @@ function go_quiz_check_answers(status, target) {
         }
     });
 }
-
 
 function go_send_save_quiz_result(target, status, callback ){
     var test_list = jQuery(target).closest(".go_checks_and_buttons").find(" .go_test_container");

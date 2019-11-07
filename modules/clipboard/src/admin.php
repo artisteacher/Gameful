@@ -41,7 +41,7 @@ function go_clipboard_menu() {
             </div>
         </div>
         <?php
-
+        //go_hidden_footer();
     }
 }
 
@@ -49,6 +49,14 @@ function go_clipboard_filters(){
 
     $task_name = ucfirst(get_option( 'options_go_tasks_name_plural'  ));
     $badges_name = ucfirst(get_option('options_go_badges_name_singular'));
+
+    $user_id = get_current_user_id();
+    $unmatched_saved = get_user_meta($user_id, 'unmatched_toggle', true);
+    if($unmatched_saved == 'true' || empty($unmatched_saved)){
+        $unmatched_toggle = 'checked';
+    }else{
+        $unmatched_toggle = '';
+    }
     ?>
     <div id="go_leaderboard_filters" style="display: flex; flex-wrap: wrap ; margin-right:20px;">
         <div style="padding: 0 20px 20px 20px;">
@@ -70,7 +78,7 @@ function go_clipboard_filters(){
 
             <span id="go_store_filters"><br><label for="go_clipboard_store_item_select">Store Items </label><select id="go_store_item_select" class="js-store_data" style="width:250px;"></select></span>
             <span id="go_task_filters"><br><label for="go_clipboard_task_select"><?php echo $task_name; ?> </label><select id="go_task_select" class="js-store_data" style="width:250px;"></select></span>
-            <span id="go_show_unmatched" ><br><label for="go_unmatched_toggle">Show Unmatched Users </label><input id="go_unmatched_toggle" type="checkbox" class="checkbox" name="unmatched"><span class="tooltip" data-tippy-content="Show a minimum of one row per user. This is useful to see who has not done something, in addition to those who have."><span><i class="fa fa-info-circle"></i></span> </span></span>
+            <span id="go_show_unmatched" ><br><label for="go_unmatched_toggle">Show Unmatched Users </label><input id="go_unmatched_toggle" type="checkbox" class="checkbox" name="unmatched" <?php echo $unmatched_toggle; ?> ><span class="tooltip" data-tippy-content="Show a minimum of one row per user. This is useful to see who has not done something, in addition to those who have."><span><i class="fa fa-info-circle"></i></span> </span></span>
         </div>
         <div id="go_leaderboard_update_button" style="padding:20px; align-self: flex-end;">
             <div style="margin-right: 60px;"><button class="go_reset_clipboard dt-button ui-button ui-state-default ui-button-text-only buttons-collection"><span class="ui-button-text">Clear Filters <i class="fa fa-undo" aria-hidden="true"></i></span></button></div>

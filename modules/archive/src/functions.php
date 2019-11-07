@@ -6,7 +6,6 @@
  * Time: 20:32
  */
 
-
 function go_delete_temp_archive($dirPath = false){
     //check_ajax_referer( 'go_clipboard_activity_' . get_current_user_id() );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_delete_temp_archive' ) ) {

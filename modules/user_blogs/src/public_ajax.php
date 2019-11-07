@@ -125,7 +125,7 @@ function go_get_blog_posts($user_id = null, $is_archive = false, $private_archiv
                 foreach ($posts as $post){
                     $post = json_decode(json_encode($post), True);//convert stdclass to array by encoding and decoding
                     $post_id = $post['ID'];
-                    go_blog_post($post_id, null,false, $with_feedback, false, true, null, null, false, $is_archive);
+                    go_blog_post($post_id, null,false, $with_feedback, false, true, null, false, $is_archive);
                     //go_user_feedback_container($post_id);
                 }
                 ?>

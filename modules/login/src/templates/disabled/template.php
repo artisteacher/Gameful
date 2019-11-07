@@ -75,15 +75,9 @@ if($is_gameful) {
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 <div id="page" class="hfeed site">
-
-
     <div id="main" class="wrapper">
 
-
-
 <?php
-
-
 
 echo "<div id ='go_login_center'>";
 

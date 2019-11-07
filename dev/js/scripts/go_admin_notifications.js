@@ -1,10 +1,15 @@
 jQuery( document ).ready( function() {
-    if(typeof go_debug == 'false') {
-        setInterval(go_admin_check_messages, 10000);
-        jQuery(window).focus(function () {
-            go_admin_check_messages();
-        });
+    //this only needs to be run if logged in
+    if(jQuery('body').hasClass('logged-in') || jQuery('body').hasClass('wp-admin')){
+        if(typeof go_debug == 'false') {
+            console.log('booya');
+            setInterval(go_admin_check_messages, 10000);
+            jQuery(window).focus(function () {
+                go_admin_check_messages();
+            });
+        }
     }
+
 });
 
 function go_admin_check_messages(){

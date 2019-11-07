@@ -1,6 +1,7 @@
+//this is needed on every front end page!
 jQuery( document ).ready( function() {
     if(jQuery('#go_user_bar').length) {
-        jQuery("#go_user_bar_inner").fadeIn();
+        //jQuery("#go_user_bar_inner").fadeIn();
 
         var user_bar_width = jQuery('#go_user_bar_inner ').width() + 40;
         var user_bar_width_1 = user_bar_width + 1;
@@ -47,44 +48,11 @@ jQuery( document ).ready( function() {
 
 
         });
-    }
+        jQuery('body').fadeIn(100);
+        //jQuery('body').show();
+    }else {
 
-});
 
-
-/*
-jQuery(window).on('load', function() {
-    var user_bar_width = jQuery('#go_user_bar_inner ').width();
-    var user_bar_width_1 = user_bar_width + 1;
-    //change the media queries if the default wordpress header has a sticky setting
-    var top = jQuery('#main-header').css('top');
-    console.log(top);
-    if (typeof (top) !== 'undefined') {
-        var new_top = '85px !important';
-        console.log(new_top);
-        jQuery('#main-header').css('top', 85);
-        //jQuery('#main-header').css('display', 'none');
-        document.querySelector('style').textContent +=
-            "@media screen and (min-width:" + user_bar_width + "px) { #main-header{top:" + new_top + "px !important;}}";
+        jQuery('body').show();
     }
 });
-
-jQuery( window ).resize(function() {
-    var user_bar_width = jQuery('#go_user_bar_inner ').width();
-    var user_bar_width_1 = user_bar_width + 1;
-    //change the media queries if the default wordpress header has a sticky setting
-    var top = jQuery('#main-header').css('top');
-    console.log(top);
-    if (typeof (top) !== 'undefined') {
-        var new_top = '85px !important';
-        console.log(new_top);
-        jQuery('#main-header').css('top', 85);
-        //jQuery('#main-header').css('display', 'none');
-        document.querySelector('style').textContent +=
-            "@media screen and (min-width:" + user_bar_width + "px) { #main-header{top:" + new_top + "px !important;}}";
-    }
-});
-
-*/
-
-

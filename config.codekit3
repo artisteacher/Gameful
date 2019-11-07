@@ -113,21 +113,13 @@
 		"oAP": "/.idea/watcherTasks.xml",
 		"oF": 1
 		},
-	"/.idea/webServers.xml": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 1,
-		"oAP": "/.idea/webServers.xml",
-		"oF": 1
-		},
 	"/.idea/workspace.xml": {
 		"cB": 0,
 		"ft": 8192,
 		"hM": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "/.idea/workspace.xml",
-		"oF": 0
+		"oF": 1
 		},
 	"/acf-json/group_5a8af2a1334bf.json": {
 		"ft": 524288,
@@ -141,14 +133,6 @@
 		"ft": 524288,
 		"oA": 1,
 		"oAP": "/acf-json/group_5a8b6cf082397-min.json",
-		"oF": 0,
-		"oO": 0,
-		"oS": 1
-		},
-	"/acf-json/group_5a8fb5fbe075d.json": {
-		"ft": 524288,
-		"oA": 1,
-		"oAP": "/acf-json/group_5a8fb5fbe075d-min.json",
 		"oF": 0,
 		"oO": 0,
 		"oS": 1
@@ -539,24 +523,14 @@
 		"oS": 0,
 		"uL": 1
 		},
-	"/dev/css/files/go_tasks-admin-acf-min.css": {
-		"aP": 1,
-		"bl": 0,
-		"ft": 16,
-		"ma": 0,
-		"oA": 0,
-		"oAP": "/dev/css/files/go_tasks-admin-acf-min-min.css",
-		"oF": 0,
-		"oS": 3
-		},
 	"/dev/css/files/go_tasks-admin-acf.css": {
 		"aP": 1,
 		"bl": 0,
 		"ft": 16,
 		"ma": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "/dev/css/files/go_tasks-admin-acf-min.css",
-		"oF": 0,
+		"oF": 1,
 		"oS": 3
 		},
 	"/dev/css/files/go_timer_sass.scss": {
@@ -680,6 +654,16 @@
 		"oF": 0,
 		"oS": 3
 		},
+	"/dev/includes/css/featherlight.gallery.min.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/dev/includes/css/featherlight.gallery.min-min.css",
+		"oF": 0,
+		"oS": 3
+		},
 	"/dev/includes/css/featherlight.min.css": {
 		"aP": 1,
 		"bl": 0,
@@ -762,6 +746,17 @@
 		"mi": 1,
 		"oA": 1,
 		"oAP": "/dev/includes/js/daterangepicker.min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/includes/js/featherlight.gallery.min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/dev/includes/js/featherlight.gallery.min-min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
@@ -1163,14 +1158,6 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/game-on.php",
-		"oF": 0
-		},
-	"/includes.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/includes.php",
 		"oF": 0
 		},
 	"/includes/ABOUT_INCLUDES.txt": {
@@ -1598,22 +1585,6 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"/includes/acf/includes/acf-data-functions.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/includes/acf/includes/acf-data-functions.php",
-		"oF": 0
-		},
-	"/includes/acf/includes/acf-deprecated-functions.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/includes/acf/includes/acf-deprecated-functions.php",
-		"oF": 0
-		},
 	"/includes/acf/includes/acf-field-functions.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -1654,6 +1625,14 @@
 		"oAP": "/includes/acf/includes/acf-hook-functions.php",
 		"oF": 0
 		},
+	"/includes/acf/includes/acf-input-functions.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf/includes/acf-input-functions.php",
+		"oF": 0
+		},
 	"/includes/acf/includes/acf-meta-functions.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -1676,6 +1655,14 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/includes/acf/includes/acf-user-functions.php",
+		"oF": 0
+		},
+	"/includes/acf/includes/acf-utility-functions.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf/includes/acf-utility-functions.php",
 		"oF": 0
 		},
 	"/includes/acf/includes/acf-value-functions.php": {
@@ -1908,14 +1895,6 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/includes/acf/includes/api/api-helpers.php",
-		"oF": 0
-		},
-	"/includes/acf/includes/api/api-input.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/includes/acf/includes/api/api-input.php",
 		"oF": 0
 		},
 	"/includes/acf/includes/api/api-template.php": {
@@ -2764,6 +2743,22 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/includes/acf/lang/acf-fi.po",
+		"oF": 0
+		},
+	"/includes/acf/lang/acf-fr_CA.mo": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf/lang/acf-fr_CA.mo",
+		"oF": 0
+		},
+	"/includes/acf/lang/acf-fr_CA.po": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf/lang/acf-fr_CA.po",
 		"oF": 0
 		},
 	"/includes/acf/lang/acf-fr_FR.mo": {
@@ -4231,6 +4226,177 @@
 		"oT": 1,
 		"q": 100
 		},
+	"/includes/custom-acf-fields/advanced-custom-fields-font-awesome/acf-font-awesome.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/advanced-custom-fields-font-awesome/acf-font-awesome.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/advanced-custom-fields-font-awesome/admin/class-ACFFA-Admin.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/advanced-custom-fields-font-awesome/admin/class-ACFFA-Admin.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/advanced-custom-fields-font-awesome/assets/css/input.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/advanced-custom-fields-font-awesome/assets/css/input-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/includes/custom-acf-fields/advanced-custom-fields-font-awesome/assets/inc/class-ACFFA-Loader-4.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/advanced-custom-fields-font-awesome/assets/inc/class-ACFFA-Loader-4.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/advanced-custom-fields-font-awesome/assets/inc/class-ACFFA-Loader-5.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/advanced-custom-fields-font-awesome/assets/inc/class-ACFFA-Loader-5.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/advanced-custom-fields-font-awesome/assets/inc/multi-select/jquery.multi-select.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/advanced-custom-fields-font-awesome/assets/inc/multi-select/jquery.multi-select-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/custom-acf-fields/advanced-custom-fields-font-awesome/assets/inc/multi-select/LICENSE.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/advanced-custom-fields-font-awesome/assets/inc/multi-select/LICENSE.txt",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/advanced-custom-fields-font-awesome/assets/inc/multi-select/multi-select.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/advanced-custom-fields-font-awesome/assets/inc/multi-select/multi-select-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/includes/custom-acf-fields/advanced-custom-fields-font-awesome/assets/inc/multi-select/switch.png": {
+		"ft": 32768,
+		"iS": 540,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/advanced-custom-fields-font-awesome/assets/inc/multi-select/switch.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/custom-acf-fields/advanced-custom-fields-font-awesome/assets/inc/quicksearch/jquery.quicksearch.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/advanced-custom-fields-font-awesome/assets/inc/quicksearch/jquery.quicksearch-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/custom-acf-fields/advanced-custom-fields-font-awesome/assets/inc/quicksearch/README.markdown": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/advanced-custom-fields-font-awesome/assets/inc/quicksearch/README.markdown",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/advanced-custom-fields-font-awesome/assets/inc/spyc/COPYING": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/advanced-custom-fields-font-awesome/assets/inc/spyc/COPYING",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/advanced-custom-fields-font-awesome/assets/inc/spyc/spyc.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/advanced-custom-fields-font-awesome/assets/inc/spyc/spyc.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/advanced-custom-fields-font-awesome/assets/js/input-v5.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/advanced-custom-fields-font-awesome/assets/js/input-v5-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/custom-acf-fields/advanced-custom-fields-font-awesome/assets/js/settings.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/advanced-custom-fields-font-awesome/assets/js/settings-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/custom-acf-fields/advanced-custom-fields-font-awesome/fields/acf-font-awesome-v5.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/advanced-custom-fields-font-awesome/fields/acf-font-awesome-v5.php",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/advanced-custom-fields-font-awesome/lang/acf-font-awesome.pot": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/advanced-custom-fields-font-awesome/lang/acf-font-awesome.pot",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/advanced-custom-fields-font-awesome/readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/advanced-custom-fields-font-awesome/readme.txt",
+		"oF": 0
+		},
+	"/includes/custom-acf-fields/advanced-custom-fields-font-awesome/uninstall.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/custom-acf-fields/advanced-custom-fields-font-awesome/uninstall.php",
+		"oF": 0
+		},
 	"/includes/custom-acf-fields/wp-acf-unique_id-master/acf-unique_id-v5.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -4290,6 +4456,653 @@
 		"oAP": "/includes/includes.php",
 		"oF": 0
 		},
+	"/includes/summernote/font/summernote.eot": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/summernote/font/summernote.eot",
+		"oF": 0
+		},
+	"/includes/summernote/font/summernote.ttf": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/summernote/font/summernote.ttf",
+		"oF": 0
+		},
+	"/includes/summernote/font/summernote.woff": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/summernote/font/summernote.woff",
+		"oF": 0
+		},
+	"/includes/summernote/lang/summernote-ar-AR.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-ar-AR-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-bg-BG.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-bg-BG-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-ca-ES.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-ca-ES-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-cs-CZ.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-cs-CZ-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-da-DK.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-da-DK-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-de-DE.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-de-DE-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-el-GR.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-el-GR-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-es-ES.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-es-ES-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-es-EU.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-es-EU-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-fa-IR.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-fa-IR-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-fi-FI.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-fi-FI-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-fr-FR.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-fr-FR-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-gl-ES.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-gl-ES-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-he-IL.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-he-IL-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-hr-HR.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-hr-HR-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-hu-HU.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-hu-HU-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-id-ID.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-id-ID-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-it-IT.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-it-IT-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-ja-JP.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-ja-JP-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-ko-KR.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-ko-KR-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-lt-LT.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-lt-LT-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-lt-LV.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-lt-LV-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-mn-MN.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-mn-MN-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-nb-NO.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-nb-NO-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-nl-NL.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-nl-NL-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-pl-PL.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-pl-PL-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-pt-BR.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-pt-BR-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-pt-PT.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-pt-PT-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-ro-RO.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-ro-RO-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-ru-RU.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-ru-RU-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-sk-SK.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-sk-SK-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-sl-SI.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-sl-SI-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-sr-RS-Latin.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-sr-RS-Latin-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-sr-RS.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-sr-RS-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-sv-SE.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-sv-SE-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-ta-IN.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-ta-IN-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-th-TH.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-th-TH-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-tr-TR.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-tr-TR-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-uk-UA.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-uk-UA-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-uz-UZ.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-uz-UZ-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-vi-VN.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-vi-VN-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-zh-CN.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-zh-CN-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/lang/summernote-zh-TW.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/lang/summernote-zh-TW-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/plugin/databasic/summernote-ext-databasic.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/includes/summernote/plugin/databasic/summernote-ext-databasic-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/includes/summernote/plugin/databasic/summernote-ext-databasic.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/plugin/databasic/summernote-ext-databasic-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/plugin/hello/summernote-ext-hello.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/plugin/hello/summernote-ext-hello-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/plugin/specialchars/summernote-ext-specialchars.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/plugin/specialchars/summernote-ext-specialchars-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/summernote-bs4.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/includes/summernote/summernote-bs4-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/includes/summernote/summernote-bs4.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/summernote-bs4-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/summernote-bs4.min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/summernote-bs4.min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/summernote-lite-min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/summernote-lite-min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/summernote-lite.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/includes/summernote/summernote-lite-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/includes/summernote/summernote-lite.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/summernote-lite-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/summernote-lite.min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/summernote-lite.min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/summernote.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/includes/summernote/summernote-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/includes/summernote/summernote.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/summernote-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/summernote/summernote.min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/summernote/summernote.min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"/includes/wp-frontend-media-master/frontend-media.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -4303,7 +5116,7 @@
 		"ft": 8192,
 		"hM": 0,
 		"oA": 0,
-		"oAP": "/includes/wp-frontend-media-master/index.php",
+		"oAP": "/includes/wp-frontend-media-master_go/index.php",
 		"oF": 0
 		},
 	"/includes/wp-frontend-media-master/js/frontend-min.js": {
@@ -4312,7 +5125,7 @@
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "/includes/wp-frontend-media-master/js/frontend-min-min.js",
+		"oAP": "/includes/wp-frontend-media-master_go/js/frontend-min-min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
@@ -4357,7 +5170,7 @@
 		"ft": 8192,
 		"hM": 0,
 		"oA": 0,
-		"oAP": "/includes/wp-frontend-media-master/uninstall.php",
+		"oAP": "/includes/wp-frontend-media-master_go/uninstall.php",
 		"oF": 0
 		},
 	"/js/go_enque_js.php": {
@@ -4444,9 +5257,53 @@
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "/js/scripts/go_acf_admin-min.js",
-		"oF": 2,
+		"oF": 3,
+		"sC": 3,
+		"tS": 0
+		},
+	"/js/scripts/go_admin_comments_mce-min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/js/scripts/go_admin_comments_mce-min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/js/scripts/go_admin_comments_mce.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/js/scripts/go_admin_comments_mce-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/js/scripts/go_font_multisite-min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/js/scripts/go_font_multisite-min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/js/scripts/go_shortcode_mce-min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/js/scripts/go_shortcode_mce-min-min.js",
+		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},
@@ -4455,11 +5312,22 @@
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "/js/scripts/go_shortcode_mce-min.js",
-		"oF": 0,
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
+		},
+	"/media/go_coin_face.png": {
+		"ft": 32768,
+		"iS": 79581,
+		"oA": 0,
+		"oAP": "/media/go_coin_face.png",
+		"oF": 0,
+		"oIPL": 1,
+		"opt": 1,
+		"oT": 1,
+		"q": 100
 		},
 	"/media/images/ajax-loader.gif": {
 		"ft": 4194304,
@@ -4468,6 +5336,16 @@
 		"oAP": "/media/images/ajax-loader.gif",
 		"oF": 0,
 		"opt": 0
+		},
+	"/media/images/spinner-solid.svg": {
+		"ft": 2097152,
+		"miP": 0,
+		"oA": 2,
+		"oAP": "/media/images/spinner-solid.svg",
+		"oF": 0,
+		"opt": 0,
+		"plM": 3758088159,
+		"prP": 0
 		},
 	"/media/map/L1-center.png": {
 		"ft": 32768,
@@ -4963,6 +5841,12 @@
 		"oAP": "/modules/archive/src/ajax.php",
 		"oF": 0
 		},
+	"/modules/archive/src/archive_temp": {
+		"ft": 65536,
+		"oA": 1,
+		"oAP": "/build/modules/archive/src/archive_temp",
+		"oF": 0
+		},
 	"/modules/archive/src/functions.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -5099,12 +5983,12 @@
 		"oAP": "/modules/login/src/templates/disabled/reset_password_template.php",
 		"oF": 0
 		},
-	"/modules/login/src/templates/template.php": {
+	"/modules/login/src/templates/disabled/template.php": {
 		"cB": 0,
 		"ft": 8192,
 		"hM": 0,
 		"oA": 0,
-		"oAP": "/modules/login/src/templates/template.php",
+		"oAP": "/modules/login/src/templates/disabled/template.php",
 		"oF": 0
 		},
 	"/modules/login/src/templates/user.php": {
@@ -5241,14 +6125,6 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/modules/store/src/admin.php",
-		"oF": 0
-		},
-	"/modules/store/src/admin_ajax.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/modules/store/src/admin_ajax.php",
 		"oF": 0
 		},
 	"/modules/store/src/ajax.php": {
@@ -5619,7 +6495,7 @@
 	},
 "projectAttributes": {
 	"creationDate": 536785481,
-	"displayValue": "game-on-v4",
+	"displayValue": "Gameful Pro",
 	"displayValueWasSetByUser": 1,
 	"iconImageName": "meme-yesBaby",
 	"iconImageWasSetByUser": 0

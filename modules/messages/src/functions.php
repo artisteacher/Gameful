@@ -85,10 +85,10 @@ function go_check_messages($response = null , $data = null){
             }
 
             if ($type == 'admin_notification'){
-                go_noty_message_generic('warning', '', $title, '15000');
+                go_noty_message_modal('warning', '', $title);
             }
             else if ( $type == 'reset' && $type = 'reset_stage') {
-                go_noty_message_generic('warning', $title, $message, '');
+                go_noty_message_modal('warning', $title, $message);
                 $sound = go_down_sound();
                 echo $sound;
             }
@@ -199,25 +199,24 @@ function go_check_messages($response = null , $data = null){
 
 
                 if (!empty($xp_reward) || !empty($gold_reward) || !empty($health_reward) || !empty($badge_award) || !empty($group_award)) {
-                    $reward = "<div class='go_messages_loot go_messages_rewards'><h3>Reward:</h3>$xp_reward $gold_reward $health_reward $badge_award $group_award</div>";
-                } else {
-                    $reward = '';
-                }
-
-                if (!empty($xp_penalty) || !empty($gold_penalty) || !empty($health_penalty) || !empty($badge_penalty) || !empty($group_penalty)) {
+                    $loot = "<div class='go_messages_loot go_messages_rewards'><h3>Reward:</h3>$xp_reward $gold_reward $health_reward $badge_award $group_award</div>";
+                    $type = 'success';
+                } else if (!empty($xp_penalty) || !empty($gold_penalty) || !empty($health_penalty) || !empty($badge_penalty) || !empty($group_penalty)){
                     //if (empty($post_id)){
-                    $penalty = "<div class='go_messages_loot go_messages_penalties'><h3>Consequence:</h3>$xp_penalty $gold_penalty $health_penalty $badge_penalty $group_penalty</div>";
+                    $loot = "<div class='go_messages_loot go_messages_penalties'><h3>Consequence:</h3>$xp_penalty $gold_penalty $health_penalty $badge_penalty $group_penalty</div>";
                     //}
                     //else{
                     //    $penalty = "<h4>Additional Penalty:</h4>{$xp_penalty}{$gold_penalty}{$health_penalty}{$badge_penalty}{$group_penalty}";
                     // }
-                } else {
-                    $penalty = '';
+                    $type = 'error';
+                }else{
+                    $loot='';
+                    $type='info';
                 }
 
-                $message = "<div>$message</div><div>$reward<br>$penalty</div>";
+                $message = "<div>$message</div><div>$loot</div>";
 
-                go_noty_message_generic('warning', $title, $message, '');
+                go_noty_message_modal($type, $title, $message);
             }
 
         }
@@ -267,7 +266,3 @@ function go_check_messages($response = null , $data = null){
 }
 add_action( 'wp_footer', 'go_check_messages' );
 add_action('go_after_stage_change', 'go_check_messages');
-
-
-
-?>

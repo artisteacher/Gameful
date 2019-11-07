@@ -1,24 +1,21 @@
-
-
-
-//Resize listener--move to map shortcode/lightbox
-/*
-//Hide and show map on click
-jQuery( document ).ready(function() {
-    go_map_check_if_done();
-});
-
-
-jQuery( window ).resize(function() {
-    go_resizeMap();
-});
-*/
-
 if (typeof (go_is_map) !== 'undefined') {
-    jQuery( document ).ready( function() {
-        go_setup_map();
-    });
+
 }
+
+
+
+jQuery( document ).ready( function() {
+    if(jQuery('#go_map_container').length > 0){
+        jQuery('body').show(function() {
+            // Animation complete.
+            go_setup_map();
+            jQuery('#page').css("width", "100%" ).css('max-width', 'unset');
+            jQuery('#go_map_container').show();
+            jQuery('#sitemap').show();
+            go_resizeMap();
+        });
+    }
+});
 
 function go_setup_map(){
     console.log("go_setup_map");
@@ -44,7 +41,6 @@ function go_setup_map(){
 
 
 }
-
 
 function go_optional_task_toggle(){
     console.log('go_optional_task_toggle');
@@ -96,7 +92,7 @@ function go_show_map(mapid) {
 //
 	document.getElementById("maps").style.display = "none";
 	document.getElementById("loader_container").style.display = "block";
-    var nonce = GO_FRONTEND_DATA.nonces.go_update_last_map;
+    var nonce = GO_EVERY_PAGE_DATA.nonces.go_update_last_map;
     var uid = jQuery('#go_map_user').data("uid");
 	//var map_nonce = jQuery( '#_wpnonce' ).val();
 
@@ -134,49 +130,6 @@ function go_show_map(mapid) {
 	});
 }
 
-//I think this was supposed to check the dropdown to see if the maps were done.
-//It doesn't work
-/*
-function go_map_check_if_done() {
-    go_resizeMap();
-    //declare idArray
-    var idArray = [];
-    //make array of all the maps ids
-    jQuery('.map').each(function () {
-        idArray.push(this.id);
-    });
-    console.log("IDS" + idArray);
-    console.log(idArray.length);
-    //for each map do something
-    var mapNum = 0;
-    for (var i = 0; i < idArray.length; i++){
-        var mapNum = mapNum++;
-        var mapNumID = "#mapLink_" + mapNum;
-        var mapNumClass = "#mapLink_" + mapNum + ' .mapLink';
-        var mapID = "#map_" + mapNum;
-        var countAvail = "#" + idArray[i] + " .available_color";
-        var countDone = "#" + idArray[i] + " .checkmark";
-        var numAvail = jQuery(countAvail).length;
-        var numDone = jQuery(countDone).length;
-        
-     
-        if (numAvail == 0){
-            if (numDone == 0){
-                
-                jQuery(mapNumID).addClass("filtered"); 
-            }
-            else {
-                
-                jQuery(mapNumID).addClass("done");
-                jQuery(mapNumClass).addClass("checkmark");
-            }    
-        }
-    }
-
-    //go_resizeMap();
-  }
-  */
-
 //Resize map function, also runs on window load
 function go_resizeMap() {
  	console.log("resize");
@@ -184,47 +137,51 @@ function go_resizeMap() {
 	var mapNum = jQuery("#maps").data('mapid');
 
     var mapID = "#map_" + mapNum;
-        
-        var taskCount = ((jQuery(mapID + " .primaryNav > li").length)-1);
-        if (taskCount == 0){
-            taskCount = 1;
-        }
-        if (taskCount == Infinity){
-            taskCount = 1;
-        }
-        var taskWidth = (100/taskCount);
-        var minWidth = ((jQuery(mapID).width()) / taskCount);
-      
+
+    var taskCount = ((jQuery(mapID + " .primaryNav > li").length)-1);
+    if (taskCount == 0){
+        taskCount = 1;
+    }
+    if (taskCount == Infinity){
+        taskCount = 1;
+    }
+    var taskWidth = (100/taskCount);
+    var minWidth = ((jQuery(mapID).width()) / taskCount);
+
+    console.log("taskCount: " + taskCount);
+    console.log("minWidth: " + minWidth);
         //set the width of the tasks on the map
         //jQuery(mapID + " .primaryNav li").css("width", taskWidth + "%");
-        
-        if (taskWidth == 100) {
-            jQuery(mapID + ' .primaryNav > li').css("width","90%");  
-            jQuery(mapID + ' .primaryNav li').css("float","right"); 
-            jQuery(mapID + ' .tasks > li').css("width","80%"); 
-            jQuery(mapID + " .primaryNav li").addClass("singleCol");
-            //jQuery(mapID + " .primaryNav li").css("background", "url('../wp-content/plugins/game-on-master/styles/images/map/vertical-line.png') center top no-repeat");
- 
-        }
-        else if (minWidth >= 130){
-            jQuery(mapID + " .primaryNav li").css("float","left"); 
-           
-            jQuery(mapID + " .primaryNav li").css("width", taskWidth + "%");
-            jQuery(mapID + ' .tasks > li').css("width","100%");
-            jQuery(mapID + " .primaryNav li").css("background", "");
- 
-        }
-        else {
-            jQuery(mapID + ' .primaryNav > li').css("width","100%");  
-            jQuery(mapID + ' .primaryNav li').css("float","right"); 
-            jQuery(mapID + ' .tasks > li').css("width","95%"); 
-            //jQuery(mapID + " .primaryNav li").css("background", "url('../wp-content/plugins/game-on-master/styles/images/map/vertical-line.png') center top no-repeat");
- 			jQuery(mapID + " .primaryNav li").addClass("singleCol");
-        }
-        
-			jQuery('#sitemap').css("visibility","visible");  
-   			jQuery('#maps').css("visibility","visible"); 
-        
+
+    if (taskWidth == 100) {
+        jQuery(mapID + ' .primaryNav > li').css("width","90%");
+        jQuery(mapID + ' .primaryNav li').css("float","right");
+        jQuery(mapID + ' .tasks > li').css("width","80%");
+        jQuery(mapID + " .primaryNav li").addClass("singleCol");
+        //jQuery(mapID + " .primaryNav li").css("background", "url('../wp-content/plugins/game-on-master/styles/images/map/vertical-line.png') center top no-repeat");
+
+    }
+    else if (minWidth >= 130){
+        jQuery(mapID + " .primaryNav li").css("float","left");
+
+        jQuery(mapID + " .primaryNav li").css("width", taskWidth + "%");
+        jQuery(mapID + ' .tasks > li').css("width","100%");
+        jQuery(mapID + " .primaryNav li").css("background", "");
+        jQuery(mapID + " .primaryNav li").removeClass("singleCol");
+
+    }
+    else {
+        jQuery(mapID + ' .primaryNav > li').css("width","100%");
+        jQuery(mapID + ' .primaryNav li').css("float","right");
+        jQuery(mapID + ' .tasks > li').css("width","95%");
+        //jQuery(mapID + " .primaryNav li").css("background", "url('../wp-content/plugins/game-on-master/styles/images/map/vertical-line.png') center top no-repeat");
+        jQuery(mapID + " .primaryNav li").addClass("singleCol");
+    }
+
+        jQuery('#sitemap').show();
+        jQuery('#maps').show();
+        go_activate_tippy();
+
 }
 
 /* When the user clicks on the button, 
@@ -234,8 +191,8 @@ function go_map_dropDown() {
 }
 
 function go_user_map(user_id) {
-    console.log("map");
-    var nonce = GO_ADMIN_PAGE_DATA.nonces.go_user_map_ajax;
+    console.log("go_user_map");
+    var nonce = GO_EVERY_PAGE_DATA.nonces.go_user_map_ajax;
     jQuery.ajax({
         type: 'post',
         url: MyAjax.ajaxurl,
@@ -275,3 +232,47 @@ function go_user_map(user_id) {
     });
 
 }
+
+
+//I think this was supposed to check the dropdown to see if the maps were done.
+//It doesn't work
+/*
+function go_map_check_if_done() {
+    go_resizeMap();
+    //declare idArray
+    var idArray = [];
+    //make array of all the maps ids
+    jQuery('.map').each(function () {
+        idArray.push(this.id);
+    });
+    console.log("IDS" + idArray);
+    console.log(idArray.length);
+    //for each map do something
+    var mapNum = 0;
+    for (var i = 0; i < idArray.length; i++){
+        var mapNum = mapNum++;
+        var mapNumID = "#mapLink_" + mapNum;
+        var mapNumClass = "#mapLink_" + mapNum + ' .mapLink';
+        var mapID = "#map_" + mapNum;
+        var countAvail = "#" + idArray[i] + " .available_color";
+        var countDone = "#" + idArray[i] + " .checkmark";
+        var numAvail = jQuery(countAvail).length;
+        var numDone = jQuery(countDone).length;
+
+
+        if (numAvail == 0){
+            if (numDone == 0){
+
+                jQuery(mapNumID).addClass("filtered");
+            }
+            else {
+
+                jQuery(mapNumID).addClass("done");
+                jQuery(mapNumClass).addClass("checkmark");
+            }
+        }
+    }
+
+    //go_resizeMap();
+  }
+  */

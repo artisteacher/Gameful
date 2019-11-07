@@ -38,14 +38,14 @@ if(!is_main_site() || !$is_gameful){
 
 function go_player_bar_v5() {
 
-    echo '<div id="go_user_bar"><div id="go_user_bar_top"><div id="go_user_bar_inner" style="display: none;">';
+    echo '<div id="go_user_bar" style=""><div id="go_user_bar_top"><div id="go_user_bar_inner" >';
 
     //get options for what to show
     $go_home_switch = get_option( 'options_go_home_toggle' );
     $go_search_switch = get_option( 'options_go_search_toggle' );
     $go_map_switch = get_option( 'options_go_locations_map_toggle' );
     $go_store_switch = get_option( 'options_go_store_toggle' );
-    $go_stats_switch = get_option( 'options_go_stats_toggle' );
+    //$go_stats_switch = get_option( 'options_go_stats_toggle' );
     $go_blog_switch = get_option('options_go_blogs_toggle');
     $go_leaderboard_switch = get_option('options_go_stats_leaderboard_toggle');
 
@@ -95,16 +95,16 @@ function go_player_bar_v5() {
         echo '<div class="go_user_bar_icon go_user_bar_home"><a href="'.$go_home_link.'"><i class="fas fa-home ab-icon" aria-hidden="true"></i><br><div class="go_player_bar_text">Home</div></a></div>';
     }
     if (is_user_member_of_blog() || go_user_is_admin()) {
-        if ($go_stats_switch) {
+        //if ($go_stats_switch) {
             //acf_form_head();
             $stats_name = get_option('options_go_stats_name');
             echo '<div class="go_user_bar_icon go_user_bar_stats"><a href="javascript:void(0)"><i class="fas fa-chart-area ab-icon" aria-hidden="true"></i><br><div class="go_player_bar_text">' . $stats_name . '</div><div id="go_stats_page"></div></a><script>  jQuery(".go_user_bar_stats").one("click", function(){ go_stats_lightbox_page_button()}); </script></div>';
-        }
+        //}
 
         if ($go_leaderboard_switch) {
-            $go_leaderboard_name = urlencode(get_option('options_go_stats_leaderboard_name'));
-            $go_leaderboard_link = get_site_url(null, $go_leaderboard_name);
-
+            $go_leaderboard_name = get_option('options_go_stats_leaderboard_name');
+            //$go_leaderboard_link = get_site_url(null, $go_leaderboard_name);
+            $go_leaderboard_link = go_get_link_from_option('options_go_stats_leaderboard_name');
 
             echo "<div class='go_user_bar_icon'><a href='$go_leaderboard_link'><i class='fas fa-trophy ab-icon' aria-hidden='true'></i><br><div class='go_player_bar_text' id='go_leaderboard_page'>$go_leaderboard_name</div></a></div>";
 
@@ -115,9 +115,9 @@ function go_player_bar_v5() {
             //acf_form_head();
             //$stats_name = get_option('options_go_stats_name');
 
-            $user_info = get_userdata($user_id);
-            $userloginname = $user_info->user_login;
-            $user_blog_link = get_site_url(null, '/user/' . $userloginname);
+            //$user_info = get_userdata($user_id);
+            //$userloginname = $user_info->user_login;
+            $user_blog_link = get_site_url(null, '/user/' . $user_id);
 
             echo '<div class="go_user_bar_icon"><a href="'.$user_blog_link.'"><i class="fas fa-thumbtack ab-icon" aria-hidden="true"></i><br><div class="go_player_bar_text">Blog</div></a></div>';
         }
@@ -213,13 +213,13 @@ function go_player_bar_v5() {
 
     }else{//not logged in, show login and no dropdown
         $login_text = 'Login';
-        if(is_gameful()) {
+        /*if(is_gameful()) {
             $blog_id = get_current_blog_id();
             $go_login_link = get_site_url(1, 'login');
             $go_login_link = network_site_url('signin?redirect_to=' . $go_login_link . '?blog_id=' . $blog_id);
-        }else{
-            $go_login_link = wp_login_url('login');
-        }
+        }else{*/
+            $go_login_link = wp_login_url();
+       // }
         //$go_login_link = network_site_url ('signin?redirect_to=https://gameful.me/login?blog_id='.$blog_id);
         echo "<div class='go_user_bar_icon userbar_dropdown'><a href='$go_login_link'><i class='fas fa-user ab-icon' aria-hidden='true'></i><br><div class='go_player_bar_text' id='go_user_link'>$login_text</div></a>";
         //echo "<div class='go_user_bar_icon userbar_dropdown'><div id='go_login_link'><i class='fas fa-user ab-icon' aria-hidden='true'></i><br><div class='go_player_bar_text' id='go_user_link'>$login_text</div></div>";
@@ -295,18 +295,10 @@ function go_stats_leaderboard() {
 
     // prepares tab titles
     $xp_name = get_option("options_go_loot_xp_name");
-    $gold_name = get_option("options_go_loot_gold_name");
-
-    $coins_currency = get_option("options_go_loot_gold_currency");
-    if($coins_currency === 'coins') {
-        $gold_name = get_option("options_go_loot_gold_coin_names_gold_coin_name");
-    }
-
+    $gold_name = go_get_gold_name();
 
     $health_name = get_option("options_go_loot_health_name");
-    $badges_name = get_option('options_go_badges_name_singular') . " Count";
-
-
+    $badges_name = get_option('options_go_badges_name_plural');
 
     $xp_toggle = get_option('options_go_loot_xp_toggle');
     $gold_toggle = get_option('options_go_loot_gold_toggle');
@@ -397,9 +389,3 @@ function go_stats_leaderboard() {
     <?php
 
 }
-
-
-
-
-
-

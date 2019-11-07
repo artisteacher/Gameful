@@ -52,53 +52,24 @@ jQuery( document ).ready( function() {
             go_activate_apply_filters();//datapicker
         });
 
+        jQuery('.summernote').summernote({
+            toolbar: [
+                // [groupName, [list of button]]
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                //['font', ['strikethrough', 'superscript', 'subscript']],
+                ['fontsize', ['fontsize']],
+                // ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                //['height', ['height']]
+                ['insert', ['link']],
+            ]
+        });
     }
 
+    //these buttons can appear on the reader, blog, task, or anywhere else blog posts appear
+    //so run this on every page
     go_reader_activate_buttons();
 
-
-
-        //alert("go_num_posts");
-
-    //END
-
-    //get localstorage data and set fields
-    /*
-
-
-
-
-    var date = localStorage.getItem('go_reader_date')
-    if (date){
-        jQuery('#go_datepicker_clipboard span').html(date)
-    }
-    if (localStorage.getItem('go_reader_unread') == 'true'){
-        jQuery('#go_reader_unread').prop('checked', true);
-    }
-
-    //console.log("Read_var: " + localStorage.getItem('go_reader_read'));
-    if (localStorage.getItem('go_reader_read') == 'true'){
-        jQuery('#go_reader_read').prop('checked', true);
-    }
-
-    if (localStorage.getItem('go_reader_reset') == 'true'){
-        jQuery('#go_reader_reset').prop('checked', true);
-    }
-
-    if (localStorage.getItem('go_reader_trash') == 'true'){
-        jQuery('#go_reader_trash').prop('checked', true);
-    }
-    if (localStorage.getItem('go_reader_order') == 'true'){
-        jQuery('#go_reader_draft').prop('checked', true);
-    }
-
-    if (localStorage.getItem('go_reader_draft') == 'true'){
-        jQuery('#go_reader_draft').prop('checked', true);
-    }
-    */
-
-
-    //go_reader_update(true);
 
 });
 
@@ -238,15 +209,20 @@ function go_reader_update() {
     var trash = jQuery('#go_reader_trash').prop('checked');
     var draft = jQuery('#go_reader_draft').prop('checked');
     var order = jQuery("input[name='go_reader_order']:checked").val();
-    var limit = jQuery('#go_posts_num').val();
-    //console.log("unread:" + unread);
+    var limit = jQuery('#go_num_posts').val();
+
+
+
+    //var limit = 25;
+
+    console.log("limit:" + limit);
 
     var nonce = GO_FRONTEND_DATA.nonces.go_filter_reader;
     //console.log("refresh" + nonce);
     //console.log("stats");
     jQuery.ajax({
         url: MyAjax.ajaxurl,
-        type: 'post',
+        type: 'GET',
         data: {
             _ajax_nonce: nonce,
             action: 'go_filter_reader',
@@ -290,7 +266,7 @@ function go_reader_update() {
                 });
 
 
-
+                go_Vids_Fit_and_Box("body");
                 //document.getElementById("loader_container").style.display = "none";
 
 
@@ -343,7 +319,7 @@ function go_reader_activate_buttons(){
         go_blog_trash(this);
     });
 
-    jQuery(".go_reset_task_clipboard").off().one("click", function(){
+    jQuery(".go_reset_task_stage_blog").off().one("click", function(){
         go_messages_opener( this.getAttribute('data-uid'), this.getAttribute('data-task'), 'reset_stage', this );
     });
 
@@ -392,6 +368,8 @@ function go_reader_activate_buttons(){
     });
 
     jQuery('.feedback_accordion').show('slow');
+
+    go_stats_links();
 }
 
 function go_num_posts(){
@@ -408,7 +386,7 @@ function go_num_posts(){
 
     jQuery.ajax({
         url: MyAjax.ajaxurl,
-        type: 'post',
+        type: 'GET',
         data: {
             _ajax_nonce: nonce,
             action: 'go_num_posts',
@@ -450,6 +428,7 @@ function go_num_posts(){
                 //document.getElementById("loader_container").style.display = "none";
 
             }
+
         }
     });
 
@@ -603,7 +582,8 @@ function go_feedback_canned(target){
 
     jQuery(target).closest('.go_feedback_form').find('.go_title_input').val(title);
     //jQuery(target).closest('.go_feedback_form').find('.go_message_input').html($message);
-    jQuery(target).closest('.go_feedback_form').find('.go_message_input').val(message);
+    jQuery(target).closest('.go_feedback_form').find('.go_message_input').val(message);//the val of th text area
+    jQuery(target).closest('.go_feedback_form').find('.note-editable').html(message);//the display in the WYSIWYG
 
 
 
@@ -639,9 +619,8 @@ function go_send_feedback(target) {
     console.log('go_send_feedback');
     console.log(target);
     var title = jQuery(target).closest('.go_feedback_input').find('.go_title_input').val();
-    //title = go_stripslashes(title);
+
     var message = jQuery(target).closest('.go_feedback_input').find('.go_message_input').val();
-    //message = go_stripslashes(message);
     // var radio =  jQuery('input[type=radio][name=loot_option]').val();
     var radio = jQuery(target).closest('.go_feedback_input').find('input[name=loot_option]:checked').val();
     var toggle_assign = (jQuery(target).closest('.go_feedback_input').find('.go_messages_toggle_input').siblings().hasClass("-on")) ? 1 : 0;
@@ -703,6 +682,8 @@ function go_send_feedback(target) {
            ;console.log(response.json_status);
             if ( 302 === Number.parseInt( response.json_status ) ) {
                 console.log (302);
+                jQuery(target).closest('.go_blog_post_wrapper').find('.fa-eye-slash').hide();
+                jQuery(target).closest('.go_blog_post_wrapper').find('.fa-eye').show();
                 let table = response.table;
                 let form = response.form;
                 console.log(toggle_percent);
@@ -727,17 +708,36 @@ function go_send_feedback(target) {
                     jQuery('.feedback_accordion').accordion("refresh");
                     jQuery(target).closest('.feedback_accordion').find('.go_feedback_table_container').html(table);
                 }
-                jQuery(target).closest('.go_feedback_form_container').html(form);
+                jQuery(target).closest('.go_feedback_form_container').html(form).find('.summernote').summernote({
+                    toolbar: [
+                        // [groupName, [list of button]]
+                        ['style', ['bold', 'italic', 'underline', 'clear']],
+                        //['font', ['strikethrough', 'superscript', 'subscript']],
+                        ['fontsize', ['fontsize']],
+                        // ['color', ['color']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        //['height', ['height']]
+                        ['insert', ['link']],
+                    ]
+                });
+
+
                 go_reader_activate_buttons();
             }
+
+
+
             // show success or error message
             console.log("send successful2");
-
+            console.log(target);
             Swal.fire(//sw2 OK
-                'Success!',
-                '',
-                'success'
+                {
+                    type: 'success',
+                    showConfirmButton: false,
+                    timer: 1500
+                }
             );
+
 
 
         }

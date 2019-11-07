@@ -154,11 +154,30 @@
             "endpoint": 0
         },
         {
+            "key": "field_5dab3daa1d0e6",
+            "label": "Google Only Log In and Registration",
+            "name": "google-only",
+            "type": "true_false",
+            "instructions": "Hide the user name and password fields on the sign in screen.  Useful if you are only using Google sign in. If you have an account that needs the log in form they can still login on the Gameful.me site.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui": 1,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
             "key": "field_5d1a5479aac67",
-            "label": "Allow Joining of Site",
+            "label": "Allow New Registrations",
             "name": "allow_registration",
             "type": "true_false",
-            "instructions": "Users can be added manually on the user management page. If registration is set to 'Allow', users will be able to register on the front end. For security purposes, you can set a code that users must have to register or limit to particular domains.",
+            "instructions": "If registration is set to 'Allow', users will be able to register on the front end. You have a choice of options for how students join the site including auto registration with Google, membership codes, and limiting registration to certain domains.\r\n<br><br>Users can also be added manually. They will receive an email that allows them to join the site.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -173,12 +192,12 @@
             "ui_off_text": "None"
         },
         {
-            "key": "field_5d1ad7142a3ab",
-            "label": "Membership Code",
-            "name": "registration_code",
-            "type": "group",
-            "instructions": "",
-            "required": 0,
+            "key": "field_5dab339b24a7e",
+            "label": "Security Options",
+            "name": "security",
+            "type": "checkbox",
+            "instructions": "You must use at least one of the following options to secure your registration.  This will limit bots and malicious sign-ups.",
+            "required": 1,
             "conditional_logic": [
                 [
                     {
@@ -193,27 +212,45 @@
                 "class": "",
                 "id": ""
             },
+            "choices": {
+                "domains": "Limit Domains",
+                "code": "Membership Code"
+            },
+            "allow_custom": 0,
+            "default_value": [],
+            "layout": "horizontal",
+            "toggle": 0,
+            "return_format": "value",
+            "save_custom": 0
+        },
+        {
+            "key": "field_5d1ad7142a3ab",
+            "label": "Membership Code",
+            "name": "registration_code",
+            "type": "group",
+            "instructions": "Add a code that is needed to join your site.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5d1a5479aac67",
+                        "operator": "==",
+                        "value": "1"
+                    },
+                    {
+                        "field": "field_5dab339b24a7e",
+                        "operator": "==",
+                        "value": "code"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "layout": "block",
             "sub_fields": [
-                {
-                    "key": "field_5cda000434383",
-                    "label": "",
-                    "name": "toggle",
-                    "type": "true_false",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "message": "",
-                    "default_value": 1,
-                    "ui": 1,
-                    "ui_on_text": "",
-                    "ui_off_text": ""
-                },
                 {
                     "key": "field_5cd8b34685248",
                     "label": "Code",
@@ -248,7 +285,7 @@
             "label": "Limit Domains",
             "name": "limit_domains",
             "type": "group",
-            "instructions": "",
+            "instructions": "Limit registrations to your users with an email in your school's domain(s).  This is great if using Google Apps for Education.",
             "required": 0,
             "conditional_logic": [
                 [
@@ -256,6 +293,11 @@
                         "field": "field_5d1a5479aac67",
                         "operator": "==",
                         "value": "1"
+                    },
+                    {
+                        "field": "field_5dab339b24a7e",
+                        "operator": "==",
+                        "value": "domains"
                     }
                 ]
             ],
@@ -266,25 +308,6 @@
             },
             "layout": "block",
             "sub_fields": [
-                {
-                    "key": "field_5d1adac53770e",
-                    "label": "",
-                    "name": "toggle",
-                    "type": "true_false",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "message": "",
-                    "default_value": 1,
-                    "ui": 1,
-                    "ui_on_text": "",
-                    "ui_off_text": ""
-                },
                 {
                     "key": "field_5d1e909ac15db",
                     "label": "Domains",
@@ -326,7 +349,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "",
+                            "placeholder": "your_domain.com",
                             "prepend": "",
                             "append": "",
                             "maxlength": ""
@@ -336,38 +359,11 @@
             ]
         },
         {
-            "key": "field_5d1adb1837710",
-            "label": "Use reCaptcha",
-            "name": "use_recaptcha",
-            "type": "true_false",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_5d1a5479aac67",
-                        "operator": "==",
-                        "value": "1"
-                    }
-                ]
-            ],
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "message": "",
-            "default_value": 0,
-            "ui": 1,
-            "ui_on_text": "",
-            "ui_off_text": ""
-        },
-        {
             "key": "field_5d1a54dcd738a",
             "label": "Fields on Register Page",
             "name": "register_fields",
             "type": "group",
-            "instructions": "",
+            "instructions": "Registration will always require a name, email, login name, and game display name.  You can add additional fields to the registration form here.\r\n\r\nIf Google sign-ups are allowed, this information is collected after they first sign in with Google.",
             "required": 0,
             "conditional_logic": [
                 [
@@ -380,47 +376,11 @@
             ],
             "wrapper": {
                 "width": "",
-                "class": "",
+                "class": "go_profile_fields",
                 "id": ""
             },
-            "layout": "block",
+            "layout": "table",
             "sub_fields": [
-                {
-                    "key": "field_5d210a917ded6",
-                    "label": "Display Name",
-                    "name": "display_name",
-                    "type": "group",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "layout": "block",
-                    "sub_fields": [
-                        {
-                            "key": "field_5d210a917ded7",
-                            "label": "Show",
-                            "name": "toggle",
-                            "type": "true_false",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "message": "",
-                            "default_value": 0,
-                            "ui": 1,
-                            "ui_on_text": "",
-                            "ui_off_text": ""
-                        }
-                    ]
-                },
                 {
                     "key": "field_5d1a61a64732e",
                     "label": "Avatar",
@@ -729,10 +689,10 @@
             "conditional_logic": 0,
             "wrapper": {
                 "width": "",
-                "class": "",
+                "class": "go_profile_fields",
                 "id": ""
             },
-            "layout": "block",
+            "layout": "table",
             "sub_fields": [
                 {
                     "key": "field_5d1babd966f8d",
@@ -747,7 +707,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "layout": "row",
+                    "layout": "block",
                     "sub_fields": [
                         {
                             "key": "field_5d1babd966f8e",
@@ -783,7 +743,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "layout": "row",
+                    "layout": "block",
                     "sub_fields": [
                         {
                             "key": "field_5d1ba6762da07",
@@ -819,7 +779,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "layout": "row",
+                    "layout": "block",
                     "sub_fields": [
                         {
                             "key": "field_5d1ba6932da0a",
@@ -855,7 +815,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "layout": "row",
+                    "layout": "block",
                     "sub_fields": [
                         {
                             "key": "field_5d1ba69b2da0d",
@@ -891,7 +851,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "layout": "row",
+                    "layout": "block",
                     "sub_fields": [
                         {
                             "key": "field_5d1babbe66f8b",
@@ -954,7 +914,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "layout": "row",
+                    "layout": "block",
                     "sub_fields": [
                         {
                             "key": "field_5d1ad85b2a3b8",
@@ -1017,7 +977,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "layout": "row",
+                    "layout": "block",
                     "sub_fields": [
                         {
                             "key": "field_5d1ad85b2a3af",
@@ -1107,7 +1067,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "layout": "row",
+                    "layout": "block",
                     "sub_fields": [
                         {
                             "key": "field_5d1ad85b2a3b2",
@@ -1178,5 +1138,5 @@
     "active": 1,
     "description": "",
     "recaptcha": 0,
-    "modified": 1563234370
+    "modified": 1571526097
 }

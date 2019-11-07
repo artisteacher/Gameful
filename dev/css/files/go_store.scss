@@ -1,21 +1,57 @@
 .featherlight.store .featherlight-content {
     min-width: 70%;
 }
+
+#store {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center ;
+
+    ul {
+        margin: 0px !important;
+    }
+}
+
+#go_store_container h1 {
+    text-align: center !important;
+    padding: unset;
+
+
+}
+
+#go_store_container .go_clone_icon{
+    display: none;
+}
+
+#go_store_container.clone .go_clone_icon{
+    display: block;
+}
 /*
 store categories styles
  */
+.store_row_container {
+    margin: 10px;
+    background-color: white;
 
+    background-color: #f8f8f8;
+
+
+    h2 {
+        margin: 10px 0  0 10px;
+    }
+}
 .store_row {
 display: flex;
 flex-wrap: wrap;
     }
     
 .store_cats {
-	//width: 300px;
-    float: left;
+	width: 250px;
+    //float: left;
     padding: 10px 30px;
     margin: 10px;
-    background-color: #f8f8f8;
+    background-color: white;
     }
 
 .store_items li{

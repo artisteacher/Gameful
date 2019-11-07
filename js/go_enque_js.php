@@ -6,6 +6,12 @@
 
 add_action( 'wp_enqueue_scripts', 'go_scripts' );
 function go_scripts () {
+
+    if(is_gameful() && is_main_site() && !is_user_logged_in()  && is_front_page()){
+        return;
+    }
+
+
     global $go_js_version;
     wp_register_script( 'go_wp_media', get_site_url(null, 'wp-admin/css/media.css'), null, $go_js_version );
 
@@ -94,6 +100,8 @@ function go_scripts () {
                 'go_num_posts'                  => wp_create_nonce('go_num_posts'),
                 'go_buy_item'                   => wp_create_nonce( 'go_buy_item' ),
                 'go_get_purchase_count'         => wp_create_nonce( 'go_get_purchase_count' ),
+                'go_change_avatar'              => wp_create_nonce( 'go_change_avatar' ),
+                'go_importer'                   => wp_create_nonce( 'go_importer' ),
             ),
             'go_is_admin'                   => $is_admin,
             'userID'	=>  $user_id
@@ -109,6 +117,27 @@ function go_scripts () {
             array(true)
         );
     }
+
+    $reader_url = 'reader';
+    if ($page_uri === $reader_url) {
+        wp_localize_script(
+            'go_frontend',
+            'go_is_reader_or_blog',
+            array(true)
+        );
+    }
+
+
+    $blog_url = get_query_var('query_type');
+    if ('user_blog' === $blog_url) {
+        wp_localize_script(
+            'go_frontend',
+            'go_is_reader_or_blog',
+            array(true)
+        );
+    }
+
+
 
     $page_uri = go_get_page_uri();
     $store_url = get_option('options_go_store_store_link');

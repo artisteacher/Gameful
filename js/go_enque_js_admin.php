@@ -4,6 +4,10 @@ function go_admin_scripts ($hook) {
     global $post;
     global $go_js_version;
 
+
+    if(is_gameful() && is_main_site() && !is_user_logged_in()  && is_front_page()){
+        return;
+    }
     /*
      * Registering Scripts For Admin Pages
      */
@@ -16,11 +20,14 @@ function go_admin_scripts ($hook) {
 
     wp_register_script( 'go_admin_user', plugin_dir_url( __FILE__ ).'min/go_admin_user-min.js', array( 'jquery' ), $go_js_version, true);
 
-    wp_register_script( 'go_all_pages_js', plugin_dir_url( __FILE__ ).'min/go_all-min.js', array('jquery'), $go_js_version, true);
-    wp_enqueue_script( 'go_all_pages_js' );
-
     wp_register_script( 'go_combined_js_depend', plugin_dir_url( __FILE__ ).'min/go_combine_dependencies-min.js', array( 'jquery' ), $go_js_version, true);
     wp_enqueue_script( 'go_combined_js_depend' );
+
+
+    wp_register_script( 'go_all_pages_js', plugin_dir_url( __FILE__ ).'min/go_all-min.js', array('jquery', 'go_combined_js_depend'), $go_js_version, true);
+    wp_enqueue_script( 'go_all_pages_js' );
+
+
 
     //this one doesn't minify for some reason
     //wp_register_script( 'go_admin-tools', plugin_dir_url( __FILE__ ).'scripts/go_tools.js', array( 'jquery' ), $go_js_version, true);
@@ -64,7 +71,6 @@ function go_admin_scripts ($hook) {
         'GO_ADMIN_PAGE_DATA',
         array(
             'nonces' => array(
-                'go_user_map_ajax'              => wp_create_nonce('go_user_map_ajax'),//on the clipboard
                 'go_reset_all_users'			=> wp_create_nonce( 'go_reset_all_users'),//could be just on tools
                 'go_flush_all_permalinks'			=> wp_create_nonce( 'go_flush_all_permalinks'),//could be just on tools
                 'go_disable_game_on_this_site'  => wp_create_nonce( 'go_disable_game_on_this_site' )
@@ -122,6 +128,19 @@ function go_admin_scripts ($hook) {
                 )
             );
 
+            //this is needed on backend because blog posts show to admin when viewing maps from the clipboard
+            wp_localize_script(
+                'go_admin_user',
+                'GO_FRONTEND_DATA',
+                array(
+                    'nonces' => array(
+                        'go_blog_opener'                => wp_create_nonce('go_blog_opener'),//this is the form, needed all over the place on front end
+                        'go_blog_submit'                => wp_create_nonce('go_blog_submit'),
+                        'go_blog_trash'                 => wp_create_nonce('go_blog_trash'),//on reader, blog, tasks
+                    )
+                )
+            );
+
 
             wp_localize_script(
                 'go_admin_user',
@@ -145,11 +164,19 @@ function go_admin_scripts ($hook) {
             }
         }
         if ( $hook == 'edit.php' ) {
-            if ( 'tasks' === $_GET['post_type']) {
+            $post_type = $badge_ids = (isset($_GET['post_type']) ?  $_GET['post_type'] : null);
+            if ( 'tasks' === $post_type) {
                 //wp_enqueue_script('go_edit_store');
                 //$id = get_the_ID();
                // $store_name = get_option( 'options_go_store_name');
                 wp_localize_script( 'go_admin_user', 'GO_TASK_LIST', array('is_task_list' => true));
+            }
+        }
+
+        if($hook == 'term.php'){
+            if($_GET['taxonomy'] === 'task_chains'){
+                $map_link =go_get_link_from_option('options_go_locations_map_map_link');
+                wp_localize_script( 'go_admin_user', 'map_url', $map_link );
             }
         }
     }
@@ -161,6 +188,22 @@ function go_admin_scripts ($hook) {
             'go_is_tools',
             array(true)
         );
+    }
+
+    if ($hook === 'edit-tags.php' || $hook === 'term.php') {
+        $badge_name = strtoupper(get_option('options_go_badges_name_singular'));
+        wp_localize_script(
+            'go_admin_user',
+            'go_badge_name',
+            $badge_name
+        );
+
+        $group_name = strtoupper(get_option('options_go_groups_name_singular'));
+        wp_localize_script(
+            'go_admin_user',
+            'go_group_name',
+            $group_name
+    );
     }
 
 

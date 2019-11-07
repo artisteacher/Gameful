@@ -1,5 +1,5 @@
 <?php
-
+/*
 //Redirect to homepage after logout and remove cookies
 //add_action('wp_logout','auto_redirect_after_logout');
 function auto_redirect_after_logout($k){
@@ -30,8 +30,7 @@ function auto_redirect_after_logout($k){
         //wp_redirect( home_url() );
         exit();
     }
-}
-
+}*/
 
 //remove dashboard
 //add_action( 'admin_menu', 'Wps_remove_tools', 99 );
@@ -41,27 +40,34 @@ function Wps_remove_tools(){
 	}
 }
 
+
+add_filter( 'show_admin_bar', 'go_display_admin_bar' );
 function go_display_admin_bar() {
     $is_admin = go_user_is_admin();
     $is_gameful = is_gameful();
     //$blog_id = get_current_blog_id();
     $is_logged_in = is_user_logged_in();
+
     $show = false;
 	if($is_admin || ($is_gameful && $is_logged_in)){
-        if (current_user_can( 'edit_posts')){
+        if (current_user_can( 'delete_posts')){
             $show =  true;
-        }else {
+        }else if(is_main_site()){
+            $show =  true;
+        }
+        else {
             $user_id = get_current_user_id();
-            $blogs = get_blogs_of_user($user_id);
-            if(count($blogs) > 1){
+            $blogs = count(get_blogs_of_user($user_id));
+            if($blogs > 1){
                 $show = true;
             }
         }
-
+//
     }
+
 	return $show;
 }
-add_filter( 'show_admin_bar', 'go_display_admin_bar' );
+
 
 
 /**
@@ -98,6 +104,34 @@ function go_admin_bar_v5() {
             );
         }*/
 
+        $user_id = get_current_user_id();
+        $blogs = get_blogs_of_user($user_id);
+        foreach($blogs as $blog){
+            $blog_id = $blog->userblog_id;
+            if(is_gameful()) {
+                switch_to_blog($blog_id);
+                if (!current_user_can('delete_posts')) {
+                    $wp_admin_bar->remove_node('blog-' . $blog_id . '-v');
+                    $wp_admin_bar->remove_node('blog-' . $blog_id . '-d');
+                } else {
+                    $sub_title = get_bloginfo('name');
+                    $url = home_url();
+                    $wp_admin_bar->remove_node('blog-' . $blog_id);
+
+                    $wp_admin_bar->add_menu(array(
+                        'parent' => 'my-sites-list',
+                        'id' => 'blog-' . $blog_id,
+                        'title' => $sub_title,
+                        'href' => $url,
+                    ));
+                }
+
+                restore_current_blog();
+            }
+
+        }
+
+
         $wp_admin_bar->remove_node('new-tasks');
         $wp_admin_bar->remove_node('new-go_store');
 
@@ -108,7 +142,15 @@ function go_admin_bar_v5() {
             $wp_admin_bar->remove_node('my-account');
             $wp_admin_bar->remove_node('search');
             $wp_admin_bar->remove_node('search');
-
+            $logout_url = wp_logout_url( get_home_url() );
+            $wp_admin_bar->add_node(
+                array(
+                    'id' => 'go_logout',
+                    'title' => 'Log Out',
+                    'href' => $logout_url,
+                    'parent' => 'top-secondary',
+                )
+            );
         }
 
         //remove the comments and new post from the "My Sites"
@@ -385,50 +427,55 @@ function go_admin_bar_v5() {
 
         //VIEW TYPE ON QUESTS
         if (is_user_member_of_blog() || go_user_is_admin()) {
+
            // $wp_admin_bar->remove_menu('wp-logo');
             /**
              * If is admin, show the dropdown for view type
              */
             if ($is_admin) {
-                $post_type = get_post_type();
-                $admin_view = get_user_option('go_admin_view', $user_id);
-                if (!empty ($admin_view)) {
-                    if ($admin_view == 'all') {
-                        $all_selected = 'selected = "selected"';
-                    } else {
-                        $all_selected = null;
-                    }
-                    if ($admin_view == 'player') {
-                        $player_selected = 'selected = "selected"';
-                    } else {
-                        $player_selected = null;
-                    }
-                    if ($admin_view == 'user') {
-                        $user_selected = 'selected = "selected"';
-                    } else {
-                        $user_selected = null;
-                    }
-                    if ($admin_view == 'guest') {
-                        $guest_selected = 'selected = "selected"';
-                    } else {
-                        $guest_selected = null;
-                    }
-
-                } else {
+                //$post_type = get_post_type();
+               // if ($post_type == 'tasks' && !is_admin()) {
+                if (!is_admin()) {
+                    $admin_view = get_user_option('go_admin_view', $user_id);
                     $all_selected = null;
                     $player_selected = null;
                     $user_selected = null;
                     $guest_selected = null;
-                }
-                $content = '<form>
-                            View: <select id="go_select_admin_view" onchange="go_update_admin_view(this.value)">
-                                <option value="user" ' . $user_selected . '>Player Mode: Locks On</option>
-                                <option value="player" ' . $player_selected . '>Admin Mode: No Locks</option>
-                                <option value="all" ' . $all_selected . ' >All Stages</option>
-                                <option value="guest" ' . $guest_selected . '>Guest</option>
-                            </select>
-                        </form>';
-                if ($post_type == 'tasks' && !is_admin()) {
+                    $clone_selected = null;
+                    if (!empty ($admin_view)) {
+                        if ($admin_view == 'all') {
+                            $all_selected = 'selected = "selected"';
+                        }
+                        else if ($admin_view == 'player') {
+                            $player_selected = 'selected = "selected"';
+                        }
+                        else if ($admin_view == 'user') {
+                            $user_selected = 'selected = "selected"';
+                        }
+                        else if ($admin_view == 'guest') {
+                            $guest_selected = 'selected = "selected"';
+                        }
+                        else if ($admin_view == 'clone') {
+                            $clone_selected = 'selected = "selected"';
+                        }
+
+                    } else {
+                        $all_selected = null;
+                        $player_selected = null;
+                        $user_selected = null;
+                        $guest_selected = null;
+                    }
+//
+                    $content = '<form>
+                                View: <select id="go_select_admin_view" onchange="go_update_admin_view(this.value)">
+                                    <option value="user" ' . $user_selected . '>Player Mode: Locks On</option>
+                                    <option value="player" ' . $player_selected . '>Admin Mode: No Locks</option>
+                                    <option value="all" ' . $all_selected . ' >All Stages</option>
+                                    <option value="guest" ' . $guest_selected . '>Guest</option>
+                                    <option value="clone" ' . $clone_selected . '>Clone</option>
+                                </select>
+                            </form>';
+
                     $wp_admin_bar->add_menu(array('id' => 'go_admin_view_form', 'parent' => 'top-secondary', 'title' => $content));
                 }
             }
@@ -454,11 +501,13 @@ function go_admin_bar_v5() {
             $go_map_switch = get_option( 'options_go_locations_map_toggle' );
             $go_store_switch = get_option( 'options_go_store_toggle' );
             if ($go_map_switch) {
+                /*
                 $map_url = get_option('options_go_locations_map_map_link');
                 $go_map_link = (string)$map_url;
                 //$go_map_link = get_permalink(get_page_by_path($go_map_link));
                 $go_map_link = get_site_url(null, $go_map_link);
-                $name = get_option('options_go_locations_map_name');
+                $name = get_option('options_go_locations_map_name');*/
+                $go_map_link = go_get_link_from_option('options_go_locations_map_map_link');
                 $wp_admin_bar->add_node(
                     array(
                         'id' => 'go_map',
@@ -470,10 +519,13 @@ function go_admin_bar_v5() {
             };
 
             if ($go_store_switch) {
+                /*
                 $go_store_link = get_option('options_go_store_store_link');
                 //$go_store_link = get_permalink(get_page_by_path($go_store_link));
                 $go_store_link = get_site_url(null, $go_store_link);
                 $name = get_option('options_go_store_name');
+*/
+                $go_store_link = go_get_link_from_option('options_go_store_store_link');
                 $wp_admin_bar->add_node(
                     array(
                         'id' => 'go_store',

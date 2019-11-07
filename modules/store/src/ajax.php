@@ -24,7 +24,7 @@ function go_buy_item() {
                 layout: 'topRight',
                 text: 'Error: You must be logged in to use the store.',
                 visibilityControl: true,
-                theme: 'relax'
+                theme: 'sunset'
                 }).show();parent.window.$.featherlight.current().close();</script>";
         die();
     }
@@ -35,13 +35,16 @@ function go_buy_item() {
 
     $purchase_count = go_get_purchase_count($post_id, $user_id, $custom_fields);
     $purchase_limit = go_get_purchase_limit($post_id, $user_id, $custom_fields, $purchase_count);
+    if (!is_int($purchase_limit)){
+        $purchase_limit = 0;
+    }
     $qty = ( ! empty( $_POST['qty'] ) && (int) $_POST['qty'] > 0 ? (int) $_POST['qty'] : 1 );
     if ($qty > $purchase_limit){
         echo "<script> new Noty({
                 type: 'error',
                 layout: 'topRight',
                 text: 'Error: You exceeded your loot available. Try a lower quantity.' ,
-                theme: 'relax',
+                theme: 'sunset',
                 visibilityControl: true
                 }).show();parent.window.$.featherlight.current().close();</script>";
         die();
@@ -50,6 +53,11 @@ function go_buy_item() {
     $store_limit_toggle = ( ($custom_fields['go-store-options_limit_toggle'][0] == true ) ? $custom_fields['go-store-options_limit_toggle'][0] : null );
     if ($store_limit_toggle) {
         $purchase_remaining_max = go_get_purchase_limit($post_id, $user_id, $custom_fields, null);
+        if (!is_int($purchase_remaining_max)){
+            //$message = $purchase_remaining_max;
+            $purchase_remaining_max = 0;
+
+        }
 
         if ($qty > $purchase_remaining_max) {
             //echo 'Error: You attempted to buy more than your current limit. Try again.';
@@ -57,7 +65,7 @@ function go_buy_item() {
                 type: 'info',
                 layout: 'topRight',
                 text: 'Error: You attempted to buy more than your current limit.',
-                theme: 'relax',
+                theme: 'sunset',
                 visibilityControl: true
                 }).show();parent.window.$.featherlight.current().close();</script>";
             die();
@@ -142,8 +150,16 @@ function go_buy_item() {
         $admin_users = get_users( $args );
 
         foreach ($admin_users as $admin_user) {
-            go_update_actions(intval($admin_user), 'admin_notification', null , 1, null, null, $result, null, null, null, null, $xp, $gold, $health, $badge_ids, $group_ids, 'admin');
-            update_user_option(intval($admin_user), 'go_new_messages', true);
+            //go_update_actions(intval($admin_user), 'admin_notification', null , 1, null, null, $result, null, null, null, null, $xp, $gold, $health, $badge_ids, $group_ids, 'admin');
+            global $wpdb;
+            $go_actions_table_name = "{$wpdb->prefix}go_actions";
+            //$time = date( 'Y-m-d G:i:s', current_time( 'timestamp', 0 ) )
+            $time = current_time('mysql');
+            $admin_user_id = $admin_user->ID;
+            $wpdb->insert($go_actions_table_name, array('uid' => $admin_user_id, 'action_type' => 'admin_notification', 'source_id' => null, 'TIMESTAMP' => $time, 'stage' => 1, 'bonus_status' => null, 'check_type' => null, 'result' => $result, 'quiz_mod' => null, 'late_mod' => null, 'timer_mod' => null, 'global_mod' => null, 'xp' => null, 'gold' => null, 'health' => null, 'badges' => null, 'groups' => null, 'xp_total' => null, 'gold_total' => null, 'health_total' => null));
+
+
+            update_user_option($admin_user_id, 'go_new_messages', true);
         }
         //go_update_actions($user_id, 'message', null , 1, null, null, $result, null, null, null, null, $xp, $gold, $health, $badge_ids, $group_ids, false);
         //update_user_option($user_id, 'go_new_messages');
@@ -154,7 +170,7 @@ function go_buy_item() {
     type: 'info',
     layout: 'topRight',
     text: '<h2>Receipt</h2><br>Item: " . addslashes($the_title) . " <br>Quantity: " . addslashes($qty) . " <br>Time: " . addslashes($time) . "',
-    theme: 'relax',
+    theme: 'sunset',
     visibilityControl: true,
     callbacks: {
                     beforeShow: function() { go_noty_close_oldest();},
@@ -168,13 +184,35 @@ function go_buy_item() {
 
     ob_end_clean();
 
-    ob_start();
-    //load custom content here
-    //Make a page for custom content--content that is locked until purchased.  Options include:
-    //new avatar, content with videos, css for custom background/admin-bar colors
-    $buffer2 = ob_get_contents();
+    //$locked_content_toggle = get_option( 'options_go_purch_reward_go_locked_content' );
+    $locked_content_toggle = (isset($custom_fields['go_purch_reward_go_locked_content'][0]) ?  $custom_fields['go_purch_reward_go_locked_content'][0] : false);
+    $buffer2 = '';
+    if($locked_content_toggle){
+        $locked_content = '';
+        if($locked_content_toggle ==='custom') {
 
-    ob_end_clean();
+            // $locked_content = get_option( 'options_go_purch_reward_purchased_message' );
+            $locked_content = (isset($custom_fields['go_purch_reward_purchased_message'][0]) ? $custom_fields['go_purch_reward_purchased_message'][0] : null);
+            $buffer2 = apply_filters('go_awesome_text', $locked_content);
+        }
+        else if($locked_content_toggle =='avatar') {
+
+            ob_start();
+
+            //load custom content here
+            echo "<div id='go_purchased_content' style='display: block;'>";
+            $media_id = get_user_option('go_avatar', $user_id);
+            go_upload_check_blog($media_id, 'go_this_avatar', 'image', 'go_this_avatar');
+            echo '<div id="go_change_avatar" style="display: none;"><button class="go_change_avatar" type="button" onclick="go_change_avatar( this);" style="position: relative; z-index: 1;">Change Avatar</button></div>';
+            echo "</div>";
+
+
+            $buffer2 = ob_get_contents();
+            ob_end_clean();
+        }
+    }
+    //$buffer2 = "yes";
+
     echo json_encode(
         array(
             'json_status' => 'success',
@@ -306,7 +344,7 @@ function go_the_lb_ajax() {
         $store_abs_cost_gold = (isset($custom_fields['go_loot_loot_gold'][0]) ? $custom_fields['go_loot_loot_gold'][0] : null);
         if (get_option('options_go_loot_gold_toggle') && $store_abs_cost_gold > 0) {
             $gold_on = true;
-            $gold_name = get_option('options_go_loot_gold_name');
+            $gold_name = go_get_gold_name();
             $store_toggle_gold = (isset($custom_fields['go_loot_reward_toggle_gold'][0]) ? $custom_fields['go_loot_reward_toggle_gold'][0] : null);
             $store_cost_gold = go_display_shorthand_currency('gold', $store_abs_cost_gold);
         } else {
@@ -330,6 +368,11 @@ function go_the_lb_ajax() {
             $store_limit = (($custom_fields['go-store-options_limit_num'][0] == true) ? $custom_fields['go-store-options_limit_num'][0] : null);
         }
         $purchase_remaining_max = go_get_purchase_limit($post_id, $user_id, $custom_fields, $purchase_count);
+        if (!is_int($purchase_remaining_max)){
+            $message = $purchase_remaining_max;
+            $purchase_remaining_max = 0;
+
+        }
 
         $badges_toggle = get_option('options_go_badges_toggle');
         if ($badges_toggle) {
@@ -451,9 +494,7 @@ function go_the_lb_ajax() {
             }
             if ($purchase_remaining_max == 0) {
                 ?>
-                <div class="error">You have reached your purchase limit or do not have enough loot to purchase this
-                    item.
-                </div>
+                <div class="error"><?php echo $message; ?></div>
                 <?php
             }
             ?>
@@ -513,7 +554,7 @@ function go_get_purchase_count($post_id, $user_id, $custom_fields) {
 }
 
 function go_get_purchase_limit($post_id, $user_id, $custom_fields, $purchase_count) {
-
+    $message = '';
     if ($purchase_count == null) {
         $purchase_count = go_get_purchase_count($post_id, $user_id, $custom_fields);
     }
@@ -521,6 +562,9 @@ function go_get_purchase_limit($post_id, $user_id, $custom_fields, $purchase_cou
 
     if ($store_limit){
         $purchases_left = $store_limit - $purchase_count;
+        if($purchases_left<1){
+            $message = "You have reached your purchase limit of this item.";
+        }
     }else{
         $purchases_left = 9999;
     }
@@ -533,6 +577,9 @@ function go_get_purchase_limit($post_id, $user_id, $custom_fields, $purchase_cou
         if ($store_toggle_xp == false){
             //$store_cost_xp = $store_abs_cost_xp * -1;
             $max_xp = $user_xp / $store_abs_cost_xp;
+            if($max_xp<1){
+                $message = "You do not have enough loot.";
+            }
         }
     }
 
@@ -543,6 +590,9 @@ function go_get_purchase_limit($post_id, $user_id, $custom_fields, $purchase_cou
         $store_toggle_gold = (isset($custom_fields['go_loot_reward_toggle_gold'][0]) ?  $custom_fields['go_loot_reward_toggle_gold'][0] : null);
         if ($store_toggle_gold == false){
             $max_gold = $user_gold / $store_abs_cost_gold;
+            if($max_gold<1){
+                $message = "You do not have enough loot.";
+            }
         }
     }
 
@@ -553,16 +603,44 @@ function go_get_purchase_limit($post_id, $user_id, $custom_fields, $purchase_cou
         $store_toggle_health = (isset($custom_fields['go_loot_reward_toggle_health'][0]) ?  $custom_fields['go_loot_reward_toggle_health'][0] : null);
         if ($store_toggle_health == false){
             $max_health = $user_health / $store_abs_cost_health;
+            if($max_health<1){
+                $message = "You do not have enough loot.";
+            }
         }
     }
 
     $purchase_remaining_min = floor(min($purchases_left, $max_xp, $max_gold, $max_health));
+    $purchase_remaining_min = intval($purchase_remaining_min);
 
-    if ($purchase_remaining_min < 0){
-        $purchase_remaining_min = 0;
+    if ($purchase_remaining_min <= 0){
+        //$purchase_remaining_min = 0;
+        $purchase_remaining_min = $message;
     }
 
     return $purchase_remaining_min;
 
 }
-?>
+
+function go_change_avatar(){
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
+    //check_ajax_referer( 'go_the_lb_ajax');
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_change_avatar' ) ) {
+        echo "refresh";
+        die( );
+    }
+
+    $media_id = (int) $_POST['media_id'];
+    $user_id = get_current_user_id();
+    update_user_option( $user_id, 'go_avatar', $media_id, false );
+
+    $url = wp_get_attachment_image_src(  $media_id, 'thumbnail' );
+   // $url = (isset($url) ?  $url : wp_get_attachment_image_src(  $media_id, 'full' ));
+
+    echo $url[0];
+    die();
+
+}
