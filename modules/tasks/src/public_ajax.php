@@ -129,8 +129,8 @@ function go_task_shortcode($atts, $content = null ) {
         $image_id = $custom_fields['go_featured_image'][0];
         $image_url = wp_get_attachment_image_src($image_id, 'large');
         $full = wp_get_attachment_image_src($image_id, 'full');
-
-        echo '<div><a href="#" data="1" data-featherlight="' . $full[0] . '"><img style="max-height:350px;" data-type="file" src="' . $image_url[0] .'"></a></div>';
+//
+        echo '<span><a href="#" data="1" data-featherlight="' . $full[0] . '"><img style="max-height:350px; padding-bottom: 17px;" data-type="file" src="' . $image_url[0] .'"></a></span>';
     }
     /**
      * GUEST ACCESS
@@ -581,7 +581,12 @@ function go_print_1_message ( $custom_fields, $i ){
     //echo "<div id='message_" . $i . "' class='go_stage_message'  style='display: none;'>".do_shortcode(wpautop( $message  ) )."</div>";
 
     $message  = apply_filters( 'go_awesome_text', $message );
-    echo "<div id='message_" . $i . "' class='go_stage_message'  style='display: none;'><h2>".$heading."</h2>". $message ."</div>";
+    echo "<div id='message_" . $i . "' class='go_stage_message'  style='display: none;'>";
+    if(!empty($heading)){
+      echo "<h2>".$heading."</h2>";
+    }
+    echo  $message ."</div>";
+
 }
 
 /**

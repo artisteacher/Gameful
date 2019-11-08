@@ -3,6 +3,12 @@
 //determine the correct login redirect page based on status and options
 add_filter('login_redirect', 'go_get_user_redirect', 10, 3);
 function go_get_user_redirect($redirect_to = null, $request = null, $user = null){
+    //$redirect_blog_id = $_COOKIE['redirect_blog_id'];
+    $redirect_blog_id = (isset($_COOKIE['redirect_blog_id']) ?  $_COOKIE['redirect_blog_id'] : false);
+    if(is_gameful() && $redirect_blog_id){
+        switch_to_blog($redirect_blog_id);
+    }
+
 
     if($user === null){
         $user = wp_get_current_user();

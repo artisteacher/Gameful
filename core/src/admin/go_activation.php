@@ -113,7 +113,7 @@ function go_flush_rewrites() {
     go_blogs_rewrite();// on init priority 10 (default), adds rewrite rule
     go_store_page();// on init priority 10 (default), adds rewrite rule
     go_reader_page();// on init priority 10 (default), adds rewrite rule
-    go_login_rewrite(); // on init priority 10 (default), adds rewrite rule
+    //go_login_rewrite(); // on init priority 10 (default), adds rewrite rule
     //go_logout_rewrite();
     //go_reset_password_rewrite();// on init priority 10 (default), adds rewrite rule
     go_profile_rewrite();// on init priority 10 (default), adds rewrite rule
