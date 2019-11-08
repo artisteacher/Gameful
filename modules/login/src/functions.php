@@ -1,29 +1,25 @@
 <?php
 
-/**
- * redirect on /login path
- * This is after login happens
- */
-add_action('init', 'go_login_rewrite');
-function go_login_rewrite(){
-    $page_uri = go_get_page_uri();
-    if($page_uri == 'login' && is_user_logged_in()){
-        $redirect_blog_id = $_COOKIE['redirect_blog_id'];
-        switch_to_blog($redirect_blog_id);
-        //wp_redirect($redirect_to);
-        wp_redirect(go_get_user_redirect());
-        exit;
-    }
-}
-
 //determine the correct login redirect page based on status and options
-function go_get_user_redirect($user_id = null){
-    $page = '';
+add_filter('login_redirect', 'go_get_user_redirect', 10, 3);
+function go_get_user_redirect($redirect_to = null, $request = null, $user = null){
+
+    if($user === null){
+        $user = wp_get_current_user();
+    }
+
+    if ( isset( $user->roles ) && is_array( $user->roles ) ) {
+        $page = '';
+        $user_id = $user->ID;
+    }else{
+        return $redirect_to;
+    }
+
     if ($user_id == null){
         $user_id = get_current_user_id();
     }
     if (!empty($user_id)) {
-        $primary_blog_id = get_network()->site_id;
+        //$primary_blog_id = get_network()->site_id;
         if (is_user_member_of_blog($user_id) || go_user_is_admin($user_id)) {
             $redirect_to = get_option('options_go_landing_page_radio', 'home');
             //$page = get_option('options_go_landing_page_on_login', '');
@@ -40,7 +36,7 @@ function go_get_user_redirect($user_id = null){
                 //return null;
             }
 
-        } else if(is_main_site()){
+        } else if(is_gameful() && is_main_site()){
             $page = '';
         } else{
             $page = 'join';
@@ -82,7 +78,7 @@ function user_registration_login_init () {
     $action =(isset($_GET['action']) ?  $_GET['action'] : null);
     if($action === 'logout' ){
         wp_logout();
-        wp_redirect(site_url('signin'));
+        wp_redirect(wp_login_url());
         exit;
     }
 
@@ -136,19 +132,19 @@ add_filter( 'wp_login_errors', 'go_custom_error_messages');
 
 add_filter( 'register', 'go_custom_registration_link');
 function go_custom_registration_link($registration_url){
-   if(is_gameful()){
+    if(is_gameful()){
 
-       if(!is_main_site()) {
+        if(!is_main_site()) {
             $registration_url = '<a href ="';
             $registration_url .= site_url('register');
             $registration_url .= '">Register</a>';
-       }else{
-           $registration_url = '<a href ="';
-           $registration_url .= site_url('/registration/1/single-teacher');
-           $registration_url .= '">Register</a>';
-           //$registration_url = null;
-       }
-   }
+        }else{
+            $registration_url = '<a href ="';
+            $registration_url .= site_url('/registration/1/single-teacher');
+            $registration_url .= '">Register</a>';
+            //$registration_url = null;
+        }
+    }
     return $registration_url;
 }
 
@@ -213,25 +209,7 @@ function go_register_page( $register_url ) {
 }
 
 
-/*
-part of this from: https://profiles.wordpress.org/khromov
-*/
-/* http://premium.wpmudev.org/forums/topic/redirect-users-to-their-blogs-homepage */
-add_filter('login_redirect', 'go_login_redirect_queries', 100, 3);
-function go_login_redirect_queries($redirect_to, $request_redirect_to, $user) {
-    global $blog_id;
 
-    $redirect_to = site_url('login');
-    return $redirect_to;
-    //$redirect_to = $_COOKIE['redirect_domain'];
-    $redirect_blog_id = $_COOKIE['redirect_blog_id'];
-    switch_to_blog($redirect_blog_id);
-    //wp_redirect($redirect_to);
-    $redirect_to = go_get_user_redirect();
-    restore_current_blog();
-
-    return $redirect_to;
-}
 
 //resets the social login cookie
 //add_action('login_footer', 'go_login_footer');
@@ -346,7 +324,7 @@ function go_bad_domain_message ($errors) {
         if(is_gameful()) {
             restore_current_blog();
         }
-}
+    }
     return $errors;
 }
 add_filter('wp_login_errors', 'go_bad_domain_message');
@@ -513,11 +491,11 @@ function go_verify_username_password($user, $username, $password){
 
 add_action('init', 'go_profile_rewrite');
 function go_profile_rewrite(){
-	if(is_gameful() && is_main_site()){
-    	$hide = true;
+    if(is_gameful() && is_main_site()){
+        $hide = true;
     }
     else{
-    	$hide = false;
+        $hide = false;
     }
     if (!$hide) {
         $page_name = 'profile';
@@ -560,10 +538,10 @@ function go_profile_template_include($template){
 add_action('init', 'go_registration_rewrite');
 function go_registration_rewrite(){
     if(is_gameful() && is_main_site()){
-    	$hide = true;
+        $hide = true;
     }
     else{
-    	$hide = false;
+        $hide = false;
     }
     if (!$hide) {
         $page_name = 'register';
@@ -899,12 +877,12 @@ function acf_save_user( $post_id ) {
             wp_set_current_user ( $user_id );
             wp_set_auth_cookie  ( $user_id );
 
-/*
-            print_r($result);
-            echo $user_id;
-            echo $user_name;
-            exit;
-*/
+            /*
+                        print_r($result);
+                        echo $user_id;
+                        echo $user_name;
+                        exit;
+            */
             /*
             //login with the new password
             $creds = array();
@@ -1053,7 +1031,7 @@ function acf_save_user( $post_id ) {
 }
 
 function go_update_display_name( $value, $post_id, $field  ) {
-   if (substr($post_id, 0 , 5) === 'user_') {
+    if (substr($post_id, 0 , 5) === 'user_') {
         $user_id = str_replace("user_", "", $post_id);
         update_user_option( $user_id, 'go_nickname', $value, false );
     }
@@ -1188,8 +1166,8 @@ function go_display_sections_and_seats( $value, $post_id, $field  ) {
             $section_fields = array("field_5cd5031deb292");//backend editing
             $seat_fields = array("field_5cd5031deb293");
         }else{
-           // $section_field = "field_5d1bca2e8c585";//multiple, no repeats
-           // $seat_field = "field_5d1bca2e8c586";
+            // $section_field = "field_5d1bca2e8c585";//multiple, no repeats
+            // $seat_field = "field_5d1bca2e8c586";
 
             $section_fields = array("field_5cd4f7b4498dd", "field_5d1bca108c582", "field_5d1bc17d82db9",
                 "field_5d1bcaa48c58b", "field_5d1bca2e8c585", "field_5d1bc9e48c57e", "field_5d1bd3f76f8a4", "field_5d1bd3f46f8a1",
