@@ -29,6 +29,7 @@ if ( defined( 'DOING_AJAX' )) {
     //Allows uploading on frontend
     include( 'wp-frontend-media-master/frontend-media.php' );
 
+
 }
 else if ( is_admin() ) {
 
@@ -42,13 +43,21 @@ else if ( is_admin() ) {
     include_once('custom-acf-fields/acf-typography-field/acf-typography.php');
     include_once('custom-acf-fields/advanced-custom-fields-font-awesome/acf-font-awesome.php');
 
+
+
 }
 else{
     //INCLUDES on Public Pages
     //Allows uploading on frontend
-    include( 'wp-frontend-media-master/frontend-media.php' );
+    include_once( 'wp-frontend-media-master/frontend-media.php' );
+
+
 
 }
 
 //$nsl_location = dirname(__FILE__) . '/nextend-gameon-connect/nextend-facebook-connect.php';
 //include($nsl_location);
+add_action('init', 'go_add_customizer_controls');
+function go_add_customizer_controls(){
+    include_once('customizer-custom-controls/functions.php');
+}

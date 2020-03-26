@@ -30,7 +30,7 @@ get_header();
         $current_user_id = get_current_user_id();
 
 
-        $is_admin = go_user_is_admin($current_user_id);
+        $is_admin = go_user_is_admin();
 
         $user_fullname = $user_obj->first_name . ' ' . $user_obj->last_name;
         $user_login = $user_obj->user_login;
@@ -56,19 +56,67 @@ get_header();
         <div id='go_stats_lite_wrapper'>
 
             <?php
+
             go_stats_header($user_id, true, true, false, true, true);
+            if (($current_user_id === $user_id) || $is_admin) {
+                go_leaderboard_filters('blog', $user_id);
+            }
+
             ?>
         </div>
-        <div id='loader_container' style='display:none; height: 250px; width: 100%; padding: 10px 30px; '>
-            <div id='loader'>
-                <i class='fas fa-spinner fa-pulse fa-4x'></i>
-            </div>
-        </div>
+
         <?php
 
         /// END USER HEADER
 
-        go_get_blog_posts($user_id);
+
+
+
+
+
+        wp_localize_script( 'go_frontend', 'IsReader', 'true' );
+
+        //echo "success";
+
+        //video options
+        $go_lightbox_switch = get_option( 'go_video_lightbox_toggle_switch' );
+        if($go_lightbox_switch === false){
+            $go_lightbox_switch = 1;
+        }
+        $go_video_unit = get_option ('go_video_width_type_control');
+        if ($go_video_unit == '%'){
+            $percent = get_option( 'go_video_width_percent_control' );
+            if($percent === false){
+                $percent = 100;
+            }
+            $go_fitvids_maxwidth = $percent."%";
+        }else{
+            $pixels = get_option( 'go_video_width_px_control' );
+            if($pixels === false){
+                $pixels = 400;
+            }
+            $go_fitvids_maxwidth = $pixels."px";
+        }
+
+        $current_user_id = get_current_user_id();
+        $cards = get_user_option('go_use_cards', $current_user_id);
+        if($cards == "true"){
+            $checked = 'checked';
+        }else{
+            $checked = '';
+        }
+        echo "<div id='go_cards_toggle_wrapper'><input id='go_cards_toggle' type='checkbox' name='cards' style='display: inline;' $checked> View with Cards</div><br>";
+        echo "<div id='go_wrapper' data-lightbox='{$go_lightbox_switch}' data-maxwidth='{$go_fitvids_maxwidth}' >";
+
+        echo "
+          <div id='go_posts_wrapper' >";
+        go_reader_get_posts(null, null, $order, $user_id);
+        echo "</div></div>";
+
+
+
+
+
     }else{
     $user_id = 0;
     echo "<div style='padding:30px;'>This user does not exist.</div>";

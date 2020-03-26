@@ -1,5 +1,6 @@
 //this is needed on every front end page!
 jQuery( document ).ready( function() {
+    jQuery(".acf-image-uploader .acf-icon[data-name='edit']").remove();//removes edit button on avatar profile page--it doesn't work
     if(jQuery('#go_user_bar').length) {
         //jQuery("#go_user_bar_inner").fadeIn();
 
@@ -18,8 +19,9 @@ jQuery( document ).ready( function() {
             ".userbar_dropdown-content {top: 43px !important;}}";
 
 
+        var height = GO_STYLES.playerbar_height;
         document.querySelector('style').textContent +=
-            "@media screen and (min-width:" + user_bar_width + "px) { body{margin-top: 91px !important;}}";
+            "@media screen and (min-width:" + user_bar_width + "px) { body{margin-top: " + height + "px !important;}}";
 
 
         jQuery('.userbar_dropdown_toggle.search').on('click', function () {

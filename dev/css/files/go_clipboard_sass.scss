@@ -37,12 +37,22 @@
 .go_tools_section{
   display: flex;
   flex-wrap: wrap;
+  align-items: stretch;
+  a {
+    color: inherit;
+    text-decoration: inherit; /* no underline */
+  }
+  ul {
+    list-style-type: disc;
+    padding: 0 10px;
+  }
 }
 
 #go_tools_wrapper .card{
   width: 300px;
-  margin: 20px;
+  margin: 10px;
   padding-bottom: 10px;
+  height: 90%;
 }
 
 #go_tools_wrapper button{
@@ -69,3 +79,30 @@
   left: 0;
   background-color: #3085d6;
 }
+
+
+.quest_stats_wrapper{
+  /* margin: auto; */
+  /* width: 200px; */
+  /* float: right; */
+  display: flex;
+  margin: 10px;
+  justify-content: center;
+  align-items: center;
+}
+.quest_stats {
+  padding: 5px;
+  border: 1px solid;
+}
+
+.quest_stats.complete{
+    background-color: lightgreen;
+  }
+
+.quest_stats.started{
+    background-color: lightgoldenrodyellow;
+  }
+
+.quest_stats.not_started{
+    background-color: pink;
+  }

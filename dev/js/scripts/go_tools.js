@@ -20,10 +20,55 @@ jQuery(document).ready(function(){
          //   go_export_wp();
         //});
         //jQuery('#go_tool_update_v5').one("click", function() {go_update_go_ajax_v5_check();});
+
+        jQuery("#go_use_beta").change(function() {
+            go_use_beta();
+        });
     }
 
 
 });
+
+function go_use_beta(){
+    var nonce = GO_ADMIN_PAGE_DATA.nonces.go_use_beta;
+
+    if (jQuery('#go_use_beta').is(":checked")) {
+        var go_use_beta = 1;
+    }
+    else{
+         var go_use_beta = 0;
+    }
+    jQuery.ajax({
+        type: 'post',
+        url: MyAjax.ajaxurl,
+        data:{
+            _ajax_nonce: nonce,
+            is_frontend: is_frontend,
+            action: 'go_use_beta',
+            go_use_beta: go_use_beta
+        },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
+        success: function( res ) {
+            if (res === 'success') {
+                if(go_use_beta) {
+                    swal.fire("Success", "You are now using the beta code.", "success");
+                }
+                else{
+                    swal.fire("Success  ", "You are now using the regular code.", "success");
+                }
+            }
+
+        }
+    });
+}
 
 function go_flush_all_permalinks_dialog(){
     console.log('go_flush_all_permalinks_dialog');
@@ -64,6 +109,7 @@ function go_flush_all_permalinks(){
         url: MyAjax.ajaxurl,
         data:{
             _ajax_nonce: nonce,
+            is_frontend: is_frontend,
             action: 'go_flush_all_permalinks'
         },
         /**
@@ -76,7 +122,7 @@ function go_flush_all_permalinks(){
             }
         },
         success: function( res ) {
-            if (res = 'flushed') {
+            if (res === 'flushed') {
                 swal.fire("Success", "Permalinks were flushed.", "success");
                 jQuery('#go_flush_all_permalinks').one("click", function () {
                     go_flush_all_permalinks_dialog();
@@ -130,6 +176,7 @@ function go_disable_game_on_this_site(){
         url: MyAjax.ajaxurl,
         data:{
             _ajax_nonce: nonce,
+            is_frontend: is_frontend,
             action: 'go_disable_game_on_this_site'
         },
         /**
@@ -161,12 +208,16 @@ function go_reset_all_users_dialog (){
 
     swal.fire({
         title: "Reset User Game Data",
-        text: "Are you sure? This can't be undone!",
-        type: "warning",
+        html: "Are you sure? This can't be undone!<br><br>" +
+            "All user history, progress, and loot will be removed." +
+            " Users will not show on the clipboard until the visit the site again." +
+            " It's like they have never played the game.",
+        type: "error",
         showCancelButton: true,
         confirmButtonText: 'Reset All User Game Data',
         cancelButtonText: 'Cancel',
         reverseButtons: true,
+        focusCancel: true,
         customClass: {
             confirmButton: 'btn btn-success',
             cancelButton: 'btn btn-danger'
@@ -184,8 +235,6 @@ function go_reset_all_users_dialog (){
                 );
                 jQuery('#go_reset_all_users').one("click", function() {go_reset_all_users_dialog();});
 
-
-
             }
         });
 
@@ -198,6 +247,7 @@ function go_reset_all_users (){
         url: MyAjax.ajaxurl,
         data:{
             _ajax_nonce: nonce,
+            is_frontend: is_frontend,
             action: 'go_reset_all_users'
         },
         /**

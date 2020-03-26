@@ -1,8 +1,11 @@
+$corner_radius: 7px;
 
 /* ------------------------------------------------------------
     lightbox
 ------------------------------------------------------------ */
-
+.featherlight.quests .featherlight-content{
+	width: 90%;
+}
 .featherlight.map .featherlight-content
 {
 	min-width: 90%;
@@ -22,14 +25,34 @@
 }
 
 #go_map_container {
-	padding:30px;
-	background-color: white;
+	//padding:30px;
+	//background-color: white;
 	text-align: center;
 
 
 }
+#mapwrapper {
+	padding:30px;
+}
+
+.quickedit_form {
+	font-size: .8em;
+	text-align: center;
+
+	.checkbox {
+		padding: 0 10px !important;
+	}
+}
+
 
 #maps {
+	a,
+	a:visited,
+	a:hover,
+	a:focus,
+	a:active{
+		color: unset;}
+
 	//visibility: hidden;
 	//font-family: 'Teko', sans-serif;
 
@@ -37,23 +60,48 @@
         Reset Styles (from meyerweb.com)
     ------------------------------------------------------------ */
 
-	div, span, applet, object, iframe,
+	html, body, div, span, applet, object, iframe,
 	h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 	a, abbr, acronym, address, big, cite, code,
-	del, dfn, em, font, img, ins, kbd, q, s, samp,
+	del, dfn, em, img, ins, kbd, q, s, samp,
 	small, strike, strong, sub, sup, tt, var,
+	b, u, i, center,
 	dl, dt, dd, ol, ul, li,
 	fieldset, form, label, legend,
-	table, caption, tbody, tfoot, thead, tr, th, td {
+	table, caption, tbody, tfoot, thead, tr, th, td,
+	article, aside, canvas, details, embed,
+	figure, figcaption, footer, header, hgroup,
+	menu, nav, output, ruby, section, summary,
+	time, mark, audio, video {
 		margin: 0;
 		padding: 0;
 		border: 0;
-		outline: 0;
-		font-weight: inherit;
-		font-style: inherit;
 		font-size: 100%;
-		font-family: inherit;
+		font: inherit;
 		vertical-align: baseline;
+	}
+	/* HTML5 display-role reset for older browsers */
+	article, aside, details, figcaption, figure,
+	footer, header, hgroup, menu, nav, section {
+		display: block;
+	}
+	body {
+		line-height: 1;
+	}
+	ol, ul {
+		list-style: none;
+	}
+	blockquote, q {
+		quotes: none;
+	}
+	blockquote:before, blockquote:after,
+	q:before, q:after {
+		content: '';
+		content: none;
+	}
+	table {
+		border-collapse: collapse;
+		border-spacing: 0;
 	}
 
 	/* ------------------------------------------------------------
@@ -63,13 +111,16 @@
 	h1 {
 		font-weight: bold;
 		text-transform: uppercase;
-		font-size: 20px;
+		font-size: 1.5em;
 		margin: 0 0 5px 0;
 	}
 	h2 {
-		font-family: "Lucida Grande", Verdana, sans-serif;
-		font-size: 10px;
-		color: #777777;
+		font-size: 1.3em;
+		margin: 0 0 5px 0;
+	}
+
+	h3 {
+		font-size: 1.2em;
 		margin: 0 0 20px 0;
 	}
 	a {
@@ -82,6 +133,16 @@
 		//padding-top: 20px;
 		display: block;
 		text-align: center;
+		margin-bottom: 25px;
+
+
+		.map_title {
+			font-size: 1.7em;
+		}
+	}
+
+	.title {
+		padding: 10px;
 	}
 
 	/* ------------------------------------------------------------
@@ -90,202 +151,434 @@
 
 	/* --------	Top Level --------- */
 
-	.singleCol {
+	/*.singleCol {
 		//	background: url('../../media/map/vertical-line.png') center top no-repeat !important;
 		width: 100% !important;
+	}*/
+
+
+
+	//top map name
+	.ParentNav {
+		display: inline-block;//so the action tooltips show only on dropdown
+		//float: none;
+		//position: relative;
+		//z-index: 2;
+		//margin: 0px 10px 0px 10px;
+		//padding: 0 0 0 0;
+		//width: calc(100% - 20px) !important;
+		p{
+			//margin-top: 0px;
+			//background: unset;
+			//border: unset;
+			//text-align: left;
+			//font-size: 1.5em;
+		}
+
+
+		/* Dropdown Button */
+		.dropbtn, .dropbtn:hover, .dropbtn:focus {
+			cursor: pointer;
+			margin: 0;
+			display: block;
+			text-align: center;
+			//color: black;
+			//background: #c3eafb;
+			border: 2px solid rgba( 50,50,50,.2);
+			border-right: 50px solid rgba( 50,50,50,.2);
+			//-moz-border-radius: 5px;
+			//-webkit-border-radius: 5px;
+			-webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
+			-moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px; /* FF 3.5+ */
+
+			/* styling */
+
+			border-radius: $corner_radius;
+			font: inherit;
+			//line-height: 1.5em;
+			padding: 10px;
+			//font-size: 1.1em;
+			width: 300px;
+
+
+		}
+
+		/* The container <div> - needed to position the dropdown content */
+		.dropdown {
+			position: relative;
+			display: inline-block;
+			z-index: 3;
+			font-size: unset;
+			font-size: 1.1em;
+
+			#go_drop_arrow{
+				line-height: 28px;
+				float: right;
+				position: relative;
+				right: -43px;
+			}
+		}
+
+		/* Dropdown Content (Hidden by Default) */
+		.dropdown-content {
+			display: none;
+			position: absolute;
+			//background-color: #f9f9f9;
+			min-width: 160px;
+			box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+			z-index: 1;
+			font-size: .8em;
+		}
+
+		/* Links inside the dropdown */
+		.dropdown-content a {
+			//color: black;
+			padding: 8px 10px;
+			text-decoration: none;
+			display: block;
+		}
+
+		/* Change color of dropdown links on hover */
+		.dropdown-content a:hover {
+			background-color: #f1f1f1
+		}
+
+		/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+		.show {
+			display: block;
+		}
+
+		/* ------------------------------------------------------------
+            Utility Navigation
+        ------------------------------------------------------------ */
+
+		#go_Dropdown {
+			float: left;
+			width: 100%;
+			min-width: 300px;
+			margin-right: 10px;
+			margin-bottom: 40px;
+			//border-radius: $corner_radius;
+		}
+		#utilityNav li {
+			float: left;
+			margin-bottom: 10px;
+		}
+		#go_Dropdown a {
+			display: block;
+			//font-size: .9em;
+			min-width: 150px;
+			//color: black;
+			//background: #bae9ff;
+			cursor: pointer;
+
+		}
+
+		#go_Dropdown a:hover {
+			//background: #aee1ff;
+			background-color: rgba( 255, 255, 255, .5);
+			box-shadow: inset 0 -1px 0 rgb(146, 140, 140);
+		}
+
+		#go_Dropdown .locked a,
+		#go_Dropdown .locked a:hover {
+			//background-color: #cccccc;
+			border-color: #000;
+			color: #555;
+		}
+		#go_Dropdown .done a,
+		#go_Dropdown .done a:hover {
+			//background-color: #cee3ac;
+			border-color: #b8da83;
+		}
+
+		#utilityNav li a:hover {
+			background-color: #fffce5;
+			border-color: #d1b62c;
+			cursor: pointer;
+		}
+
+
+
+		.go_badge_wrap{
+			width: unset;
+			font-size: .6em;
+			width: 100%;
+		}
 	}
 
 	/* ------------------------------------------------------------
     ------------------------------------------------------------ */
-	.primaryNav {
+	.primaryNav {//the container for the chain columns
 		margin: 0px 0 0 0;
-		float: left;
 		width: 100%;
 		padding-bottom: 20px;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: stretch;
 
-		li {
-			//width: 90%;
+		.go_map_quest_hover:hover{
+			background-color: rgba( 255, 255, 255, .5);
+			cursor: pointer;
+			border-radius: $corner_radius;
 		}
 
-		li ul {
-			padding: 0px !important;
+		.go_chain_loot_info {
+			background-color: #ffffff;
+			border-color: #444444;
 		}
 
-		li {
-			float: left;
+		.loot_info {
+			display:none;
+			color: #0b0b0b;
+			font-size: .7em;
+			background-color: rgba(255, 255, 255, 0.7);
 		}
 
-		//top map name
-		.ParentNav {
-			display: block;
-			float: none;
-			position: relative;
-			z-index: 2;
-			//background: #c3eafb;
-			//-webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
-			//-moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px; /* FF 3.5+ */
-			margin: 0px 10px 0px 10px;
-			padding: 0 0 0 0;
-			width: calc(100% - 20px) !important;
-			p{
-				margin-top: 0px;
-				-webkit-box-shadow: unset;
-				-moz-box-shadow: unset;
-				background: unset;
-				border: unset;
-				//text-align: left;
-				font-size: 1.5em;
-			}
-			div{
-				//display: flex;
-			}
-			.go_badge_wrap{
-				width: unset;
-				font-size: .6em;
-				width: 100%;
-			}
-		}
+		.go_task_chain{
+			flex: 1;
+			//font-size: .8em;
+			padding: 0 10px;
 
-		.optional_task {
-			margin-top: 0px;
-			border-top: 1px solid grey;
-			//border-left: 10px solid grey;
-			display: none;
-			box-shadow: 10px 0px 0px 0px #e3ca4b inset;
-		}
-
-		.go_optional_toggle, .go_optional_toggle:hover {
-			margin-top: 0px;
-			background-color: #292929;
-			color: whitesmoke;
-			height: 19px;
-		}
-
-
-
-		.optional_task a {
-			//font-size: 1em !important;
-			font-style: italic;
-
-		}
-
-		> li {//task chains
+			//set the margins and shadows
+			.task,
 			.go_task_chain_map_box,//task chains names
-			li//tasks
-			{
-				background: #c3eafb;
+			.go_task_pod_required {
 				-webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
 				-moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px; /* FF 3.5+ */
-				margin: 10px 10px 0px 10px;
-				padding: 0 0 0 0;
-				width: calc(100% - 20px) !important;
-			}
-
-			//clickable area inside of tasks
-			a,
-			.go_task_chain_map_box{
-				//margin: 0 10px;
-				padding: 10px 0;
+				box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
 				display: block;
-				//font-size: 14px;
-				font-weight: bold;
+				//font-weight: bold;
 				text-align: center;
+			}
+
+			.show_shadow{
+				-webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px, inset 0px 0px 6px 6px rgba(0,0,0,0.6);
+				-moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px, inset 0px 0px 6px 6px rgba(0,0,0,0.6);
+				box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px, inset 0px 0px 6px 6px rgba(0,0,0,0.6);
+			}
+
+			.task_container,
+			.go_task_chain_map_box{
+				margin: 10px 0;
+			}
+
+			.go_task_chain_map_box{
+				font-size: 1.1em;
+				//padding: 5px 0;
+				border-radius: $corner_radius;
+				margin-top: 0px;
+			}
+			.go_task_chain_map_box_badge{
+				border-radius: $corner_radius;
+			}
+
+			.go_task_pod_required{
+				font-size: .8em;
+			}
+
+			.tasks{
+				//font-size: .8em;
+				.task_container {
+					//margin: 0 10px;
+					position: relative;
+
+					/* --------	available tasks colors --------- */
+					.up{
+						border-color: mediumturquoise;
+						border-width: 4px 4px 4px 4px;
+						border-style: solid;
+					}
+
+					.down{
+						border-color: indianred;
+						border-width: 4px 4px 4px 4px;
+						border-radius: (4px + $corner_radius) (4px + $corner_radius) (4px + $corner_radius) (4px + $corner_radius);
+						border-style: solid;
+					}
+
+					.reset{
+						border-color: indianred;
+						border-width: 2px 2px 2px 2px;
+						border-radius: (2px + $corner_radius) (2px + $corner_radius) (2px + $corner_radius) (2px + $corner_radius);
+						border-style: solid;
+						background-color: pink;
+						color: black;
+					}
+
+					.resetted{
+						border-color: #F4B400;
+						border-width: 4px 4px 4px 4px;
+						border-radius: (4px + $corner_radius) (4px + $corner_radius) (4px + $corner_radius) (4px + $corner_radius);
+						border-style: solid;
+					}
+
+					.task{
+
+
+						padding: 0px;
+						border-radius: $corner_radius;
+
+						.go_map_quest_hover {
+
+						}
+
+						.go_bonus_progresss_bar_position{
+							//height: 5px;
+						}
+
+						.go_bonus_progresss_bar_container {
+							height: 17px;
+							border: 1px solid;
+							box-sizing: unset;
+							border: thin black solid;
+							background-color: #292929;
+							color: whitesmoke;
+							position: relative;
+							//bottom: 0;
+							width: 100%;
+							border-radius: 0 0 $corner_radius $corner_radius;
+
+							.go_bonus_progress_bar{
+								position: absolute;
+								height: 17px;
+								background-color: #39b54a ;
+								border-radius: 0 0 $corner_radius $corner_radius;
+							}
+
+							.bonus_progress{
+								position: relative;
+								width: 100%;
+								height: 17px;
+								font-size: .75em;
+								line-height: 17px;
+							}
+						}
+
+					}
+
+					.optional{
+						background-size: 75px 75px;
+						background-image: linear-gradient(45deg, rgba(69, 69, 69, 0.05) 25%, rgba(51, 51, 51, 0.1) 25%, rgba(51, 51, 51, 0.1) 50%, rgba(69, 69, 69, 0.05) 50%, rgba(69, 69, 69, 0.05) 75%, rgba(51, 51, 51, 0.1) 75%, rgba(51, 51, 51, 0.1) 100%);
+					}
+
+					.nested_opaque:hover{
+						background-color: rgba( 255, 255, 255, .4);
+						cursor: pointer;
+					}
+					.nested_opaque{
+						background-color: rgba( 255, 255, 255, .5);
+						//border-radius: 0 0 $corner_radius $corner_radius;
+					}
+
+					.go_nested_hover:hover,
+					.nested_opaque:hover{
+						border-radius: 0 0 $corner_radius $corner_radius;
+					}
+
+					.nested_opaque,
+					.go_nested_toggle
+					{
+						border-radius: 0 0 $corner_radius $corner_radius;
+					}
+
+					.go_nested_toggle
+					{
+						margin-top: 0px;
+						color: black;
+						-webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
+						-moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px; /* FF 3.5+ */
+						box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
+
+
+						.nested_icon{
+							line-height: 17px;
+						}
+					}
+
+					.go_nested_toggle.open {
+						border-radius: 0 ;
+
+						.nested_opaque{
+							border-radius: 0 ;
+						}
+					}
+
+					.go_nested_toggle,
+					.go_nested_hover,
+					.nested_opaque{
+						height: 19px;
+					}
+
+					.go_nested_list {
+						display: none;
+
+						.task_container{
+							margin: 0px;
+						}
+
+						.task {
+							border-radius: 0;
+							border-top:1px solid;
+
+							.go_bonus_progresss_bar_container,
+							.go_bonus_progress_bar,
+							.go_map_quest_hover:hover {
+								border-radius: 0;
+							}
+						}
+
+						:last-child .task{
+							border-radius: 0 0 $corner_radius $corner_radius;
+
+							.go_bonus_progresss_bar_container,
+							.go_bonus_progress_bar,
+							.go_map_quest_hover:hover {
+								border-radius: 0 0 $corner_radius $corner_radius;
+							}
+						}
+
+					}
+
+
+				}//task container
+
+				.hasNested{
+
+					> .task{//the task with the nested
+						border-radius: $corner_radius $corner_radius 0 0;
+
+						.go_bonus_progresss_bar_container,
+						.go_bonus_progress_bar{
+							border-radius: 0px !important;
+						}
+					}
+				}
+
+			}//tasks
+
+
+			.tasks.sorting{
+				background-color: rgba( 255, 255, 255, .3);
+				border: 1px solid;
+				border-radius: $corner_radius;
+			}
+
+			.go_task_pod_required{
+				background-color: white;
 				color: black;
-
+				border-radius: $corner_radius;
+				padding: 10px;
 			}
 
-		}
-
-		.go_bonus_progresss_bar_position{
-			height: 15px;
-		}
-
-
-		.go_bonus_progresss_bar_container {
-			height: 15px;
-			border: 1px solid;
-			box-sizing: unset;
-			border: thin black solid;
-			background-color: #292929;
-			color: whitesmoke;
-			position: absolute;
-			bottom: 0;
-			width: 100%;
-
-
-			.go_bonus_progress_bar{
-				position: absolute;
-				height: 15px;
-				background-color: #39b54a ;
-			}
-		}
+		}//task_chain
 
 
 
-		li li ,
-		.done  {
-			background-color: #cee3ac;
-			border-color: #b8da83;
-			position: relative;
-		}
-
-		li li:hover,
-		.done:hover {
-			border-color: #94b75f;
-			background-color: #e7f1d7;
-		}
-
-		/* --------	grey out colors --------- */
-		.locked,
-		li .locked,
-		li .locked:hover {
-			background-color: #cccccc;
-			border-color: #000;
-			color: #555;
-		}
-
-		/* --------	available tasks colors --------- */
-		.up a{
-			border-color: mediumturquoise;
-			border-width: 4px 4px 4px 4px;
-			border-style: solid;
-		}
-
-		.down a{
-			border-color: indianred;
-			border-width: 4px 4px 4px 4px;
-			border-style: solid;
-		}
-
-		.reset a{
-			border-color: indianred;
-			border-width: 2px 2px 2px 2px;
-			border-style: solid;
-			background-color: pink;
-		}
-
-		.resetted a{
-			border-color: #F4B400;
-			border-width: 4px 4px 4px 4px;
-			border-style: solid;
-		}
-
-		li .available {
-			background-color: #fff7aa;
-			border-color: #e3ca4b;
-		}
-		li .available:hover {
-			background-color: #fffce5;
-			border-color: #d1b62c;
-		}
 
 
-		li li:first-child {
-			//padding-top: 30px;
-		}
-		li li:last-child {
-			//background: url('../../media/map/vertical-line.png') center bottom repeat-y;
-		}
+
+
 
 	}
 
@@ -298,8 +591,9 @@
 	.go_badge_wrap {
 		width: 100%;
 		height: unset;
-		margin-bottom: 10px;
-		font-weight: 500;
+		//margin-bottom: 10px;
+		font-size: .8em;
+		float: unset;
 
 		.go_badge_container {
 			margin: 0 auto;
@@ -312,132 +606,24 @@
 				padding: 10px;
 
 				img{
-					width: 75px !important;
+					height: 42px !important;
+					width: auto !important;
+				}
+				.fig_wrap{
+					font-size: .8em;
 				}
 			}
 		}
 	}
 
-}
-
-
-
-/* Dropdown Button */
-.dropbtn, .dropbtn:hover, .dropbtn:focus {
-	cursor: pointer;
-	margin: 0;
-	display: block;
-	text-align: center;
-	color: black;
-	background: #c3eafb;
-	border: 2px solid #b5d9ea;
-	//-moz-border-radius: 5px;
-	//-webkit-border-radius: 5px;
-	-webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
-	-moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px; /* FF 3.5+ */
-
-	/* styling */
-
-	border-radius: 4px;
-	font: inherit;
-	line-height: 1.5em;
-	padding: 0.5em 3.5em 0.5em 1em;
-
-	/* reset */
-
-	background-image: linear-gradient(45deg, transparent 50%, blue 50%),
-	linear-gradient(135deg, blue 50%, transparent 50%),
-	linear-gradient(to right, skyblue, skyblue);
-	background-position: calc(100% - 16px) calc(1em + 2px),
-	calc(100% - 11px) calc(1em + 2px),
-	100% 0;
-	background-size: 5px 5px,
-	5px 5px,
-	2.5em 2.5em;
-	background-repeat: no-repeat;
-	width: 300px;
 
 }
 
-/* The container <div> - needed to position the dropdown content */
-.dropdown {
-	position: relative;
-	display: inline-block;
-	z-index: 3;
-}
-
-/* Dropdown Content (Hidden by Default) */
-.dropdown-content {
-	display: none;
-	position: absolute;
-	background-color: #f9f9f9;
-	min-width: 160px;
-	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-	z-index: 1;
-}
-
-/* Links inside the dropdown */
-.dropdown-content a {
-	color: black;
-	padding: 8px 10px;
-	text-decoration: none;
-	display: block;
-}
-
-/* Change color of dropdown links on hover */
-.dropdown-content a:hover {
-	background-color: #f1f1f1
-}
-
-/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
-.show {
-	display: block;
-}
-
-/* ------------------------------------------------------------
-    Utility Navigation
------------------------------------------------------------- */
-
-#go_Dropdown {
-	float: left;
-	max-width: 100%;
-	margin-right: 10px;
-	margin-bottom: 40px;
-}
-#utilityNav li {
-	float: left;
-	margin-bottom: 10px;
-}
-#go_Dropdown a {
-	display: block;
-	font-size: .9em;
-	min-width: 150px;
-	color: black;
-	background: #bae9ff;
-	cursor: pointer;
-
-}
-
-#go_Dropdown a:hover {
-	background: #aee1ff;
-	box-shadow: inset 0 -1px 0 rgb(146, 140, 140);
-}
-
-#go_Dropdown .locked a,
-#go_Dropdown .locked a:hover {
-	background-color: #cccccc;
-	border-color: #000;
-	color: #555;
-}
-#go_Dropdown .done a,
-#go_Dropdown .done a:hover {
-	background-color: #cee3ac;
-	border-color: #b8da83;
-}
-
-#utilityNav li a:hover {
-	background-color: #fffce5;
-	border-color: #d1b62c;
-	cursor: pointer;
+.show_nest_border{
+	.go_nested_list{
+		border: 1px solid !important;
+		border-radius: $corner_radius;
+		background-color: rgba( 255, 255, 255, .5);
+	}
 }
 

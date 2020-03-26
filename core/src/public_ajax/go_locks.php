@@ -14,12 +14,20 @@
  * @param $loot
  * @return bool
  */
-function go_task_locks ( $id, $user_id, $task_name, $custom_fields, $is_logged_in, $check_only){
+function go_task_locks ( $id, $check_only, $user_id = null, $task_name = false, $custom_fields = null){
+
+        ob_start();
+
 
     if($user_id === null){
         $user_id = get_current_user_id();
     }
+    if($custom_fields === null){
+        $custom_fields = go_post_meta($id);
+        $custom_fields = go_post_meta($id);
+    }
 
+    $is_logged_in = is_user_logged_in();
 
     //this is for maps.
     //This check is done later on tasks and store as well.
@@ -28,19 +36,19 @@ function go_task_locks ( $id, $user_id, $task_name, $custom_fields, $is_logged_i
         $is_unlocked = go_master_unlocked($user_id, $id); //one query per quest on map
         if ($is_unlocked == 'password' || $is_unlocked == 'master password') {
             //$is_unlocked = true;
+            ob_get_clean();
             return $is_unlocked;
         }
         else {
             $go_password_lock = (isset($custom_fields['go_password_lock'][0]) ?  $custom_fields['go_password_lock'][0] : null);
             if ($go_password_lock == true){
+                ob_get_clean();
                 return true;
             }
-
         }
     }
 
     $task_is_locked = false;
-
 
     /**
      * This section is for the chain locks
@@ -48,12 +56,12 @@ function go_task_locks ( $id, $user_id, $task_name, $custom_fields, $is_logged_i
     if($is_logged_in) {
         $location_map_toggle = (isset($custom_fields['go-location_map_toggle'][0]) ? $custom_fields['go-location_map_toggle'][0] : null);
         if ($location_map_toggle == true) {
-            ob_start();
+
             $task_is_locked_cl = go_task_chain_lock($id, $user_id, $task_name, $custom_fields, $is_logged_in, $check_only);
-            $chain_message = ob_get_clean();
+            //$chain_message = ob_get_clean();
 
             if ($task_is_locked_cl == true) {
-                echo $chain_message;
+                //echo $chain_message;
                 $task_is_locked = true;
 
             }
@@ -66,13 +74,13 @@ function go_task_locks ( $id, $user_id, $task_name, $custom_fields, $is_logged_i
     $go_sched_toggle = (isset($custom_fields['go_sched_toggle'][0]) ?  $custom_fields['go_sched_toggle'][0] : null);
     if ($go_sched_toggle == true) {
 
-        $this_lock = go_schedule_access($user_id, $custom_fields, $is_logged_in, $check_only);
+        $this_lock = go_schedule_access($user_id, $custom_fields, $is_logged_in, $check_only);//returns and not prints result
 
         if ($this_lock !== false && !$check_only){
             echo $this_lock;
             $task_is_locked = true;
         }else{
-            return false;
+            //return false;
         }
     }
 
@@ -81,26 +89,46 @@ function go_task_locks ( $id, $user_id, $task_name, $custom_fields, $is_logged_i
      * Loop to check all the locks and keys
      */
     $go_lock_toggle = (isset($custom_fields['go_lock_toggle'][0]) ?  $custom_fields['go_lock_toggle'][0] : null);
+    $locks_status = false;
+
+    ob_start();
+
     if ($go_lock_toggle == true ) {
-        $task_is_locked_locks = false;
+
+        //$task_is_locked_locks = false;
         if (!$check_only) {
             $task_caps = ucwords($task_name);
             $lock_message = (isset($custom_fields['go_lock_message'][0]) ?  $custom_fields['go_lock_message'][0] : null);
-            ob_start();
-            echo '<div class="go_locks"><h3>Locked ' . $task_caps . '</h3>' . $lock_message . '<br>You must unlock one lock to continue.';
+            if(!empty($lock_message)){
+                $custom_message = true;
+                echo '<div class="go_locks"><h3>Locked ' . $task_caps . '</h3>' . $lock_message .'</div>';
+
+            }else{
+                $custom_message = false;
+                echo '<div class="go_locks"><h3>Locked ' . $task_caps . '</h3>' . $lock_message . 'You must unlock one lock to continue. <div class="go_locks_wrapper" style="display: flex; align-items: stretch; justify-items: center; justify-content: center;">';
+
+            }
         }
         //$task_is_locked = false;
         $num_locks = $custom_fields['go_locks'][0];
         $lock_num_display = 1;
-        $print_locks = false;
+        $locks_status = true;
+
         for ($i = 0; $i < $num_locks; $i++) {
-            if (!$check_only) {
-                ob_start();
+            $this_lock_status = false;
+            //if (!$check_only) {
+
                 if ($lock_num_display > 1){
-                    echo '-or-';
+                    if(!$custom_message) {
+                        echo '<div style="width: 75px;display: flex;
+    align-items: center;
+    justify-content: center;">-or-</div>';
+                    }
                 }
-                echo '<div class="go_lock"><p>Lock ' . $lock_num_display . '<ul>';
+            if(!$custom_message) {
+                echo '<div class="go_lock" style="text-align: center;"><p>Lock ' . $lock_num_display . '<div class="go_lock_info">';
             }
+            //}
             $this_lock = false;
             $lock_num = "go_locks_" . $i . "_keys";
             $num_keys = $custom_fields[$lock_num][0];
@@ -112,42 +140,61 @@ function go_task_locks ( $id, $user_id, $task_name, $custom_fields, $is_logged_i
 
                 if ($key_type != null) {
                     $this_lock = $key_type($id, $user_id, $task_name, $custom_fields, $i, $k, $is_logged_in, $check_only);
-                    $print_locks = true;
-                    if ($this_lock !== false && !$check_only){
+                    if ($this_lock !== false){
                         if(!$first){
-                            echo '-and-';
-                            $first = false;
+                            if(!$custom_message) {
+                                echo '<div style="padding:25px;">–and–</div>';
+                            }
                         }
-                        echo $this_lock;
+                        $first = false;
+                        if(!$custom_message) {
+                            echo $this_lock;
+                        }
+                        $this_lock_status = true;
                     }
                 }
 
-                if ($this_lock == true){
-                    $task_is_locked_locks = true;
-                    $this_lock_on = true;
-                    $task_is_locked = true;
-                }
             }
-            if (!$check_only) {
-                echo '</ul></div>';
-                if ($this_lock_on) {
-                    $lock_num_display++;
-                    echo ob_get_clean();
-                } else {
-                    ob_end_clean();
-                }
+            if(!$this_lock_status){
+                $locks_status = false;
+                break;
+            }
+            if(!$custom_message) {
+                echo '</div></div>';
+            }
+            if ($this_lock_status) {
+                $lock_num_display++;
             }
 
+
         }
-        if (!$check_only) {
-            echo '</div>';
-            $message1 = ob_get_clean();
-            if($task_is_locked_locks && $print_locks == true) {
-                echo $message1;
-            }
+        if(!$custom_message) {
+            echo '</div></div>';
         }
+
+
+
+
 
     }
+    if($locks_status){
+        $task_is_locked = true;
+        if (!$check_only) {
+            //$message =  ob_get_clean();
+            $message = ob_get_contents();
+        }
+    }
+    ob_end_clean();
+    if($locks_status){
+        if (!$check_only) {
+            echo $message;
+        }
+    }
+
+
+
+
+
 
     /**
      * This section is for the password lock
@@ -164,8 +211,17 @@ function go_task_locks ( $id, $user_id, $task_name, $custom_fields, $is_logged_i
     //}
 
     //Locks End
-    return $task_is_locked;
 
+    if (!$check_only && $task_is_locked) {
+        $message = ob_get_contents();
+    }
+    ob_end_clean();
+    if (!$check_only && $task_is_locked) {
+        echo $message;
+    }
+
+
+    return $task_is_locked;
 }
 
 /**
@@ -182,7 +238,7 @@ function go_task_locks ( $id, $user_id, $task_name, $custom_fields, $is_logged_i
  */
 function go_until_lock($id, $user_id, $task_name, $custom_fields, $i, $k, $is_logged_in, $check_only ){
     $this_lock = false;
-    $is_admin = go_user_is_admin( $user_id );
+    $is_admin = go_user_is_admin();
     $option = "go_locks_" . $i . "_keys_" . $k . "_options_0_until";
     $start_filter = $custom_fields[$option][0];
 
@@ -197,7 +253,7 @@ function go_until_lock($id, $user_id, $task_name, $custom_fields, $i, $k, $is_lo
         if ($unix_now < $start_unix) {
             $time_string = date('g:ia', $start_unix) . ' on ' . date('D, F j, Y', $start_unix);
             if (!$check_only) {
-                $this_lock = "<li class='go_error_red'>It is after {$time_string}.</li>";
+                $this_lock = "<p class='go_error_red'>It is after {$time_string}.</p>";
 
                 $this_lock .= go_timezone_message($user_id);
 
@@ -205,8 +261,6 @@ function go_until_lock($id, $user_id, $task_name, $custom_fields, $i, $k, $is_lo
             else{
                 $this_lock = true;
             }
-
-
         }
     }
 
@@ -226,7 +280,7 @@ function go_until_lock($id, $user_id, $task_name, $custom_fields, $i, $k, $is_lo
  * @return bool
  */
 function go_after_lock($id, $user_id, $task_name, $custom_fields, $i, $k, $is_logged_in, $check_only ){
-    //$is_admin = go_user_is_admin( $user_id );
+    //$is_admin = go_user_is_admin( );
     $this_lock = false;
     $option = "go_locks_" . $i . "_keys_" . $k . "_options_0_after";
     $start_filter = $custom_fields[$option][0];
@@ -243,7 +297,7 @@ function go_after_lock($id, $user_id, $task_name, $custom_fields, $i, $k, $is_lo
         if ($unix_now > $start_unix) {
             $time_string = date('g:ia', $start_unix) . ' on ' . date('D, F j, Y', $start_unix);
             if (!$check_only) {
-                $this_lock =  "<li class='go_error_red'>This " . $task_name . " was only available until {$time_string}.</li>";
+                $this_lock =  "<p class='go_error_red'>This " . $task_name . " was only available until {$time_string}.</p>";
                 $this_lock .= go_timezone_message($user_id);
 
             }
@@ -288,12 +342,12 @@ function go_badge_lock($id, $user_id, $task_name, $custom_fields, $i, $k, $is_lo
         }
     */
         if (is_serialized($terms_needed)){
-            $terms_needed = unserialize($terms_needed);//legacy badges saved as serialized array
+            $terms_needed = unserialize($terms_needed);// badges saved as serialized array
         }
         if (!is_array($terms_needed)){
             $terms_needed = array($terms_needed);
         }else{
-            $terms_needed = array();
+            //$terms_needed = array();
         }
 
 
@@ -302,6 +356,7 @@ function go_badge_lock($id, $user_id, $task_name, $custom_fields, $i, $k, $is_lo
 
         $key = go_prefix_key('go_badge');
         $badges_array = get_user_meta($user_id, $key, false);
+
 
         if(!is_array($badges_array)) {
             $badges_array = array();
@@ -312,19 +367,59 @@ function go_badge_lock($id, $user_id, $task_name, $custom_fields, $i, $k, $is_lo
             // checks to see if the filter array are in the the user's badge array
             $intersection = array_values(array_intersect($badges_array, $terms_needed));
             // stores an array of the badges that were not found in the user's badge array
-            $term_diff = array_diff($terms_needed, $intersection);
-            if (!empty($term_diff)) {
+            //$term_diff = array_diff($terms_needed, $intersection);
+            if(count($intersection) === 0){
+            //if (!empty($term_diff)) {
                 if (!$check_only) {
-                    $this_lock = "<li class='go_error_red'>You are in the possession of one of these " . $badges_name . ":</li>";
-                    $this_lock .= "<ul class='go_term_list go_error_red'>";
-                    foreach ($term_diff as $term_id) {
-                        $term_object = get_term($term_id);
-                        $term_name = $term_object->name;
-                        if (!empty($term_name)) {
-                            $this_lock .= "<li>$term_name</li>";
+                    //$this_lock = "<div class='go_error_red'>You are in the possession of one of these " . $badges_name . ":</div>";
+                   // $this_lock = "<div><b>" . $badges_name . ":</b></div>";
+                    $this_lock = "<div>You must possess one of these " . $badges_name . " to access this ".$task_name .":</div>";
+
+                    $this_lock .= "<div class='go_term_list'>";
+                    $first = true;
+                    $count = count($terms_needed);
+                    $i = 0;
+                    foreach ($terms_needed as $term_id) {
+                        $i++;
+                        if (!empty($term_id)) {
+
+
+                            $term = get_term($term_id);
+                            $term_name = $term->name;
+                            if (!$first) {
+                                if ($count === $i) {
+                                    $this_lock .= " or ";
+                                } else {
+                                    //$this_lock .= "<p> –or– </p>";
+                                    $this_lock .= ", ";
+                                }
+                            }
+                            $first = false;
+                            $this_lock .= "$term_name";
+                        }
+
+                    }
+                    $this_lock .= "</div>";
+
+                    /*
+
+                    $this_lock .= "<div class='go_term_list'>";
+                    $first = true;
+                    foreach ($terms_needed as $term_id) {
+
+
+
+                        if (!empty($term_id)) {
+                            if (!$first){
+                                $this_lock .= "<p> –or– </p>";
+                            }
+                            $first = false;
+                            $term = get_term($term_id);
+                            $term_name = $term->name;
+                            $this_lock .= "<p>$term_name</p>";
                         }
                     }
-                    $this_lock .= "</ul>";
+                    $this_lock .= "</div>";*/
                 }
                 else{
                     $this_lock = true;
@@ -376,19 +471,40 @@ function go_user_lock($id, $user_id, $task_name, $custom_fields, $i, $k, $is_log
             // checks to see if the filter array are in the the user's groups array
             $intersection = array_values(array_intersect($user_terms, $terms_needed));
             // stores an array of the groups that were not found in the user's groups array
-            $term_diff = array_diff($terms_needed, $intersection);
-            if (!empty($term_diff)) {
+            //$term_diff = array_diff($terms_needed, $intersection);
+            if(count($intersection) === 0){
+            //if (!empty($term_diff)) {
                 if (!$check_only) {
-                    $this_lock = "<li class='go_error_red'>You are a member of one of these groups:</li>";
-                    $this_lock .= "<ul class='go_term_list go_error_red'>";
-                    foreach ($term_diff as $term_id) {
-                        $term_object = get_term($term_id);
-                        $term_name = $term_object->name;
-                        if (!empty($term_name)) {
-                            $this_lock .= "<li>$term_name</li>";
+                    //$this_lock = "<div class='go_error_red'>You are a member of one of these groups:</div>";
+
+                    //$this_lock = "<div><b>Groups:</b></div>";
+                    $this_lock = "<div>You must be in one of these groups to access this ".$task_name .":</div>";
+
+                    $this_lock .= "<div class='go_term_list'>";
+                    $first = true;
+                    $count = count($terms_needed);
+                    $i = 0;
+                    foreach ($terms_needed as $term_id) {
+                        $i++;
+                        if (!empty($term_id)) {
+
+
+                            $term = get_term($term_id);
+                            $term_name = $term->name;
+                            if (!$first) {
+                                if ($count === $i) {
+                                    $this_lock .= " or ";
+                                } else {
+                                    //$this_lock .= "<p> –or– </p>";
+                                    $this_lock .= ", ";
+                                }
+                            }
+                            $first = false;
+                            $this_lock .= "$term_name";
                         }
+
                     }
-                    $this_lock .= "</ul>";
+                    $this_lock .= "</div>";
                 }
                 else{
                     $this_lock = true;
@@ -434,21 +550,57 @@ function go_period_lock($id, $user_id, $task_name, $custom_fields, $i, $k, $is_l
             // checks to see if the filter array are in the the user's section array
             $intersection = array_values(array_intersect($user_terms, $terms_needed));
             // stores an array of the terms that were not found in the user's term array
-            $term_diff = array_diff($terms_needed, $intersection);
-            if (!empty($term_diff)) {
+           // $term_diff = array_diff($terms_needed, $intersection);
+            if(count($intersection) === 0){
+            //if (!empty($term_diff)) {
                 if (!$check_only) {
-                    $this_lock = "<li class='go_error_red'>You must be in one of the following classes:</li>";
-                    $this_lock .= "<ul class='go_term_list go_error_red'>";
-                    foreach ($term_diff as $term_id) {
+                    //$this_lock = "<div class='go_error_red'>You must be in one of the following classes:</div>";
+                    //$this_lock = "<div><b>Classes:</b></div>";
+                    $this_lock = "<div>You must be in one of these class sections to access this ".$task_name .":</div>";
+
+                    $this_lock .= "<div class='go_term_list'>";
+                    $first = true;
+                    $count = count($terms_needed);
+                    $i = 0;
+                    foreach ($terms_needed as $term_id) {
+                        $i++;
+                        if (!empty($term_id)) {
+
+
+                            $term = get_term($term_id);
+                            $term_name = $term->name;
+                            if (!$first) {
+                                if ($count === $i) {
+                                    $this_lock .= " or ";
+                                } else {
+                                    //$this_lock .= "<p> –or– </p>";
+                                    $this_lock .= ", ";
+                                }
+                            }
+                            $first = false;
+                            $this_lock .= "$term_name";
+                        }
+
+                    }
+                    $this_lock .= "</div>";
+
+                    /*
+                    $this_lock .= "<div class='go_term_list'>";
+                    $first = true;
+                    foreach ($terms_needed as $term_id) {
                         //$term_object = get_term($term_id);
                         //$term_name = $term_object->name;
                         if (!empty($term_id)) {
+                            if (!$first){
+                                $this_lock .= "<p> –or– </p>";
+                            }
+                            $first = false;
                             $term = get_term($term_id);
                             $term_name = $term->name;
-                            $this_lock .= "<li>$term_name</li>";
+                            $this_lock .= "<p>$term_name</p>";
                         }
                     }
-                    $this_lock .= "</ul>";
+                    $this_lock .= "</div>";*/
                 }
                 else{
                     $this_lock = true;
@@ -484,7 +636,7 @@ function go_xp_lock($id, $user_id, $task_name, $custom_fields, $i, $k, $is_logge
         $xp_name = get_option('options_go_loot_xp_name');
         if ($user_xp < $xp_needed){
             if (!$check_only) {
-                $this_lock = "<br><span class='go_error_red'>You must have {$xp_needed} {$xp_name} to access this {$task_name}.</span></br>";
+                $this_lock = "<div class='go_error_red'>You must have {$xp_needed} {$xp_name} to access this {$task_name}.</div>";
             }
             else{
                 $this_lock = true;
@@ -519,7 +671,7 @@ function go_xp_levels_lock($id, $user_id, $task_name, $custom_fields, $i, $k, $i
         $xp_name = get_option('options_go_loot_xp_name');
         if ($user_xp < $xp_needed){
             if (!$check_only) {
-                $this_lock = "<br><span class='go_error_red'>You must have {$xp_needed} {$xp_name} to access this {$task_name}.</span></br>";
+                $this_lock = "<div class='go_error_red'>You must have {$xp_needed} {$xp_name} to access this {$task_name}.</div>";
             }
             else{
                 $this_lock = true;
@@ -554,7 +706,7 @@ function go_gold_lock($id, $user_id, $task_name, $custom_fields, $i, $k, $is_log
         $gold_name = go_get_gold_name();
         if ($user_gold < $gold_needed){
             if (!$check_only) {
-                $this_lock = "<br><span class='go_error_red'>You must have {$gold_needed} {$gold_name} to access this {$task_name}.</span></br>";
+                $this_lock = "<div class='go_error_red'>You must have {$gold_needed} {$gold_name} to access this {$task_name}.</div>";
             }
             else{
                 $this_lock = true;
@@ -589,7 +741,7 @@ function go_health_lock($id, $user_id, $task_name, $custom_fields, $i, $k, $is_l
         $health_name = get_option('options_go_loot_health_name');
         if ($user_health < $health_needed){
             if (!$check_only) {
-                $this_lock = "<br><span class='go_error_red'>You must have {$health_needed} {$health_name} to access this {$task_name}.</span></br>";
+                $this_lock = "<div class='go_error_red'>You must have {$health_needed} {$health_name} to access this {$task_name}.</div>";
             }
             else{
                 $this_lock = true;
@@ -677,7 +829,10 @@ function go_schedule_access($user_id, $custom_fields, $is_logged_in, $check_only
                 $lock_message = $lock_message . '<br>';
             }
 
-            $this_lock = "<div class='go_sched_access_message'><h3>Access Schedule</h3>$lock_message";
+            $this_lock = "<div class='go_sched_access_message'><h3>Not Currently Available</h3>$lock_message";
+
+            $this_lock .= '<div class="scheduled_accordion"><h3>See Access Schedule</h3><div class="content">';
+
 
 
             //echo current_time( 'timestamp' );
@@ -723,7 +878,7 @@ function go_schedule_access($user_id, $custom_fields, $is_logged_in, $check_only
                 }
                 $dow_time = strtotime($dow_time);
                 if (!$first) {
-                    $this_lock .= "-or-<br>";
+                    $this_lock .= "–or–<br>";
                 }
 
                 if (!empty ($dow_section)) {
@@ -746,7 +901,14 @@ function go_schedule_access($user_id, $custom_fields, $is_logged_in, $check_only
 
             $this_lock .= go_timezone_message($user_id);
 
-            $this_lock .= '</div>';
+            $this_lock .= '</div></div></div><script>
+  jQuery( function() {
+    jQuery( ".scheduled_accordion" ).accordion({
+    active: false,
+    collapsible: true            
+});
+  } );
+  </script>';
         }
 
     }
@@ -754,10 +916,11 @@ function go_schedule_access($user_id, $custom_fields, $is_logged_in, $check_only
 
 }
 
+
 //gets the last non optional task on a task chain
 //starts at the $id of the task if provided
 //returns the post_id of the previous task, or false if no previous non optional task on this chain
-function go_prev_task($id = null, $chain_id){
+function go_prev_task($id = null, $chain_id, $is_nested = false){
     $prev_task = false;
     //FIND IF THE PREVIOUS NON OPTIONAL TASK IS ON THE PREVIOUS CHAIN
     //if this task is on a chain
@@ -781,11 +944,18 @@ function go_prev_task($id = null, $chain_id){
         while ($prev_key >= 0){
             $prev_task = $go_task_ids[$prev_key];
             $prev_task_custom_meta = go_post_meta($prev_task);
-            $is_last_optional = (isset($prev_task_custom_meta['go-location_map_opt'][0]) ?  $prev_task_custom_meta['go-location_map_opt'][0] : false);
-
-            if (!$is_last_optional){//if a not optional task is found, break the loop and return the id
-                break;
-                return $prev_task;
+            if(!$is_nested) {
+                $is_last_optional = (isset($prev_task_custom_meta['go-location_map_options_optional'][0]) ? $prev_task_custom_meta['go-location_map_options_optional'][0] : false);
+                if (!$is_last_optional) {//if a not optional task is found, break the loop and return the id
+                    break;
+                    return $prev_task;
+                }
+            }else{
+                $is_last_nested = (isset($prev_task_custom_meta['go-location_map_options_nested'][0]) ? $prev_task_custom_meta['go-location_map_options_nested'][0] : false);
+                if (!$is_last_nested) {//if a not optional task is found, break the loop and return the id
+                    break;
+                    return $prev_task;
+                }
             }
             $prev_key--;
         }
@@ -801,12 +971,12 @@ function go_prev_task($id = null, $chain_id){
     return $prev_task;
 }
 
-function go_task_chain_lock_message($prev_task, $task_name){
+function go_task_chain_lock_message($post_id, $task_name){
 
-        $task_title = go_the_title($prev_task);
-        $task_link = go_post_permalink($prev_task);
+        $task_title = go_the_title($post_id);
+        $task_link = go_post_permalink($post_id);
 
-        return "<div class='go_sched_access_message'><h3 class='go_error_red'>Locked</h3>The $task_name, <a href='$task_link'>$task_title</a> must be done first</div>";
+        return "<div class='go_sched_access_message'><h3 class='go_error_red'>Locked</h3>The $task_name, <a href='$task_link'>$task_title</a> must be done first.</div>";
 
 }
 
@@ -849,6 +1019,43 @@ function go_task_chain_lock($id, $user_id, $task_name, $custom_fields, $is_logge
         $first_in_chain = true;
     }
 
+    //Check #0
+    //is the chain or map locked
+    $map_data = go_term_data($chain_id);
+    $map_custom_fields = $map_data[1];
+    $is_map_locked = go_task_locks ( $chain_id, $check_only, $user_id , 'Map', $map_custom_fields);
+    if ($is_map_locked) {
+        return true;//it is locked
+    }
+
+    $parent_map_term_id = go_get_parent_map_id($chain_id);
+    $map_data = go_term_data($parent_map_term_id);
+    $map_custom_fields = $map_data[1];
+    $is_map_locked = go_task_locks ( $parent_map_term_id, $check_only, $user_id , 'Map', $map_custom_fields);
+    if ($is_map_locked) {
+        return true;//it is locked
+    }
+
+
+    //nested check
+    $nested = (isset($custom_fields['go-location_map_options_nested'][0]) ? $custom_fields['go-location_map_options_nested'][0] : false);
+    if($nested){
+        //GET THE TASK ID OF THE FIRST PREVIOUS NON_NESTED TASK ON THE CURRENT CHAIN
+        $any_prev_task = go_prev_task($id, $chain_id, true);
+        if ($any_prev_task) {//if there is a previous task
+            $is_done = go_is_done($any_prev_task, $user_id);//is it done
+            if ($is_done) {
+                return false;//it is unlocked
+            } else {
+                if (!$check_only) {
+                    $this_lock = go_task_chain_lock_message($any_prev_task, $task_name);
+                    echo $this_lock;
+                }
+                return true;//it is locked
+            }
+        }
+    }
+
 
     //CHECK #1
     // IF NOT FIRST ON CHAIN and IT IS NOT A POD then CHECK THE PREVIOUS TASK
@@ -870,9 +1077,12 @@ function go_task_chain_lock($id, $user_id, $task_name, $custom_fields, $is_logge
     //IF THIS IS A POD OR THE FIRST IN THE CHAIN
     //AND THIS CHAIN is not LOCKED BY THE PREVIOUS
     //THEN SET THIS TASK TO UNLOCKED(available)
-    else if (($is_pod || $first_in_chain) && !$locked_by_prev) {
+    //else if (($is_pod || $first_in_chain) && !$locked_by_prev) {
+    else if ( $first_in_chain && !$locked_by_prev && !$is_pod) {
         return false;//it is unlocked
     }
+
+
 
     //CHECK #3
     //THESE CHECKS ARE FOR PODS/FIRST IN CHAIN THAT ARE LOCKED BY PREVIOUS (that should be everything else)
@@ -886,15 +1096,89 @@ function go_task_chain_lock($id, $user_id, $task_name, $custom_fields, $is_logge
         //CHECK IF THE MASTER PASSWORD WAS USED ON ANY TASK ON THIS CHAIN
         //THEN SET THIS (AND ALL TASKS) TO UNLOCKED IF TRUE
         if ($is_pod) {
+
             $go_task_ids = go_get_chain_posts($chain_id, false);
-            $master_unlock = false;
-            //are any in the pod unlocked by masterpassword
+            $done_num = get_term_meta($chain_id, "pod_done_num", true);
+            $max_num = get_term_meta($chain_id, "pod_max_num", true);
+
+            //$master_unlock = false;
+
+            $attempted = 0;
             foreach ($go_task_ids as $task_id) {
-                $is_unlocked = go_master_unlocked($user_id, $task_id);
-                if ($is_unlocked == 'password' || $is_unlocked == 'master password') {
-                    return false;//it is unlocked
+
+                //if is pod check if the max attempted is reached
+                if($max_num) {
+                    $go_task_data = go_post_data($task_id); //0--name, 1--status, 2--permalink, 3--metadata
+                    $custom_fields = $go_task_data[3];
+                    $nested = (isset($custom_fields['go-location_map_options_nested'][0]) ? $custom_fields['go-location_map_options_nested'][0] : false);
+                    $optional = (isset($custom_fields['go-location_map_options_optional'][0]) ? $custom_fields['go-location_map_options_optional'][0] : false);
+                    if(!$nested && !$optional) {
+                        $status = go_get_status($task_id, $user_id);
+                        if ($status >= 1) {
+                            if ($task_id == $id) {
+                                break;
+                            }
+                            $attempted++;
+                        }
+                    }
+                    if ($attempted >= $done_num) {
+                        if (!$check_only) {
+                            $task_name_plural = get_option('options_go_tasks_name_plural');
+                            echo "<div class='go_sched_access_message'><h3 class='go_error_red'>Locked</h3>You have reached the maximum number of " . $task_name_plural . " to attempt in this pod.</div>";
+
+                            // echo "You have reached the maximum number of quests to attempt in this pod.";
+                        }
+                        return true;//it is locked
+                    }
                 }
             }
+
+            //are any in the pod unlocked by masterpassword
+            $is_unlocked = go_master_unlocked($user_id, $task_id);
+            if ($is_unlocked == 'password' || $is_unlocked == 'master password') {
+                return false;//it is unlocked
+            }
+
+            if ( !$locked_by_prev) {
+                return false;//it is unlocked
+            }
+
+            /*
+            $marked_hidden = (isset($custom_fields['go-location_map_options_hidden'][0]) ?  $custom_fields['go-location_map_options_hidden'][0] : false);
+            if($marked_hidden) {
+                $chain_order = go_get_chain_posts($chain_id, false);
+                if (empty($chain_order) || !is_array($chain_order)) {
+                    //do nothing
+                } else {
+                    $this_task_order = array_search($id, $chain_order);
+                    if ($this_task_order == 0) {
+                        //if the first task in pod is hidden, it is locked
+                        return false;
+                    } else {
+                        $prev_found = false;
+                        $i = (int)$this_task_order;
+                        while (!$prev_found) {
+                            $i--;
+                            $prev_task = $chain_order[$i];
+                            $is_hidden = get_post_meta($prev_task, 'go-location_map_options_hidden');
+                            $is_hidden = (isset($is_hidden[0]) ?  $is_hidden[0] : false);
+                            if (!$is_hidden) {
+                                $is_done = go_is_done($prev_task, $user_id);
+                                if($is_done){
+                                    return false;
+                                }else{
+                                    if (!$check_only) {
+                                        $this_lock = go_task_chain_lock_message($prev_task, $task_name);
+                                        echo $this_lock;
+                                    }
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }*/
+
         }
 
         //#4.2
@@ -971,8 +1255,7 @@ function go_task_chain_lock($id, $user_id, $task_name, $custom_fields, $is_logge
 
                 $map_url = get_option('options_go_locations_map_map_link');
                 $map_url = (string) $map_url;
-                $go_map_link = get_permalink( get_page_by_path($map_url) );
-
+                $go_map_link = get_site_url(null, $map_url);
                 echo "<div class='go_sched_access_message'><h3 class='go_error_red'>Locked</h3>The previous group of " . $task_name . " must be done first. Please check the <a href='" . $go_map_link . "'>map</a>.</div>";
 
             }
@@ -1067,7 +1350,7 @@ function go_task_chain_lock($id, $user_id, $task_name, $custom_fields, $is_logge
  * Timezone message
  */
 function go_timezone_message($user_id) {
-    $is_admin = go_user_is_admin( $user_id );
+    $is_admin = go_user_is_admin( );
     $timezone = get_option('timezone_string');
     $current_time = current_time('timestamp');
     //$offset = 3600 * get_option('gmt_offset');
@@ -1232,11 +1515,33 @@ function go_lock_password_validate($pass, $custom_fields){
 
 function is_chain_done($chain_id, $user_id, $post_id, $is_progressing = true){
     $is_pod = get_term_meta($chain_id, "pod_toggle", true);
-
-    $args = array('tax_query' => array(array('taxonomy' => 'task_chains', 'field' => 'term_id', 'terms' => $chain_id,)), 'orderby' => 'meta_value_num', 'order' => 'ASC', 'posts_per_page' => -1, 'meta_key' => 'go-location_map_order_item', 'meta_value' => '', 'post_type' => 'tasks', 'post_mime_type' => '', 'post_parent' => '', 'author' => '', 'author_name' => '', 'post_status' => 'publish', 'suppress_filters' => true
+/*
+    $args = array(
+            'tax_query' => array(array('taxonomy' => 'task_chains', 'field' => 'term_id', 'terms' => $chain_id,)),
+            'orderby' => 'meta_value_num',
+            'order' => 'ASC', 'posts_per_page' => -1,
+            'meta_key' => 'go-location_map_order_item',
+            'meta_value' => '',
+            'post_type' => 'tasks',
+            'post_mime_type' => '',
+            'post_parent' => '',
+            'author' => '',
+            'author_name' => '',
+            'post_status' => 'publish',
+            'suppress_filters' => true,
+            'meta_query' => array(
+                array(
+                    'key' => 'go-location_map_toggle',
+                    'value' => '1',
+                    'compare' => '=',
+                )
+            )
     );
 
     $go_task_objs = get_posts($args);
+*/
+
+    $go_task_objs = go_get_ordered_posts($chain_id);
 
     //HOW MANY ARE NEEDED
     if ($is_pod ) {// it is a pod, find how many are neeed
@@ -1251,6 +1556,8 @@ function is_chain_done($chain_id, $user_id, $post_id, $is_progressing = true){
     }else{
         $num_needed = count($go_task_objs);
     }
+
+
 
     //HOW MANY ARE DONE
     $num_done = 0;
@@ -1267,15 +1574,22 @@ function is_chain_done($chain_id, $user_id, $post_id, $is_progressing = true){
             continue;
         }
 
-        //count as done if optional
-        $is_optional = go_post_meta($go_task_id, 'go-location_map_opt', true);
+
+        $is_optional = go_post_meta($go_task_id, 'go-location_map_options_optional', true);
         if ($is_optional){//if is optional, then count as done and continue
-            $num_done++;
-            if ($num_done >= $num_needed) {
-                return true;//if enough are done, return it is done
+            if(!$is_pod){
+                $num_done++;//count as done if optional on chain
+                if ($num_done >= $num_needed) {
+                    return true;//if enough are done, return it is done
+                }
+                continue;
             }
-            continue;
+            else{
+                continue;
+            }
         }
+
+
 
         //count as done if complete
         $stage_count = intval(go_post_meta($go_task_id, 'go_stages', true));//total stages
@@ -1328,6 +1642,152 @@ function is_chain_done($chain_id, $user_id, $post_id, $is_progressing = true){
     }
     */
     return false;
+}
+
+
+function test_is_chain_done($chain_id, $user_id, $post_id, $is_progressing = true){
+    $is_pod = get_term_meta($chain_id, "pod_toggle", true);
+    /*
+        $args = array(
+                'tax_query' => array(array('taxonomy' => 'task_chains', 'field' => 'term_id', 'terms' => $chain_id,)),
+                'orderby' => 'meta_value_num',
+                'order' => 'ASC', 'posts_per_page' => -1,
+                'meta_key' => 'go-location_map_order_item',
+                'meta_value' => '',
+                'post_type' => 'tasks',
+                'post_mime_type' => '',
+                'post_parent' => '',
+                'author' => '',
+                'author_name' => '',
+                'post_status' => 'publish',
+                'suppress_filters' => true,
+                'meta_query' => array(
+                    array(
+                        'key' => 'go-location_map_toggle',
+                        'value' => '1',
+                        'compare' => '=',
+                    )
+                )
+        );
+
+        $go_task_objs = get_posts($args);
+    */
+
+    $go_task_objs = go_get_ordered_posts($chain_id, 'tasks');
+
+    //HOW MANY ARE NEEDED
+    if ($is_pod ) {// it is a pod, find how many are neeed
+        $all_needed = get_term_meta($chain_id, "pod_all", true);
+
+        if ($all_needed) {
+
+            $num_needed = count($go_task_objs);
+        }else{
+            $num_needed = get_term_meta($chain_id, "pod_done_num", true);
+        }
+    }else{
+        $num_needed = count($go_task_objs);
+    }
+
+
+
+    //HOW MANY ARE DONE
+    $num_done = 0;
+    $unpublished = 0;
+    foreach ($go_task_objs as $go_task_obj) {//check if each task is done
+        $go_task_id = $go_task_obj->ID;
+
+        //count as done if unpublished (it is in the count and can't be done)
+        $is_published = get_post_status( $go_task_id );
+        if ($is_published !== 'publish'){//if is not published, then count as done and continue
+            $unpublished++;
+            if ($num_done >= $num_needed) {
+                //return true;//if enough are done, return it is done
+            }
+            continue;
+        }
+
+
+        $is_optional = go_post_meta($go_task_id, 'go-location_map_options_optional', true);
+        if ($is_optional){//if is optional, then count as done and continue
+            if(!$is_pod){
+                $num_done++;//count as done if optional on chain
+                if ($num_done >= $num_needed) {
+                   // return true;//if enough are done, return it is done
+                }
+            }
+            else{
+                continue;
+            }
+        }
+
+
+
+        //count as done if complete
+        $stage_count = intval(go_post_meta($go_task_id, 'go_stages', true));//total stages
+        $status = intval(go_get_status($go_task_id, $user_id));
+        //adjust status if this is being run on a stage complete/undo last
+        if($post_id == $go_task_id){//if this is the current quest and complete was checked (that is when a $complete_post_id is passed)
+            if ($is_progressing === true) {
+                $status++;
+            }else if ($is_progressing === false){
+                $status--;
+            }
+        }
+
+        if ($stage_count == $status){
+            $num_done++;
+            if ($num_done >= $num_needed) {
+               // return true;//if enough are done, return it is done
+            }
+        }
+
+    }
+
+
+
+    $log = "the count of the obj is " . $num_needed .". and the num done is " . $num_done;
+    ?>
+
+
+    <script>
+        console.log("<?php echo $log; ?>")
+    </script>
+    <?php
+
+
+
+
+    //IS IT DONE
+    if ($num_done >= $num_needed) {
+       // return true;//if enough are done, return it is done
+    }
+    //}
+    /*
+    else {//not pod
+        //is this the last item on chain that isn't optional
+
+
+
+        foreach ($go_task_objs as $go_task_obj){
+            $go_task_id = $go_task_obj->ID;
+
+            $is_optional = go_post_meta($go_task_id, 'go-location_map_opt', true);
+            if (!$is_optional){
+                $stage_count = go_post_meta($go_task_id, 'go_stages', true);//total stages
+
+                $status = go_get_status($go_task_id, $user_id);
+
+                if ($stage_count == $status){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+        }
+    }
+    */
+   // return false;
 }
 
 

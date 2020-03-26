@@ -8,3 +8,4 @@
 // @codekit-prepend 'scripts/go_videos_fit_and_box.js'
 // @codekit-prepend 'scripts/go_map.js'
 // @codekit-prepend 'scripts/go_messages.js'
+// @codekit-prepend 'scripts/go_clipboard.js'

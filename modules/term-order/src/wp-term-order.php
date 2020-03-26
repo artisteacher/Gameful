@@ -34,7 +34,7 @@ final class WP_Term_Order {
 	/**
 	 * @var string Database version
 	 */
-	public $db_version = 201510280002;
+	public $db_version = 20200107;
 
 	/**
 	 * @var string Database version

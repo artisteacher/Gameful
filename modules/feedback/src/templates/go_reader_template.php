@@ -19,7 +19,7 @@
  */
 
 get_header();
-echo "<div class='go_reader_wrapper' style='max-width: 1100px; margin: 0 auto;'>";
+echo "<div class='go_reader_wrapper' style='max-width: 1200px; margin: 0 20px;'>";
 echo "<h2 style='padding-top:10px;'>Reader</h2>";
 go_make_reader();
 

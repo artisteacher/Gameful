@@ -64,7 +64,6 @@ function go_flush_all_permalinks(){
 
 }
 
-
 //https://jeremyfelt.com/2015/07/17/flushing-rewrite-rules-in-wordpress-multisite-for-fun-and-profit/
 function go_disable_game_on_this_site(){
     if ( !is_user_logged_in() ) {
@@ -86,6 +85,27 @@ function go_disable_game_on_this_site(){
     }
 
     echo "disabled";
+    die();
+
+}
+
+function go_use_beta(){
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
+    //check_ajax_referer( 'go_reset_all_users' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_use_beta' ) ) {
+        echo "refresh";
+        die( );
+    }
+
+    $go_use_beta = (isset($_POST['go_use_beta']) ?  $_POST['go_use_beta'] : false);
+    update_option('go_use_beta', $go_use_beta);
+
+    echo "success";
+
     die();
 
 }

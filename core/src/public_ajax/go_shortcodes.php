@@ -1,5 +1,7 @@
 <?php
 
+//not sure what this does and if it is needed
+add_filter( 'wp_default_editor', function() {return 'tinymce';});
 
 
 function go_video_link( $atts, $video_url ) {
@@ -179,7 +181,7 @@ add_shortcode ( 'go_user_only_content','go_user_only_content_function' );
 
 //Makes content within tags visible to admins only
 function go_admin_only_content_function( $atts, $content = null ) {
-	if ( current_user_can( 'manage_options' ) || go_user_is_admin() ) {
+	if ( go_user_is_admin() ) {
 		return '<div id="admin-only-content" style="color:red"> <i>' .do_shortcode( $content). '</i> </div>';
 	} else {
 		return '';
@@ -200,7 +202,7 @@ function go_admin_comments( $atts, $content = null ) {
     }
 
     if ( $is_author || go_user_is_admin() ) {
-        return '<div id="admin-only-content" style="color:darkred">' .do_shortcode( $content). '</div>';
+        return '<span id="admin-only-content" style="color:red; display: inline;"> ' .do_shortcode( $content). ' </span>';
     } else {
         return '';
     }

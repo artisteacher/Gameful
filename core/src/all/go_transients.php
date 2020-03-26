@@ -284,6 +284,7 @@ function go_get_chain_posts($term_id, $is_map = false ){
 
         );
 
+
         $data = get_posts($args);
 
         if ($is_map) {
@@ -345,7 +346,7 @@ function go_post_data($post_id){
 
 function go_the_title($post_id){
     $post_data = go_post_data( $post_id );
-    $post_title = $post_data[0];
+    //$post_title = $post_data[0];
     $post_title= (isset($post_data[0]) ? $post_data[0] : null);
     return $post_title;
 }
@@ -355,12 +356,14 @@ function go_post_status($post_id){
     $post_status = (isset($post_data[1]) ? $post_data[1] : null);
     return $post_status;
 }
+
 function go_post_permalink($post_id){
     $post_data = go_post_data( $post_id );
     $post_permalink = (isset($post_data[2]) ? $post_data[2] : null);
 
     return $post_permalink;
 }
+
 function go_post_meta($post_id, $key = '', $single = 'false'){
     $post_data = go_post_data( $post_id );
     ///$custom_fields = $post_data[3];
@@ -384,22 +387,105 @@ function go_post_meta($post_id, $key = '', $single = 'false'){
     return $post_meta;
 }
 
+function go_task_loot($post_id){
+    $key = 'go_task_loot_' . $post_id;
+    $data = go_get_transient($key);
+
+    if ($data !== false){
+        $loot = $data;
+
+    }else {
+        $custom_fields = get_post_meta($post_id);
+        $stage_count = $custom_fields['go_stages'][0];
+
+        $xp_toggle = get_option( 'options_go_loot_xp_toggle' );
+        $gold_toggle = get_option( 'options_go_loot_gold_toggle' );
+        $health_toggle = get_option( 'options_go_loot_health_toggle' );
+        $badges_toggle = get_option( 'options_go_badges_toggle' );
+        $groups_toggle = get_option('options_go_groups_toggle');
+
+        $xp_loot = 0;
+        $gold_loot = 0;
+        $health_loot = 0;
+        $badges = array();
+        $groups = array();
+
+        //entry loot
+        if ($xp_toggle){
+            $xp_loot = (isset($custom_fields['go_entry_rewards_xp'][0]) ?  $custom_fields['go_entry_rewards_xp'][0] : null);
+        }
+        if ($gold_toggle){
+            $gold_loot = (isset($custom_fields['go_entry_rewards_gold'][0]) ?  $custom_fields['go_entry_rewards_gold'][0] : null);
+        }
+        if ($health_toggle){
+            $health_loot = (isset($custom_fields['go_entry_rewards_health'][0]) ?  $custom_fields['go_entry_rewards_health'][0] : null);
+        }
+        if ($badges_toggle){
+            $badges = (isset($custom_fields['go_badges'][0]) ?  $custom_fields['go_badges'][0] : null);
+        }
+        if ($groups_toggle){
+            $groups = (isset($custom_fields['go_groups'][0]) ?  $custom_fields['go_groups'][0] : null);
+        }
+
+        $i = 0;
+
+        //add all the loot from the stages
+        while ( $stage_count > $i ) {
+            if (get_option( 'options_go_loot_xp_toggle' )) {
+                $key = 'go_stages_' . $i . '_rewards_xp';
+                //$xp = $custom_fields[$key][0];
+                $xp = (isset($custom_fields[$key][0]) ?  $custom_fields[$key][0] : null);
+                $xp_loot = $xp + $xp_loot;
+            }
+
+            if(get_option( 'options_go_loot_gold_toggle' )) {
+                $key = 'go_stages_' . $i . '_rewards_gold';
+                $gold = (isset($custom_fields[$key][0]) ?  $custom_fields[$key][0] : null);
+                $gold_loot = $gold + $gold_loot;
+            }
+
+            if(get_option( 'options_go_loot_health_toggle' )) {
+                $key = 'go_stages_' . $i . '_rewards_health';
+                $health = (isset($custom_fields[$key][0]) ?  $custom_fields[$key][0] : null);
+                $health_loot = $health + $health_loot;
+                if($health_loot > 200){
+                    $health_loot = 200;
+                }
+            }
+
+            $i++;
+        }
+
+        $loot['xp'] = $xp_loot;
+        $loot['gold'] = $gold_loot;
+        $loot['health'] = $health_loot;
+        $loot['badges'] = $badges;
+        $loot['groups'] = $groups;
+
+        go_set_transient($key, $loot, 3600 * 24);
+    }
+    return $loot;
+
+}
+
 
 /**
  * Update transients on post save, delete or trash
  * @param  integer $post_id
  */
 function go_update_task_post_save( $post_id ) {
-
-
     $post_type = (isset($_POST['post_type']) ?  $_POST['post_type'] : null);
     if(empty($post_type)){
         $post_type = get_post_type( $post_id );
     }
+
+
     // Check for post type.
     if ( 'tasks' !== $post_type ) {
         return;
     }
+
+    update_post_meta( $post_id, 'go_task_version', 2);
 
     //delete task chain transient for old and new task chain
     //delete old task chain transient
@@ -413,7 +499,7 @@ function go_update_task_post_save( $post_id ) {
     go_delete_transient($key);*/
 
     //delete OLD task chain transient
-    $term_id = go_post_meta($post_id, 'go-location_map_loc');
+    $term_id = go_post_meta($post_id, 'go-location_map_loc');//can we get this from the taxonomy relationship
     //$term_id = (isset($custom_fields['go-location_map_loc'][0]) ? $custom_fields['go-location_map_loc'][0] : null);
     if(!empty($term_id)) {
         $key = 'go_get_chain_posts_' . $term_id;
@@ -434,6 +520,10 @@ function go_update_task_post_save( $post_id ) {
 
     //delete task data transient
     $key = 'go_post_data_' . $post_id;
+    go_delete_transient($key);
+
+    //delete task loot transient
+    $key = 'go_task_loot_' . $post_id;
     go_delete_transient($key);
 
 }
@@ -461,11 +551,31 @@ function go_update_task_chain_term_save( $term_id ) {
     $key = 'go_get_maps_term_ids';
     go_delete_transient( $key );
 
+    $key = 'go_get_chain_posts_' . $term_id;
+    go_delete_transient( $key );
+
     go_reset_map_transient($term_id);
 
+    $parent_id[] = go_get_parent_map_id($term_id);//the existing parent ID
+    if (!empty($parent_id)) {
+        $key = 'go_get_map_chain_term_ids_' . $parent_id;
+        go_delete_transient($key);
+
+        $key = 'go_term_data_' . $parent_id;
+        go_delete_transient($key);
+
+        $key = 'go_get_parent_map_id_' . $parent_id;
+        go_delete_transient($key);
+
+        $key = 'go_get_chain_posts_' . $parent_id;
+        go_delete_transient($key);
+
+        go_reset_map_transient($parent_id);
+    }
 }
 
 add_action( "delete_task_chains", 'go_update_task_chain_term_save', 10, 4 );
+add_action( "delete_term_taxonomy", 'go_update_task_chain_term_save', 10, 4 );
 add_action( "create_task_chains", 'go_update_task_chain_term_save', 10, 4 );
 add_action( "edit_task_chains", 'go_update_task_chain_term_save', 10, 4 );
 

@@ -73,8 +73,6 @@ function go_buy_item() {
     }
 
     $the_title = go_the_title($post_id);
-    $health_mod = go_get_health_mod ($user_id);
-    //$health_mod = go_get_user_loot( $user_id, 'health' );
     $xp = 0;
     $gold = 0;
     $health = 0;
@@ -135,7 +133,7 @@ function go_buy_item() {
 
     if ($go_admin_message){
 
-        $username = go_get_users_name($user_id);
+        $username = go_get_user_display_name($user_id);
         $result = array();
         $result[] = $username . " bought " . $the_title;
         $result[] = "";
@@ -249,7 +247,7 @@ function go_the_lb_ajax() {
 
     $user_id = get_current_user_id();
     $is_logged_in = ! empty( $user_id ) && $user_id > 0 ? true : false;
-    $is_admin = go_user_is_admin( $user_id );
+    $is_admin = go_user_is_admin(  );
 
     ob_start();
 
@@ -261,9 +259,9 @@ function go_the_lb_ajax() {
         }
         $task_is_locked = false;
         if ($custom_fields['go_lock_toggle'][0] == true || $custom_fields['go_sched_toggle'][0] == true) {
-            $task_is_locked = go_task_locks($post_id, $user_id, "Item", $custom_fields, $is_logged_in, false);
+            $task_is_locked = go_task_locks($post_id, false, $user_id, "Item", $custom_fields);
         }
-
+        $this1 = ob_get_contents();
         $go_password_lock = (isset($custom_fields['go_password_lock'][0]) ? $custom_fields['go_password_lock'][0] : null);
         if ($go_password_lock == true) {
             $task_is_locked = true;
@@ -389,7 +387,7 @@ function go_the_lb_ajax() {
         echo '<div id="go-lb-the-content"><div id="go_store_description" >' . $the_content . '</div>';
 
         if (($xp_on && $store_toggle_xp == false) || ($gold_on && $store_toggle_gold == false) || ($health_on && $store_toggle_health == false)) {
-            echo "<div id='go_store_loot'><div id='go_cost'> <div id='go_store_cost_container' class='go_store_container'> <div class='go_store_loot_left'><div class='go_round_button_container'><div id='gp_store_minus' class='go_store_round_button'>-</div></div></div><div class='go_store_loot_right'><h3>Cost</h3>";
+            echo "<div id='go_store_loot'><div id='go_cost'> <div id='go_store_cost_container' class='go_store_container'> <div class='go_store_loot_left'><div class='go_round_button_container'><div id='gp_store_minus' class='go_store_round_button'><div>-</div></div></div></div><div class='go_store_loot_right'><h3>Cost</h3>";
             if ($xp_on && $store_toggle_xp == false) {
                 echo '<div class="golb-fr-boxes-r">' . $store_cost_xp . '</div>';
             }
@@ -402,9 +400,10 @@ function go_the_lb_ajax() {
 
             echo "</div></div></div>";
         }
+        //
 
         if (($xp_on && $store_toggle_xp == true) || ($gold_on && $store_toggle_gold == true) || ($health_on && $store_toggle_health == true) || (!empty($badges)) || (!empty($groups))) {
-            echo "<div id='go_reward'><div class='go_store_container'> <div class='go_store_loot_left'><div class='go_round_button_container'><div id='gp_store_plus' class='go_store_round_button'>+</div></div></div><div class='go_store_loot_right'><h3>Reward</h3>";
+            echo "<div id='go_reward'><div class='go_store_container'> <div class='go_store_loot_left'><div class='go_round_button_container'><div id='gp_store_plus' class='go_store_round_button'><div>+</div></div></div></div><div class='go_store_loot_right'><h3>Reward</h3>";
             if ($xp_on && $store_toggle_xp == true) {
                 echo '<div class="golb-fr-boxes-g">' . $store_cost_xp .  '</div>';
             }
@@ -450,7 +449,7 @@ function go_the_lb_ajax() {
             if ($purchase_remaining_max > 0 && $store_multiple_toggle) {
                 ?>
 
-                <div id="golb-fr-qty" class="golb-fr-boxes-n">Qty: <input id="go_qty" type="number" value="1" disabled="disabled"/>
+                <div id="golb-fr-qty" class="golb-fr-boxes-n">Qty: <input id="go_qty" type="number" value="1" disabled="disabled">
                 </div>
                 <?php
             }
@@ -458,8 +457,10 @@ function go_the_lb_ajax() {
 
             <div id="go_purch_limits">
                 <?php
-                $store_limit_duration = false;
-                if ($store_limit_duration == 'Total') {
+                //$store_limit_duration = false;
+                $store_limit_frequency = ucwords( ($custom_fields['go-store-options_limit_toggle'][0] == true ) ? $custom_fields['go-store-options_limit_frequency'][0] : null );
+
+                if ($store_limit_frequency == 'Total') {
                     $var1 = ' ';
                 } else {
                     $var1 = ' / ';
@@ -468,7 +469,7 @@ function go_the_lb_ajax() {
                 if ($store_limit_toggle) {
                     ?>
                     <div id="golb-fr-purchase-limit"
-                         val="<?php echo(!empty($purchase_remaining_max) ? $purchase_remaining_max : 0); ?>"><?php echo(($store_limit_toggle) ? "Limit {$store_limit}{$var1}{$store_limit_duration}" : 'No limit'); ?></div>
+                         val="<?php echo(!empty($purchase_remaining_max) ? $purchase_remaining_max : 0); ?>"><?php echo(($store_limit_toggle) ? "Limit {$store_limit}{$var1}{$store_limit_frequency}" : 'No limit'); ?></div>
                     <?php
                 }
                 ?>
@@ -487,8 +488,14 @@ function go_the_lb_ajax() {
             if ($purchase_remaining_max > 0) {
                 ?>
                 <div id="golb-fr-buy" class="golb-fr-boxes-gold"
-                     onclick="goBuytheItem( '<?php echo $post_id; ?>', '<?php echo $purchase_count ?>' ); this.removeAttribute( 'onclick' );">
-                    Buy
+                     onclick="goBuytheItem( '<?php echo $post_id; ?>', '<?php echo $purchase_count ?>' ); this.removeAttribute( 'onclick' );"><?php
+                    $custom_toggle = ( ($custom_fields['go-store-options_custom_button_text_toggle'][0] == true ) ? $custom_fields['go-store-options_custom_button_text_toggle'][0] : false );
+                    if ($custom_toggle){
+                        $custom_button = ( ($custom_fields['go-store-options_custom_button_text_button_text'][0] == true ) ? $custom_fields['go-store-options_custom_button_text_button_text'][0] : 'Buy' );
+                    }else{
+                        $custom_button = "Buy";
+                    }
+                    echo $custom_button; ?>
                 </div>
                 <?php
             }
@@ -515,13 +522,14 @@ function go_get_purchase_count($post_id, $user_id, $custom_fields) {
     global $wpdb;
     $store_limit_frequency = ( ($custom_fields['go-store-options_limit_toggle'][0] == true ) ? $custom_fields['go-store-options_limit_frequency'][0] : null );
     $current_time = current_time('Ymd');
+    $week_starts_on = get_option( 'start_of_week' );
 
     //set the search for the correct time period
     if ($store_limit_frequency == 'day') {
         $timeSQL = ' Date(timestamp)= '.$current_time.' AND';
     }
     else if ($store_limit_frequency == 'week') {
-        $timeSQL = ' YEARWEEK(timestamp)= YEARWEEK('.$current_time.') AND';
+        $timeSQL = " YEARWEEK(timestamp, $week_starts_on )= YEARWEEK({$current_time}) AND";
     }
     else if ($store_limit_frequency == 'month') {
         $timeSQL = ' Year(timestamp)=Year('.$current_time.') AND Month(timestamp)= Month('.$current_time.') AND';

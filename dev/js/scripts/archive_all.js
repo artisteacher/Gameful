@@ -3,6 +3,7 @@ function go_delete_temp_archive(){
 
     console.log("go_delete_temp_archive ");
     var gotoSend = {
+        is_frontend: is_frontend,
         action:"go_delete_temp_archive",
         _ajax_nonce: nonce,
     };
@@ -31,6 +32,7 @@ function go_zip_archive(){
     var nonce = go_zip_archive_nonce;
     //generate_user_list($user_list, $is_private)
     var gotoSend = {
+        is_frontend: is_frontend,
         action:"go_zip_archive",
         _ajax_nonce: nonce,
     };

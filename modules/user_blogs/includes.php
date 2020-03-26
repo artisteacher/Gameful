@@ -17,15 +17,16 @@ if ( !is_admin() ) {
     //Blogs
     //add_action( 'wp_ajax_go_blog_lightbox_opener', 'go_blog_lightbox_opener' ); //OK
     add_action( 'wp_ajax_go_blog_opener', 'go_blog_opener' ); //OK
+    add_action( 'wp_ajax_go_blog_post_opener', 'go_blog_post_opener' ); //OK
+    add_action( 'wp_ajax_go_blog_autosave', 'go_blog_autosave' ); //OK
     add_action( 'wp_ajax_go_blog_trash', 'go_blog_trash' ); //OK
     add_action( 'wp_ajax_go_blog_submit', 'go_blog_submit' ); //OK
     add_action( 'wp_ajax_go_blog_user_task', 'go_blog_user_task');
-    add_action( 'wp_ajax_go_blog_favorite_toggle', 'go_blog_favorite_toggle');
-    add_action( 'wp_ajax_go_show_private', 'go_show_private');
+    //add_action( 'wp_ajax_go_show_private', 'go_show_private');
 }else{
     //include_once('admin/admin.php');
 }
 
 //always include
 include_once('src/functions.php');
-include_once('src/revisions.php');
+//include_once('src/revisions.php');

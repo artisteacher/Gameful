@@ -1,0 +1,117 @@
+{
+    "key": "group_5e37ba0ceec3a",
+    "title": "Store Category (copy)",
+    "fields": [
+        {
+            "key": "field_5e37bb8f5b17c",
+            "label": "Row or Column",
+            "name": "parent_or_child",
+            "type": "radio",
+            "instructions": "Rows are the container that holds the columns. Columns hold the store items.",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "parent": "Row",
+                "child": "Column"
+            },
+            "allow_null": 1,
+            "other_choice": 0,
+            "default_value": "",
+            "layout": "horizontal",
+            "return_format": "value",
+            "save_other_choice": 0
+        },
+        {
+            "key": "field_5e37bbe75b17d",
+            "label": "Choose a Row",
+            "name": "choose_row",
+            "type": "taxonomy",
+            "instructions": "",
+            "required": 1,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5e37bb8f5b17c",
+                        "operator": "==",
+                        "value": "child"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "taxonomy": "store_types",
+            "field_type": "select",
+            "allow_null": 0,
+            "add_term": 0,
+            "save_terms": 0,
+            "load_terms": 0,
+            "return_format": "id",
+            "multiple": 0
+        },
+        {
+            "key": "field_5e37ba0d0238e",
+            "label": "Hide Category in Store",
+            "name": "go_hide_store_cat",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5e37bb8f5b17c",
+                        "operator": "==",
+                        "value": "parent"
+                    }
+                ],
+                [
+                    {
+                        "field": "field_5e37bb8f5b17c",
+                        "operator": "==",
+                        "value": "child"
+                    },
+                    {
+                        "field": "field_5e37bbe75b17d",
+                        "operator": "!=empty"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui": 1,
+            "ui_on_text": "Yes",
+            "ui_off_text": "No"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "taxonomy",
+                "operator": "==",
+                "value": "store_types"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "seamless",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": "",
+    "recaptcha": 0,
+    "modified": 1580715633
+}

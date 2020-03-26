@@ -38,6 +38,8 @@ if ( !is_admin() ) {
     add_action( 'wp_ajax_nopriv_go_update_last_map', 'go_update_last_map' ); //OK
     add_action( 'wp_ajax_nopriv_go_to_this_map', 'go_to_this_map' ); //OK
     add_action( 'wp_ajax_go_user_map_ajax', 'go_user_map_ajax' );
+    add_action( 'wp_ajax_go_update_chain_order', 'go_update_chain_order' );
+    add_action( 'wp_ajax_go_update_task_order', 'go_update_task_order' );
 
 }else{
     //include_once('admin/admin.php');

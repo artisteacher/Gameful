@@ -326,8 +326,8 @@ function generate_single_archive($show_loot = false, $user_id,  $is_admin_archiv
     <?php
 
 
-    go_get_blog_posts($user_id, true, $show_loot);
-
+    //go_get_blog_posts($user_id, true, $show_loot);
+    go_reader_get_posts(null, null, 'ASC', $user_id, false);
     ?>
     <script>
 
@@ -609,4 +609,68 @@ function convert_urls($content, $destination){
 
 
     return $content;
+}
+
+
+function go_reset_selected_users(){
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
+    if(!go_user_is_admin()){
+        echo "not admin";
+        die();
+    }
+
+    //check_ajax_referer( 'go_reset_all_users' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_reset_selected_users_nonce' ) ) {
+        echo "refresh";
+        die( );
+    }
+    global $wpdb;
+
+    $user_list = (isset($_POST['archive_vars']) ? $_POST['archive_vars'] : null);
+    foreach ($user_list as $user) {
+        $user_id = $user['uid'];
+        $loot_table  = $wpdb->prefix . 'go_loot';
+        $wpdb->delete( $loot_table, array( 'uid' => $user_id ), array( "%d" ) );
+
+        $tasks_table  = $wpdb->prefix . 'go_tasks';
+        $wpdb->delete( $tasks_table, array( 'uid' => $user_id ), array( "%d"  ) );
+
+        $actions_table  = $wpdb->prefix . 'go_actions';
+        $wpdb->delete( $actions_table, array( 'uid' => $user_id ), array( "%d"  ) );
+
+        $args = array(
+            'post_type' => array('any','go_blogs','revision'),
+            'author'        =>  $user_id,
+            'orderby'       =>  'post_date',
+            'order'         =>  'ASC',
+            'post_status' => array('publish', 'pending', 'draft', 'auto-draft', 'future', 'private', 'inherit', 'trash', 'reset', 'initial', 'unread', 'read'),
+            'posts_per_page' => -1
+        );
+
+
+        $author_query = new WP_Query( $args );
+        $user_posts = $author_query->posts;
+        if (!empty($user_posts)) {
+            // delete all the user posts
+            foreach ($user_posts as $user_post) {
+                if($user_post->post_type === 'attachment'){
+                    wp_delete_attachment( $user_post->ID );
+                }else {
+                    wp_delete_post($user_post->ID, true);
+                }
+                //wp_delete_attachment( $attachment->ID );
+
+            }
+        }
+
+    }
+
+
+    echo "reset";
+    die();
+
 }

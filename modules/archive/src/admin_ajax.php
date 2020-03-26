@@ -17,5 +17,5 @@ function go_clean_up_archive_temp_folder(){
             }
 
     }
-    go_delete_temp_archive_helper($content);
+
 }

@@ -135,8 +135,8 @@
     "label_placement": "top",
     "instruction_placement": "label",
     "hide_on_screen": "",
-    "active": 1,
+    "active": 0,
     "description": "",
     "recaptcha": 0,
-    "modified": 1570430753
+    "modified": 1580715505
 }

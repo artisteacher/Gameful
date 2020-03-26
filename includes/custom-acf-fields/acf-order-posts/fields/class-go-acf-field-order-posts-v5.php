@@ -154,21 +154,14 @@ class go_acf_field_order_posts extends acf_field {
             'name'			=> 'sort_term',
         ));
 
-        // term to sort
-        acf_render_field_setting( $field, array(
-            'label'			=> __('Taxonomy field to sort--field ID','acf'),
-            'instructions'	=> 'Enter the field ID ',
-            'type'			=> 'text',
-            'name'			=> 'taxonomy_field',
-        ));
 
-        // order field name
-        acf_render_field_setting( $field, array(
-            'label'			=> __('Order field key name in post meta data','acf'),
-            'instructions'	=> 'Name the field meta key for the order field.  E.g. field_name_item ',
-            'type'			=> 'text',
-            'name'			=> 'order_key_name',
-        ));
+       // order field name
+       acf_render_field_setting( $field, array(
+           'label'			=> __('Order field key name in post meta data','acf'),
+           'instructions'	=> 'Name the field meta key for the order field.  E.g. field_name_item ',
+           'type'			=> 'text',
+           'name'			=> 'order_key_name',
+       ));
 
         // return_format
         acf_render_field_setting( $field, array(
@@ -182,6 +175,7 @@ class go_acf_field_order_posts extends acf_field {
             ),
             'layout'	=>	'horizontal',
         ));
+
     }
 
 
@@ -228,7 +222,12 @@ class go_acf_field_order_posts extends acf_field {
         }
 
 
-        $nonce = wp_create_nonce( 'acf_load_order_field_list' );
+        $nonce = wp_create_nonce( 'acf_load_order_field_list' );//localize this
+        $order_key_name = $field['order_key_name'] ;
+        $term_id = get_field($field['sort_term']) ;
+        $key = $field['key'] ;
+        $name = $field['name'] ;
+       // $order_key_name = $field['order_key_name'] ;
         ?>
         <div <?php acf_esc_attr_e($atts); ?>>
 
@@ -237,15 +236,12 @@ class go_acf_field_order_posts extends acf_field {
             ?>
 
 
-
-            <div class="selection">
-
+<?php
+            echo "<div id='$key' data-key='$key' data-nonce='$nonce' data-name='$name' data-term_id='$term_id' data-post_id='$post_id' data-order_key_name='$order_key_name' class='selection'>";
+?>
                 <div class="values" style="width: 100%;">
                     <?php
-                    $term_id = get_field($field['sort_term']) ;
-                    $key = $field['key'] ;
-                    $name = $field['name'] ;
-                    $order_key_name = $field['order_key_name'] ;
+
 
                     go_acf_order_posts_list($key, $name, $term_id, $post_id, $order_key_name)
 
@@ -256,51 +252,6 @@ class go_acf_field_order_posts extends acf_field {
 
 
         <?php
-        $nonce = wp_create_nonce( 'acf_load_order_field_list' );
-        $order_key_name = $field['order_key_name'] ;
-        $taxonomy = $field['taxonomy_field'] ;
-        //dynamic js
-        // when there is a change in connected taxonomy field
-        //clear this field and
-        //get the field
-        //and make sortble
-        //$key, $name, $term_id, $post_id
-        echo '<script>
-console.log("reorder");
-                jQuery(".' . $taxonomy . '").change(
-                    function() {
-                        var term_id =  jQuery(".' . $taxonomy . '").val();
-                        var key = "' . $key . '";
-                        var post_id = "' . $post_id . '";
-                        var name = "' . $name . '";
-                        var url = "' . admin_url( 'admin-ajax.php' ) . '";
-                        var list_id = "#list_' . $key . '";
-                        var order_key_name = "' . $order_key_name . '";
-                        var nonce = "' . $nonce . '";
-                        console.log("term_id: " + term_id);
-                        jQuery.ajax({
-                            type: "get",
-                            url: url,
-                            data: {
-                                _ajax_nonce: nonce,
-                                action: "acf_load_order_field_list",
-                                key: key,
-                                post_id: post_id,
-                                name: name,
-                                term_id: term_id,
-                                order_key_name: order_key_name
-                            },
-                            success: function( res ) {
-                                console.log("res: " + res);
-                                jQuery(list_id).html(res);
-                               return res;
-                               
-                            }
-                        });
-                    }
-                );
-        </script>';
-
 
     }
 		
@@ -478,7 +429,7 @@ console.log("reorder");
 	*  @param	$field (array) the field array holding all the field options
 	*  @return	$value
 	*/
-
+/*
     function load_value( $value, $post_id, $field ) {
 
         //new taxonomy
@@ -488,22 +439,13 @@ console.log("reorder");
         if (!empty($term_obj) && !is_wp_error($term_obj)) {
             $taxonomy = $term_obj->taxonomy;
             $meta_key = $field["order_key_name"];
-            /*
-            //Game on Specific Code
-            //CHANGE LINES BELOW TO ADD/CHANGE GAME ON FIELDS
-            if ($taxonomy == 'task_chains') {
-                $meta_key = 'go-location_map_order_item';
-            } else if ($taxonomy == 'store_types') {
-                $meta_key = 'go-store-location_store_item';
-            }else{
-                $meta_key = 'acf-'. $taxonomy . '_order';
-            }
-            */
+
+
             //substitute for universal code
             //$meta_key = 'go-order-posts-item';
 
             // get all posts that are assigned to this taxonomy term
-            $args = array('tax_query' => array(array('taxonomy' => $taxonomy, 'field' => 'term_id', 'terms' => $term_id,)), 'posts_per_page' => -1, 'orderby' => 'meta_value_num', 'order' => 'ASC',
+            $args = array('tax_query' => array(array('taxonomy' => $taxonomy, 'field' => 'term_id', 'terms' => $term_id,)), 'posts_per_page' => -1,     'orderby' => 'meta_value_num', 'order' => 'ASC',
 
                 'meta_key' => $meta_key, 'meta_value' => '', 'post_type' => $post_slug, 'post_mime_type' => '', 'post_parent' => '', 'author' => '', 'author_name' => '', 'post_status' => 'publish', 'suppress_filters' => true
 
@@ -518,10 +460,10 @@ console.log("reorder");
             }
 
         }
-        return $value;
+        //return $value;
 
     }
-
+*/
 
 
     /*
@@ -767,7 +709,7 @@ endif;
  *Extend the relationship field so that when a taxonomy is changed in another field the
  *terms and order are loaded in this field
  */
-function go_acf_order_posts_value($term_id, $order_key_name){
+function go_acf_order_posts_value($term_id){
     //term_id
     //new taxonomy
     $value = array();
@@ -792,13 +734,38 @@ function go_acf_order_posts_value($term_id, $order_key_name){
         //$meta_key = 'go-order-posts-item';
 
         // get all posts that are assigned to this taxonomy term
+        /*
         $args = array('tax_query' => array(array('taxonomy' => $taxonomy, 'field' => 'term_id', 'terms' => $term_id,)), 'posts_per_page' => -1, 'orderby' => 'meta_value_num', 'order' => 'ASC',
 
             'meta_key' => $order_key_name, 'meta_value' => '', 'post_type' => $post_slug, 'post_mime_type' => '', 'post_parent' => '', 'author' => '', 'author_name' => '', 'post_status' => 'publish', 'suppress_filters' => true
 
-        );
+        );*/
+        /*
+        $args = array(
+            'post_type' => $post_slug,
+            'orderby' => 'meta_value_num',
+            'order' => 'ASC',
+            'posts_per_page' => -1,
+            'meta_key' => $order_key_name,
+            'post_status' => 'publish',
+            'suppress_filters' => true,
+            'meta_query' => array(
+                array(
+                    'key'     => 'go-location_map_toggle',
+                    'value'   => 1,
+                )
+            ),
+            'meta_query' => array(
+                array(
+                    'key'     => 'go-location_map_loc',
+                    'value'   => $term_id,
+                )
+            ),
+        );*/
 
-        $go_tasks_objs = get_posts($args);
+
+        //$go_tasks_objs = get_posts($args);
+        $go_tasks_objs = go_get_ordered_posts($term_id);
 
         //$posts = get_posts(array(
         //'post_type' => $post_slug,
@@ -820,11 +787,11 @@ function go_acf_order_posts_value($term_id, $order_key_name){
     return $value;
 }
 
-function go_acf_order_posts_list($key, $name, $term_id, $post_id, $order_key_name){
+function go_acf_order_posts_list($key, $name, $term_id, $post_id){
     //term_id can be the one from the db on load
     //or from ajax if the term was changed on the page
 
-    $values = go_acf_order_posts_value($term_id, $order_key_name);
+    $values = go_acf_order_posts_value($term_id);
     $list_id = "list_" . $key;
     ?>
     <ul id="<?php
@@ -832,8 +799,6 @@ function go_acf_order_posts_list($key, $name, $term_id, $post_id, $order_key_nam
     ?>" class="acf-bl list">
     <?php
         //if( !empty($field['value']) ):
-
-
 
         $value = $values;
 
@@ -847,14 +812,30 @@ function go_acf_order_posts_list($key, $name, $term_id, $post_id, $order_key_nam
             'post__in' => $value
         ));
 
-
-
         // loop
         foreach( $posts as $post ): ?>
+            <?php
+        $prefix = '';
+            $post_data = go_post_data( $post->ID  );
+            ///$custom_fields = $post_data[3];
+            $custom_fields = (isset($post_data[3]) ? $post_data[3] : null);
+            $nested = (isset($custom_fields['go-location_map_options_nested'][0]) ? $custom_fields['go-location_map_options_nested'][0] : false);
+            if($nested){
+                $prefix .= '— ';
+            }
+            $marked_hidden = (isset($custom_fields['go-location_map_options_hidden'][0]) ? $custom_fields['go-location_map_options_hidden'][0] : false);
+            if($marked_hidden){
+                $prefix .= 'Hidden: ';
+            }
+            $optional = (isset($custom_fields['go-location_map_options_optional'][0]) ? $custom_fields['go-location_map_options_optional'][0] : false);
+            if($optional){
+                $prefix .= 'Optional: ';
+            }
+            ?>
             <li>
                 <?php acf_hidden_input( array('name' => $name.'[]', 'value' => $post->ID) ); ?>
                 <span data-id="<?php echo esc_attr($post->ID); ?>" class="acf-rel-item">
-							<?php echo get_the_title( $post ); ?>
+							<?php echo $prefix . get_the_title( $post ); ?>
 
 						</span>
             </li>
@@ -863,7 +844,6 @@ function go_acf_order_posts_list($key, $name, $term_id, $post_id, $order_key_nam
     </ul>
 <?php
 }
-
 
 function acf_load_order_field_list() {
     // this function is called by AJAX to load posts

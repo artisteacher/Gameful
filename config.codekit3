@@ -7,7 +7,7 @@
 		"uuidString": "8F58B1E5-6BDE-48ED-B36C-6D5C0D9104BE"
 		}
 	],
-"creatorBuild": "31491",
+"creatorBuild": "31934",
 "files": {
 	"/.gitattributes": {
 		"cB": 0,
@@ -249,6 +249,62 @@
 		"oO": 0,
 		"oS": 1
 		},
+	"/acf-json/group_5df05b0c1e8bf.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5df05b0c1e8bf-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/acf-json/group_5e11c17ab35dd.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5e11c17ab35dd-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/acf-json/group_5e35978c81de6.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5e35978c81de6-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/acf-json/group_5e37ba0ceec3a.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5e37ba0ceec3a-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/acf-json/group_5e37cdd9253d4.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5e37cdd9253d4-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/acf-json/group_5e389128bfb72.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5e389128bfb72-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/acf-json/group_5e3dfab4659fb.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/acf-json/group_5e3dfab4659fb-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
 	"/core/includes.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -287,6 +343,14 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/core/src/ajax/ajax.php",
+		"oF": 0
+		},
+	"/core/src/all/attendance.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/core/src/all/attendance.php",
 		"oF": 0
 		},
 	"/core/src/all/go-acf-functions.php": {
@@ -360,6 +424,61 @@
 		"oA": 0,
 		"oAP": "/core/src/all/go_users.php",
 		"oF": 0
+		},
+	"/core/src/all/tinymce/annotate/img/annotation-delete.png": {
+		"ft": 32768,
+		"iS": 2290,
+		"oA": 0,
+		"oAP": "/core/src/all/tinymce/annotate/img/annotation-delete.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/core/src/all/tinymce/annotate/img/annotation-hide.png": {
+		"ft": 32768,
+		"iS": 2644,
+		"oA": 0,
+		"oAP": "/core/src/all/tinymce/annotate/img/annotation-hide.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/core/src/all/tinymce/annotate/img/annotation.png": {
+		"ft": 32768,
+		"iS": 2330,
+		"oA": 0,
+		"oAP": "/core/src/all/tinymce/annotate/img/annotation.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/core/src/all/tinymce/annotate/plugin-min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/core/src/all/tinymce/annotate/plugin-min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/core/src/all/tinymce/annotate/plugin.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/core/src/all/tinymce/annotate/plugin-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
 		},
 	"/core/src/all/tinymce/wordcount/wordcount-min.js": {
 		"bF": 0,
@@ -438,14 +557,24 @@
 		"oS": 0,
 		"uL": 1
 		},
+	"/dev/css/files/annotate.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "/dev/css/files/annotate-min.css",
+		"oF": 1,
+		"oS": 3
+		},
 	"/dev/css/files/go-acf-global.css": {
 		"aP": 1,
 		"bl": 0,
 		"ft": 16,
 		"ma": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "/dev/css/files/go-acf-global-min.css",
-		"oF": 0,
+		"oF": 1,
 		"oS": 3
 		},
 	"/dev/css/files/go-acf-input.css": {
@@ -453,9 +582,9 @@
 		"bl": 0,
 		"ft": 16,
 		"ma": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "/dev/css/files/go-acf-input-min.css",
-		"oF": 0,
+		"oF": 1,
 		"oS": 3
 		},
 	"/dev/css/files/go_clipboard_sass.scss": {
@@ -523,15 +652,18 @@
 		"oS": 0,
 		"uL": 1
 		},
-	"/dev/css/files/go_tasks-admin-acf.css": {
-		"aP": 1,
+	"/dev/css/files/go_tasks-admin-acf.scss": {
+		"aP": 0,
 		"bl": 0,
-		"ft": 16,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
 		"ma": 0,
 		"oA": 1,
-		"oAP": "/dev/css/files/go_tasks-admin-acf-min.css",
-		"oF": 1,
-		"oS": 3
+		"oAP": "/dev/css/files/go_tasks-admin-acf.css",
+		"oF": 0,
+		"oS": 0,
+		"uL": 1
 		},
 	"/dev/css/files/go_timer_sass.scss": {
 		"aP": 0,
@@ -604,7 +736,7 @@
 		"ma": 0,
 		"oA": 0,
 		"oAP": "/styles/min/go_admin.css",
-		"oF": 2,
+		"oF": 3,
 		"oS": 0,
 		"uL": 1
 		},
@@ -704,6 +836,26 @@
 		"oF": 0,
 		"oS": 3
 		},
+	"/dev/includes/css/tippy-min.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/dev/includes/css/tippy-min-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/dev/includes/css/tippy.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/dev/includes/css/tippy-min.css",
+		"oF": 0,
+		"oS": 3
+		},
 	"/dev/includes/go_combine_dependencies.js": {
 		"bF": 0,
 		"ft": 64,
@@ -711,7 +863,7 @@
 		"mi": 1,
 		"oA": 0,
 		"oAP": "/js/min/go_combine_dependencies-min.js",
-		"oF": 3,
+		"oF": 2,
 		"sC": 3,
 		"tS": 0
 		},
@@ -772,6 +924,28 @@
 		"sC": 3,
 		"tS": 0
 		},
+	"/dev/includes/js/imagesloaded.pkgd.min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/dev/includes/js/imagesloaded.pkgd.min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/dev/includes/js/masonry.pkgd.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/dev/includes/js/masonry.pkgd-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"/dev/includes/js/moment.min.js": {
 		"bF": 0,
 		"ft": 64,
@@ -805,13 +979,13 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"/dev/includes/js/select2.full.js": {
+	"/dev/includes/js/popper.min.js": {
 		"bF": 0,
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
-		"oA": 0,
-		"oAP": "/dev/includes/js/select2.full-min.js",
+		"oA": 1,
+		"oAP": "/dev/includes/js/popper.min-min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
@@ -860,6 +1034,17 @@
 		"sC": 3,
 		"tS": 0
 		},
+	"/dev/includes/tippy.all.min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/dev/includes/tippy.all.min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"/dev/js/disabled/client-side-image-resize.js": {
 		"bF": 0,
 		"ft": 64,
@@ -889,7 +1074,7 @@
 		"mi": 1,
 		"oA": 0,
 		"oAP": "/js/min/go_all-min.js",
-		"oF": 3,
+		"oF": 2,
 		"sC": 3,
 		"tS": 0
 		},
@@ -1435,6 +1620,27 @@
 		"oT": 1,
 		"q": 100
 		},
+	"/includes/acf/assets/inc/select2/4/select2-min.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/includes/acf/assets/inc/select2/4/select2-min-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/includes/acf/assets/inc/select2/4/select2-min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/acf/assets/inc/select2/4/select2-min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"/includes/acf/assets/inc/select2/4/select2.css": {
 		"aP": 1,
 		"bl": 0,
@@ -1445,6 +1651,17 @@
 		"oF": 0,
 		"oS": 3
 		},
+	"/includes/acf/assets/inc/select2/4/select2.full-min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/acf/assets/inc/select2/4/select2.full-min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"/includes/acf/assets/inc/select2/4/select2.full.js": {
 		"bF": 0,
 		"ft": 64,
@@ -1452,6 +1669,17 @@
 		"mi": 1,
 		"oA": 0,
 		"oAP": "/includes/acf/assets/inc/select2/4/select2.full-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/acf/assets/inc/select2/4/select2.full.min-min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/acf/assets/inc/select2/4/select2.full.min-min-min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
@@ -1478,6 +1706,17 @@
 		"sC": 3,
 		"tS": 0
 		},
+	"/includes/acf/assets/inc/select2/4/select2.min-min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/acf/assets/inc/select2/4/select2.min-min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"/includes/acf/assets/inc/select2/4/select2.min.css": {
 		"aP": 1,
 		"bl": 0,
@@ -1495,6 +1734,132 @@
 		"mi": 1,
 		"oA": 0,
 		"oAP": "/includes/acf/assets/inc/select2/4/select2.min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/acf/assets/inc/select2_bak/3/select2-spinner.gif": {
+		"ft": 4194304,
+		"iS": 1434,
+		"oA": 0,
+		"oAP": "/includes/acf/assets/inc/select2_bak/3/select2-spinner.gif",
+		"oF": 0,
+		"opt": 0
+		},
+	"/includes/acf/assets/inc/select2_bak/3/select2.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/includes/acf/assets/inc/select2_bak/3/select2-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/includes/acf/assets/inc/select2_bak/3/select2.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/acf/assets/inc/select2_bak/3/select2-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/acf/assets/inc/select2_bak/3/select2.min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/acf/assets/inc/select2_bak/3/select2.min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/acf/assets/inc/select2_bak/3/select2.png": {
+		"ft": 32768,
+		"iS": 525,
+		"oA": 0,
+		"oAP": "/includes/acf/assets/inc/select2_bak/3/select2.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/acf/assets/inc/select2_bak/3/select2x2.png": {
+		"ft": 32768,
+		"iS": 653,
+		"oA": 0,
+		"oAP": "/includes/acf/assets/inc/select2_bak/3/select2x2.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/acf/assets/inc/select2_bak/4/select2.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/includes/acf/assets/inc/select2_bak/4/select2-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/includes/acf/assets/inc/select2_bak/4/select2.full.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/acf/assets/inc/select2_bak/4/select2.full-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/acf/assets/inc/select2_bak/4/select2.full.min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/acf/assets/inc/select2_bak/4/select2.full.min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/acf/assets/inc/select2_bak/4/select2.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/acf/assets/inc/select2_bak/4/select2-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/acf/assets/inc/select2_bak/4/select2.min.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/includes/acf/assets/inc/select2_bak/4/select2.min-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/includes/acf/assets/inc/select2_bak/4/select2.min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/acf/assets/inc/select2_bak/4/select2.min-min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
@@ -1721,14 +2086,6 @@
 		"oAP": "/includes/acf/includes/admin/admin.php",
 		"oF": 0
 		},
-	"/includes/acf/includes/admin/settings-info.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/includes/acf/includes/admin/settings-info.php",
-		"oF": 0
-		},
 	"/includes/acf/includes/admin/tools/class-acf-admin-tool-export.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -1839,14 +2196,6 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/includes/acf/includes/admin/views/html-notice-upgrade.php",
-		"oF": 0
-		},
-	"/includes/acf/includes/admin/views/settings-addons.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/includes/acf/includes/admin/views/settings-addons.php",
 		"oF": 0
 		},
 	"/includes/acf/includes/admin/views/settings-info.php": {
@@ -2633,6 +2982,22 @@
 		"oAP": "/includes/acf/lang/acf-bg_BG.po",
 		"oF": 0
 		},
+	"/includes/acf/lang/acf-ca.mo": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf/lang/acf-ca.mo",
+		"oF": 0
+		},
+	"/includes/acf/lang/acf-ca.po": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf/lang/acf-ca.po",
+		"oF": 0
+		},
 	"/includes/acf/lang/acf-cs_CZ.mo": {
 		"cB": 0,
 		"ft": 8192,
@@ -3063,6 +3428,22 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/includes/acf/lang/acf-zh_CN.po",
+		"oF": 0
+		},
+	"/includes/acf/lang/acf-zh_TW.mo": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf/lang/acf-zh_TW.mo",
+		"oF": 0
+		},
+	"/includes/acf/lang/acf-zh_TW.po": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/acf/lang/acf-zh_TW.po",
 		"oF": 0
 		},
 	"/includes/acf/lang/acf.pot": {
@@ -3836,7 +4217,7 @@
 		},
 	"/includes/custom-acf-fields/acf-recaptcha-master/assets/banner-1544x500.png": {
 		"ft": 32768,
-		"iS": 33515,
+		"iS": 13107,
 		"oA": 0,
 		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/assets/banner-1544x500.png",
 		"oF": 0,
@@ -3847,7 +4228,7 @@
 		},
 	"/includes/custom-acf-fields/acf-recaptcha-master/assets/banner-772x250.png": {
 		"ft": 32768,
-		"iS": 16602,
+		"iS": 6537,
 		"oA": 0,
 		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/assets/banner-772x250.png",
 		"oF": 0,
@@ -3858,7 +4239,7 @@
 		},
 	"/includes/custom-acf-fields/acf-recaptcha-master/assets/icon-128x128.png": {
 		"ft": 32768,
-		"iS": 6296,
+		"iS": 2267,
 		"oA": 0,
 		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/assets/icon-128x128.png",
 		"oF": 0,
@@ -3869,7 +4250,7 @@
 		},
 	"/includes/custom-acf-fields/acf-recaptcha-master/assets/icon-256x256.png": {
 		"ft": 32768,
-		"iS": 9904,
+		"iS": 3664,
 		"oA": 0,
 		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/assets/icon-256x256.png",
 		"oF": 0,
@@ -3880,18 +4261,18 @@
 		},
 	"/includes/custom-acf-fields/acf-recaptcha-master/assets/screenshot-1.png": {
 		"ft": 32768,
-		"iS": 190757,
+		"iS": 69600,
 		"oA": 0,
 		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/assets/screenshot-1.png",
 		"oF": 0,
-		"oIPL": 0,
-		"opt": 0,
+		"oIPL": 1,
+		"opt": 1,
 		"oT": 1,
 		"q": 100
 		},
 	"/includes/custom-acf-fields/acf-recaptcha-master/assets/screenshot-2.png": {
 		"ft": 32768,
-		"iS": 101712,
+		"iS": 30126,
 		"oA": 0,
 		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/assets/screenshot-2.png",
 		"oF": 0,
@@ -3902,7 +4283,7 @@
 		},
 	"/includes/custom-acf-fields/acf-recaptcha-master/assets/screenshot-3.png": {
 		"ft": 32768,
-		"iS": 120397,
+		"iS": 25960,
 		"oA": 0,
 		"oAP": "/includes/custom-acf-fields/acf-recaptcha-master/assets/screenshot-3.png",
 		"oF": 0,
@@ -4195,7 +4576,7 @@
 		},
 	"/includes/custom-acf-fields/acf-typography-field/screenshot-1.png": {
 		"ft": 32768,
-		"iS": 138606,
+		"iS": 39276,
 		"oA": 0,
 		"oAP": "/includes/custom-acf-fields/acf-typography-field/screenshot-1.png",
 		"oF": 0,
@@ -4206,7 +4587,7 @@
 		},
 	"/includes/custom-acf-fields/acf-typography-field/screenshot-2.png": {
 		"ft": 32768,
-		"iS": 38239,
+		"iS": 10200,
 		"oA": 0,
 		"oAP": "/includes/custom-acf-fields/acf-typography-field/screenshot-2.png",
 		"oF": 0,
@@ -4217,12 +4598,12 @@
 		},
 	"/includes/custom-acf-fields/acf-typography-field/screenshot-3.png": {
 		"ft": 32768,
-		"iS": 9921,
+		"iS": 3881,
 		"oA": 0,
 		"oAP": "/includes/custom-acf-fields/acf-typography-field/screenshot-3.png",
 		"oF": 0,
-		"oIPL": 0,
-		"opt": 0,
+		"oIPL": 1,
+		"opt": 1,
 		"oT": 1,
 		"q": 100
 		},
@@ -4440,6 +4821,352 @@
 		"oAP": "/includes/custom-acf-fields/wp-acf-unique_id-master/readme.txt",
 		"oF": 0
 		},
+	"/includes/customizer-custom-controls/css/customizer.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/css/customizer-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/includes/customizer-custom-controls/css/fontawesome-all.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/css/fontawesome-all-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/includes/customizer-custom-controls/css/fontawesome-all.min.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/css/fontawesome-all.min-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/includes/customizer-custom-controls/fonts/fa-brands-400.eot": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/fonts/fa-brands-400.eot",
+		"oF": 0
+		},
+	"/includes/customizer-custom-controls/fonts/fa-brands-400.svg": {
+		"ft": 2097152,
+		"miP": 0,
+		"oA": 2,
+		"oAP": "/includes/customizer-custom-controls/fonts/fa-brands-400.svg",
+		"oF": 0,
+		"opt": 0,
+		"plM": 3758088159,
+		"prP": 0
+		},
+	"/includes/customizer-custom-controls/fonts/fa-brands-400.ttf": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/fonts/fa-brands-400.ttf",
+		"oF": 0
+		},
+	"/includes/customizer-custom-controls/fonts/fa-brands-400.woff": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/fonts/fa-brands-400.woff",
+		"oF": 0
+		},
+	"/includes/customizer-custom-controls/fonts/fa-brands-400.woff2": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/fonts/fa-brands-400.woff2",
+		"oF": 0
+		},
+	"/includes/customizer-custom-controls/fonts/fa-regular-400.eot": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/fonts/fa-regular-400.eot",
+		"oF": 0
+		},
+	"/includes/customizer-custom-controls/fonts/fa-regular-400.svg": {
+		"ft": 2097152,
+		"miP": 0,
+		"oA": 2,
+		"oAP": "/includes/customizer-custom-controls/fonts/fa-regular-400.svg",
+		"oF": 0,
+		"opt": 0,
+		"plM": 3758088159,
+		"prP": 0
+		},
+	"/includes/customizer-custom-controls/fonts/fa-regular-400.ttf": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/fonts/fa-regular-400.ttf",
+		"oF": 0
+		},
+	"/includes/customizer-custom-controls/fonts/fa-regular-400.woff": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/fonts/fa-regular-400.woff",
+		"oF": 0
+		},
+	"/includes/customizer-custom-controls/fonts/fa-regular-400.woff2": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/fonts/fa-regular-400.woff2",
+		"oF": 0
+		},
+	"/includes/customizer-custom-controls/fonts/fa-solid-900.eot": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/fonts/fa-solid-900.eot",
+		"oF": 0
+		},
+	"/includes/customizer-custom-controls/fonts/fa-solid-900.svg": {
+		"ft": 2097152,
+		"miP": 0,
+		"oA": 2,
+		"oAP": "/includes/customizer-custom-controls/fonts/fa-solid-900.svg",
+		"oF": 0,
+		"opt": 0,
+		"plM": 3758088159,
+		"prP": 0
+		},
+	"/includes/customizer-custom-controls/fonts/fa-solid-900.ttf": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/fonts/fa-solid-900.ttf",
+		"oF": 0
+		},
+	"/includes/customizer-custom-controls/fonts/fa-solid-900.woff": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/fonts/fa-solid-900.woff",
+		"oF": 0
+		},
+	"/includes/customizer-custom-controls/fonts/fa-solid-900.woff2": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/fonts/fa-solid-900.woff2",
+		"oF": 0
+		},
+	"/includes/customizer-custom-controls/functions.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/functions.php",
+		"oF": 0
+		},
+	"/includes/customizer-custom-controls/images/allcaps.png": {
+		"ft": 32768,
+		"iS": 1313,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/images/allcaps.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/customizer-custom-controls/images/bold.png": {
+		"ft": 32768,
+		"iS": 1416,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/images/bold.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/customizer-custom-controls/images/color-picker-transparency-grid.png": {
+		"ft": 32768,
+		"iS": 2646,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/images/color-picker-transparency-grid.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/customizer-custom-controls/images/italic.png": {
+		"ft": 32768,
+		"iS": 1298,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/images/italic.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/customizer-custom-controls/images/sidebar-left.png": {
+		"ft": 32768,
+		"iS": 1102,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/images/sidebar-left.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/customizer-custom-controls/images/sidebar-none.png": {
+		"ft": 32768,
+		"iS": 1093,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/images/sidebar-none.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/customizer-custom-controls/images/sidebar-right.png": {
+		"ft": 32768,
+		"iS": 1100,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/images/sidebar-right.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/customizer-custom-controls/images/underline.png": {
+		"ft": 32768,
+		"iS": 1370,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/images/underline.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/customizer-custom-controls/inc/custom-controls.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/inc/custom-controls.php",
+		"oF": 0
+		},
+	"/includes/customizer-custom-controls/inc/customizer.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/inc/customizer.php",
+		"oF": 0
+		},
+	"/includes/customizer-custom-controls/inc/google-fonts-alphabetical.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/includes/customizer-custom-controls/inc/google-fonts-alphabetical-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/includes/customizer-custom-controls/inc/google-fonts-popularity.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "/includes/customizer-custom-controls/inc/google-fonts-popularity-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"/includes/customizer-custom-controls/js/customizer-preview.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/js/customizer-preview-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/customizer-custom-controls/js/customizer.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/js/customizer-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/customizer-custom-controls/js/wp-color-picker-alpha.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/js/wp-color-picker-alpha-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/customizer-custom-controls/readme.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/readme.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"/includes/customizer-custom-controls/style.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/includes/customizer-custom-controls/style-min.css",
+		"oF": 0,
+		"oS": 3
+		},
 	"/includes/go_enqueue_includes.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -4456,652 +5183,897 @@
 		"oAP": "/includes/includes.php",
 		"oF": 0
 		},
-	"/includes/summernote/font/summernote.eot": {
+	"/includes/literallycanvas/css/literallycanvas.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/css/literallycanvas-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"/includes/literallycanvas/img/alpha.png": {
+		"ft": 32768,
+		"iS": 7224,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/img/alpha.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/literallycanvas/img/checkerboard-8x8.png": {
+		"ft": 32768,
+		"iS": 1087,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/img/checkerboard-8x8.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/literallycanvas/img/dashed-line.png": {
+		"ft": 32768,
+		"iS": 4328,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/img/dashed-line.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/literallycanvas/img/ellipse.png": {
+		"ft": 32768,
+		"iS": 4933,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/img/ellipse.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/literallycanvas/img/eraser.png": {
+		"ft": 32768,
+		"iS": 373,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/img/eraser.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/literallycanvas/img/eyedropper.png": {
+		"ft": 32768,
+		"iS": 468,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/img/eyedropper.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/literallycanvas/img/hue.png": {
+		"ft": 32768,
+		"iS": 4201,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/img/hue.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/literallycanvas/img/line-with-arrow.png": {
+		"ft": 32768,
+		"iS": 4312,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/img/line-with-arrow.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/literallycanvas/img/line.png": {
+		"ft": 32768,
+		"iS": 191,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/img/line.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/literallycanvas/img/pan.png": {
+		"ft": 32768,
+		"iS": 384,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/img/pan.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/literallycanvas/img/pencil.png": {
+		"ft": 32768,
+		"iS": 302,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/img/pencil.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/literallycanvas/img/polygon-cancel.png": {
+		"ft": 32768,
+		"iS": 2269,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/img/polygon-cancel.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/literallycanvas/img/polygon-closed.png": {
+		"ft": 32768,
+		"iS": 1954,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/img/polygon-closed.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/literallycanvas/img/polygon-open.png": {
+		"ft": 32768,
+		"iS": 1907,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/img/polygon-open.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/literallycanvas/img/polygon.png": {
+		"ft": 32768,
+		"iS": 1786,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/img/polygon.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/literallycanvas/img/rectangle.png": {
+		"ft": 32768,
+		"iS": 181,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/img/rectangle.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/literallycanvas/img/redo.png": {
+		"ft": 32768,
+		"iS": 5091,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/img/redo.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/literallycanvas/img/saturation.png": {
+		"ft": 32768,
+		"iS": 37098,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/img/saturation.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/literallycanvas/img/screenshot.png": {
+		"ft": 32768,
+		"iS": 218926,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/img/screenshot.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/literallycanvas/img/text.png": {
+		"ft": 32768,
+		"iS": 4315,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/img/text.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/literallycanvas/img/undo.png": {
+		"ft": 32768,
+		"iS": 1479,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/img/undo.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/literallycanvas/img/zoom-in.png": {
+		"ft": 32768,
+		"iS": 1991,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/img/zoom-in.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/literallycanvas/img/zoom-out.png": {
+		"ft": 32768,
+		"iS": 1934,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/img/zoom-out.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"/includes/literallycanvas/js/.gitignore": {
 		"cB": 0,
 		"ft": 8192,
 		"hM": 0,
 		"oA": 0,
-		"oAP": "/includes/summernote/font/summernote.eot",
+		"oAP": "/includes/literallycanvas/js/.gitignore",
 		"oF": 0
 		},
-	"/includes/summernote/font/summernote.ttf": {
+	"/includes/literallycanvas/js/.npmignore": {
 		"cB": 0,
 		"ft": 8192,
 		"hM": 0,
 		"oA": 0,
-		"oAP": "/includes/summernote/font/summernote.ttf",
+		"oAP": "/includes/literallycanvas/js/.npmignore",
 		"oF": 0
 		},
-	"/includes/summernote/font/summernote.woff": {
+	"/includes/literallycanvas/js/core/actions.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/core/actions-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/core/bindEvents.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/core/bindEvents-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/core/canvasRenderer.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/core/canvasRenderer-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/core/defaultOptions.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/core/defaultOptions-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/core/fontmetrics.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/core/fontmetrics-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/core/lineEndCapShapes.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/core/lineEndCapShapes-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/core/LiterallyCanvas.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/core/LiterallyCanvas-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/core/localization.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/core/localization-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/core/math.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/core/math-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/core/renderSnapshotToImage.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/core/renderSnapshotToImage-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/core/renderSnapshotToSVG.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/core/renderSnapshotToSVG-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/core/shapes.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/core/shapes-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/core/svgRenderer.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/core/svgRenderer-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/core/TextRenderer.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/core/TextRenderer-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/core/util.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/core/util-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/ie_customevent.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/ie_customevent-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/ie_setLineDash.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/ie_setLineDash-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/index.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/index-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/literallycanvas-core.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/literallycanvas-core-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/literallycanvas-core.min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/literallycanvas-core.min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/literallycanvas.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/literallycanvas-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/literallycanvas.min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/literallycanvas.min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/optionsStyles/font.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/optionsStyles/font-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/optionsStyles/line-options-and-stroke-width.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/optionsStyles/line-options-and-stroke-width-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/optionsStyles/null.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/optionsStyles/null-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/optionsStyles/optionsStyles.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/optionsStyles/optionsStyles-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/optionsStyles/polygon-and-stroke-width.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/optionsStyles/polygon-and-stroke-width-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/optionsStyles/stroke-or-fill.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/optionsStyles/stroke-or-fill-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/optionsStyles/stroke-width.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/optionsStyles/stroke-width-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/reactGUI/ClearButton.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/reactGUI/ClearButton-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/reactGUI/ColorWell.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/reactGUI/ColorWell-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/reactGUI/createSetStateOnEventMixin.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/reactGUI/createSetStateOnEventMixin-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/reactGUI/createToolButton.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/reactGUI/createToolButton-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/reactGUI/init.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/reactGUI/init-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/reactGUI/initDOM.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/reactGUI/initDOM-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/reactGUI/LiterallyCanvas.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/reactGUI/LiterallyCanvas-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/reactGUI/Options.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/reactGUI/Options-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/reactGUI/Picker.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/reactGUI/Picker-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/reactGUI/React-shim.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/reactGUI/React-shim-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/reactGUI/ReactDOM-shim.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/reactGUI/ReactDOM-shim-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/reactGUI/StrokeWidthPicker.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/reactGUI/StrokeWidthPicker-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/reactGUI/UndoRedoButtons.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/reactGUI/UndoRedoButtons-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/reactGUI/ZoomButtons.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/reactGUI/ZoomButtons-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/tools/base.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/tools/base-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/tools/Ellipse.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/tools/Ellipse-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/tools/Eraser.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/tools/Eraser-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/tools/Eyedropper.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/tools/Eyedropper-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/tools/Line.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/tools/Line-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/tools/Pan.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/tools/Pan-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/tools/Pencil.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/tools/Pencil-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/tools/Polygon.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/tools/Polygon-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/tools/Rectangle.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/tools/Rectangle-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/tools/SelectShape.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/tools/SelectShape-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/js/tools/Text.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/includes/literallycanvas/js/tools/Text-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"/includes/literallycanvas/README.md": {
 		"cB": 0,
-		"ft": 8192,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
 		"hM": 0,
 		"oA": 0,
-		"oAP": "/includes/summernote/font/summernote.woff",
-		"oF": 0
-		},
-	"/includes/summernote/lang/summernote-ar-AR.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-ar-AR-min.js",
+		"oAP": "/includes/literallycanvas/README.html",
 		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-bg-BG.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-bg-BG-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-ca-ES.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-ca-ES-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-cs-CZ.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-cs-CZ-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-da-DK.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-da-DK-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-de-DE.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-de-DE-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-el-GR.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-el-GR-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-es-ES.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-es-ES-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-es-EU.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-es-EU-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-fa-IR.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-fa-IR-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-fi-FI.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-fi-FI-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-fr-FR.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-fr-FR-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-gl-ES.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-gl-ES-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-he-IL.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-he-IL-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-hr-HR.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-hr-HR-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-hu-HU.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-hu-HU-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-id-ID.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-id-ID-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-it-IT.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-it-IT-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-ja-JP.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-ja-JP-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-ko-KR.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-ko-KR-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-lt-LT.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-lt-LT-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-lt-LV.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-lt-LV-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-mn-MN.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-mn-MN-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-nb-NO.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-nb-NO-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-nl-NL.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-nl-NL-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-pl-PL.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-pl-PL-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-pt-BR.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-pt-BR-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-pt-PT.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-pt-PT-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-ro-RO.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-ro-RO-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-ru-RU.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-ru-RU-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-sk-SK.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-sk-SK-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-sl-SI.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-sl-SI-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-sr-RS-Latin.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-sr-RS-Latin-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-sr-RS.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-sr-RS-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-sv-SE.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-sv-SE-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-ta-IN.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-ta-IN-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-th-TH.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-th-TH-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-tr-TR.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-tr-TR-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-uk-UA.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-uk-UA-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-uz-UZ.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-uz-UZ-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-vi-VN.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-vi-VN-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-zh-CN.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-zh-CN-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/lang/summernote-zh-TW.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/lang/summernote-zh-TW-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/plugin/databasic/summernote-ext-databasic.css": {
-		"aP": 1,
-		"bl": 0,
-		"ft": 16,
-		"ma": 0,
-		"oA": 0,
-		"oAP": "/includes/summernote/plugin/databasic/summernote-ext-databasic-min.css",
-		"oF": 0,
-		"oS": 3
-		},
-	"/includes/summernote/plugin/databasic/summernote-ext-databasic.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/plugin/databasic/summernote-ext-databasic-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/plugin/hello/summernote-ext-hello.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/plugin/hello/summernote-ext-hello-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/plugin/specialchars/summernote-ext-specialchars.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/plugin/specialchars/summernote-ext-specialchars-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/summernote-bs4.css": {
-		"aP": 1,
-		"bl": 0,
-		"ft": 16,
-		"ma": 0,
-		"oA": 0,
-		"oAP": "/includes/summernote/summernote-bs4-min.css",
-		"oF": 0,
-		"oS": 3
-		},
-	"/includes/summernote/summernote-bs4.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/summernote-bs4-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/summernote-bs4.min.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/summernote-bs4.min-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/summernote-lite-min.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/summernote-lite-min-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/summernote-lite.css": {
-		"aP": 1,
-		"bl": 0,
-		"ft": 16,
-		"ma": 0,
-		"oA": 0,
-		"oAP": "/includes/summernote/summernote-lite-min.css",
-		"oF": 0,
-		"oS": 3
-		},
-	"/includes/summernote/summernote-lite.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/summernote-lite-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/summernote-lite.min.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/summernote-lite.min-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/summernote.css": {
-		"aP": 1,
-		"bl": 0,
-		"ft": 16,
-		"ma": 0,
-		"oA": 0,
-		"oAP": "/includes/summernote/summernote-min.css",
-		"oF": 0,
-		"oS": 3
-		},
-	"/includes/summernote/summernote.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/summernote-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/includes/summernote/summernote.min.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/includes/summernote/summernote.min-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
 		},
 	"/includes/wp-frontend-media-master/frontend-media.php": {
 		"cB": 0,
@@ -5257,9 +6229,9 @@
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
-		"oA": 1,
+		"oA": 0,
 		"oAP": "/js/scripts/go_acf_admin-min.js",
-		"oF": 3,
+		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},
@@ -5312,20 +6284,20 @@
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
-		"oA": 1,
+		"oA": 0,
 		"oAP": "/js/scripts/go_shortcode_mce-min.js",
-		"oF": 1,
+		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},
 	"/media/go_coin_face.png": {
 		"ft": 32768,
-		"iS": 79581,
+		"iS": 27676,
 		"oA": 0,
 		"oAP": "/media/go_coin_face.png",
 		"oF": 0,
-		"oIPL": 1,
-		"opt": 1,
+		"oIPL": 0,
+		"opt": 0,
 		"oT": 1,
 		"q": 100
 		},
@@ -5785,22 +6757,6 @@
 		"oAP": "/modules/admin_bar/src/public.php",
 		"oF": 0
 		},
-	"/modules/admin_bar/src/public_ajax.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/modules/admin_bar/src/public_ajax.php",
-		"oF": 0
-		},
-	"/modules/admin_bar/src/templates/leaderboard.php": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/modules/admin_bar/src/templates/leaderboard.php",
-		"oF": 0
-		},
 	"/modules/admin_bar/src/templates/new_task_from_template.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -5879,6 +6835,14 @@
 		"oAP": "/modules/clipboard/src/ajax.php",
 		"oF": 0
 		},
+	"/modules/clipboard/src/functions.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/clipboard/src/functions.php",
+		"oF": 0
+		},
 	"/modules/clipboard/src/public_ajax.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -5925,6 +6889,14 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/modules/feedback/src/public_ajax.php",
+		"oF": 0
+		},
+	"/modules/feedback/src/templates/go_quest_reader_template.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/feedback/src/templates/go_quest_reader_template.php",
 		"oF": 0
 		},
 	"/modules/feedback/src/templates/go_reader_template.php": {
@@ -6085,6 +7057,54 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/modules/quiz/src/public_ajax.php",
+		"oF": 0
+		},
+	"/modules/social/includes.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/social/includes.php",
+		"oF": 0
+		},
+	"/modules/social/src/ajax.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/social/src/ajax.php",
+		"oF": 0
+		},
+	"/modules/social/src/functions.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/social/src/functions.php",
+		"oF": 0
+		},
+	"/modules/social/src/public.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/social/src/public.php",
+		"oF": 0
+		},
+	"/modules/social/src/public_ajax.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/social/src/public_ajax.php",
+		"oF": 0
+		},
+	"/modules/social/src/templates/leaderboard.php": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/modules/social/src/templates/leaderboard.php",
 		"oF": 0
 		},
 	"/modules/stats/includes.php": {
@@ -6453,9 +7473,9 @@
 		"bl": 0,
 		"ft": 16,
 		"ma": 0,
-		"oA": 1,
+		"oA": 0,
 		"oAP": "/styles/min/go_admin-min.css",
-		"oF": 1,
+		"oF": 0,
 		"oS": 3
 		},
 	"/styles/min/go_combine_dependencies.css": {
@@ -6473,9 +7493,9 @@
 		"bl": 0,
 		"ft": 16,
 		"ma": 0,
-		"oA": 1,
+		"oA": 0,
 		"oAP": "/styles/min/go_frontend-min.css",
-		"oF": 1,
+		"oF": 0,
 		"oS": 3
 		},
 	"/styles/min/go_styles.css": {
@@ -6483,9 +7503,9 @@
 		"bl": 0,
 		"ft": 16,
 		"ma": 0,
-		"oA": 1,
+		"oA": 0,
 		"oAP": "/styles/min/go_styles-min.css",
-		"oF": 1,
+		"oF": 0,
 		"oS": 3
 		}
 	},
@@ -6933,6 +7953,7 @@
 			"flagValue": -1
 			}
 		},
+	"environmentVariablesString": "NODE_ENV:::production",
 	"esLintConfigFileHandlingType": 0,
 	"esLintECMAVersion": 7,
 	"esLintEnvironmentsMask": 1,
@@ -7034,6 +8055,10 @@
 			"optionString": "'all'"
 			},
 		"default-case": {
+			"active": 0,
+			"optionString": ""
+			},
+		"default-param-last": {
 			"active": 0,
 			"optionString": ""
 			},
@@ -7383,6 +8408,10 @@
 			},
 		"no-implied-eval": {
 			"active": 0,
+			"optionString": ""
+			},
+		"no-import-assign": {
+			"active": 1,
 			"optionString": ""
 			},
 		"no-inline-comments": {
@@ -7808,6 +8837,10 @@
 		"prefer-promise-reject-errors": {
 			"active": 0,
 			"optionString": "{'allowEmptyReject': false}"
+			},
+		"prefer-regex-literals": {
+			"active": 0,
+			"optionString": ""
 			},
 		"prefer-rest-params": {
 			"active": 0,
@@ -8417,7 +9450,6 @@
 		"autoOutputPathStyle": 0,
 		"createSourceMap": 1,
 		"enableJavascript": 0,
-		"ieCompatibility": 1,
 		"mathStyle": 0,
 		"outputStyle": 0,
 		"rewriteURLStyle": 0,
@@ -8557,6 +9589,9 @@
 	"npmTargetDependencyListType": 1,
 	"overrideExternalServerCSS": 0,
 	"previewPathAddition": "/wordpress_new/wp-admin/admin.php?page=game-on-options.php",
+	"rollupExternals": "",
+	"rollupReplacements": "process.env.NODE_ENV:::$NODE_ENV,,,ENVIRONMENT:::$NODE_ENV",
+	"rollupTreeshakingEnabled": 1,
 	"skippedFoldersString": "log, _logs, logs, _cache, cache, /storage/framework/sessions, node_modules, /modules/archive/src/archive_temp, /dev/js/scripts",
 	"sourceFolderName": "source",
 	"susyVersion": 3,

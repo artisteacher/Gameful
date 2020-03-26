@@ -4,10 +4,13 @@
 add_filter('login_redirect', 'go_get_user_redirect', 10, 3);
 function go_get_user_redirect($redirect_to = null, $request = null, $user = null){
     //$redirect_blog_id = $_COOKIE['redirect_blog_id'];
+
+    /*
     $redirect_blog_id = (isset($_COOKIE['redirect_blog_id']) ?  $_COOKIE['redirect_blog_id'] : false);
     if(is_gameful() && $redirect_blog_id){
         switch_to_blog($redirect_blog_id);
     }
+    */
 
 
     if($user === null){
@@ -26,7 +29,7 @@ function go_get_user_redirect($redirect_to = null, $request = null, $user = null
     }
     if (!empty($user_id)) {
         //$primary_blog_id = get_network()->site_id;
-        if (is_user_member_of_blog($user_id) || go_user_is_admin($user_id)) {
+        if (is_user_member_of_blog($user_id) || go_user_is_admin()) {
             $redirect_to = get_option('options_go_landing_page_radio', 'home');
             //$page = get_option('options_go_landing_page_on_login', '');
 
@@ -381,6 +384,7 @@ function validate_email_against_domains($email){
  * $blog_url =  $this->provider->getLastLocationRedirectTo();$args = array($email, $blog_url);do_action('nsl_limit_domains', $args);
  */
 //add_action('nsl_limit_domains', 'go_limit_domains');
+/*
 function go_limit_domains($email){
     //$email = $args[0];
     //$blog_url = $args[1];
@@ -430,6 +434,87 @@ function go_limit_domains($email){
         }
 
 
+
+        if(!$is_valid){
+            if ( is_gameful() && ($blog_id == $primary_blog_id ) ) {
+                $go_login_link = network_site_url('signin');
+                wp_redirect($go_login_link . '?registration=disabled');
+                return false;
+            } else{
+                $go_login_link = get_site_url($blog_id, 'signin');
+                wp_redirect($go_login_link . '?login=bad_domain');
+                return false;
+            }
+        }
+    }
+
+
+    //if this is the main site and this is not an existing user, don't allow registration
+    if ( is_gameful() ) {
+        if($blog_id == $primary_blog_id ){
+            if ( !email_exists( $email ) ) {
+                $go_login_link = get_site_url($blog_id, 'signin');
+                wp_redirect($go_login_link . '?registration=disabled');
+                return false;
+            }
+        }
+    }
+    restore_current_blog();
+
+    return true;
+}
+*/
+
+function go_limit_domains($email){
+    //$email = $args[0];
+    //$blog_url = $args[1];
+
+    //$parts = parse_url($blog_url);
+    //parse_str($parts['query'], $query);
+    //$blog_id = $query['blog_id'];
+    //$blog_id = (isset($query['blog_id']) ?  $query['blog_id'] : null);
+/*
+    $blog_id = $_COOKIE['redirect_blog_id'];
+    $primary_blog_id = get_main_site_id();
+
+
+    if (empty($blog_id)){
+        $blog_id = $primary_blog_id;
+    }
+
+    switch_to_blog($blog_id);
+*/
+
+    $blog_id = get_current_blog_id();
+    $primary_blog_id = get_main_site_id();
+
+    $registration_allowed = intval(get_option('options_allow_registration'));
+
+    if(!$registration_allowed){
+        if(!is_main_site($blog_id) || !is_gameful()) {
+            $go_login_link = get_site_url($blog_id, 'signin');
+            wp_redirect($go_login_link . '?registration=disabled');
+            return false;
+        }
+
+
+    };
+
+    //$limit_toggle = get_option('options_limit_domains_toggle');
+    //if($limit_toggle){
+    $security_options = get_option('options_security');
+    if(!is_array($security_options)){
+        $security_options = array();
+    }
+    if(in_array('domains', $security_options)){
+        if(is_gameful()) {
+            switch_to_blog(intval($blog_id));
+        }
+
+        $is_valid = validate_email_against_domains($email);
+        if(is_gameful()) {
+            restore_current_blog();
+        }
 
         if(!$is_valid){
             if ( is_gameful() && ($blog_id == $primary_blog_id ) ) {
@@ -1052,7 +1137,7 @@ function go_display_display_name( $value, $post_id, $field  ) {
         $value = go_get_user_display_name(  $user_id );
     }
     return $value;
-
+//
 }
 add_filter('acf/load_value/name=go_nickname', 'go_display_display_name', 10, 3);
 
@@ -1168,7 +1253,7 @@ function go_display_sections_and_seats( $value, $post_id, $field  ) {
 
 
         $hook = (isset($GLOBALS['hook_suffix']) ?  $GLOBALS['hook_suffix'] : null);
-        if($hook === 'user-edit.php'){
+        if($hook === 'user-edit.php' || $hook === 'profile.php'){
             $section_fields = array("field_5cd5031deb292");//backend editing
             $seat_fields = array("field_5cd5031deb293");
         }else{

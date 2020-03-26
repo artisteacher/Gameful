@@ -92,6 +92,9 @@ get_header();
 }
 */
 $security_options = get_option('options_security');
+if(!is_array($security_options)){
+    $security_options[]= $security_options;
+}
 $block_form = false;
 if ($this_page == 'profile'){
     $redirect = false;
@@ -190,7 +193,7 @@ else if (($this_page == 'register') || ($this_page == 'join')){
             }
         }
     }
-
+//
     //If multisite, register settings are always from blog #1. NEW combine main and sub site settings.
     //if(is_gameful()) {
     //            $main_site_id = get_network()->site_id;

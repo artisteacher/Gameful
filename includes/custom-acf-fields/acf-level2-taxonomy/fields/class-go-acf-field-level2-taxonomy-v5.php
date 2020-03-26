@@ -31,6 +31,8 @@ class go_acf_field_level2_taxonomy extends acf_field {
 		*/
 		
 		$this->name = 'level2_taxonomy';
+
+
 		
 		
 		/*
@@ -45,6 +47,8 @@ class go_acf_field_level2_taxonomy extends acf_field {
 		*/
 		
 		$this->category = 'relational';
+
+
 		
 		
 		/*
@@ -54,7 +58,7 @@ class go_acf_field_level2_taxonomy extends acf_field {
 		$this->defaults = array(
             'taxonomy' 			=> 'category',
 		);
-		
+
 		
 		/*
 		*  l10n (array) Array of strings that are used in JavaScript. This allows JS strings to be translated in PHP and loaded via:
@@ -113,6 +117,29 @@ class go_acf_field_level2_taxonomy extends acf_field {
             'choices'		=> acf_get_taxonomy_labels(),
         ));
 
+        // field_type
+        acf_render_field_setting( $field, array(
+            'label'			=> __('Appearance','acf'),
+            'instructions'	=> __('Select the appearance of this field','acf'),
+            'type'			=> 'select',
+            'name'			=> 'field_type',
+            'optgroup'		=> true,
+            'choices'		=> array(
+                __("Select",'acf') => array(
+                    'select' => __('Single Value', 'acf'),
+                    'multi_select' => __('Multi Select', 'acf')
+                )
+            )
+        ));
+
+        // term to sort--if any
+        acf_render_field_setting( $field, array(
+            'label'			=> __('Order field ID','acf'),
+            'instructions'	=> 'Enter the field ID ',
+            'type'			=> 'text',
+            'name'			=> 'order_field',
+        ));
+
 
 	}
 	
@@ -153,22 +180,47 @@ class go_acf_field_level2_taxonomy extends acf_field {
 		*/
 		$class = "." . esc_attr($field['key']);
 		$taxonomy = esc_attr($field['taxonomy']);
-        $value = esc_attr($field['value']);
-        $value = intval($value);
+        $value = $field['value'];
 
+        $field_type = esc_attr((isset($field['field_type']) ?  $field['field_type'] : ''));
+        $order_field = esc_attr((isset($field['order_field']) ?  $field['order_field'] : 'none'));//the field id of the field to order on change, if any
+
+        if(is_serialized($value)){
+            $values = unserialize($value);
+            //$values = array();
+        }else if(!is_array($value)){
+            $myvalue = intval($value);
+            $values = array();
+            $values[] = $myvalue;
+        }else{
+            $values = $value;
+            $value = serialize($value);
+        }
+
+
+        $multiple = '';
+        if($field_type === "multi_select"){
+            $multiple = 'multiple';
+        }
+/*   <input type="hidden" style="display: block;" name="<?php echo esc_attr($field['name']) ?>" value="<?php echo $value ?>" />   */
 		?>
 
-        <input type="hidden" style="display: block;" name="<?php echo esc_attr($field['name']) ?>" value="<?php echo $value ?>" />
-        <select class="<?php echo esc_attr($field['key']); ?> l2tax" name="<?php echo esc_attr($field['name']) ?>" value="<?php echo $value ?>" data-taxonomy="<?php echo $taxonomy ?>" onchange='acf_level2_taxonomy_update(this);' style="width: 100%;">
+        <input type="hidden" class="<?php echo esc_attr($field['key']); ?>" style="display: block;" name="<?php echo esc_attr($field['name']) ?>" value="<?php echo $value ?>" />
+        <select <?php echo $multiple; ?> class="l2tax tax_<?php echo esc_attr($field['key']); ?>"  data-taxonomy="<?php echo $taxonomy; ?>" data-order_field="<?php echo $order_field; ?>" onchange='acf_level2_taxonomy_update(this);' style="width: 100%;" >
             <?php
-                $value = esc_attr($field['value']);
+               // $value = esc_attr($field['value']);
                 if (!empty($value)){
 
-                    $term = get_term($value);
-                    if ($term){
-                        $term_name = ( mb_strlen( $term->name ) > 50 ) ? mb_substr( $term->name, 0, 49 ) . '...' : $term->name;
-                        echo '<option value="' . $value. '" selected="selected">' . $term_name . '</option>';
-                    }
+                        foreach($values as $item){
+                            $term = get_term($item);
+                            if ($term){
+                                $term_name = ( mb_strlen( $term->name ) > 50 ) ? mb_substr( $term->name, 0, 49 ) . '...' : $term->name;
+                                echo '<option value="' . $item. '" selected="selected">' . $term_name . '</option>';
+                            }
+                        }
+
+
+
                 }
             ?>
         </select>
@@ -265,7 +317,6 @@ class go_acf_field_level2_taxonomy extends acf_field {
    	
    	*/
 	
-	
 	/*
 	*  input_admin_footer()
 	*
@@ -289,8 +340,7 @@ class go_acf_field_level2_taxonomy extends acf_field {
 	}
 	
 	*/
-	
-	
+
 	/*
 	*  field_group_admin_enqueue_scripts()
 	*
@@ -353,13 +403,13 @@ class go_acf_field_level2_taxonomy extends acf_field {
 	*/
 	
 
-	
+	/*
 	function load_value( $value, $post_id, $field ) {
         if (is_array($value)) {
             $value = $value[0];
         }
 		return $value;
-	}
+	}*/
 	
 
 	
@@ -382,16 +432,28 @@ class go_acf_field_level2_taxonomy extends acf_field {
 
 	
 	function update_value( $value, $post_id, $field ) {
-	    if (!empty($value) || $value == 0) {
-	        $post_id = intval($post_id);
-            $value = intval($value);
-            wp_set_object_terms($post_id, $value, $field['taxonomy']);
-        }
+	    $value = str_replace('.', ',', $value);
+        //$myArray = explode(',', $value);
+        if(!is_serialized($value)) {
+            $myArray = array_map('intval', explode(',', $value));
+            $count = count($myArray);
 
+            if ($count === 1) {
+                $value = $myArray[0];
+                if (!empty($value) || $value == 0) {
+                    $post_id = intval($post_id);
+                    $value = intval($value);
+                    wp_set_object_terms($post_id, $value, $field['taxonomy']);
+                }
+            } else {
+                $value = $myArray;
+            }
+        }else{
+            $value = unserialize($value);
+        }
         //$value = (array)$value;
         //wp_set_post_terms($post_id, $value);
 		return $value;
-		
 	}
 	
 

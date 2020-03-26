@@ -11,14 +11,10 @@ jQuery(window).load(function () {
 
 jQuery(document).ready(function(){
     //alert("store_ready");
-    /*
-    jQuery('.go_str_item').off().one("click", function(e){
-        console.log("item_clicked");
-        go_lb_opener( this.id );
-    });
-    */
     if (typeof (go_is_store) !== 'undefined') {
         jQuery('#page').css("width", "100%").css('max-width', 'unset');
+
+        go_actions_tooltip();
     }
 });
 
@@ -51,6 +47,7 @@ function go_lb_opener( id ) {
         var get_id = id;
         var nonce = GO_EVERY_PAGE_DATA.nonces.go_the_lb_ajax;
         var gotoSend = {
+            is_frontend: is_frontend,
             action:"go_the_lb_ajax",
             _ajax_nonce: nonce,
             the_item_id: get_id,
@@ -73,6 +70,7 @@ function go_lb_opener( id ) {
                 }
             },
             success: function( raw) {
+                go_after_ajax();
                 console.log('success');
                 //console.log(raw);
                 var res = JSON.parse( raw );
@@ -128,19 +126,20 @@ function go_lb_opener( id ) {
 
 //called when the "buy" button is clicked.
 function goBuytheItem( id, count ) {
-
+    console.log('goBuytheItem');
 	var nonce = GO_FRONTEND_DATA.nonces.go_buy_item;
 	var user_id = GO_FRONTEND_DATA.userID;
 
-	jQuery( document ).ready( function( jQuery ) {
+	//jQuery( document ).ready( function( jQuery ) {
 		var gotoBuy = {
 			_ajax_nonce: nonce,
-			action: 'go_buy_item',
+            is_frontend: is_frontend,
+            action: 'go_buy_item',
 			the_id: id,
 			qty: jQuery( '#go_qty' ).val(),
             user_id: user_id,
 		};
-
+        console.log('goBuytheItem1');
 
 		jQuery.ajax({
 			url: MyAjax.ajaxurl,
@@ -161,6 +160,8 @@ function goBuytheItem( id, count ) {
                 }
             },
 			success: function( raw ) {
+                console.log('goBuytheItem2');
+                go_after_ajax();
                 var res = {};
                 try {
                     var res = JSON.parse( raw );
@@ -188,7 +189,7 @@ function goBuytheItem( id, count ) {
 				}
 			}
 		});
-	});
+	//});
 }
 
 function flash_error_msg_store( elem ) {
@@ -228,6 +229,7 @@ function go_store_password( id ){
         var get_id = id;
         var nonce = GO_EVERY_PAGE_DATA.nonces.go_the_lb_ajax;
         var gotoSend = {
+            is_frontend: is_frontend,
             action:"go_the_lb_ajax",
             _ajax_nonce: nonce,
             the_item_id: get_id,
@@ -251,6 +253,7 @@ function go_store_password( id ){
                 }
             },
             success: function( raw) {
+                go_after_ajax();
                     var res = JSON.parse( raw );
 
                     try {
@@ -330,7 +333,8 @@ function go_count_item( item_id ) {
 		type: 'POST',
 		data: {
 			_ajax_nonce: nonce,
-			action: 'go_get_purchase_count',
+            is_frontend: is_frontend,
+            action: 'go_get_purchase_count',
 			item_id: item_id
 		},
         /**
@@ -343,6 +347,7 @@ function go_count_item( item_id ) {
             }
         },
 		success: function( res ) {
+            go_after_ajax();
 			if ( -1 !== res ) {
 				var count = res.toString();
 				jQuery( '#golb-purchased' ).html( 'Quantity purchased: ' + count );
@@ -363,6 +368,7 @@ function go_change_avatar( target ){
         type: 'POST',
         data: {
             _ajax_nonce: nonce,
+            is_frontend: is_frontend,
             action: 'go_change_avatar',
             media_id: media_id
         },
@@ -376,6 +382,7 @@ function go_change_avatar( target ){
             }
         },
         success: function( res ) {
+            go_after_ajax();
             if ( -1 !== res ) {
                 swal.fire({//sw2 OK
                     text: "Your avatar was changed."

@@ -24,9 +24,10 @@ add_action( 'go_user_management_card' ,'go_archive_tool_card');
 function go_archive_tool_card(){
     ?>
     <div class="card">
-        <h2>User Blog Archive</h2>
-        <p>Create an archive of blog posts for selected users.  This is useful for record keeping if you are going to delete users from the site at the end of a course.</p>
-        <a href="<?php  menu_page_url( 'tool_blog_archive', true ); ?>"><button id="go_blog_archive_button">Create Archive</button></a>
+        <h2>Archive and Reset</h2>
+        <p>Create an archive of blog posts for selected users.  This is useful for record keeping if you are going to delete users from the site at the end of a course.
+            You can also remove all user content with this tool.</p>
+        <a href="<?php  menu_page_url( 'tool_blog_archive', true ); ?>"><button id="go_blog_archive_button">View Tool</button></a>
     </div>
     <?php
 }

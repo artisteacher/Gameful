@@ -1,4 +1,112 @@
 @charset "UTF-8";
+.mce-notification {
+  display: none !important; }
+
+/********************
+*	Map and Store actions
+********************/
+.go_actions_wrapper_flex a {
+  color: #1a1a1a !important; }
+
+.go_actions_wrapper_flex {
+  display: flex;
+  justify-content: flex-end; }
+
+.go_actions_wrapper {
+  display: inline; }
+
+.go_actions_wrapper_flex,
+.go_actions_wrapper {
+  font-size: 18px !important;
+  padding: 5px 10px !important; }
+  .go_actions_wrapper_flex > span span,
+  .go_actions_wrapper > span span {
+    padding: 0 10px !important; }
+  .go_actions_wrapper_flex a,
+  .go_actions_wrapper a {
+    display: inline !important; }
+
+.fa-clone {
+  cursor: pointer; }
+
+.fa-cloner:hover {
+  color: #ccc; }
+
+/********************
+*	END
+********************/
+.go_acf_hidden {
+  display: none; }
+
+.go_check_autosave_wrapper {
+  border: solid 2px;
+  background: white;
+  padding: 10px;
+  margin: 10px 0; }
+
+#social_feed {
+  background-color: #cccccc; }
+
+.go_social_button {
+  margin: 5px;
+  padding: 5px 10px; }
+
+/********************
+*	Fix for Elementor Select2 jumps to top
+********************/
+/********************
+*	Quest Reader Masonry Cards
+********************/
+/*
+#go_cards {
+	display: flex;
+	flex-flow: column wrap;
+	clear:both;
+	height: 200px;
+}
+
+.go_blog_post_card_wrapper {
+	width: 30%;
+	min-width: 306px;
+	padding: 20px;
+	margin: 10px;
+	background-color: white;
+	overflow: hidden;
+}*/
+#go_cards {
+  clear: both; }
+
+.go_blog_post_card_wrapper {
+  padding: 20px;
+  margin: 10px;
+  background-color: white; }
+
+.go_blog_post_card_sizer {
+  width: 100%; }
+
+@media (min-width: 400px) {
+  .go_blog_post_card_sizer {
+    width: 100%; } }
+
+@media (min-width: 768px) {
+  .go_blog_post_card_sizer {
+    width: 50%; } }
+
+@media (min-width: 1024px) {
+  .go_blog_post_card_sizer {
+    width: 33%; } }
+
+.go_likes_list img {
+  width: 35px;
+  height: 35px; }
+
+.go_quest_reader_lightbox .featherlight-content {
+  width: 95%;
+  margin-right: 2.5% !important;
+  margin-left: 2.5% !important;
+  background: #efefef !important;
+  overflow: scroll !important; }
+
 /********************
 *	User Bar
 ********************/
@@ -24,7 +132,6 @@ body.wp-admin {
   top: 0px;
   width: 100%;
   z-index: 100000;
-  height: 91px;
   font-family: sans-serif;
   font-size: 14px; }
   #go_user_bar .progress-bar-border {
@@ -111,6 +218,11 @@ body.wp-admin {
 @media screen and (max-width: 782px) {
   .admin-bar #go_user_bar {
     top: 46px; }
+  #wpadminbar .ab-icon:before {
+    text-align: center;
+    font-size: 34px;
+    height: 46px;
+    line-height: 47px; }
   /*
 	body.blog{margin-top: 39px !important;}
 	html #go_user_bar {
@@ -223,14 +335,38 @@ input[type="checkbox"]:checked + label span.checkbox::after {
 #go_datepicker_container {
   text-align: right; }
 
+.daterangepicker {
+  z-index: 100003 !important; }
+  .daterangepicker td, .daterangepicker th {
+    padding: 0; }
+
+#go_user_filters {
+  width: 100%;
+  padding-bottom: 20px; }
+
 #go_user_filters_1 {
   text-align: right; }
 
-#go_user_filters_1 .select2-container {
+#go_user_filters_1 .user_filter {
   min-width: 150px;
   padding-left: 10px; }
+  #go_user_filters_1 .user_filter label {
+    padding: 0 10px; }
 
 #go_user_filters_1 label {
+  float: left; }
+
+#go_action_filters {
+  flex-wrap: wrap;
+  padding: 20px 40px 20px 20px; }
+  #go_action_filters div {
+    padding: 0 15px;
+    align-items: center; }
+
+.status_filters, .order_filter {
+  padding: 20px 40px 20px 20px; }
+
+.order_filter {
   float: left; }
 
 #go_leaderboard_filters {
@@ -327,13 +463,15 @@ body:not(.wp-customizer) .media-modal {
  */
 #go_loot_table .acf-switch,
 #go_loot_table .go-acf-switch,
-.go_loot_table .go-acf-switch {
+.go_loot_table .go-acf-switch,
+#go_loot_table.penalty {
   background: pink !important;
   border-color: indianred !important; }
 
 #go_loot_table .acf-switch.-on,
 #go_loot_table .go-acf-switch.-on,
-.go_loot_table .go-acf-switch.-on {
+.go_loot_table .go-acf-switch.-on,
+#go_loot_table.reward {
   background: forestgreen !important;
   border-color: darkgreen !important; }
 
@@ -523,24 +661,28 @@ body:not(.wp-customizer) .media-modal {
   color: black;
   border: 1px solid; }
 
-.go_required_blog_content {
-  padding: 20px; }
-
 /********************
 *	locks
 ********************/
 .go_locks {
-  border: 1px solid;
-  border-radius: 15px;
   padding: 10px;
   margin: 10px;
   background-color: #ddd; }
+  .go_locks p {
+    margin-bottom: 10px; }
+
+.go_task_pod_required .go_locks {
+  background-color: unset; }
+
+.go_term_list p {
+  margin: 0px !important; }
 
 .go_lock, .go_late_mods, .go_sched_access_message, .go_timer_message, .go_checks_and_buttons {
   border-radius: 3px;
   padding: 10px;
   margin: 10px 0;
-  background-color: #f5b3bd; }
+  background-color: #f5b3bd;
+  min-width: 200px; }
 
 .go_lock .go_error_red {
   color: unset; }
@@ -692,6 +834,10 @@ input[type='text'].go_error_red {
   top: 0;
   left: 0;
   height: 100% !important; }
+
+.bonus .go_admin_bar_health_bar {
+  background-image: linear-gradient(45deg, rgba(69, 69, 69, 0.2) 25%, rgba(51, 51, 51, 0.4) 25%, rgba(51, 51, 51, 0.4) 50%, rgba(69, 69, 69, 0.2) 50%, rgba(69, 69, 69, 0.2) 75%, rgba(51, 51, 51, 0.4) 75%, rgba(51, 51, 51, 0.4) 100%);
+  background-size: 28.28px 28.28px; }
 
 #go_admin_bar_title {
   text-align: left; }
@@ -1091,6 +1237,7 @@ input#go_pass_lock::-moz-placeholder {
   height: 80%;
   overflow-y: hidden !important; }
 
+#adminmenu #menu-settings .wp-menu-image:before,
 #adminmenu #toplevel_page_game-on-options .wp-menu-image:before {
   font-family: 'Font Awesome 5 Pro' !important;
   content: '\f085';
@@ -1173,6 +1320,12 @@ input#go_pass_lock::-moz-placeholder {
   pointer-events: none !important; }
 
 #go_all_content .wp-editor-container textarea.wp-editor-area {
+  height: 50px; }
+
+#go_all_content .go_mce_textarea {
+  display: block; }
+
+.wp-editor-container textarea.wp-editor-area {
   height: 50px; }
 
 #go_task_rewards {
@@ -2014,6 +2167,10 @@ input#go_pass_lock::-moz-placeholder {
 /********************
 *	Feedback and blog
 ********************/
+.go_blog_post_wrapper .question {
+  font-size: .8em;
+  font-weight: bold; }
+
 .go_blog_post_wrapper.reset {
   background-color: #fff3f3 !important;
   border: 1px solid;
@@ -2079,6 +2236,8 @@ input#go_pass_lock::-moz-placeholder {
 
 .go_blog_content {
   margin-top: 5px; }
+  .go_blog_content img {
+    cursor: pointer; }
 
 .feedback_percent_input {
   width: 60px !important; }
@@ -2119,6 +2278,14 @@ i.mce-i-go_admin_comment:before {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-family: 'Font Awesome 5 Pro' !important; }
+
+/********************
+*	Canvas svg output
+********************/
+.my-drawing-svg svg {
+  width: 100%;
+  max-width: 800px;
+  height: auto; }
 
 .featherlight.stats .featherlight-content {
   width: 90%;
@@ -2309,11 +2476,14 @@ END TOOLTIP
   display: flex;
   flex-wrap: wrap;
   flex-grow: 1; }
+  #go_stats_badges .fig_wrap,
+  #go_groups .fig_wrap {
+    height: 100px; }
 
 .go_badge_wrap {
   display: inline-block;
   float: left;
-  margin-right: 25px;
+  margin: 15px;
   height: 150px; }
 
 .go_group_wrap {
@@ -2322,9 +2492,14 @@ END TOOLTIP
   margin-right: 25px;
   width: 100%; }
 
-.go_badge_container,
-.go_group_container {
-  float: left; }
+#stats_badges .go_badge_container,
+#stats_badges .go_group_container,
+#stats_groups .go_badge_container,
+#stats_groups .go_group_container {
+  width: 200px;
+  max-width: 200px;
+  display: flex;
+  justify-content: center; }
 
 .go_badge {
   text-align: center;
@@ -2374,11 +2549,6 @@ END TOOLTIP
 #go_leaderboard_wrapper .fg-toolbar {
   /**display: block;*/ }
 
-#go_leaderboard_wrapper {
-  padding: 40px;
-  max-width: 1200px;
-  margin: auto; }
-
 .go_is_user td {
   background-color: #fdb7b7 !important; }
 
@@ -2389,19 +2559,14 @@ END TOOLTIP
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  text-align: center; }
+  text-align: center;
+  clear: both; }
   #store ul {
     margin: 0px !important; }
 
 #go_store_container h1 {
   text-align: center !important;
   padding: unset; }
-
-#go_store_container .go_clone_icon {
-  display: none; }
-
-#go_store_container.clone .go_clone_icon {
-  display: block; }
 
 /*
 store categories styles
@@ -2473,16 +2638,18 @@ store lightbox styles
   width: 30px; }
 
 .go_store_round_button {
-  width: 100%;
-  height: 0;
-  padding-bottom: 100%;
+  width: 30px;
+  height: 30px;
+  /* padding-bottom: 100%; */
   border-radius: 50%;
   border: 3px solid #cfdcec;
-  overflow: hidden;
+  /* overflow: hidden; */
   box-shadow: 0 0 3px grey;
-  padding-bottom: 25px;
+  /* padding-bottom: 25px; */
   text-align: center;
   color: white; }
+  .go_store_round_button div {
+    margin-top: -2px; }
 
 #gp_store_plus {
   background-color: green; }
@@ -2520,13 +2687,22 @@ store lightbox styles
   padding: 10px;
   background-color: lightgoldenrodyellow;
   display: flex;
-  flex-wrap: wrap; }
-
-#go_store_actions > div {
-  margin: 10px; }
-
-#go_purch_limits {
-  flex-grow: 1; }
+  flex-wrap: wrap;
+  align-items: center; }
+  #go_store_actions #go_purch_limits {
+    margin: 10px;
+    flex-grow: 1; }
+  #go_store_actions #golb-fr-qty {
+    /* Chrome, Safari, Edge, Opera */
+    /* Firefox */ }
+    #go_store_actions #golb-fr-qty #go_qty {
+      width: 60px; }
+    #go_store_actions #golb-fr-qty input::-webkit-outer-spin-button,
+    #go_store_actions #golb-fr-qty input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0; }
+    #go_store_actions #golb-fr-qty input[type=number] {
+      -moz-appearance: textfield; }
 
 .black_overlay {
   position: fixed;
@@ -2615,7 +2791,8 @@ store lightbox styles
   color: white;
   border: 1px solid;
   border-radius: 3px;
-  cursor: pointer; }
+  cursor: pointer;
+  border-color: #c7a000; }
 
 .golb-fr-boxes-g {
   float: left;
@@ -2658,6 +2835,9 @@ store lightbox styles
 /* ------------------------------------------------------------
     lightbox
 ------------------------------------------------------------ */
+.featherlight.quests .featherlight-content {
+  width: 90%; }
+
 .featherlight.map .featherlight-content {
   min-width: 90%;
   min-height: 90%; }
@@ -2671,14 +2851,22 @@ store lightbox styles
   margin: 10px; }
 
 #go_map_container {
-  padding: 30px;
-  background-color: white;
   text-align: center; }
+
+#mapwrapper {
+  padding: 30px; }
+
+.quickedit_form {
+  font-size: .8em;
+  text-align: center; }
+  .quickedit_form .checkbox {
+    padding: 0 10px !important; }
 
 #maps {
   /* ------------------------------------------------------------
         Reset Styles (from meyerweb.com)
     ------------------------------------------------------------ */
+  /* HTML5 display-role reset for older browsers */
   /* ------------------------------------------------------------
         General Styles
     ------------------------------------------------------------ */
@@ -2686,38 +2874,67 @@ store lightbox styles
         Site Map Styles
     ------------------------------------------------------------ */
   /* --------	Top Level --------- */
+  /*.singleCol {
+		//	background: url('../../media/map/vertical-line.png') center top no-repeat !important;
+		width: 100% !important;
+	}*/
   /* ------------------------------------------------------------
     ------------------------------------------------------------ */
   /* ------------------------------------------------------------
         Badges
     ------------------------------------------------------------ */
   /** Badge Styles **/ }
-  #maps div, #maps span, #maps applet, #maps object, #maps iframe,
+  #maps a,
+  #maps a:visited,
+  #maps a:hover,
+  #maps a:focus,
+  #maps a:active {
+    color: unset; }
+  #maps html, #maps body, #maps div, #maps span, #maps applet, #maps object, #maps iframe,
   #maps h1, #maps h2, #maps h3, #maps h4, #maps h5, #maps h6, #maps p, #maps blockquote, #maps pre,
   #maps a, #maps abbr, #maps acronym, #maps address, #maps big, #maps cite, #maps code,
-  #maps del, #maps dfn, #maps em, #maps font, #maps img, #maps ins, #maps kbd, #maps q, #maps s, #maps samp,
+  #maps del, #maps dfn, #maps em, #maps img, #maps ins, #maps kbd, #maps q, #maps s, #maps samp,
   #maps small, #maps strike, #maps strong, #maps sub, #maps sup, #maps tt, #maps var,
+  #maps b, #maps u, #maps i, #maps center,
   #maps dl, #maps dt, #maps dd, #maps ol, #maps ul, #maps li,
   #maps fieldset, #maps form, #maps label, #maps legend,
-  #maps table, #maps caption, #maps tbody, #maps tfoot, #maps thead, #maps tr, #maps th, #maps td {
+  #maps table, #maps caption, #maps tbody, #maps tfoot, #maps thead, #maps tr, #maps th, #maps td,
+  #maps article, #maps aside, #maps canvas, #maps details, #maps embed,
+  #maps figure, #maps figcaption, #maps footer, #maps header, #maps hgroup,
+  #maps menu, #maps nav, #maps output, #maps ruby, #maps section, #maps summary,
+  #maps time, #maps mark, #maps audio, #maps video {
     margin: 0;
     padding: 0;
     border: 0;
-    outline: 0;
-    font-weight: inherit;
-    font-style: inherit;
     font-size: 100%;
-    font-family: inherit;
+    font: inherit;
     vertical-align: baseline; }
+  #maps article, #maps aside, #maps details, #maps figcaption, #maps figure,
+  #maps footer, #maps header, #maps hgroup, #maps menu, #maps nav, #maps section {
+    display: block; }
+  #maps body {
+    line-height: 1; }
+  #maps ol, #maps ul {
+    list-style: none; }
+  #maps blockquote, #maps q {
+    quotes: none; }
+  #maps blockquote:before, #maps blockquote:after,
+  #maps q:before, #maps q:after {
+    content: '';
+    content: none; }
+  #maps table {
+    border-collapse: collapse;
+    border-spacing: 0; }
   #maps h1 {
     font-weight: bold;
     text-transform: uppercase;
-    font-size: 20px;
+    font-size: 1.5em;
     margin: 0 0 5px 0; }
   #maps h2 {
-    font-family: "Lucida Grande", Verdana, sans-serif;
-    font-size: 10px;
-    color: #777777;
+    font-size: 1.3em;
+    margin: 0 0 5px 0; }
+  #maps h3 {
+    font-size: 1.2em;
     margin: 0 0 20px 0; }
   #maps a {
     text-decoration: none; }
@@ -2725,126 +2942,256 @@ store lightbox styles
     list-style: none !important; }
   #maps .map {
     display: block;
-    text-align: center; }
-  #maps .singleCol {
-    width: 100% !important; }
-  #maps .primaryNav {
-    margin: 0px 0 0 0;
-    float: left;
-    width: 100%;
-    padding-bottom: 20px;
-    /* --------	grey out colors --------- */
-    /* --------	available tasks colors --------- */ }
-    #maps .primaryNav li ul {
-      padding: 0px !important; }
-    #maps .primaryNav li {
-      float: left; }
-    #maps .primaryNav .ParentNav {
+    text-align: center;
+    margin-bottom: 25px; }
+    #maps .map .map_title {
+      font-size: 1.7em; }
+  #maps .title {
+    padding: 10px; }
+  #maps .ParentNav {
+    display: inline-block;
+    /* Dropdown Button */
+    /* The container <div> - needed to position the dropdown content */
+    /* Dropdown Content (Hidden by Default) */
+    /* Links inside the dropdown */
+    /* Change color of dropdown links on hover */
+    /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+    /* ------------------------------------------------------------
+            Utility Navigation
+        ------------------------------------------------------------ */ }
+    #maps .ParentNav .dropbtn, #maps .ParentNav .dropbtn:hover, #maps .ParentNav .dropbtn:focus {
+      cursor: pointer;
+      margin: 0;
       display: block;
-      float: none;
-      position: relative;
-      z-index: 2;
-      margin: 0px 10px 0px 10px;
-      padding: 0 0 0 0;
-      width: calc(100% - 20px) !important; }
-      #maps .primaryNav .ParentNav p {
-        margin-top: 0px;
-        -webkit-box-shadow: unset;
-        -moz-box-shadow: unset;
-        background: unset;
-        border: unset;
-        font-size: 1.5em; }
-      #maps .primaryNav .ParentNav .go_badge_wrap {
-        width: unset;
-        font-size: .6em;
-        width: 100%; }
-    #maps .primaryNav .optional_task {
-      margin-top: 0px;
-      border-top: 1px solid grey;
-      display: none;
-      box-shadow: 10px 0px 0px 0px #e3ca4b inset; }
-    #maps .primaryNav .go_optional_toggle, #maps .primaryNav .go_optional_toggle:hover {
-      margin-top: 0px;
-      background-color: #292929;
-      color: whitesmoke;
-      height: 19px; }
-    #maps .primaryNav .optional_task a {
-      font-style: italic; }
-    #maps .primaryNav > li .go_task_chain_map_box,
-    #maps .primaryNav > li li {
-      background: #c3eafb;
+      text-align: center;
+      border: 2px solid rgba(50, 50, 50, 0.2);
+      border-right: 50px solid rgba(50, 50, 50, 0.2);
       -webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
       -moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
       /* FF 3.5+ */
-      margin: 10px 10px 0px 10px;
-      padding: 0 0 0 0;
-      width: calc(100% - 20px) !important; }
-    #maps .primaryNav > li a,
-    #maps .primaryNav > li .go_task_chain_map_box {
-      padding: 10px 0;
-      display: block;
-      font-weight: bold;
-      text-align: center;
-      color: black; }
-    #maps .primaryNav .go_bonus_progresss_bar_position {
-      height: 15px; }
-    #maps .primaryNav .go_bonus_progresss_bar_container {
-      height: 15px;
-      border: 1px solid;
-      box-sizing: unset;
-      border: thin black solid;
-      background-color: #292929;
-      color: whitesmoke;
+      /* styling */
+      border-radius: 7px;
+      font: inherit;
+      padding: 10px;
+      width: 300px; }
+    #maps .ParentNav .dropdown {
+      position: relative;
+      display: inline-block;
+      z-index: 3;
+      font-size: unset;
+      font-size: 1.1em; }
+      #maps .ParentNav .dropdown #go_drop_arrow {
+        line-height: 28px;
+        float: right;
+        position: relative;
+        right: -43px; }
+    #maps .ParentNav .dropdown-content {
+      display: none;
       position: absolute;
-      bottom: 0;
-      width: 100%; }
-      #maps .primaryNav .go_bonus_progresss_bar_container .go_bonus_progress_bar {
-        position: absolute;
-        height: 15px;
-        background-color: #39b54a; }
-    #maps .primaryNav li li,
-    #maps .primaryNav .done {
-      background-color: #cee3ac;
-      border-color: #b8da83;
-      position: relative; }
-    #maps .primaryNav li li:hover,
-    #maps .primaryNav .done:hover {
-      border-color: #94b75f;
-      background-color: #e7f1d7; }
-    #maps .primaryNav .locked,
-    #maps .primaryNav li .locked,
-    #maps .primaryNav li .locked:hover {
-      background-color: #cccccc;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+      z-index: 1;
+      font-size: .8em; }
+    #maps .ParentNav .dropdown-content a {
+      padding: 8px 10px;
+      text-decoration: none;
+      display: block; }
+    #maps .ParentNav .dropdown-content a:hover {
+      background-color: #f1f1f1; }
+    #maps .ParentNav .show {
+      display: block; }
+    #maps .ParentNav #go_Dropdown {
+      float: left;
+      width: 100%;
+      min-width: 300px;
+      margin-right: 10px;
+      margin-bottom: 40px; }
+    #maps .ParentNav #utilityNav li {
+      float: left;
+      margin-bottom: 10px; }
+    #maps .ParentNav #go_Dropdown a {
+      display: block;
+      min-width: 150px;
+      cursor: pointer; }
+    #maps .ParentNav #go_Dropdown a:hover {
+      background-color: rgba(255, 255, 255, 0.5);
+      box-shadow: inset 0 -1px 0 #928c8c; }
+    #maps .ParentNav #go_Dropdown .locked a,
+    #maps .ParentNav #go_Dropdown .locked a:hover {
       border-color: #000;
       color: #555; }
-    #maps .primaryNav .up a {
-      border-color: mediumturquoise;
-      border-width: 4px 4px 4px 4px;
-      border-style: solid; }
-    #maps .primaryNav .down a {
-      border-color: indianred;
-      border-width: 4px 4px 4px 4px;
-      border-style: solid; }
-    #maps .primaryNav .reset a {
-      border-color: indianred;
-      border-width: 2px 2px 2px 2px;
-      border-style: solid;
-      background-color: pink; }
-    #maps .primaryNav .resetted a {
-      border-color: #F4B400;
-      border-width: 4px 4px 4px 4px;
-      border-style: solid; }
-    #maps .primaryNav li .available {
-      background-color: #fff7aa;
-      border-color: #e3ca4b; }
-    #maps .primaryNav li .available:hover {
+    #maps .ParentNav #go_Dropdown .done a,
+    #maps .ParentNav #go_Dropdown .done a:hover {
+      border-color: #b8da83; }
+    #maps .ParentNav #utilityNav li a:hover {
       background-color: #fffce5;
-      border-color: #d1b62c; }
+      border-color: #d1b62c;
+      cursor: pointer; }
+    #maps .ParentNav .go_badge_wrap {
+      width: unset;
+      font-size: .6em;
+      width: 100%; }
+  #maps .primaryNav {
+    margin: 0px 0 0 0;
+    width: 100%;
+    padding-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch; }
+    #maps .primaryNav .go_map_quest_hover:hover {
+      background-color: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      border-radius: 7px; }
+    #maps .primaryNav .go_chain_loot_info {
+      background-color: #ffffff;
+      border-color: #444444; }
+    #maps .primaryNav .loot_info {
+      display: none;
+      color: #0b0b0b;
+      font-size: .7em;
+      background-color: rgba(255, 255, 255, 0.7); }
+    #maps .primaryNav .go_task_chain {
+      flex: 1;
+      padding: 0 10px; }
+      #maps .primaryNav .go_task_chain .task,
+      #maps .primaryNav .go_task_chain .go_task_chain_map_box,
+      #maps .primaryNav .go_task_chain .go_task_pod_required {
+        -webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
+        -moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
+        /* FF 3.5+ */
+        box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
+        display: block;
+        text-align: center; }
+      #maps .primaryNav .go_task_chain .show_shadow {
+        -webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px, inset 0px 0px 6px 6px rgba(0, 0, 0, 0.6);
+        -moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px, inset 0px 0px 6px 6px rgba(0, 0, 0, 0.6);
+        box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px, inset 0px 0px 6px 6px rgba(0, 0, 0, 0.6); }
+      #maps .primaryNav .go_task_chain .task_container,
+      #maps .primaryNav .go_task_chain .go_task_chain_map_box {
+        margin: 10px 0; }
+      #maps .primaryNav .go_task_chain .go_task_chain_map_box {
+        font-size: 1.1em;
+        border-radius: 7px;
+        margin-top: 0px; }
+      #maps .primaryNav .go_task_chain .go_task_chain_map_box_badge {
+        border-radius: 7px; }
+      #maps .primaryNav .go_task_chain .go_task_pod_required {
+        font-size: .8em; }
+      #maps .primaryNav .go_task_chain .tasks .task_container {
+        position: relative;
+        /* --------	available tasks colors --------- */ }
+        #maps .primaryNav .go_task_chain .tasks .task_container .up {
+          border-color: mediumturquoise;
+          border-width: 4px 4px 4px 4px;
+          border-style: solid; }
+        #maps .primaryNav .go_task_chain .tasks .task_container .down {
+          border-color: indianred;
+          border-width: 4px 4px 4px 4px;
+          border-radius: 11px 11px 11px 11px;
+          border-style: solid; }
+        #maps .primaryNav .go_task_chain .tasks .task_container .reset {
+          border-color: indianred;
+          border-width: 2px 2px 2px 2px;
+          border-radius: 9px 9px 9px 9px;
+          border-style: solid;
+          background-color: pink;
+          color: black; }
+        #maps .primaryNav .go_task_chain .tasks .task_container .resetted {
+          border-color: #F4B400;
+          border-width: 4px 4px 4px 4px;
+          border-radius: 11px 11px 11px 11px;
+          border-style: solid; }
+        #maps .primaryNav .go_task_chain .tasks .task_container .task {
+          padding: 0px;
+          border-radius: 7px; }
+          #maps .primaryNav .go_task_chain .tasks .task_container .task .go_bonus_progresss_bar_container {
+            height: 17px;
+            border: 1px solid;
+            box-sizing: unset;
+            border: thin black solid;
+            background-color: #292929;
+            color: whitesmoke;
+            position: relative;
+            width: 100%;
+            border-radius: 0 0 7px 7px; }
+            #maps .primaryNav .go_task_chain .tasks .task_container .task .go_bonus_progresss_bar_container .go_bonus_progress_bar {
+              position: absolute;
+              height: 17px;
+              background-color: #39b54a;
+              border-radius: 0 0 7px 7px; }
+            #maps .primaryNav .go_task_chain .tasks .task_container .task .go_bonus_progresss_bar_container .bonus_progress {
+              position: relative;
+              width: 100%;
+              height: 17px;
+              font-size: .75em;
+              line-height: 17px; }
+        #maps .primaryNav .go_task_chain .tasks .task_container .optional {
+          background-size: 75px 75px;
+          background-image: linear-gradient(45deg, rgba(69, 69, 69, 0.05) 25%, rgba(51, 51, 51, 0.1) 25%, rgba(51, 51, 51, 0.1) 50%, rgba(69, 69, 69, 0.05) 50%, rgba(69, 69, 69, 0.05) 75%, rgba(51, 51, 51, 0.1) 75%, rgba(51, 51, 51, 0.1) 100%); }
+        #maps .primaryNav .go_task_chain .tasks .task_container .nested_opaque:hover {
+          background-color: rgba(255, 255, 255, 0.4);
+          cursor: pointer; }
+        #maps .primaryNav .go_task_chain .tasks .task_container .nested_opaque {
+          background-color: rgba(255, 255, 255, 0.5); }
+        #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_hover:hover,
+        #maps .primaryNav .go_task_chain .tasks .task_container .nested_opaque:hover {
+          border-radius: 0 0 7px 7px; }
+        #maps .primaryNav .go_task_chain .tasks .task_container .nested_opaque,
+        #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_toggle {
+          border-radius: 0 0 7px 7px; }
+        #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_toggle {
+          margin-top: 0px;
+          color: black;
+          -webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
+          -moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
+          /* FF 3.5+ */
+          box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px; }
+          #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_toggle .nested_icon {
+            line-height: 17px; }
+        #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_toggle.open {
+          border-radius: 0; }
+          #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_toggle.open .nested_opaque {
+            border-radius: 0; }
+        #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_toggle,
+        #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_hover,
+        #maps .primaryNav .go_task_chain .tasks .task_container .nested_opaque {
+          height: 19px; }
+        #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_list {
+          display: none; }
+          #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_list .task_container {
+            margin: 0px; }
+          #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_list .task {
+            border-radius: 0;
+            border-top: 1px solid; }
+            #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_list .task .go_bonus_progresss_bar_container,
+            #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_list .task .go_bonus_progress_bar,
+            #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_list .task .go_map_quest_hover:hover {
+              border-radius: 0; }
+          #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_list :last-child .task {
+            border-radius: 0 0 7px 7px; }
+            #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_list :last-child .task .go_bonus_progresss_bar_container,
+            #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_list :last-child .task .go_bonus_progress_bar,
+            #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_list :last-child .task .go_map_quest_hover:hover {
+              border-radius: 0 0 7px 7px; }
+      #maps .primaryNav .go_task_chain .tasks .hasNested > .task {
+        border-radius: 7px 7px 0 0; }
+        #maps .primaryNav .go_task_chain .tasks .hasNested > .task .go_bonus_progresss_bar_container,
+        #maps .primaryNav .go_task_chain .tasks .hasNested > .task .go_bonus_progress_bar {
+          border-radius: 0px !important; }
+      #maps .primaryNav .go_task_chain .tasks.sorting {
+        background-color: rgba(255, 255, 255, 0.3);
+        border: 1px solid;
+        border-radius: 7px; }
+      #maps .primaryNav .go_task_chain .go_task_pod_required {
+        background-color: white;
+        color: black;
+        border-radius: 7px;
+        padding: 10px; }
   #maps .go_badge_wrap {
     width: 100%;
     height: unset;
-    margin-bottom: 10px;
-    font-weight: 500; }
+    font-size: .8em;
+    float: unset; }
     #maps .go_badge_wrap .go_badge_container {
       margin: 0 auto;
       float: none; }
@@ -2853,102 +3200,15 @@ store lightbox styles
         margin: 0 auto;
         padding: 10px; }
         #maps .go_badge_wrap .go_badge_container .go_badge img {
-          width: 75px !important; }
+          height: 42px !important;
+          width: auto !important; }
+        #maps .go_badge_wrap .go_badge_container .go_badge .fig_wrap {
+          font-size: .8em; }
 
-/* Dropdown Button */
-.dropbtn, .dropbtn:hover, .dropbtn:focus {
-  cursor: pointer;
-  margin: 0;
-  display: block;
-  text-align: center;
-  color: black;
-  background: #c3eafb;
-  border: 2px solid #b5d9ea;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
-  -moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
-  /* FF 3.5+ */
-  /* styling */
-  border-radius: 4px;
-  font: inherit;
-  line-height: 1.5em;
-  padding: 0.5em 3.5em 0.5em 1em;
-  /* reset */
-  background-image: linear-gradient(45deg, transparent 50%, blue 50%), linear-gradient(135deg, blue 50%, transparent 50%), linear-gradient(to right, skyblue, skyblue);
-  background-position: calc(100% - 16px) calc(1em + 2px), calc(100% - 11px) calc(1em + 2px), 100% 0;
-  background-size: 5px 5px, 5px 5px, 2.5em 2.5em;
-  background-repeat: no-repeat;
-  width: 300px; }
-
-/* The container <div> - needed to position the dropdown content */
-.dropdown {
-  position: relative;
-  display: inline-block;
-  z-index: 3; }
-
-/* Dropdown Content (Hidden by Default) */
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f9f9f9;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 1; }
-
-/* Links inside the dropdown */
-.dropdown-content a {
-  color: black;
-  padding: 8px 10px;
-  text-decoration: none;
-  display: block; }
-
-/* Change color of dropdown links on hover */
-.dropdown-content a:hover {
-  background-color: #f1f1f1; }
-
-/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
-.show {
-  display: block; }
-
-/* ------------------------------------------------------------
-    Utility Navigation
------------------------------------------------------------- */
-#go_Dropdown {
-  float: left;
-  max-width: 100%;
-  margin-right: 10px;
-  margin-bottom: 40px; }
-
-#utilityNav li {
-  float: left;
-  margin-bottom: 10px; }
-
-#go_Dropdown a {
-  display: block;
-  font-size: .9em;
-  min-width: 150px;
-  color: black;
-  background: #bae9ff;
-  cursor: pointer; }
-
-#go_Dropdown a:hover {
-  background: #aee1ff;
-  box-shadow: inset 0 -1px 0 #928c8c; }
-
-#go_Dropdown .locked a,
-#go_Dropdown .locked a:hover {
-  background-color: #cccccc;
-  border-color: #000;
-  color: #555; }
-
-#go_Dropdown .done a,
-#go_Dropdown .done a:hover {
-  background-color: #cee3ac;
-  border-color: #b8da83; }
-
-#utilityNav li a:hover {
-  background-color: #fffce5;
-  border-color: #d1b62c;
-  cursor: pointer; }
+.show_nest_border .go_nested_list {
+  border: 1px solid !important;
+  border-radius: 7px;
+  background-color: rgba(255, 255, 255, 0.5); }
 
 /*--------------------------------------------------------------------------------------------
 *
@@ -7106,3 +7366,119 @@ html[dir="rtl"] .go-acf-table > tbody > tr > td.order + td {
     float: none;
     width: auto;
     margin: 0; } }
+
+/****
+* Plugin Name: TinyMCE Annotate
+* Description: Create annotations on your posts or pages
+* Version:     1.1.2
+* Author:      xyulex
+* Author URI:  https://profiles.wordpress.org/xyulex/
+* License:     GPLv2 or later
+* License URI: http://www.gnu.org/licenses/gpl-2.0.html
+*/
+.annotation:hover {
+  cursor: pointer; }
+
+.annotation:hover:after {
+  content: attr(data-author) ":\a" attr(data-annotation);
+  color: #333;
+  position: absolute;
+  white-space: pre;
+  z-index: 20;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  border: 2px solid #000;
+  padding: 10px;
+  background-color: #fff;
+  font-size: 14px; }
+
+#go_leaderboard_filters_container {
+  display: flex;
+  justify-content: space-between; }
+
+#go_leaderboard_filters, #go_leaderboard_update_button {
+  padding: 20px;
+  text-align: right; }
+
+#go_leaderboard_filters h3,
+#go_leaderboard_filters .select2 {
+  text-align: left; }
+
+#records_tabs a, #records_tabs .tooltip {
+  color: blue; }
+
+.dt-buttons {
+  padding: 10px; }
+
+.hidden_action {
+  display: none; }
+
+.dataTables_processing {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  background-color: lightblue !important;
+  z-index: 1 !important;
+  margin: 0px !important; }
+
+.go_tools_section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch; }
+  .go_tools_section a {
+    color: inherit;
+    text-decoration: inherit;
+    /* no underline */ }
+  .go_tools_section ul {
+    list-style-type: disc;
+    padding: 0 10px; }
+
+#go_tools_wrapper .card {
+  width: 300px;
+  margin: 10px;
+  padding-bottom: 10px;
+  height: 90%; }
+
+#go_tools_wrapper button {
+  float: right; }
+
+.progress-bar-border-swal {
+  height: 30px;
+  width: 120px;
+  border: thin white solid;
+  margin: 30px 0px;
+  position: relative;
+  background-color: lightgrey;
+  font-size: 14px;
+  box-sizing: unset; }
+
+.archive_progress_bar {
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #3085d6; }
+
+.quest_stats_wrapper {
+  /* margin: auto; */
+  /* width: 200px; */
+  /* float: right; */
+  display: flex;
+  margin: 10px;
+  justify-content: center;
+  align-items: center; }
+
+.quest_stats {
+  padding: 5px;
+  border: 1px solid; }
+
+.quest_stats.complete {
+  background-color: lightgreen; }
+
+.quest_stats.started {
+  background-color: lightgoldenrodyellow; }
+
+.quest_stats.not_started {
+  background-color: pink; }

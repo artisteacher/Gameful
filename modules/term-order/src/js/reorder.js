@@ -85,7 +85,7 @@ if (  filtered_terms.includes(params.taxonomy) ) {
 	console.log(parentName);
 
 	jQuery( document.querySelector( '.tablenav .bulkactions' ) ).after( '<select id="go_page_' + taxonomy + '_select" ' + parent_data + parentName_data +' class="go_activate_filter"></select> <button id="js-filter" class="button go_apply_filters" type="button">Filter</button> ' );
-	go_make_select2_filter(taxonomy,false, false, true);
+	go_make_select2_filter(taxonomy,'page', false, true);
 
 
 	// If we're already filtering the view, have the dropdown reflect that
@@ -141,6 +141,10 @@ jQuery("#cb-select-all-2").click(function() {
 });
 
 jQuery(document).ready(function(){
+	var loader_html = go_loader_html('big');
+
+		jQuery("#col-right").prepend('<span class="go_loading">' + loader_html + '</span> ');
+
 
     var idArray = [];
     //make array of all the term ids
@@ -430,33 +434,34 @@ jQuery(document).ready(function(){
 			}
 		}
 
-		jQuery("thead li").each(function (index) {
+		jQuery("#col-right thead li").each(function (index) {
 			jQuery(this).wrapInner('<div class="container term_list_header"></div>');
 		});
 
-		jQuery("tfoot li").each(function (index) {
+		jQuery("#col-right tfoot li").each(function (index) {
 			jQuery(this).wrapInner('<div class="container term_list_footer"></div>');
 		});
 
-		jQuery('thead').wrapInner('<div class="the-list-header"></div>');
-		jQuery('thead').contents().unwrap();
-		jQuery('th').replaceTag('<div>', true);
+		jQuery('#col-right thead').wrapInner('<div class="the-list-header"></div>');
+		jQuery('#col-right thead').contents().unwrap();
+		jQuery('#col-right th').replaceTag('<div>', true);
 
-		jQuery('tfoot').wrapInner('<div class="the-list-footer"></ul>');
-		jQuery('tfoot').contents().unwrap();
+		jQuery('#col-right tfoot').wrapInner('<div class="the-list-footer"></ul>');
+		jQuery('#col-right tfoot').contents().unwrap();
 
-		jQuery('.the-list-footer tr').prepend('<div class="handleLeft"></div>' );
-		jQuery('.the-list-header tr').prepend('<div class="handleLeft"></div>' );
-		jQuery('.the-list-footer tr').append('<div class="handleRight_nograb"></div>' );
-		jQuery('.the-list-header tr').append('<div class="handleRight_nograb"></div>' );
+		jQuery('#col-right  .the-list-footer tr').prepend('<div class="handleLeft"></div>' );
+		jQuery('#col-right  .the-list-header tr').prepend('<div class="handleLeft"></div>' );
+		jQuery('#col-right  .the-list-footer tr').append('<div class="handleRight_nograb"></div>' );
+		jQuery('#col-right  .the-list-header tr').append('<div class="handleRight_nograb"></div>' );
 
-		jQuery('.the-list-header tr').replaceTag('<div class=container>', true);
-		jQuery('.the-list-header td').replaceTag('<div>', true);
+		jQuery('#col-right  .the-list-header tr').replaceTag('<div class=container>', true);
+		jQuery('#col-right  .the-list-header td').replaceTag('<div>', true);
 
-		jQuery('.the-list-footer tr').replaceTag('<div class=container>', true);
-		jQuery('.the-list-footer td').replaceTag('<div>', true);
+		jQuery('#col-right  .the-list-footer tr').replaceTag('<div class=container>', true);
+		jQuery('#col-right  .the-list-footer td').replaceTag('<div>', true);
 
-		jQuery("#col-right").css("display", "block");
+		jQuery("#col-right .col-wrap").css("display", "block");
+		jQuery('.go_loading').hide();
 
 		//set width of columns on term list pages (edit-tags.php)
 		var posts_width = jQuery('#posts').width();
@@ -484,7 +489,8 @@ jQuery(document).ready(function(){
 
 		///if submit button is pressed, reload content and redo list from table
 		jQuery("#submit").click(function() {
-			jQuery("#col-right").css("display", "none");
+			jQuery("#col-right .col-wrap").css("display", "none");
+			jQuery('.go_loading').show();
 			//delay here??
 			jQuery("#col-right").bind("DOMSubtreeModified", function(){
 				console.log("modified and reload");
@@ -493,7 +499,8 @@ jQuery(document).ready(function(){
 
 			if ((jQuery(".term-name-wrap").hasClass( "form-invalid" )) == true){
 				jQuery("#col-right").unbind("DOMSubtreeModified");
-				jQuery("#col-right").css("display", "block");
+				jQuery("#col-right .col-wrap").css("display", "block");
+				jQuery('.go_loading').hide();
 			}
 			if ((jQuery( ".formfield" ).hasClass( "form-invalid" )) == true)
 			{

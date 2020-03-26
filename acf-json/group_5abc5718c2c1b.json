@@ -208,25 +208,6 @@
                     ]
                 },
                 {
-                    "key": "field_5b0ba55790241",
-                    "label": "Optional Task",
-                    "name": "optional_task",
-                    "type": "text",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "Bonus",
-                    "placeholder": "Bonus",
-                    "prepend": "",
-                    "append": "",
-                    "maxlength": ""
-                },
-                {
                     "key": "field_5abd9cfbdc0e8",
                     "label": "Bonus Stage",
                     "name": "bonus_stage",
@@ -244,6 +225,25 @@
                     "prepend": "",
                     "append": "",
                     "maxlength": ""
+                },
+                {
+                    "key": "field_5dfbc442c28b3",
+                    "label": "Show All Posts Button",
+                    "name": "show_all_posts",
+                    "type": "true_false",
+                    "instructions": "<span class=\"tooltip\" data-tippy-content=\"Add a button so users can see all submissions for a particular post. If on, you can toggle it off per post and choose to show before or after submission.\"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "view_posts_button",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 1,
+                    "ui": 1,
+                    "ui_on_text": "",
+                    "ui_off_text": ""
                 }
             ]
         },
@@ -355,8 +355,27 @@
                     "maxlength": ""
                 },
                 {
+                    "key": "field_5df037f8a5d23",
+                    "label": "Map Header",
+                    "name": "map_header",
+                    "type": "wysiwyg",
+                    "instructions": "<span class=\"tooltip\" data-tippy-content=\"Add content that will show above the map.\"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "tabs": "all",
+                    "toolbar": "full",
+                    "media_upload": 1,
+                    "delay": 0
+                },
+                {
                     "key": "field_5d20da4b94be2",
-                    "label": "Note on Hidden Map",
+                    "label": "About turning Maps Off",
                     "name": "",
                     "type": "message",
                     "instructions": "",
@@ -487,6 +506,25 @@
                     "prepend": "",
                     "append": "",
                     "maxlength": ""
+                },
+                {
+                    "key": "field_5df037baa5d22",
+                    "label": "Store Header",
+                    "name": "store_header",
+                    "type": "wysiwyg",
+                    "instructions": "<span class=\"tooltip\" data-tippy-content=\"Add content that will show above the store.\"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "tabs": "all",
+                    "toolbar": "full",
+                    "media_upload": 1,
+                    "delay": 0
                 }
             ]
         },
@@ -695,15 +733,7 @@
             "type": "group",
             "instructions": "<div class=\"go_help_vid\" data-video=\"1ozlJ4woETY\"><\/div>\r\n\r\n<span class=\"tooltip\" data-tippy-content=\"Here you can turn on the leaderboard and set the name of the page\/toolbar link.\"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
             "required": 0,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_5abc8e474b1ad",
-                        "operator": "==",
-                        "value": "1"
-                    }
-                ]
-            ],
+            "conditional_logic": 0,
             "wrapper": {
                 "width": "",
                 "class": "",
@@ -756,6 +786,62 @@
                     "prepend": "",
                     "append": "",
                     "maxlength": ""
+                },
+                {
+                    "key": "field_5dfc5a8264928",
+                    "label": "Percentage to Show",
+                    "name": "percent_to_show",
+                    "type": "number",
+                    "instructions": "Percentage of users to show loot. Users below this amount will be sorted by name and have no loot shown.",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5ad6786d291c9",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": 50,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "%",
+                    "min": 1,
+                    "max": 100,
+                    "step": ""
+                },
+                {
+                    "key": "field_5e0fa1cd21c38",
+                    "label": "Show Social Feed",
+                    "name": "show_social_feed",
+                    "type": "true_false",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5ad6786d291c9",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 1,
+                    "ui": 1,
+                    "ui_on_text": "",
+                    "ui_off_text": ""
                 }
             ]
         },
@@ -821,6 +907,33 @@
             "layout": "horizontal",
             "return_format": "value",
             "save_other_choice": 0
+        },
+        {
+            "key": "field_5e3f961f203ce",
+            "label": "Frontend Text Editor Defaults",
+            "name": "go_text_editor_defaults",
+            "type": "checkbox",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "full": "Use Full Toolbar",
+                "media": "Show Media Button",
+                "text": "Show Text Tab"
+            },
+            "allow_custom": 0,
+            "default_value": [
+                "media"
+            ],
+            "layout": "horizontal",
+            "toggle": 0,
+            "return_format": "value",
+            "save_custom": 0
         },
         {
             "key": "field_5adc010641915",
@@ -1559,7 +1672,7 @@
             "label": "Reputation",
             "name": "go_loot_health",
             "type": "group",
-            "instructions": "<div class=\"go_help_vid\" data-video=\"Sr4kuaV2Qeo\"><\/div>\r\n\r\n<span class=\"tooltip\" data-tippy-content=\"Reputation modifies the amount of currency awarded on quests. 100 reputation gives 100%. This is designed to be a behavior modifier. Taken all together this means that do you work and do the expected behaviors (which includes doing work) and you will get more gold.\"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
+            "instructions": "<div class=\"go_help_vid\" data-video=\"Sr4kuaV2Qeo\"><\/div>\r\n\r\n<span class=\"tooltip\" data-tippy-content=\"Reputation modifies the amount of currency awarded on quests. 100 reputation gives 100%. This is designed to be a behavior modifier. Taken all together this means that do you work and do the expected behaviors (which includes doing work) and you will get more loot.\"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2354,5 +2467,5 @@
     "active": 1,
     "description": "",
     "recaptcha": 0,
-    "modified": 1571093283
+    "modified": 1581226285
 }

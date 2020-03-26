@@ -8,32 +8,11 @@
 
 
 
-add_action( 'wp_head', 'go_user_bar_dynamic_styles', 99 );
-function go_user_bar_dynamic_styles() {
-
-    $bkg_color = get_option('options_go_user_bar_background_color');
-    $link_color = get_option('options_go_user_bar_link_color');
-    $hover_color = get_option('options_go_user_bar_hover_color');
-    $drop_bkg_color = get_option('options_go_user_bar_dropdown_bkg');
-
-    ?>
-    <style type="text/css" media="screen">
-        #go_user_bar_top { background-color:<?php echo $bkg_color; ?> !important; color:<?php echo $link_color; ?>; }
-        #go_user_bar a:link { color:<?php echo $link_color; ?>; text-decoration: none; }
-        #go_user_bar a:visited { color:<?php echo $link_color; ?>; text-decoration: none; }
-        #go_user_bar a:hover { color:<?php echo $hover_color; ?>; text-decoration: none; }
-        #go_user_bar a:active { color:<?php echo $hover_color; ?>; text-decoration: underline; }
-        .progress-bar-border { border-color:<?php echo $link_color; ?>; }
-        #go_user_bar .userbar_dropdown-content {background-color: <?php echo $drop_bkg_color; ?>;  color:<?php echo $link_color; ?>; }
-    </style>
-    <?php
-
-}
 
 $is_gameful = is_gameful();
 $blog_id = get_current_blog_id();
 if(!is_main_site() || !$is_gameful){
-    add_action('wp_head', 'go_player_bar_v5');
+    add_action('wp_head', 'go_player_bar_v5', 99999999);
 }
 
 function go_player_bar_v5() {
@@ -55,10 +34,11 @@ function go_player_bar_v5() {
 
 
     $user_id = get_current_user_id();
-    $is_admin = go_user_is_admin($user_id);
+
+    $is_admin = go_user_is_admin();
 
 
-    if (is_user_member_of_blog() || go_user_is_admin()) {
+    if (is_user_member_of_blog() || $is_admin) {
 
 
         //displays Timer in admin bar
@@ -268,124 +248,3 @@ function go_player_bar_v5() {
 
 }
 
-/**Leaderboard Stuff Below
- *
- */
-
-/**
- *
- */
-function go_stats_leaderboard() {
-    wp_localize_script( 'go_frontend', 'IsLeaderboard', 'true' );
-    if ( !is_user_logged_in() ) {
-        echo "login";
-        die();
-    }
-
-    //check_ajax_referer('go_stats_leaderboard_');
-    /* if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_leaderboard' ) ) {
-         echo "refresh";
-         die( );
-     }
-    if (!empty($_POST['user_id'])) {
-        $current_user_id = (int)$_POST['user_id'];
-    }*/
-
-
-
-    // prepares tab titles
-    $xp_name = get_option("options_go_loot_xp_name");
-    $gold_name = go_get_gold_name();
-
-    $health_name = get_option("options_go_loot_health_name");
-    $badges_name = get_option('options_go_badges_name_plural');
-
-    $xp_toggle = get_option('options_go_loot_xp_toggle');
-    $gold_toggle = get_option('options_go_loot_gold_toggle');
-    $health_toggle = get_option('options_go_loot_health_toggle');
-
-    $badges_toggle = get_option('options_go_badges_toggle');
-
-    //is the current user an admin
-    $current_user_id = get_current_user_id();
-    $is_admin = go_user_is_admin($current_user_id);
-
-    $full_name_toggle = get_option('options_go_full-names_toggle');
-
-    /*
-    $section = intval(get_user_option('go_leaderboard_section', $current_user_id));
-    $section_name ='';
-    if (is_int($section) & $section > 0){
-        $parent = get_term($section);
-        $section_name = ( mb_strlen( $parent->name ) > 50 ) ? mb_substr( $parent->name, 0, 49 ) . '...' : $parent->name;
-    }
-
-
-    $group = intval(get_user_option('go_leaderboard_group', $current_user_id));
-    $group_name = '';
-    if (is_int($group) & $group > 0) {
-        $parent = get_term($group);
-        $group_name = (mb_strlen($parent->name) > 50) ? mb_substr($parent->name, 0, 49) . '...' : $parent->name;
-    }*/
-
-    $section = 'loading';
-    $section_name = " ";
-    $group = 'loading';
-    $group_name =  " ";
-    $go_leaderboard_name = ucwords(get_option('options_go_stats_leaderboard_name'));
-    ?>
-
-    <div id="go_leaderboard_wrapper" class="go_datatables">
-        <h2 style='padding-top:10px;'><?php echo $go_leaderboard_name; ?></h2>
-        <div id="go_leaderboard_filters">
-            <span>Section:<?php go_make_tax_select('user_go_sections', false, $section, $section_name, false); ?></span>
-            <span>Group:<?php go_make_tax_select('user_go_groups', false, $group, $group_name, false); ?></span>
-
-        </div>
-
-
-        <div id="go_leaderboard_flex">
-
-            <div id="go_leaderboard" class="go_leaderboard_layer">
-
-                <table id='go_leaders_datatable' class='pretty display'>
-                    <thead>
-                    <tr>
-                        <th></th>
-                        <?php
-                        /*
-                        if ($full_name_toggle == 'full' || $is_admin){
-                            echo "<th class='header'><a href='#'>Full Name</a></th>";
-                        }else if ($full_name_toggle == 'first'){
-                            echo "<th class='header'><a href='#'>First Name</a></th>";
-                        }*/
-                        ?>
-                        <th class='header'><a href="#">Name</a></th>
-                        <th class='header'><a href="#">Links</a></th>
-                        <?php
-                        if ($xp_toggle) {
-                            echo "<th class='header'><a href='#'>" . $xp_name . "</a></th>";
-                        }
-                        if ($gold_toggle) {
-                            echo "<th class='header'><a href='#'>" . $gold_name . "</a></th>";
-                        }
-                        if ($health_toggle) {
-                            echo "<th class='header'><a href='#'>" . $health_name . "</a></th>";
-                        }
-                        if ($badges_toggle) {
-                            echo "<th class='header'><a href='#'>" . $badges_name . "</a></th>";
-                        }
-                        ?>
-
-                    </tr>
-                    </thead>
-                    <tbody></table>
-            </div>
-
-        </div>
-    </div>
-
-
-    <?php
-
-}

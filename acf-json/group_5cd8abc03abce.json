@@ -174,12 +174,12 @@
     ],
     "menu_order": 0,
     "position": "normal",
-    "style": "default",
+    "style": "seamless",
     "label_placement": "top",
     "instruction_placement": "label",
     "hide_on_screen": "",
     "active": 1,
     "description": "",
     "recaptcha": 0,
-    "modified": 1568264756
+    "modified": 1578086221
 }

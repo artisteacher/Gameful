@@ -12,8 +12,6 @@ function go_blog_opener(){
     if ( !is_user_logged_in() ) {
         echo "login";
         die();
-    }else{
-        $is_logged_in = true;
     }
 
     //check_ajax_referer( 'go_blog_opener' );
@@ -46,7 +44,7 @@ function go_blog_opener(){
         $go_blog_task_id = go_get_task_id($blog_post_id);
         if(!empty($go_blog_task_id)) {
             $custom_fields = get_post_meta($go_blog_task_id);
-            $task_is_locked = go_task_locks($go_blog_task_id, null, false, $custom_fields, $is_logged_in, true);
+            $task_is_locked = go_task_locks($go_blog_task_id, true,null, false, $custom_fields);
             if ( $task_is_locked === true && !$is_admin ) {
                 echo "locked";
                 die();
@@ -73,24 +71,62 @@ function go_blog_opener(){
             }
         }
     }
+    if($blog_post_id){
+        $post = get_post($blog_post_id);
+        $autosave = wp_get_post_autosave($blog_post_id);
 
-    go_blog_form($blog_post_id, '_lightbox', $go_blog_task_id, $i, $bonus, $check_for_understanding );
+        $autosave_time = strtotime($autosave->post_modified);
+        $post_time = strtotime($post->post_modified);
+
+        if( $post_time < $autosave_time){
+            $check_autosave = true;
+        }
+
+    }
+    $check_autosave = false;
+    if($blog_post_id){
+        $post = get_post($blog_post_id);
+        $autosave = wp_get_post_autosave($blog_post_id);
+
+        if($autosave) {
+            $autosave_time = strtotime($autosave->post_modified);
+            $post_time = strtotime($post->post_modified);
+
+
+            if ($post_time < $autosave_time) {
+                $check_autosave = true;
+                go_check_autosave($post, $autosave);
+            }
+        }
+
+    }
+    if(!$check_autosave){
+        go_blog_form($blog_post_id, '_lightbox', $go_blog_task_id, $i, $bonus, $check_for_understanding );
+    }
     echo "<p id='go_blog_error_msg' class='go_error_msg' style='display: none; color: red;'></p>";
-    ?>
-    <script>
+    die();
+}
 
-        jQuery( document ).ready( function() {
-            console.log ("go_blog_opener function READY");
-            jQuery("#go_blog_submit").off().one("click", function(e){
-                task_stage_check_input(this, false);
-            });
+function go_blog_post_opener(){
 
-        });
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }else{
+        $is_logged_in = true;
+    }
 
-    </script>
+    //check_ajax_referer( 'go_blog_opener' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_blog_post_opener' ) ) {
+        echo "refresh";
+        die( );
+    }
 
-    <?php
+    $blog_post_id = ( ! empty( $_POST['blog_post_id'] ) ? (int) $_POST['blog_post_id'] : 0 );
 
+    go_blog_post($blog_post_id, null, false, true);
+
+    die();
 }
 
 function go_blog_trash(){
@@ -129,7 +165,11 @@ function go_blog_trash(){
         }
 
         if(empty($go_blog_task_id)) {//this post is not associated with a task
-            wp_trash_post( intval($blog_post_id ) );
+            //wp_trash_post( intval($blog_post_id ) );
+            wp_update_post(array(
+                'ID'    =>  $blog_post_id,
+                'post_status'   =>  'trash'
+            ));
         }
         else{
 
@@ -193,7 +233,11 @@ function go_blog_trash(){
                 $result = $loot_row['result'];
 
                 if ($check_type === "blog"){
-                    wp_trash_post( intval($result ) );
+                    //wp_trash_post( intval($result ) );
+                    wp_update_post(array(
+                        'ID'    =>  intval($result ),
+                        'post_status'   =>  'trash'
+                    ));
                 }
 
                 $badge_task = unserialize($badges);
@@ -273,6 +317,67 @@ function go_blog_trash(){
     }
 }
 
+function go_blog_autosave(){
+//return;
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
+    //check_ajax_referer( 'go_blog_submit' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_blog_autosave' ) ) {
+        echo "refresh";
+        die( );
+    }
+
+
+    add_filter( 'user_has_cap', 'go_allow_to_autosave', 10, 4 );
+
+    $blog_post_id = intval(!empty($_POST['blog_post_id']) ? (string)$_POST['blog_post_id'] : '');
+
+    if($blog_post_id){
+        $post_author_id = get_post_field( 'post_author', $blog_post_id );
+        $user_id = get_current_user_id();
+        if ($post_author_id != $user_id){
+            echo "not your post";
+            die( );
+        }
+    }
+    $is_private = !empty($_POST['blog_private']) ? $_POST['blog_private'] : 0;
+    $post_id = !empty($_POST['post_id']) ? intval($_POST['post_id']) : null;
+
+    $post_status = 'unread';//if submit was pressed, set status as unread
+
+
+    $blog_meta = get_post_meta($blog_post_id);
+    //$go_blog_task_id = intval(isset($blog_meta['go_blog_task_id'][0]) ? $blog_meta['go_blog_task_id'][0] : null);
+    $go_blog_task_id = wp_get_post_parent_id($blog_post_id);
+    $go_blog_task_stage = intval(isset($blog_meta['go_blog_task_stage'][0]) ? $blog_meta['go_blog_task_stage'][0] : null);
+    $go_blog_task_bonus = (isset($blog_meta['go_blog_bonus_stage'][0]) ? $blog_meta['go_blog_bonus_stage'][0] : null);
+
+
+    if ($go_blog_task_bonus !== null){
+        $go_blog_task_bonus = intval($go_blog_task_bonus);
+        $go_blog_task_stage = null;
+    }
+
+    $result = go_save_blog_post($go_blog_task_id, $go_blog_task_stage, $go_blog_task_bonus, $post_status, $is_private, true);
+
+    if ( is_wp_error( $result ) ) {
+        $message = $result;
+    }else{
+        $message = 'autosave complete';
+    }
+
+    echo json_encode(
+        array(
+            'json_status' => 'success',
+            'message'   => $message
+        )
+    );
+
+    die();
+}
 
 function go_blog_submit(){
 
@@ -295,6 +400,7 @@ function go_blog_submit(){
 
     if ($button == 'submit'){
         $post_status = 'unread';//if submit was pressed, set status as unread
+
 
         //if this is an existing post, check if it is being edited by admin and set to read
         if (go_post_exists($blog_post_id)){
@@ -358,7 +464,8 @@ function go_blog_submit(){
     die();
 }
 
-function go_save_blog_post($post_id = null, $stage = null, $bonus_status = null, $post_status, $is_private = 0){
+function go_save_blog_post($go_blog_task_id = null, $stage = null, $bonus_status = null, $post_status = false, $is_private = 0, $is_autosave = false){
+
     $result = (!empty($_POST['result']) ? (string)$_POST['result'] : ''); // Contains the result from the check for understanding
     $result_title = (!empty($_POST['result_title']) ? (string)$_POST['result_title'] : '');// Contains the result from the check for understanding
     $blog_post_id = intval(!empty($_POST['blog_post_id']) ? (string)$_POST['blog_post_id'] : null);
@@ -367,14 +474,13 @@ function go_save_blog_post($post_id = null, $stage = null, $bonus_status = null,
         $user_id = get_current_user_id();
     }else{
         $user_id = get_post_field( 'post_author', $blog_post_id );
-
     }
-
+    $status = null;
     $uniqueid = null;
-    if (is_int($post_id) and $post_id > 0) {//if this is attached to a quest
+    if (is_int($go_blog_task_id) and $go_blog_task_id > 0) {//if this is attached to a quest
         //update_post_meta( $post_id, 'go_is_reset', false );
         //stage uniqueid
-        $uniqueid = go_post_meta($post_id, 'go_stages_' . $stage . '_uniqueid', true);
+
         global $wpdb;
         $go_task_table_name = "{$wpdb->prefix}go_tasks";
 
@@ -393,18 +499,56 @@ function go_save_blog_post($post_id = null, $stage = null, $bonus_status = null,
             }
         }
         if ($bonus_status !== null) {//if this is a bonus stage blog post, set variables
+            //$uniqueid = 'bonus';
             $bonus_status = $bonus_status + 1;
             $stage = null;
             $status = null;
-            $meta_key = 'go_bonus_stage_blog_options_v5_bonus_private';
+            //$meta_key = 'go_bonus_stage_blog_options_v5_bonus_private';
+            //$meta_key = 'go_bonus_stage_blog_options_v5_bonus_private';
+            //$is_private =  get_post_meta($go_blog_task_id, 'go_bonus_stage_blog_options_v5_opts', true) ? get_post_meta($go_blog_task_id, 'go_bonus_stage_blog_options_v5_opts', true) : get_post_meta($go_blog_task_id, 'go_bonus_stage_blog_options_v5_bonus_private', true);
+            //$is_private = (isset($custom_fields['go_bonus_stage_blog_options_v5_private'][0]) ?  $custom_fields['go_bonus_stage_blog_options_v5_private'][0] : false);
+            $is_private = false;
+            $opts = get_post_meta($go_blog_task_id, 'go_bonus_stage_blog_options_v5_opts', true) ? true : false;
+            if($opts){//if this post has been saved with the new options
+                $opts = get_post_meta($go_blog_task_id, 'go_bonus_stage_blog_options_v5_opts', true);//get the new options
+                if(!is_array($opts)){
+                    $opts = array();
+                }
+                if(in_array('private', $opts)){
+                    $is_private = true;
+                }
+            }else{
+                $is_private = get_post_meta($go_blog_task_id, 'go_bonus_stage_blog_options_v5_private', true);//old style private setting
+            }
+
         } else {//if this is a regular stage blog post, set variables
+            $uniqueid = go_post_meta($go_blog_task_id, 'go_stages_' . $stage . '_uniqueid', true);
             $status = $stage;
-            $meta_key = 'go_stages_' . $status . '_blog_options_v5_private';
+           // $meta_key = 'go_stages_' . $status . '_blog_options_v5_private';
+            //$new_style =  get_post_meta($go_blog_task_id, 'go_stages_' . $i . '_blog_options_v5_opts', true) ? true : false;
+            //$opts =  get_post_meta($go_blog_task_id, 'go_stages_' . $status . '_blog_options_v5_opts', true) ? get_post_meta($go_blog_task_id, 'go_stages_' . $status . '_blog_options_v5_opts', true) : false;
+
+
+            $is_private = false;
+            $opts = get_post_meta($go_blog_task_id, 'go_stages_' . $stage . '_blog_options_v5_opts', true) ? true : false;
+            if($opts){//if this post has been saved with the new options
+                $opts = get_post_meta($go_blog_task_id, 'go_stages_' . $stage . '_blog_options_v5_opts', true);//get the new options
+                if(!is_array($opts)){
+                    $opts = array();
+                }
+                if(in_array('private', $opts)){
+                    $is_private = true;
+                }
+            }else{
+                $is_private = get_post_meta($go_blog_task_id, 'go_stages_'.$stage.'_blog_options_v5_privat', true);//old style private setting
+            }
             $stage = ($stage + 1);
+
         }
 
         //Set Privacy
         //don't change the privacy status if post exists
+        /*
         if (go_post_exists($blog_post_id) == true) {
             //do something if this blog post already exists
 
@@ -414,12 +558,12 @@ function go_save_blog_post($post_id = null, $stage = null, $bonus_status = null,
                 $is_private = 1;//this is a fix for some v4 posts
             }
 
-        } else {
+        } else {*/
             //do something for new blog posts
                 //$custom_fields = get_post_meta($post_id);
                 //$is_private = (isset($custom_fields[$meta_key][0]) ? $custom_fields[$meta_key][0] : true);
-            $is_private = get_post_meta($post_id, $meta_key, true);
-        }
+            //$is_private = get_post_meta($go_blog_task_id, $meta_key, true);
+       // }
 
 
     }
@@ -428,7 +572,7 @@ function go_save_blog_post($post_id = null, $stage = null, $bonus_status = null,
    // $blog_media = (!empty($_POST['blog_media']) ? (string)$_POST['blog_media'] : '');
     //$blog_video = (!empty($_POST['blog_video']) ? (string)$_POST['blog_video'] : '');
 
-    if(!is_array($_POST['required_elements'])){
+   /* if(!is_array($_POST['required_elements'])){
          $required_elements = (!empty($_POST['required_elements']) ? (string)$_POST['required_elements'] : '');
          //this is a string of the unique Ids and the element contents.
         $required_elements = str_replace("\\", "", $required_elements);
@@ -436,12 +580,19 @@ function go_save_blog_post($post_id = null, $stage = null, $bonus_status = null,
         $required_elements = json_decode($required_elements, true);
     }
     else{
-        $required_elements = $_POST['required_elements'];
+
     }
-    $required_elements['go_blog_task_stage'] = $status;
+   */
+    $required_elements = $_POST['required_elements'];
+    $required_elements = array_map( 'wp_kses_post', $required_elements );
+    $test['go_blog_task_stage'] = $status;
     $required_elements['go_blog_bonus_stage'] = $bonus_status;
     $required_elements['go_blog_private_post'] = $is_private;
     $required_elements['go_stage_uniqueid'] = $uniqueid;
+
+
+   global $sent_meta;
+    $sent_meta = $required_elements;
 
     $my_post = array(
         'ID'        => $blog_post_id,
@@ -450,34 +601,134 @@ function go_save_blog_post($post_id = null, $stage = null, $bonus_status = null,
         'post_content'  => $result,
         'post_status'   => $post_status,
         'post_author'   => $user_id,
-        'post_parent'    => $post_id,
+        'post_parent'    => $go_blog_task_id,
         'meta_input'    => $required_elements
     );
 
-    if (empty($blog_post_id)) {
+    if($is_autosave){
+        $autosave_post_data = array(
+            'post_ID'        => $blog_post_id,
+            'post_title'    => $result_title,
+            'post_content'  => $result,
+            'meta_input'    => $required_elements,
+            'user_ID'       => $user_id,
+        );
+
+
+        $result = wp_create_post_autosave( $autosave_post_data );
+    }
+    else if(empty($blog_post_id)) {
         // Insert the post into the database
         $new_post_id = wp_insert_post( $my_post );
-        wp_save_post_revision(  $new_post_id );
+        if(empty($go_blog_task_id)) {
+            wp_save_post_revision($new_post_id);//add to only save this if there is content/required elements
+        }
         $result = $new_post_id;
         //create an entry in the actions table that attaches this blog post to this task and stage.  This is how the check for understanding looks up the blog post.
-        go_update_actions($user_id, 'blog_post', $post_id, $stage, $bonus_status, null, $result, null, null, null, null, null, null, null, null, null, false);
+        go_update_actions($user_id, 'blog_post', $go_blog_task_id, $stage, $bonus_status, null, $result, null, null, null, null, null, null, null, null, null, false);
 
     }else{
-        wp_update_post($my_post);
+        $return = wp_update_post($my_post);//revisions are saved automatically on update post
+        //ADD if a revision was saved then meta data needs to be saved to the revision
+
+        //$return =wp_save_post_revision(  $blog_post_id );
         $result = $blog_post_id;
+        $key = 'go_post_data_' . $blog_post_id;
+        go_delete_transient($key);
+    }
+    //$result = go_blog_save($blog_post_id, $my_post);
+    return $result;
+}
+
+/**
+ * If meta is changed, save a new post revision
+ */
+add_filter( 'wp_save_post_revision_post_has_changed', 'go_is_meta_changed', 10, 3 );
+function go_is_meta_changed($post_has_changed, $last_revision, $post){
+
+    //check if meta has changed
+
+    global $sent_meta;
+
+    $post_id = $last_revision->ID;
+    $custom_fields = get_post_meta($post_id);
+    foreach($sent_meta as $key=>$value){
+        $prev_value = $custom_fields[$key];
+        if($prev_value[0] != $value){
+            return true;
+        }
     }
 
+    return $post_has_changed;
+}
 
-    //$result = go_blog_save($blog_post_id, $my_post);
+//do_action( "save_post_{$post->post_type}", $post_ID, $post, $update );
+add_action('save_post_revision', 'go_save_blog_revision_meta', 10, 2);
+function go_save_blog_revision_meta($post_id, $post){
+    //if post is revision or autosave
+    //then add metadata to post
 
-    return $result;
+    $parent_id = $post->post_parent;
+    //if ( $parent_id = wp_is_post_revision( $post_id ) ) {
+
+    $type = get_post_type($parent_id);
+    if($type != 'go_blogs'){
+        return;
+    }
+    //$parent = get_post($parent_id);
+
+    if($_POST['action'] === "go_blog_autosave"){
+        global $sent_meta;
+        $blog_meta = $sent_meta;
+    }else {
+
+        $blog_meta = get_post_meta($parent_id);
+    }
+    //Save values from created array into db
+    foreach($blog_meta as $meta_key=>$meta_value) {
+       // update_post_meta($post_id, $meta_key, $meta_value[0]);
+        if(is_array($meta_value)){
+            $meta_value = $meta_value[0];
+        }
+        update_metadata( 'post', $post_id, $meta_key, $meta_value);
+    }
+   // }
+}
+
+add_action( 'wp_restore_post_revision', 'pmr_restore_revision', 10, 2 );
+function pmr_restore_revision( $post_id, $revision_id ) {
+    $type = get_post_type($post_id);
+    if($type != 'go_blogs'){
+        return;
+    }
+    $post_meta      = get_post_meta($post_id);
+    $revision_meta      = get_post_meta($revision_id);
+
+    //remove post meta
+    foreach($post_meta as $meta_key=>$meta_value) {
+        delete_post_meta($post_id, $meta_key);
+    }
+
+    //add revision meta to post
+    foreach($revision_meta as $meta_key=>$meta_value) {
+        update_post_meta($post_id, $meta_key, $meta_value[0]);
+    }
+}
+
+function go_allow_to_autosave($all_caps, $caps, $args, $hmm){
+    $all_caps['edit_post']= true;
+    $all_caps['edit_pages']= true;
+    return $all_caps;
 }
 
 /**
  * Prints content for the clipboard tasks table and user map viewer
  */
-function go_blog_user_task($not_ajax = false, $user_id = null, $post_id = null){
-    if (!$not_ajax) {
+function go_blog_user_task($is_ajax = true, $user_id = null, $post_id = null){
+    if($is_ajax !== false){
+        $is_ajax = true;
+    }
+    if ($is_ajax) {
         if (!is_user_logged_in()) {
             echo "login";
             die();
@@ -627,6 +878,8 @@ function go_blog_user_task($not_ajax = false, $user_id = null, $post_id = null){
             //set the time for the next loop
             $current_time = $TIMESTAMP;
 
+
+            //THERE ARE SOME LEGAGY check_types THAT CAN BE REMOVED IN THIS NEXT PART
             ob_start();
             $stage_name = ucfirst($stage_name);
             echo  "<span class='go_blog_stage'><h3>". $stage_name . " " . $current_stage .": ";
@@ -686,9 +939,12 @@ function go_blog_user_task($not_ajax = false, $user_id = null, $post_id = null){
     }
     echo "</div>";
 
+    if($is_ajax){
+        die();
+    }
 }
 
-
+/*
 function go_show_private(){
     //check_ajax_referer( 'go_blog_opener' );
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_show_private' ) ) {
@@ -712,4 +968,4 @@ function go_show_private(){
     echo $buffer;
     die();
 
-}
+}*/

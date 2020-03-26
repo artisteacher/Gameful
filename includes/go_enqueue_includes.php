@@ -17,8 +17,12 @@ $js_in_footer = true;
 //$go_datatables_ns_js_url = 'https://cdn.datatables.net/plug-ins/1.10.19/sorting/natural.js';
 
 //pdf make--it is almost 1MB should it be included in GO --what happens when it fails?
-$go_pdfmake_js_url       = 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js';
-$go_pdfmake_fonts_js_url  = 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js';
+//$go_pdfmake_js_url       = 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js';
+//$go_pdfmake_fonts_js_url  = 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js';
+
+
+
+
 
 /**
  * @param $hook
@@ -31,8 +35,21 @@ function go_includes ($hook) {
 
     // Bring variables from beginning of file into function scope
     global $js_in_footer;
-    global $go_pdfmake_js_url, $go_pdfmake_fonts_js_url;
+    //global $go_pdfmake_js_url, $go_pdfmake_fonts_js_url;
+/*
+    $go_react ="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-with-addons.js";
+    $go_react_dom ="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-dom.js";
 
+    wp_enqueue_script('go_react', $go_react, false, null, false);
+    wp_enqueue_script('go_react_dom', $go_react_dom, false, null, false);
+
+
+    wp_register_script( 'literallycanvas', plugin_dir_url( __FILE__ ).'literallycanvas/js/literallycanvas.min.js', array( 'jquery' ), '0.4.14', true);
+    wp_enqueue_script( 'literallycanvas' );
+
+    wp_register_style( 'literallycanvas-css', plugin_dir_url( __FILE__ ).'literallycanvas/css/literallycanvas.css', null, '0.4.14' );
+    wp_enqueue_style( 'literallycanvas-css' );
+*/
     /**
      * Font Awesome
      * https://fontawesome.com
@@ -63,9 +80,11 @@ function go_includes ($hook) {
     /**
      * Summernote
      */
-    wp_register_script( 'go_summernote', plugin_dir_url( __FILE__ ).'summernote/summernote-lite.js', array( 'jquery' ), 0.812, true);
+    /*
+    wp_register_script( 'go_summernote', plugin_dir_url( __FILE__ ).'summernote/summernote-lite.js', array( 'jquery' ), 0.8151, true);
     wp_enqueue_script( 'go_summernote' );
-
+    */
+//
 }
 
 
@@ -102,8 +121,9 @@ function go_include_css ($hook) {
     /**
      * Summernote
      */
+    /*
     wp_register_style( 'go_summernote-css', plugin_dir_url( __FILE__ ).'summernote/summernote-lite.css', null, 0.812 );
-    wp_enqueue_style( 'go_summernote-css' );
+    wp_enqueue_style( 'go_summernote-css' );*/
 }
 
 

@@ -37,8 +37,8 @@ if ($resize) {
     add_filter('plupload_default_settings', function ($settings) {
         $settings['resize'] = array(
             'enabled' => true,
-            'width' => 1920,
-            'height' => 1080,
+            'width' => 3480,
+            'height' => 2160,
             'quality' => 80,
             'preserve_headers' => true,
         );

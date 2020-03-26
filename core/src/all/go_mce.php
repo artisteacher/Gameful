@@ -8,13 +8,14 @@
 
 //these are the text filters
 //https://themehybrid.com/weblog/how-to-apply-content-filters
-add_filter( 'go_awesome_text', 'wptexturize'       );
+add_filter( 'go_awesome_text', 'go_oembed_text' );
+add_filter( 'go_awesome_text', 'wptexturize'       );//this one converts double hyphens to dashes
 add_filter( 'go_awesome_text', 'convert_smilies'   );
 add_filter( 'go_awesome_text', 'convert_chars'     );
 add_filter( 'go_awesome_text', 'wpautop'           );
 add_filter( 'go_awesome_text', 'shortcode_unautop' );
 add_filter( 'go_awesome_text', 'do_shortcode'      );
-add_filter( 'go_awesome_text', 'go_oembed_text' );
+
 
 
 //the go_awesome_text filter uses this to embed content
@@ -144,11 +145,33 @@ function go_tinymce_wordcount($plugins_array = array())
 
 
 
+//*******************************************************************************************
+// Load tinymce annotate
+//*******************************************************************************************
+
+add_filter('mce_external_plugins', 'go_tinymce_annotate');
+
+function go_tinymce_annotate($plugins_array = array())
+{
+    $plugins = array('annotate');
+    //Build the response - the key is the plugin name, value is the URL to the plugin JS
+    foreach ($plugins as $plugin )
+    {
+        $plugins_array[ $plugin ] = plugins_url('tinymce/', __FILE__) . $plugin . '/plugin.js';
+    }
+    return $plugins_array;
+}
+
+
+
 function go_mce_add_button( $buttons ) {
     if(go_user_is_admin()) {
         array_push($buttons, "separator", "go_shortcode_button");
         array_push($buttons, "separator", "go_admin_comment");
     }
+    array_push($buttons, "separator", "tma_annotate");
+    array_push($buttons, "separator", "tma_annotatedelete");
+    array_push($buttons, "separator", "tma_annotatehide");
     return $buttons;
 }
 add_filter( 'mce_buttons', 'go_mce_add_button', 0);
@@ -172,4 +195,23 @@ function go_comments_button_register( $plugin_array ) {
     return $plugin_array;
 }
 add_filter( 'mce_external_plugins', 'go_comments_button_register' );
+
+function go_annotate_button_register( $plugin_array ) {
+    $url = plugin_dir_url(dirname(dirname(dirname(__FILE__))));
+    //if(go_user_is_admin()) {
+        $url .= "core/src/all/tinymce/annotate/plugin.js";
+        $plugin_array['go_admin_comment'] = $url;
+   // }
+    return $plugin_array;
+}
+add_filter( 'mce_external_plugins', 'go_annotate_button_register' );
+
+function tma_annotate_css($mce_css) {
+    if (!empty($mce_css))
+        $mce_css .= ',';
+    $mce_css = plugin_dir_url(dirname(dirname(dirname(__FILE__))));
+    $mce_css .= "dev/css/files/annotate.css";
+    return $mce_css;
+}
+add_filter('mce_css', 'tma_annotate_css');
 

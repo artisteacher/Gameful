@@ -13,7 +13,7 @@ add_filter('get_comment_author', 'go_comment_author', 10, 3);
 function go_comment_author(  $author,  $comment_id,  $comment  ) {
     // Get the comment ID from WP_Query
     $user_id = $comment->user_id;
-    return go_get_user_display_name($user_id);
+    return go_get_fullname($user_id);
 }
 
 add_filter('get_comment_author_url', 'go_comment_author_url', 10, 3);
@@ -24,9 +24,7 @@ function go_comment_author_url(  $author,  $comment_id,  $comment  ) {
     $user_blog_link = '';
     $user_id = (isset($comment->user_id) ?  $comment->user_id : null);
     if(!empty($user_id)) {
-        $user_info = get_userdata($user_id);
-        $info_login = $user_info->user_login;
-        $user_blog_link = get_site_url(null, '/user/' . $info_login);
+        $user_blog_link = get_site_url(null, '/user/' . $user_id);
     }
     return $user_blog_link;
 }
@@ -38,6 +36,7 @@ function go_comment_author_url(  $author,  $comment_id,  $comment  ) {
  * @param  mixed  $user_id The user ID or object. Default is current user.
  * @return string          The user's name.
  */
+/*
 function go_get_users_name( $user_id = null ) {
     $user_info = $user_id ? new WP_User( $user_id ) : wp_get_current_user();
     if ( $user_info->first_name ) {
@@ -48,7 +47,7 @@ function go_get_users_name( $user_id = null ) {
     }
     $user_id = $user_info->ID;
     return go_get_user_display_name($user_id);
-}
+}*/
 
 /**
  * Determines whether or not a user is an administrator with management capabilities.
@@ -56,18 +55,167 @@ function go_get_users_name( $user_id = null ) {
  * @since 3.0.0
  *
  * @param int $user_id Optional. The user ID.
+ * @param bool $use_option
  * @return boolean True if the user has the 'administrator' role and has the 'manage_options'
  *                 capability. False otherwise.
  */
-function go_user_is_admin( $user_id = null ) {
+function go_user_is_admin( $user_id = null  ) {
     if ( empty( $user_id ) ) {
         $user_id = get_current_user_id();
     } else {
         $user_id = (int) $user_id;
     }
 
-    if(user_can( $user_id, 'manage_options' ) || is_super_admin($user_id)) {
-        return true;
+    $current_blog = get_current_blog_id();
+
+    $cache_key = "go_user_is_admin_".$user_id;
+    $cached = wp_cache_get( $cache_key );
+    if($cached) {
+        if($cached === 'no'){
+            $cached = false;
+        }
+        return $cached;
+    }else{
+
+        if (user_can($user_id, 'manage_options') || is_super_admin($user_id)) {
+
+            if( defined('DOING_AJAX') && DOING_AJAX ) {
+                $is_frontend = $_REQUEST['is_frontend'];
+                if($is_frontend !== 'true'){//this is an admin page ajax call
+                    wp_cache_set( $cache_key, true );
+                    return true;
+                }
+            }else{//not doing ajax
+                if (is_admin()) {//this is an admin page, not doing ajax
+
+                    wp_cache_set($cache_key, true);
+                    return true;
+                }
+            }
+
+
+            $admin_view = get_user_option('go_admin_view', $user_id);
+            if (in_array($admin_view, array('user', 'guest'))) {
+                wp_cache_set( $cache_key, 'no' );
+                return false;
+            } else {
+                wp_cache_set( $cache_key, true );
+                return true;
+            }
+
+        }
+        wp_cache_set( $cache_key, 'no' );
+        return false;
+    }
+
+
+}
+
+//sets the $go_user global to the user id if admin chooses guest view
+//and changes the user capabilities for player view
+add_action('init', 'go_admin_view');
+function go_admin_view(){
+
+    if( defined('DOING_AJAX') && DOING_AJAX ) {
+        $is_frontend = $_REQUEST['is_frontend'];
+        if($is_frontend !== 'true'){//this is an admin page
+            return;
+        }
+        if($_REQUEST['action'] === 'go_update_admin_view'){//this is a call to change the view
+            return;
+        }
+    }else{//not doing ajax
+        if (is_admin())//this is an admin page
+            return;
+    }
+
+    global $current_user;
+
+    global $go_user_guest_view;
+
+    /*
+    $user_id = $current_user->ID;
+    if(user_can( $user_id, 'manage_options' )){
+        global $is_really_admin;
+        $is_really_admin = true;
+    }*/
+
+    $user_id = get_current_user_id();
+    $go_user_guest_view = 0;
+    global $admin_view;
+    $admin_view = get_user_option('go_admin_view', $user_id);
+    if(user_can( $user_id, 'manage_options' )){
+        global $is_really_admin;
+        $is_really_admin = true;
+    }
+    if (in_array($admin_view, array('guest'))) {
+        $go_user_guest_view = $current_user;
+        $current_user = -1;
+        return;
+    }
+    else if($admin_view === 'user'){
+        $subscriber_caps = get_role( 'subscriber' )->capabilities;
+        $current_user->roles = array('subscriber');
+        $current_user->allcaps = $subscriber_caps;
+        return;
+    }
+
+}
+
+function go_get_admin_view($user_id){
+    //return 'admin';
+    if(empty($user_id)){
+        $user_id = get_current_user_id();
+    }
+    global $is_really_admin;
+    //$is_admin = go_user_is_admin($user_id);
+    if($is_really_admin) {
+        $admin_view = (get_user_option('go_admin_view', $user_id) ? get_user_option('go_admin_view', $user_id) : 'admin');
+    }else{
+        $admin_view = false;
+    }
+    return $admin_view;
+}
+
+add_action('wp_head', 'go_admin_view_player_warning', 9);
+function go_admin_view_player_warning(){
+    global $admin_view;
+    if($admin_view === 'user'){
+        ?>
+       <script>
+            jQuery( document ).ready( function() {
+                new Noty({
+                    type: 'warning',
+                    layout: 'topCenter',
+                    text: 'You are viewing this page as a Player.',
+                    theme: 'sunset',
+                    visibilityControl: true,
+                }).show();
+            });</script>
+        <?php
+    }
+}
+
+
+function go_user_is_admin_on_any_other_blog( $user_id = null  ) {
+    if ( empty( $user_id ) ) {
+        $user_id = get_current_user_id();
+    } else {
+        $user_id = (int) $user_id;
+    }
+
+    $blogs = get_blogs_of_user($user_id);
+    foreach($blogs as $blog){
+        $blog_id = $blog->userblog_id;
+        $current_blog = get_current_blog_id();
+        if($current_blog != $blog_id) {
+            switch_to_blog($blog_id);
+            $is_admin = go_user_is_admin();
+            restore_current_blog();
+            if ($is_admin) {
+                return true;
+            }
+        }
     }
     return false;
 }
@@ -124,14 +272,15 @@ function mc_edit_permission_check() {
     global $current_user, $profileuser;
 
     $screen = get_current_screen();
+    if(is_object($screen)){
+        wp_get_current_user();
 
-    wp_get_current_user();
-
-    if( ! is_super_admin( $current_user->ID ) && in_array( $screen->base, array( 'user-edit', 'user-edit-network' ) ) ) { // editing a user profile
-        if ( is_super_admin( $profileuser->ID ) ) { // trying to edit a superadmin while less than a superadmin
-            wp_die( __( 'You do not have permission to edit this user.' ) );
-        } elseif ( ! ( is_user_member_of_blog( $profileuser->ID, get_current_blog_id() ) && is_user_member_of_blog( $current_user->ID, get_current_blog_id() ) )) { // editing user and edited user aren't members of the same blog
-            wp_die( __( 'You do not have permission to edit this user.' ) );
+        if (!is_super_admin($current_user->ID) && in_array($screen->base, array('user-edit', 'user-edit-network'))) { // editing a user profile
+            if (is_super_admin($profileuser->ID)) { // trying to edit a superadmin while less than a superadmin
+                wp_die(__('You do not have permission to edit this user.'));
+            } elseif (!(is_user_member_of_blog($profileuser->ID, get_current_blog_id()) && is_user_member_of_blog($current_user->ID, get_current_blog_id()))) { // editing user and edited user aren't members of the same blog
+                wp_die(__('You do not have permission to edit this user.'));
+            }
         }
     }
 

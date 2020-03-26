@@ -10,55 +10,80 @@
 /**
  *
  */
-function go_make_map() {
-    if ( ! is_admin() ) {
+function go_make_map($map_id = null, $current_user_id = null) {
+
+    if(empty($user_id)){
         $user_id = get_current_user_id();
-        //$last_map_id = get_user_option('go_last_map', $user_id);
-        $last_map_id = (isset($_GET['map_id']) ?  $_GET['map_id'] : get_user_option('go_last_map', $user_id));
-
-        $font = get_option('options_map_font');
-        $font_size = $font['font_size'];
-        $font_family = $font['font_family'];
-        $font_weight = $font['font_weight'];
-        $font_style = $font['font_style'];
-
-        $get_font = $font_family . ":" . $font_weight .$font_style;
-
-        wp_enqueue_style( 'acft-gf', 'https://fonts.googleapis.com/css?family='.$get_font );
-
-
-        if(!$last_map_id){
-            $last_map_id = get_option('options_go_locations_map_default', '');
-        }
-        if(!$last_map_id){
-            $taxonomy = 'task_chains';
-            /*$term_args0=array(
-                'hide_empty' => false,
-                'order' => 'ASC',
-                'parent' => '0',
-                'number' => 1
-            );
-            $firstmap = get_terms($taxonomy,$term_args0);*/
-            $firstmap = go_get_terms_ordered($taxonomy, '0', 1);
-            if (!empty($firstmap)) {
-                $last_map_id = $firstmap[0]->term_id;
-            }else{
-                $last_map_id = null;
-            }
-        }
-
-        echo "<div id='go_map_container' style='font-family: $font_family; font-style: $font_style; font-weight: $font_weight; font-size: $font_size"."px;'>";
-        $map_title = get_option( 'options_go_locations_map_title');
-        echo "<h1>{$map_title}</h1>";
-        go_make_map_dropdown();
-        go_make_single_map($last_map_id, false);// do your thing
-        echo "</div>";
-        ?>
-<script>
-
-</script>
-        <?php
     }
+
+        //$last_map_id = get_user_option('go_last_map', $user_id);
+
+    if(empty($map_id)){
+        $map_id = (isset($_GET['map_id']) ?  $_GET['map_id'] : get_user_option('go_last_map', $user_id));
+    }
+
+
+    //$font = get_option('options_map_font');
+    //$font_size = $font['font_size'];
+    //        $font_family = $font['font'];
+    //        $font_weight = $font['font_weight'];
+    //        $font_style = $font['font_style'];
+    //{"font":"Muli","regularweight":"200","italicweight":"200italic","boldweight":"200","category":"sans-serif"}
+
+    $font = get_option('go_map_google_font_select');
+    if(!$font){
+        $font = '{"font":"Muli","category":"sans-serif"}';
+    }
+    $font = json_decode($font);
+    $myfont = $font->font;
+   // $font_weight = $font->regularweight;
+   // $font_boldweight = $font->boldweight;
+    $font_category = $font->category;
+
+
+    $get_font = $myfont;
+
+    wp_enqueue_style( 'acft-gf', 'https://fonts.googleapis.com/css?family='.$get_font );
+
+
+    $font_size = get_option('go_map_font_size_control');
+    if(!$font_size){
+        $font_size = 17;
+    }
+
+    if(!$map_id){
+        $map_id = get_option('options_go_locations_map_default', '');
+    }
+    if(!$map_id){
+        $taxonomy = 'task_chains';
+        /*$term_args0=array(
+            'hide_empty' => false,
+            'order' => 'ASC',
+            'parent' => '0',
+            'number' => 1
+        );
+        $firstmap = get_terms($taxonomy,$term_args0);*/
+        $firstmap = go_get_terms_ordered($taxonomy, '0', 1);
+        if (!empty($firstmap)) {
+            $map_id = $firstmap[0]->term_id;
+        }else{
+            $map_id = null;
+        }
+    }
+    $font_family = $myfont . "," . $font_category;
+    echo "<div id='go_map_container' style='font-family: $font_family; font-style: normal; font-size: $font_size"."px;'>";
+    //$map_title = get_option( 'options_go_locations_map_title');
+    //echo "<h1>{$map_title}</h1>";
+
+    $map_header = get_option( 'options_go_locations_map_map_header');
+    if($map_header){
+        $map_header = apply_filters( 'go_awesome_text', $map_header );
+        echo $map_header;
+    }
+    //go_make_map_dropdown();
+    go_make_single_map($map_id, false);// do your thing
+    echo "</div>";
+
 }
 add_shortcode('go_make_map', 'go_make_map');
 
@@ -105,6 +130,7 @@ if ($go_map_switch) {
     		$hide = false;
   	 	}
   	  	if (!$hide) {
+
             $map_name = get_option('options_go_locations_map_map_link');
             $map_name = (isset($map_name) ?  $map_name : 'map');
             global $wp_query; //Load $wp_query object
@@ -112,6 +138,7 @@ if ($go_map_switch) {
             $page_value = (isset($wp_query->query_vars[$map_name]) ? $wp_query->query_vars[$map_name] : false); //Check for query var "blah"
 
             if ($page_value && $page_value == "true") { //Verify "blah" exists and value is "true".
+                $GLOBALS['current_theme_template'] = 'map';
                 return plugin_dir_path(__FILE__) . 'templates/go_map_template.php'; //Load your template or file
             }
 

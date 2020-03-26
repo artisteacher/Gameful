@@ -1,5 +1,6 @@
 
 jQuery( document ).ready( function() {
+
     go_activate_tippy();
     if (typeof (GO_TASK_LIST) !== 'undefined'){
         jQuery('.page-title-action').removeAttr("href").css("cursor","pointer").on("click", function(e){
@@ -7,13 +8,25 @@ jQuery( document ).ready( function() {
         });
     }
 
+    //This is to fix a bug in select2 that affects Safari only
+    jQuery('select.select2-hidden-accessible').on('select2:closing', function() {
+        $('body > span.select2-container.select2-container--default.select2-container--open').hide();
+    });
+
+    jQuery('select.select2-hidden-accessible').on('select2:open', function() {
+        $('body > span.select2-container.select2-container--default.select2-container--open').css('display','inline-block');
+    });
+    //END SELECT2 fix
+
     //jQuery('#go_user_link').on("click", function(e){
     //    go_login_lightbox();
    // });
 
     go_activate_tippy();
     let debug = go_debug;
+
     if (debug === 'false') {
+        /*
         jQuery(document).on('heartbeat-tick', function (event, data) {
 
             // Check for our data, and use it.
@@ -26,9 +39,9 @@ jQuery( document ).ready( function() {
 
         jQuery(document).on('heartbeat-send', function (event, data) {
             console.log('send');
-            // Add additional data to Heartbeat data.
+            // Add additional data to Heartbeat data. //used for checking messages
             data.go_heartbeat = true;
-        });
+        });*/
     }else{
         console.log('Game On Debug Mode On');
     }
@@ -50,6 +63,92 @@ jQuery( document ).ready( function() {
         jQuery('#footer-widgets').hide();
     }
 });
+
+
+function go_highlight_apply_filters() {
+    console.log("go_highlight_apply_filters");
+    //if there is a filter, add the filter on change to all inputs
+    //with the correct type of data to filter
+    //typeof jQuery("#go_leaderboard_filters")
+    var filter_on_change = jQuery("#go_leaderboard_filters").data("filter_on_change");
+    var type = jQuery("#go_leaderboard_filters").data("type");
+    console.log('filter on change');
+    console.log(filter_on_change);
+
+    if (filter_on_change) {
+        //console.log(filter_on_change2);
+        console.log(type);
+        //var filter_on_change = jQuery("#go_leaderboard_filters").data("filter_on_change");
+        //if (filter_on_change) {
+
+            if (type === 'leaderboard') {
+                console.log("Leaderboard Update Now");
+                go_update_leaderboard();
+            } else if (type == 'blog') {
+                go_reader_update();
+                console.log("Update Now");
+            }
+            else if (type === 'single_stage') {
+                go_reader_update();
+                console.log("Update Now");
+            }
+       // }
+    }
+    else {//clipboard and reader
+            jQuery('.go_apply_filters').addClass("bluepulse");
+            jQuery('.go_apply_filters').html('<span class="ui-button-text">Apply Filter<i class="fas fa-filter" aria-hidden="true"></i></span>');
+    }
+}
+
+function go_after_ajax(){
+    //activate any new store item links on the result
+    jQuery('.go_str_item').off().one("click", function(e){
+        go_lb_opener( this.id );
+    });
+    //do the attendance ajax
+    go_check_attendance();
+}
+
+function go_check_attendance(){
+    console.log('go_check_attendance');
+    var nonce = GO_EVERY_PAGE_DATA.nonces.go_attendance_check_ajax;
+
+    jQuery.ajax({
+        type: "GET",
+        url: MyAjax.ajaxurl,
+        data: {
+            _ajax_nonce: nonce,
+            action: 'go_attendance_check_ajax',
+            is_frontend: is_frontend
+        },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function (jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400) {
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [{'wp-auth-check': false}]);
+            }
+
+        },
+        success: function (res) {
+            console.log("go_check_attendance SUCCESS")
+            go_check_messages_ajax();
+            jQuery('body').append(res);
+        }
+    });
+}
+
+function go_show_clone_buttons(){
+    jQuery(".go_actions_wrapper").toggle();
+    jQuery(".go_actions_wrapper_flex").toggle();
+
+    //get the option from local storage
+    //toggle the option
+    //set local storage
+    //toggle the items
+    //jQuery(".loot_info").toggle();
+}
 
 function go_activate_tippy(){
     console.log('go_activate_tippy');
@@ -84,7 +183,8 @@ function go_new_task_from_template(){
         url: MyAjax.ajaxurl,
         data: {
             //_ajax_nonce: nonce,
-            action: 'go_new_task_from_template'
+            action: 'go_new_task_from_template',
+            is_frontend: is_frontend,
         },
         /**
          * A function to be called if the request fails.
@@ -104,7 +204,7 @@ function go_new_task_from_template(){
             }
 
             if ( -1 !== res ) {
-                console.log('winning');
+                //console.log('winning');
                 console.log(res);
                 if (res){
                     console.log(res);
@@ -125,8 +225,11 @@ function go_new_task_from_template(){
 //sends the selected post_id to the clone function
 //there should be no return--just a redirect
 function go_clone_post_new_menu_bar() {
-    console.log('go_clone_post_new_menu_bar');
+    console.log('go_clone_post_new_menu_bar22');
     let post_id = jQuery('.go_new_task_from_template').val();
+    let global = jQuery('.go_new_task_from_template .'+ post_id).data('global');
+    console.log("global");
+    //console.log(global);
 
     var nonce = GO_EVERY_PAGE_DATA.nonces.go_clone_post_new_menu_bar;
 
@@ -136,7 +239,9 @@ function go_clone_post_new_menu_bar() {
         data: {
             _ajax_nonce: nonce,
             action: 'go_clone_post_new_menu_bar',
-            post: post_id
+            is_frontend: is_frontend,
+            post: post_id,
+            global: global
 
         },
         /**
@@ -204,7 +309,8 @@ function go_update_password_lightbox(){//this is only needed on the frontend pro
         url: MyAjax.ajaxurl,
         data: {
             //_ajax_nonce: nonce,
-            action: 'go_update_password_lightbox'
+            action: 'go_update_password_lightbox',
+            is_frontend: is_frontend,
         },
         /**
          * A function to be called if the request fails.
@@ -356,6 +462,7 @@ function go_update_password(){//this is only needed on the frontend
         data: {
             //_ajax_nonce: nonce,
             action: 'go_update_password',
+            is_frontend: is_frontend,
             current_password: current_password,
             new_password: new_password,
             confirm_password: confirm_password,
@@ -373,6 +480,7 @@ function go_update_password(){//this is only needed on the frontend
             });
         },
         success: function( res ) {
+            go_after_ajax();
             console.log(res);
             let error = go_ajax_error_checker(res);
             if (error == 'true') return;
@@ -443,6 +551,7 @@ function go_user_profile_link(uid){
         data: {
             //_ajax_nonce: nonce,
             action: 'go_user_profile_link',
+            is_frontend: is_frontend,
             uid: uid
         },
         /**
@@ -455,6 +564,7 @@ function go_user_profile_link(uid){
             }
         },
         success: function (url) {
+            go_after_ajax();
             //console.log(url);
             //console.log('go_user_profile_link_success');
             window.open(url);
@@ -474,6 +584,7 @@ function go_noty_close_oldest(){
 }
 
 function go_lightbox_blog_img(){
+    console.log("go_lightbox_blog_img");
     jQuery('[class*= wp-image]').each(function(  ) {
         var fullSize = jQuery( this ).hasClass( "size-full" );
         console.log("fullsize:" + fullSize);
@@ -568,10 +679,6 @@ function go_lightbox_blog_img(){
         jQuery(element).find('a').featherlightGallery({
         });
     });
-
-
-
-
 }
 
 function go_stats_lightbox_page_button( uid ) {//this is called from the admin bar
@@ -583,6 +690,7 @@ function go_stats_lightbox_page_button( uid ) {//this is called from the admin b
         url: MyAjax.ajaxurl,
         data: {
             _ajax_nonce: nonce,
+            is_frontend: is_frontend,
             action: 'go_stats_lightbox',
             uid: uid
         },
@@ -597,6 +705,7 @@ function go_stats_lightbox_page_button( uid ) {//this is called from the admin b
         },
         success: function( res ) {
             console.log("go_stats_lightbox_page_button SUCCESS");
+            go_after_ajax();
             let error = go_ajax_error_checker(res);
             if (error == 'true') return;
 
@@ -642,7 +751,12 @@ function go_stats_lightbox_page_button( uid ) {//this is called from the admin b
                 });
 
                 go_stats_links(); //links for the header
-                go_reader_activate_buttons();//activate buttons on about me blog post
+                //go_reader_activate_buttons();//activate buttons on about new blog post
+                go_blog_new_posts();
+
+                jQuery(".go_grade_scales").off().one("click", function(){
+                    go_print_grade_scales(this);
+                });
 
 
                 //if there is no about tab, and there is a task tab, load the task table
@@ -659,6 +773,44 @@ function go_stats_lightbox_page_button( uid ) {//this is called from the admin b
     });
 }
 
+function go_print_grade_scales(target){
+    console.log("go_print_grade_scales");
+    var nonce = GO_EVERY_PAGE_DATA.nonces.go_print_grade_scales;
+    jQuery.ajax({
+        type: 'post',
+        url: MyAjax.ajaxurl,
+        data: {
+            _ajax_nonce: nonce,
+            is_frontend: is_frontend,
+            action: 'go_print_grade_scales'
+        },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
+        success: function (res) {
+            jQuery(target).off().one("click", function(){
+                go_print_grade_scales(this);
+            });
+            go_after_ajax();
+            if (-1 !== res) {
+                jQuery.featherlight(res,
+                    {
+                        variant: 'go_print_grade_scales',
+                        afterContent: function () {
+
+                        }
+                    });
+            }
+        }
+    });
+}
+
 //Applies the stats and messages links to the icons on tables on clipboard and leaderboard
 function go_stats_links(){
     //jQuery('.go_user_link_stats').prop('onclick',null).off('click');
@@ -671,32 +823,39 @@ function go_stats_links(){
         var user_id = this.getAttribute('data-uid');
         go_messages_opener(user_id, null, "single_message", this);
     });
+
+    jQuery(".go_user_map").off().one("click", function(e){
+        go_user_map(this);
+    });
 }
 
-function go_make_select2_filter(taxonomy, is_lightbox, use_saved_value = false, parents_only = false) {
+function go_make_select2_filter(taxonomy, location, use_saved_value = false, parents_only = false, value = null, value_name = null) {
     console.log("go_make_select2_filter");
-
-    if (is_lightbox){
-        var location = 'lightbox';
-        console.log('lightbox');
-    }
-    else{
-
-        var location = 'page';
-        console.log('page');
-    }
-
+    var value = jQuery('#go_' + location + '_' + taxonomy + '_select').data('value');
+    var value_name = jQuery('#go_' + location + '_' + taxonomy + '_select').data('value_name');
     if (use_saved_value) {
         // Get saved data from sessionStorage
-        var value = localStorage.getItem(taxonomy);
-        var value_name = localStorage.getItem(taxonomy + '_name');
-        console.log(value);
-        console.log(value_name);
-    }else{
-        value = jQuery('#go_' + location + '_' + taxonomy + '_select').data('value');
-        value_name = jQuery('#go_' + location + '_' + taxonomy + '_select').data('value_name');
+        if(value === null) {
+            var saved_value = localStorage.getItem(taxonomy);
+            var saved_value_name = localStorage.getItem(taxonomy + '_name');
+        }else{
+            var saved_value = value;
+            var saved_value_name = value_name;
+        }
+        //console.log("saved_value"+saved_value);
+        //console.log('saved_value_name'+saved_value_name);
+        if(saved_value != 'undefined' && saved_value_name != 'undefined' && saved_value != '' && saved_value_name != '' && saved_value != 'null' ){
+            value = saved_value;
+            value_name = saved_value_name;
+        }else{
+            value = '';
+            value_name = '';
+        }
     }
-
+    console.log("taxonomy"+taxonomy);
+    console.log("value"+value);
+    console.log('value_name'+value_name);
+    console.log('location: ' + location);
 
     if( value != null && value != 'null') {
         // Fetch the preselected item, and add to the control
@@ -712,7 +871,7 @@ function go_make_select2_filter(taxonomy, is_lightbox, use_saved_value = false, 
         jQuery('#go_' + location + '_' + taxonomy + '_select').val(null).trigger('change');
         jQuery('#go_' + location + '_' + taxonomy + '_select').empty();
         if(jQuery('#go_' + location + '_' + taxonomy + '_select').hasClass("go_activate_filter")) {
-            go_activate_apply_filters();
+            go_highlight_apply_filters();
         }
     });
 
@@ -727,6 +886,7 @@ function go_make_select2_filter(taxonomy, is_lightbox, use_saved_value = false, 
 
                 return {
                     q: params.term, // search query
+                    is_frontend: is_frontend,
                     action: 'go_make_taxonomy_dropdown_ajax', // AJAX action for admin-ajax.php
                     taxonomy: taxonomy,
                     parents_only: parents_only,
@@ -750,16 +910,15 @@ function go_make_select2_filter(taxonomy, is_lightbox, use_saved_value = false, 
                     jQuery('#go_' + location + '_' + taxonomy + '_select').on('select2:select', function (e) {
                         // Do something
                         console.log("apply_filters");
-                        go_activate_apply_filters();
+                        go_highlight_apply_filters();
                     });
 
                     jQuery('#go_' + location + '_' + taxonomy + '_select').on('select2:unselect', function (e) {
-                        go_activate_apply_filters();
+                        go_highlight_apply_filters();
                     });
-
-
                 }
 
+                /*
                 // Event listener to the range filtering inputs to redraw on input
                 if (jQuery("#go_leaders_datatable").length) {
                     console.log("On the Leaderboard");
@@ -767,21 +926,20 @@ function go_make_select2_filter(taxonomy, is_lightbox, use_saved_value = false, 
                         //var section = jQuery('#go_user_go_sections_select').val();
                         console.log('redraw');
                         leaderboard.draw();
-
                     });
-                }
+                }*/
 
+                //var is_reader = jQuery("#go_leaderboard_filters").data("is_reader");
+
+                //
                 return {
                     results: data
                 };
 
             },
             success: function( data ) {
-
                 console.log("success_select2");
-
-
-
+                go_after_ajax();
             },
             cache: true
         },
@@ -790,8 +948,6 @@ function go_make_select2_filter(taxonomy, is_lightbox, use_saved_value = false, 
         placeholder: "Show All",
         allowClear: true,
     });
-
-
 }
 
 function go_make_select2_cpt( my_div, cpt) {
@@ -804,6 +960,7 @@ function go_make_select2_cpt( my_div, cpt) {
             data: function (params) {
                 return {
                     q: params.term, // search query
+                    is_frontend: is_frontend,
                     action: 'go_make_cpt_select2_ajax', // AJAX action for admin-ajax.php
                     cpt: cpt
                 };
@@ -832,17 +989,38 @@ function go_make_select2_cpt( my_div, cpt) {
 
 }
 
-function go_stats_task_list() {
+function go_loader_html(size){
+    var url = ( PluginDir.url + 'media/images/spinner-solid.svg' );
+    if(size == "big"){
+        var px = 75;
+        var html = "<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px 0; text-align: center'><div id='loader'><img style='height: " + px + "px;' class='go_loader fa-pulse' src='" + url + "'></div></div>";
 
+    }else if(size == "tiny"){
+        var px = 15
+        var html = "<img style='height: " + px + "px; margin-top: 7px;' class='go_loader fa-pulse' src='" + url + "'>";
+    }
+    else{
+        var px = 25
+        var html = "<img style='height: " + px + "px; margin-top: 7px;' class='go_loader fa-pulse' src='" + url + "'>";
+    }
+
+    return html;
+}
+
+function go_stats_task_list() {
+console.log("go_stats_task_list");
     if (jQuery("#go_tasks_datatable").length == 0) {
-        var url = ( PluginDir.url + 'media/images/spinner-solid.svg' );
-        jQuery("#stats_tasks").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px; text-align: center'><div id='loader'><img style='height: 75px;' class='go_loader fa-pulse' src='"+url+"'></div></div>");
+
+        var loader_html = go_loader_html('big');
+        jQuery("#stats_tasks").html(loader_html);
+
         var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_task_list;
         jQuery.ajax({
             type: 'post',
             url: MyAjax.ajaxurl,
             data: {
                 _ajax_nonce: nonce,
+                is_frontend: is_frontend,
                 action: 'go_stats_task_list',
                 user_id: jQuery('#go_stats_hidden_input').val()
             },
@@ -856,6 +1034,9 @@ function go_stats_task_list() {
                 }
             },
             success: function (res) {
+                go_after_ajax();
+                console.log("SUCCESS go_stats_task_list");
+                //console.log(res);
                 if (-1 !== res) {
                     jQuery('#stats_tasks').html(res);
                     jQuery('#go_tasks_datatable').dataTable({
@@ -875,37 +1056,13 @@ function go_stats_task_list() {
                         "searching": true,
                         "drawCallback": function( settings ) {
                             go_enable_reset_buttons();
+                            jQuery( ".go_blog_user_task" ).off().one("click", function () {
+                                go_blog_user_task(this);
+                            });
                         },
 
                         "order": [[3, "desc"]],
-                        /*'createdRow': function (row, data, dataIndex) {
-                            var dateCell = jQuery(row).find('td:eq(0)').text(); // get first column
 
-                            var d = new Date(dateCell * 1000);
-                            var month = d.getMonth() + 1;
-                            var day = d.getDate();
-                            var year = d.getFullYear().toString().slice(-2);
-                            var hours = d.getHours();
-                            var dd = "AM";
-                            var h = hours;
-                            if (h >= 12) {
-                                h = hours - 12;
-                                dd = "PM";
-                            }
-                            if (h == 0) {
-                                h = 12;
-                            }
-// Minutes part from the timestamp
-                            var minutes = "0" + d.getMinutes();
-// Seconds part from the timestamp
-                            //var seconds = "0" + d.getSeconds();
-
-// Will display time in 10:30:23 format
-                            var formattedTime = month + "/" + day + "/" + year + "  " + h + ':' + minutes.substr(-2) + " " + dd;
-                            jQuery(row).find('td:eq(0)').attr("data-order", dateCell).text(formattedTime);
-
-
-                        }*/
 
 
                     });
@@ -934,6 +1091,7 @@ function go_enable_reset_buttons(){
     });
 }
 
+//not used
 function go_close_single_history(){
     jQuery("#go_task_list").show();
     jQuery("#go_task_list_single").hide();
@@ -947,6 +1105,7 @@ function go_stats_single_task_activity_list (postID) {
         url: MyAjax.ajaxurl,
         data:{
             _ajax_nonce: nonce,
+            is_frontend: is_frontend,
             action: 'go_stats_single_task_activity_list',
             user_id: jQuery( '#go_stats_hidden_input' ).val(),
             postID: postID
@@ -961,6 +1120,7 @@ function go_stats_single_task_activity_list (postID) {
             }
         },
         success: function( res ) {
+            go_after_ajax();
             if ( -1 !== res ) {
                 //jQuery( '#go_stats_body' ).html( '' );
                 jQuery( '#go_task_list_single' ).remove();
@@ -984,8 +1144,9 @@ function go_stats_store_list() {
     //jQuery(".go_datatables").hide();
 
     if (jQuery("#go_store_datatable").length == 0 ) {
-        var url = ( PluginDir.url + 'media/images/spinner-solid.svg' );
-        jQuery("#stats_store").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px; text-align: center'><div id='loader'><img style='height: 75px;' class='go_loader fa-pulse' src='"+url+"'></div></div>");
+
+        var loader_html = go_loader_html('big');
+        jQuery("#stats_store").html(loader_html);
 
         var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_store_list;
         jQuery.ajax({
@@ -993,6 +1154,7 @@ function go_stats_store_list() {
             url: MyAjax.ajaxurl,
             data: {
                 _ajax_nonce: nonce,
+                is_frontend: is_frontend,
                 action: 'go_stats_store_list',
                 user_id: jQuery('#go_stats_hidden_input').val()
             },
@@ -1006,6 +1168,7 @@ function go_stats_store_list() {
                 }
             },
             success: function (res) {
+                go_after_ajax();
                 if (-1 !== res) {
                     jQuery('#stats_store').html(res);
                     jQuery('#go_store_datatable').dataTable({
@@ -1030,11 +1193,71 @@ function go_stats_store_list() {
     }
 }
 
+function go_actions_tooltip(){
+    if(typeof window.tippyInstances == 'undefined' ){
+        window.tippyInstances = []
+    };
+    var map_actions = sessionStorage.getItem('map_actions');
+    if(map_actions === 'true') {
+        if (jQuery('.go_show_actions').has('.actions_tooltip').length) {
+
+            const instances = tippy('.go_show_actions', {
+                content(reference) {
+                    const tooltip = reference.getElementsByClassName("actions_tooltip")[0];
+                    //console.log(tooltip);
+                    if (typeof (tooltip) !== 'undefined') {
+                        return tooltip.getElementsByClassName("my_tooltip")[0].innerHTML;
+                    }
+                    //return reference;
+                },
+                interactive: true,
+                arrow: true,
+                delay: [500, 0],
+                theme: 'light',
+                placement: 'top',
+                flip: false,
+                followCursor: 'initial',
+                zIndex: 9999999,
+                onMount(instance) {
+                    //jQuery('.tools').show();
+                    //jQuery('.quickedit_form').hide();
+                },
+                onShown(instance) {
+                    // ...
+                    go_tooltip_callback();
+                }
+            });
+
+            window.tippyInstances = tippyInstances.concat(instances);
+        }
+    }
+}
+
+function go_tooltip_callback(){
+    // ...
+    jQuery(".go_clone_icon").off().one("click", function () {
+        go_importer(this);
+    });
+
+    jQuery('.go_quest_reader_lightbox_button').off().one("click", function () {
+        go_reader_update(this, true);
+    });
+
+    jQuery(".go_quests_frontend").off().one("click", function(){
+        go_quests_frontend(this);
+    });
+
+    jQuery(".go_quick_edit_show").off().one("click", function(){
+        go_quick_edit_show(this);
+    });
+}
+
 function go_stats_activity_list() {
     console.log("go_stats_activity_list");
     if (jQuery("#go_activity_datatable").length == 0) {
-        var url = ( PluginDir.url + 'media/images/spinner-solid.svg' );
-        jQuery("#stats_history").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px; text-align: center'><div id='loader'><img style='height: 75px;' class='go_loader fa-pulse' src='"+url+"'></div></div>");
+
+        var loader_html = go_loader_html('big');
+        jQuery("#stats_history").html(loader_html);
 
         var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_activity_list;
         jQuery.ajax({
@@ -1042,6 +1265,7 @@ function go_stats_activity_list() {
             url: MyAjax.ajaxurl,
             data: {
                 _ajax_nonce: nonce,
+                is_frontend: is_frontend,
                 action: 'go_stats_activity_list',
                 user_id: jQuery('#go_stats_hidden_input').val(),
             },
@@ -1055,6 +1279,7 @@ function go_stats_activity_list() {
                 }
             },
             success: function (res) {
+                go_after_ajax();
                 if (-1 !== res) {
                     jQuery('#stats_history').html(res);
                     jQuery('#go_activity_datatable').dataTable({
@@ -1089,8 +1314,9 @@ function go_stats_activity_list() {
 function go_stats_messages() {
 
     if (jQuery("#go_messages_datatable").length == 0) {
-        var url = ( PluginDir.url + 'media/images/spinner-solid.svg' );
-        jQuery("#stats_messages").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px; text-align: center'><div id='loader'><img style='height: 75px;' class='go_loader fa-pulse' src='"+url+"'></div></div>");
+
+        var loader_html = go_loader_html('big');
+        jQuery("#stats_messages").html(loader_html);
 
         var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_messages;
         jQuery.ajax({
@@ -1098,6 +1324,7 @@ function go_stats_messages() {
             url: MyAjax.ajaxurl,
             data: {
                 _ajax_nonce: nonce,
+                is_frontend: is_frontend,
                 action: 'go_stats_messages',
                 user_id: jQuery('#go_stats_hidden_input').val(),
             },
@@ -1111,6 +1338,7 @@ function go_stats_messages() {
                 }
             },
             success: function (res) {
+                go_after_ajax();
                 if (-1 !== res) {
                     jQuery('#stats_messages').html(res);
                     jQuery('#go_messages_datatable').dataTable({
@@ -1143,8 +1371,9 @@ function go_stats_badges_list() {
 
     if (jQuery("#go_badges_list").length === 0) {
         var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_badges_list;
-        var url = ( PluginDir.url + 'media/images/spinner-solid.svg' );
-        jQuery("#stats_badges").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px; text-align: center'><div id='loader'><img style='height: 75px;' class='go_loader fa-pulse' src='"+url+"'></div></div>");
+
+        var loader_html = go_loader_html('big');
+        jQuery("#stats_badges").html(loader_html);
 
         console.log("go_stats_badges_list");
         jQuery.ajax({
@@ -1152,6 +1381,7 @@ function go_stats_badges_list() {
             url: MyAjax.ajaxurl,
             data: {
                 _ajax_nonce: nonce,
+                is_frontend: is_frontend,
                 action: 'go_stats_badges_list',
                 user_id: jQuery('#go_stats_hidden_input').val(),
             },
@@ -1165,6 +1395,7 @@ function go_stats_badges_list() {
                 }
             },
             success: function (res) {
+                go_after_ajax();
                 //console.log(res);
                 if (-1 !== res) {
                     jQuery('#stats_badges').html(res);
@@ -1180,14 +1411,16 @@ function go_stats_groups_list() {
     console.log("go_stats_groups_list");
     if (jQuery("#go_groups_list").length == 0) {
         var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_groups_list;
-        var url = ( PluginDir.url + 'media/images/spinner-solid.svg' );
-        jQuery("#stats_groups").html("<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px; text-align: center'><div id='loader'><img style='height: 75px;' class='go_loader fa-pulse' src='"+url+"'></div></div>");
+
+        var loader_html = go_loader_html('big');
+        jQuery("#stats_groups").html(loader_html);
 
         jQuery.ajax({
             type: 'post',
             url: MyAjax.ajaxurl,
             data: {
                 _ajax_nonce: nonce,
+                is_frontend: is_frontend,
                 action: 'go_stats_groups_list',
                 user_id: jQuery('#go_stats_hidden_input').val(),
             },
@@ -1201,6 +1434,7 @@ function go_stats_groups_list() {
                 }
             },
             success: function (res) {
+                go_after_ajax();
                 //console.log(res);
                 if (-1 !== res) {
                     jQuery('#stats_groups').html(res);
@@ -1210,25 +1444,21 @@ function go_stats_groups_list() {
     }
 }
 
-function go_activate_apply_filters() {
-    jQuery('.go_apply_filters').addClass("bluepulse");
-    jQuery('.go_apply_filters').html('<span class="ui-button-text">Apply Filter<i class="fas fa-filter" aria-hidden="true"></i></span>');
-}
+
 
 function go_date_loader(start, end, is_default) {
     if (is_default == true){
         start = moment();
         end = moment();
     }else{
-        go_activate_apply_filters();//on date change
+        go_highlight_apply_filters();//on date change
     }
 
     jQuery('#go_datepicker').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-
-
 }
 
-function go_load_daterangepicker(page){
+function go_load_daterangepicker(source){
+    console.log(source);
     console.log("go_load_daterangepicker");
     jQuery('#go_datepicker_clipboard').daterangepicker({
         ranges: {
@@ -1247,21 +1477,19 @@ function go_load_daterangepicker(page){
         }
     }, function(start, end, label) {
         console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
-
-            go_date_loader(start, end, false);
-
+        go_date_loader(start, end, false);
     });
 
     jQuery('#go_datepicker_clipboard').on('cancel.daterangepicker', function(ev, picker) {
         jQuery('#go_datepicker_clipboard span').html('');
     });
 
-        go_date_loader(null, null, true);
+    go_date_loader(null, null, true);
 }
 
 //NOT USED
 function go_load_daterangepicker_empty(){
-
+    console.log('go_load_daterangepicker_empty');
     jQuery('#go_datepicker_clipboard').daterangepicker({
         autoUpdateInput: false,
         locale: {
@@ -1279,19 +1507,32 @@ function go_load_daterangepicker_empty(){
 
 }
 
-function go_setup_reset_filter_button(is_reader){
+function go_setup_filter_buttons(is_reader){
+    console.log("go_setup_filter_buttons");
+
     jQuery('#go_task_select, #go_store_item_select').on('select2:select', function (e) {
         // Do something
-        go_activate_apply_filters();
-    });
-    jQuery('#go_task_select, #go_store_item_select').on('select2:unselect', function (e) {
-        // Do something
-       go_activate_apply_filters();
+        go_highlight_apply_filters();
     });
 
-    jQuery('.go_reset_clipboard').on("click", function () {
+    jQuery('#go_task_select, #go_store_item_select').on('select2:unselect', function (e) {
+        // Do something
+        go_highlight_apply_filters();
+    });
+
+    jQuery(".go_reader_input").change(function () {
+        go_highlight_apply_filters();//on reader checkbox change
+    });
+
+    jQuery('.go_reset_filters').on("click", function () {
+        jQuery('#datepicker_clipboard span').html("");
+        jQuery('#go_reader_user_go_sections_select, #go_reader_user_go_groups_select, #go_reader_go_badges_select, #go_task_select, #go_store_item_select').val(null).trigger('change');
+        go_highlight_apply_filters();
+    });
+
+    jQuery('.go_reset_filters').on("click", function () {
         jQuery('#go_datepicker').html("");
-        jQuery('#go_page_user_go_sections_select, #go_page_user_go_groups_select, #go_page_go_badges_select, #go_task_select, #go_store_item_select').val(null).trigger('change');
+        jQuery('#go_reader_user_go_sections_select, #go_reader_user_go_groups_select, #go_reader_go_badges_select, #go_task_select, #go_store_item_select').val(null).trigger('change');
 
 
         if(is_reader){
@@ -1300,17 +1541,30 @@ function go_setup_reset_filter_button(is_reader){
             jQuery("#go_reader_order_oldest").prop("checked", true);
             jQuery("#go_posts_num").val("10");
 
+
+
+
         }else{
-            jQuery('#go_unmatched_toggle').prop('checked', false); // Uncheck
+            //jQuery('#go_unmatched_toggle').prop('checked', false); // Uncheck
         }
-        go_activate_apply_filters();//on reset of the filter
+
+
+        go_highlight_apply_filters();//on reset of the filter
 
     });
 
+    if(is_reader){
+        jQuery("#go_leaderboard_filters").css('display', 'flex');
+    }
+
+    /*
+    var go_unmatched_toggle = localStorage.getItem('go_unmatched');
+    //console.log("go_unmatched_toggle: "+go_unmatched_toggle);
+    if(go_unmatched_toggle == 'checked'){
+        jQuery('#go_unmatched_toggle').prop('checked', true); // check
+    }*/
 
     go_daterange_clear();
-
-
 }
 
 function go_daterange_clear(){
@@ -1322,18 +1576,12 @@ function go_daterange_clear(){
         jQuery('#go_reset_datepicker').hide();
         jQuery('#go_datepicker_container').one("click", function (){
             //console.log("hi there one");
-            go_load_daterangepicker('clear');
+            go_load_daterangepicker('go_daterange_clear');
             jQuery('#go_reset_datepicker').show();
             go_daterange_clear();
         });
-        go_activate_apply_filters();//on clear of daterange
-
-        //go_load_daterangepicker_empty();
-
+        go_highlight_apply_filters();//on clear of daterange
     });
-}
-
-function go_clear_daterange(){
 }
 
 function go_copy_to_clipboard(event){
@@ -1365,4 +1613,85 @@ function go_copy_to_clipboard(event){
 
 
 
+}
+
+//this now saves to session data
+function go_save_filters(location){
+    console.log("go_save_filters");
+    var source = location;
+    if(location == 'clipboard'){
+        location = 'reader'
+    }
+    //SESSION STORAGE
+    var section = jQuery( "#go_" + location + "_user_go_sections_select" ).val();
+    var section_name = jQuery("#go_" + location + "_user_go_sections_select option:selected").text();
+    var group = jQuery( "#go_" + location + "_user_go_groups_select" ).val();
+    var group_name = jQuery("#go_" + location + "_user_go_groups_select option:selected").text();
+    var badge = jQuery( "#go_" + location + "_go_badges_select" ).val();
+    var badge_name = jQuery("#go_" + location + "_go_badges_select option:selected").text();
+
+    /*
+    if(source == 'clipboard') {
+        //var unmatched = document.getElementById("go_unmatched_toggle").checked;
+        var unmatched = jQuery("#go_unmatched_toggle").attr('checked');
+    }*/
+    //localStorage.setItem('test_this', "yep");
+    localStorage.setItem('user_go_sections', section);
+    localStorage.setItem('go_badges', badge);
+    localStorage.setItem('user_go_groups', group);
+    localStorage.setItem('user_go_sections_name', section_name);
+    localStorage.setItem('go_badges_name', badge_name);
+    localStorage.setItem('user_go_groups_name', group_name);
+    //localStorage.setItem('go_unmatched', unmatched);
+
+
+    /*
+    if(is_reader){
+        var date = jQuery('#go_datepicker_clipboard span').html();
+        var tasks = jQuery("#go_task_select").val();
+        var unread = jQuery('#go_reader_unread').prop('checked');
+        var read = jQuery('#go_reader_read').prop('checked');
+        var reset = jQuery('#go_reader_reset').prop('checked');
+        var trash = jQuery('#go_reader_trash').prop('checked');
+        var draft = jQuery('#go_reader_draft').prop('checked');
+        var order = jQuery("input[name='go_reader_order']:checked").val();
+        var limit = jQuery('#go_posts_num').val();
+        localStorage.setItem('go_reader_date', date);
+        localStorage.setItem('go_reader_tasks', tasks);
+        localStorage.setItem('go_reader_unread', unread);
+        localStorage.setItem('go_reader_read', read);
+        localStorage.setItem('go_reader_reset', reset);
+        localStorage.setItem('go_reader_trash', trash);
+        localStorage.setItem('go_reader_draft', draft);
+        localStorage.setItem('go_reader_order', order);
+        localStorage.setItem('go_reader_limit', limit);
+    }
+    */
+
+    /*
+    //THIS IS FOR SAVING AS OPTION IN DB WITH AJAX
+    //ajax to save the values
+    var nonce = GO_CLIPBOARD_DATA.nonces.go_clipboard_save_filters;
+    var section = jQuery( '#go_page_user_go_sections_select' ).val();
+    var group = jQuery( '#go_page_user_go_groups_select' ).val();
+    var badge = jQuery( '#go_page_go_badges_select' ).val();
+    var unmatched = document.getElementById("go_unmatched_toggle").checked;
+    //alert ("badge " + badge);
+    jQuery.ajax({
+        type: "post",
+        url: MyAjax.ajaxurl,
+        data: {
+            _ajax_nonce: nonce,
+            is_frontend: is_frontend,
+            action: 'go_clipboard_save_filters',
+            section: section,
+            badge: badge,
+            group: group,
+            unmatched: unmatched
+        },
+        success: function( res ) {
+            console.log("values saved");
+        }
+    });
+    */
 }

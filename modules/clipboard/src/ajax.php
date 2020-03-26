@@ -109,7 +109,7 @@ function go_sOrder($tab = null){
         }
 
     }
-    else if ($tab == 'messages'){
+    else if ($tab == 'messages' || $tab == 'attendance'){
         if ($order_col == 8){
             $order_var = 'action_id';//Time (ids are sequential)
         }
@@ -200,21 +200,16 @@ function go_sOrder($tab = null){
 
 function go_sType(){
     $user_id = get_current_user_id();
-    $unmatched_saved = get_user_meta($user_id, 'unmatched_toggle', true);//saved value
-    $unmatched = (isset($_GET['unmatched']) ? $_GET['unmatched'] : $unmatched_saved);//sent value
+    //$unmatched_saved = get_user_meta($user_id, 'unmatched_toggle', true);//saved value
+   // $unmatched = (isset($_GET['unmatched']) ? $_GET['unmatched'] : $unmatched_saved);//sent value
 
-    if(empty($unmatched_saved)){//if this user has never viewed the clipboard set the value to true
-        $unmatched = true;
-        update_user_meta( $user_id, 'unmatched_toggle', true );
-    }else if($unmatched_saved != $unmatched){//else if the sent value is different than the saved value, update the saved value
-        update_user_meta( $user_id, 'unmatched_toggle', $unmatched );
-    }
 
-    if ($unmatched === true || $unmatched == 'true' ) {
+
+    //if ($unmatched === true || $unmatched == 'true' ) {
         $sType = "LEFT";//add switch for "show unmatched users" toggle
-    }else{
-        $sType = "INNER";
-    }
+   // }else{
+     //   $sType = "INNER";
+  //  }
     return $sType;
 }
 
@@ -222,7 +217,7 @@ function go_sOn($action_type){
     $sOn = "";
     $date = $_GET['date'];
 
-    if ($action_type == 'store' || $action_type == 'message') {
+    if ($action_type == 'store' || $action_type == 'message' || $action_type == 'attendance') {
         if (isset($date) && $date != "") {
             $dates = explode(' - ', $date);
             $firstdate = $dates[0];
@@ -231,7 +226,11 @@ function go_sOn($action_type){
             $lastdate = date("Y-m-d", strtotime($lastdate));
             $date = " AND ( DATE(t4.TIMESTAMP) BETWEEN '" . $firstdate . "' AND '" . $lastdate . "')";
         }
-        $sOn = "AND (action_type = '" . $action_type . "') ";
+        if($action_type == 'message'){
+            $sOn = "AND (action_type = 'message' OR action_type = 'note') ";
+        }else {
+            $sOn = "AND (action_type = '" . $action_type . "') ";
+        }
         $sOn .= $date;
 
 
@@ -300,7 +299,7 @@ function go_start_row($action){
 
 
     ob_start();
-    go_user_links($user_id, true, true, true, true, $website, $login);
+    go_user_links($user_id, true, true, true, true, $website);
     $links = ob_get_clean();
 
 
@@ -455,7 +454,7 @@ function go_badges_and_groups($badge_ids, $group_ids){
  * Called by the ajax dataloaders.
  */
 function go_clipboard_stats() {
-    if ( ! current_user_can( 'manage_options' ) && !go_user_is_admin() ) {
+    if ( ! go_user_is_admin() ) {
         die( -1 );
     }
 
@@ -540,7 +539,7 @@ function go_clipboard_stats_dataloader_ajax(){
     //END MAINTENANCE TOOL
 
     global $wpdb;
-    $sColumns = array('first_name', 'last_name', 'display_name');
+    $sColumns = array('first_name', 'last_name', 'site_name');
     $xp_toggle = get_option('options_go_loot_xp_toggle');
     $badges_toggle = get_option('options_go_badges_toggle');
     $groups_toggle = get_option('options_go_groups_toggle');
@@ -785,7 +784,7 @@ function go_clipboard_store() {
 function go_clipboard_store_dataloader_ajax(){
     global $wpdb;
 
-    $sColumns = array('first_name', 'last_name', 'display_name', 'result', 'post_title');
+    $sColumns = array('first_name', 'last_name', 'site_name', 'result', 'post_title');
     $sHaving = go_sHaving($sColumns);
 
     $sLimit = '';
@@ -794,7 +793,8 @@ function go_clipboard_store_dataloader_ajax(){
     }
 
     $sOrder = go_sOrder('store');
-    $sType = go_sType();
+    //$sType = go_sType();
+    $sType = 'LEFT';
 
     $pTable = "{$wpdb->prefix}posts";
     $lTable = "{$wpdb->prefix}go_loot";
@@ -1037,7 +1037,7 @@ function go_clipboard_messages() {
 function go_clipboard_messages_dataloader_ajax(){
     global $wpdb;
 
-    $sColumns = array('first_name', 'last_name', 'display_name', 'result');
+    $sColumns = array('first_name', 'last_name', 'site_name', 'result');
     $sHaving = go_sHaving($sColumns);
 
     $sLimit = '';
@@ -1047,7 +1047,8 @@ function go_clipboard_messages_dataloader_ajax(){
 
     $sOrder = go_sOrder('messages');
 
-    $sType = go_sType();
+    //$sType = go_sType();
+    $sType = 'LEFT';
     $sOn = go_sOn('message');
     //Index column
     $sIndexColumn = "id";
@@ -1206,11 +1207,6 @@ function go_clipboard_messages_dataloader_ajax(){
             $message = '';
         }
 
-
-
-
-
-
         if (!empty($message)) {
             //$title = "<span class='tooltip' ><span class='tooltiptext'>{$message}</span>$title</span>";
             $title = '<span class="tooltip" data-tippy-content="'. $message .'">'. $title . '</span>';
@@ -1258,7 +1254,7 @@ function go_clipboard_messages_dataloader_ajax(){
  *
  */
 function go_clipboard_activity() {
-    if ( ! current_user_can( 'manage_options' ) && !go_user_is_admin()) {
+    if ( ! go_user_is_admin()) {
         die( -1 );
     }
 
@@ -1316,7 +1312,7 @@ function go_clipboard_activity() {
 function go_clipboard_activity_dataloader_ajax(){
     global $wpdb;
 
-    $sColumns = array('first_name', 'last_name', 'display_name', 'post_title');
+    $sColumns = array('first_name', 'last_name', 'site_name', 'post_title');
     $sHaving = go_sHaving( $sColumns);
 
     $sLimit = '';
@@ -1326,28 +1322,41 @@ function go_clipboard_activity_dataloader_ajax(){
 
     $sOrder = go_sOrder('tasks');
 
-    $sType = go_sType();
+    //$sType = go_sType();
+    $sType = 'LEFT';
+
     $sOn = go_sOn('tasks');
     //add store items to On statement
+    $lTable = "{$wpdb->prefix}go_loot";
+    //$aTable = "{$wpdb->prefix}go_actions";
+    $tTable = "{$wpdb->prefix}go_tasks";
+    $pTable = "{$wpdb->prefix}posts";
+
+    $totalTable = $tTable;
     $tasks = $_GET['tasks'];
     if ( isset($tasks) && !empty($tasks) )
     {
         $sOn .= " AND (";
-        for ( $i=0 ; $i<count($tasks) ; $i++ )
-        {
-            $task = intval($tasks[$i]);
-            $sOn .= "t4.post_id = ".$task." OR ";
-        }
+        if(is_array($tasks)) {
+            for ($i = 0; $i < count($tasks); $i++) {
+                $task = intval($tasks[$i]);
+                $sOn .= "t4.post_id = " . $task . " OR ";
+            }
+
         $sOn = substr_replace( $sOn, "", -3 );
         $sOn .= ")";
+        }
+        else{
+            $sOn .= "t4.post_id = " . $tasks . ") ";
+            $totalTable = $lTable;
+        }
     }
 
     //Index column
     $sIndexColumn = "id";
 
 
-    $lTable = "{$wpdb->prefix}go_loot";
-    $aTable = "{$wpdb->prefix}go_actions";
+
     if(is_gameful()) {
         $main_site_id = get_network()->site_id;
         switch_to_blog($main_site_id);
@@ -1357,8 +1366,7 @@ function go_clipboard_activity_dataloader_ajax(){
     if(is_gameful()) {
         restore_current_blog();
     }
-    $tTable = "{$wpdb->prefix}go_tasks";
-    $pTable = "{$wpdb->prefix}posts";
+
 
     $sectionQuery = go_sectionQuery();
     $badgeQuery = go_badgeQuery();
@@ -1458,10 +1466,11 @@ function go_clipboard_activity_dataloader_ajax(){
 
     $iFilteredTotal = $rResultFilterTotal [0];
 
+
     //$totalWhere = " WHERE (action_type = 'message') ";
     $sQuery3 = "
     SELECT COUNT(`" . $sIndexColumn . "`)
-    FROM   $tTable
+    FROM   $totalTable
     WHERE uid NOT IN ( '$admin_ids' ) 
     ";
 
@@ -1495,8 +1504,7 @@ function go_clipboard_activity_dataloader_ajax(){
         //}
 
         $user_id = $action['user_id'];
-        $row[] = '<a href="javascript:;" class="go_blog_user_task" data-UserId="'.$user_id.'" onclick="go_blog_user_task('.$user_id.', '.$task_id.');"><i style="padding: 0px 10px;" class="fas fa-search" aria-hidden="true"></i></a><a><i data-uid="' . $user_id . '" data-task="'. $task_id . '" style="padding: 0px 10px;" class="go_reset_task_clipboard fa fa-times-circle" aria-hidden="true"></a>';//actions
-
+        $row[] = '<a href="javascript:;" class="go_blog_user_task" data-user_id="'.$user_id.'" data-post_id="'.$task_id.'"><i style="padding: 0px 10px;" class="fas fa-search" aria-hidden="true"></i></a><a><i data-uid="' . $user_id . '" data-task="'. $task_id . '" style="padding: 0px 10px;" class="go_reset_task_clipboard fa fa-times-circle" aria-hidden="true"></a>';//actions
         $start = $action['start_time'];
         $row[] = go_clipboard_time($start);
         $last = $action['last_time'];
@@ -1517,7 +1525,7 @@ function go_clipboard_activity_dataloader_ajax(){
         $custom_fields = go_post_meta($action['post_id']);
 
         $bonus_count = 0;
-        if ($action['status'] >= 0) {
+        if ($action['status'] > 0) {
             $stage_count = (isset($custom_fields['go_stages'][0]) ? $custom_fields['go_stages'][0] : null);
             $bonus_count = (isset($custom_fields['go_bonus_limit'][0]) ? $custom_fields['go_bonus_limit'][0] : null);
             $row[] = strval($action['status']) . " / " . strval($stage_count);
@@ -1536,6 +1544,10 @@ function go_clipboard_activity_dataloader_ajax(){
         }
         else if ($action['status'] == -1){
             $row[] = "abandoned";
+            $row[] = "";
+        }
+        else if ($action['status'] == 0){
+            $row[] = "";
             $row[] = "";
         }
 
@@ -1572,5 +1584,457 @@ function go_clipboard_activity_dataloader_ajax(){
     //go_total_query_time();
 
     echo json_encode( $output );
+    die();
+}
+
+
+function go_clipboard_activity_stats_ajax(){
+    global $wpdb;
+
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+    //check_ajax_referer( 'go_clipboard_messages' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_clipboard_activity_stats_ajax' ) ) {
+        echo "refresh";
+        die( );
+    }
+
+    $sColumns = array('first_name', 'last_name', 'display_name', 'post_title');
+    $sHaving = go_sHaving( $sColumns);
+
+    $sType = 'LEFT';
+
+    $sOn = go_sOn('tasks');
+    //add store items to On statement
+    $tasks = $_GET['tasks'];
+    if ( isset($tasks) && !empty($tasks) )
+    {
+        $sOn .= " AND (";
+        for ( $i=0 ; $i<count($tasks) ; $i++ )
+        {
+            $task = intval($tasks[$i]);
+            $sOn .= "t4.post_id = ".$task." OR ";
+        }
+        $sOn = substr_replace( $sOn, "", -3 );
+        $sOn .= ")";
+    }
+
+    //Index column
+    $sIndexColumn = "id";
+
+
+    $lTable = "{$wpdb->prefix}go_loot";
+    //$aTable = "{$wpdb->prefix}go_actions";
+    if(is_gameful()) {
+        $main_site_id = get_network()->site_id;
+        switch_to_blog($main_site_id);
+    }
+    $uTable = "{$wpdb->prefix}users";
+    $umTable = "{$wpdb->prefix}usermeta";
+    if(is_gameful()) {
+        restore_current_blog();
+    }
+    $tTable = "{$wpdb->prefix}go_tasks";
+    $pTable = "{$wpdb->prefix}posts";
+
+    $sectionQuery = go_sectionQuery();
+    $badgeQuery = go_badgeQuery();
+    $groupQuery = go_groupQuery();
+
+    $seat_key = go_prefix_key('go_seat');
+    $section_key = go_prefix_key('go_section');
+    $badge_key = go_prefix_key('go_badge');
+    $group_key = go_prefix_key('go_group');
+
+    $caps_key = "{$wpdb->prefix}capabilities";
+
+    $site_display_name_key = go_prefix_key('go_nickname');
+
+    $section = (isset($_GET['section']) ?  $_GET['section'] : null);
+    //if filtered by period, only get the seat for that period
+    if(!empty($section)){
+        $get_seat = "CAST(GROUP_CONCAT(CASE WHEN t2.meta_key = '".$seat_key."' AND ".$section." = (SUBSTRING_INDEX(t2.meta_value,'_',-1)) THEN (SUBSTRING_INDEX(t2.meta_value,'_',1)) END) as UNSIGNED INTEGER)";
+        $get_sections = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' AND ".$section." = (SUBSTRING_INDEX(t2.meta_value,'_',-1)) THEN meta_value END)";
+        $get_section = "MAX(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END)";
+    }
+    else {//if not, get all seats
+        $get_seat = "GROUP_CONCAT(CASE WHEN t2.meta_key = '".$seat_key."' THEN (SUBSTRING_INDEX(t2.meta_value,'_',1)) END)";
+        $get_sections = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END)";
+        $get_section = "MAX(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END)";
+    }
+    $admin_ids = go_get_all_admin();
+    $admin_ids = implode( "', '" , $admin_ids );
+    $sQuery = "    
+                  SELECT SQL_CALC_FOUND_ROWS
+                    t9.*
+                  FROM (
+                      SELECT
+                       t9.*, t4.status
+                      FROM (
+                        SELECT
+                          t8.user_id
+                        FROM(
+                          SELECT t6.user_id
+                          FROM (
+                            SELECT t4.user_id
+                            FROM (
+                                SELECT t2.*
+                                FROM(
+                                  SELECT t1.uid AS user_id
+                                  FROM $lTable AS t1
+                                  ) AS t2
+                                $sectionQuery
+                                ) AS t4
+                            $badgeQuery
+                            ) AS t6
+                          $groupQuery
+                          )AS t8
+                        LEFT JOIN $umTable AS t2 ON t8.user_id = t2.user_id
+                        LEFT JOIN $uTable AS t3 ON t8.user_id = t3.ID
+                        WHERE t8.user_id NOT IN ( '$admin_ids' ) 
+                        GROUP BY t8.user_id 
+                        ) AS t9
+                      $sType JOIN $tTable AS t4 ON t9.user_id = t4.uid $sOn
+                      $sType JOIN $pTable AS t6 ON t4.post_id = t6.ID
+                      $sHaving
+                  ) AS t9    
+        ";
+
+    /*
+     * ) AS t5
+          $sType JOIN $tTable AS t4 ON t5.uid = t4.uid $sOn
+          $sType JOIN $pTable AS t6 ON t4.post_id = t6.ID
+          $sWhere
+          ) AS t9
+          $sOrder
+          $sLimit
+     */
+    ////columns that will be returned
+    $rResult = $wpdb->get_results($sQuery, ARRAY_A);
+
+    $complete_num = 0;
+    $started_num = 0;
+    $not_started_num = 0;
+    foreach($rResult as $action) {//output a row for each action
+
+
+        $custom_fields = go_post_meta($action['post_id']);
+
+
+        if ($action['status'] < 0 || $action['status'] === null  ){
+            $not_started_num++;
+        }
+        else if ($action['status'] >= 0) {
+            $stage_count = (isset($custom_fields['go_stages'][0]) ? $custom_fields['go_stages'][0] : null);
+
+            if (($action['status'] >= $stage_count) && !empty($action['status'])) {
+                $complete_num++;
+            } else {
+                $started_num++;
+            }
+        } else {
+            $not_started_num++;
+        }
+    }
+        echo json_encode(
+            array(
+                'json_status' => 'success',
+                'complete_num' => $complete_num,
+                'started_num' => $started_num,
+                'not_started_num' => $not_started_num
+            )
+        );
+    die();
+}
+
+/**
+ *
+ */
+function go_clipboard_attendance() {
+
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+    //check_ajax_referer( 'go_clipboard_messages' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_clipboard_attendance' ) ) {
+        echo "refresh";
+        die( );
+    }
+
+    $seats_name = get_option( 'options_go_seats_name' );
+
+    echo "<div id='go_clipboard_attendance' class='go_datatables'><table id='go_clipboard_attendance_datatable' class='pretty display'>
+    <thead>
+    <tr>
+        <th></th>
+        <th><input type=\"checkbox\" onClick=\"go_toggle(this);\" /></th>
+        <th class=\"header\">Section</th>
+        <th class=\"header\">" . $seats_name . "</a></th>
+        <th class=\"header\">First</th>
+        <th class=\"header\">Last</th>
+        <th class=\"header\">Display</th>
+        <th class=\"header\">Links</th>
+        <th class='header'>Time</th>
+        <th class='header'>Message</th>";
+
+
+    go_loot_headers(false, false );
+    ?>
+    </tr>
+    </thead>
+
+    </table></div>
+    <?php
+
+    die();
+}
+
+/**
+ * go_clipboard_messages_dataloader_ajax
+ * Called for Server Side Processing from the JS
+ */
+function go_clipboard_attendance_dataloader_ajax(){
+    global $wpdb;
+
+    $sColumns = array('first_name', 'last_name', 'display_name', 'result');
+    $sHaving = go_sHaving($sColumns);
+
+    $sLimit = '';
+    if (isset($_GET['start']) && $_GET['length'] != '-1') {
+        $sLimit = "LIMIT " . intval($_GET['start']) . ", " . intval($_GET['length']);
+    }
+
+    $sOrder = go_sOrder('attendance');
+
+    //$sType = go_sType();
+    $sType = 'LEFT';
+    $sOn = go_sOn('attendance');
+    //Index column
+    $sIndexColumn = "id";
+
+    $lTable = "{$wpdb->prefix}go_loot";
+    $aTable = "{$wpdb->prefix}go_actions";
+    if(is_gameful()) {
+        $main_site_id = get_network()->site_id;
+        switch_to_blog($main_site_id);
+    }
+    $uTable = "{$wpdb->prefix}users";
+    $umTable = "{$wpdb->prefix}usermeta";
+    if(is_gameful()) {
+        restore_current_blog();
+    }
+    $sectionQuery = go_sectionQuery();
+    $badgeQuery = go_badgeQuery();
+    $groupQuery = go_groupQuery();
+
+    $seat_key = go_prefix_key('go_seat');
+    $section_key = go_prefix_key('go_section');
+    $badge_key = go_prefix_key('go_badge');
+    $group_key = go_prefix_key('go_group');
+
+    $caps_key = "{$wpdb->prefix}capabilities";
+
+    $site_display_name_key = go_prefix_key('go_nickname');
+
+    $section = (isset($_GET['section']) ?  $_GET['section'] : null);
+    //if filtered by period, only get the seat for that period
+    if(!empty($section)){
+        $get_seat = "CAST(GROUP_CONCAT(CASE WHEN t2.meta_key = '".$seat_key."' AND ".$section." = (SUBSTRING_INDEX(t2.meta_value,'_',-1)) THEN (SUBSTRING_INDEX(t2.meta_value,'_',1)) END) as UNSIGNED INTEGER)";
+        $get_sections = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' AND ".$section." = (SUBSTRING_INDEX(t2.meta_value,'_',-1)) THEN meta_value END)";
+        $get_section = "MAX(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END)";
+    }
+    else {//if not, get all seats
+        $get_seat = "GROUP_CONCAT(CASE WHEN t2.meta_key = '".$seat_key."' THEN (SUBSTRING_INDEX(t2.meta_value,'_',1)) END)";
+        $get_sections = "GROUP_CONCAT(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END)";
+        $get_section = "MAX(CASE WHEN t2.meta_key = '$section_key' THEN meta_value END)";
+    }
+
+    $admin_ids = go_get_all_admin();
+    $admin_ids = implode( "', '" , $admin_ids );
+
+    $sQuery = "    
+                  SELECT SQL_CALC_FOUND_ROWS
+                    t9.*
+                  FROM (
+                      SELECT
+                        t9.*, t4.id AS action_id, t4.source_id, t4.action_type, t4.TIMESTAMP, t4.result, t4.xp, t4.gold, t4.health, t4.badges, t4.groups
+                      FROM (
+                        SELECT
+                          t8.user_id,
+                          t3.display_name, t3.user_url, t3.user_login,
+                          $get_seat as go_seats,
+                          $get_sections as go_sections, 
+                          $get_section as go_section, 
+                          GROUP_CONCAT(CASE WHEN t2.meta_key = '$badge_key' THEN meta_value END) as go_badges,
+                          GROUP_CONCAT(CASE WHEN t2.meta_key = '$group_key' THEN meta_value END) as go_groups,
+                          MAX(CASE WHEN t2.meta_key = 'nickname' THEN meta_value END) AS nickname,
+                          MAX(CASE WHEN t2.meta_key = '$site_display_name_key' THEN meta_value END) AS site_name,
+                          MAX(CASE WHEN t2.meta_key = 'first_name' THEN meta_value END) AS first_name,
+                          MAX(CASE WHEN t2.meta_key = 'last_name' THEN meta_value END) AS last_name,
+                          MAX(CASE WHEN t2.meta_key = '$caps_key' THEN meta_value END) AS wp_capabilities
+                        FROM(
+                          SELECT t6.user_id
+                          FROM (
+                            SELECT t4.user_id
+                            FROM (
+                                SELECT t2.*
+                                FROM(
+                                  SELECT t1.uid AS user_id
+                                  FROM $lTable AS t1
+                                  ) AS t2
+                                $sectionQuery
+                                ) AS t4
+                            $badgeQuery
+                            ) AS t6
+                          $groupQuery
+                          )AS t8
+                        LEFT JOIN $umTable AS t2 ON t8.user_id = t2.user_id
+                        LEFT JOIN $uTable AS t3 ON t8.user_id = t3.ID
+                        WHERE t8.user_id NOT IN ( '$admin_ids' ) 
+                        GROUP BY t8.user_id 
+                        ) AS t9
+                      $sType JOIN $aTable AS t4 ON t9.user_id = t4.uid $sOn
+                      $sHaving
+                  ) AS t9
+                  $sOrder
+                  $sLimit     
+        ";
+
+    /*
+     * $sType JOIN $aTable AS t4 ON t5.uid = t4.uid $sOn
+          $sWhere
+          ) AS t9
+          $sOrder
+          $sLimit
+     */
+
+
+    ////columns that will be returned
+    $rResult = $wpdb->get_results($sQuery, ARRAY_A);
+
+
+    $sQuery = "SELECT FOUND_ROWS()";
+
+    $rResultFilterTotal = $wpdb->get_results($sQuery, ARRAY_N);
+
+    $iFilteredTotal = $rResultFilterTotal [0];
+
+    $totalWhere = " WHERE (action_type = 'attendance') AND uid NOT IN ( '$admin_ids' )  ";
+    $sQuery = "
+    SELECT COUNT(`" . $sIndexColumn . "`)
+    FROM   $aTable
+    $totalWhere
+    ";
+
+    $rResultTotal = $wpdb->get_results($sQuery, ARRAY_N);
+
+    $iTotal = $rResultTotal [0];
+    //$iFilteredTotal = number that match without limit;
+    //$iTotalRecords = number in this table total (total store items/messages)
+    $output = array("iTotalRecords" => $iTotal, "iTotalDisplayRecords" => $iFilteredTotal, "aaData" => array());
+
+
+    $data = array();
+    foreach($rResult as $action){//output a row for each action
+        /*$caps = $action['wp_capabilities'];
+        $caps = unserialize($caps);
+        if ($caps['administrator'] ===true || !$caps){
+            $total = $iTotal[0];
+            $iTotal[0] = $total -1;
+            $total = $iFilteredTotal[0];
+            $iFilteredTotal[0] = $total -1;
+            continue;
+        }*/
+
+        //The message content
+        $row = go_start_row($action);
+        $TIMESTAMP = $action['TIMESTAMP'];
+        //$badge_ids = $action['badges'];
+        //$group_ids = $action['groups'];
+        $result = $action['result'];
+
+        //unserialize the message and set the results
+        $result_array = unserialize($result);
+        $title = $result_array[0];
+
+        $message = $result_array[1];
+
+        if(empty($title) && !empty($message)){
+            $title = 'View Message';
+        }
+        if($message == '<i class="fas fa-heart fa-4x" style="color:#8B0000"></i>'){//don't show message if was marked as favorite heart
+            $message = '';
+        }
+
+
+
+
+
+
+        if (!empty($message)) {
+            //$title = "<span class='tooltip' ><span class='tooltiptext'>{$message}</span>$title</span>";
+            $title = '<span class="tooltip" data-tippy-content="'. $message .'">'. $title . '</span>';
+        }
+
+        $time  = go_clipboard_time($TIMESTAMP);
+
+        $row[] = "{$time}";
+        $row[] = "{$title}";
+
+        $go_loot_columns = go_loot_columns_clipboard($action);
+        $row = array_merge($row, $go_loot_columns);
+
+        $data[] = $row;
+    }
+    $output = array("iTotalRecords" => $iTotal, "iTotalDisplayRecords" => $iFilteredTotal, "aaData" => $data);
+
+    global $go_debug;
+    if($go_debug) {
+        go_total_query_time();
+    }
+
+    echo json_encode( $output );
+    die();
+}
+
+function go_quests_frontend(){
+    //check_ajax_referer( 'go_clipboard_messages' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_quests_frontend' ) ) {
+        echo "refresh";
+        die( );
+    }
+
+    if ( ! go_user_is_admin() ) {
+        wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+    } else {
+
+        echo "<div id='quest_frontend_wrapper'>";
+        //Loader goes here
+        echo "<div id='quest_frontend_loader'></div>";
+        echo "<div id='quest_frontend_container' style='display: none;'>";
+        $task_name = get_option( 'options_go_tasks_name_plural'  );
+
+        $post_id = (isset($_POST['post_id']) ?  $_POST['post_id'] : null);
+        $post_title = go_the_title($post_id);
+        //go_clipboard_filters();
+        go_leaderboard_filters('single_quest');
+        ?>
+
+
+
+
+            <div id="clipboard_activity_wrap">
+                <div class="quest_stats_wrapper"><h2 style="padding-right: 20px; margin: 0px;"><?php echo $post_title; ?></h2><div class="quest_stats complete" ><span id="quest_complete" class="quest_stats_num"></span> Complete</div><div class=" quest_stats started" ><span id="quest_started"  class="quest_stats_num"></span> In Progress</div><div class="quest_stats not_started"><span id="quest_not_encountered"  class="quest_stats_num"></span> Not Started</div> </div>
+                <div id="clipboard_activity_datatable_container"></div>
+            </div>
+
+        </div>
+        </div>
+        <?php
+        //go_hidden_footer();
+    }
     die();
 }

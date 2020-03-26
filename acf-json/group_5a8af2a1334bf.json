@@ -20,6 +20,31 @@
             "endpoint": 0
         },
         {
+            "key": "19411",
+            "label": "",
+            "name": "",
+            "type": "text",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": [
+                [
+                    {
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_5a960f458bf8c",
             "label": "Map",
             "name": "go-location",
@@ -70,7 +95,7 @@
                         },
                         {
                             "key": "field_5a960f468bf8e",
-                            "label": "Map",
+                            "label": "Map Column",
                             "name": "loc",
                             "type": "level2_taxonomy",
                             "instructions": "",
@@ -89,7 +114,9 @@
                                 "class": "select2_child acf-hide-label",
                                 "id": ""
                             },
-                            "taxonomy": "task_chains"
+                            "taxonomy": "task_chains",
+                            "field_type": "select",
+                            "order_field": "field_5a960f468bf91"
                         },
                         {
                             "key": "field_5a960f468bf91",
@@ -128,31 +155,102 @@
                             "elements": []
                         },
                         {
-                            "key": "field_5a960f468bf92",
-                            "label": "Hidden Task",
-                            "name": "opt",
-                            "type": "true_false",
-                            "instructions": "<span class=\"tooltip\" data-tippy-content=\"This quest will not show on the map until the previous required task is done.  Make sure it’s not the first quest in this chain or it will not show at all. These are designed for support and enrichment tasks to be completed after the previous task is complete.\"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
+                            "key": "field_5e0f7968c4ef7",
+                            "label": "Options",
+                            "name": "options",
+                            "type": "group",
+                            "instructions": "",
                             "required": 0,
-                            "conditional_logic": [
-                                [
-                                    {
-                                        "field": "field_5ab197699d24b",
-                                        "operator": "==",
-                                        "value": "1"
-                                    }
-                                ]
-                            ],
+                            "conditional_logic": 0,
                             "wrapper": {
                                 "width": "",
                                 "class": "",
                                 "id": ""
                             },
-                            "message": "",
-                            "default_value": 0,
-                            "ui": 0,
-                            "ui_on_text": "",
-                            "ui_off_text": ""
+                            "layout": "table",
+                            "sub_fields": [
+                                {
+                                    "key": "field_5a960f468bf92",
+                                    "label": "Hidden",
+                                    "name": "hidden",
+                                    "type": "true_false",
+                                    "instructions": "<span class=\"tooltip\" data-tippy-content=\"This quest will not show on the map until the previous required task is done.  Make sure it’s not the first quest in this chain or it will not show at all. These are designed for support and enrichment tasks to be completed after the previous task is complete.\"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
+                                    "required": 0,
+                                    "conditional_logic": [
+                                        [
+                                            {
+                                                "field": "field_5ab197699d24b",
+                                                "operator": "==",
+                                                "value": "1"
+                                            }
+                                        ]
+                                    ],
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "message": "",
+                                    "default_value": 0,
+                                    "ui": 0,
+                                    "ui_on_text": "",
+                                    "ui_off_text": ""
+                                },
+                                {
+                                    "key": "field_5e0f77a616af1",
+                                    "label": "Nested",
+                                    "name": "nested",
+                                    "type": "true_false",
+                                    "instructions": "<span class=\"tooltip\" data-tippy-content=\"This quest will show as nested under the previous task. Make sure it’s not the first quest in this chain or it will not show at all. This allows for the map to be more organized by creating clusters of quests.\"><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
+                                    "required": 0,
+                                    "conditional_logic": [
+                                        [
+                                            {
+                                                "field": "field_5ab197699d24b",
+                                                "operator": "==",
+                                                "value": "1"
+                                            }
+                                        ]
+                                    ],
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "message": "",
+                                    "default_value": 0,
+                                    "ui": 0,
+                                    "ui_on_text": "",
+                                    "ui_off_text": ""
+                                },
+                                {
+                                    "key": "field_5e0f780116af2",
+                                    "label": "Optional",
+                                    "name": "optional",
+                                    "type": "true_false",
+                                    "instructions": "<span class=\"tooltip\" data-tippy-content=\"This quest will not be required before moving on to the next task in a chain. This can be combined with \"Nested\" and\/or \"Hidden\" to create tasks that are enrichment after the previous task is complete. If not nested, it can be an optional scaffolding before the next task. Tip: Give the task a title that includes a note on the purpose of it being optional (e.g., \"Enrichment\", \"Bonus\", or \"Optional Help\")><span class=\"go_help_info_icon\"><i class=\"fa fa-info-circle\"><\/i><\/span><\/span>",
+                                    "required": 0,
+                                    "conditional_logic": [
+                                        [
+                                            {
+                                                "field": "field_5ab197699d24b",
+                                                "operator": "==",
+                                                "value": "1"
+                                            }
+                                        ]
+                                    ],
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "message": "",
+                                    "default_value": 0,
+                                    "ui": 0,
+                                    "ui_on_text": "",
+                                    "ui_off_text": ""
+                                }
+                            ]
                         }
                     ]
                 }
@@ -594,7 +692,8 @@
                                         "class": "go_badges",
                                         "id": ""
                                     },
-                                    "taxonomy": "go_badges"
+                                    "taxonomy": "go_badges",
+                                    "field_type": "multi_select"
                                 },
                                 {
                                     "key": "field_5ac134bb78594",
@@ -617,7 +716,8 @@
                                         "class": "",
                                         "id": ""
                                     },
-                                    "taxonomy": "user_go_groups"
+                                    "taxonomy": "user_go_groups",
+                                    "field_type": "multi_select"
                                 },
                                 {
                                     "key": "field_5b23676184648",
@@ -1367,13 +1467,40 @@
                     "endpoint": 0
                 },
                 {
+                    "key": "field_5e3eecfae9849",
+                    "label": "Add Instructions",
+                    "name": "add_instructions",
+                    "type": "true_false",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "go_call_to_action",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 0,
+                    "ui": 0,
+                    "ui_on_text": "",
+                    "ui_off_text": ""
+                },
+                {
                     "key": "field_5ae79e3fb5228",
                     "label": "Call to Action",
                     "name": "instructions",
                     "type": "wysiwyg",
                     "instructions": "",
                     "required": 0,
-                    "conditional_logic": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5e3eecfae9849",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
                     "wrapper": {
                         "width": "",
                         "class": "go_call_to_action go-content",
@@ -1429,33 +1556,66 @@
                     ],
                     "wrapper": {
                         "width": "",
-                        "class": "",
+                        "class": "go_call_to_action",
                         "id": ""
                     },
                     "layout": "block",
                     "sub_fields": [
                         {
+                            "key": "field_5e3d8b7907ca2",
+                            "label": "Options",
+                            "name": "opts",
+                            "type": "checkbox",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "acf-hide-label",
+                                "id": ""
+                            },
+                            "choices": {
+                                "title": "Add Custom Title to User Submissions",
+                                "private": "Mark All Posts Private",
+                                "show_posts": "Show View All Posts Button"
+                            },
+                            "allow_custom": 0,
+                            "default_value": [],
+                            "layout": "horizontal",
+                            "toggle": 0,
+                            "return_format": "value",
+                            "save_custom": 0
+                        },
+                        {
                             "key": "field_5cba487b9f57b",
                             "label": "Title",
                             "name": "title",
                             "type": "text",
-                            "instructions": "Leave blank to have the title automaticall set to \"quest name-stage #\"",
+                            "instructions": "",
                             "required": 0,
-                            "conditional_logic": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_5e3d8b7907ca2",
+                                        "operator": "==",
+                                        "value": "title"
+                                    }
+                                ]
+                            ],
                             "wrapper": {
                                 "width": "",
                                 "class": "",
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "quest name-stage # by default",
+                            "placeholder": "Quest Name and Stage # by default",
                             "prepend": "",
                             "append": "",
                             "maxlength": 30
                         },
                         {
                             "key": "field_5cba48899f588",
-                            "label": "Required Elements",
+                            "label": "Questions",
                             "name": "blog_elements",
                             "type": "repeater",
                             "instructions": "",
@@ -1476,7 +1636,7 @@
                                     "key": "field_5d95984389354",
                                     "label": "Prompt\/Question",
                                     "name": "promptquestion",
-                                    "type": "textarea",
+                                    "type": "wysiwyg",
                                     "instructions": "",
                                     "required": 0,
                                     "conditional_logic": 0,
@@ -1486,14 +1646,14 @@
                                         "id": ""
                                     },
                                     "default_value": "",
-                                    "placeholder": "",
-                                    "maxlength": "",
-                                    "rows": 2,
-                                    "new_lines": ""
+                                    "tabs": "all",
+                                    "toolbar": "basic",
+                                    "media_upload": 1,
+                                    "delay": 0
                                 },
                                 {
                                     "key": "field_5cba489d9f589",
-                                    "label": "Element",
+                                    "label": "Response",
                                     "name": "element",
                                     "type": "select",
                                     "instructions": "",
@@ -1508,9 +1668,12 @@
                                         "URL": "URL",
                                         "File": "File",
                                         "Video": "Video",
-                                        "Text": "Text"
+                                        "Text": "Text",
+                                        "sketch": "Sketch (beta)"
                                     },
-                                    "default_value": [],
+                                    "default_value": [
+                                        "Text"
+                                    ],
                                     "allow_null": 1,
                                     "multiple": 0,
                                     "ui": 0,
@@ -1581,9 +1744,9 @@
                                     ],
                                     "allow_null": 0,
                                     "multiple": 0,
-                                    "ui": 1,
-                                    "ajax": 0,
+                                    "ui": 0,
                                     "return_format": "value",
+                                    "ajax": 0,
                                     "placeholder": ""
                                 },
                                 {
@@ -1612,11 +1775,11 @@
                                     "esc_html": 0
                                 },
                                 {
-                                    "key": "field_5d95c1ce0246c",
-                                    "label": "Rows",
-                                    "name": "requirements_height",
+                                    "key": "field_5e3c70c8f90cc",
+                                    "label": "Minimum Words",
+                                    "name": "minimum_length",
                                     "type": "number",
-                                    "instructions": "Number of lines in the text area",
+                                    "instructions": "",
                                     "required": 0,
                                     "conditional_logic": [
                                         [
@@ -1632,13 +1795,78 @@
                                         "class": "",
                                         "id": ""
                                     },
-                                    "default_value": 1,
+                                    "default_value": "",
                                     "placeholder": "",
                                     "prepend": "",
                                     "append": "",
-                                    "min": 1,
-                                    "max": 20,
+                                    "min": 0,
+                                    "max": "",
                                     "step": 1
+                                },
+                                {
+                                    "key": "field_5e3f5712c36a9",
+                                    "label": "Editor Options",
+                                    "name": "editor_opts_toggle",
+                                    "type": "radio",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": [
+                                        [
+                                            {
+                                                "field": "field_5cba489d9f589",
+                                                "operator": "==",
+                                                "value": "Text"
+                                            }
+                                        ]
+                                    ],
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "default": "Default",
+                                        "custom": "Custom"
+                                    },
+                                    "allow_null": 0,
+                                    "other_choice": 0,
+                                    "default_value": "default",
+                                    "layout": "horizontal",
+                                    "return_format": "value",
+                                    "save_other_choice": 0
+                                },
+                                {
+                                    "key": "field_5e3f5754c36aa",
+                                    "label": "Options",
+                                    "name": "editor_opts",
+                                    "type": "checkbox",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": [
+                                        [
+                                            {
+                                                "field": "field_5e3f5712c36a9",
+                                                "operator": "==",
+                                                "value": "custom"
+                                            }
+                                        ]
+                                    ],
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "acf-hide-label",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "full": "Use Full Toolbar",
+                                        "media": "Show Media Button",
+                                        "text": "Show Text Tab"
+                                    },
+                                    "allow_custom": 0,
+                                    "default_value": [],
+                                    "layout": "horizontal",
+                                    "toggle": 0,
+                                    "return_format": "value",
+                                    "save_custom": 0
                                 },
                                 {
                                     "key": "field_5cba56c3e8804",
@@ -1650,122 +1878,11 @@
                                     "conditional_logic": 0,
                                     "wrapper": {
                                         "width": "0",
-                                        "class": "",
+                                        "class": "go_acf_hidden",
                                         "id": ""
                                     }
                                 }
                             ]
-                        },
-                        {
-                            "key": "field_5cba4c7387032",
-                            "label": "Show Text Editor",
-                            "name": "blog_text",
-                            "type": "group",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "layout": "block",
-                            "sub_fields": [
-                                {
-                                    "key": "field_5cba4c7387033",
-                                    "label": "",
-                                    "name": "toggle",
-                                    "type": "true_false",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": 0,
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "message": "",
-                                    "default_value": 1,
-                                    "ui": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": ""
-                                },
-                                {
-                                    "key": "field_5cba4c7387034",
-                                    "label": "Minimum Words",
-                                    "name": "minimum_length",
-                                    "type": "number",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": [
-                                        [
-                                            {
-                                                "field": "field_5cba4c7387033",
-                                                "operator": "==",
-                                                "value": "1"
-                                            }
-                                        ]
-                                    ],
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "default_value": "",
-                                    "placeholder": "minimum words",
-                                    "prepend": "",
-                                    "append": "",
-                                    "min": 0,
-                                    "max": "",
-                                    "step": 1
-                                },
-                                {
-                                    "key": "field_5dad8769316c9",
-                                    "label": "Prompt",
-                                    "name": "prompt",
-                                    "type": "textarea",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": [
-                                        [
-                                            {
-                                                "field": "field_5cba4c7387033",
-                                                "operator": "==",
-                                                "value": "1"
-                                            }
-                                        ]
-                                    ],
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "default_value": "",
-                                    "placeholder": "",
-                                    "maxlength": "",
-                                    "rows": 2,
-                                    "new_lines": ""
-                                }
-                            ]
-                        },
-                        {
-                            "key": "field_5cba487b9f587",
-                            "label": "Private",
-                            "name": "private",
-                            "type": "true_false",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "message": "Private Post",
-                            "default_value": 0,
-                            "ui": 0,
-                            "ui_on_text": "",
-                            "ui_off_text": ""
                         }
                     ]
                 },
@@ -2345,13 +2462,40 @@
                     "delay": 0
                 },
                 {
+                    "key": "field_5e3f36078a0bf",
+                    "label": "Add Instructions",
+                    "name": "add_instructions",
+                    "type": "true_false",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "go_call_to_action",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 0,
+                    "ui": 0,
+                    "ui_on_text": "",
+                    "ui_off_text": ""
+                },
+                {
                     "key": "field_5afa59e675cec",
-                    "label": "Call to Action",
+                    "label": "Instructions",
                     "name": "instructions",
                     "type": "wysiwyg",
                     "instructions": "",
                     "required": 0,
-                    "conditional_logic": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5e3f36078a0bf",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
                     "wrapper": {
                         "width": "",
                         "class": "go_call_to_action",
@@ -2406,11 +2550,36 @@
                     ],
                     "wrapper": {
                         "width": "",
-                        "class": "",
+                        "class": "go_call_to_action",
                         "id": ""
                     },
                     "layout": "block",
                     "sub_fields": [
+                        {
+                            "key": "field_5e3f2d616c25b",
+                            "label": "Options",
+                            "name": "opts",
+                            "type": "checkbox",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "acf-hide-label",
+                                "id": ""
+                            },
+                            "choices": {
+                                "title": "Add Custom Title to User Submissions",
+                                "private": "Mark All Posts Private",
+                                "show_posts": "Show View All Posts Button"
+                            },
+                            "allow_custom": 0,
+                            "default_value": [],
+                            "layout": "horizontal",
+                            "toggle": 0,
+                            "return_format": "value",
+                            "save_custom": 0
+                        },
                         {
                             "key": "field_5cbad9e8eb50d",
                             "label": "Title",
@@ -2418,7 +2587,15 @@
                             "type": "text",
                             "instructions": "Leave blank to have the title automaticall set to \"quest name-stage #\"",
                             "required": 0,
-                            "conditional_logic": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_5e3f2d616c25b",
+                                        "operator": "==",
+                                        "value": "title"
+                                    }
+                                ]
+                            ],
                             "wrapper": {
                                 "width": "",
                                 "class": "",
@@ -2431,27 +2608,8 @@
                             "maxlength": 30
                         },
                         {
-                            "key": "field_5cbad9e8eb50e",
-                            "label": "Private",
-                            "name": "private",
-                            "type": "true_false",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "message": "Private Post",
-                            "default_value": 0,
-                            "ui": 0,
-                            "ui_on_text": "",
-                            "ui_off_text": ""
-                        },
-                        {
                             "key": "field_5cbad9e8eb50f",
-                            "label": "Required Elements",
+                            "label": "Questions",
                             "name": "blog_elements",
                             "type": "repeater",
                             "instructions": "",
@@ -2472,7 +2630,7 @@
                                     "key": "field_5d95ac15a2712",
                                     "label": "Prompt\/Question",
                                     "name": "promptquestion",
-                                    "type": "textarea",
+                                    "type": "wysiwyg",
                                     "instructions": "",
                                     "required": 0,
                                     "conditional_logic": 0,
@@ -2482,14 +2640,14 @@
                                         "id": ""
                                     },
                                     "default_value": "",
-                                    "placeholder": "",
-                                    "maxlength": "",
-                                    "rows": 2,
-                                    "new_lines": ""
+                                    "tabs": "all",
+                                    "toolbar": "basic",
+                                    "media_upload": 1,
+                                    "delay": 0
                                 },
                                 {
                                     "key": "field_5cbad9e8eb510",
-                                    "label": "Elements",
+                                    "label": "Response",
                                     "name": "element",
                                     "type": "select",
                                     "instructions": "",
@@ -2515,9 +2673,9 @@
                                     "placeholder": ""
                                 },
                                 {
-                                    "key": "field_5d95c963262c4",
-                                    "label": "Rows",
-                                    "name": "requirements_height",
+                                    "key": "field_5e3f3d4e4929a",
+                                    "label": "Minimum Words",
+                                    "name": "minimum_length",
                                     "type": "number",
                                     "instructions": "",
                                     "required": 0,
@@ -2535,12 +2693,12 @@
                                         "class": "",
                                         "id": ""
                                     },
-                                    "default_value": 1,
+                                    "default_value": "",
                                     "placeholder": "",
                                     "prepend": "",
                                     "append": "",
-                                    "min": 1,
-                                    "max": 20,
+                                    "min": 0,
+                                    "max": "",
                                     "step": 1
                                 },
                                 {
@@ -2610,6 +2768,71 @@
                                     "placeholder": ""
                                 },
                                 {
+                                    "key": "field_5e3f88185bac4",
+                                    "label": "Editor Options",
+                                    "name": "editor_opts_toggle",
+                                    "type": "radio",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": [
+                                        [
+                                            {
+                                                "field": "field_5cbad9e8eb510",
+                                                "operator": "==",
+                                                "value": "Text"
+                                            }
+                                        ]
+                                    ],
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "default": "Default",
+                                        "custom": "Custom"
+                                    },
+                                    "allow_null": 0,
+                                    "other_choice": 0,
+                                    "default_value": "default",
+                                    "layout": "horizontal",
+                                    "return_format": "value",
+                                    "save_other_choice": 0
+                                },
+                                {
+                                    "key": "field_5e3f881c5bac5",
+                                    "label": "Options",
+                                    "name": "editor_opts",
+                                    "type": "checkbox",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": [
+                                        [
+                                            {
+                                                "field": "field_5e3f88185bac4",
+                                                "operator": "==",
+                                                "value": "custom"
+                                            }
+                                        ]
+                                    ],
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "acf-hide-label",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "full": "Use Full Toolbar",
+                                        "media": "Show Media Button",
+                                        "text": "Show Text Tab"
+                                    },
+                                    "allow_custom": 0,
+                                    "default_value": [],
+                                    "layout": "horizontal",
+                                    "toggle": 0,
+                                    "return_format": "value",
+                                    "save_custom": 0
+                                },
+                                {
                                     "key": "field_5cbad9e8eb514",
                                     "label": "Video URL",
                                     "name": "",
@@ -2647,98 +2870,6 @@
                                         "class": "acf-hide",
                                         "id": ""
                                     }
-                                }
-                            ]
-                        },
-                        {
-                            "key": "field_5cbad9e8eb516",
-                            "label": "Show Text Editor",
-                            "name": "blog_text",
-                            "type": "group",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "layout": "block",
-                            "sub_fields": [
-                                {
-                                    "key": "field_5cbad9e8eb517",
-                                    "label": "",
-                                    "name": "toggle",
-                                    "type": "true_false",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": 0,
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "message": "",
-                                    "default_value": 1,
-                                    "ui": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": ""
-                                },
-                                {
-                                    "key": "field_5cbad9e8eb518",
-                                    "label": "Minimum Words",
-                                    "name": "minimum_length",
-                                    "type": "number",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": [
-                                        [
-                                            {
-                                                "field": "field_5cbad9e8eb517",
-                                                "operator": "==",
-                                                "value": "1"
-                                            }
-                                        ]
-                                    ],
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "default_value": "",
-                                    "placeholder": "minimum words",
-                                    "prepend": "",
-                                    "append": "",
-                                    "min": 0,
-                                    "max": "",
-                                    "step": 1
-                                },
-                                {
-                                    "key": "field_5dae14f17a529",
-                                    "label": "Prompt",
-                                    "name": "prompt",
-                                    "type": "textarea",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": [
-                                        [
-                                            {
-                                                "field": "field_5cbad9e8eb517",
-                                                "operator": "==",
-                                                "value": "1"
-                                            }
-                                        ]
-                                    ],
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "default_value": "",
-                                    "placeholder": "",
-                                    "maxlength": "",
-                                    "rows": 3,
-                                    "new_lines": ""
                                 }
                             ]
                         }
@@ -2781,7 +2912,7 @@
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
-                        "class": "go_rewards",
+                        "class": "go_rewards go_call_to_action",
                         "id": ""
                     },
                     "layout": "table",
@@ -2879,5 +3010,5 @@
     "active": 1,
     "description": "",
     "recaptcha": 0,
-    "modified": 1572962652
+    "modified": 1581705232
 }

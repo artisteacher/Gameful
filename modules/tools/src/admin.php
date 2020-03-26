@@ -119,7 +119,39 @@ function go_admin_tools_menu_content() {
         $export_url = home_url('wp-admin/admin.php?page=game-tools&go_download=true&password=' . $pass);
         //<button id="go_export_game" onclick="window.location.href = 'wp-admin/admin.php?page=game-tools&download=true';">Export All Game Data</button>
 
+?>
+
+
+        <h2>User Management</h2>
+        <div class="go_tools_section">
+            <div class="card">
+                <h2>Reset All User Data</h2>
+                <p>Reset tasks, history, and loot for all users. Blog posts and media will remain.</p>
+                <button id="go_reset_all_users">Reset All Users</button>
+            </div>
+            <?php
+            do_action('go_user_management_card');//loads other user management cards from modules, i.e., archive
+            ?>
+        </div>
+        <?php
+
+    }
+
+    do_action('go_add_tool');
+    if(is_super_admin() && is_gameful()){
         ?>
+        <h2>Super Admin Tools</h2>
+        <div class="go_tools_section">
+            <div class="card">
+                <h2>Flush permalinks on all sites</h2>
+                <p>This is a maintenance task. Only run if needed--it's expensive.</p>
+                <button id="go_flush_all_permalinks">Flush All Permalinks</button>
+            </div>
+            <?php
+            //do_action('go_flush_all_permalinks');
+            ?>
+        </div>
+
         <h2>Import and Export Tools</h2>
         <div class="go_tools_section">
             <div class="card">
@@ -160,34 +192,6 @@ function go_admin_tools_menu_content() {
             </div>
         </div>
 
-
-        <h2>User Management</h2>
-        <div class="go_tools_section">
-            <div class="card">
-                <h2>Reset All User Data</h2>
-                <p>Reset tasks, history, and loot for all users. Blog posts and media will remain.</p>
-                <button id="go_reset_all_users">Reset All Users</button>
-            </div>
-            <?php
-            do_action('go_user_management_card');//loads other user management cards from modules, i.e., archive
-            ?>
-        </div>
-        <?php
-
-    }
-    if(is_super_admin() && is_gameful()){
-        ?>
-        <h2>Super Admin Tools</h2>
-        <div class="go_tools_section">
-            <div class="card">
-                <h2>Flush permalinks on all sites</h2>
-                <p>This is a maintenance task. Only run if needed--it's expensive.</p>
-                <button id="go_flush_all_permalinks">Flush All Permalinks</button>
-            </div>
-            <?php
-            //do_action('go_flush_all_permalinks');
-            ?>
-        </div>
         <?php
         /*
         if (is_gameful()) {
@@ -216,7 +220,8 @@ function go_create_user_blog_archive(){
     //add a table with a button to create archive here
     echo "<h2>Create Archive</h2><p>Select Users to create an archive of their blogs. This can be done anytime, but is typically done at the end of a course before deleting users from the site.</p>";
 
-    go_clipboard_filters();
+    //go_clipboard_filters();
+    go_leaderboard_filters('clipboard');
     ?>
     <div id="records_tabs" style="clear: both; margin-right: 20px;">
         <ul>
@@ -232,26 +237,10 @@ function go_create_user_blog_archive(){
 }
 
 function go_update_go_to_v5(){
-    /*
-     * Not run from ajax anymore--just runs on activation if needed.
-        if ( !is_user_logged_in() ) {
-            echo "login";
-            die();
-        }
-
-        //check_ajax_referer( 'go_upgade4' );
-        if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_update_go_ajax_v5' ) ) {
-            echo "refresh";
-            die( );
-        }
-
-    */
-
     $query = new WP_Query(array(
         'post_type' => 'tasks',
         'posts_per_page' => 10000
     ));
-
 
     while ($query->have_posts()) {
         $query->the_post();

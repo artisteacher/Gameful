@@ -22,14 +22,14 @@ if ( !is_admin() ) {
     add_action( 'wp_ajax_go_stats_single_task_activity_list', 'go_stats_single_task_activity_list' ); //OK
     add_action( 'wp_ajax_go_stats_badges_list', 'go_stats_badges_list' ); //OK
     add_action( 'wp_ajax_go_stats_groups_list', 'go_stats_groups_list' ); //OK
-    //add_action( 'wp_ajax_go_stats_leaderboard', 'go_stats_leaderboard' ); //OK
-    //add_action( 'wp_ajax_go_stats_leaderboard_dataloader_ajax', 'go_stats_leaderboard_dataloader_ajax');
     //add_action( 'wp_ajax_go_stats_lite', 'go_stats_lite' ); //OK
     add_action( 'wp_ajax_go_stats_about', 'go_stats_about' ); //OK
     add_action( 'wp_ajax_go_activity_dataloader_ajax', 'go_activity_dataloader_ajax');
     add_action( 'wp_ajax_go_messages_dataloader_ajax', 'go_messages_dataloader_ajax');
     add_action( 'wp_ajax_go_stats_store_item_dataloader', 'go_stats_store_item_dataloader');
     add_action( 'wp_ajax_go_tasks_dataloader_ajax', 'go_tasks_dataloader_ajax');
+    add_action( 'wp_ajax_go_print_grade_scales', 'go_print_grade_scales');
+
 
 }else{
     //include_once('admin/admin.php');

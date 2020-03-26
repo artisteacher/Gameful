@@ -59,6 +59,7 @@ function go_save_archive(){
                         //send the ajax with the input from the alert
                         var nonce = go_make_user_archive_zip_nonce;
                         var gotoSend = {
+                            is_frontend: is_frontend,
                             action:"go_make_user_archive_zip",
                             archive_type: archive_type,
                             is_admin_archive: false,

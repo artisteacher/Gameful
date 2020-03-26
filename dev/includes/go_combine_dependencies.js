@@ -4,6 +4,7 @@
 // @codekit-prepend 'js/featherlight.gallery.min.js'
 // @codekit-prepend 'js/noty.min.js'
 // @codekit-prepend 'js/sweetalert2@8.js'
+// @codekit-prepend 'js/popper.min.js'
 // @codekit-prepend 'js/tippy.all.min.js'
 // @codekit-prepend 'js/select2.min.js'
 // @codekit-prepend 'js/datatables.min.js'

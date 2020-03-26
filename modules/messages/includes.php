@@ -17,6 +17,7 @@ if ( !is_admin() ) {
     add_action( 'wp_ajax_go_create_admin_message', 'go_create_admin_message' );//OK
     add_action( 'wp_ajax_go_send_message', 'go_send_message' ); //OK
     add_action( 'wp_ajax_go_admin_messages', 'go_admin_messages' );//OK
+    add_action( 'wp_ajax_go_check_messages_ajax', 'go_check_messages_ajax' );//OK
 
 }else{
     //include_once('admin/admin.php');

@@ -68,8 +68,11 @@ function go_user_map_ajax(){
     }
     $user_id = intval($_POST['uid']);
     $current_user_id = get_current_user_id();
-    $last_map_id = get_user_option('go_last_map', $current_user_id);
-    go_make_map_dropdown($user_id);
-    go_make_single_map($last_map_id, false, $user_id);// do your thing
+    $map_id = get_user_option('go_last_map', $current_user_id);
+    echo "<div class='go_user_map_wrapper'>";
+    //go_make_map_dropdown('task_chains', $last_map_id, $user_id);
+    //go_make_single_map($last_map_id, false, $user_id);// do your thing
+    go_make_map($map_id, $current_user_id);
+    echo "</div>";
     die();
 }

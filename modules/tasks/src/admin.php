@@ -56,6 +56,8 @@ function manage_term_columns(){
 
 
     add_filter( 'manage_edit-task_chains_columns', function ( $columns ) {
+        $columns['locked_prev'] = __( 'Lock by Prev', 'my-plugin' );
+        $columns['locks_on'] = __( 'Locks On', 'my-plugin' );
         $columns['hidden_term'] = __( 'Hidden', 'my-plugin' );
         $columns['pod_toggle'] = __( 'Pod', 'my-plugin' );
         $columns['pod_done_num'] = __( '# Needed', 'my-plugin' );
@@ -82,10 +84,16 @@ function manage_term_columns(){
      * BADGES EDIT COLUMNS AND FIELDS
      *
      */
+
+    add_filter( 'manage_edit-go_badges_columns', function ( $columns ) {
+        $columns['thumb'] = __( 'Thumb', 'my-plugin' );
+        return $columns;
+    });
+
 //remove description column
     add_filter('manage_edit-go_badges_columns', function ( $columns ) {
         if( isset( $columns['description'] ) )
-            unset( $columns['description'] );
+            //unset( $columns['description'] );
         if( isset( $columns['slug'] ) )
             unset( $columns['slug'] );
         if( isset( $columns['posts'] ) )
@@ -182,6 +190,13 @@ function manage_term_columns(){
      * USER GROUPS EDIT COLUMNS AND FIELDS
      *
      */
+
+    add_filter( 'manage_edit-user_go_groups_columns', function ( $columns ) {
+        $columns['thumb'] = __( 'Thumb', 'my-plugin' );
+        return $columns;
+    });
+
+
 //remove slug column
     add_filter('manage_edit-user_go_groups_columns', function ( $columns ) {
         if( isset( $columns['slug'] ) )
@@ -227,6 +242,29 @@ function go_limit_parents($args, $taxonomy ) {
 
 function task_chains_add_field_column_contents( $content, $column_name, $term_id ) {
     switch( $column_name ) {
+        case 'locked_prev' :
+            $term = get_term($term_id, 'task_chains');
+            $termParent = ($term->parent == 0) ? null : true;
+            if($termParent) {
+                $content = get_term_meta($term_id, 'locked_by_previous', true);
+            }
+            else{
+                $content = false;
+            }
+            if ($content == true){
+                $content = '<i class="fas fa-flip-horizontal fa-level-up-alt"></i>';
+            }
+            else {
+                $content = '';}
+            break;
+        case 'locks_on' :
+            $content = get_term_meta( $term_id, 'go_lock_toggle', true );
+            if ($content == true){
+                $content = '<i class="fas fa-lock"></i>';
+            }
+            else {
+                $content = '';}
+            break;
         case 'hidden_term' :
             $content = get_term_meta( $term_id, 'go_hide_map', true );
             if ($content == true){
@@ -238,7 +276,7 @@ function task_chains_add_field_column_contents( $content, $column_name, $term_id
         case 'pod_toggle' :
             $content = get_term_meta( $term_id, 'pod_toggle', true );
             if ($content == true){
-                $content = '&#10004;';
+                $content = '<i class="fal fa-layer-group"></i>';
             }
             else {
                 $content = '';}
@@ -297,6 +335,47 @@ function store_types_add_field_column_contents($content, $column_name, $term_id)
 }
 add_filter( 'manage_store_types_custom_column', 'store_types_add_field_column_contents', 10, 3 );
 
+function go_badges_add_field_column_contents($content, $column_name, $term_id){
+    $img = '';
+    switch( $column_name ) {
+        case 'thumb' :
+            ////////
+            ///
+            $obj = get_term($term_id);
+            $parent = $obj->parent;
+            if(!empty($parent)) {
+                if (!empty($obj)) {
+                    $name = $obj->name;
+                    $id = $obj->term_id;
+
+                    $icon_toggle = get_term_meta($id, 'image_source');
+                    $icon_toggle = (isset($icon_toggle[0]) ? $icon_toggle[0] : false);
+
+                    if ($icon_toggle === '1') {
+                        $icon = get_term_meta($id, 'icon');
+                        $color = get_term_meta($id, 'icon_color');
+                        $img = '<i class="' . $icon[0] . ' fa-3x" style="color:' . $color[0] . '"></i>';
+
+                    } else {
+                        $img_id = get_term_meta($id, 'my_image');
+                        //$img = '';
+                        if (isset($img_id[0]) && !empty($img_id[0])) {
+                            $img = wp_get_attachment_image($img_id[0], array(50, 50));
+                        } else {
+                            $img = '<i class="fas fa-award fa-3x" style="height: 50px"></i>';
+                        }
+                    }
+                }
+            }
+            break;
+
+    }
+    $img = '<div style="padding:10px;">' . $img . '</div>';
+    return $img;
+}
+add_filter( 'manage_go_badges_custom_column', 'go_badges_add_field_column_contents', 10, 3 );
+add_filter( 'manage_user_go_groups_custom_column', 'go_badges_add_field_column_contents', 10, 3 );
+
 
 # Called only in /wp-admin/edit.php pages
 //add_action( 'load-edit.php', function() {
@@ -320,6 +399,10 @@ function hide_meta_boxes_tasks() {
     remove_meta_box('postcustom', 'tasks', 'normal');
     remove_meta_box('slugdiv', 'tasks', 'normal');
     remove_meta_box('generate_layout_options_meta_box', 'tasks', 'normal');
+    remove_meta_box('generate_layout_options_meta_box', 'tasks', 'side');
+
+    remove_meta_box('generate_layout_options_meta_box', 'go_store', 'normal');
+    remove_meta_box('generate_layout_options_meta_box', 'go_store', 'side');
     ////remove_meta_box('commentstatusdiv', 'tasks', 'normal');
     //remove_meta_box('commentsdiv', 'tasks', 'normal');
     //remove_meta_box('revisionsdiv', 'tasks', 'normal');
@@ -334,8 +417,9 @@ function hide_meta_boxes_tasks_templates() {
     remove_meta_box('slugdiv', 'tasks_templates', 'normal');
     remove_meta_box('commentstatusdiv', 'tasks_templates', 'normal');
     remove_meta_box('commentsdiv', 'tasks_templates', 'normal');
-    remove_meta_box('generate_layout_options_meta_box', 'tasks', 'normal');
-    remove_meta_box('postimagediv', 'tasks', 'normal');
-    remove_meta_box('postimagediv', 'tasks', 'side');
+    remove_meta_box('generate_layout_options_meta_box', 'tasks_templates', 'normal');
+    remove_meta_box('generate_layout_options_meta_box', 'tasks_templates', 'side');
+    remove_meta_box('postimagediv', 'tasks_templates', 'normal');
+    remove_meta_box('postimagediv', 'tasks_templates', 'side');
     //remove_meta_box('revisionsdiv', 'tasks', 'normal');
 }

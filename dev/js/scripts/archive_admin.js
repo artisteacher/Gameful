@@ -5,17 +5,147 @@ jQuery(document).ready(function(){
         }
         go_blog_archive_datatable();//draw the stats tab on load
 
-        go_make_select2_filter('user_go_sections', false, true);
+        go_make_select2_filter('user_go_sections', 'reader', true);
 
-        go_make_select2_filter('user_go_groups',false, true);
+        go_make_select2_filter('user_go_groups','reader', true);
 
-        go_make_select2_filter('go_badges',false, true);
+        go_make_select2_filter('go_badges','reader', true);
 
         jQuery(".go_save_icon_multiple_clipboard").parent().off().one("click", function(e){
             go_save_admin_archive();
         });
+
+        jQuery(".go_reset_icon_multiple_clipboard").parent().off().one("click", function(e){
+            go_reset_selected_users();
+        });
     }
 });
+
+function go_reset_selected_users(){
+    console.log('go_reset_selected_users');
+    var inputs = jQuery(".go_checkbox:visible");
+    //console.log(inputs);
+    var archive_vars = [];
+    for(var i = 0; i < inputs.length; i++){
+        if (inputs[i]['checked'] === true ){
+            var uid = (inputs[i]).getAttribute('data-uid');
+            archive_vars.push({uid:uid});
+        }
+    }
+    let num_users = archive_vars.length;
+
+    if (num_users <=0){
+        Swal.fire({//sw2 OK
+            title: "Error",
+            text: "No users were selected.",
+            type: 'error',
+            showCancelButton: false,
+        });
+        jQuery(".go_reset_icon_multiple_clipboard").parent().off().one("click", function(e){
+            go_reset_selected_users();
+        });
+        return;
+    }
+
+    //select private or public archive
+    Swal.fire({//sw2 OK
+        title: "Are you sure?",
+        html: "This will reset the selected users. <br><br>All loot will be reset.<br><br>All blog posts, messages, and history will be removed.",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Reset',
+        cancelButtonText: 'Cancel',
+        focusConfirm: false,
+        focusCancel: true,
+        reverseButtons: false,
+        //buttonsStyling: false,
+        cancelButtonColor: '#3085d6'
+
+    })
+        .then((result) => {
+            if (result.value) {
+                go_do_selected_reset(archive_vars);
+            } else if (result.dismiss === Swal.DismissReason.cancel){
+
+            }
+
+        })
+}
+function go_do_selected_reset(archive_vars){
+    console.log('go_do_selected_reset');
+    console.log(archive_vars);
+    //send the ajax with the input from the alert
+    var nonce = go_reset_selected_users_nonce;
+    //generate_user_list($user_list, $is_private)
+
+    var gotoSend = {
+        is_frontend: is_frontend,
+        action:"go_reset_selected_users",
+        archive_vars: archive_vars,
+        _ajax_nonce: nonce,
+        // blog_post_id: blog_post_id,
+        // checked: checked
+    };
+    //jQuery.ajaxSetup({ cache: true });
+
+    jQuery.ajax({
+        url: MyAjax.ajaxurl,
+        type: 'POST',
+        data: gotoSend,
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log('error');
+            jQuery(".go_reset_icon_multiple_clipboard").parent().off().one("click", function(e){
+                go_reset_selected_users();
+            });
+            Swal.fire({//sw2 OK
+                title: "Error",
+                text: "There was a problem resetting these users.",
+                type: 'error',
+                showCancelButton: false,
+            });
+            console.log('error1');
+            //return 'error1';
+        },
+        success: function (raw) {
+            go_after_ajax();
+            console.log(raw);
+            if (raw == 0 || raw == '0'){
+                Swal.fire({//sw2 OK
+                    title: "Error",
+                    text: "There was a problem resetting these users.",
+                    type: 'error',
+                    showCancelButton: false,
+                });
+                console.log('error2');
+                //return 'error2';
+            }else {
+
+
+                swal.fire({
+                    title: "Success",
+                    text: "Users were reset.",
+                    showCancelButton: false,
+                    confirmButtonText: 'Continue',
+                    customClass: {
+                        confirmButton: 'btn btn-success',
+                    },
+                })
+                    .then((result) => {
+                        Clipboard.draw();
+                        //go_clipboard_stats_datatable(true);
+                        go_clipboard_update();
+                    });
+
+            }
+        }
+    });
+
+}
+
 
 function go_save_admin_archive(){
     console.log('go_save_admin_archive');
@@ -88,11 +218,12 @@ function go_create_user_list(archive_type, archive_vars){
     console.log('go_create_user_list');
     //send the ajax with the input from the alert
     var nonce = go_create_user_list_nonce;
-    let section = jQuery('#go_page_user_go_sections_select').val();
-    let group = jQuery('#go_page_user_go_groups_select').val();
-    let badge = jQuery('#go_page_go_badges_select').val();
+    let section = jQuery('#go_reader_user_go_sections_select').val();
+    let group = jQuery('#go_reader_user_go_groups_select').val();
+    let badge = jQuery('#go_reader_go_badges_select').val();
     //generate_user_list($user_list, $is_private)
     var gotoSend = {
+        is_frontend: is_frontend,
         action:"go_create_user_list",
         archive_type: archive_type,
         is_admin_archive: true,
@@ -129,6 +260,7 @@ function go_create_user_list(archive_type, archive_vars){
             //return 'error1';
         },
         success: function (raw) {
+            go_after_ajax();
             console.log(raw);
             if (raw == 0 || raw == '0'){
                 Swal.fire({//sw2 OK
@@ -174,11 +306,12 @@ function go_generate_user_archive(archive_type, archive_vars, i, total_users, er
 
     //send the ajax with the input from the alert
     var nonce = go_make_user_archive_zip_nonce;
-    let section = jQuery('#go_page_user_go_sections_select').val();
-    let group = jQuery('#go_page_user_go_groups_select').val();
-    let badge = jQuery('#go_page_go_badges_select').val();
+    let section = jQuery('#go_reader_user_go_sections_select').val();
+    let group = jQuery('#go_reader_user_go_groups_select').val();
+    let badge = jQuery('#go_reader_go_badges_select').val();
     //generate_user_list($user_list, $is_private)
     var gotoSend = {
+        is_frontend: is_frontend,
         action:"go_make_user_archive_zip",
         archive_type: archive_type,
         is_admin_archive: true,
@@ -217,6 +350,7 @@ function go_generate_user_archive(archive_type, archive_vars, i, total_users, er
             }
         },
         success: function (raw) {
+            go_after_ajax();
             if (raw == 0 || raw == '0'){
                 error_count++;
             }
@@ -247,7 +381,8 @@ function go_generate_user_archive2(archive_type, user_id){
     let badge = jQuery('#go_page_go_badges_select').val();
     //generate_user_list($user_list, $is_private)
     var gotoSend = {
-        action:"go_make_user_archive_zip",
+        is_frontend: is_frontend,
+            action:"go_make_user_archive_zip",
         archive_type: archive_type,
         is_admin_archive: true,
         user_id: user_id,
@@ -294,6 +429,7 @@ function go_archive_progress(num_users, first = true, last_time_out = 0){
         url: MyAjax.ajaxurl,
         data: {
             _ajax_nonce: nonce,
+            is_frontend: is_frontend,
             action: 'go_archive_progress',
             first: first
             //refresh: refresh,
@@ -346,6 +482,7 @@ function go_blog_archive_datatable(refresh) {
             url: MyAjax.ajaxurl,
             data: {
                 _ajax_nonce: nonce,
+                is_frontend: is_frontend,
                 action: 'go_clipboard_stats',
                 refresh: refresh
             },
@@ -359,6 +496,7 @@ function go_blog_archive_datatable(refresh) {
                 }
             },
             success: function( res ) {
+                go_after_ajax();
                 //console.log("success");
                 if (-1 !== res) {
                     jQuery('#clipboard_stats_datatable_container').html(res);
@@ -371,9 +509,9 @@ function go_blog_archive_datatable(refresh) {
                             "data": function(d){
                                 //d.user_id = jQuery('#go_stats_hidden_input').val();
                                 //d.user_id = jQuery('#go_stats_hidden_input').val();
-                                d.section = jQuery('#go_page_user_go_sections_select').val();
-                                d.group = jQuery('#go_page_user_go_groups_select').val();
-                                d.badge = jQuery('#go_page_go_badges_select').val();
+                                d.section = jQuery('#go_reader_user_go_sections_select').val();
+                                d.group = jQuery('#go_reader_user_go_groups_select').val();
+                                d.badge = jQuery('#go_reader_go_badges_select').val();
                             }
                         },
                         "bPaginate": true,
@@ -394,6 +532,9 @@ function go_blog_archive_datatable(refresh) {
                             go_clipboard_callback();
                             jQuery(".go_save_icon_multiple_clipboard").parent().one("click", function(e){
                                 go_save_admin_archive();
+                            });
+                            jQuery(".go_reset_icon_multiple_clipboard").parent().off().one("click", function(e){
+                                go_reset_selected_users();
                             });
 
                         },
@@ -434,6 +575,15 @@ function go_blog_archive_datatable(refresh) {
 
                                 }
 
+
+                            },
+                            {
+                                text: '<span class="go_reset_icon_multiple_clipboard">Reset Selected Users <i class="fas fa-times-circle" aria-hidden="true"></i><span>',
+                                action: function ( e, dt, node, config ) {
+
+                                }
+
+
                             },
                             {
                                 extend: 'colvis',
@@ -456,6 +606,9 @@ function go_blog_archive_datatable(refresh) {
         go_clipboard_callback();
         jQuery(".go_save_icon_multiple_clipboard").parent().one("click", function(e){
             go_save_admin_archive();
+        });
+        jQuery(".go_reset_icon_multiple_clipboard").parent().off().one("click", function(e){
+            go_reset_selected_users();
         });
     }
 }

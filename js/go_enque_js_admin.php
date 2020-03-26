@@ -21,7 +21,7 @@ function go_admin_scripts ($hook) {
     wp_register_script( 'go_admin_user', plugin_dir_url( __FILE__ ).'min/go_admin_user-min.js', array( 'jquery' ), $go_js_version, true);
 
     wp_register_script( 'go_combined_js_depend', plugin_dir_url( __FILE__ ).'min/go_combine_dependencies-min.js', array( 'jquery' ), $go_js_version, true);
-    wp_enqueue_script( 'go_combined_js_depend' );
+        wp_enqueue_script( 'go_combined_js_depend' );
 
 
     wp_register_script( 'go_all_pages_js', plugin_dir_url( __FILE__ ).'min/go_all-min.js', array('jquery', 'go_combined_js_depend'), $go_js_version, true);
@@ -65,6 +65,7 @@ function go_admin_scripts ($hook) {
     wp_localize_script( 'go_admin_user', 'SiteURL', get_site_url() );
     wp_localize_script( 'go_admin_user', 'MyAjax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
     wp_localize_script( 'go_admin_user', 'PluginDir', array( 'url' => plugin_dir_url(dirname(__FILE__) ) ) );
+    wp_localize_script( 'go_admin_user', 'is_frontend', "false");
 
     wp_localize_script(
         'go_admin_user',
@@ -72,11 +73,21 @@ function go_admin_scripts ($hook) {
         array(
             'nonces' => array(
                 'go_reset_all_users'			=> wp_create_nonce( 'go_reset_all_users'),//could be just on tools
-                'go_flush_all_permalinks'			=> wp_create_nonce( 'go_flush_all_permalinks'),//could be just on tools
+                'go_flush_all_permalinks'	    => wp_create_nonce( 'go_flush_all_permalinks'),//could be just on tools
+                'go_use_beta'			        => wp_create_nonce( 'go_use_beta'),//could be just on tools
                 'go_disable_game_on_this_site'  => wp_create_nonce( 'go_disable_game_on_this_site' )
             ),
         )
     );
+
+
+    if ($hook === 'toplevel_page_game-tools') {
+        wp_localize_script(
+            'go_admin_user',
+            'go_is_tools',
+            array(true)
+        );
+    }
 
     go_localize_all_pages();
 
@@ -102,7 +113,7 @@ function go_admin_scripts ($hook) {
                 'go_xp_toggle'          => get_option('options_go_loot_xp_toggle') ,
                 'go_health_toggle'      => get_option('options_go_loot_health_toggle') ,
                 'go_badges_toggle'      => get_option('options_go_badges_toggle'),
-                //'go_leaderboard_toggle'      => get_option('options_go_stats_leaderboard_toggle')
+                'go_leaderboard_toggle'      => get_option('options_go_stats_leaderboard_toggle')
 
             )
         );
@@ -112,8 +123,8 @@ function go_admin_scripts ($hook) {
         if ( 'toplevel_page_go_clipboard' === $hook ) {
 
             /*
-             * Clipboard Scripts
-             */
+                        * Clipboard Scripts
+                        */
             wp_localize_script(
                 'go_admin_user',
                 'GO_CLIPBOARD_DATA',
@@ -122,13 +133,18 @@ function go_admin_scripts ($hook) {
                         'go_clipboard_stats'          => wp_create_nonce( 'go_clipboard_stats' ),
                         'go_clipboard_activity' => wp_create_nonce( 'go_clipboard_activity' ),
                         'go_clipboard_messages' => wp_create_nonce( 'go_clipboard_messages'),
+                        'go_clipboard_attendance' => wp_create_nonce( 'go_clipboard_attendance'),
                         'go_clipboard_store' => wp_create_nonce( 'go_clipboard_store'),
-                        'go_clipboard_save_filters'     => wp_create_nonce( 'go_clipboard_save_filters' )
+                        'go_clipboard_save_filters'     => wp_create_nonce( 'go_clipboard_save_filters' ),
+                        'go_clipboard_activity_stats_ajax'     => wp_create_nonce( 'go_clipboard_activity_stats_ajax' )
                     ),
                 )
             );
 
+
+
             //this is needed on backend because blog posts show to admin when viewing maps from the clipboard
+            $is_admin = go_user_is_admin();
             wp_localize_script(
                 'go_admin_user',
                 'GO_FRONTEND_DATA',
@@ -137,10 +153,34 @@ function go_admin_scripts ($hook) {
                         'go_blog_opener'                => wp_create_nonce('go_blog_opener'),//this is the form, needed all over the place on front end
                         'go_blog_submit'                => wp_create_nonce('go_blog_submit'),
                         'go_blog_trash'                 => wp_create_nonce('go_blog_trash'),//on reader, blog, tasks
-                    )
+                        'go_blog_autosave'                 => wp_create_nonce('go_blog_autosave'),
+                    ),
+                    'go_is_admin'                   => $is_admin,
                 )
             );
 
+            $current_user = wp_get_current_user();
+            wp_localize_script( 'go_admin_user', 'TMA',
+                array(
+                    'id'        => $current_user->ID,
+                    'author'    => $current_user->display_name,
+                    'errors'    => array(
+                        'missing_fields'        => __('Select the color and the annotation text', 'tinymce-annotate'),
+                        'missing_annotation'    => __('Please select some text for creating an annotation', 'tinymce-annotate'),
+                        'missing_selected'      => __('Please select the annotation you want to delete', 'tinymce-annotate')
+                    ),
+                    'tooltips'  => array(
+                        'annotation_settings'   => __('Annotation settings', 'tinymce-annotate'),
+                        'annotation_create'     => __('Create annotation', 'tinymce-annotate'),
+                        'annotation_delete'     => __('Delete annotation', 'tinymce-annotate'),
+                        'annotation_hide'       => __('Hide annotations', 'tinymce-annotate')
+                    ),
+                    'settings'  => array(
+                        'setting_annotation'    => __('Annotation', 'tinymce-annotate'),
+                        'setting_background'    => __('Background color', 'tinymce-annotate')
+                    )
+                )
+            );
 
             wp_localize_script(
                 'go_admin_user',
@@ -150,7 +190,7 @@ function go_admin_scripts ($hook) {
         }
 
         // Enqueue and Localization for options page
-        if ( 'options_page_go_options' === $hook ) {
+        if ( 'settings_page_go_options' === $hook ) {
             wp_localize_script('go_admin_user', 'levelGrowth', get_option('options_go_loot_xp_levels_growth'));
             wp_localize_script('go_admin_user', 'go_is_options_page', array('is_options_page' => true));
         }
@@ -173,8 +213,9 @@ function go_admin_scripts ($hook) {
             }
         }
 
-        if($hook == 'term.php'){
-            if($_GET['taxonomy'] === 'task_chains'){
+        if($hook == 'term.php' || $hook = 'edit-tags.php'){
+            $taxonomy = (isset($_GET['taxonomy']) ?  $_GET['taxonomy'] : null);
+            if($taxonomy === 'task_chains'){
                 $map_link =go_get_link_from_option('options_go_locations_map_map_link');
                 wp_localize_script( 'go_admin_user', 'map_url', $map_link );
             }

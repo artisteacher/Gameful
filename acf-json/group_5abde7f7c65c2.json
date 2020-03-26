@@ -89,7 +89,9 @@
                                 "class": "select2_child acf-hide-label",
                                 "id": ""
                             },
-                            "taxonomy": "store_types"
+                            "taxonomy": "store_types",
+                            "field_type": "select",
+                            "order_field": "field_5abde7f980cc5"
                         },
                         {
                             "key": "field_5abde7f980cc5",
@@ -583,7 +585,8 @@
                                         "class": "go_badges",
                                         "id": ""
                                     },
-                                    "taxonomy": "go_badges"
+                                    "taxonomy": "go_badges",
+                                    "field_type": "multi_select"
                                 },
                                 {
                                     "key": "field_5b1b1f4210e05",
@@ -606,7 +609,8 @@
                                         "class": "",
                                         "id": ""
                                     },
-                                    "taxonomy": "user_go_groups"
+                                    "taxonomy": "user_go_groups",
+                                    "field_type": "multi_select"
                                 },
                                 {
                                     "key": "field_5b1b1f4210e06",
@@ -1224,6 +1228,69 @@
                     "ui": 1,
                     "ui_on_text": "",
                     "ui_off_text": ""
+                },
+                {
+                    "key": "field_5df0318aece07",
+                    "label": "Custom Button Text",
+                    "name": "custom_button_text",
+                    "type": "group",
+                    "instructions": "Change the default \"Buy\" text (e.g., Claim, Take, Trade, etc.)",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_5df031aaece08",
+                            "label": "Toggle",
+                            "name": "toggle",
+                            "type": "true_false",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "message": "",
+                            "default_value": 0,
+                            "ui": 1,
+                            "ui_on_text": "",
+                            "ui_off_text": ""
+                        },
+                        {
+                            "key": "field_5df03161ece06",
+                            "label": "Custom Button Text",
+                            "name": "button_text",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_5df031aaece08",
+                                        "operator": "==",
+                                        "value": "1"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "40 Character Limit",
+                            "prepend": "",
+                            "append": "",
+                            "maxlength": 40
+                        }
+                    ]
                 }
             ]
         }
@@ -1246,5 +1313,5 @@
     "active": 1,
     "description": "",
     "recaptcha": 0,
-    "modified": 1571540272
+    "modified": 1579390914
 }

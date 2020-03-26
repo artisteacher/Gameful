@@ -41,7 +41,7 @@ function go_test_shortcode( $atts ) {
                 if ($question_type == 'radio') {
                     echo "<li class='go_test go_test_element'><input type='radio' name='go_test_answer_{$question_num}' value='{$answer}'/> {$answer}</li>";
                 }else {
-                    echo "<li class='go_test go_test_element'><input type='checkbox' name='go_test_answer_{$question_num}_{$x}' value='{$answer}'/>{$answer}</li>";
+                    echo "<li class='go_test go_test_element'><input type='checkbox' name='go_test_answer_{$question_num}_{$x}' value='{$answer}'/> {$answer}</li>";
                 }
             }
             echo "</ul>";

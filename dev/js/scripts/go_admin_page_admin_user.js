@@ -36,7 +36,13 @@ jQuery(document).ready(function(){
 
     jQuery('.user-nickname-wrap, .user-url-wrap, .user-display-name-wrap').hide();
 
-
+    jQuery('.acf-icon.-copy').each(function() {
+        if(jQuery(this).closest('#go_attendance_schedules').length) {
+            // code
+        }else{
+            jQuery(this).remove();
+        }
+    });
 
 
 
@@ -71,15 +77,15 @@ function set_height_mce() {
 }
 
 
-
+//REMOVE THIS
 /*
 on the create new taxonomy term page,
 this hides the acf stuff until a parent map is selected
  */
 function go_hide_child_tax_acfs() {
-
+console.log("go_hide_child_tax_acfs");
     if(jQuery('.edit-tags-php.taxonomy-task_chains #parent').length) {
-        jQuery('select option:contains("None")').text('NEW MAP');
+        jQuery('select option:contains("None")').text('Select');
         jQuery('.term-parent-wrap p').html('Select the map for this Map Section (aka: quest chain). If no parent map is selected, then this will be a new map.');
     }
     else if(jQuery('.edit-tags-php.taxonomy-go_badges #parent').length) {

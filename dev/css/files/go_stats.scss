@@ -225,11 +225,15 @@ END TOOLTIP
 	display: flex;
 	flex-wrap: wrap;
 	flex-grow: 1;
+
+	.fig_wrap{
+		height:100px;
+	}
 }
 .go_badge_wrap {
 	display: inline-block;
 	float: left;
-	margin-right: 25px;
+	margin: 15px;
 	height: 150px; 
 }
 
@@ -240,9 +244,16 @@ END TOOLTIP
 	width: 100%;
 }
 
-.go_badge_container,
-.go_group_container{
-	float: left;
+#stats_badges,
+#stats_groups{
+
+	.go_badge_container,
+	.go_group_container {
+		width: 200px;
+		max-width: 200px;
+		display: flex;
+		justify-content: center;
+	}
 }
 
 .go_badge {
@@ -299,12 +310,6 @@ END TOOLTIP
 #go_leaderboard_wrapper thead,
 #go_leaderboard_wrapper .fg-toolbar{
 	/**display: block;*/
-}
-
-#go_leaderboard_wrapper{
-	padding: 40px;
-	max-width: 1200px;
-	margin: auto;
 }
 
 .go_is_user td {

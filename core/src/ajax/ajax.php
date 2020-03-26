@@ -28,7 +28,7 @@ function go_clone_post_new_menu_bar(){
  *
  */
 function go_admin_remove_notification() {
-    if ( ! current_user_can( 'manage_options' ) && !go_user_is_admin() ) {
+    if ( go_user_is_admin() ) {
         die( -1 );
     }
 

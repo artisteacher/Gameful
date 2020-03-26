@@ -1,4 +1,4 @@
-//This file is loaded by a filter in the shortcode.php file.
+//This file is loaded by a filter in the go_mce.php file.
 ( function() {
 
 

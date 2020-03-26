@@ -4,85 +4,206 @@ jQuery( document ).ready( function() {
     console.log("go_feedback is Ready.")
     if (typeof (IsReader) !== 'undefined') {
         //console.log("jQuery is loaded2");
-        go_load_daterangepicker('reader');
+        go_activate_reader();
+    }
+});
 
+function go_activate_reader(is_single_stage = false){
+    go_blog_new_posts();
 
-        go_make_select2_filter('user_go_sections',false, false);
-        go_make_select2_filter('user_go_groups',false, false);
-        go_make_select2_filter('go_badges',false, false);
+    go_make_select2_filter('user_go_sections','reader', true);
+    go_make_select2_filter('user_go_groups','reader', true);
+    go_make_select2_filter('go_badges','reader', true);
 
-        jQuery(".go_reader_input").change(function () {
-            go_activate_apply_filters();//on reader checkbox change
-        });
+    //add task select2
+    go_make_select2_cpt('#go_task_select', 'tasks');
 
+    go_setup_filter_buttons(true);
 
-
-
-        jQuery('#go_task_select, #go_store_item_select').on('select2:select', function (e) {
-            // Do something
-            go_activate_apply_filters();
-        });
-
-        jQuery('.go_reset_clipboard').on("click", function () {
-            jQuery('#datepicker_clipboard span').html("");
-            jQuery('#go_page_user_go_sections_select, #go_page_user_go_groups_select, #go_page_go_badges_select, #go_task_select, #go_store_item_select').val(null).trigger('change');
-            go_activate_apply_filters();
-        });
-
-        go_setup_reset_filter_button(true);
-
-        //add task select2
-        go_make_select2_cpt('#go_task_select', 'tasks');
-
-        //update button--set this table to update
-        jQuery('.go_apply_filters').prop('onclick', null).off('click');//unbind click
-        jQuery('.go_apply_filters').one("click", function () {
+    if(is_single_stage){
+        jQuery('.go_apply_filters').off().one("click", function () {
             go_reader_update();
         });
-
-        //set the datepicker to clear
-        jQuery('#go_datepicker_container').html('<div id="go_datepicker_clipboard"><i class="fas fa-calendar" style="float: left;"></i><span id="go_datepicker"></span> <i id="go_reset_datepicker" class=""select2-selection__clear><b> × </b></i><i class="fa fa-caret-down"></i></div>');
-        //jQuery('#go_datepicker_clipboard span').html('');
-        jQuery('#go_reset_datepicker').hide();
-        jQuery('#go_datepicker_container').one("click", function () {
-            //console.log("hi there one");
-            go_load_daterangepicker('clear');
-            jQuery('#go_reset_datepicker').show();
-            go_daterange_clear();
-            go_activate_apply_filters();//datapicker
-        });
-
-        jQuery('.summernote').summernote({
-            toolbar: [
-                // [groupName, [list of button]]
-                ['style', ['bold', 'italic', 'underline', 'clear']],
-                //['font', ['strikethrough', 'superscript', 'subscript']],
-                ['fontsize', ['fontsize']],
-                // ['color', ['color']],
-                ['para', ['ul', 'ol', 'paragraph']],
-                //['height', ['height']]
-                ['insert', ['link']],
-            ]
+    }
+    else {
+        jQuery('.go_apply_filters').off().one("click", function () {
+            go_reader_update();
         });
     }
 
-    //these buttons can appear on the reader, blog, task, or anywhere else blog posts appear
-    //so run this on every page
-    go_reader_activate_buttons();
+    go_load_daterangepicker('go_activate_reader');
+    //set the datepicker to clear
+    jQuery('#go_datepicker_container').html('<div id="go_datepicker_clipboard"><i class="fas fa-calendar" style="float: left;"></i><span id="go_datepicker"></span> <i id="go_reset_datepicker" class=""select2-selection__clear><b> × </b></i><i class="fa fa-caret-down"></i></div>');
+    //jQuery('#go_datepicker_clipboard span').html('');
+    jQuery('#go_reset_datepicker').hide();
+
+    jQuery('#go_datepicker_container').one("click", function () {
+        //console.log("hi there one");
+        go_load_daterangepicker('go_activate_reader');
+        jQuery('#go_reset_datepicker').show();
+        go_daterange_clear();
+        go_highlight_apply_filters();//datapicker
+    });
+
+    jQuery("#go_num_posts, #go_cards_toggle").off().change(function() {
+        go_num_posts();
+    });
+
+    jQuery("#go_show_all_feed").off().change(function() {
+        go_reader_update();
+    });
+}
+
+function go_reader_update(target, is_initial_single_stage = false) {
+    console.log("go_reader_update");
+    console.log(target);
+    jQuery('.go_apply_filters').removeClass("bluepulse");
+
+    var user_id = jQuery("#go_leaderboard_filters").data('user_id');
+    var type = jQuery("#go_leaderboard_filters").data('type');
+    //this can be coming from the reader, blog, quest_stage, or social feed (leaderboard)
+    //for all types send the data needed for this type
+    console.log("Get task ID");
+    if(typeof jQuery(target).data('post_id') !== 'undefined') { //this was from a single quest or stage button
+        console.log("Get task ID1");
+        var tasks = jQuery(target).data('post_id');//there was a post id on the button data (single quest stage)
+        var stage = jQuery(target).data('stage');
+    }
+    else{
+        console.log("Get task ID2");
+        var tasks = jQuery("#go_task_select").val();//the post id on the filter
+        var stage = jQuery("#go_leaderboard_filters").data('stage');
+        go_save_filters('reader');
+    }
 
 
-});
+    jQuery('.go_apply_filters').html('<span class="ui-button-text">Refresh Data <span class="dashicons dashicons-update" style="vertical-align: center;"></span></span>');
 
+    var date = jQuery('#go_datepicker_clipboard span').html();
+
+    var published  = jQuery('#go_reader_published').prop('checked');
+    var unread  = jQuery('#go_reader_unread').prop('checked');
+    var read    = jQuery('#go_reader_read').prop('checked');
+    var reset   = jQuery('#go_reader_reset').prop('checked');
+    var trash   = jQuery('#go_reader_trash').prop('checked');
+    var draft   = jQuery('#go_reader_draft').prop('checked');
+    var order   = jQuery("input[name='go_reader_order']:checked").val();
+    /*console.log("order:"+order);
+    if (typeof order == 'undefined') {
+        order = "DESC";
+    }*/
+    var limit = jQuery('#go_num_posts').val();
+
+    if(is_initial_single_stage){
+        var section = localStorage.getItem('user_go_sections');
+        var group = localStorage.getItem('user_go_groups');
+        var badge = localStorage.getItem('go_badges');
+    }
+    else {
+        var section = jQuery('#go_reader_user_go_sections_select').val();
+        var group = jQuery('#go_reader_user_go_groups_select').val();
+        var badge = jQuery('#go_reader_go_badges_select').val();
+    }
+
+
+    var current_tab = jQuery("#social_tabs").find("[aria-selected='true']").attr('aria-controls');
+    var show_all = jQuery('#go_show_all_feed').is(':checked');
+
+    var nonce = GO_FRONTEND_DATA.nonces.go_filter_reader;
+    var loader_html = go_loader_html('big');
+    jQuery('#go_posts_wrapper').html(loader_html);
+    jQuery.ajax({
+        url: MyAjax.ajaxurl,
+        type: 'GET',
+        data: {
+            _ajax_nonce: nonce,
+            is_frontend: is_frontend,
+            action: 'go_filter_reader',
+            date: date,
+            section: section,
+            group: group,
+            badge: badge,
+            post_id: tasks,
+            unread: unread,
+            published: published,
+            read: read,
+            reset: reset,
+            trash: trash,
+            draft: draft,
+            order: order,
+            limit: limit,
+            //is_single_stage: is_single_stage,
+            is_initial_single_stage: is_initial_single_stage,
+            stage: stage,
+            current_tab: current_tab,
+            show_all: show_all,
+            type: type,
+            user_id: user_id
+        },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
+        success: function( res ) {
+            go_after_ajax();
+            let error = go_ajax_error_checker(res);
+            if (error == 'true') return;
+
+            //console.log("success: " + res);
+            if (-1 !== res) {
+                console.log("success");
+                if (is_initial_single_stage) {
+                    jQuery.featherlight(res,
+                        {
+                            variant: 'go_quest_reader_lightbox',
+                            afterContent: function () {
+                                go_activate_reader(true);
+                            }
+                        });
+                }else {
+
+                    jQuery('#go_posts_wrapper').html(res).promise().done(function () {
+                        //your callback logic / code here
+                        jQuery('#go_posts_wrapper').show();
+                        go_blog_new_posts();
+
+                        if(type === "quest_stage"){
+                            jQuery('.go_apply_filters').off().one("click", function () {
+                                go_reader_update();
+                            });
+                        }
+                        else {
+                            jQuery('.go_apply_filters').off().one("click", function () {
+                                go_reader_update();
+                            });
+                        }
+
+                        jQuery([document.documentElement, document.body]).animate({
+                            scrollTop: ((jQuery("#go_posts_wrapper").offset().top) -150)
+                        }, 500);
+                    });
+                }
+            }
+        }
+    });
+}
+
+//gets blog post revision and places in a lightbox with restore button
 function go_blog_revision(target){
     console.log('function go_blog_revision');
     let post_id = jQuery(target).attr('blog_post_id');
-    let current_post_id = jQuery(target).closest('.go_blog_post_wrapper').data('postid');
     let nonce = GO_EVERY_PAGE_DATA.nonces.go_blog_revision;
     jQuery.ajax({
         url: MyAjax.ajaxurl,
         type: 'post',
         data: {
             _ajax_nonce: nonce,
+            is_frontend: is_frontend,
             action: 'go_blog_revision',
             post_id: post_id
         },
@@ -91,324 +212,184 @@ function go_blog_revision(target){
          * Assumes they are not logged in and shows the login message in lightbox
          */
         error: function(jqXHR, textStatus, errorThrown) {
-            jQuery('#loader_container').hide();
-            jQuery('#go_posts_wrapper').show();
+            jQuery('#loader_container').remove();
+            //jQuery('#go_posts_wrapper').show();
             if (jqXHR.status === 400){
                 jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
             }
-            jQuery(target).one("click", function () {
+            jQuery(target).off().one("click", function () {
                 go_blog_revision(this);
             });
         },
         success: function( res ) {
+            go_after_ajax();
+            jQuery(target).off().one("click", function () {
+                go_blog_revision(this);
+            });
             //console.log("success: " + res);
             let error = go_ajax_error_checker(res);
             if (error == 'true') return;
 
             if (-1 !== res) {
-                console.log('success');
-                console.log(res);
+                //console.log('success');
+                //console.log(res);
                 jQuery.featherlight(res, {afterContent: function(){
-                        jQuery('.go_restore_revision').one("click", function () {
-                            go_restore_revision(this);
-                        });
-                    }});
-
-                jQuery(target).one("click", function () {
-                    go_blog_revision(this);
-                });
-
+                    jQuery('.go_restore_revision').off().one("click", function () {
+                        go_restore_revision(this);
+                    });
+                    go_blog_new_posts();
+                }});
             }
         }
     });
-
-
 }
 
+//restores previous revision or autosave
+//can load form or post as needed
 function go_restore_revision(target){
     console.log('function go_restore_revision');
+    go_enable_loading( target );
+    let lightbox = false;
     let post_id = jQuery(target).data('post_id');
     let parent_id = jQuery(target).data('parent_id');
+    let autosave = jQuery(target).data('autosave');
+    let load_current = jQuery(target).data('load_current');
     let nonce = GO_EVERY_PAGE_DATA.nonces.go_restore_revision;
+    if (jQuery(target).parents('.featherlight-content').length) {
+        lightbox = true;
+    }
+    let form = jQuery(target).data('form');
+
+
+    console.log("load_current"+load_current);
+
     jQuery.ajax({
         url: MyAjax.ajaxurl,
         type: 'post',
         data: {
             _ajax_nonce: nonce,
+            is_frontend: is_frontend,
             action: 'go_restore_revision',
             post_id: post_id,
-            parent_id: parent_id
+            parent_id: parent_id,
+            autosave: autosave,
+            lightbox: lightbox,
+            form: form,
+            load_current: load_current,
+
         },
         /**
          * A function to be called if the request fails.
          * Assumes they are not logged in and shows the login message in lightbox
          */
         error: function(jqXHR, textStatus, errorThrown) {
-            jQuery('#loader_container').hide();
-            jQuery('#go_posts_wrapper').show();
+            jQuery('#loader_container').remove();
+            //jQuery('#go_posts_wrapper').show();
             if (jqXHR.status === 400){
                 jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
             }
-            jQuery(target).one("click", function () {
+            jQuery(target).off().one("click", function () {
                 go_blog_revision(this);
             });
         },
         success: function( res ) {
-            console.log("success:" + res);
+            go_after_ajax();
+            //console.log("success:" + res);
             let error = go_ajax_error_checker(res);
             if (error == 'true') return;
 
             if (-1 !== res) {
-                console.log('res');
+                //console.log('res');
                 //close featherlight
                 //get the container for previous target and replace it with the result
-                let container = '.go_blog_post_wrapper_' + parent_id;
-                //jQuery(container).hide();
-                jQuery(container).replaceWith(res);
-                go_reader_activate_buttons();
-                jQuery.featherlight.close();
-
-
-                swal.fire({//sw2 OK
-                        text: "Your previous revision has been restored.",
-                        type: 'success'
+                if(form){
+                    if(load_current == true){
+                        var wrapper = '.go_check_autosave_' + post_id;
                     }
-                );
+                    else {
+                        var wrapper = '.go_check_autosave_' + parent_id;
+                    }
+                }
+                else {
+                    var wrapper = '.go_blog_post_wrapper_' + parent_id;
+                    jQuery.featherlight.close();
+                }
+                console.log('wrap'+wrapper);
+                //jQuery(container).hide();
+                jQuery(wrapper).replaceWith(res);
 
+                if(form == "true"){
+                    go_blog_after_ajax();
+                    go_activate_tinymce_on_task_change_stage('go_blog_post');
+                }else {
+                    go_blog_new_posts();
+                }
 
+                jQuery('#go_buttons').show();
+                if(load_current != true) {
+                    swal.fire({//sw2 OK
+                            text: "Your previous revision has been restored.",
+                            type: 'success'
+                        }
+                    );
+                }
             }
         }
     });
-
-
 }
 
-function go_reader_update() {
-    //console.log("update reader");
-    //document.getElementById("loader_container").style.display = "block";
-    jQuery('#loader_container').show();
-    jQuery('#go_posts_wrapper').hide();
-    //if(!first) {
-    //    go_save_clipboard_filters();
-    //}
-    jQuery('.go_apply_filters').removeClass("bluepulse");
-    jQuery('.go_apply_filters').html('<span class="ui-button-text">Refresh Data <span class="dashicons dashicons-update" style="vertical-align: center;"></span></span>');
-    jQuery('.go_apply_filters').prop('onclick',null).off('click');//unbind click
-    jQuery('.go_apply_filters').one("click", function () {
-        go_reader_update();
-    });
-
-    var date = jQuery('#go_datepicker_clipboard span').html();
-    var section = jQuery('#go_page_user_go_sections_select').val();
-    var group = jQuery('#go_page_user_go_groups_select').val();
-    var badge = jQuery('#go_page_go_badges_select').val();
-    var tasks = jQuery("#go_task_select").val();
-    var unread = jQuery('#go_reader_unread').prop('checked');
-    var read = jQuery('#go_reader_read').prop('checked');
-    var reset = jQuery('#go_reader_reset').prop('checked');
-    var trash = jQuery('#go_reader_trash').prop('checked');
-    var draft = jQuery('#go_reader_draft').prop('checked');
-    var order = jQuery("input[name='go_reader_order']:checked").val();
-    var limit = jQuery('#go_num_posts').val();
-
-
-
-    //var limit = 25;
-
-    console.log("limit:" + limit);
-
-    var nonce = GO_FRONTEND_DATA.nonces.go_filter_reader;
-    //console.log("refresh" + nonce);
-    //console.log("stats");
-    jQuery.ajax({
-        url: MyAjax.ajaxurl,
-        type: 'GET',
-        data: {
-            _ajax_nonce: nonce,
-            action: 'go_filter_reader',
-            date: date,
-            section: section,
-            group: group,
-            badge: badge,
-            tasks: tasks,
-            unread: unread,
-            read: read,
-            reset: reset,
-            trash: trash,
-            draft: draft,
-            order: order,
-            limit: limit
-        },
-        /**
-         * A function to be called if the request fails.
-         * Assumes they are not logged in and shows the login message in lightbox
-         */
-        error: function(jqXHR, textStatus, errorThrown) {
-            jQuery('#loader_container').hide();
-            jQuery('#go_posts_wrapper').show();
-            if (jqXHR.status === 400){
-                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
-            }
-        },
-        success: function( res ) {
-            let error = go_ajax_error_checker(res);
-            if (error == 'true') return;
-
-            //console.log("success: " + res);
-            if (-1 !== res) {
-
-                jQuery('#loader_container').hide();
-                jQuery('#go_posts_wrapper').html(res).promise().done(function(){
-                    //your callback logic / code here
-                    jQuery('#go_posts_wrapper').show();
-                    go_reader_activate_buttons();
-                    go_loadmore_reader();
-                });
-
-
-                go_Vids_Fit_and_Box("body");
-                //document.getElementById("loader_container").style.display = "none";
-
-
-
-            }
-        }
-    });
-
-
-}
-
-function go_reader_activate_buttons(){
-    console.log("go_reader_activate_buttons");
-
-    jQuery(".go_blog_opener").off().one("click", function(e){
-        go_blog_opener( this );
-    });
-
-    jQuery('#go_read_printed_button').off().on("click", function () {
-        console.log("clicked");
-        go_reader_read_printed();
-    });
-
-    jQuery('input[type=radio][name=loot_option]').on('change', function() {
-        switch (jQuery(this).val()) {
-            case 'none':
-                jQuery(this).closest('.messages_form').find('.go_feedback_assign_loot').hide();
-                jQuery(this).closest('.messages_form').find('.go_feedback_percent_loot').hide();
-                break;
-            case 'percent':
-                jQuery(this).closest('.messages_form').find('.go_feedback_assign_loot').hide();
-                jQuery(this).closest('.messages_form').find('.go_feedback_percent_loot').show();
-                break;
-            case 'assign':
-                jQuery(this).closest('.messages_form').find('.go_feedback_assign_loot').show();
-                jQuery(this).closest('.messages_form').find('.go_feedback_percent_loot').hide();
-                break;
-        }
-    });
-
-    jQuery('.go_blog_revision').one("click", function () {
-        go_blog_revision(this);
-    });
-
-    jQuery(".go_blog_favorite").off().click(function() {
-        go_blog_favorite(this);
-    });
-
-    jQuery(".go_blog_trash").off().one("click", function (e) {
-        go_blog_trash(this);
-    });
-
-    jQuery(".go_reset_task_stage_blog").off().one("click", function(){
-        go_messages_opener( this.getAttribute('data-uid'), this.getAttribute('data-task'), 'reset_stage', this );
-    });
-
-    go_activate_tippy();
-
-    jQuery("#go_mark_all_read").off().one("click", function(){
-        go_reader_bulk_read(this);
-
-    });
-
-    jQuery(".go_status_read_toggle").off().one("click", function(){
-        go_mark_one_read_toggle(this);
-    });
-
-    jQuery( ".feedback_accordion" ).accordion({
-        collapsible: true,
-        active: false,
-        heightStyle: "content"
-    });
-
-    jQuery("#go_num_posts").off().change(function() {
-        go_num_posts();
-    });
-
-    jQuery(".go_send_feedback").off().one("click", function(){
-        go_send_feedback(this);
-    });
-
-
-    jQuery('.go-acf-switch').off().click(function () {
-        console.log("click");
-        if (jQuery(this).hasClass('-on') == false) {
-            jQuery(this).prev('input').prop('checked', true);
-            jQuery(this).addClass('-on');
-            jQuery(this).removeClass('-off');
-        } else {
-            jQuery(this).prev('input').prop('checked', false);
-            jQuery(this).removeClass('-on');
-            jQuery(this).addClass('-off');
-        }
-    });
-
-    jQuery(".go_feedback_canned").off().on('change', function (e) {
-        var optionSelected = jQuery("option:selected", this);
-        go_feedback_canned(optionSelected);
-    });
-
-    jQuery('.feedback_accordion').show('slow');
-
-    go_stats_links();
-}
-
+//used by the view with cards toggle as well as the change count
 function go_num_posts(){
-    jQuery('#loader_container').show();
-    jQuery('#go_posts_wrapper').hide();
-    //console.log("go_num_posts");
 
     const limit = jQuery('#go_num_posts').val();
     const query = jQuery('#go_num_posts').data('query');
     const where = jQuery('#go_num_posts').data('where');
     const order = jQuery('#go_num_posts').data('order');
+
+    const cards = jQuery('#go_cards_toggle').is(':checked');
+    jQuery('#go_cards_toggle_wrapper').hide();
+
     //const tQuery = jQuery('#go_num_posts').data('tQuery');
     const nonce = GO_FRONTEND_DATA.nonces.go_num_posts;
+
+    var loader_html = go_loader_html('big');
+    jQuery('#go_posts_wrapper').html(loader_html);
+
+    var current_tab = jQuery("#social_tabs").find("[aria-selected='true']").attr('aria-controls');
+    var show_all = jQuery('#go_show_all_feed').is(':checked');
 
     jQuery.ajax({
         url: MyAjax.ajaxurl,
         type: 'GET',
         data: {
             _ajax_nonce: nonce,
+            is_frontend: is_frontend,
             action: 'go_num_posts',
-            query: query,
             query: query,
             where: where,
             order: order,
             //tQuery: tQuery,
-            limit: limit
+            limit: limit,
+            cards: cards,
+            current_tab: current_tab,
+            show_all: show_all,
         },
         /**
          * A function to be called if the request fails.
          * Assumes they are not logged in and shows the login message in lightbox
          */
         error: function(jqXHR, textStatus, errorThrown) {
-            jQuery('#loader_container').hide();
-            jQuery('#go_posts_wrapper').show();
+            jQuery('#loader_container').remove();
+            //jQuery('#go_posts_wrapper').show();
             if (jqXHR.status === 400){
                 jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
             }
+            jQuery('#go_cards_toggle_wrapper').show();
         },
         success: function( res ) {
+            go_after_ajax();
+
+
             let error = go_ajax_error_checker(res);
             if (error == 'true') return;
 
@@ -416,48 +397,46 @@ function go_num_posts(){
             if (-1 !== res) {
                 jQuery('#go_posts_wrapper').html(res).promise().done(function(){
                     //your callback logic / code here
-                    jQuery('#loader_container').hide();
                     jQuery('#go_posts_wrapper').show("fast", function(){
-                        go_reader_activate_buttons();
-                        go_loadmore_reader();
+                        go_blog_new_posts();
                     });
-                });;
-
-
-
-                //document.getElementById("loader_container").style.display = "none";
-
+                });
             }
-
+            jQuery('#go_cards_toggle_wrapper').show();
         }
     });
 
 }
 
+
+//Maybe remove this
+//and remove the info attache to go_num_posts
+//mark all that match the filter as read
+/*
 function go_reader_bulk_read(target){
+    console.log("go_reader_bulk_read");
     var nonce = GO_FRONTEND_DATA.nonces.go_reader_bulk_read;
 
     const query = jQuery('#go_num_posts').data('query');
     const where = jQuery('#go_num_posts').data('where');
     const order = jQuery('#go_num_posts').data('order');
-    //jQuery(target).parent().append("<i class='fas fa-spinner fa-pulse'></i>");
-    jQuery('#loader_container').show();
-    //console.log("refresh" + nonce);
-    //console.log("stats");
+
+
+    var loader_html = go_loader_html('big');
+    jQuery('#go_posts_wrapper').html(loader_html);
+
     jQuery.ajax({
         url: MyAjax.ajaxurl,
         type: 'post',
         data: {
             _ajax_nonce: nonce,
+            is_frontend: is_frontend,
             action: 'go_reader_bulk_read',
             query: query,
             where: where,
             order: order
         },
-        /**
-         * A function to be called if the request fails.
-         * Assumes they are not logged in and shows the login message in lightbox
-         */
+
         error: function(jqXHR, textStatus, errorThrown) {
             if (jqXHR.status === 400){
                 jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
@@ -470,8 +449,10 @@ function go_reader_bulk_read(target){
             go_reader_update();
         }
     });
-}
+}*/
 
+//mark all on the page as read
+//MAYBE DELETE
 function go_reader_read_printed(){
     console.log('go_reader_read_printed');
     var nonce = GO_FRONTEND_DATA.nonces.go_reader_read_printed;
@@ -488,6 +469,7 @@ function go_reader_read_printed(){
         type: 'post',
         data: {
             _ajax_nonce: nonce,
+            is_frontend: is_frontend,
             action: 'go_reader_read_printed',
             //query: query,
             postids: postids
@@ -522,6 +504,7 @@ function go_mark_one_read_toggle(target){
         type: 'post',
         data: {
             _ajax_nonce: nonce,
+            is_frontend: is_frontend,
             action: 'go_mark_one_read_toggle',
             postid: postid
         },
@@ -550,12 +533,12 @@ function go_mark_one_read_toggle(target){
                     go_mark_one_read_toggle(this);
                 });
                 if (res === 'read') {
-                    console.log(target);
-                    jQuery(target).find('.fa-eye-slash').hide();
-                    jQuery(target).find('.fa-eye').show();
+                    jQuery('.go_blog_post_wrapper_' + postid).find('.fa-eye-slash').hide();
+                    jQuery('.go_blog_post_wrapper_' + postid).find('.fa-eye').show();
                 } else if (res === 'unread') {
-                    jQuery(target).find('.fa-eye-slash').show();
-                    jQuery(target).find('.fa-eye').hide();
+
+                    jQuery('.go_blog_post_wrapper_' + postid).find('.fa-eye-slash').show();
+                    jQuery('.go_blog_post_wrapper_' + postid).find('.fa-eye').hide();
                 }
             }
         }
@@ -575,22 +558,32 @@ function go_feedback_canned(target){
     const health = jQuery(target).data('health');
     const toggle_percent = jQuery(target).data('toggle_percent');
     const percent = jQuery(target).data('percent');
+    const post_id = jQuery(target).closest('.go_blog_post_wrapper').data('postid');
     console.log(title);
     console.log(message);
     console.log(radio);
-    console.log(percent);
+    console.log(toggle_percent);
+    console.log(toggle_assign);
 
     jQuery(target).closest('.go_feedback_form').find('.go_title_input').val(title);
     //jQuery(target).closest('.go_feedback_form').find('.go_message_input').html($message);
-    jQuery(target).closest('.go_feedback_form').find('.go_message_input').val(message);//the val of th text area
-    jQuery(target).closest('.go_feedback_form').find('.note-editable').html(message);//the display in the WYSIWYG
+
+    tinyMCE.get('go_feedback_text_area_id_'+post_id).setContent(message);
+
+
+
+    //summernote
+    //jQuery(target).closest('.go_feedback_form').find('.go_message_input').val(message);//the val of th text area
+    //jQuery(target).closest('.go_feedback_form').find('.note-editable').html(message);//the display in the WYSIWYG
+
+    //jQuery(target).trigger('click');
 
 
 
     ///////////
     if (radio == 'percent') {
-        jQuery(target).closest('.go_feedback_form').find('.loot_option_percent').trigger("click");
-        //jQuery(target).closest('.go_feedback_form').find('.loot_option_percent').prop("checked", true);
+        jQuery(target).closest('.go_feedback_form').find('.loot_option_percent').trigger("change");
+        jQuery(target).closest('.go_feedback_form').find('.loot_option_percent').prop("checked", true);
 
         jQuery(target).closest('.go_feedback_form').find('.go_toggle_input').val(toggle_percent);
         if (toggle_percent){
@@ -601,9 +594,14 @@ function go_feedback_canned(target){
         jQuery(target).closest('.go_feedback_form').find('.go_percent_input').val(percent);
     }
     else if (radio == 'assign') {
-        //jQuery(target).closest('.go_feedback_form').find('.loot_option_assign').prop("checked", true);
-        jQuery(target).closest('.go_feedback_form').find('.loot_option_assign').trigger("click");
+        jQuery(target).closest('.go_feedback_form').find('.loot_option_assign').prop("checked", true);
+        jQuery(target).closest('.go_feedback_form').find('.loot_option_assign').trigger("change");
 
+        if (toggle_assign){
+            jQuery(target).closest('.go_feedback_form').find('.go-acf-switch').addClass('-on').removeClass('-off');
+        }else{
+            jQuery(target).closest('.go_feedback_form').find('.go-acf-switch').addClass('-off').removeClass('-on');
+        }
         jQuery(target).closest('.go_feedback_form').find('.go_messages_toggle_input').val(toggle_assign);
         jQuery(target).closest('.go_feedback_form').find('.go_messages_xp_input').val(xp);
         jQuery(target).closest('.go_feedback_form').find('.go_messages_gold_input').val(gold);
@@ -619,8 +617,13 @@ function go_send_feedback(target) {
     console.log('go_send_feedback');
     console.log(target);
     var title = jQuery(target).closest('.go_feedback_input').find('.go_title_input').val();
-
-    var message = jQuery(target).closest('.go_feedback_input').find('.go_message_input').val();
+    const post_id = jQuery(target).data('postid');
+    //var message = jQuery(target).closest('.go_feedback_input').find('.go_message_input').val();
+    //var post_id = jQuery(target).closest('.go_blog_post_wrapper').data('postid');
+    console.log("postid: "+post_id);
+    var message_id = 'go_feedback_text_area_id_'+ post_id;
+    console.log("message_id: "+message_id);
+    var message = go_tmce_getContent(message_id);
     // var radio =  jQuery('input[type=radio][name=loot_option]').val();
     var radio = jQuery(target).closest('.go_feedback_input').find('input[name=loot_option]:checked').val();
     var toggle_assign = (jQuery(target).closest('.go_feedback_input').find('.go_messages_toggle_input').siblings().hasClass("-on")) ? 1 : 0;
@@ -629,11 +632,12 @@ function go_send_feedback(target) {
     var health = jQuery(target).closest('.go_feedback_input').find('.go_messages_health_input').val();
     var toggle_percent = (jQuery(target).closest('.go_feedback_input').find('.go_feedback_toggle').siblings().hasClass("-on")) ? 1 : 0;
     var percent = jQuery(target).closest('.go_feedback_input').find('.feedback_percent_input').val();
-    const post_id = jQuery(target).data('postid');
+
 
     // send data
     var nonce = GO_EVERY_PAGE_DATA.nonces.go_send_feedback;
     var gotoSend = {
+        is_frontend: is_frontend,
         action:"go_send_feedback",
         _ajax_nonce: nonce,
         title: title,
@@ -663,8 +667,8 @@ function go_send_feedback(target) {
             }
         },
         success: function( res ) {
-            console.log('success_test');
-            console.log(res);
+            //console.log('success_test');
+            //console.log(res);
 
             let error = go_ajax_error_checker(res);
             if (error == 'true') return;
@@ -682,8 +686,9 @@ function go_send_feedback(target) {
            ;console.log(response.json_status);
             if ( 302 === Number.parseInt( response.json_status ) ) {
                 console.log (302);
-                jQuery(target).closest('.go_blog_post_wrapper').find('.fa-eye-slash').hide();
-                jQuery(target).closest('.go_blog_post_wrapper').find('.fa-eye').show();
+                jQuery('.go_blog_post_wrapper_' + post_id).find('.fa-eye-slash').hide();
+                jQuery('.go_blog_post_wrapper_' + post_id).find('.fa-eye').show();
+
                 let table = response.table;
                 let form = response.form;
                 console.log(toggle_percent);
@@ -708,7 +713,7 @@ function go_send_feedback(target) {
                     jQuery('.feedback_accordion').accordion("refresh");
                     jQuery(target).closest('.feedback_accordion').find('.go_feedback_table_container').html(table);
                 }
-                jQuery(target).closest('.go_feedback_form_container').html(form).find('.summernote').summernote({
+                /*jQuery(target).closest('.go_feedback_form_container').html(form).find('.summernote').summernote({
                     toolbar: [
                         // [groupName, [list of button]]
                         ['style', ['bold', 'italic', 'underline', 'clear']],
@@ -719,10 +724,74 @@ function go_send_feedback(target) {
                         //['height', ['height']]
                         ['insert', ['link']],
                     ]
+                });*/
+
+                var fullId = 'go_feedback_text_area_id_'+post_id;
+                var plugins = "charmap,hr,lists,media,paste,tabfocus,textcolor,fullscreen,wordpress,wpeditimage,wpgallery,wplink,wpdialogs,wpview,wordcount,go_shortcode_button,go_admin_comment";
+
+                var toolbar1 = "formatselect,bold,italic,bullist,numlist,blockquote,alignleft,aligncenter,alignright,link,spellchecker,go_shortcode_button,,fullscreen";
+                var toolbar2 = '';
+                tinymce.init({
+                    selector: fullId,
+                    branding: false,
+                    theme: "modern",
+                    skin: "lightgray",
+                    language: "en",
+                    formats: {
+                        alignleft: [
+                            {selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li', styles: {textAlign: 'left'}},
+                            {selector: 'img,table,dl.wp-caption', classes: 'alignleft'}
+                        ],
+                        aligncenter: [
+                            {selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li', styles: {textAlign: 'center'}},
+                            {selector: 'img,table,dl.wp-caption', classes: 'aligncenter'}
+                        ],
+                        alignright: [
+                            {selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li', styles: {textAlign: 'right'}},
+                            {selector: 'img,table,dl.wp-caption', classes: 'alignright'}
+                        ],
+                        strikethrough: {inline: 'del'}
+                    },
+                    relative_urls: false,
+                    remove_script_host: false,
+                    convert_urls: false,
+                    browser_spellcheck: true,
+                    fix_list_elements: true,
+                    entities: "38,amp,60,lt,62,gt",
+                    entity_encoding: "raw",
+                    keep_styles: false,
+                    paste_webkit_styles: "font-weight font-style color",
+                    preview_styles: "font-family font-size font-weight font-style text-decoration text-transform",
+                    wpeditimage_disable_captions: false,
+                    wpeditimage_html5_captions: true,
+                    plugins: plugins,
+                    selector: "#" + fullId,
+                    resize: "vertical",
+                    menubar: false,
+                    wpautop: true,
+                    wordpress_adv_hidden: false,
+                    indent: false,
+                    toolbar1: toolbar1,
+                    toolbar2: toolbar2,
+                    toolbar3: "",
+                    toolbar4: "",
+                    tabfocus_elements: ":prev,:next",
+                    body_class: "id post-type-post post-status-publish post-format-standard",
+                    height: "150",
                 });
 
+                // this is needed for the editor to initiate
+                tinyMCE.execCommand('mceAddEditor', false, fullId);
 
-                go_reader_activate_buttons();
+                jQuery(target).closest('.go_feedback_form').find('.go_title_input').val('');
+                //jQuery(target).closest('.go_feedback_form').find('.go_message_input').html($message);
+
+                tinyMCE.get('go_feedback_text_area_id_'+post_id).setContent('');
+
+
+                go_blog_new_posts();
+
+
             }
 
 
@@ -737,9 +806,51 @@ function go_send_feedback(target) {
                     timer: 1500
                 }
             );
+        }
+    });
+}
 
+function go_get_likes_list(target){
+    console.log("go_get_likes_list");
 
-
+    console.log("go_get_likes_list");
+    var user_id = jQuery(target).data('user_id');
+    var post_id = jQuery(target).data('post_id');
+    var nonce = GO_EVERY_PAGE_DATA.nonces.go_get_likes_list;
+    jQuery.ajax({
+        type: 'post',
+        url: MyAjax.ajaxurl,
+        data: {
+            _ajax_nonce: nonce,
+            is_frontend: is_frontend,
+            action: 'go_get_likes_list',
+            user_id: user_id,
+            post_id: post_id
+        },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
+        success: function (res) {
+            go_after_ajax();
+            jQuery(".go_show_likes_list").off().one("click", function(e){
+                go_get_likes_list(this);
+                //go_blog_new_posts();
+            });
+            console.log(res);
+            if (-1 !== res) {
+                jQuery.featherlight(res,
+                    {
+                        variant: 'go_get_likes_list',
+                        afterContent: function () {
+                        }
+                    });
+            }
         }
     });
 }

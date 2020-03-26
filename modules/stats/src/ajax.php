@@ -30,7 +30,7 @@ function go_stats_lightbox() {
     $about_me_is_public = get_option( 'options_about_me_public' );
 
     $current_user_id = get_current_user_id();
-    $is_admin = go_user_is_admin($current_user_id);
+    $is_admin = go_user_is_admin();
     $is_current_user = false;
     if($current_user_id === $user_id){
         $is_current_user = true;
@@ -158,7 +158,7 @@ function go_stats_lightbox() {
     die();
 }
 
-function go_loot_headers($totals = null){
+function go_loot_headers($totals = null, $terms = true){
     $xp_abbr = get_option( "options_go_loot_xp_abbreviation" );
     //$gold_abbr = get_option( "options_go_loot_gold_abbreviation" );
     $gold_abbr = go_get_loot_short_name('gold');
@@ -197,16 +197,18 @@ function go_loot_headers($totals = null){
         <th class='header'><?php echo "$total" . "$health_abbr"; ?></th>
         <?php
     }
-    if ($badges_toggle && !$totals) {
-        ?>
-        <th class='header'><?php echo "$badges_name"; ?></th>
-        <?php
-    }
+    if($terms) {
+        if ($badges_toggle && !$totals) {
+            ?>
+            <th class='header'><?php echo "$badges_name"; ?></th>
+            <?php
+        }
 
-    if ($groups_toggle && !$totals) {
-        ?>
-        <th class='header'><?php echo "$groups_name"; ?></th>
-        <?php
+        if ($groups_toggle && !$totals) {
+            ?>
+            <th class='header'><?php echo "$groups_name"; ?></th>
+            <?php
+        }
     }
 }
 
@@ -234,7 +236,10 @@ function go_stats_about($user_id, $not_ajax = false) {
 
     echo "<div id='go_stats_about' class='go_datatables'>";
     $about_me_quest = get_option( 'options_about_me_quest' );
-    go_blog_user_task(true, $user_id, $about_me_quest);
+
+    go_blog_user_task(false, $user_id, $about_me_quest);
+
+    //go_blog_post($about_me_quest)
 
     echo "</div>";
 
@@ -255,7 +260,7 @@ function go_stats_task_list($skip_ajax_checks = false) {
         }
     }
     $current_user = get_current_user_id();
-    $is_admin = go_user_is_admin($current_user);
+    $is_admin = go_user_is_admin();
 
     echo "<div id='go_task_list' class='go_datatables'><table id='go_tasks_datatable' class='pretty display'>
                    <thead>
@@ -309,7 +314,7 @@ function go_tasks_dataloader_ajax(){
     $sIndexColumn = "id";
     $sTable = $go_task_table_name;
     $current_user = get_current_user_id();
-    $is_admin = go_user_is_admin($current_user);
+    $is_admin = go_user_is_admin();
 
 
     $sLimit = '';
@@ -455,7 +460,7 @@ function go_tasks_dataloader_ajax(){
             $row[] = "{$status} / {$total_stages}";
         }
         $row[] = "{$bonus_status}";
-        $row[] = '<a href="javascript:;" class="go_blog_user_task" data-UserId="'.$user_id.'" onclick="go_blog_user_task('.$user_id.', '.$post_id.');"><i style="padding: 0px 10px;" class="fas fa-search" aria-hidden="true"></i></a>';//actions
+        $row[] = '<a href="javascript:;" class="go_blog_user_task" data-user_id="'.$user_id.'" data-post_id="'.$post_id.'" ><i style="padding: 0px 10px;" class="fas fa-search" aria-hidden="true"></i></a>';//actions
 
         $row[] = " <a href='javascript:;' class='go_stats_body_activity_single_task' data-postID='{$post_id}' onclick='go_stats_single_task_activity_list({$post_id});'><i style=\"padding: 0px 10px;\" class=\"fas fa-table\" aria-hidden=\"true\"></i></a>";
 
@@ -918,7 +923,11 @@ function go_messages_dataloader_ajax(){
 
     $user_id = $_GET['user_id'];
 
-    $sWhere = "WHERE uid = ".$user_id . " AND (action_type = 'message' OR action_type = 'reset') ";
+    $is_admin = go_user_is_admin();
+    if($is_admin){
+        $include_notes = "OR action_type = 'note'";
+    }
+    $sWhere = "WHERE uid = ".$user_id . " AND (action_type = 'message' OR action_type = 'reset' ". $include_notes. ") ";
 
     if ( isset($search_val) && $search_val != "" )
     {
@@ -1198,7 +1207,7 @@ function go_activity_dataloader_ajax(){
                 $action_title = "Undo Stage: " . $stage;
             }
         }
-        else if ($action_type == 'message' || $action_type == 'reset'){
+        else if ($action_type == 'message' || $action_type == 'reset' || $action_type == 'attendance'){
             $type = ucfirst($action_type);
             $result_array = unserialize($result);
             $title = $result_array[0];

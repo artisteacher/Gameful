@@ -115,6 +115,38 @@
                     "min": 1,
                     "max": "",
                     "step": ""
+                },
+                {
+                    "key": "field_5e1ffeb30c23d",
+                    "label": "Maximum # to Attempt",
+                    "name": "max_num",
+                    "type": "true_false",
+                    "instructions": "The # to complete pod is the maximum that are allowed to be done in this pod.",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "pod_toggle",
+                                "operator": "==",
+                                "value": "1"
+                            },
+                            {
+                                "field": "field_5b0c2b565dadb",
+                                "operator": "!=",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 0,
+                    "ui": 1,
+                    "ui_on_text": "",
+                    "ui_off_text": ""
                 }
             ]
         },
@@ -168,6 +200,453 @@
             "ui": 1,
             "ui_on_text": "Hide",
             "ui_off_text": "Show"
+        },
+        {
+            "key": "field_5e11a0bfde660",
+            "label": "Enable Locks",
+            "name": "go_lock_toggle",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui": 1,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_5e11aa6aac7d8",
+            "label": "Custom Lock Message",
+            "name": "go_lock_message",
+            "type": "textarea",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5e11a0bfde660",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "Optional message to display when locked.",
+            "maxlength": "",
+            "rows": 2,
+            "new_lines": ""
+        },
+        {
+            "key": "field_5e119e85ecdd0",
+            "label": "Locks",
+            "name": "go_locks",
+            "type": "repeater",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5e11a0bfde660",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "go-acf-locks",
+                "id": ""
+            },
+            "collapsed": "",
+            "min": 1,
+            "max": 3,
+            "layout": "block",
+            "button_label": "- or -",
+            "sub_fields": [
+                {
+                    "key": "field_5e119e85ecdd1",
+                    "label": "Keys",
+                    "name": "keys",
+                    "type": "repeater",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "100",
+                        "class": "go-acf-keys",
+                        "id": ""
+                    },
+                    "collapsed": "",
+                    "min": 1,
+                    "max": 7,
+                    "layout": "table",
+                    "button_label": "- and -",
+                    "sub_fields": [
+                        {
+                            "key": "field_5e119e85ecdd3",
+                            "label": "Keys",
+                            "name": "key",
+                            "type": "select",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "go_until_lock": "Lock Until Date",
+                                "go_after_lock": "Lock After Date",
+                                "go_badge_lock": "[Badges] - 1 of these",
+                                "go_user_lock": "User [Groups] - 1 of these",
+                                "go_xp_levels_lock": "Minimum [XP] Level",
+                                "go_gold_lock": "Minimum [Gold]",
+                                "go_health_lock": "Minimum [Reputation]",
+                                "go_period_lock": "Class Section - 1 of these"
+                            },
+                            "default_value": [],
+                            "allow_null": 1,
+                            "multiple": 0,
+                            "ui": 0,
+                            "ajax": 0,
+                            "return_format": "value",
+                            "placeholder": ""
+                        },
+                        {
+                            "key": "field_5e119e85ecdd4",
+                            "label": "options",
+                            "name": "options",
+                            "type": "repeater",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "key_options",
+                                "id": ""
+                            },
+                            "collapsed": "",
+                            "min": 1,
+                            "max": 1,
+                            "layout": "block",
+                            "button_label": "",
+                            "sub_fields": [
+                                {
+                                    "key": "field_5e119e85ecdd5",
+                                    "label": "lock options",
+                                    "name": "",
+                                    "type": "message",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": [
+                                        [
+                                            {
+                                                "field": "field_5e119e85ecdd3",
+                                                "operator": "==",
+                                                "value": ""
+                                            }
+                                        ]
+                                    ],
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "message": "Select a key to set options.",
+                                    "new_lines": "wpautop",
+                                    "esc_html": 0
+                                },
+                                {
+                                    "key": "field_5e119e85ecdd6",
+                                    "label": "Lock Until Date",
+                                    "name": "until",
+                                    "type": "date_time_picker",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": [
+                                        [
+                                            {
+                                                "field": "field_5e119e85ecdd3",
+                                                "operator": "==",
+                                                "value": "go_until_lock"
+                                            }
+                                        ]
+                                    ],
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "display_format": "F j, Y g:i a",
+                                    "return_format": "Y-m-d H:i:s",
+                                    "first_day": 0
+                                },
+                                {
+                                    "key": "field_5e119e85ecdd7",
+                                    "label": "Lock After Date",
+                                    "name": "after",
+                                    "type": "date_time_picker",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": [
+                                        [
+                                            {
+                                                "field": "field_5e119e85ecdd3",
+                                                "operator": "==",
+                                                "value": "go_after_lock"
+                                            }
+                                        ]
+                                    ],
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "display_format": "F j, Y g:i a",
+                                    "return_format": "Y-m-d H:i:s",
+                                    "first_day": 0
+                                },
+                                {
+                                    "key": "field_5e119e85ecdd8",
+                                    "label": "Badges",
+                                    "name": "badge",
+                                    "type": "level2_taxonomy",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": [
+                                        [
+                                            {
+                                                "field": "field_5e119e85ecdd3",
+                                                "operator": "==",
+                                                "value": "go_badge_lock"
+                                            }
+                                        ]
+                                    ],
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "go_badges",
+                                        "id": ""
+                                    },
+                                    "taxonomy": "go_badges",
+                                    "field_type": "multi_select"
+                                },
+                                {
+                                    "key": "field_5e119e85ecdd9",
+                                    "label": "User Groups",
+                                    "name": "group",
+                                    "type": "level2_taxonomy",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": [
+                                        [
+                                            {
+                                                "field": "field_5e119e85ecdd3",
+                                                "operator": "==",
+                                                "value": "go_user_lock"
+                                            }
+                                        ]
+                                    ],
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "taxonomy": "user_go_groups",
+                                    "field_type": "multi_select"
+                                },
+                                {
+                                    "key": "field_5e119e85ecdda",
+                                    "label": "Minimum [XP]",
+                                    "name": "xp_level",
+                                    "type": "select",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": [
+                                        [
+                                            {
+                                                "field": "field_5e119e85ecdd3",
+                                                "operator": "==",
+                                                "value": "go_xp_levels_lock"
+                                            }
+                                        ]
+                                    ],
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        ": Select": ": Select",
+                                        "0": "Level1 - beginner",
+                                        "50": "Level2 - beginner",
+                                        "105": "Level3 - beginner",
+                                        "200": "Level4 - beginner",
+                                        "300": "Level5 - beginner",
+                                        "400": "Level6 - beginner"
+                                    },
+                                    "default_value": [],
+                                    "allow_null": 0,
+                                    "multiple": 0,
+                                    "ui": 0,
+                                    "ajax": 0,
+                                    "return_format": "value",
+                                    "placeholder": ""
+                                },
+                                {
+                                    "key": "field_5e119e85ecddb",
+                                    "label": "Minimum [Gold]",
+                                    "name": "gold",
+                                    "type": "number",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": [
+                                        [
+                                            {
+                                                "field": "field_5e119e85ecdd3",
+                                                "operator": "==",
+                                                "value": "go_gold_lock"
+                                            }
+                                        ]
+                                    ],
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "placeholder": "",
+                                    "prepend": "",
+                                    "append": "",
+                                    "min": 0,
+                                    "max": "",
+                                    "step": ""
+                                },
+                                {
+                                    "key": "field_5e119e85ecddc",
+                                    "label": "Minimum [Reputation]",
+                                    "name": "health",
+                                    "type": "number",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": [
+                                        [
+                                            {
+                                                "field": "field_5e119e85ecdd3",
+                                                "operator": "==",
+                                                "value": "go_health_lock"
+                                            }
+                                        ]
+                                    ],
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "placeholder": "",
+                                    "prepend": "",
+                                    "append": "",
+                                    "min": 0,
+                                    "max": 200,
+                                    "step": ""
+                                },
+                                {
+                                    "key": "field_5e119e85ecddd",
+                                    "label": "Class Section",
+                                    "name": "lock_sections",
+                                    "type": "taxonomy",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": [
+                                        [
+                                            {
+                                                "field": "field_5e119e85ecdd3",
+                                                "operator": "==",
+                                                "value": "go_period_lock"
+                                            }
+                                        ]
+                                    ],
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "taxonomy": "user_go_sections",
+                                    "field_type": "multi_select",
+                                    "allow_null": 0,
+                                    "add_term": 0,
+                                    "save_terms": 0,
+                                    "load_terms": 0,
+                                    "return_format": "id",
+                                    "multiple": 0
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "key": "field_5e119fe15d470",
+                    "label": "",
+                    "name": "",
+                    "type": "message",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "or",
+                    "new_lines": "",
+                    "esc_html": 0
+                }
+            ]
+        },
+        {
+            "key": "field_5e11aacbac7d9",
+            "label": "Hide if Locked",
+            "name": "hide_if_locked",
+            "type": "radio",
+            "instructions": "You have choices of how the map shows if it is locked. You can show it (all items will be locked). You can only show the lock message, but not the quests. Or, you can completely hide a map it. If hidden, it will also not show in the dropdown of maps.",
+            "required": 1,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5e11a0bfde660",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "show": "Show Map if Locked",
+                "hide": "Hide Map if Locked",
+                "message": "Only Show Message if Locked"
+            },
+            "allow_null": 0,
+            "other_choice": 0,
+            "default_value": "hide",
+            "layout": "vertical",
+            "return_format": "value",
+            "save_other_choice": 0
         }
     ],
     "location": [
@@ -200,8 +679,8 @@
         "tags",
         "send-trackbacks"
     ],
-    "active": 1,
+    "active": 0,
     "description": "",
     "recaptcha": 0,
-    "modified": 1570631491
+    "modified": 1580571241
 }

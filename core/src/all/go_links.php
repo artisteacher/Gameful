@@ -15,13 +15,13 @@
  * @param $website_link
  * @param $login
  */
-function go_user_links($user_id, $show_stats_link = false, $show_internal_links = false, $show_blog_link = false, $is_clipboard = false, $website_link = null, $login = null, $map = null ) {
+function go_user_links($user_id, $show_stats_link = false, $show_internal_links = false, $show_blog_link = false, $is_clipboard = false, $website_link = null, $map = null ) {
     //if current user is admin, set all to true
     global $wpdb;
     $is_admin = false;
     if (!$is_clipboard) { //if this is NOT the clipboard
         $current_id = get_current_user_id();
-        $is_admin = go_user_is_admin($current_id);
+        $is_admin = go_user_is_admin();
         //if this is an admin
       // if ($current_id == $user_id) {//if this is the current user
            //$is_current_user = true;
@@ -38,7 +38,7 @@ function go_user_links($user_id, $show_stats_link = false, $show_internal_links 
 
     //show the map on the clipboard
     if ($is_clipboard || ($map & $is_admin & $show_internal_links)){
-        echo "<div class='go_user_link go_user_map' name='{$user_id}'><a onclick='go_user_map({$user_id})' href='javascript:void(0);'><i class='fas fa-sitemap' aria-hidden='true'></i></a></div>";
+        echo "<div class='go_user_link go_user_map' data-user_id='{$user_id}'><a href='javascript:void(0);'><i class='fas fa-sitemap' aria-hidden='true'></i></a></div>";
     }
 
     //show profile link to admin unless it is an archive
@@ -62,7 +62,7 @@ function go_user_links($user_id, $show_stats_link = false, $show_internal_links 
                 $info_login = $user_info->user_login;
             }*/
             $user_blog_link = get_site_url(null, '/user/' . $user_id);
-            echo " <div class='go_user_link'><a href='$user_blog_link' target='_blank'><span class='dashicons dashicons-admin-post'></span></a></div>";
+            echo " <div class='go_user_link'><a href='$user_blog_link' target='_blank'><i class='fas fa-thumbtack'></i></a></div>";
         }
     }
 
@@ -78,7 +78,7 @@ function go_user_links($user_id, $show_stats_link = false, $show_internal_links 
         $website_link = go_get_website($user_id);
     }
     if (!empty($website_link)) {
-        echo " <div class='go_user_link'><a href='$website_link' target='_blank'><span class='dashicons dashicons-admin-site'></span></a></div>";
+        echo " <div class='go_user_link'><a href='$website_link' target='_blank'><i class='fas fa-globe-americas' aria-hidden='true'></i></a></div>";
     }
 
 

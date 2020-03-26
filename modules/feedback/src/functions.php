@@ -10,6 +10,7 @@ function go_reader_page(){
     //add_rewrite_rule( "store", 'index.php?query_type=user_blog&uname=$matches[1]', "top");
     //add_rewrite_rule( "reader", 'index.php?reader=true', "top");
     add_rewrite_rule( $reader_name, 'index.php?' . $reader_name . '=true', "top");
+
 }
 
 // Query Vars
@@ -42,14 +43,36 @@ function go_reader_template_include($template){
         if ($page_value && $page_value == "true") { //Verify "blah" exists and value is "true".
             return plugin_dir_path(__FILE__) . 'templates/go_reader_template.php'; //Load your template or file
         }
-
     }
     return $template; //Load normal template when $page_value != "true" as a fallback
 }
 
+/* Template Include */
+add_filter('template_include', 'go_quest_reader_template_include', 1, 1);
+function go_quest_reader_template_include($template){
+    $reader = 'quest_posts';
+    global $wp_query; //Load $wp_query object
+    $pagename = (isset($wp_query->query_vars['pagename']) ? $wp_query->query_vars['pagename'] : false); //Check for query var "blah"
+    if ($pagename == $reader) { //Verify "blah" exists and value is "true".
+        return plugin_dir_path(__FILE__) . 'templates/go_quest_reader_template.php'; //Load your template or file
+    }
+    return $template; //Load normal template when $page_value != "true" as a fallback
+}
+
+add_filter( 'pre_get_document_title', 'quest_reader_title' );
+function quest_reader_title( $title ) {
+    // Return a custom document title for
+    // the boat details custom page template
+    global $wp_query;
+    $pagename = (isset($wp_query->query_vars['pagename']) ? $wp_query->query_vars['pagename'] : false); //Check for query var "blah"
+    if ($pagename == 'quest_posts') {
+        return 'Reader';
+    }
+    // Otherwise, don't modify the document title
+    return $title;
+}
 
 add_action('go_blog_template_after_post', 'go_user_feedback_container', 10, 3);
-
 function go_user_feedback_container($post_id, $show_form = true, $is_archive = false){
     $admin_user = go_user_is_admin();
 
@@ -76,7 +99,6 @@ function go_user_feedback_container($post_id, $show_form = true, $is_archive = f
     </div>
     <?php
 }
-
 
 function go_blog_post_feedback_table($post_id){
 
@@ -234,23 +256,80 @@ function go_blog_is_private($post_id){
     }
 }
 
-function go_blog_favorite($post_id, $is_admin, $is_archive){
+function go_blog_favorite($post_id, $is_archive = false){
+    $user_id = get_current_user_id();
+    $post_author_id = get_post_field('post_author', $post_id);
+    $status = go_post_meta($post_id, 'go_blog_favorite', true );
+    if(is_serialized($status)) {
+        $status = unserialize($status);
+    }
 
-        $status = go_post_meta($post_id, 'go_blog_favorite', true );
-        if ($status == 'true'){
+    $checked = '';
+    $is_logged_in = is_user_logged_in();
+
+    if($user_id == $post_author_id) {
+        $is_current_user = true;
+    }else{
+        $is_current_user = false;
+    }
+    if($is_current_user){
+        if ($status == 'true') {
             $checked = 'checked';
-        }else{
-            $checked = '';
+        } else if (is_array($status)) {
+            if (count($status) > 0) {
+                $checked = 'checked';
+            }
         }
-        //echo "<div style=''><input type='checkbox' class='go_blog_favorite ' value='go_blog_favorite' data-post_id='{$post_id}' {$checked}> Favorite</div>";
+    }else{
 
+        if(!is_array($status)){//if it is not an array, it was liked before this was saved as an array by the admin
+            $status = array();
+        }
 
-        if($is_admin && !$is_archive) {
-            return "<div class='go_favorite_container'><label><input type='checkbox' class='go_blog_favorite ' value='go_blog_favorite' data-post_id='" . $post_id . "' " . $checked . "> <span class='go_favorite_label'></span></label></div>";
-        }else if ($checked){
-            return "<div class='go_is_favorite_container'><label><span class='go_is_favorite_label'></span></label></div>";
+        if (in_array($user_id, $status)) {
+            $checked = 'checked';
+        }
+    }
+    //echo "<div style=''><input type='checkbox' class='go_blog_favorite ' value='go_blog_favorite' data-post_id='{$post_id}' {$checked}> Favorite</div>";
+
+    if(!$is_archive && $is_logged_in) {
+        $disabled = "";
+        ob_start();
+
+        if(!$is_current_user || ($is_current_user && $checked === 'checked')) {
+            if ($is_current_user) {
+                $disabled = 'disabled';
+                echo "<div class='go_show_likes_list' data-post_id='$post_id' data-user_id='$post_author_id' >";
+            }
+            echo "<div class='go_favorite_container'><label><input type='checkbox' class='go_blog_favorite{$disabled}' value='go_blog_favorite' data-post_id='" . $post_id . "' " . $checked . " $disabled> <span class='go_favorite_label'></span>";
+
+            if (is_array($status) && $is_current_user) {
+                $count = count($status);
+                if ($count > 0) {
+                    $likes = "like";
+                    if ($count > 1) {
+                        $likes = "likes";
+                    }
+                    echo " $count $likes";
+
+                    //echo"</div></div>";
+                }
+            }
+            echo "</div>";
+            if ($is_current_user) {
+                echo "</div>";
+            }
+           // echo "</label></div>";
 
         }
+        $favorite = ob_get_contents();
+        ob_end_clean();
+        return $favorite;
+
+    }else if ($checked){
+        return "<div class='go_is_favorite_container'><label><span class='go_is_favorite_label'></span></label></div>";
+
+    }
 }
 
 function go_blog_favorite_toggle(){
@@ -265,7 +344,24 @@ function go_blog_favorite_toggle(){
     }
     $post_id = !empty($_POST['blog_post_id']) ? intval($_POST['blog_post_id']) : false;
     $status = !empty($_POST['checked']) ? $_POST['checked'] : false;
-    update_post_meta( $post_id, 'go_blog_favorite', $status);
+    $current_likes = unserialize(go_post_meta($post_id, 'go_blog_favorite', true ));
+    $user_id = get_current_user_id();
+    if($status == "true"){
+        if($current_likes){
+            if(!is_array($current_likes)){//if it is not an array, it was liked before this was saved as an array by the admin
+                $current_likes = array();
+            }
+        }
+        if (!in_array($user_id, $current_likes))
+        {
+            $current_likes[] = $user_id;
+        }
+    }else{
+        if (($key = array_search($user_id, $current_likes)) !== false) {
+            unset($current_likes[$key]);
+        }
+    }
+    update_post_meta( $post_id, 'go_blog_favorite', $current_likes);
     $key = 'go_post_data_' . $post_id;
     go_delete_transient($key);
     if($status === 'true') {
@@ -276,7 +372,6 @@ function go_blog_favorite_toggle(){
         $current_user_name = ucwords(go_get_user_display_name());
         go_send_message(true, $current_user_name .' liked your post "'.$post_title.'."', $message, 'message', true, 0, 0, 0, 0, false, '', '', $vars);
     }
-
 }
 
 function go_blog_post_history_table($post_id){
@@ -336,7 +431,7 @@ function go_feedback_canned(){
         $message = get_option('options_go_feedback_canned_'.$i.'_message');
         $message = htmlspecialchars($message, ENT_QUOTES);
         $radio = get_option('options_go_feedback_canned_'.$i.'_adjust');
-        $toggle_assign = get_option('options_go_feedback_canned_'.$i.'_defaults_toggle');
+        $toggle_assign = get_option('options_go_feedback_canned_'.$i.'_assign_toggle');
         $xp = get_option('options_go_feedback_canned_'.$i.'_assign_loot_xp');
         $gold = get_option('options_go_feedback_canned_'.$i.'_assign_loot_gold');
         $health = get_option('options_go_feedback_canned_'.$i.'_assign_loot_health');
@@ -357,7 +452,7 @@ function go_feedback_input($post_id){
     ?>
     <div id="go_messages_container">
         <form method="post">
-            <div class="go_messages" style="display:flex;">
+            <div class="go_messages">
 
                 <div class="messages_form">
                     <table class="form-table">
@@ -370,7 +465,39 @@ function go_feedback_input($post_id){
                         <tr valign="top">
                             <th scope="row">Message</th>
 
-                            <td><textarea name="message" class="widefat go_message_input summernote" cols="50" rows="5"></textarea>
+                            <td>
+                            <?php
+
+
+                            //$plugins = "charmap,hr,lists,media,paste,tabfocus,textcolor,fullscreen,wordpress,wpeditimage,wpgallery,wplink,wpdialogs,wpview,wordcount,tma_annotate";
+                            $plugins = "charmap,hr,lists,media,paste,tabfocus,textcolor,fullscreen,wordpress,wpeditimage,wpgallery,wplink,wpdialogs,wpview,wordcount,go_shortcode_button,go_admin_comment";
+
+                            $buttons = "formatselect,bold,italic,bullist,numlist,blockquote,alignleft,aligncenter,alignright,link,spellchecker,go_shortcode_button,,fullscreen";
+
+
+                            $buttons2 = '';
+
+
+                            $settings = array(
+                                'tinymce'=> array(
+                                    'menubar'   => true,
+                                    'plugins'   =>  "{$plugins}",
+                                    'toolbar1'  =>  "{$buttons}",
+                                    'toolbar2'  =>  "{$buttons2}"
+                                ),
+                                //'tinymce'=>true,
+                                //'wpautop' =>false,
+                                'textarea_name' => 'go_feedback_text_area',
+                                'media_buttons' => true,
+                                //'teeny' => true,
+                                'quicktags' => true,
+                                'menubar' => false,
+                                'drag_drop_upload' => true,
+                                'textarea_rows' => 5,
+                                'editor_class' => 'go_feedback_text_area');
+
+                            wp_editor('', 'go_feedback_text_area_id_'.$post_id, $settings);
+                                ?>
 
                             </td>
                         </tr>
@@ -455,7 +582,7 @@ function go_feedback_input($post_id){
                                 <td colspan="2">
                                     <input id="loot_option_none_<?php echo $post_id; ?>" class="loot_option_none"
                                            type="radio" name="loot_option" value="none" checked> <label
-                                            for="loot_option_none_<?php echo $post_id; ?>"> None </label>
+                                            for="loot_option_none_<?php echo $post_id; ?>"> None </label>&nbsp; &nbsp;
                                     <?php
                                     if ($go_blog_task_id != null) {
                                         ?>
@@ -468,7 +595,6 @@ function go_feedback_input($post_id){
                                     }
                                     if ($go_xp_toggle || $go_gold_toggle || $go_health_toggle) {
                                         ?>
-
                                         <input id="loot_option_assign_<?php echo $post_id; ?>"
                                                class="loot_option_assign"
                                                type="radio" name="loot_option" value="assign"><label

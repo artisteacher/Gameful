@@ -82,6 +82,7 @@ function go_check_quiz_answers() {
                     $correct = array_values($correct);
                     for ($a = 0; $a < $count; $a++) {
                         $answer = (isset($all_test_choices[$i][$a]) ?  $all_test_choices[$i][$a] : null);
+                        $answer =  stripslashes($answer);
                         if (in_array( $answer ,$correct) ){
                             $checkbox++;
                         }

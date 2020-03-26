@@ -14,7 +14,7 @@ function go_sectionQuery($section = false){
     if ($section === false) {
         $section = (isset($_REQUEST['section']) ? $_REQUEST['section'] : null);
     }
-    if (!empty($section)) {
+    if (!empty($section) && $section != 'null') {
         global $wpdb;
         if(is_gameful()) {
             $main_site_id = get_network()->site_id;
@@ -71,7 +71,7 @@ function go_groupQuery($group = false){
     if($group === false) {
         $group = (isset($_GET['group']) ? $_GET['group'] : null);
     }
-    if (!empty($group)) {
+    if (!empty($group)  && $group != 'null') {
 
         global $wpdb;
         if(is_gameful()){
@@ -92,3 +92,4 @@ function go_groupQuery($group = false){
     }
     return $Query;
 }
+

@@ -7,6 +7,7 @@
     flex-wrap: wrap;
     justify-content: center;
     text-align: center ;
+    clear: both;
 
     ul {
         margin: 0px !important;
@@ -20,13 +21,7 @@
 
 }
 
-#go_store_container .go_clone_icon{
-    display: none;
-}
 
-#go_store_container.clone .go_clone_icon{
-    display: block;
-}
 /*
 store categories styles
  */
@@ -112,19 +107,24 @@ store lightbox styles
 
 .go_round_button_container {
     width: 30px;
+    //
 }
 
 .go_store_round_button {
-    width: 100%;
-    height: 0;
-    padding-bottom: 100%;
+    width: 30px;
+    height: 30px;
+    /* padding-bottom: 100%; */
     border-radius: 50%;
     border: 3px solid #cfdcec;
-    overflow: hidden;
+    /* overflow: hidden; */
     box-shadow: 0 0 3px grey;
-    padding-bottom: 25px;
+    /* padding-bottom: 25px; */
     text-align: center;
     color: white;
+
+    div{
+        margin-top: -2px;
+    }
 }
 
 #gp_store_plus {
@@ -153,18 +153,33 @@ store lightbox styles
     margin-top: 30px;
     padding: 10px;
     background-color: lightgoldenrodyellow;
-    display: flex;flex-wrap: wrap
+    display: flex;flex-wrap: wrap; align-items: center;
+
+    #go_purch_limits {
+        margin: 10px;
+        flex-grow: 1;
+    }
+
+    #golb-fr-qty{
+        #go_qty {
+            width: 60px;
+        }
+
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+            -moz-appearance:textfield;
+        }
+    }
+
 }
 
-#go_store_actions > div {
-    margin: 10px;
-}
-
-
-
-#go_purch_limits {
-    flex-grow: 1;
-}
 
 .black_overlay {
     position: fixed;
@@ -266,6 +281,7 @@ store lightbox styles
     border: 1px solid;
     border-radius: 3px;
     cursor: pointer;
+    border-color: #c7a000;
 }
 
 .golb-fr-boxes-g {

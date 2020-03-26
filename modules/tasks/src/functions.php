@@ -6,29 +6,30 @@
 function go_register_task_tax_and_cpt() {
 
     // Register Task chains Taxonomy
+    $map_name_singular = get_option( 'options_go_tasks_name_singular' );
     $task_chains_labels = array(
-        'name' => _x(get_option( 'options_go_tasks_name_singular' ). ' Maps', 'task_chains' ),
-        'singular_name' => _x(get_option( 'options_go_tasks_name_singular' ). ' Map', 'task_chains' ),
-        'search_items' => _x('Search '. get_option( 'options_go_tasks_name_singular' ) . ' Maps', 'task_chains' ),
-        'popular_items' => _x('Popular '. get_option( 'options_go_tasks_name_singular' ) . ' Maps', 'task_chains' ),
-        'all_items' => _x('All '. get_option( 'options_go_tasks_name_singular' ) . ' Maps', 'task_chains' ),
+        'name' => _x($map_name_singular. ' Maps', 'task_chains' ),
+        'singular_name' => _x($map_name_singular. ' Map', 'task_chains' ),
+        'search_items' => _x('Search '. $map_name_singular . ' Maps', 'task_chains' ),
+        'popular_items' => _x('Popular '. $map_name_singular . ' Maps', 'task_chains' ),
+        'all_items' => _x('All '.$map_name_singular . ' Maps', 'task_chains' ),
         'parent_item' => 'Map',
         'parent_item_colon' => 'Map:',
-        'edit_item' => _x('Edit '. get_option( 'options_go_tasks_name_singular' ) . ' Maps', 'task_chains' ),
-        'update_item' => _x('Update '. get_option( 'options_go_tasks_name_singular' ) . ' Maps', 'task_chains' ),
-        'add_new_item' => _x('Add New '. get_option( 'options_go_tasks_name_singular' ) . ' Map/Map Section', 'task_chains' ),
-        'new_item_name' => _x('Add New '. get_option( 'options_go_tasks_name_singular' ) . ' Map/Map Section', 'task_chains' ),
-        'separate_items_with_commas' => _x('Separate '. get_option( 'options_go_tasks_name_singular' ) . ' Maps with commas', 'task_chains' ),
-        'add_or_remove_items' => _x('Add of Remove '. get_option( 'options_go_tasks_name_singular' ) . ' Maps', 'task_chains' ),
-        'choose_from_most_used' => _x('Choose from the most used '. get_option( 'options_go_tasks_name_singular' ) . ' Map', 'task_chains' ),
-        'menu_name' => _x(get_option( 'options_go_tasks_name_singular' ). 'Maps', 'task_chains' ),
+        'edit_item' => _x('Edit '. $map_name_singular . ' Maps', 'task_chains' ),
+        'update_item' => _x('Update '. $map_name_singular . ' Maps', 'task_chains' ),
+        'add_new_item' => _x('Add New '. $map_name_singular . ' Map/Map Column', 'task_chains' ),
+        'new_item_name' => _x('Add New '. $map_name_singular . ' Map/Map Column', 'task_chains' ),
+        'separate_items_with_commas' => _x('Separate '. $map_name_singular . ' Maps with commas', 'task_chains' ),
+        'add_or_remove_items' => _x('Add of Remove '. $map_name_singular . ' Maps', 'task_chains' ),
+        'choose_from_most_used' => _x('Choose from the most used '. $map_name_singular . ' Map', 'task_chains' ),
+        'menu_name' => _x($map_name_singular. ' Maps', 'task_chains' ),
     );
 
     $task_chains_args = array(
         'labels' => $task_chains_labels,
         'public' => true,
         'show_in_nav_menus' => true,
-        'show_in_menu' => false,
+        'show_in_menu' => true,
         'show_ui' => true,
         'show_tagcloud' => true,
         'show_admin_column' => true,
@@ -176,7 +177,7 @@ function go_register_task_tax_and_cpt() {
 		'hierarchical' => false,
 		'description' => $tasks_name_plural,
         'supports' => array( 'title', 'comments', 'thumbnail', 'revisions' ),
-		'taxonomies' => array(''),
+		'taxonomies' => array(),
 		'public' => true,
 		'show_ui' => true,
 		'show_in_menu' => true,
@@ -296,7 +297,7 @@ function go_new_task_from_template($admin_bar=true){
 			foreach ($templates as $template){
 				$post_id = $template->ID;
 				$title = $template->post_title;
-				echo '<option value="' .$post_id.'">' .$title.'</option>';
+				echo '<option data-global="false" value="' .$post_id.'">' .$title.'</option>';
 			}
 			echo "</optgroup>";
 		}
@@ -307,7 +308,7 @@ function go_new_task_from_template($admin_bar=true){
                 $post_id = $template->ID;
                 $title = $template->post_title;
                 restore_current_blog();
-                echo '<option value="' .$post_id.'">' .$title.'</option>';
+                echo '<option class="' .$post_id.'" data-global="true" value="' .$post_id.'">' .$title.'</option>';
             }
             echo "</optgroup>";
         }
@@ -355,3 +356,4 @@ function go_fix_file_types_allowed( $value, $post_id, $field )
 // acf/load_value/key={$field_key} - filter for a specific field based on it's name
 add_filter('acf/load_value/key=field_5cba487b9f582', 'go_fix_file_types_allowed', 10, 3);
 add_filter('acf/load_value/key=field_5cbad9e8eb513', 'go_fix_file_types_allowed', 10, 3);
+

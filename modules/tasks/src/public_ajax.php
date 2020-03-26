@@ -62,19 +62,29 @@ function go_task_shortcode($atts, $content = null ) {
     $uc_task_name = ucwords($task_name);
     $badges_name = get_option('options_go_badges_name_plural');
     //$badge_name = get_option( 'options_go_naming_other_badges' );
-    $go_lightbox_switch = get_option( 'options_go_video_lightbox' );
-    $go_video_unit = get_option ('options_go_video_width_unit');
-    if ($go_video_unit == 'px'){
-        $go_fitvids_maxwidth = get_option('options_go_video_width_pixels')."px";
+    $go_lightbox_switch = get_option( 'go_video_lightbox_toggle_switch' );
+    if($go_lightbox_switch === false){
+        $go_lightbox_switch = 1;
     }
+    $go_video_unit = get_option ('go_video_width_type_control');
     if ($go_video_unit == '%'){
-        $go_fitvids_maxwidth = get_option('options_go_video_width_percent')."%";
+        $percent = get_option( 'go_video_width_percent_control' );
+        if($percent === false){
+            $percent = 100;
+        }
+        $go_fitvids_maxwidth = $percent."%";
+    }else{
+        $pixels = get_option( 'go_video_width_px_control' );
+        if($pixels === false){
+            $pixels = 400;
+        }
+        $go_fitvids_maxwidth = $pixels."px";
     }
 
     $admin_name = 'an administrator';
-    $is_admin = go_user_is_admin( $user_id );
+    $is_admin = go_user_is_admin();
 
-    $admin_view = ($is_admin ?  get_user_option('go_admin_view', $user_id) : null);
+
 
     //user status
     $status = go_get_status($post_id, $user_id);
@@ -146,9 +156,10 @@ function go_task_shortcode($atts, $content = null ) {
     /**
      * Admin Views & Locks
      */
-    $admin_flag = go_admin_content($post_id, $is_admin, $admin_view, $custom_fields, $is_logged_in, $task_name, $status, $user_id, $post_id, $badges_name);
-
-    if ($admin_flag == 'stop') {
+    //$admin_view = ($is_admin ?  get_user_option('go_admin_view', $user_id) : null);
+    $admin_view = go_get_admin_view($user_id);
+    if ($is_admin && $admin_view == 'all') {
+        go_display_visitor_content( $custom_fields, $post_id, $task_name, $badges_name, $uc_task_name, true);
         echo "</div>";
         return null;
     }
@@ -157,11 +168,11 @@ function go_task_shortcode($atts, $content = null ) {
      * LOCKS
      */
     if (!$is_unlocked) { //if not previously unlocked with a password
-        if (!$is_admin || $admin_flag == 'locks') {
+        if (!$is_admin) {
             $task_is_locked = go_display_locks($post_id, $user_id, $is_admin, $task_name, $badges_name, $custom_fields, $is_logged_in, $uc_task_name);
             if ($task_is_locked) {
                 //Print the bottom of the page
-                go_task_render_chain_pagination( $post_id, $custom_fields );
+                go_new_pagination( $post_id, $custom_fields );
                 //go_hidden_footer();
                 echo "</div>";
                 return null;
@@ -209,7 +220,7 @@ function go_task_shortcode($atts, $content = null ) {
      * Display Rewards before task content
      * This is the list of rewards at the top of the task.
      */
-    go_display_rewards( $custom_fields, $task_name, $user_id, 'top' );
+    go_display_rewards( $custom_fields, $task_name, $user_id, 'top', $post_id );
 
     /**
      * Timer
@@ -218,7 +229,7 @@ function go_task_shortcode($atts, $content = null ) {
     if ($locks_status){
 
         //echo "</div>";
-        go_task_render_chain_pagination ( $post_id, $custom_fields );
+        go_new_pagination ( $post_id, $custom_fields );
         //go_hidden_footer ();
         echo "</div>";
         return null;
@@ -248,7 +259,7 @@ function go_task_shortcode($atts, $content = null ) {
 
     //echo "</div></div>";
     //Print the bottom of the page
-    go_task_render_chain_pagination( $post_id, $custom_fields );//3 Queries
+    go_new_pagination( $post_id, $custom_fields );//3 Queries
     //go_hidden_footer();
 
     //Print comments//
@@ -286,7 +297,7 @@ function go_display_locks ($post_id, $user_id, $is_admin, $task_name, $badge_nam
         $on_map = false;
     }
     if ($custom_fields['go_lock_toggle'][0] == true || $custom_fields['go_sched_toggle'][0] == true || $on_map == true) {
-        $task_is_locked = go_task_locks($post_id, $user_id, $task_name, $custom_fields, $is_logged_in, false);
+        $task_is_locked = go_task_locks($post_id, false, $user_id, $task_name, $custom_fields);
     }
 
     //if it is locked, show master password field and stop printing of the task.
@@ -300,7 +311,7 @@ function go_display_locks ($post_id, $user_id, $is_admin, $task_name, $badge_nam
         if ($go_password_lock) {
             //Show password unlock
             echo "<div class='go_lock'><h3>Unlock {$uc_task_name}</h3><input id='go_result' class='clickable' type='password' placeholder='Enter Password'>";
-            go_buttons($user_id, $custom_fields, null, null, null, 'unlock', false, null, null, false);
+            go_buttons($custom_fields, null, null, null, 'unlock', false, null, null, false);
             echo "</div>";
 
         } else if ($task_is_locked == true) {
@@ -312,7 +323,7 @@ function go_display_locks ($post_id, $user_id, $is_admin, $task_name, $badge_nam
             <?php
             //Show password unlock
             echo "<div class='go_lock go_password' style='display: none;'><h3>Admin Override</h3><p>This field is not for users. Do not ask for this password. It is not part of the gameplay.</p><input id='go_result' class='clickable' type='password' placeholder='Enter Password'>";
-            go_buttons($user_id, $custom_fields, null, null, null, 'unlock', false, null, null, false);
+            go_buttons($custom_fields, null, null, null, 'unlock', false, null, null, false);
             echo "</div>";
 
             //}
@@ -331,47 +342,61 @@ function go_display_locks ($post_id, $user_id, $is_admin, $task_name, $badge_nam
  * Logic to decide if locks should be used for visitors
  * based on options and task settings.
  * @param $custom_fields
+ * @param $post_id
+ * @param $task_name
+ * @param $badge_name
+ * @param $uc_task_name
+ * @param $show_all
+ *
  * @return null
  */
-function go_display_visitor_content ( $custom_fields, $post_id, $task_name, $badge_name, $uc_task_name ){
+function go_display_visitor_content ( $custom_fields, $post_id, $task_name, $badge_name, $uc_task_name, $show_all = false ){
 
 
-    if ($custom_fields['go-guest-view'][0] == "global"){
-        $guest_access = get_option('options_go_guest_global');
+        if ($custom_fields['go-guest-view'][0] == "global"){
+            $guest_access = get_option('options_go_guest_global');
+        }
+        else {
+            $guest_access = $custom_fields['go-guest-view'][0];
+        }
+    if(!$show_all){
+        if ($guest_access == "blocked" ) {
+            echo "<div><h2 class='go_error_red'>You must be logged in to view this content.</h2></div>";
+            return null;
+        }
     }
-    else {
-        $guest_access = $custom_fields['go-guest-view'][0];
-    }
-    if ($guest_access == "blocked" ) {
-        echo "<div><h2 class='go_error_red'>You must be logged in to view this content.</h2></div>";
-        return null;
-    }
 
 
-    go_display_rewards( $custom_fields, $task_name, null, 'top');
+    go_display_rewards( $custom_fields, $task_name, null, 'top', $post_id);
     go_due_date_mods ($custom_fields, false, $task_name );
 
     $task_is_locked = false;
-    if ($guest_access == "regular" ) {
+    if ($guest_access == "regular" || $show_all  ) {
         //echo "Regular";
         $task_is_locked = go_display_locks($post_id, null, false, $task_name, $badge_name, $custom_fields, false, $uc_task_name);
 
     }
 
 
-    if (( $guest_access == "regular" && !$task_is_locked) || $guest_access == "open"){
-        echo "<script> 
-        jQuery( document ).ready( function() { 
-           new Noty({
-                type: 'error',
-                layout: 'topCenter',
-                text: 'You are viewing this page as a Guest. <br>You can view the content, but gameplay is disabled.',
-                theme: 'sunset',
-                visibilityControl: true,  
-            }).show();
-           jQuery('#go_all_content input, #go_all_content textarea').attr('disabled', 'disabled');
-        });</script>";
+    if (( $guest_access == "regular" && !$task_is_locked) || $guest_access == "open" || $show_all){
+        if(!$show_all) {
+            echo "<script> 
+            jQuery( document ).ready( function() { 
+               new Noty({
+                    type: 'error',
+                    layout: 'topCenter',
+                    text: 'You are viewing this page as a Guest. <br>You can view the content, but gameplay is disabled.',
+                    theme: 'sunset',
+                    visibilityControl: true,  
+                }).show();               
+            });</script>";
+        }
 
+        echo "<script> 
+            jQuery( document ).ready( function() { 
+               //jQuery('#go_all_content input, #go_all_content textarea').removeClass('summernote');
+               jQuery('#go_all_content input, #go_all_content textarea').attr('disabled', 'disabled');
+            });</script>";
         echo "<div id='go_all_content'>";
         go_hidden_blog_post();
 
@@ -380,7 +405,7 @@ function go_display_visitor_content ( $custom_fields, $post_id, $task_name, $bad
         go_print_outro (null, $post_id, $custom_fields, 1, 1, true);
 
         // displays the chain pagination list so that visitors can still navigate chains easily
-        go_task_render_chain_pagination( $post_id, $custom_fields );
+        go_new_pagination( $post_id, $custom_fields );
 
         //go_hidden_footer();
         echo "</div>";
@@ -431,6 +456,7 @@ function go_hidden_blog_post(){
  * @param $task_name
  * @return string
  */
+/*
 function go_admin_content ($post_id, $is_admin, $admin_view, $custom_fields, $is_logged_in, $task_name, $status, $uid, $task_id, $badge_name){
 
     if ($is_admin && $admin_view == 'all') {
@@ -452,7 +478,7 @@ function go_admin_content ($post_id, $is_admin, $admin_view, $custom_fields, $is
         $admin_flag = 'no_locks';
         return $admin_flag;
     }
-}
+}*/
 
 /**
  * If the dropdown is "all" do this.
@@ -478,7 +504,7 @@ function go_display_all_admin_content( $custom_fields, $is_logged_in, $task_name
 
     echo "<div id='go_all_content'>";
     go_hidden_blog_post();
-    go_display_rewards( $custom_fields, $task_name , $user_id, 'top');
+    go_display_rewards( $custom_fields, $task_name , $user_id, 'top', $post_id);
     go_due_date_mods ($custom_fields, $is_logged_in, $task_name );
     //Print messages
     $i = 0;
@@ -498,7 +524,7 @@ function go_display_all_admin_content( $custom_fields, $is_logged_in, $task_name
     */
 
     // displays the chain pagination list so that visitors can still navigate chains easily
-    go_task_render_chain_pagination( $post_id, $custom_fields);
+    go_new_pagination( $post_id, $custom_fields);
     //go_hidden_footer();
     echo "</div>";
 }
@@ -720,12 +746,12 @@ function go_print_outro ($user_id, $post_id, $custom_fields, $stage_count, $stat
      if (!$all_content) {
         go_display_rewards( $custom_fields, $task_name, $user_id, 'bottom', $post_id);
     }else{
-        go_display_rewards( $custom_fields, $task_name, $user_id, 'top');
+        go_display_rewards( $custom_fields, $task_name, $user_id, 'top', $post_id);
     }
 
     $bonus_status = go_get_bonus_status($post_id, $user_id);
     if ($bonus_status <= 0){
-        go_buttons($user_id, $custom_fields, null, $stage_count, $status, 'show_bonus', false, null, null, true);
+        go_buttons($custom_fields, null, $stage_count, $status, 'show_bonus', false, null, null, true);
     }
     echo "</div>";
     if ($bonus_status > 0 || $all_content){
@@ -866,51 +892,14 @@ function go_display_rewards($custom_fields, $task_name, $user_id, $position, $po
     if($position === 'top'){
         echo "<span>This is a {$stage_count} {$stage_name} {$task_name}. Upon completion you will receive:</span>";
 
-        //entry loot
-        if ($xp_toggle){
-            $xp_loot = (isset($custom_fields['go_entry_rewards_xp'][0]) ?  $custom_fields['go_entry_rewards_xp'][0] : null);
-        }
-        if ($gold_toggle){
-            $gold_loot = (isset($custom_fields['go_entry_rewards_gold'][0]) ?  $custom_fields['go_entry_rewards_gold'][0] : null);
-        }
-        if ($health_toggle){
-            $health_loot = (isset($custom_fields['go_entry_rewards_health'][0]) ?  $custom_fields['go_entry_rewards_health'][0] : null);
-        }
-        if ($badges_toggle){
-            $badges = (isset($custom_fields['go_badges'][0]) ?  $custom_fields['go_badges'][0] : null);
-        }
-        if ($groups_toggle){
-            $groups = (isset($custom_fields['go_groups'][0]) ?  $custom_fields['go_groups'][0] : null);
-        }
 
-        $i = 0;
+        $loot = go_task_loot($post_id);
 
-        //add all the loot from the stages
-        while ( $stage_count > $i ) {
-            if (get_option( 'options_go_loot_xp_toggle' )) {
-                $key = 'go_stages_' . $i . '_rewards_xp';
-                //$xp = $custom_fields[$key][0];
-                $xp = (isset($custom_fields[$key][0]) ?  $custom_fields[$key][0] : null);
-                $xp_loot = $xp + $xp_loot;
-            }
-
-            if(get_option( 'options_go_loot_gold_toggle' )) {
-                $key = 'go_stages_' . $i . '_rewards_gold';
-                $gold = (isset($custom_fields[$key][0]) ?  $custom_fields[$key][0] : null);
-                $gold_loot = $gold + $gold_loot;
-            }
-
-            if(get_option( 'options_go_loot_health_toggle' )) {
-                $key = 'go_stages_' . $i . '_rewards_health';
-                $health = (isset($custom_fields[$key][0]) ?  $custom_fields[$key][0] : null);
-                $health_loot = $health + $health_loot;
-                if($health_loot > 200){
-                    $health_loot = 200;
-                }
-            }
-
-            $i++;
-        }
+        $xp_loot = $loot['xp'];
+        $gold_loot = $loot['gold'];
+        $health_loot = $loot['health'];
+        $badges = $loot['badges'];
+        $groups = $loot['groups'];
 
     }
     else if($position === 'bottom') {
@@ -1067,6 +1056,8 @@ function go_print_rewards($position, $user_id = null, $xp_loot, $gold_loot, $hea
 
     echo "</div>";
 }
+
+
 /**
  * Outputs the task chain navigation links for the specified task and user.
  *
@@ -1080,7 +1071,9 @@ function go_print_rewards($position, $user_id = null, $xp_loot, $gold_loot, $hea
  * @param int $task_id The task ID.
  * @param int $user_id Optional. The user ID.
  */
-function go_task_render_chain_pagination ( $task_id, $custom_fields ) {
+
+
+function go_new_pagination ( $task_id, $custom_fields = null ) {
 
     if ( empty( $task_id ) ) {
         return;
@@ -1088,6 +1081,9 @@ function go_task_render_chain_pagination ( $task_id, $custom_fields ) {
         $task_id = (int) $task_id;
     }
 
+    if(empty($custom_fields)){
+        $custom_fields = go_post_meta($task_id);
+    }
 
     $chain_id = (isset($custom_fields['go-location_map_loc'][0]) ?  $custom_fields['go-location_map_loc'][0] : null);
 
@@ -1099,30 +1095,51 @@ function go_task_render_chain_pagination ( $task_id, $custom_fields ) {
         $this_task_order = array_search($task_id, $chain_order);
         if ($this_task_order == 0) {
             $prev_task = null;
-        } else {
-            $prev_key = (int)$this_task_order - 1;
-            $prev_task = $chain_order[$prev_key];
-            if (is_int($prev_task)){
-                $task_title = go_the_title($prev_task);
-                $task_link = go_post_permalink($prev_task);
-
-                $prev_link = $task_link;
-                $prev_title = $task_title;
+        }
+        else {
+            $prev_found = false;
+            $i = (int)$this_task_order;
+            while(!$prev_found){
+                $i--;
+                if($i >= 0) {
+                    $prev_task = $chain_order[$i];
+                    $is_hidden = get_post_meta($prev_task, 'go-location_map_options_hidden');
+                    $is_hidden = (isset($is_hidden[0]) ? $is_hidden[0] : false);
+                    if ($is_hidden) {
+                        $is_locked = go_task_locks($prev_task, true);
+                        if ($is_locked) {
+                            continue;
+                        }
+                    }
+                }
+                if (is_int($prev_task)){
+                    $prev_title = go_the_title($prev_task);
+                    $prev_link = go_post_permalink($prev_task);
+                }
+                $prev_found = true;
             }
         }
+
         $count = count($chain_order);
-        $next_key = (int)$this_task_order + 1;
-        if ($count > $next_key){
-            $next_task = $chain_order[$next_key];
-            if (is_int($next_task)){
-                $task_title = go_the_title($next_task);
-                //$status = $go_task_data[1];
-                $task_link = go_post_permalink($next_task);
-                //$custom_fields = $go_task_data[3];
-
-
-                $next_link = $task_link;
-                $next_title = $task_title;
+        $i = (int)$this_task_order;
+        if ($count > $i){
+            $next_found = false;
+            while(!$next_found && $count > ($i+1)) {
+                $i++;
+                $next_task = $chain_order[$i];
+                $is_hidden = get_post_meta($next_task, 'go-location_map_options_hidden');
+                $is_hidden = (isset($is_hidden[0]) ?  $is_hidden[0] : false);
+                if($is_hidden){
+                    $is_locked = go_task_locks($next_task, true);
+                    if($is_locked) {
+                        continue;
+                    }
+                }
+                if (is_int($next_task)) {
+                    $next_title = go_the_title($next_task);
+                    $next_link = go_post_permalink($next_task);
+                }
+                $next_found = true;
             }
         }
 
@@ -1130,7 +1147,7 @@ function go_task_render_chain_pagination ( $task_id, $custom_fields ) {
         return false;
     }
 
-    echo"<div style='height: 100px;'>";
+    echo"<div id='go_task_pagination' style='height: 100px;'>";
     if (isset($prev_link)){
         echo "<div style='float: left;'><p>Previous:<br><a href='$prev_link'>$prev_title</a></p></div> ";
     }
@@ -1139,6 +1156,5 @@ function go_task_render_chain_pagination ( $task_id, $custom_fields ) {
     }
     echo "</div>";
 
-    foreach ( $chain_order as $task_id ) {
-    }
 }
+

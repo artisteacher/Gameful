@@ -305,7 +305,7 @@ function go_display_shorthand_currency ($currency_type, $amount, $output = false
                     $r_str = "{$gold_suffix}<br>";
                 }else{
                     $str = "{$gold_amount}{$divider}{$gold_suffix}";
-                    $str .= "&nbsp;&nbsp;&nbsp;";
+                    $str .= "&nbsp;";
                 }
             }
             if ($silver_amount != 0 || $show_empty){
@@ -315,7 +315,7 @@ function go_display_shorthand_currency ($currency_type, $amount, $output = false
                     $r_str .= "{$silver_suffix}<br>";
                 }else{
                     $str .=  "{$silver_amount}{$divider}{$silver_suffix}";
-                    $str .= "&nbsp;&nbsp;&nbsp;";
+                    $str .= "&nbsp;";
                 }
             }
             if ($copper_amount != 0 || $show_empty){
@@ -326,7 +326,7 @@ function go_display_shorthand_currency ($currency_type, $amount, $output = false
                 }
                 else{
                     $str .=  "{$copper_amount}{$divider}{$copper_suffix}";
-                    $str .= "&nbsp;&nbsp;&nbsp;";
+                    //$str .= "&nbsp;";
                 }
             }
 
@@ -355,7 +355,7 @@ function go_display_shorthand_currency ($currency_type, $amount, $output = false
 function go_get_health_mod ($user_id){
     //set the health mod
     $is_logged_in = ! empty( $user_id ) && is_user_member_of_blog( $user_id ) ? true : false;
-    if (go_user_is_admin($user_id)){
+    if (go_user_is_admin()){
         $is_logged_in = true;
     }
     $health_toggle = go_get_loot_toggle( 'health' );
@@ -456,7 +456,7 @@ function go_update_stage_table ($user_id, $post_id, $custom_fields, $status, $bo
     $go_task_table_name = "{$wpdb->prefix}go_tasks";
     $go_actions_table_name = "{$wpdb->prefix}go_actions";
     $is_logged_in = !empty($user_id) && is_user_member_of_blog($user_id) ? true : false;
-    if (go_user_is_admin($user_id)){
+    if (go_user_is_admin()){
         $is_logged_in = true;
     }
     $bonus_status = (isset($bonus_status) ? $bonus_status : null);
@@ -482,7 +482,6 @@ function go_update_stage_table ($user_id, $post_id, $custom_fields, $status, $bo
 			ORDER BY last_time DESC", $user_id, $post_id
     ));
 
-    $update = false;
     if(is_array($class)) {
         $class = (isset($class[0]->class) ?  $class[0]->class : null);
         //$class = $class[0]->class;
@@ -494,7 +493,6 @@ function go_update_stage_table ($user_id, $post_id, $custom_fields, $status, $bo
                 }
                 $class[] = 'resetted';
                 $class = serialize($class);
-                $update = true;
             }
         }
     }
@@ -504,7 +502,6 @@ function go_update_stage_table ($user_id, $post_id, $custom_fields, $status, $bo
     //END UPDATE CLASS
 
     if ($progressing === 'timer') {
-        $start_time = $time;
         $new_status_task = 'null';
         $new_bonus_status_task = 'null';
         $new_bonus_status_actions = 0;
@@ -842,14 +839,19 @@ function go_term_notification($term, $term_id, $add){
     if($add){
         $prefix = 'New ';
         $type = 'success';
+        $award_message = get_term_meta( $term_id, 'award_message' );
+        $award_message = (isset($award_message[0]) ?  $award_message[0] : null);
+        $award_message = "<br>".$award_message;
     }else{
         $prefix = 'Remove ';
         $type = 'error';
+        $award_message = '';
     }
     $title = $prefix . ucfirst($title);
     //go_noty_loot_success($badge_name, $message);
-    $content = "<div>" . $img . "<br>" . $term_name . "</div>";
-    go_noty_message_generic ($type, $title, $content);
+
+    $content = "<div>" . $img . "<br><h3>" . $term_name . "</h3>".$award_message."</div>";
+    go_noty_message_generic ($type, $title, $content, false);
 }
 
 /**
@@ -986,7 +988,7 @@ function go_remove_groups($group_ids, $user_id, $notify = false) {
 }
 
 function go_print_single_badge( $term_id, $type = 'badge', $output = true, $user_id = null, $additional_class = null){
-
+    $badge_assigned = false;
     //if user_id is passed, find if badge is earned
     if($user_id != null) {
         if($type === 'badge') {
@@ -1023,7 +1025,7 @@ function go_print_single_badge( $term_id, $type = 'badge', $output = true, $user
         $icon_toggle = get_term_meta( $id, 'image_source' );
         $icon_toggle = (isset($icon_toggle[0]) ?  $icon_toggle[0] : false);
 
-        if($icon_toggle[0] === '1'){
+        if($icon_toggle === '1'){
             $icon = get_term_meta( $id, 'icon' );
             $color = get_term_meta( $id, 'icon_color' );
             $img = '<i class="'.$icon[0].' fa-4x" style="color:'.$color[0].'"></i>';
@@ -1036,28 +1038,41 @@ function go_print_single_badge( $term_id, $type = 'badge', $output = true, $user
                 $img = wp_get_attachment_image($img_id[0], array( 100, 100 ));
             }else{
                 if ($type === 'badge') {
-                    $img = '<i class="fas fa-award fa-4x" style="height: 100px"></i>';
+                    $img = '<i class="fas fa-award fa-4x"></i>';
                 }
                 else if($type ==='group'){
-                    $img = '<i class="fas fa-users fa-4x" style="height: 100px"></i>';
+                    $img = '<i class="fas fa-users fa-4x"></i>';
                 }
             }
         }
 
-
         $description = term_description( $id );
+        if ($badge_assigned) {
+            $award_message = get_term_meta( $id, 'award_message' );
+            $award_message = (isset($award_message[0]) ?  $award_message[0] : null);
+            if($award_message) {
+                $description .= "<br>" . $award_message;
+            }
+        }
 
 
 
+/*
         $badge = "<div class='go_badge_wrap'><div class='go_badge_container $class'>";
 
         if (!empty($description)){
-           $badge .= "<span class='tooltip' data-tippy-content='{$description}'><figure class=go_badge title='{$name}'>{$img}<figcaption>{$name}</figcaption></figure></span>";
+           $badge .= "<span class='tooltip' data-tippy-content='{$description}'><figure class=go_badge title='{$name}'><div class='fig_wrap'>{$img}</div><figcaption>{$name}</figcaption></figure></span>";
         }else{
-            $badge .= "<figure class=go_badge title='{$name}'>$img<figcaption>{$name}</figcaption></figure>";
+            $badge .= "<figure class=go_badge title='{$name}'><div class='fig_wrap'>$img</div><figcaption>{$name}</figcaption></figure>";
         }
         $badge .= "</div></div>";
+*/
 
+        if (!empty($description)){
+            $badge = "<div class='go_badge_wrap' ><div class='go_badge_container $class'><figure class='go_badge'><div class='fig_wrap tooltip' data-tippy-content='{$description}' data-tippy-theme='light'>{$img}</div><figcaption>{$name}</figcaption></figure></div></div>";
+        }else{
+            $badge = "<div class='go_badge_wrap'><div class='go_badge_container $class'><figure class='go_badge'><div class='fig_wrap'>$img</div><figcaption>{$name}</figcaption></figure></div></div>";
+        }
 
         if($output){
             echo $badge;
@@ -1149,8 +1164,8 @@ function go_update_actions($user_id, $type, $source_id, $status, $bonus_status, 
 
 
     //Get the health before the gold incase there is a bankruptcy penalty
-    $go_current_health = $user_loot['health'];
-
+    $go_original_health = $user_loot['health'];
+    $go_current_health = $go_original_health;
 
     // the user's current amount of currency
     $go_current_gold = $user_loot['gold'];
@@ -1172,16 +1187,19 @@ function go_update_actions($user_id, $type, $source_id, $status, $bonus_status, 
         $vars[0]['uid'] = $user_id;
 
        go_send_message(true, $title, $message, 'message', true, 0, 0, $health_penalty, $source_id, false, '', '', $vars);
-       $go_current_health = $go_current_health + $health_penalty;//adjust current health because message will change the total
+       $go_current_health = $go_original_health + $health_penalty;//adjust current health because message will change the total
     }
 
     // the user's current amount of bonus currency,
     // also used for % in the admin bar
 
     $new_health_total = $go_current_health + $health;
-    if ($new_health_total < 0) {
+   /* if ($go_current_health < 0) {
         $new_health_total = 0;
         $health = $go_current_health * -1;//ony subtract the amount that a player has
+    }*/
+    if($new_health_total<0){
+        $health = $go_original_health * -1;
     }
     /*
     else if ($new_health_total > 200) {
@@ -1192,19 +1210,21 @@ function go_update_actions($user_id, $type, $source_id, $status, $bonus_status, 
     $go_actions_table_name = "{$wpdb->prefix}go_actions";
     //$time = date( 'Y-m-d G:i:s', current_time( 'timestamp', 0 ) );
     $time = current_time('mysql');
+    //if($notify === 'attendance'){
+       // $new_xp_total = $go_current_xp;
+       // $new_gold_total = $go_current_gold;
+       // $new_health_total = $go_current_health;
+    //}
 
     $wpdb->insert($go_actions_table_name, array('uid' => $user_id, 'action_type' => $type, 'source_id' => $source_id, 'TIMESTAMP' => $time, 'stage' => $status, 'bonus_status' => $bonus_status, 'check_type' => $check_type, 'result' => $result, 'quiz_mod' => $quiz_mod, 'late_mod' => $late_mod, 'timer_mod' => $timer_mod, 'global_mod' => $global_mod, 'xp' => $xp, 'gold' => $gold, 'health' => $health, 'badges' => $badge_ids, 'groups' => $group_ids, 'xp_total' => $new_xp_total, 'gold_total' => $new_gold_total, 'health_total' => $new_health_total));
 
-    //if notify = admin than this action is just creating
-    //a message and should not update the totals.
-    //The totals will be updated in another call to this function.
-    //So, if this is not a store item with admin notifications, then update the totals table
-    if ($notify !== 'admin') {
-        go_update_totals_table($user_id, $xp, $gold, $health, $notify);
-        if ($notify === true) {
-            go_update_admin_bar($user_id);
-        }
+
+
+    go_update_totals_table($user_id, $xp, $gold, $health, $notify);
+    if ($notify === true) {
+        go_update_admin_bar($user_id);
     }
+
 
 
     //badges and groups are only updated from the add/remove badges and groups functions
@@ -1613,13 +1633,13 @@ function go_noty_message_modal($type = 'alert', $title, $content) {
     if(go_user_is_admin()){
         $closeWith = 'click';
         $modal = '';
-        $timeout = "timeout: '3000',";
+        $timeout = 3000;
         //$closeWith = 'button';
         //$modal = true;
     } else {
-        $closeWith = 'button';
+        $closeWith = 'click';
         $modal = 'modal: true,';
-        $timeout = '';
+        $timeout = false;
 
     }
     //go_noty_close_oldest();
@@ -1629,7 +1649,7 @@ function go_noty_message_modal($type = 'alert', $title, $content) {
                 type: '" . $type . "',
                 layout: 'topRight',
                 text: '" . addslashes($text) . "',
-                " . $timeout . "
+                timeout: '" . $timeout . "',
                 theme: 'sunset',
                 visibilityControl: true,
                 closeWith: ['" . $closeWith . "'], // ['click', 'button', 'hover', 'backdrop'] // backdrop click will close all notifications

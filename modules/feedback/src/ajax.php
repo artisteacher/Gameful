@@ -12,12 +12,30 @@ function go_blog_revision(){
     }
 
     $post_id = (isset($_POST['post_id']) ? $_POST['post_id'] : null);
-    go_blog_post($post_id, null, false,false , false,false ,null ,true);
+    go_blog_post($post_id, null, false,false , false,false ,null);
+
+    $parent = wp_get_post_parent_id($post_id);
+    ?>
+    <div style="text-align:right;">
+        <button class="go_restore_revision" data-post_id="<?php echo $post_id; ?>"
+                data-parent_id="<?php echo $parent; ?>">Restore this post
+        </button>
+    </div>
+    <script>
+        jQuery('.go_restore_revision').off().one("click", function () {
+            go_restore_revision(this);
+        });
+    </script>
+    <?php
+
+
+
 
     die();
 }
 
 function go_restore_revision(){
+
     if ( !is_user_logged_in() ) {
         echo "login";
         die();
@@ -33,12 +51,29 @@ function go_restore_revision(){
 
     $post_id = (isset($_POST['post_id']) ? $_POST['post_id'] : null);
     $parent_id = (isset($_POST['parent_id']) ? $_POST['parent_id'] : null);
-    wp_restore_post_revision($post_id);
-    go_blog_post($parent_id, null, false,true , true,false,null ,false);
+    $is_autosave = (isset($_POST['autosave']) ? $_POST['autosave'] : false);
+    $form = (isset($_POST['form']) ? $_POST['form'] : false);
+    $load_current = (isset($_POST['load_current']) ? $_POST['load_current'] : false);
+    if(!$load_current) {
+        wp_restore_post_revision($post_id);
+    }
+    if(!$form) {
+        go_blog_post($parent_id, null, false, true, true, false, null);
+    }
+    else{
+        if($is_autosave === "true") {
+            go_blog_form($parent_id);
+        }
+        else{
+            go_blog_form($post_id);
+        }
+        //go_buttons($custom_fields, $i, $stage_count, $status, $check_type, $bonus, $bonus_status, $repeat_max, false, $blog_post_id);
+    }
 
     die();
 }
 
+//This filters the reader and loads the reader if it is the lightbox
 function go_filter_reader(){
 
     if ( !is_user_logged_in() ) {
@@ -50,12 +85,23 @@ function go_filter_reader(){
         echo "refresh";
         die( );
     }
-    go_reader_get_posts(false);
+    $is_initial_single_stage = (isset($_GET['is_initial_single_stage']) ? $_GET['is_initial_single_stage'] : false);
+
+    if($is_initial_single_stage == "true"){
+
+        go_make_reader();
+
+    }else{
+        go_reader_get_posts( null, null, null);
+    }
+    //go_reader_get_posts(false);
+
     die();
 }
 
-function go_reader_bulk_read(){
-
+//remove nonce?
+function go_reader_bulk_read($query){
+/*
     if ( !is_user_logged_in() ) {
         echo "login";
         die();
@@ -66,9 +112,10 @@ function go_reader_bulk_read(){
         echo "refresh";
         die( );
     }
+*/
 
     global $wpdb;
-    $sQuery1 = "SELECT
+    /*$sQuery1 = "SELECT
             t4.ID";
 
     $where = (isset($_POST['where']) ? $_POST['where'] : null);
@@ -80,10 +127,11 @@ function go_reader_bulk_read(){
 
     //$sQuery = $sQuery1 . $sQuery2 . $pWhere . " ORDER BY t4.post_modified " . $order ;
     $sQuery = $sQuery1 . $sQuery2 . $pWhere ;
+*/
 
-    $posts = $wpdb->get_results($sQuery, ARRAY_A);
+    //$posts = $wpdb->get_results($sQuery, ARRAY_A);
     //$posts = array_column($posts, 'ID');
-
+    $posts = $wpdb->get_results($query, ARRAY_A);
     $task_ids = array_column($posts, 'ID');
     //$task_ids = json_decode($task_ids);
 
@@ -109,12 +157,13 @@ function go_reader_bulk_read(){
         }
     }
     */
-    echo ("Posts were marked as read.");
-    die();
+    //echo '<div id="go_post_found" style="width: 600px;float:left;"></div>';
+    //die();
 }
 
+//remove nonce?
 function go_reader_read_printed(){
-
+/*
     if ( !is_user_logged_in() ) {
         echo "login";
         die();
@@ -124,7 +173,7 @@ function go_reader_read_printed(){
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_reader_read_printed' ) ) {
         echo "refresh";
         die( );
-    }
+    }*/
 
     $post_ids = (isset($_POST['postids']) ? $_POST['postids'] : null);
 
@@ -139,7 +188,7 @@ function go_reader_read_printed(){
         }
     }
     //echo ("Posts were marked as read.");
-    die();
+    //die();
 }
 
 function go_mark_one_read_toggle(){
@@ -182,7 +231,6 @@ function go_mark_one_read_toggle(){
 
 function go_num_posts()
 {
-
     if (!is_user_logged_in()) {
         echo "login";
         die();
@@ -198,15 +246,18 @@ function go_num_posts()
     $order = (isset($_GET['order']) ? $_GET['order'] : null);
 
     $squery = (isset($_GET['query']) ? $_GET['query'] : null);
+
     $sQuery = stripslashes($squery);
+
+    $cards = (isset($_GET['cards']) ? $_GET['cards'] : "false");
+    $user_id = get_current_user_id();
+
+    update_user_option($user_id, 'go_use_cards', $cards);
 
     //$tQuery = (isset($_POST['tQuery']) ? $_POST['tQuery'] : null);
     //$tQuery = stripslashes($tQuery);
 
-
-
-    go_reader_get_posts(false, $sQuery, $where, $order);
-
+    go_reader_get_posts( $sQuery, $where, $order);
 
     //echo "Posts were marked as read.";
     die();
@@ -226,11 +277,12 @@ function go_send_feedback()
     }
 
     global $wpdb;
-    //$go_task_table_name = "{$wpdb->prefix}go_tasks";
 
     $feedback_title = (!empty($_POST['title']) ? $_POST['title'] : "");
+    $feedback_title = wp_kses_post($feedback_title);
     $feedback_title = stripslashes($feedback_title);
     $feedback_message = (!empty($_POST['message']) ? $_POST['message'] : "");
+    $feedback_message = wp_kses_post($feedback_message);
     $feedback_message = stripslashes($feedback_message);
     $feedback_title  = do_shortcode( $feedback_title );
     $feedback_message  = do_shortcode( $feedback_message );
@@ -447,6 +499,57 @@ function go_send_feedback()
     wp_update_post($query, true);
     die();
 }
+
+function go_get_likes_list(){
+    if (!is_user_logged_in()) {
+        echo "login";
+        die();
+    }
+
+    //check_ajax_referer( 'go_send_message');
+    if (!wp_verify_nonce($_REQUEST['_ajax_nonce'], 'go_get_likes_list')) {
+        echo "refresh";
+        die();
+    }
+
+    $user_id = (!empty($_POST['user_id']) ? $_POST['user_id'] : null);
+    $post_id = (!empty($_POST['post_id']) ? $_POST['post_id'] : null);
+    if(empty($user_id) || empty($post_id)){
+        die();
+    }
+
+    $status = go_post_meta($post_id, 'go_blog_favorite', true );
+    if(is_serialized($status)) {
+        $status = unserialize($status);
+    }
+    if (is_array($status)) {
+        $count = count($status);
+        if ($count > 0) {
+            echo "<div><div class='go_likes_list'><h3>Likes</h3><div style='display: flex; '>";
+            foreach ($status as $uid) {
+                echo go_get_avatar($uid, false, array(35, 35));
+                echo "<span style='width: 250px; padding-left: 10px;'>" . go_get_user_display_name($uid) . "</span>";
+                $blog_toggle = get_option('options_go_blogs_toggle');
+                if ($blog_toggle) {
+                    /*if ($is_clipboard) {
+                        $info_login = $login;
+                    } else {
+                        $user_info = get_userdata($user_id);
+                        $info_login = $user_info->user_login;
+                    }*/
+                    $user_blog_link = get_site_url(null, '/user/' . $uid);
+                    echo '<button onclick="window.open(\'' . $user_blog_link . '\')">View Blog</button>';
+                }
+
+                //echo "<span style='width: 50px;'>" . go_user_links($uid, false,  false,  true,  false ) . "</span>";
+                echo "<br>";
+            }
+            echo"</div>";
+        }
+    }
+    die();
+}
+
 
 
 

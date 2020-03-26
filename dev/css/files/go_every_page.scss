@@ -1,3 +1,147 @@
+.mce-notification {display: none !important;}
+
+
+
+/********************
+*	Map and Store actions
+********************/
+
+.go_actions_wrapper_flex a{
+	color: #1a1a1a !important;
+}
+
+.go_actions_wrapper_flex {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.go_actions_wrapper {
+	display: inline;
+}
+.go_actions_wrapper_flex,
+.go_actions_wrapper {
+	font-size: 18px !important;
+	padding: 5px 10px !important;
+	> span span {
+		padding: 0 10px !important;
+	}
+
+	a {
+		display: inline !important;
+	}
+}
+
+.fa-clone{
+	cursor: pointer;
+}
+.fa-cloner:hover{
+	color: #ccc;
+}
+/********************
+*	END
+********************/
+
+
+
+
+.go_acf_hidden {display: none;}
+
+.go_check_autosave_wrapper {
+  border: solid 2px;
+  background: white;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+
+#social_feed {
+	background-color: #cccccc;
+}
+
+.go_social_button{
+	margin: 5px;
+	padding: 5px 10px;
+}
+
+/********************
+*	Fix for Elementor Select2 jumps to top
+********************/
+.ui-helper-hidden-accessible {
+	//position: relative !important;
+	//top: unset !important;
+}
+
+/********************
+*	Quest Reader Masonry Cards
+********************/
+
+
+/*
+#go_cards {
+	display: flex;
+	flex-flow: column wrap;
+	clear:both;
+	height: 200px;
+}
+
+.go_blog_post_card_wrapper {
+	width: 30%;
+	min-width: 306px;
+	padding: 20px;
+	margin: 10px;
+	background-color: white;
+	overflow: hidden;
+}*/
+
+#go_cards {
+	clear:both;
+}
+
+.go_blog_post_card_wrapper {
+	padding: 20px;
+	margin: 10px;
+	background-color: white;
+	//width: 100%;
+}
+
+.go_blog_post_card_sizer{
+	//max-width: 500px !important;
+	//float: left;
+	width: 100%;
+}
+
+@media (min-width: 400px){
+	.go_blog_post_card_sizer {
+		width: 100%;
+	}
+}
+
+@media (min-width: 768px){
+
+	.go_blog_post_card_sizer {
+		width: 50%;
+	}
+}
+
+@media (min-width: 1024px){
+
+	.go_blog_post_card_sizer {
+		width: 33%;
+	}
+}
+
+.go_likes_list img{
+	width: 35px;
+	height: 35px;
+}
+
+.go_quest_reader_lightbox .featherlight-content{
+	width: 95%;
+	margin-right: 2.5% !important;
+	margin-left: 2.5% !important;
+	background: #efefef !important;
+	overflow: scroll !important;
+}
 
 /********************
 *	User Bar
@@ -31,7 +175,7 @@ body.wp-admin {
 	top: 0px;
 	width: 100%;
 	z-index: 100000;
-	height: 91px;
+	//height: 91px;
 	font-family: sans-serif;
 	font-size: 14px;
 
@@ -171,6 +315,13 @@ body.wp-admin {
 	//move the payerbar down when the admin bar is shown
 	.admin-bar #go_user_bar { top: 46px;}
 
+	#wpadminbar .ab-icon:before {
+		text-align: center;
+		font-size: 34px;
+		height: 46px;
+		line-height: 47px;
+	}
+
 	/*
 	body.blog{margin-top: 39px !important;}
 	html #go_user_bar {
@@ -196,7 +347,6 @@ body.wp-admin {
 	body { margin-top:0px;}
 
 }
-
 
 .go_loader_container{
 	width: 100%;
@@ -311,18 +461,49 @@ input[type="checkbox"]:checked + label span.checkbox::after {
 #go_datepicker_container {
 	text-align: right;
 }
-
-#go_user_filters_1{
+.daterangepicker {
+	z-index: 100003 !important;
+	td, th{
+		padding: 0;
+	}
+}
+#go_user_filters {
+	width: 100%;
+	padding-bottom: 20px;
+ }
+ #go_user_filters_1{
 	text-align: right;
 }
-#go_user_filters_1 .select2-container {
+#go_user_filters_1 .user_filter {
 	min-width: 150px;
 	padding-left: 10px;
+
+	label{
+		padding: 0 10px;
+	}
 }
 
 #go_user_filters_1 label {
 	float: left;
 
+}
+
+#go_action_filters {
+	flex-wrap: wrap;
+	padding: 20px 40px 20px 20px;
+
+	div {
+		padding: 0 15px;
+		align-items: center;
+	}
+
+}
+.status_filters, .order_filter{
+	padding: 20px 40px 20px 20px;
+}
+
+.order_filter{
+	float: left;
 }
 
 #go_leaderboard_filters {
@@ -434,14 +615,16 @@ body:not(.wp-customizer) .media-modal {
  */
 #go_loot_table .acf-switch,
 #go_loot_table .go-acf-switch,
-.go_loot_table .go-acf-switch{
+.go_loot_table .go-acf-switch,
+#go_loot_table.penalty{
 	background: pink !important;
 	border-color: indianred !important;
 }
 
 #go_loot_table .acf-switch.-on,
 #go_loot_table .go-acf-switch.-on,
-.go_loot_table .go-acf-switch.-on{
+.go_loot_table .go-acf-switch.-on,
+#go_loot_table.reward{
 	background: forestgreen !important;
 	border-color: darkgreen !important;
 }
@@ -675,7 +858,7 @@ body:not(.wp-customizer) .media-modal {
 }
 
 .go_required_blog_content{
-	padding: 20px;
+	//padding: 20px;
 }
 
 
@@ -684,18 +867,33 @@ body:not(.wp-customizer) .media-modal {
 *	locks
 ********************/
 .go_locks {
-	border: 1px solid;
-	border-radius: 15px;
 	padding: 10px;
 	margin: 10px;
 	background-color: #ddd;
+
+
+	p{
+		margin-bottom: 10px;
+	}
+
+
 }
+.go_task_pod_required .go_locks {
+	background-color: unset;
+	}
+
+
+.go_term_list p {
+	margin: 0px !important;
+}
+
 .go_lock, .go_late_mods, .go_sched_access_message, .go_timer_message, .go_checks_and_buttons {
 	//border: solid 1px;
 	border-radius: 3px;
 	padding: 10px;
 	margin: 10px 0;
 	background-color: #f5b3bd;
+	min-width: 200px;
 }
 
 .go_lock .go_error_red {
@@ -721,6 +919,8 @@ body:not(.wp-customizer) .media-modal {
 	list-style-type: disc !important;
 	list-style-position: inside !important;
 }
+
+
 
 /********************
 *	Top Menu
@@ -883,6 +1083,10 @@ input[type='text'].go_error_red {
 	left: 0;
 	height: 100% !important;}
 
+.bonus .go_admin_bar_health_bar {
+	background-image: linear-gradient(45deg, rgba(69, 69, 69, .2) 25%, rgba(51, 51, 51, .4) 25%, rgba(51, 51, 51, .4) 50%, rgba(69, 69, 69, .2) 50%, rgba(69, 69, 69, .2) 75%, rgba(51, 51, 51, .4) 75%, rgba(51, 51, 51, .4) 100%);
+	background-size: 28.28px 28.28px;
+}
 
 #go_admin_bar_title {
 	text-align: left;
@@ -1384,6 +1588,7 @@ input#go_pass_lock::-moz-placeholder {
 	overflow-y: hidden !important;
 }
 
+#adminmenu #menu-settings .wp-menu-image:before,
 #adminmenu #toplevel_page_game-on-options .wp-menu-image:before {
 	font-family: 'Font Awesome 5 Pro' !important;
 	content: '\f085';
@@ -1483,7 +1688,16 @@ input#go_pass_lock::-moz-placeholder {
 	.wp-editor-container textarea.wp-editor-area{
 		height: 50px;
 	}
+
+	.go_mce_textarea {
+		display: block;
+	}
 }
+
+.wp-editor-container textarea.wp-editor-area{
+	height: 50px;
+}
+
 
 #go_task_rewards {
 	display: flex;
@@ -1858,7 +2072,11 @@ $turn-time: 3s;
 /********************
 *	Feedback and blog
 ********************/
-
+.go_blog_post_wrapper .question{
+	font-size: .8em;
+	//font-style: italic;
+	font-weight: bold;
+}
 .go_blog_post_wrapper.reset{
 	background-color: #fff3f3 !important;
 	border: 1px solid;
@@ -1948,6 +2166,10 @@ $turn-time: 3s;
 
 .go_blog_content{
 	margin-top: 5px;
+
+	img{
+		cursor: pointer;
+	}
 }
 
 .feedback_percent_input{
@@ -2001,4 +2223,14 @@ i.mce-i-go_admin_comment:before {   // FONT-AWESOME-CLASSNAME e.g. "icon-youtube
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	font-family: 'Font Awesome 5 Pro' !important;
+}
+
+/********************
+*	Canvas svg output
+********************/
+
+.my-drawing-svg svg {
+	width: 100%;
+	max-width: 800px;
+	height: auto;
 }

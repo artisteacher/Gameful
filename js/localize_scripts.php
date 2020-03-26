@@ -15,15 +15,42 @@ function go_localize_all_pages(){
         wp_localize_script( 'go_all_pages_js', 'go_debug', 'false' );
     }
 
-    $go_lightbox_switch = get_option( 'options_go_video_lightbox' );
-    $go_video_unit = get_option ('options_go_video_width_unit');
-    $go_fitvids_maxwidth = "";
-    if ($go_video_unit == 'px'){
-        $go_fitvids_maxwidth = get_option('options_go_video_width_pixels')."px";
+    $go_lightbox_switch = get_option( 'go_video_lightbox_toggle_switch' );
+    if($go_lightbox_switch === false){
+        $go_lightbox_switch = 1;
     }
+    $go_video_unit = get_option ('go_video_width_type_control');$go_video_unit = get_option ('go_video_width_type_control');
     if ($go_video_unit == '%'){
-        $go_fitvids_maxwidth = get_option('options_go_video_width_percent')."%";
+        $percent = get_option( 'go_video_width_percent_control' );
+        if($percent === false){
+            $percent = 100;
+        }
+        $go_fitvids_maxwidth = $percent."%";
+    }else{
+        $pixels = get_option( 'go_video_width_px_control' );
+        if($pixels === false){
+            $pixels = 400;
+        }
+        $go_fitvids_maxwidth = $pixels."px";
     }
+
+    /*
+           * Clipboard Scripts
+           */
+    wp_localize_script(
+        'go_all_pages_js',
+        'GO_CLIPBOARD_DATA_frontend',
+        array(
+            'nonces' => array(
+                'go_clipboard_activity' => wp_create_nonce( 'go_clipboard_activity' ),
+                'go_clipboard_save_filters'     => wp_create_nonce( 'go_clipboard_save_filters' ),
+                'go_clipboard_activity_stats_ajax'     => wp_create_nonce( 'go_clipboard_activity_stats_ajax' )
+            ),
+        )
+    );
+
+
+
     wp_localize_script(
         'go_all_pages_js',
         'GO_EVERY_PAGE_DATA',
@@ -39,7 +66,7 @@ function go_localize_all_pages(){
                 'go_stats_single_task_activity_list'       => wp_create_nonce( 'go_stats_single_task_activity_list' ),
                 'go_stats_badges_list'          => wp_create_nonce( 'go_stats_badges_list' ),
                 'go_stats_groups_list'          => wp_create_nonce( 'go_stats_groups_list' ),
-                'go_stats_leaderboard'          => wp_create_nonce( 'go_stats_leaderboard' ),
+                'go_make_leaderboard'           => wp_create_nonce( 'go_make_leaderboard' ),
                 'go_stats_lite'                 => wp_create_nonce( 'go_stats_lite' ),
                 'go_to_this_map'                => wp_create_nonce('go_to_this_map'),//only needed on map page and clipboard
                 'go_the_lb_ajax'                => wp_create_nonce( 'go_the_lb_ajax' ),//could happen anywhere with shortcode
@@ -54,6 +81,14 @@ function go_localize_all_pages(){
                 'go_restore_revision'           => wp_create_nonce('go_restore_revision'),
                 'go_clone_post_new_menu_bar'    => wp_create_nonce('go_clone_post_new_menu_bar'),//all pages for admin users
                 'go_user_map_ajax'              => wp_create_nonce('go_user_map_ajax'),
+                'go_get_likes_list'             => wp_create_nonce('go_get_likes_list'),
+                'go_print_grade_scales'         => wp_create_nonce('go_print_grade_scales'),
+                'go_check_messages_ajax'        => wp_create_nonce('go_check_messages_ajax'),
+                'go_attendance_check_ajax'      => wp_create_nonce('go_attendance_check_ajax'),
+                'go_loadmore_reader'            => wp_create_nonce('go_loadmore_reader'),
+                'go_update_chain_order'         => wp_create_nonce('go_update_chain_order'),
+                'go_update_task_order'          => wp_create_nonce('go_update_task_order'),
+                'go_quick_edit_task'            => wp_create_nonce('go_quick_edit_task'),
             ),
             'go_lightbox_switch'            => $go_lightbox_switch,
             'go_fitvids_maxwidth'           => $go_fitvids_maxwidth

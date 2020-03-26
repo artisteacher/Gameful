@@ -14,6 +14,7 @@ if ( !is_admin() ) {
     include_once('src/public_ajax.php');
     include_once('src/ajax.php');
     add_action( 'wp_ajax_go_task_change_stage', 'go_task_change_stage' ); //OK
+    add_action( 'wp_ajax_go_new_pagination_ajax', 'go_new_pagination_ajax' ); //OK
 }else{
     include_once('src/admin.php');
 }
