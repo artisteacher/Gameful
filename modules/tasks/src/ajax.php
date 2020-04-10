@@ -34,6 +34,7 @@ function go_task_change_stage() {
     $post_data = go_post_data( $post_id );
     $post_status = go_post_status( $post_id );
     $custom_fields = go_post_meta( $post_id );
+    $stage_count = (isset($custom_fields['go_stages'][0]) ?  $custom_fields['go_stages'][0] : null); //total # of stages
     //$custom_fields = go_post_meta( $post_id ); // Just gathering some data about this task with its post id
     $task_name = strtolower( get_option( 'options_go_tasks_name_singular' ) );
     $button_type 			= ( ! empty( $_POST['button_type'] ) ? $_POST['button_type'] : null );
@@ -51,6 +52,8 @@ function go_task_change_stage() {
         $blog_post_id = null;
     }
     */
+    //just in case somehow the current status is greater than the number of stages
+
 
     $redirect_url = null;
     $time_left_ms = null;
@@ -152,7 +155,8 @@ function go_task_change_stage() {
             //wp_list_comments();
         }
 
-    }else {
+    }
+    else {
 
         //this makes sure the action wasn't done twice (perhaps two windows open) and refreshed page if it appears that is the case.
         if (($status != $db_status && $check_type != 'unlock') || ($db_check_type != $check_type && $check_type != 'show_bonus' && $check_type != 'unlock')) {
@@ -166,6 +170,10 @@ function go_task_change_stage() {
 
 
         if ($button_type == 'continue' || $button_type == 'complete') {
+            if($stage_count < $db_status){
+                echo "refresh";
+                die( );
+            }
             //check password on stage. Returns "password" or "master_password".
             if ($check_type == 'password') {
                 $result = go_stage_password_validate($result, $custom_fields, $status, false);
@@ -616,4 +624,94 @@ function go_new_pagination_ajax(){
     $task_id = (!empty($_POST['post_id']) ? $_POST['post_id'] : null);
     go_new_pagination ( $task_id );
     die();
+}
+
+
+
+//needs nonce
+function go_new_task_from_template($admin_bar=true){
+    if ( !is_user_logged_in() ) {
+        echo "login";
+        die();
+    }
+
+    //check_ajax_referer('go_stats_leaderboard_');
+    if (!wp_verify_nonce($_REQUEST['_ajax_nonce'], 'go_new_task_from_template')) {
+        echo "refresh";
+        die();
+    }
+
+    $chain_id = $_REQUEST['chain_id'];
+    $chain_name = $_REQUEST['chain_name'];
+    $frontend_edit = $_REQUEST['frontend_edit'];
+    $task_name = get_option('options_go_tasks_name_singular');
+    $templates = get_posts([
+        'post_type' => 'tasks_templates',
+        'post_status' => 'any',
+        'numberposts' => -1
+        // 'order'    => 'ASC'
+    ]);
+    $global_templates = false;
+    if(is_gameful()){
+        $primary_blog_id = get_main_site_id();
+        switch_to_blog($primary_blog_id);
+        $global_templates = get_posts([
+            'post_type' => 'tasks_templates',
+            'post_status' => 'any',
+            'numberposts' => -1
+            // 'order'    => 'ASC'
+        ]);
+        restore_current_blog();
+    }
+
+
+    //create a select dropdown
+    if($admin_bar) {
+        echo '<h3>Choose a Template:</h3>';
+    }
+
+    echo '<select class="go_new_task_from_template" name="new_task"><option value="0">New Empty '.$task_name.'</option>';
+    if ($templates) {
+        echo "<optgroup label='My Templates'>";
+        foreach ($templates as $template){
+            $post_id = $template->ID;
+            $title = $template->post_title;
+            echo '<option data-global="false" value="' .$post_id.'">' .$title.'</option>';
+        }
+        echo "</optgroup>";
+    }
+    if($global_templates){
+        echo "<optgroup label='Global Templates'>";
+        foreach ($global_templates as $template){
+            switch_to_blog($primary_blog_id);
+            $post_id = $template->ID;
+            $title = $template->post_title;
+            restore_current_blog();
+            echo '<option class="' .$post_id.'" data-global="true" value="' .$post_id.'">' .$title.'</option>';
+        }
+        echo "</optgroup>";
+    }
+    echo '</select>';
+    if($admin_bar) {
+        echo '<br>';
+    }
+
+    echo '<button class="submit-button button go_new_task_from_template_button" type="submit"';
+    if($admin_bar) {
+        echo 'style="float: right;"';
+    }
+    if(!empty($chain_id) && !empty($chain_name)){
+        echo " data-chain_id='$chain_id' data-chain_name='$chain_name' data-frontend_edit='$frontend_edit'";
+    }
+    echo '>Create '.$task_name.'</button>';
+
+    // $url_new_task = get_admin_url(null, 'post-new.php?post_type=tasks');
+    // echo '<br><br>-or-<br><br><p style="float:right;"><a href="'. $url_new_task .'">Create New Empty '.$task_name.'</a></p>';
+
+
+
+
+    if ( defined( 'DOING_AJAX' )) {
+        die();
+    }
 }

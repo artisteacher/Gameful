@@ -203,7 +203,7 @@ class go_acf_field_level2_taxonomy extends acf_field {
             $multiple = 'multiple';
         }
 /*   <input type="hidden" style="display: block;" name="<?php echo esc_attr($field['name']) ?>" value="<?php echo $value ?>" />   */
-		?>
+		/*?>
 
         <input type="hidden" class="<?php echo esc_attr($field['key']); ?>" style="display: block;" name="<?php echo esc_attr($field['name']) ?>" value="<?php echo $value ?>" />
         <select <?php echo $multiple; ?> class="l2tax tax_<?php echo esc_attr($field['key']); ?>"  data-taxonomy="<?php echo $taxonomy; ?>" data-order_field="<?php echo $order_field; ?>" onchange='acf_level2_taxonomy_update(this);' style="width: 100%;" >
@@ -215,7 +215,8 @@ class go_acf_field_level2_taxonomy extends acf_field {
                             $term = get_term($item);
                             if ($term){
                                 $term_name = ( mb_strlen( $term->name ) > 50 ) ? mb_substr( $term->name, 0, 49 ) . '...' : $term->name;
-                                echo '<option value="' . $item. '" selected="selected">' . $term_name . '</option>';
+                                //echo '<option value="' . $item. '" selected="selected">' . $term_name . '</option>';
+                               //<option value="39" data-select2-id="143">Getting Started2</option>
                             }
                         }
 
@@ -225,7 +226,46 @@ class go_acf_field_level2_taxonomy extends acf_field {
             ?>
         </select>
 
-        <?php
+        <?php*/
+        // Change Field into a select
+        //$field= array();
+        if( $field['field_type'] == 'select' ) {
+
+            $field['multiple'] = 0;
+
+           // $this->render_field_select( $field );
+
+        } elseif( $field['field_type'] == 'multi_select' ) {
+
+            $field['multiple'] = 1;
+
+           // $this->render_field_select( $field );
+
+        }
+        $field['type'] = 'select';
+        $field['ui'] = 1;
+        $field['ajax'] = 1;
+        $field['choices'] = array();
+        $field['allow_null'] = true;
+
+        if (!empty($value)){
+
+            foreach($values as $item){
+                $term = get_term($item);
+                if ($term){
+                    $term_name = ( mb_strlen( $term->name ) > 50 ) ? mb_substr( $term->name, 0, 49 ) . '...' : $term->name;
+                    //echo '<option value="' . $item. '" selected="selected">' . $term_name . '</option>';
+                    //<option value="39" data-select2-id="143">Getting Started2</option>
+                    $field['choices'][ $item] = $term_name;
+                }
+            }
+
+        }
+
+        echo "<div class='l2select_wrapper' data-taxonomy='$taxonomy' data-order_field='$order_field'>";
+        // render select
+        acf_render_field( $field );
+        echo "</div>";
 	}
 	
 		
@@ -435,18 +475,27 @@ class go_acf_field_level2_taxonomy extends acf_field {
 	    $value = str_replace('.', ',', $value);
         //$myArray = explode(',', $value);
         if(!is_serialized($value)) {
-            $myArray = array_map('intval', explode(',', $value));
-            $count = count($myArray);
+           // $myArray = array_map('intval', explode(',', $value));
+            if(is_array($value)) {
+                $count = count($value);
+            }else if (!empty($value)){
+                $count = 1;
+            }else{
+                $count = 0;
+            }
 
             if ($count === 1) {
-                $value = $myArray[0];
+                if(is_array($value)){
+                    $value = $value[0];
+                }
+                $value = intval($value);
                 if (!empty($value) || $value == 0) {
                     $post_id = intval($post_id);
                     $value = intval($value);
                     wp_set_object_terms($post_id, $value, $field['taxonomy']);
                 }
             } else {
-                $value = $myArray;
+                $value = $value;
             }
         }else{
             $value = unserialize($value);

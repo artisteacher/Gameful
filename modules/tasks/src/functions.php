@@ -236,9 +236,6 @@ function go_register_task_tax_and_cpt() {
 }
 add_action( 'init', 'go_register_task_tax_and_cpt', 0 );
 
-
-
-
 add_filter( 'template_include', 'go_tasks_template_function', 1 );
 function go_tasks_template_function( $template_path ) {
     if ( get_post_type() == 'tasks' ) {
@@ -257,82 +254,6 @@ function go_tasks_filter_content() {
     echo do_shortcode( '[go_task id="'.get_the_id().'"]' );
 }
 
-
-
-//Maybe move this to ajax.php
-function go_new_task_from_template($admin_bar=true){
-	if ( !is_user_logged_in() ) {
-		echo "login";
-		die();
-	}
-	$task_name = get_option('options_go_tasks_name_singular');
-	$templates = get_posts([
-		'post_type' => 'tasks_templates',
-		'post_status' => 'any',
-		'numberposts' => -1
-		// 'order'    => 'ASC'
-	]);
-    $global_templates = false;
-	if(is_gameful()){
-        $primary_blog_id = get_main_site_id();
-        switch_to_blog($primary_blog_id);
-        $global_templates = get_posts([
-            'post_type' => 'tasks_templates',
-            'post_status' => 'any',
-            'numberposts' => -1
-            // 'order'    => 'ASC'
-        ]);
-        restore_current_blog();
-    }
-
-
-		//create a select dropdown
-		if($admin_bar) {
-			echo '<h3>Choose a Template:</h3>';
-		}
-
-		echo '<select class="go_new_task_from_template" name="new_task"><option value="0">New Empty '.$task_name.'</option>';
-		if ($templates) {
-            echo "<optgroup label='My Templates'>";
-			foreach ($templates as $template){
-				$post_id = $template->ID;
-				$title = $template->post_title;
-				echo '<option data-global="false" value="' .$post_id.'">' .$title.'</option>';
-			}
-			echo "</optgroup>";
-		}
-		if($global_templates){
-            echo "<optgroup label='Global Templates'>";
-            foreach ($global_templates as $template){
-                switch_to_blog($primary_blog_id);
-                $post_id = $template->ID;
-                $title = $template->post_title;
-                restore_current_blog();
-                echo '<option class="' .$post_id.'" data-global="true" value="' .$post_id.'">' .$title.'</option>';
-            }
-            echo "</optgroup>";
-        }
-		echo '</select>';
-		if($admin_bar) {
-			echo '<br>';
-		}
-
-		echo '<button class="submit-button button go_new_task_from_template_button" type="submit"';
-		if($admin_bar) {
-			echo 'style="float: right;';
-		}
-		echo '">Create '.$task_name.'</button>';
-
-		// $url_new_task = get_admin_url(null, 'post-new.php?post_type=tasks');
-		// echo '<br><br>-or-<br><br><p style="float:right;"><a href="'. $url_new_task .'">Create New Empty '.$task_name.'</a></p>';
-
-
-
-
-	if ( defined( 'DOING_AJAX' )) {
-		die();
-	}
-}
 
 //File types originally was saved as a array, but is now a single value
 //if array is in database and has single value, convert to single value

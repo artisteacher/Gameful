@@ -375,12 +375,13 @@ function go_blog_new_posts(initial = 'false'){
     });
 
     jQuery('.go_str_item').off().one("click", function (e) {
-        go_lb_opener(this.id);
+        go_lb_opener(this);
     });
 
     if(initial === 'false') {
         go_activate_tinymce_on_task_change_stage('go_blog_post');
 
+        /*
         jQuery('.go_blog_element_input').each(
             function () {
                 console.log("go_blog_element_input");
@@ -388,7 +389,17 @@ function go_blog_new_posts(initial = 'false'){
                 console.log("go_mce_id" + go_mce_id);
                 go_activate_tinymce_on_task_change_stage(go_mce_id);
             }
-        );
+        );*/
+
+        jQuery(".wp-editor-area").each(function(){
+            var go_mce_id = jQuery(this).attr('id');
+            console.log("go_mce_id" + go_mce_id);
+            go_activate_tinymce_on_task_change_stage(go_mce_id);
+        })
+
+
+
+
     }
 
 /*
@@ -1370,6 +1381,7 @@ function go_blog_user_task (target) {
         success: function( res ) {
             go_after_ajax();
             go_disable_loading();
+
             jQuery.featherlight(res, {
                 variant: 'blogs',
                 afterOpen: function(event){
@@ -1497,15 +1509,19 @@ function go_show_private(target){
     //refresh page (or posts)
 }
 
-function go_activate_tinymce_on_task_change_stage(fullId){
+function go_activate_tinymce_on_task_change_stage(fullId, use_full = null){
     //tinymce.execCommand('mceRemoveEditor', true, 'go_blog_post_lightbox');
-    console.log("go_activate_tinymce_on_task_change_stage:"+fullId);
+    //console.log("go_activate_tinymce_on_task_change_stage:"+fullId);
 
     var is_admin = GO_FRONTEND_DATA.go_is_admin;
     //var is_admin = false;
-    var use_full = jQuery("#"+fullId).closest('.go_blog_element_input').data('toolbar');
-    console.log("use_full: " + use_full);
-    console.log(use_full);
+    if(use_full === null) {
+        use_full = jQuery("#" + fullId).closest('.go_blog_element_input').data('toolbar');
+    } else if(use_full === 'admin'){
+        use_full = is_admin;
+    }
+    //console.log("use_full: " + use_full);
+    //console.log(use_full);
    // var use_summernote = false;
    // var use_mce = ["go_message_text_area_id", "go_blog_post_lightbox", "go_blog_post"];
    // if(use_mce.includes(fullId)) {//settings for regular blog posts

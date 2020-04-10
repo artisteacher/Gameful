@@ -12,49 +12,41 @@ if (typeof (go_is_map) !== 'undefined') {
 
     });
 
-    jQuery(document).keydown(function(event){
-        if(event.which=="17" || event.which=="91") {
-            openInNewTab = true;
-            //console.log(openInNewTab);
-        }
-    });
-
-    jQuery(document).keyup(function(){
-        openInNewTab = false;
-    });
-
-    var openInNewTab = false;
 }
 
 function go_setup_map(){
     console.log("go_setup_map");
 
+    var taxonomy = jQuery("#maps").data('taxonomy');
     go_show_map_loot(true);
 
     if(jQuery('#maps').hasClass('sortable')) {
-        jQuery(".primaryNav").sortable({
-            update: function (event, ui) {
+
+        var el = document.getElementById('go_Dropdown');
+        new Sortable(el, {
+            //group: 'shared', // set both lists to same group
+            animation: 150,
+            onUpdate: function (/**Event*/evt) {
+                var itemEl = evt.item; // dragged HTMLElement
+                var listEl = evt.from; //previous list
+
                 console.log('update');
                 var terms = [];
-                jQuery(event.target).find('.go_task_chain').each(function () {
+                jQuery(listEl).find('.mapLink').each(function () {
                     var term_id = jQuery(this).data('term_id');
                     terms.push(term_id);
                 });
-                var map_id = jQuery('#maps').data('mapid');
-                var nonce = GO_EVERY_PAGE_DATA.nonces.go_update_chain_order;
+                //var map_id = jQuery('#maps').data('mapid');
+                var nonce = GO_EVERY_PAGE_DATA.nonces.go_update_map_order;
                 jQuery.ajax({
                     type: 'post',
                     url: MyAjax.ajaxurl,
                     data: {
                         _ajax_nonce: nonce,
-                        action: 'go_update_chain_order',
+                        action: 'go_update_map_order',
                         terms: terms,
-                        map_id: map_id,
+                        //map_id: map_id,
                     },
-                    /**
-                     * A function to be called if the request fails.
-                     * Assumes they are not logged in and shows the login message in lightbox
-                     */
                     error: function (jqXHR, textStatus, errorThrown) {
                         if (jqXHR.status === 400) {
                             jQuery(document).trigger('heartbeat-tick.wp-auth-check', [{'wp-auth-check': false}]);
@@ -77,149 +69,168 @@ function go_setup_map(){
 
                     }
                 });
-            }
+            },
         });
 
-        jQuery(".tasks").sortable({
-            //helper: "clone",
-            connectWith: ".connectedSortable, .go_nested_list",
-            placeholder: "sortable-placeholder",
-            start: function (event, ui) {
-                jQuery('#maps').addClass('show_nest_border');
-                jQuery('.tasks').addClass('sorting');
-                var height = ui.item.height();
-                jQuery('.tasks.sorting').css('min-height', height);
-                ui.placeholder.height(ui.item.height());
-            },
-            stop: function (event, ui) {
-                jQuery('#maps').removeClass('show_nest_border');
-                jQuery('.tasks').removeClass('sorting');
-            },
-            update: function (event, ui) {
-                console.log('update');
-                var tasks = [];
-                jQuery(event.target).find('.task_container').each(function () {
-                    var task_info = [];
-                    var task_id = jQuery(this).find('.task').data('post_id');
-                    var is_nested = 0;
-                    if (jQuery(this).closest('ul').hasClass('go_nested_list')) {
-                        is_nested = 1;
-                        jQuery(this).find('.nested_checkbox').attr('checked', true);
-                    }else{
-                        jQuery(this).find('.nested_checkbox').attr('checked', false);
-                    }
 
-                    //console.log('ism');
-                    //console.log(is_nested);
-                    task_info.push(task_id);
-                    task_info.push(is_nested);
-                    tasks.push(task_info);
+        var el = document.getElementById('primaryNav');
+        console.log(el);
+        new Sortable(el, {
+            //group: 'shared', // set both lists to same group
+            animation: 150,
+            onUpdate: function (/**Event*/evt) {
+                console.log('update chain order');
+                console.log(evt);
+                var itemEl = evt.item; // dragged HTMLElement
+                var listEl = evt.from; //previous list
 
+
+                var terms = [];
+                jQuery(listEl).find('.go_task_chain').each(function () {
+                    var term_id = jQuery(this).data('term_id');
+                    terms.push(term_id);
                 });
-                var chain_id = jQuery(event.target).data('chain_id');
-                var nonce = GO_EVERY_PAGE_DATA.nonces.go_update_task_order;
+                var map_id = jQuery('#maps').data('mapid');
+                var nonce = GO_EVERY_PAGE_DATA.nonces.go_update_chain_order;
                 jQuery.ajax({
                     type: 'post',
                     url: MyAjax.ajaxurl,
                     data: {
                         _ajax_nonce: nonce,
-                        action: 'go_update_task_order',
-                        tasks: tasks,
-                        chain_id: chain_id,
+                        action: 'go_update_chain_order',
+                        terms: terms,
+                        taxonomy: taxonomy,
+                        map_id: map_id,
                     },
-                    /**
-                     * A function to be called if the request fails.
-                     * Assumes they are not logged in and shows the login message in lightbox
-                     */
+
                     error: function (jqXHR, textStatus, errorThrown) {
                         if (jqXHR.status === 400) {
                             jQuery(document).trigger('heartbeat-tick.wp-auth-check', [{'wp-auth-check': false}]);
                         }
                     },
-                    success: function (raw) {
-                        go_fix_task_colors(raw);
-                        go_set_nested_toggle_colors();
-                    }
-                });
-            }
-
-        });
-
-        jQuery(".go_nested_list").sortable({
-            //helper: "clone",
-            connectWith: ".connectedSortable, .go_nested_list",
-            start: function (event, ui) {
-                jQuery('#maps').addClass('show_nest_border');
-            },
-            stop: function (event, ui) {
-                jQuery('#maps').removeClass('show_nest_border');
-            },
-            update: function (event, ui) {
-                console.log('update');
-                var tasks = [];
-                jQuery(event.target).find('.go_nested_toggle').remove();
-                jQuery(event.target).find('.go_nested_hover').contents().unwrap();
-                jQuery(event.target).find('.go_nested_list').contents().unwrap();
-                jQuery(event.target).find('.task_container').removeClass('hasNested');
-                jQuery(event.target).find('.task_container').each(function () {
-                    jQuery(this).find('.task_container').insertAfter(this);
-                });
-
-
-
-
-                jQuery(event.target).closest('.tasks').find('.task_container').each(function () {
-                    //var task_id = jQuery(this).find('.task').data('post_id');
-                    //tasks.push( task_id );
-
-                    var task_info = [];
-                    var task_id = jQuery(this).find('.task').data('post_id');
-                    var is_nested = 0;
-                    if (jQuery(this).closest('ul').hasClass('go_nested_list')) {
-                        is_nested = 1;
-                        jQuery(this).find('.nested_checkbox').prop('checked', true);
-                    }else{
-                        jQuery(this).find('.nested_checkbox').prop('checked', true);
-                    }
-
-
-
-                    //console.log('ism');
-                    //console.log(is_nested);
-                    task_info.push(task_id);
-                    task_info.push(is_nested);
-                    tasks.push(task_info);
-
-
-                });
-                var chain_id = jQuery(event.target).closest('.tasks').data('chain_id');
-                var nonce = GO_EVERY_PAGE_DATA.nonces.go_update_task_order;
-                jQuery.ajax({
-                    type: 'post',
-                    url: MyAjax.ajaxurl,
-                    data: {
-                        _ajax_nonce: nonce,
-                        action: 'go_update_task_order',
-                        tasks: tasks,
-                        chain_id: chain_id,
-                    },
-                    /**
-                     * A function to be called if the request fails.
-                     * Assumes they are not logged in and shows the login message in lightbox
-                     */
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        if (jqXHR.status === 400) {
-                            jQuery(document).trigger('heartbeat-tick.wp-auth-check', [{'wp-auth-check': false}]);
+                    success: function (res) {
+                        console.log(res);
+                        if (res !== 'success') {
+                            swal.fire({
+                                type: 'warning',
+                                title: 'There was a problem updating the map.',
+                                text: 'The page will be updated and then you can try again.',
+                                confirmButtonText:
+                                    "Refresh",
+                                timer: 15000,
+                            }).then((result) => {
+                                location.reload();
+                            });
                         }
-                    },
-                    success: function (raw) {
-                        go_fix_task_colors(raw);
-                        go_set_nested_toggle_colors();
+
                     }
                 });
-            }
-
+            },
         });
+
+
+
+
+        var elements = document.getElementsByClassName('tasks');
+        for (var i = 0; i < elements.length; i++) {
+
+            var el = elements[i];
+            new Sortable(el, {
+                group: 'shared', // set both lists to same group
+                animation: 150,
+                onAdd: function (/**Event*/evt) {
+                    console.log('update task order Add');
+                    var itemEl = evt.item; // dragged HTMLElement
+                    var NewListEl = evt.to;    // target list
+                    var listEl = evt.from; //previous list
+
+                    go_update_task_sort(NewListEl)
+
+                },
+                onRemove: function (/**Event*/evt) {
+                    console.log('update task order Remove');
+                    var itemEl = evt.item; // dragged HTMLElement
+                    var NewListEl = evt.to;    // target list
+                    var listEl = evt.from; //previous list
+
+                    go_update_task_sort(listEl)
+
+                },
+                onUpdate: function (/**Event*/evt) {
+                    console.log('update task order update');
+                    var itemEl = evt.item; // dragged HTMLElement
+                    var NewListEl = evt.to;    // target list
+                    var listEl = evt.from; //previous list
+
+                    go_update_task_sort(listEl)
+
+                },
+            });
+        }
+
+
+
+        var elements = document.getElementsByClassName('go_nested_list');
+        for (var i = 0; i < elements.length; i++) {
+
+            var el = elements[i];
+            new Sortable(el, {
+                group: 'shared', // set both lists to same group
+                animation: 150,
+                onAdd: function (/**Event*/evt) {
+                    console.log('update nest order Add');
+                    var itemEl = evt.item; // dragged HTMLElement
+                    var NewListEl = evt.to;    // target list
+                    var listEl = evt.from; //previous list
+                    var new_task_id = null;
+                    var task_id = null;
+                    //if this was added from the same term, this isn't needed
+                    //if the destination is the same term, this isn't needed
+                    jQuery(NewListEl).find('.task_container').each(function () {
+                        new_task_id = jQuery(this).find('.task').data('post_id');
+                    });
+                    jQuery(listEl).closest('.tasks').find('.task_container').each(function () {
+                        task_id = jQuery(this).find('.task').data('post_id');
+                    });
+
+                    if(new_task_id != task_id) {
+                        console.log('update Add');
+                        go_update_nested_sort(NewListEl)
+                    };
+
+                },
+                onRemove: function (/**Event*/evt) {
+                    console.log('update nest order Remove');
+                    var itemEl = evt.item; // dragged HTMLElement
+                    var NewListEl = evt.to;    // target list
+                    var listEl = evt.from; //previous list
+                    var new_task_id = null;
+                    var task_id = null;
+                    //if the destination is the same term, this isn't needed
+                    jQuery(NewListEl).find('.task_container').each(function () {
+                        new_task_id = jQuery(this).find('.task').data('post_id');
+                    });
+                    jQuery(listEl).closest('.tasks').find('.task_container').each(function () {
+                        task_id = jQuery(this).find('.task').data('post_id');
+                    });
+
+                    if(new_task_id != task_id) {
+                        console.log('update remove');
+                        go_update_nested_sort(listEl)
+                    };
+
+                },
+                onUpdate: function (/**Event*/evt) {
+                    console.log('update nest order update');
+                    var itemEl = evt.item; // dragged HTMLElement
+                    var NewListEl = evt.to;    // target list
+                    var listEl = evt.from; //previous list
+
+                    go_update_nested_sort(listEl)
+
+                },
+            });
+        }
     }
 
     go_disable_tooltips(true);
@@ -235,7 +246,7 @@ function go_setup_map(){
 
 
     jQuery(document.body).click( function(e) {
-        go_map_closeMenu();
+        jQuery("#go_Dropdown").addClass('hidden');
     });
 
     jQuery(".dropdown").click( function(e) {
@@ -244,12 +255,30 @@ function go_setup_map(){
 
     //add onclick to to optional toggles
     //jQuery('.go_nested_toggle').click(go_nested_toggle);
+
+    jQuery('.go_nested_toggle').mouseenter(function() {
+        console.log('in');
+        tippyInstances.forEach(instance => {
+            instance.disable();
+        });
+    });
+
+    jQuery('.go_nested_toggle').mouseleave(function() {
+        console.log('out');
+        tippyInstances.forEach(instance => {
+            instance.enable();
+        });
+    });
+
     jQuery('.go_nested_hover').hover(function() {
             el = jQuery(this);
 
             timeout = setTimeout(function(){
                 // do stuff on hover
                 console.log('go_nested_hover');
+                tippyInstances.forEach(instance => {
+                    instance.hide();
+                });
 
                 jQuery(el).find('.go_nested_toggle').addClass('open');
                 //jQuery(this).html("<div class='go_nested_hover' style='line-height: 17px;'><i class='fas fa-caret-up'></i></div>");
@@ -311,8 +340,122 @@ function go_setup_map(){
     go_set_nested_toggle_colors();
     console.log('map is ready');
 
+
 }
 
+//frontend map sort
+function go_update_task_sort(listEl){
+    console.log('go_update_task_sort');
+    var tasks = [];
+    jQuery(listEl).find('.task_container').each(function () {
+        var task_info = [];
+        var task_id = jQuery(this).find('.task').data('post_id');
+        var is_nested = 0;
+        if (jQuery(this).closest('ul').hasClass('go_nested_list')) {
+            is_nested = 1;
+            jQuery(this).find('.nested_checkbox').attr('checked', true);
+        }else{
+            jQuery(this).find('.nested_checkbox').attr('checked', false);
+        }
+
+        //console.log('ism');
+        //console.log(is_nested);
+        task_info.push(task_id);
+        task_info.push(is_nested);
+        tasks.push(task_info);
+
+    });
+
+    var chain_id = jQuery(listEl).data('chain_id');
+    var taxonomy = jQuery("#maps").data('taxonomy');
+    var nonce = GO_EVERY_PAGE_DATA.nonces.go_update_task_order;
+
+    console.log(tasks);
+    console.log(chain_id);
+    jQuery.ajax({
+        type: 'post',
+        url: MyAjax.ajaxurl,
+        data: {
+            _ajax_nonce: nonce,
+            action: 'go_update_task_order',
+            tasks: tasks,
+            chain_id: chain_id,
+            taxonomy: taxonomy
+        },
+
+        error: function (jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400) {
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [{'wp-auth-check': false}]);
+            }
+        },
+        success: function (raw) {
+            go_fix_task_colors(raw);
+            go_set_nested_toggle_colors();
+        }
+    });
+}
+
+//front end map sort
+function go_update_nested_sort(listEL){
+    console.log('go_update_nested_sort');
+    var tasks = [];
+    jQuery(listEL).find('.go_nested_toggle').remove();
+    jQuery(listEL).find('.go_nested_hover').contents().unwrap();
+    jQuery(listEL).find('.go_nested_list').contents().unwrap();
+    jQuery(listEL).find('.task_container').removeClass('hasNested');
+    jQuery(listEL).find('.task_container').each(function () {
+        jQuery(this).find('.task_container').insertAfter(this);
+    });
+
+
+
+
+    jQuery(listEL).closest('.tasks').find('.task_container').each(function () {
+        //var task_id = jQuery(this).find('.task').data('post_id');
+        //tasks.push( task_id );
+
+        var task_info = [];
+        var task_id = jQuery(this).find('.task').data('post_id');
+        var is_nested = 0;
+        if (jQuery(this).closest('ul').hasClass('go_nested_list')) {
+            is_nested = 1;
+            jQuery(this).find('.nested_checkbox').prop('checked', true);
+        }else{
+            jQuery(this).find('.nested_checkbox').prop('checked', true);
+        }
+
+
+
+        //console.log('ism');
+        //console.log(is_nested);
+        task_info.push(task_id);
+        task_info.push(is_nested);
+        tasks.push(task_info);
+
+
+    });
+    var chain_id = jQuery(listEL).closest('.tasks').data('chain_id');
+    var nonce = GO_EVERY_PAGE_DATA.nonces.go_update_task_order;
+    jQuery.ajax({
+        type: 'post',
+        url: MyAjax.ajaxurl,
+        data: {
+            _ajax_nonce: nonce,
+            action: 'go_update_task_order',
+            tasks: tasks,
+            chain_id: chain_id,
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400) {
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [{'wp-auth-check': false}]);
+            }
+        },
+        success: function (raw) {
+            go_fix_task_colors(raw);
+            go_set_nested_toggle_colors();
+        }
+    });
+}
 
 function go_set_nested_toggle_colors(){
     console.log('go_set_nested_toggle_colors');
@@ -406,6 +549,7 @@ function go_fix_task_colors(raw){
     });
 }
 
+/*
 function go_to_task(event, link){
     console.log('go_to_task');
 
@@ -422,51 +566,48 @@ function go_to_task(event, link){
     }
 
 
-}
+}*/
 
 
 function wrapped() {
     console.log('wrapped');
     //var offset_top_prev;
-    var offset_top_prev = jQuery('.go_task_chain').offset().top;
-    //console.log(offset_top_prev);
+    if(jQuery('.go_task_chain').length) {
+        var offset_top_prev = jQuery('.go_task_chain').offset().top;
+        //console.log(offset_top_prev);
 
 
-    jQuery('.go_task_chain').each(function() {
-        var offset_top = jQuery(this).offset().top;
-        //console.log(offset_top);
+        jQuery('.go_task_chain').each(function () {
+            var offset_top = jQuery(this).offset().top;
+            //console.log(offset_top);
 
-        if (offset_top > offset_top_prev) {
-            jQuery('.primaryNav').css('flex-direction', 'column');
-            jQuery(this).addClass('wrapped');
-        } else if (offset_top == offset_top_prev) {
-            jQuery(this).removeClass('wrapped');
-        }
+            if (offset_top > offset_top_prev) {
+                jQuery('.primaryNav').css('flex-direction', 'column');
+                jQuery(this).addClass('wrapped');
+            } else if (offset_top == offset_top_prev) {
+                jQuery(this).removeClass('wrapped');
+            }
 
-        offset_top_prev = offset_top;
-    });
+            offset_top_prev = offset_top;
+        });
+    }
 
     var drop = jQuery('.dropdown').offset();
     var width = jQuery('.dropdown').width();
     var icons = jQuery('.go_map_action_icons').offset();
+    var height = jQuery('.droptop').height();
 
     if((drop.left + width + 10) > icons.left ){
-        jQuery('.dropdown').css('margin-top', 50);
+        jQuery('.dropdown').css('margin-top', 40);
+        jQuery('#maps').css('margin-top', height + 70);
     }else{
-        jQuery('.dropdown').css('margin-top', 10);
+        jQuery('.dropdown').css('margin-top', 0);
+        jQuery('#maps').css('margin-top', height + 30);
     }
 
+    jQuery()
+
 }
-
-//CLOSE DROPDOWN MENU
-function go_map_closeMenu(){
-    jQuery('#go_Dropdown').fadeOut(200);
-    //$('.add').removeClass('active');
-}
-//END CLOSE DROPDOWN
-
-
-
 
 function go_show_map_loot(initial = false){
 console.log('go_show_map_loot');
@@ -491,6 +632,7 @@ function go_disable_tooltips(initial = false){
     var map_actions = sessionStorage.getItem('map_actions');
 
     if(map_actions === null || !initial) {
+
         if (map_actions === "true") {
             sessionStorage.setItem('map_actions', 'false');
             //const go_actions_tooltip = tippy(document.querySelectorAll('.go_show_actions'));
@@ -500,18 +642,45 @@ function go_disable_tooltips(initial = false){
             tippyInstances.length = 0; // clear it
             jQuery('.go_map_action_icons .tooltip_toggle .inactive').show();
             jQuery('.go_map_action_icons .tooltip_toggle .active').hide();
+
+            //these are the badge tooltips
+            //they should toggle opposite of the tooltips
+            jQuery('.go_badge_wrap .fig_wrap.inactive').hide();
+            jQuery('.go_badge_wrap .fig_wrap.active').show();
         } else {
             sessionStorage.setItem('map_actions', 'true');
             go_actions_tooltip();
             jQuery('.go_map_action_icons .tooltip_toggle .inactive').hide();
             jQuery('.go_map_action_icons .tooltip_toggle .active').show();
 
+            //these are the badge tooltips
+            //they should toggle opposite of the tooltips
+            jQuery('.go_badge_wrap .fig_wrap.inactive').show();
+            jQuery('.go_badge_wrap .fig_wrap.active').hide();
+
         }
     }else{
+
         if (map_actions === "false") {
             jQuery('.go_map_action_icons .tooltip_toggle .inactive').show();
             jQuery('.go_map_action_icons .tooltip_toggle .active').hide();
+
+            //these are the badge tooltips
+            //they should toggle opposite of the tooltips
+            jQuery('.go_badge_wrap .fig_wrap.inactive').hide();
+            jQuery('.go_badge_wrap .fig_wrap.active').show();
+        }else{
+
+                jQuery('.go_map_action_icons .tooltip_toggle .inactive').hide();
+                jQuery('.go_map_action_icons .tooltip_toggle .active').show();
+
+                //these are the badge tooltips
+                //they should toggle opposite of the tooltips
+                jQuery('.go_badge_wrap .fig_wrap.inactive').show();
+                jQuery('.go_badge_wrap .fig_wrap.active').hide();
+
         }
+
     }
 
 }
@@ -524,6 +693,7 @@ function go_quests_frontend(target){
     console.log(loader_html);
     jQuery("#quest_frontend_wrapper").append(loader_html);
     jQuery("#quest_frontend_loader").show();
+    var taxonomy = jQuery('#maps').data('taxonomy');
     jQuery(".go_quests_frontend").off();
     var nonce = GO_FRONTEND_DATA.nonces.go_quests_frontend;
     var post_id = jQuery(target).data('post_id');
@@ -542,7 +712,8 @@ function go_quests_frontend(target){
             _ajax_nonce: nonce,
             post_id: post_id,
             action: 'go_quests_frontend',
-            is_single_stage : 'true'
+            is_single_stage : 'true',
+            taxonomy: taxonomy
         },
         /**
          * A function to be called if the request fails.
@@ -561,6 +732,7 @@ function go_quests_frontend(target){
             jQuery('.featherlight.quests .featherlight-content').append(res);
 
             console.log("after");
+            //console.log("after");
             //go_map_check_if_done();
 
             //go_load_daterangepicker('go_setup_clipboard');
@@ -571,11 +743,19 @@ function go_quests_frontend(target){
                 jQuery('#records_tabs').tabs();
                 jQuery("#records_tabs").css("margin-left", '');
             }*/
-            go_clipboard_activity_datatable(true);
-            jQuery("#go_clipboard_activity_datatable").DataTable().columns.adjust().responsive.recalc();
-            //add task select2
-            go_make_select2_cpt('#go_task_select', 'tasks');
-
+            if(taxonomy === 'store_types'){
+                console.log(taxonomy);
+                go_clipboard_store_datatable(true);
+                jQuery("#go_clipboard_store_datatable").DataTable().columns.adjust()
+                    .responsive.recalc();
+                //add the store item filter select2
+                go_make_select2_cpt('#go_store_item_select', 'go_store');
+            }else {
+                go_clipboard_activity_datatable(true);
+                jQuery("#go_clipboard_activity_datatable").DataTable().columns.adjust().responsive.recalc();
+                //add task select2
+                go_make_select2_cpt('#go_task_select', 'tasks');
+            }
 
 
             go_make_select2_filter('user_go_sections','reader', true);
@@ -589,7 +769,14 @@ function go_quests_frontend(target){
 
             go_setup_filter_buttons(false);
 
-
+            jQuery('#go_datepicker_container').one("click", function () {
+                //console.log("hi there one");
+                go_load_daterangepicker('go_activate_reader');
+                jQuery('#go_reset_datepicker').show();
+                go_daterange_clear();
+                go_highlight_apply_filters();//datapicker
+            });
+            jQuery('#go_store_filters').hide();
 
             /*
             jQuery.featherlight(res, {
@@ -643,12 +830,213 @@ function go_quests_frontend(target){
     //var item = jQuery(target).data('item');
 }
 
+function go_trash_post(target){
+    console.log('go_trash_post');
+    console.log(target);
+    jQuery(".go_trash_post").off();
+
+    var taxonomy = jQuery(target).data('taxonomy');
+    if(!taxonomy){
+        taxonomy = jQuery('#maps').data('taxonomy');
+    }
+    console.log(taxonomy);
+
+    var post_id = jQuery(target).data('post_id');
+    var term_id = jQuery(target).data('term_id');
+    var map_id = jQuery(target).data('map_id');
+
+    var singular = jQuery('#mapwrapper').data('singular');
+    var plural = jQuery('#mapwrapper').data('plural');
+    var nest_message ='';
+    var trash_message = '';
+    var text = '';
+    if(post_id) {
+        var title = jQuery(target).data('title');
+        //var title = jQuery(target).closest('.task_container').find('.title').html();
+        text = '<p>You are about to move the ' + singular + ' <b>'+ title +"</b> to the trash.</p>";
+        var container = jQuery('.task_container_'+post_id);
+        console.log(container);
+        var hasNested = jQuery(container).hasClass('hasNested');
+        if(hasNested){
+            console.log("hasNested");
+            var children = [];
+            jQuery(container).find('ul').find('li').each(function(){
+                var this_id = jQuery(this).data('post_id');
+                children.push(this_id)
+            });
+           var count = children.length;
+
+           if(count>0){
+               if (count === 1) {
+                    nest_message = '<p>There is one nested ' + singular + ' that will also be moved to the trash.';
+
+               }else{
+                    nest_message = '<p>There are ' + count + ' nested ' + plural + ' that will also be moved to the trash.';
+               }
+               trash_message = '<br>Empty the trash to remove them permanently.</br></p>';
+
+           }else{
+               trash_message = '<p>Empty the trash to remove it permanently.</p>';
+           }
+        }
+    }
+    else if(term_id){
+        var title = jQuery(target).data('title');
+        //var title = jQuery(target).closest('.task_container').find('.title').html();
+        if(taxonomy === 'task_chains' || taxonomy === 'store_types') {
+            text = '<p>You are about to delete the section <b>' + title + ".</b> The section will be deleted immediately and this can not be undone.</p>";
+            var container = jQuery('.task_chain_container_'+term_id);
+            var children = [];
+            jQuery(container).find('.task_container').each(function(){
+                var this_id = jQuery(this).data('post_id');
+                children.push(this_id)
+            });
+            var count = children.length;
+
+            if(count>0){
+                if (count === 1) {
+                    nest_message = '<p>There is one child ' + singular + ' that will also be moved to the trash.';
+                    trash_message = '<br>Empty the trash to remove it permanently.</br>';
+                }else{
+                    nest_message = '<p>There are ' + count + ' children ' + plural + ' that will also be moved to the trash.';
+                    trash_message = '<br>Empty the trash to remove them permanently.</br></p>';
+                }
+            }
+        }else{
+            text = '<p>You are about to delete the item <b>' + title + ".</b> It will be deleted immediately and this can not be undone.</p>";
+            var container = jQuery('.badges_row_'+term_id);
+            var children_terms = [];
+            jQuery(container).find('.go_badge_wrap').each(function(){
+                var this_id = jQuery(this).data('term_id');
+                children_terms.push(this_id)
+            });
+            var count = children_terms.length;
+
+            if(count>0){
+                if (count === 1) {
+                    nest_message = '<p>There is one child item that will also be deleted immediately.';
+                }else{
+                    nest_message = '<p>There are ' + count + ' items that will also be deleted immediately.';
+                }
+            }
+        }
+
+
+
+
+    }
+    else if(map_id){
+        var title = jQuery(target).data('title');
+        //var title = jQuery(target).closest('.task_container').find('.title').html();
+
+        var container = jQuery('.map_'+map_id);
+        var children = [];
+        jQuery(container).find('.go_task_chain').each(function(){
+            var this_id = jQuery(this).data('post_id');
+            children.push(this_id)
+        });
+        var count = children.length;
+
+        if(count>0){
+            swal.fire({
+                type: 'warning',
+                title: 'This map has sections.',
+                text: 'Please delete all the sections on the map before deleting the map. No action will be taken',
+                confirmButtonText:
+                    "Continue",
+            });
+            return;
+        }else{
+            text = '<p>You are about to delete the map <b>'+ title +".</b> The section will be deleted immediately and this can not be undone.</p>";
+            term_id = map_id;
+        }
+    }
+
+    text = text + nest_message + trash_message;
+
+    ///////////////
+    tippyInstances.forEach(instance => {
+        instance.hide();
+    });
+    Swal.fire({
+        title: 'Are you sure?',
+        html: text,
+        showCancelButton: true,
+        confirmButtonText: 'Delete',
+        cancelButtonText: 'Cancel',
+        reverseButtons: true,
+        showLoaderOnConfirm: true,
+        preConfirm: (login) => {
+            //console.log('go_trash_post');
+
+            jQuery(".go_quick_edit").off();
+            var nonce = GO_FRONTEND_DATA.nonces.go_trash_post;
+
+
+            return jQuery.ajax({
+                type: 'post',
+                url: MyAjax.ajaxurl,
+                data:{
+                    _ajax_nonce: nonce,
+                    post_id: post_id,
+                    term_id: term_id,
+                    children: children,
+                    children_terms: children_terms,
+                    taxonomy: taxonomy,
+                    action: 'go_trash_post',
+                    is_frontend: is_frontend,
+                }
+            })
+                .then(res => {
+                    return res;
+                })
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+        console.log(result.value);
+        if (result.value === 0) {
+            Swal.showValidationMessage(
+                `Error.`
+            )
+        }
+        if (result.value === 'refresh') {
+            Swal.fire({
+                title: `Error.`
+            })
+        }
+        if (result.value) {
+            if(taxonomy === 'task_chains' || taxonomy === 'store_types') {
+                jQuery('#mapwrapper').html(result.value);
+                go_setup_map();
+            }
+            else if(taxonomy === 'go_badges'){
+                jQuery('#stats_badges_page').html(result.value);
+                go_setup_badges_page();
+            }
+            else if(taxonomy === 'user_go_groups'){
+                jQuery('#stats_groups_page').html(result.value);
+                go_setup_groups_page()
+            }
+            //jQuery('#maps').hide();
+            Swal.fire({
+                type: "success",
+            })
+        }
+    });
+
+    //var item = jQuery(target).data('item');
+}
+
 function go_quick_edit_show(target){
     console.log('go_quick_edit_show');
+    var taxonomy = jQuery(target).data('taxonomy');
+    if(!taxonomy){
+        taxonomy = jQuery('#maps').data('taxonomy');
+    }
     //console.log(target);
     //jQuery(target).parent().parent().find('.tools').hide();
-    var html = jQuery(target).closest('.task_container').find('.quickedit_form_container').html();
-
+    var html = jQuery(target).closest('.go_actions_wrapper_flex').find('.quickedit_form_container').html();
+    //jQuery(target).closest('.quick_container').hide();
     tippyInstances.forEach(instance => {
         instance.hide();
     });
@@ -661,16 +1049,25 @@ function go_quick_edit_show(target){
         reverseButtons: true,
         showLoaderOnConfirm: true,
         preConfirm: (login) => {
-            console.log('go_quick_edit_task');
+            console.log('go_quick_edit');
 
-            jQuery(".go_quick_edit_task").off();
-            var nonce = GO_EVERY_PAGE_DATA.nonces.go_quick_edit_task;
+            jQuery(".go_quick_edit").off();
+            var nonce = GO_EVERY_PAGE_DATA.nonces.go_quick_edit;
+
             var post_id = jQuery(event.target).closest('.swal2-container').find('.quickedit_form').data('post_id');
+            var title = jQuery(event.target).closest('.swal2-container').find('.post_title').val();
             var hidden = jQuery(event.target).closest('.swal2-container').find('.hidden_checkbox').is(":checked");
             var nested = jQuery(event.target).closest('.swal2-container').find('.nested_checkbox').is(":checked");
             var optional = jQuery(event.target).closest('.swal2-container').find('.optional_checkbox').is(":checked");
 
-            var title = jQuery(event.target).closest('.swal2-container').find('.post_title').val();
+            var term_id = jQuery(event.target).closest('.swal2-container').find('.quickedit_form').data('term_id');
+            var term_title = jQuery(event.target).closest('.swal2-container').find('.term_title').val();
+            //hidden is the same
+            var pod_checkbox = jQuery(event.target).closest('.swal2-container').find('.pod_checkbox').is(":checked");
+            var locked_prev_checkbox = jQuery(event.target).closest('.swal2-container').find('.locked_prev_checkbox').is(":checked");
+
+
+
 
             //console.log(post_id);
             //console.log(hidden);
@@ -688,7 +1085,13 @@ function go_quick_edit_show(target){
                     optional: optional,
                     hidden: hidden,
                     title: title,
-                    action: 'go_quick_edit_task',
+                    term_id: term_id,
+                    term_title: term_title,
+                    pod_checkbox: pod_checkbox,
+                    locked_prev_checkbox: locked_prev_checkbox,
+                    action: 'go_quick_edit',
+                    is_frontend: is_frontend,
+                    taxonomy: taxonomy
                 }
             })
             .then(res => {
@@ -709,11 +1112,22 @@ function go_quick_edit_show(target){
             })
         }
         if (result.value) {
-            jQuery('#maps').html(result.value);
-            go_setup_map();
+            if(taxonomy === 'task_chains' || taxonomy === 'store_types') {
+                jQuery('#mapwrapper').html(result.value);
+                go_setup_map();
+            }
+            else if(taxonomy === 'go_badges'){
+                jQuery('#stats_badges_page').html(result.value);
+                go_setup_badges_page();
+            }
+            else if(taxonomy === 'user_go_groups'){
+                jQuery('#stats_groups_page').html(result.value);
+                go_setup_groups_page()
+            }
+
             //jQuery('#maps').hide();
             Swal.fire({
-                title: `Done.`
+                type: "success",
             })
         }
     });
@@ -721,7 +1135,7 @@ function go_quick_edit_show(target){
     })
         .then((result) => {
             if (result.value) {
-                go_quick_edit_task(event)
+                go_quick_edit(event)
 
             } else {
                 swal.fire({
@@ -739,12 +1153,15 @@ function go_quick_edit_show(target){
 
 }
 
-function go_quick_edit_task(event){
-        console.log('go_quick_edit_task');
+/*
+function go_quick_edit(event){
+        console.log('go_quick_edit');
     //console.log(event.target);
-    jQuery(".go_quick_edit_task").off();
-    var nonce = GO_EVERY_PAGE_DATA.nonces.go_quick_edit_task;
+    jQuery(".go_quick_edit").off();
+    var nonce = GO_EVERY_PAGE_DATA.nonces.go_quick_edit;
     var post_id = jQuery(event.target).closest('.swal2-container').find('.quickedit_form').data('post_id');
+    var taxonomy = jQuery("#maps").data('taxonomy');
+    console.log(taxonomy);
     var hidden = jQuery(event.target).closest('.swal2-container').find('.hidden_checkbox').is(":checked");
     var nested = jQuery(event.target).closest('.swal2-container').find('.nested_checkbox').is(":checked");
     var optional = jQuery(event.target).closest('.swal2-container').find('.optional_checkbox').is(":checked");
@@ -767,12 +1184,11 @@ function go_quick_edit_task(event){
             optional: optional,
             hidden: hidden,
             title: title,
-            action: 'go_quick_edit_task',
+            action: 'go_quick_edit',
+            is_frontend: is_frontend,
+            taxonomy: taxonomy,
         },
-        /**
-         * A function to be called if the request fails.
-         * Assumes they are not logged in and shows the login message in lightbox
-         */
+
         error: function(jqXHR, textStatus, errorThrown) {
             if (jqXHR.status === 400){
                 jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
@@ -785,8 +1201,234 @@ function go_quick_edit_task(event){
     });
 
 
+}*/
+
+function go_edit_frontend(target, post_id = null, new_post = false){
+    swal.close();
+
+    console.log('go_edit_frontend');
+    //console.log(target);
+    sessionStorage.setItem('go_acf_changes', 'false');
+    jQuery(".go_edit_frontend").off();
+    var loader_html = go_loader_html('fountain');
+    if(post_id === null) {
+        post_id = jQuery(target).data('post_id');
+    }
+    if(target !== null) {
+        var term_id = jQuery(target).data('term_id');
+        var new_parent_term = jQuery(target).data('new_parent_term');
+        var new_child_term = jQuery(target).data('new_child_term');
+        var term_name = jQuery(target).data('term_name');
+        var new_store_item = jQuery(target).data('new_store_item');
+        var chain_id = jQuery(target).data('chain_id');
+        var chain_name = jQuery(target).data('chain_name');
+        var settings = jQuery(target).data('settings');
+        var group = jQuery(target).data('group');
+        var title = jQuery(target).data('title');
+        var url = window.location.href;
+
+
+    }
+    var nonce = GO_EVERY_PAGE_DATA.nonces.go_edit_frontend;
+
+    var taxonomy = jQuery(target).data('taxonomy');
+    if(!taxonomy){
+        taxonomy = jQuery('#maps').data('taxonomy');
+        jQuery.featherlight.close();
+    }
+
+
+
+
+    var html = '<div id="edit_container">'+loader_html+'<div id="edit_wrap" style="display: none;"></div></div>';
+    if(typeof window.tippyInstances !== 'undefined' ) {
+        tippyInstances.forEach(instance => {
+            instance.hide();
+        });
+    }
+
+    jQuery.featherlight(html,
+        {
+            variant: 'go_edit_frontend_lightbox',
+            iframeWidth: '95%',
+            iframeHeight: '95%',
+            //closeOnClick:   false,          /* Close lightbox on click ('background', 'anywhere', or false) */
+            //closeOnEsc:     false,                  /* Close lightbox when pressing esc */
+            beforeClose: function(event){
+                console.log('closing');
+                console.log(new_post);
+                //console.log(this); // this contains all related elements
+                var changes = sessionStorage.getItem('go_acf_changes');
+                if(changes === 'true') {
+                    swal.fire({
+                        type: 'warning',
+                        title: 'You have unsaved changes. ',
+                        text: 'Are you sure you want to close the editing window?',
+                        confirmButtonText:
+                            "Keep Editing",
+                        showCancelButton: true,
+                        cancelButtonText: 'Close',
+                    }).then((result) => {
+                        if(result.dismiss === 'cancel'){
+                            sessionStorage.setItem('go_acf_changes', 'false');
+                            var current = jQuery.featherlight.current();
+                            current.close();
+                            if(new_post){
+                                location.reload();
+                            }
+                        }
+                    });
+                    return false; // prevent lightbox from opening
+                }else{
+                    if(new_post){
+                        location.reload();
+                    }
+                }
+                jQuery(".go_edit_frontend_badge").off().one("click", function(){
+                    go_edit_frontend(this);
+                });
+
+            },
+            afterOpen: function(event){
+                console.log(this);
+                var box = this;
+                console.log('ajax');
+                jQuery.ajax({
+                    type: 'post',
+                    url: MyAjax.ajaxurl,
+                    data:{
+                        _ajax_nonce: nonce,
+                        post_id: post_id,
+                        tag_ID: term_id,
+                        new_store_item: new_store_item,
+                        new_parent_term: new_parent_term,
+                        new_child_term: new_child_term,
+                        taxonomy: taxonomy,
+                        settings: settings,
+                        group: group,
+                        title: title,
+                        url: url,
+                        action: 'go_edit_frontend',
+                    },
+                    /**
+                     * A function to be called if the request fails.
+                     * Assumes they are not logged in and shows the login message in lightbox
+                     */
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        if (jqXHR.status === 400){
+                            jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+                        }
+                    },
+                    success: function( res ) {
+                        console.log("success");
+
+                        //jQuery(box.$content).find('#loader_container').html('<h3>Processing . . .</h3>').promise().done(function(){
+                            jQuery(box.$content).find('#edit_wrap').html(res).promise().done(function(){
+                                //your callback logic / code here
+                                jQuery('#acf-field_5e37cdd9598cb').data('minimumInputLength', 4);
+                                go_initialize_acf_form(function(){
+
+                                    go_activate_tippy();
+                                    jQuery('.select2').width('100%');
+                                    sessionStorage.setItem('go_acf_changes', 'false');
+                                    jQuery('#loader_container').hide(100, function(){
+                                        jQuery('#edit_wrap').show(100, function(){
+                                            jQuery(".wp-editor-area").each(function(){
+                                                var go_mce_id = jQuery(this).attr('id');
+                                                console.log("go_mce_id" + go_mce_id);
+                                                go_activate_tinymce_on_task_change_stage(go_mce_id, 'admin');
+                                                jQuery('.acf-field').change(function(e){
+                                                    //Do stuff on field change
+                                                    sessionStorage.setItem('go_acf_changes', 'true');
+                                                });
+                                            });
+
+                                            if(new_child_term){
+                                                console.log('new child term');
+                                                if(taxonomy === 'task_chains') {
+
+                                                    jQuery('#acf-field_5e35987e47073').select2("trigger", "select", {
+                                                        data: {id: new_child_term, text: term_name}
+                                                    });
+
+                                                    jQuery('.acf-field-5e35979c47071 .acf-radio-list li input').last().trigger('click');
+
+                                                }else if (taxonomy === 'store_types'){
+                                                    jQuery('#acf-field_5e37bbe75b17d').select2("trigger", "select", {
+                                                        data: {id: new_child_term, text: term_name}
+                                                    });
+                                                    jQuery('.acf-field-5e37bb8f5b17c .acf-radio-list li input').last().trigger('click');
+
+                                                }
+                                                else if (taxonomy === 'go_badges'){
+                                                    jQuery('#acf-field_5e37ce341f358').select2("trigger", "select", {
+                                                        data: {id: new_child_term, text: term_name}
+                                                    });
+                                                    jQuery('.acf-field-5e37cdfe1f357 .acf-radio-list li input').last().trigger('click');
+
+                                                }
+                                                else if (taxonomy === 'user_go_groups'){
+                                                    jQuery('#acf-field_5e389128e24d3').select2("trigger", "select", {
+                                                        data: {id: new_child_term, text: term_name}
+                                                    });
+                                                    jQuery('.acf-field-5e389128e24ab .acf-radio-list li input').last().trigger('click');
+
+                                                }
+
+                                                sessionStorage.setItem('go_acf_changes', 'false');
+
+                                            }
+                                            else if (new_store_item){
+                                                console.log('NEW STORE ITEM');
+                                                jQuery('#acf-field_5abde7f92fd6a-field_5abde7f964b9f-field_5abde7f980bdf').prop("checked", 'true').trigger('change').find('.acf-switch').addClass('-on').removeClass('-off');
+                                                jQuery('#acf-field_5abde7f92fd6a-field_5abde7f964b9f-field_5abde7f980c65').select2("trigger", "select", {
+                                                    data: {id: chain_id, text: chain_name}
+                                                });
+
+                                                //jQuery('.acf-field-5abde7f92fc75').hide();
+                                                //jQuery('.acf-field-5e37bb8f5b17c .acf-radio-list li input').last().trigger('click');
+                                            }
+
+
+
+                                        });
+                                    });
+
+                                });
+                            });
+                        //});
+
+
+                        //variables to set the acf fields based on query strings
+                        /*
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const chain_id = urlParams.get('chain_id');
+                        const chain_name = urlParams.get('chain_name');
+                        jQuery('#acf-field_5a960f458bf8c-field_5ab197179d24a-field_5ab197699d24b').prop("checked", 'true').trigger('change').find('.acf-switch').addClass('-on').removeClass('-off');
+                        //jQuery('.tax_field_5a960f468bf8e').val(myParam).trigger('change.select2');
+
+                        jQuery('.tax_field_5a960f468bf8e').select2("trigger", "select", {
+                            data: { id: chain_id, text: chain_name }
+                        });
+                        */
+                    }
+                });
+            }
+
+        });
+
+    //console.log(post_id);
+    //console.log(hidden);
+    //console.log(nested);
+    //console.log(optional);
+    //console.log(title);
 }
 
+function go_initialize_acf_form(callback) {
+
+    acf.do_action('append', jQuery('.acf-form'));
+   callback();
+}
 
 
 /*
@@ -801,6 +1443,7 @@ function go_nested_exit(){
 
 function go_nested_toggle(){
     console.log('go_nested_toggle');
+
     var list = jQuery(this).next();
     if(jQuery(this).hasClass('toggled_open')){
         jQuery(this).removeClass('open');
@@ -850,10 +1493,13 @@ function go_show_map(mapid) {
 //https://stackoverflow.com/questions/28180584/wordpress-update-user-meta-onclick-with-ajax
 //https://wordpress.stackexchange.com/questions/216140/update-user-meta-using-with-ajax
 //
+    console.log('go_show_map');
     var loader_html = go_loader_html('big');
-    jQuery("#mapwrapper").html(loader_html);
+
     var nonce = GO_EVERY_PAGE_DATA.nonces.go_update_last_map;
     var uid = jQuery('#go_map_user').data("uid");
+    var taxonomy = jQuery('#maps').data("taxonomy");
+    jQuery("#mapwrapper").html(loader_html);
 
 	jQuery.ajax({
 		type: "POST",
@@ -862,6 +1508,7 @@ function go_show_map(mapid) {
                 is_frontend: is_frontend,
                 action:'go_update_last_map',
 				goLastMap : mapid,
+                taxonomy : taxonomy,
                 _ajax_nonce: nonce,
                 uid: uid
 			},
@@ -878,7 +1525,6 @@ function go_show_map(mapid) {
                 go_after_ajax();
           		jQuery('#mapwrapper').html(data);
 				console.log("success!");
-				//go_resizeMap();
                 go_setup_map();
 
                 jQuery( ".go_blog_user_task" ).off().one("click", function () {
@@ -890,76 +1536,26 @@ function go_show_map(mapid) {
 }
 
 
-//Resize map function, also runs on window load
-function go_resizeMap() {
- 	console.log("resize");
-	//get mapid from data
-	var mapNum = jQuery("#maps").data('mapid');
-
-    var mapID = "#map_" + mapNum;
-
-    //var taskCount = ((jQuery(mapID + " .primaryNav > li").length)-1);
-    var taskCount = ((jQuery(mapID + " .primaryNav > li").length));
-    if (taskCount == 0){
-        taskCount = 1;
-    }
-    if (taskCount == Infinity){
-        taskCount = 1;
-    }
-    var taskWidth = (100/taskCount);
-    var minWidth = ((jQuery(mapID).width()) / taskCount);
-
-    console.log("taskCount: " + taskCount);
-    console.log("minWidth: " + minWidth);
-
-    //set the width of the tasks on the map
-    //jQuery(mapID + " .primaryNav li").css("width", taskWidth + "%");
-
-    /*
-    if (taskWidth == 100) {
-        jQuery(mapID + ' .primaryNav > li').css("width","90%");
-        jQuery(mapID + ' .primaryNav li').css("float","right");
-        jQuery(mapID + ' .tasks > li').css("width","80%");
-        jQuery(mapID + " .primaryNav li").addClass("singleCol");
-        //jQuery(mapID + " .primaryNav li").css("background", "url('../wp-content/plugins/game-on-master/styles/images/map/vertical-line.png') center top no-repeat");
-
-    }
-    else if (minWidth >= 130){
-       // jQuery(mapID + " .primaryNav li").css("float","left");
-
-        jQuery(mapID + " .primaryNav li").css("width", taskWidth + "%");
-        jQuery(mapID + ' .tasks > li').css("width","100%");
-        jQuery(mapID + " .primaryNav li").css("background", "");
-        jQuery(mapID + " .primaryNav li").removeClass("singleCol");
-
-    }
-    else {
-        jQuery(mapID + ' .primaryNav > li').css("width","100%");/jQuery(mapID + ' .primaryNav li').css("float","right");
-        jQuery(mapID + ' .tasks > li').css("width","95%");
-        //jQuery(mapID + " .primaryNav li").css("background", "url('../wp-content/plugins/game-on-master/styles/images/map/vertical-line.png') center top no-repeat");
-        jQuery(mapID + " .primaryNav li").addClass("singleCol");
-    }
-    */
-
-        jQuery('#sitemap').show();
-        jQuery('#maps').show();
-        go_activate_tippy();
-
-
-
-
-        /*jQuery('.task, .go_task_chain').each(function(){
-            var width = jQuery( this ).width();
-            jQuery( this ).width(width - 1);
-        });*/
-
-}
 
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
-function go_map_dropDown() {
+function go_map_dropDown(vis) {
+
     //document.getElementById("go_Dropdown").classList.toggle("show");
-    jQuery("#go_Dropdown").toggle();
+    if(vis) {
+        jQuery("#go_Dropdown").removeClass('hidden');
+        jQuery("#go_drop_arrow .up").show();
+        jQuery("#go_drop_arrow .down").hide();
+    }else{
+        jQuery("#go_Dropdown").addClass('hidden');
+        jQuery("#go_drop_arrow .up").hide();
+        jQuery("#go_drop_arrow .down").show();
+    }
+
+//fix for selecting text on open
+    if (window.getSelection) {window.getSelection().removeAllRanges();}
+    else if (document.selection) {document.selection.empty();}
+
 }
 
 function go_user_map(target) {
@@ -996,11 +1592,6 @@ function go_user_map(target) {
                     afterContent: function () {
                         console.log("after");
                         //go_map_check_if_done();
-                        //go_resizeMap();
-                        jQuery(window).on('resize', function () {
-                            //go_resizeMap();
-                        });
-
                         jQuery(".go_blog_user_task").off().one("click", function () {
                             go_blog_user_task(this);
                         });
@@ -1055,45 +1646,37 @@ function go_map_add_next_prev(user_id){
 }
 
 
-//I think this was supposed to check the dropdown to see if the maps were done.
-//It doesn't work
-/*
-function go_map_check_if_done() {
-    go_resizeMap();
-    //declare idArray
-    var idArray = [];
-    //make array of all the maps ids
-    jQuery('.map').each(function () {
-        idArray.push(this.id);
+function go_update_badge_group_sort(listEl) {
+
+    console.log('go_update_badge_group_sort');
+    var terms = [];
+    jQuery(listEl).find('.go_badge_wrap').each(function () {
+        var term_id = jQuery(this).data('term_id');
+        terms.push(term_id);
     });
-    console.log("IDS" + idArray);
-    console.log(idArray.length);
-    //for each map do something
-    var mapNum = 0;
-    for (var i = 0; i < idArray.length; i++){
-        var mapNum = mapNum++;
-        var mapNumID = "#mapLink_" + mapNum;
-        var mapNumClass = "#mapLink_" + mapNum + ' .mapLink';
-        var mapID = "#map_" + mapNum;
-        var countAvail = "#" + idArray[i] + " .available_color";
-        var countDone = "#" + idArray[i] + " .checkmark";
-        var numAvail = jQuery(countAvail).length;
-        var numDone = jQuery(countDone).length;
 
+    var term_id = jQuery(listEl).data('term_id');
+    var taxonomy = jQuery(listEl).data('taxonomy');
+    var nonce = GO_EVERY_PAGE_DATA.nonces.go_update_badge_group_sort;
 
-        if (numAvail == 0){
-            if (numDone == 0){
+    jQuery.ajax({
+        type: 'post',
+        url: MyAjax.ajaxurl,
+        data: {
+            _ajax_nonce: nonce,
+            action: 'go_update_badge_group_sort',
+            terms: terms,
+            term_id: term_id,
+            taxonomy: taxonomy
+        },
 
-                jQuery(mapNumID).addClass("filtered");
+        error: function (jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400) {
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [{'wp-auth-check': false}]);
             }
-            else {
-
-                jQuery(mapNumID).addClass("done");
-                jQuery(mapNumClass).addClass("checkmark");
-            }
+        },
+        success: function (raw) {
+        console.log('success');
         }
-    }
-
-    //go_resizeMap();
-  }
-  */
+    });
+}

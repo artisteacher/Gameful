@@ -197,7 +197,11 @@ class go_acf_field_order_posts extends acf_field {
 
     function render_field( $field ) {
 
-        $post_id = get_the_ID();
+        $post_id = (isset($_POST['post_id']) ?  $_POST['post_id'] : false);
+
+        if(!$post_id){
+            $post_id = get_the_ID();
+        }
 
         // vars
         $values = array();
@@ -224,7 +228,12 @@ class go_acf_field_order_posts extends acf_field {
 
         $nonce = wp_create_nonce( 'acf_load_order_field_list' );//localize this
         $order_key_name = $field['order_key_name'] ;
+
         $term_id = get_field($field['sort_term']) ;
+        if(empty($term_id)){
+            $term_id = get_post_meta($post_id, $field['sort_term']);
+            $term_id = $term_id[0];
+        }
         $key = $field['key'] ;
         $name = $field['name'] ;
        // $order_key_name = $field['order_key_name'] ;
@@ -501,6 +510,9 @@ class go_acf_field_order_posts extends acf_field {
             } else {
                 $i = 0;
                 foreach ($order as $item) {
+                    if($item ==='new_post'){
+                        $item = $post_id;
+                    }
                     // for each post in the value, set term
                     wp_set_post_terms($item, $term_id, $taxonomy);
                     // for each post in the value, set order
@@ -510,6 +522,9 @@ class go_acf_field_order_posts extends acf_field {
             }
         }
         $value = '';
+
+        $key = 'go_get_chain_posts_' . $term_id;
+        go_delete_transient($key);
 
         return $value;
 	}
@@ -839,7 +854,21 @@ function go_acf_order_posts_list($key, $name, $term_id, $post_id){
 
 						</span>
             </li>
-        <?php endforeach; ?>
+        <?php endforeach;
+
+        //add a container for an empty post (a new post on front end from)
+    if(empty($post_id)){
+        ?>
+        <li>
+            <?php acf_hidden_input( array('name' => $name.'[]', 'value' => 'new_post') ); ?>
+            <span data-id="new_post" class="acf-rel-item"><i>New Post (this post)</i></span>
+        </li>
+        <?php
+    }
+
+    ?>
+
+
 
     </ul>
 <?php

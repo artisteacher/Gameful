@@ -115,11 +115,17 @@ ul .row-actions {display:none;}
 .taxonomy-store_types .term-parent-wrap,
 .taxonomy-go_badges .term-parent-wrap,
 .taxonomy-user_go_groups .term-parent-wrap,
-.term-php .acf-field-5e37cdfe1f357,
-.term-php .acf-field-5e389128e24ab,
-.term-php .acf-field-5e37bb8f5b17c,
-.term-php .acf-field-5e35979c47071
+.acf-field-5e37cdfe1f357,
+.acf-field-5e389128e24ab,
+.acf-field-5e37bb8f5b17c,
+.acf-field-5e35979c47071
 {display:none;}
+
+.edit-tags-php .acf-field-5e37cdfe1f357,
+.edit-tags-php .acf-field-5e389128e24ab,
+.edit-tags-php .acf-field-5e37bb8f5b17c,
+.edit-tags-php .acf-field-5e35979c47071
+{display:block;}
 
 /********************
 *
@@ -137,4 +143,10 @@ ul .row-actions {display:none;}
 
 .acf-editor-wrap iframe {
 	min-height: 100px !important;
+}
+
+
+//Customizer
+.wp-customizer #accordion-section-themes{
+	display: none !important;
 }

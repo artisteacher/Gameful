@@ -139,6 +139,7 @@ function go_toggle( source ) {
 }
 
 function go_clipboard_callback() {
+    console.log('go_clipboard_callback');
     //*******************//
     // ALL TABS
     //*******************//
@@ -162,6 +163,9 @@ function go_clipboard_callback() {
     var type = jQuery("#go_leaderboard_filters").data("type");
     if(type ==='single_quest'){
         current_tab = 'clipboard_activity_wrap';
+    }
+    if(type ==='single_store_item'){
+        current_tab = 'clipboard_store_wrap';
     }
     console.log(current_tab);
 
@@ -190,13 +194,20 @@ function go_clipboard_callback() {
             };
         }
         else if (current_tab == "clipboard_store_wrap") {
+            jQuery("#quest_frontend_container").show();
             //recalculate for responsive behavior
             jQuery("#go_clipboard_store_datatable").DataTable().columns.adjust()
                 .responsive.recalc();
 
             //show action filters
+            var type = jQuery("#go_leaderboard_filters").data("type");
+            if(type == 'single_store_item'){
+                jQuery('#go_store_filters').hide();
+            }else{
+                jQuery('#go_store_filters').show();
+            }
+
             jQuery('#go_action_filters').show();
-            jQuery('#go_store_filters').show();
             jQuery('#go_task_filters').hide();
 
             //update button--set this table to update
@@ -576,13 +587,21 @@ function go_clipboard_store_datatable(refresh) {
 
     if ( jQuery( "#go_clipboard_store_datatable" ).length == 0  || refresh == true) {
         jQuery("#clipboard_store_datatable_container").html("<h2>Loading . . .</h2>");
-        var nonce = GO_CLIPBOARD_DATA.nonces.go_clipboard_store;
+
+
+        if (is_frontend === 'true') {
+            var nonce = GO_CLIPBOARD_DATA_frontend.nonces.go_clipboard_store;
+        }
+        else if (is_frontend === 'false') {
+            var nonce = GO_CLIPBOARD_DATA.nonces.go_clipboard_store;
+        }
         jQuery.ajax({
             url: MyAjax.ajaxurl,
             type: "post",
             data: {
                 _ajax_nonce: nonce,
-                action: 'go_clipboard_store'
+                action: 'go_clipboard_store',
+                is_frontend: is_frontend,
                 //go_clipboard_messages_datatable: jQuery( '#go_clipboard_store_datatable' ).val()
             },
             /**
@@ -633,6 +652,7 @@ function go_clipboard_store_datatable(refresh) {
                         dom: 'lBfrtip',
                         "drawCallback": function( settings ) {
                             go_clipboard_callback();
+                            //go_clipboard_store_stats_ajax();
                         },
                         "columnDefs": [
                             { type: 'natural', targets: '_all' },
@@ -703,6 +723,65 @@ function go_clipboard_store_datatable(refresh) {
         go_clipboard_callback();
     }
 }
+
+/*
+function go_clipboard_store_stats_ajax(){
+
+    console.log('go_clipboard_store_stats_ajax');
+
+    if (is_frontend === 'true') {
+        var nonce = GO_CLIPBOARD_DATA_frontend.nonces.go_clipboard_store_stats_ajax;
+    }
+    else if (is_frontend === 'false') {
+        var nonce = GO_CLIPBOARD_DATA.nonces.go_clipboard_store_stats_ajax;
+    }
+
+    //var date = jQuery('#go_datepicker').html();
+    var section = jQuery('#go_reader_user_go_sections_select').val();
+    var group = jQuery('#go_reader_user_go_groups_select').val();
+    var badge = jQuery('#go_reader_go_badges_select').val();
+    //d.unmatched = document.getElementById("go_unmatched_toggle").checked;
+    var tasks = jQuery("#go_task_select").val();
+    //console.log(date);
+    jQuery.ajax({
+        type: "get",
+        url: MyAjax.ajaxurl,
+        data: {
+            _ajax_nonce: nonce,
+            action: 'go_clipboard_store_dataloader_ajax',
+            // date: date,
+            section: section,
+            group: group,
+            badge: badge,
+            tasks: tasks
+        },
+
+        error: function(jqXHR, textStatus, errorThrown) {
+            jQuery('#loader_container').remove();
+            //jQuery('#go_posts_wrapper').show();
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
+        success: function( raw ) {
+            console.log('SUCCESS go_clipboard_store_dataloader_ajax');
+            console.log(raw);
+            // parse the raw response to get the desired JSON
+            var res = {};
+            try {
+                var res = JSON.parse( raw );
+            } catch (e) {
+                res = {
+                    json_status: '101',
+                    complete_num: '',//doesn;t do anything
+                    started_num: '',
+                    not_started_num: ''
+                };
+            }
+        }
+    });
+}
+*/
 
 function go_clipboard_messages_datatable(refresh) {
     if ( jQuery( "#go_clipboard_messages_datatable" ).length == 0  || refresh == true) {

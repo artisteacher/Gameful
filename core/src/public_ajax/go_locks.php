@@ -80,7 +80,7 @@ function go_task_locks ( $id, $check_only, $user_id = null, $task_name = false, 
             echo $this_lock;
             $task_is_locked = true;
         }else{
-            //return false;
+            return true;
         }
     }
 
@@ -171,10 +171,6 @@ function go_task_locks ( $id, $check_only, $user_id = null, $task_name = false, 
         if(!$custom_message) {
             echo '</div></div>';
         }
-
-
-
-
 
     }
     if($locks_status){
@@ -823,6 +819,7 @@ function go_schedule_access($user_id, $custom_fields, $is_logged_in, $check_only
     }
 
     if ($this_lock == true) {
+
         if (!$check_only) {
             $lock_message = (isset($custom_fields['go_sched_access_message'][0]) ?  $custom_fields['go_sched_access_message'][0] : null);
             if (!empty ($lock_message)){
@@ -904,7 +901,7 @@ function go_schedule_access($user_id, $custom_fields, $is_logged_in, $check_only
             $this_lock .= '</div></div></div><script>
   jQuery( function() {
     jQuery( ".scheduled_accordion" ).accordion({
-    active: false,
+    active: 0,
     collapsible: true            
 });
   } );
@@ -925,7 +922,7 @@ function go_prev_task($id = null, $chain_id, $is_nested = false){
     //FIND IF THE PREVIOUS NON OPTIONAL TASK IS ON THE PREVIOUS CHAIN
     //if this task is on a chain
     //get the ids on this chain
-    $go_task_ids = go_get_chain_posts ($chain_id, false);
+    $go_task_ids = go_get_chain_posts ($chain_id, 'task_chains', false);
 
     //Get this order of this task on the chain it is on
     if ($id === null){//if no post_id provided, then just get the last task on the chain
@@ -1028,7 +1025,7 @@ function go_task_chain_lock($id, $user_id, $task_name, $custom_fields, $is_logge
         return true;//it is locked
     }
 
-    $parent_map_term_id = go_get_parent_map_id($chain_id);
+    $parent_map_term_id = go_get_parent_term_id($chain_id, 'task_chains');
     $map_data = go_term_data($parent_map_term_id);
     $map_custom_fields = $map_data[1];
     $is_map_locked = go_task_locks ( $parent_map_term_id, $check_only, $user_id , 'Map', $map_custom_fields);
@@ -1097,7 +1094,7 @@ function go_task_chain_lock($id, $user_id, $task_name, $custom_fields, $is_logge
         //THEN SET THIS (AND ALL TASKS) TO UNLOCKED IF TRUE
         if ($is_pod) {
 
-            $go_task_ids = go_get_chain_posts($chain_id, false);
+            $go_task_ids = go_get_chain_posts($chain_id, 'task_chains', false);
             $done_num = get_term_meta($chain_id, "pod_done_num", true);
             $max_num = get_term_meta($chain_id, "pod_max_num", true);
 
@@ -1194,8 +1191,8 @@ function go_task_chain_lock($id, $user_id, $task_name, $custom_fields, $is_logge
         //if (($is_pod || $first_in_chain) && $locked_by_prev) {
 
         //GET THE CHAINS ON THE MAP (TERM_IDS)
-        $parent_map_term_id = go_get_parent_map_id($chain_id);
-        $sibling_chains = go_get_map_chain_term_ids($parent_map_term_id);
+        $parent_map_term_id = go_get_parent_term_id($chain_id, 'task_chains');
+        $sibling_chains = go_get_child_term_ids($parent_map_term_id, 'task_chains');
         //GET WHERE THIS CHAIN IS THE MAP BY ARRAY POSITION
         $this_chain_order = array_search($chain_id, $sibling_chains);
 
@@ -1219,7 +1216,7 @@ function go_task_chain_lock($id, $user_id, $task_name, $custom_fields, $is_logge
 
                     //$prev_chain = null;
             //get the ids of the terms on this map
-            $top_chains = go_get_maps_term_ids();
+            $top_chains = go_get_parent_term_ids();
             $this_map_order = array_search($parent_map_term_id, $top_chains);
 
             //if this is the first map, then return unlocked
@@ -1234,7 +1231,7 @@ function go_task_chain_lock($id, $user_id, $task_name, $custom_fields, $is_logge
 
 
             //get all chains on previous map
-            $children_chains = go_get_map_chain_term_ids($prev_map);
+            $children_chains = go_get_child_term_ids($prev_map, 'task_chains');
             //if no children chains on previous map, then return unlocked
             if ($children_chains == false) {
                 return false;
@@ -1356,9 +1353,9 @@ function go_timezone_message($user_id) {
     //$offset = 3600 * get_option('gmt_offset');
     //$current_time = $current_time - $offset;
     $current_time = date( 'g:ia l', $current_time );
-    $message = '<div> This lock is set based on the timezone ' . $timezone . ' where it is currently ' . $current_time . '.';
+    $message = '<div> <br><p>This lock is set based on the timezone ' . $timezone . ' where it is currently ' . $current_time . '.</p>';
     if ($is_admin){
-        $message .= '<br>Admin Message: This setting can be changed in the <a href="' . admin_url('options-general.php') . '">wordpress settings.</a> ';
+        $message .= '<p>The timezone can be changed in the <a href="' . admin_url('options-general.php') . '">settings.</a></p> ';
     }
     $message .= '</div>';
     return $message;
@@ -1421,7 +1418,7 @@ function go_is_done($task_id, $user_id = null ) {
         $task_stage_count = (isset($task_custom_meta['go_stages'][0]) ?  $task_custom_meta['go_stages'][0] : null);
         //$task_stage_count = go_post_meta($task_id, 'go_stages', true);
 
-        if ($task_status == $task_stage_count) {
+        if ($task_status >= $task_stage_count) {
             $is_done = true;
         } else {
             $is_done = false;

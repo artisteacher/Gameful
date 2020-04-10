@@ -5,7 +5,7 @@
  * Date: 2020-01-21
  * Time: 23:41
  */
-
+/*
 function go_clipboard_filters(){
 
     $task_name = ucfirst(get_option( 'options_go_tasks_name_plural'  ));
@@ -40,6 +40,6 @@ function go_clipboard_filters(){
         </div>
     </div>
     <?php
-}
+}*/
 
 

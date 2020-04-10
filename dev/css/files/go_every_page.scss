@@ -1,6 +1,14 @@
 .mce-notification {display: none !important;}
 
+.go_settings{
+	cursor: pointer;
+	padding-left: 0px !important;
+	margin-right: 0px !important;
+}
 
+#noty_layout__topCenter{
+	top: 119px !important;
+}
 
 /********************
 *	Map and Store actions
@@ -10,25 +18,39 @@
 	color: #1a1a1a !important;
 }
 
-.go_actions_wrapper_flex {
-	display: flex;
-	justify-content: flex-end;
+.go_actions_wrapper_flex .tools {
+	display: flex !important;
+	justify-content: flex-end !important;
+	flex-wrap: nowrap !important;
 }
 
 .go_actions_wrapper {
-	display: inline;
+	display: inline-block !important;
 }
 .go_actions_wrapper_flex,
 .go_actions_wrapper {
 	font-size: 18px !important;
-	padding: 5px 10px !important;
-	> span span {
-		padding: 0 10px !important;
+	margin: 5px 10px !important;
+
+	.action_icon {
+		margin: 0 5px !important;
 	}
 
 	a {
 		display: inline !important;
+		padding: 0 5px !important;
 	}
+
+
+	.action_icon a{
+		cursor: pointer;
+		padding: 0 3px;
+	}
+
+	.action_icon a:hover{
+		color: #0b457f !important;
+	}
+
 }
 
 .fa-clone{
@@ -173,6 +195,7 @@ body.wp-admin {
 #go_user_bar {
 	position: fixed;
 	top: 0px;
+	left: 0px;
 	width: 100%;
 	z-index: 100000;
 	//height: 91px;
@@ -349,7 +372,12 @@ body.wp-admin {
 }
 
 .go_loader_container{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 250px;
 	width: 100%;
+	padding: 40px 0;
 	text-align: center;
 	margin: 60px 0px;
 }
@@ -458,66 +486,129 @@ input[type="checkbox"]:checked + label span.checkbox::after {
 }
 */
 
-#go_datepicker_container {
-	text-align: right;
-}
-.daterangepicker {
-	z-index: 100003 !important;
-	td, th{
-		padding: 0;
-	}
-}
-#go_user_filters {
-	width: 100%;
-	padding-bottom: 20px;
- }
- #go_user_filters_1{
-	text-align: right;
-}
-#go_user_filters_1 .user_filter {
-	min-width: 150px;
-	padding-left: 10px;
-
-	label{
-		padding: 0 10px;
-	}
-}
-
-#go_user_filters_1 label {
-	float: left;
-
-}
-
-#go_action_filters {
-	flex-wrap: wrap;
-	padding: 20px 40px 20px 20px;
-
-	div {
-		padding: 0 15px;
-		align-items: center;
-	}
-
-}
-.status_filters, .order_filter{
-	padding: 20px 40px 20px 20px;
-}
-
-.order_filter{
-	float: left;
+.select2-results__options {
+	max-height: 400px !important;
 }
 
 #go_leaderboard_filters {
+
+	.select2-selection__rendered {
+		line-height: 24px !important;
+	}
+	.select2-container .select2-selection--single {
+		height: 35px !important;
+	}
+	.select2-selection__arrow {
+		height: 34px !important;
+	}
+
+	.select2-selection--multiple{
+		height: 38px !important;
+	}
+
+
+
 	display: flex;
 	flex-wrap: wrap;
 	border: 1px solid black;
 	border-radius: 3px;
 	padding: 15px;
 	background-color: white;
+	justify-content: space-between;
 
-	> span{
-		margin-right: 20px;
+	#go_leaderboard_update_button {
+		padding: 20px;
+		text-align: right;
 	}
+
+	.filter_row {//the rows
+		margin: 10px 0px;
+		width: 100%;
+		text-align: right;
+		display: flex;
+		align-items: stretch;
+
+
+		.filter {
+			//padding-left: 10px;
+			flex-grow: 1;
+			display: flex;
+			align-items: center;
+		}
+
+		.sections_filter{
+			flex-grow: .5;
+		}
+	}
+
+	h3{
+		text-align: left;
+	}
+
+	.select2,
+	#go_datepicker_container{
+		flex-grow: 1;
+		margin: 0 15px 0 5px;
+
+	}
+
+
+	#go_datepicker_container {
+		text-align: right;
+		background: #fff;
+		cursor: pointer;
+		padding: 0px;
+		border: 1px solid #aaa;
+		//width: 400px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border-radius: 4px;
+		height: 35px;
+
+		#go_datepicker_clipboard{
+			width: 100%;
+			padding: 0 10px;
+		}
+
+		span{
+			line-height: 1em;
+		}
+	}
+	.daterangepicker {
+		z-index: 100003 !important;
+		td, th{
+			padding: 0;
+		}
+	}
+	#go_user_filters{
+
+		.user_filter {
+			min-width: 150px;
+		}
+
+
+	}
+	.status_row {
+		.status_filters, .order_filter {
+			label{
+				padding: 0 15px 0 5px;
+			}
+
+		}
+
+		.order_filter {
+			justify-content: flex-end;
+			margin-right: 30px;
+		}
+	}
+
 }
+
+
+
+
+
 
 /**VIDEOS EMBEDED WITH MEDIA MANAGER
 https://cfxdesign.com/how-to-make-the-wordpress-video-shortcode-responsive/
@@ -581,6 +672,10 @@ video.wp-video-shortcode {
 .featherlight {
 	z-index: 100002 !important;
 	background: rgba(0,0,0,.8) !important;
+}
+
+.daterangepicker{
+	z-index: 100003 !important;
 }
 
 .featherlight.help {
@@ -894,6 +989,7 @@ body:not(.wp-customizer) .media-modal {
 	margin: 10px 0;
 	background-color: #f5b3bd;
 	min-width: 200px;
+	color: black;
 }
 
 .go_lock .go_error_red {
@@ -1048,7 +1144,8 @@ input[type='text'].go_error_red {
 
 .progress-bar-border {
 	height: 16px;
-	border: thin white solid;
+	border-color: #FFFFFF;
+	border-width: 1px 0px;
 	position: relative;
 	background-color: black;
 	font-size: 14px;
@@ -1580,6 +1677,7 @@ input#go_pass_lock::-moz-placeholder {
 	margin-left: 0% !important;
 	margin-right: 0% !important;
 }
+
 
 
 .featherlight-iframe .featherlight-content {

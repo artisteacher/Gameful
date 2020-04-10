@@ -11,6 +11,118 @@ Creation Date: 05/09/13
 //include('includes/lightbox/backend-lightbox.php');
 
 
+function go_get_purchase_count($post_id, $user_id, $custom_fields) {
+    global $wpdb;
+    $store_limit_frequency = ( ($custom_fields['go-store-options_limit_toggle'][0] == true ) ? $custom_fields['go-store-options_limit_frequency'][0] : null );
+    $current_time = current_time('Ymd');
+    $week_starts_on = get_option( 'start_of_week' );
+
+    //set the search for the correct time period
+    if ($store_limit_frequency == 'day') {
+        $timeSQL = ' Date(timestamp)= '.$current_time.' AND';
+    }
+    else if ($store_limit_frequency == 'week') {
+        $timeSQL = " YEARWEEK(timestamp, $week_starts_on )= YEARWEEK({$current_time}) AND";
+    }
+    else if ($store_limit_frequency == 'month') {
+        $timeSQL = ' Year(timestamp)=Year('.$current_time.') AND Month(timestamp)= Month('.$current_time.') AND';
+    }
+    else {
+        $timeSQL = '';
+    }
+
+    $table_name = $wpdb->prefix."go_actions";
+
+    if ( empty( $post_id ) ) {
+        die( '0' );
+    }
+
+    $purchase_count = $wpdb->get_var(
+        $wpdb->prepare(
+            "SELECT SUM( stage ) 
+			FROM {$table_name} 
+			WHERE {$timeSQL}  source_id = %d AND uid = %d",
+            $post_id,
+            $user_id
+        )
+    );
+
+    if ( empty( $purchase_count ) ) {
+        return '0';
+    } else {
+        return $purchase_count;
+    }
+}
+
+function go_get_purchase_limit($post_id, $user_id, $custom_fields, $purchase_count = null ) {
+    $message = '';
+    if ($purchase_count == null) {
+        $purchase_count = go_get_purchase_count($post_id, $user_id, $custom_fields);
+    }
+    $store_limit = ( ($custom_fields['go-store-options_limit_toggle'][0] == true ) ? $custom_fields['go-store-options_limit_num'][0] : false );
+
+    if ($store_limit){
+        $purchases_left = $store_limit - $purchase_count;
+        if($purchases_left<1){
+            $message = "You have reached your purchase limit of this item.";
+        }
+    }else{
+        $purchases_left = 9999;
+    }
+
+    $max_xp = 9999;
+    $store_abs_cost_xp = (isset($custom_fields['go_loot_loot_xp'][0]) ?  $custom_fields['go_loot_loot_xp'][0] : null);
+    if (get_option( 'options_go_loot_xp_toggle' ) && $store_abs_cost_xp > 0){
+        $user_xp = go_return_points( $user_id );
+        $store_toggle_xp = (isset($custom_fields['go_loot_reward_toggle_xp'][0]) ?  $custom_fields['go_loot_reward_toggle_xp'][0] : null);
+        if ($store_toggle_xp == false){
+            //$store_cost_xp = $store_abs_cost_xp * -1;
+            $max_xp = $user_xp / $store_abs_cost_xp;
+            if($max_xp<1){
+                $message = "You do not have enough loot.";
+            }
+        }
+    }
+
+    $max_gold = 9999;
+    $store_abs_cost_gold = (isset($custom_fields['go_loot_loot_gold'][0]) ?  $custom_fields['go_loot_loot_gold'][0] : null);
+    if (get_option( 'options_go_loot_gold_toggle' )  && $store_abs_cost_gold > 0){
+        $user_gold = go_return_currency( $user_id );
+        $store_toggle_gold = (isset($custom_fields['go_loot_reward_toggle_gold'][0]) ?  $custom_fields['go_loot_reward_toggle_gold'][0] : null);
+        if ($store_toggle_gold == false){
+            $max_gold = $user_gold / $store_abs_cost_gold;
+            if($max_gold<1){
+                $message = "You do not have enough loot.";
+            }
+        }
+    }
+
+    $max_health = 9999;
+    $store_abs_cost_health = (isset($custom_fields['go_loot_loot_health'][0]) ?  $custom_fields['go_loot_loot_health'][0] : null);
+    if (get_option( 'options_go_loot_health_toggle' ) && $store_abs_cost_health > 0){
+        $user_health = go_return_health ($user_id );
+        $store_toggle_health = (isset($custom_fields['go_loot_reward_toggle_health'][0]) ?  $custom_fields['go_loot_reward_toggle_health'][0] : null);
+        if ($store_toggle_health == false){
+            $max_health = $user_health / $store_abs_cost_health;
+            if($max_health<1){
+                $message = "You do not have enough loot.";
+            }
+        }
+    }
+
+    $purchase_remaining_min = floor(min($purchases_left, $max_xp, $max_gold, $max_health));
+    $purchase_remaining_min = intval($purchase_remaining_min);
+
+    if ($purchase_remaining_min <= 0){
+        //$purchase_remaining_min = 0;
+        $purchase_remaining_min = $message;
+    }
+
+    return $purchase_remaining_min;
+
+}
+
+
 //https://stackoverflow.com/questions/25310665/wordpress-how-to-create-a-rewrite-rule-for-a-file-in-a-custom-plugin
 add_action('init', 'go_store_page');
 function go_store_page(){
@@ -59,28 +171,9 @@ function go_store_template_include($template)
 }
 
 
-function go_make_store_new() {
-/*
-    $user_id = get_current_user_id();
 
-    $admin_view = 'player';
-    if (function_exists ( 'wu_is_active_subscriber' )){
-        if(wu_is_active_subscriber($user_id) && is_gameful()){
-            if ( go_user_is_admin()) {
-                $admin_view = get_user_option('go_admin_view', $user_id);
-            }else {
-                $admin_view = 'clone';
-            }
-        }
-    }
-    ?>
-    <script>
-        jQuery(document).ready(function() {
-            jQuery('#go_store_container').addClass('<?php echo $admin_view; ?>')
-        });
-    </script>
-<?php
-*/
+/*
+function go_make_store_new() {
 
 
 
@@ -119,7 +212,7 @@ function go_make_store_new() {
     echo "</div>";
 }
 add_shortcode('go_make_store', 'go_make_store_new');
-
+*/
 
 
 function go_register_store_tax_and_cpt() {
@@ -229,10 +322,10 @@ function go_update_store_post_save( $post_id ) {
     $key = 'go_post_data_' . $post_id;
     go_delete_transient($key);
 
-    $html = go_make_store_html();
+    //$html = go_make_store_html();
 
     //delete_option('go_store_html');
-    update_option( 'go_store_html', $html );
+    //update_option( 'go_store_html', $html );
 
 }
 
@@ -256,23 +349,6 @@ function go_fix_store_item_count( $post_id ) {
 add_action( 'deleted_post', 'go_fix_store_item_count' );
 
 
-/**
- * Update store on store term
- * @param  integer $post_id Current post ID
- * @return integer          Current post ID
- */
-function go_update_store_term_save( $term_id ) {
-
-    //$html = go_make_store_html();
-
-    delete_option( 'go_store_html' );
-}
-
-add_action( "delete_store_types", 'go_update_store_term_save', 10, 4 );
-add_action( "create_store_types", 'go_update_store_term_save', 10, 4 );
-add_action( "edit_store_types", 'go_update_store_term_save', 10, 4 );
-
-
 /* No Idea What This Does!
 function go_new_item_permalink( $return, $post_id, $new_title, $new_slug ) {
 	if ( strpos( $return, 'edit-slug' ) !== false ) {
@@ -283,7 +359,7 @@ function go_new_item_permalink( $return, $post_id, $new_title, $new_slug ) {
 add_filter( 'get_sample_permalink_html', 'go_new_item_permalink', 5, 4 );
 */
 
-
+/*
 function go_make_store_html($show_clone = false) {
 
     $user_id = get_current_user_id();
@@ -297,10 +373,11 @@ function go_make_store_html($show_clone = false) {
 
     //$args = array('hide_empty' => false, 'orderby' => 'name', 'order' => 'ASC', 'parent' => '0');
 
-    /* Get all task chains with no parents--these are the sections of the store.  */
+    // Get all task chains with no parents--these are the sections of the store.
     $taxonomy = 'store_types';
 
-    $rows = go_get_terms_ordered($taxonomy, '0');
+    //$rows = go_get_terms_ordered($taxonomy, '0');
+    $rows = go_get_parent_term_ids($taxonomy);
     ob_start();
 
     echo '
@@ -308,7 +385,7 @@ function go_make_store_html($show_clone = false) {
 
 
 
-    /* For each Store Category with no parent, get all the children.  These are the store rows.*/
+    // For each Store Category with no parent, get all the children.  These are the store rows.
     $chainParentNum = 0;
     echo '<div id="store">';
     //for each row
@@ -358,7 +435,7 @@ function go_make_store_html($show_clone = false) {
 
         //$columns = get_terms($taxonomy, $column_args);
         $columns = go_get_terms_ordered($taxonomy, $row_id);
-        /*Loop for each chain.  Prints the chain name then looks up children (quests). */
+        //Loop for each chain.  Prints the chain name then looks up children (quests).
         foreach ($columns as $column) {
             $column_id = $column->term_id;
             $custom_fields = get_term_meta($column_id);
@@ -384,34 +461,12 @@ function go_make_store_html($show_clone = false) {
             }
 
             echo "</div><ul class='store_items'>";
-            /*Gets a list of store items that are assigned to each chain as array. Ordered by post ID */
+            //Gets a list of store items that are assigned to each chain as array. Ordered by post ID
 
             ///////////////
             ///
 
-  /*          $args = array(
-                'post_type' => 'go_store',
-                'orderby' => 'meta_value_num',
-                'order' => 'ASC',
-                'posts_per_page' => -1,
-                'meta_key' => 'go-store-location_store_item',
-                'post_status' => 'publish',
-                'suppress_filters' => true,
-                'tax_query' => array(
-                    array(
-                        'taxonomy' => $taxonomy,
-                        'field' => 'term_id',
-                        'terms' => $column_id,)),
 
-                'meta_value' => '',
-
-                'post_mime_type' => '',
-                'post_parent' => '',
-                'author' => '',
-                'author_name' => '',
-               );
-
-*/
 
 
             //$go_store_objs = get_posts($args);
@@ -421,8 +476,8 @@ function go_make_store_html($show_clone = false) {
             /// ////////////////////
             //$go_store_ids = get_objects_in_term( $column_id, $taxonomy );
 
-            /*Only loop through for first item in array.  This will get the correct order
-            of items from the post metadata */
+            //Only loop through for first item in array.  This will get the correct order
+            //of items from the post metadata
 
             if (!empty($go_store_objs)) {
 
@@ -465,15 +520,9 @@ function go_make_store_html($show_clone = false) {
                         echo "</div></div></div>";
                     }
 
-                    echo "<a id='$store_item_id' class='go_str_item ' >$store_item_name</a>";
+                    echo "<a class='go_str_item ' data-post_id='$store_item_id' >$store_item_name</a>";
 
-                    /*     echo "<span class='go_actions_wrapper' style='display: none;'>";
-                    do_action('gop_add_importer_icon', $store_item_id, 'post', null, false);
-                    if($is_admin) {
-                        $url = get_edit_post_link($store_item_id, 'go_store');
-                        echo "<span><a href='{$url}'><i class='fas fa-edit'></i></a></span>";
-                    }
-                    echo "</span>";*/
+
 
 
 
@@ -534,5 +583,5 @@ function go_make_store_html($show_clone = false) {
 
     return $store_html;
 }
-
+*/
 

@@ -74,6 +74,7 @@ function quest_reader_title( $title ) {
 
 add_action('go_blog_template_after_post', 'go_user_feedback_container', 10, 3);
 function go_user_feedback_container($post_id, $show_form = true, $is_archive = false){
+
     $admin_user = go_user_is_admin();
 
     ?>
@@ -100,21 +101,76 @@ function go_user_feedback_container($post_id, $show_form = true, $is_archive = f
     <?php
 }
 
-function go_blog_post_feedback_table($post_id){
-
-    global $wpdb;
-    $aTable = "{$wpdb->prefix}go_actions";
-    //check last feedback, and if it exists, remove it
-    $all_feedback = $wpdb->get_results($wpdb->prepare("SELECT id, action_type, result, xp, gold, health
+function get_all_feedback($post_id){
+    global $all_feedback;
+    if (empty($all_feedback)){
+        global $wpdb;
+        $aTable = "{$wpdb->prefix}go_actions";
+        $all_feedback = $wpdb->get_results($wpdb->prepare("SELECT id, action_type, result, xp, gold, health
                 FROM {$aTable} 
                 WHERE source_id = %d AND (action_type = %s OR action_type = %s OR action_type = %s OR action_type = %s)
                 ORDER BY id DESC",
-        $post_id,
-        'feedback',
-        'feedback_percent',
-        'feedback_loot',
+            $post_id,
+            'feedback',
+            'feedback_percent',
+            'feedback_loot',
             'reset'
-    ), ARRAY_A);
+        ), ARRAY_A);
+
+    }
+    return $all_feedback;
+}
+
+function get_feedback_status($post_id){
+    $all_feedback = get_all_feedback($post_id);
+    $status =  null;
+    $post_status = get_post_status($post_id);
+    if ($post_status === 'reset'){
+        $status = 'has';
+    }
+    else if(!empty($all_feedback)) {
+        $feedback_xp = 0;
+        $feedback_gold = 0;
+        $feedback_health = 0;
+        foreach($all_feedback as $feedback){
+            $feedback_xp = $feedback_xp + $feedback['xp'];
+            $feedback_gold = $feedback_gold + $feedback['gold'];
+            $feedback_health = $feedback_health + $feedback['health'];
+        }
+        if (($feedback_xp < 0) || ($feedback_gold < 0) || ($feedback_health < 0)){
+            $status = 'down';
+        }
+        else if (($feedback_xp > 0) || ($feedback_gold > 0) || ($feedback_health > 0)){
+            $status = 'up';
+        }
+        else {
+            $status = 'has';
+        }
+    }
+    else if ($post_status === 'read'){
+        $status = 'read';
+    }
+
+    return $status;
+}
+
+function get_feedback_icon($post_id){
+    $feedback_status = get_feedback_status($post_id);
+    $feedback_icon = '';
+    if($feedback_status === 'up'){
+        $feedback_icon = '<i class="far fa-comment-alt-plus fa-2x" aria-hidden="true"></i>';
+    }else if($feedback_status === 'down'){
+        $feedback_icon = '<i class="far fa-comment-alt-minus fa-2x" aria-hidden="true"></i>';
+    }else if($feedback_status === 'has'){
+        $feedback_icon = '<i class="far fa-comment-alt fa-2x" aria-hidden="true"></i>';
+    }
+    return $feedback_icon;
+}
+
+
+function go_blog_post_feedback_table($post_id){
+
+    $all_feedback = get_all_feedback($post_id);
 
 
     if (count($all_feedback)>0){
@@ -165,26 +221,26 @@ function go_feedback_table($all_feedback){
                                         //$percent = ;
                                         $percent = (isset($result[5]) ?  $result[5] : '');
                                     }
-                                $xp = $feedback['xp'];
-                                $gold = $feedback['gold'];
-                                $health = $feedback['health'];
+                                    $xp = $feedback['xp'];
+                                    $gold = $feedback['gold'];
+                                    $health = $feedback['health'];
 
 
 
-                                //$link = get_permalink($id);
+                                    //$link = get_permalink($id);
 
-                                ?>
-                            <tr>
-                                <td ><?php echo $title;?></td>
-                                <td ><?php echo $message;?></td>
-                                <td ><?php echo $percent;?></td>
-                                <td ><?php echo $xp;?></td>
-                                <td ><?php echo $gold;?></td>
-                                <td ><?php echo $health;?></td>
+                                    ?>
+                                    <tr>
+                                        <td ><?php echo $title;?></td>
+                                        <td ><?php echo $message;?></td>
+                                        <td ><?php echo $percent;?></td>
+                                        <td ><?php echo $xp;?></td>
+                                        <td ><?php echo $gold;?></td>
+                                        <td ><?php echo $health;?></td>
 
-                            </tr>
-                            <?php
-                            }
+                                    </tr>
+                                    <?php
+                                }
 
                             ?></tbody></table>
                 </div>
@@ -503,7 +559,7 @@ function go_feedback_input($post_id){
                         </tr>
                         <?php
                         //get the current % and the latest loot awarded.
-                        $percent = go_post_meta( $post_id, 'go_feedback_percent', true );
+                        //$percent = go_post_meta( $post_id, 'go_feedback_percent', true );
 
                         global $wpdb;
                         $aTable = "{$wpdb->prefix}go_actions";
@@ -515,32 +571,67 @@ function go_feedback_input($post_id){
                             <th scope="row" colspan="2">Current Awards</th>
 
                         </tr>
+                        <tr valign="top">
+                           <td colspan="2">
+                               <div style="display: flex; justify-content: space-between; flex-wrap: nowrap;">
+                                   <div style="text-align: left; width: 100%;">
+                                       Quest Loot
+                                   </div>
+                                   <div style="text-align: left; width: 100%;">
+                                       +/- Assigned Loot
+                                   </div>
+                                   <div style="text-align: left; width: 100%;">
+                                       = Total Loot
+                                   </div>
+                               </div>
+                           </td>
+
+                        </tr>
                         <tr>
                             <td colspan="2">
                                 <?php
 
-                                    $result = $wpdb->get_results($wpdb->prepare("SELECT id, uid, xp, gold, health
-                                    FROM {$aTable} 
-                                    WHERE result = %d AND source_id = %d AND action_type = %s
-                                    ORDER BY id DESC LIMIT 1",
-                                        $post_id,
-                                        $go_blog_task_id,
-                                        'task'), ARRAY_A);
+                                //Get Loot Earned on stage
+                                $result = $wpdb->get_results($wpdb->prepare("SELECT id, uid, xp, gold, health
+                                FROM {$aTable} 
+                                WHERE result = %d AND source_id = %d AND action_type = %s
+                                ORDER BY id DESC LIMIT 1",
+                                    $post_id,
+                                    $go_blog_task_id,
+                                    'task'), ARRAY_A);
 
-                                    if (!empty($result)) {
-                                        //get original loot assigned on this stage--this is the baseline
-                                        $xp = $result[0]['xp'];
-                                        $gold = $result[0]['gold'];
-                                        $health = $result[0]['health'];
-                                    }else{
-                                        $xp = 0;
-                                        $gold = 0;
-                                        $health = 0;
-                                    }
+                                if (!empty($result)) {
+                                    //get original loot assigned on this stage--this is the baseline
+                                    $xp = $result[0]['xp'];
+                                    $gold = $result[0]['gold'];
+                                    $health = $result[0]['health'];
+                                }else{
+                                    $xp = 0;
+                                    $gold = 0;
+                                    $health = 0;
+                                }
 
-                                    if (($xp && $xp != 0) || ($gold && $gold != 0) || ($health && $health != 0)) {
-                                        echo "Awards: ";
-                                    }
+                                //get loot assigned in Feedback
+                                $all_feedback = get_all_feedback($post_id);
+                                $feedback_xp = 0;
+                                $feedback_gold = 0;
+                                $feedback_health = 0;
+                                foreach($all_feedback as $feedback){
+                                    $feedback_xp = $feedback_xp + $feedback['xp'];
+                                    $feedback_gold = $feedback_gold + $feedback['gold'];
+                                    $feedback_health = $feedback_health + $feedback['health'];
+                                }
+
+                                //total Loot on Stage
+                                $total_xp = $xp + $feedback_xp;
+                                $total_gold = $gold + $feedback_gold;
+                                $total_health = $health + $feedback_health;
+
+                                //Current Awards
+                                echo ' <div style="display: flex; justify-content: space-between; flex-wrap: nowrap;">';
+                                echo '<div style="text-align: left; width: 100%;">';
+                                if (($xp && $xp != 0) || ($gold && $gold != 0) || ($health && $health != 0)) {
+
                                     if ($xp && $xp != 0) {
                                         go_display_shorthand_currency('xp', $xp, true);
                                         echo " &nbsp; &nbsp;";
@@ -553,7 +644,84 @@ function go_feedback_input($post_id){
                                         go_display_shorthand_currency('health', $health, true);
                                         echo " &nbsp; &nbsp;";
                                     }
-                                    if ($percent && $percent != 0) {
+                                }
+                                else{
+                                    echo "None";
+                                }
+                                echo "</div>";
+
+
+                                echo '<div style="text-align: left; width: 100%;">';
+                                if (($feedback_xp && $feedback_xp != 0) || ($feedback_gold && $feedback_gold != 0) || ($feedback_health && $feedback_health != 0)) {
+
+                                    if ($feedback_xp && $feedback_xp != 0) {
+                                        go_display_shorthand_currency('xp', $feedback_xp, true);
+                                        echo " &nbsp; &nbsp;";
+                                    }
+                                    if ($feedback_gold && $feedback_gold != 0) {
+                                        go_display_shorthand_currency('gold', $feedback_gold, true);
+                                        echo " &nbsp; &nbsp;";
+                                    }
+                                    if ($feedback_health && $feedback_health != 0) {
+                                        go_display_shorthand_currency('health', $feedback_health, true);
+                                        echo " &nbsp; &nbsp;";
+                                    }
+                                }
+                                else{
+                                    echo "None";
+                                }
+                                echo "</div>";
+
+
+                                echo '<div style="text-align: left; width: 100%;">';
+                                if (($total_xp && $total_xp != 0) || ($total_gold && $total_gold != 0) || ($total_health && $total_health != 0)) {
+                                    echo " = &nbsp; &nbsp;";
+                                    if ($total_xp && $total_xp != 0) {
+                                        if($total_xp > $xp){
+                                            echo "<span style='color: green;'>";
+                                        }else if($total_xp < $xp){
+                                            echo "<span style='color: indianred;'>";
+                                        }else{
+                                            echo "<span>";
+                                        }
+                                        go_display_shorthand_currency('xp', $total_xp, true);
+                                        echo "</span>";
+                                        echo " &nbsp; &nbsp;";
+                                    }
+                                    if ($total_gold && $total_gold != 0) {
+                                        if($total_gold > $gold){
+                                            echo "<span style='color: green;'>";
+                                        }else if($total_gold < $gold){
+                                            echo "<span style='color: indianred;'>";
+                                        }else{
+                                            echo "<span>";
+                                        }
+                                        go_display_shorthand_currency('gold', $total_gold, true);
+                                        echo "</span>";
+                                        echo " &nbsp; &nbsp;";
+                                    }
+                                    if ($total_health && $total_health != 0) {
+                                        if($total_health > $health){
+                                            echo "<span style='color: green;'>";
+                                        }else if($total_health < $health){
+                                            echo "<span style='color: indianred;'>";
+                                        }else{
+                                            echo "<span>";
+                                        }
+                                        go_display_shorthand_currency('health', $total_health, true);
+                                        echo "</span>";
+                                        echo " &nbsp; &nbsp;";
+                                    }
+                                }
+                                else{
+                                    echo " None";
+                                }
+
+                                echo "</div></div>";
+
+
+
+                                    /*if ($percent && $percent != 0) {
                                         if ($percent > 0) {
                                             $class = 'up';
                                             $direction = "+";
@@ -562,9 +730,28 @@ function go_feedback_input($post_id){
                                             $direction = "";
                                         }
 
-                                        echo "<br>Adjusted: <span class='go_status_percent " . $class . "'> " . $direction . $percent . '%</span>';
-                                        echo " &nbsp; &nbsp;";
-                                    }
+                                        //echo "<br>Adjusted: <span class='go_status_percent " . $class . "'> " . $direction . $percent . '%</span>';
+                                        echo " &nbsp; &nbsp; x &nbsp; &nbsp; <span class='go_status_percent  $class '> $direction $percent %</span>";
+
+                                        if (($xp && $xp != 0) || ($gold && $gold != 0) || ($health && $health != 0)) {
+                                            echo " &nbsp; &nbsp; = &nbsp; &nbsp;";
+                                        }
+                                        if ($xp && $xp != 0) {
+                                            $adj_xp = $xp * $percent * .01;
+                                            go_display_shorthand_currency('xp', $adj_xp, true);
+                                            echo " &nbsp; &nbsp;";
+                                        }
+                                        if ($gold && $gold != 0) {
+                                            $adj_gold = $gold * $percent * .01;
+                                            go_display_shorthand_currency('gold', $adj_gold, true);
+                                            echo " &nbsp; &nbsp;";
+                                        }
+                                        if ($health && $health != 0) {
+                                            $adj_health = $health * $percent * .01;
+                                            go_display_shorthand_currency('health', $adj_health, true);
+                                            echo " &nbsp; &nbsp;";
+                                        }
+                                    }*/
 
                                 }
                                 ?>
@@ -574,7 +761,7 @@ function go_feedback_input($post_id){
                         if ($go_blog_task_id != null || $go_xp_toggle || $go_gold_toggle || $go_health_toggle) {
                             ?>
                             <tr valign="top">
-                                <th scope="row" colspan="2">Adjust Awards</th>
+                                <th scope="row" colspan="2">Assign Loot</th>
 
                             </tr>
                             <tr valign="top">
@@ -589,8 +776,8 @@ function go_feedback_input($post_id){
                                         <input id="loot_option_percent_<?php echo $post_id; ?>"
                                                class="loot_option_percent"
                                                type="radio" name="loot_option" value="percent"><label
-                                                for="loot_option_percent_<?php echo $post_id; ?>"> Percentage
-                                            Adjustment </label> &nbsp; &nbsp;
+                                                for="loot_option_percent_<?php echo $post_id; ?>"> %
+                                            of Quest Loot </label> &nbsp; &nbsp;
                                         <?php
                                     }
                                     if ($go_xp_toggle || $go_gold_toggle || $go_health_toggle) {
@@ -598,7 +785,7 @@ function go_feedback_input($post_id){
                                         <input id="loot_option_assign_<?php echo $post_id; ?>"
                                                class="loot_option_assign"
                                                type="radio" name="loot_option" value="assign"><label
-                                                for="loot_option_assign_<?php echo $post_id; ?>"> Assign Loot </label>
+                                                for="loot_option_assign_<?php echo $post_id; ?>"> Custom Amount </label>
                                         <?php
                                     }
                                     ?>

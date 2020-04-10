@@ -4,7 +4,7 @@ jQuery(window).load(function () {
 //alert("store_ready");
 
         jQuery('.go_str_item').off().one("click", function (e) {
-            go_lb_opener(this.id);
+            go_lb_opener(this);
         });
 
 });
@@ -30,13 +30,14 @@ function go_make_store_clickable() {
 }
 
 //open the lightbox for the store items
-function go_lb_opener( id ) {
+function go_lb_opener( target ) {
+    var id = jQuery(target).data('post_id');
     console.log("go_lb_opener");
     console.log(jQuery('.featherlight.store').length);
     if(jQuery('.featherlight.store').length > 0) {
         console.log('already open');
         jQuery('.go_str_item').off().one("click", function(e){
-            go_lb_opener( this.id );
+            go_lb_opener( this );
         });
         return;
     }
@@ -44,13 +45,13 @@ function go_lb_opener( id ) {
     jQuery('.go_str_item').prop('onclick',null).off('click');
 
     if ( ! jQuery.trim( jQuery( '#lb-content' ).html() ).length ) {
-        var get_id = id;
+        //var get_id = id;
         var nonce = GO_EVERY_PAGE_DATA.nonces.go_the_lb_ajax;
         var gotoSend = {
             is_frontend: is_frontend,
             action:"go_the_lb_ajax",
             _ajax_nonce: nonce,
-            the_item_id: get_id,
+            the_item_id: id,
         };
         jQuery.ajax({
             url: MyAjax.ajaxurl,
@@ -110,7 +111,7 @@ function go_lb_opener( id ) {
 
                 }
                 jQuery('.go_str_item').off().one("click", function(e){
-                    go_lb_opener( this.id );
+                    go_lb_opener( this );
                 });
 
                 jQuery('#go_store_pass_button').one("click", function (e) {
@@ -168,23 +169,21 @@ function goBuytheItem( id, count ) {
                 } catch (e) {
                     res = {
                         json_status : '101',
-                        html : '101 Error: Please try again.',
-                        unlocked_content: ''
+                        messages : '',
+                        content: '101 Error: Please try again.'
                     };
                 }
 				if ( -1 !== raw.indexOf( 'Error' ) ) {
 					jQuery( '#light').html(raw);
 				} else {
 				    console.log('show_content');
+                    console.log(res.messages);
+                    console.log(res.content);
                     //console.log(res.unlocked_content);
-                    jQuery( '#light').html(res.html);
+                    jQuery( '.top_content').html(res.content);
+                    jQuery( '.go_store_actions').remove();
+                    jQuery( 'body').append(res.messages);
 
-                    //testing this
-                    if(res.unlocked_content != '') {
-
-                            jQuery.featherlight(res.unlocked_content);
-
-                    }
 
 				}
 			}

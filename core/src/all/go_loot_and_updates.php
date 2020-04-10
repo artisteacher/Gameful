@@ -296,7 +296,8 @@ function go_display_shorthand_currency ($currency_type, $amount, $output = false
         $copper_amount = intval(($amount * 100) - ($gold_amount * 100) - ($silver_amount * 10));
 
 
-            $str = '';
+        $str = '';
+        $need_space = false;
             if ($gold_amount != 0 || $show_empty){
 
 
@@ -305,7 +306,7 @@ function go_display_shorthand_currency ($currency_type, $amount, $output = false
                     $r_str = "{$gold_suffix}<br>";
                 }else{
                     $str = "{$gold_amount}{$divider}{$gold_suffix}";
-                    $str .= "&nbsp;";
+                    $need_space = true;
                 }
             }
             if ($silver_amount != 0 || $show_empty){
@@ -314,8 +315,11 @@ function go_display_shorthand_currency ($currency_type, $amount, $output = false
                     $l_str .= "{$silver_amount}<br>";
                     $r_str .= "{$silver_suffix}<br>";
                 }else{
+                    if($need_space){
+                        $str .= "&nbsp;";
+                    }
                     $str .=  "{$silver_amount}{$divider}{$silver_suffix}";
-                    $str .= "&nbsp;";
+                    $need_space = true;
                 }
             }
             if ($copper_amount != 0 || $show_empty){
@@ -325,6 +329,9 @@ function go_display_shorthand_currency ($currency_type, $amount, $output = false
                     $r_str .= "{$copper_suffix}<br>";
                 }
                 else{
+                    if($need_space){
+                        $str .= "&nbsp;";
+                    }
                     $str .=  "{$copper_amount}{$divider}{$copper_suffix}";
                     //$str .= "&nbsp;";
                 }
@@ -988,8 +995,24 @@ function go_remove_groups($group_ids, $user_id, $notify = false) {
 }
 
 function go_print_single_badge( $term_id, $type = 'badge', $output = true, $user_id = null, $additional_class = null){
+    $data = go_term_data($term_id);
+    if (!empty($data)) {
+
+        $custom_fields = $data[1];
+
+        $hidden = (isset($custom_fields['go_hidden'][0]) ?  $custom_fields['go_hidden'][0] : false);
+        if($hidden && ($user_id != null)){
+            return;
+        }
+    }
+
     $badge_assigned = false;
     //if user_id is passed, find if badge is earned
+        if($type === 'badge'){
+           $taxonomy = 'go_badges';
+        }else{
+           $taxonomy = 'user_go_groups';
+        }
     if($user_id != null) {
         if($type === 'badge') {
             $key = go_prefix_key('go_badge');
@@ -1017,25 +1040,36 @@ function go_print_single_badge( $term_id, $type = 'badge', $output = true, $user
         $class .= " go_map_badge";
     }
 
-    $obj = get_term($term_id);
-    if (!empty($obj)) {
-        $name = $obj->name;
-        $id = $obj->term_id;
 
-        $icon_toggle = get_term_meta( $id, 'image_source' );
-        $icon_toggle = (isset($icon_toggle[0]) ?  $icon_toggle[0] : false);
+    if (!empty($data)) {
+        $name = '';
+        $custom_fields = $data[1];
+        $hidden = (isset($custom_fields['go_hidden'][0]) ?  $custom_fields['go_hidden'][0] : false);
+        if($hidden && ($user_id === null)){
+            $name .= "Hidden: ";
+        }
+
+        $name .= $data[0];
+        $id = $term_id;
+
+        $icon_toggle = (isset($custom_fields['image_source'][0]) ?  $custom_fields['image_source'][0] : false);
+        //$icon_toggle = get_term_meta( $id, 'image_source' );
+        //$icon_toggle = (isset($icon_toggle[0]) ?  $icon_toggle[0] : false);
 
         if($icon_toggle === '1'){
-            $icon = get_term_meta( $id, 'icon' );
-            $color = get_term_meta( $id, 'icon_color' );
-            $img = '<i class="'.$icon[0].' fa-4x" style="color:'.$color[0].'"></i>';
+           // $icon = get_term_meta( $id, 'icon' );
+            $icon = (isset($custom_fields['icon'][0]) ?  $custom_fields['icon'][0] : false);
+            //$color = get_term_meta( $id, 'icon_color' );
+            $color = (isset($custom_fields['icon_color'][0]) ?  $custom_fields['icon_color'][0] : false);
+            $img = '<i class="'.$icon.' fa-4x" style="color:'.$color.'"></i>';
 
         }
         else{
-            $img_id = get_term_meta( $id, 'my_image' );
+            //$img_id = get_term_meta( $id, 'my_image' );
+            $img_id = (isset($custom_fields['my_image'][0]) ?  $custom_fields['my_image'][0] : false);
             $img ='';
             if (isset($img_id[0]) && !empty($img_id[0])){
-                $img = wp_get_attachment_image($img_id[0], array( 100, 100 ));
+                $img = wp_get_attachment_image($img_id, array( 64, 64 ));
             }else{
                 if ($type === 'badge') {
                     $img = '<i class="fas fa-award fa-4x"></i>';
@@ -1048,8 +1082,9 @@ function go_print_single_badge( $term_id, $type = 'badge', $output = true, $user
 
         $description = term_description( $id );
         if ($badge_assigned) {
-            $award_message = get_term_meta( $id, 'award_message' );
-            $award_message = (isset($award_message[0]) ?  $award_message[0] : null);
+            //$award_message = get_term_meta( $id, 'award_message' );
+            $award_message = (isset($custom_fields['award_message'][0]) ?  $custom_fields['award_message'][0] : false);
+            $award_message = (isset($award_message) ?  $award_message : null);
             if($award_message) {
                 $description .= "<br>" . $award_message;
             }
@@ -1068,11 +1103,25 @@ function go_print_single_badge( $term_id, $type = 'badge', $output = true, $user
         $badge .= "</div></div>";
 */
 
-        if (!empty($description)){
-            $badge = "<div class='go_badge_wrap' ><div class='go_badge_container $class'><figure class='go_badge'><div class='fig_wrap tooltip' data-tippy-content='{$description}' data-tippy-theme='light'>{$img}</div><figcaption>{$name}</figcaption></figure></div></div>";
-        }else{
-            $badge = "<div class='go_badge_wrap'><div class='go_badge_container $class'><figure class='go_badge'><div class='fig_wrap'>$img</div><figcaption>{$name}</figcaption></figure></div></div>";
+        $badge = "<div class='go_badge_wrap go_show_actions' data-term_id='$term_id'>";
+        if(go_user_is_admin() && $additional_class === 'stats') {
+            ob_start();
+            go_add_action_icons($term_id, $taxonomy, false);
+            $icons = ob_get_contents();
+            ob_end_clean();
+            $badge .= $icons;
         }
+        $badge .= "<div class='go_badge_container $class'><div class='go_badge'>";
+
+        if (!empty($description)){
+            $badge .= "<div class='fig_wrap tooltip active'  data-tippy-content='{$description}' data-tippy-theme='light'>{$img}</div>";
+            $badge .= "<div class='fig_wrap inactive' style='display: none;'>$img</div>";
+        }else{
+            $badge .= "<div class='fig_wrap'>$img</div>";
+        }
+
+
+        $badge .= "<div>{$name}</div></div></div></div>";
 
         if($output){
             echo $badge;

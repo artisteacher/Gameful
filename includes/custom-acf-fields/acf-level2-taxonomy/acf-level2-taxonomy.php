@@ -38,11 +38,11 @@ class go_acf_plugin_level2_taxonomy {
 	*/
 	
 	function __construct() {
-		
+
 		// settings
 		// - these will be passed into the field class.
 		$this->settings = array(
-			'version'	=> '1.0.0',
+			'version'	=> '1.1.2',
 			'url'		=> plugin_dir_url( __FILE__ ),
 			'path'		=> plugin_dir_path( __FILE__ )
 		);

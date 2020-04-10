@@ -101,6 +101,10 @@ function user_registration_login_init () {
     if(empty($referrer)){
         //set the redirect_blog_id cookie to the site id
         setcookie("redirect_blog_id", $go_site_id, time() + 60 * 60 * 24 * 30, '/', $main_domain);
+        //setcookie('wordpress_test_cookie', 'WP Cookie check2', 0, '/', $main_domain);
+
+        //setcookie(TEST_COOKIE, 'WP Cookie check', 0, COOKIEPATH, COOKIE_DOMAIN);
+        //setcookie(TEST_COOKIE, 'WP Cookie check', 0, COOKIEPATH, $main_domain);
 
     }
 }
@@ -336,7 +340,7 @@ function go_bad_domain_message ($errors) {
     }
     return $errors;
 }
-add_filter('wp_login_errors', 'go_bad_domain_message');
+//add_filter('wp_login_errors', 'go_bad_domain_message');
 
 
 /**

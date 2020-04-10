@@ -80,25 +80,26 @@ add_action( 'wp_enqueue_scripts', 'acft_enqueue_google_fonts_file' );
 function acft_enqueue_google_fonts_file() {
     
     global $post;
-    
-    $all_fields = get_fields( $post->ID, false );
-    $font_family = array();
+    if($post) {
+        $all_fields = get_fields($post->ID, false);
+        $font_family = array();
 
-    if( is_array($all_fields) ){
-        
-        array_walk_recursive($all_fields, function($item, $key) use (&$font_family) {
-            if( $key === 'font_family' )
-                $font_family[] = $item;
-        });
+        if (is_array($all_fields)) {
 
-    }
+            array_walk_recursive($all_fields, function ($item, $key) use (&$font_family) {
+                if ($key === 'font_family')
+                    $font_family[] = $item;
+            });
 
-    if( is_array($font_family) && count($font_family) > 0 ){
+        }
 
-        $font_family = implode( ':400,700|', $font_family );
-        
-        wp_enqueue_style( 'acft-gf', 'https://fonts.googleapis.com/css?family='.$font_family );
+        if (is_array($font_family) && count($font_family) > 0) {
 
+            $font_family = implode(':400,700|', $font_family);
+
+            wp_enqueue_style('acft-gf', 'https://fonts.googleapis.com/css?family=' . $font_family);
+
+        }
     }
 
 }

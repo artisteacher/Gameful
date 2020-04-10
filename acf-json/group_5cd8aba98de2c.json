@@ -44,7 +44,7 @@
                     "key": "field_5cc0ba56364b8",
                     "label": "Message",
                     "name": "message",
-                    "type": "textarea",
+                    "type": "wysiwyg",
                     "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
@@ -53,11 +53,11 @@
                         "class": "",
                         "id": ""
                     },
+                    "tabs": "all",
+                    "toolbar": "full",
+                    "media_upload": 1,
                     "default_value": "",
-                    "placeholder": "",
-                    "maxlength": "",
-                    "rows": "",
-                    "new_lines": ""
+                    "delay": 0
                 },
                 {
                     "key": "field_5e462536f591b",
@@ -274,5 +274,5 @@
     "active": 1,
     "description": "",
     "recaptcha": 0,
-    "modified": 1584768147
+    "modified": 1585838953
 }

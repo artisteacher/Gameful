@@ -10,6 +10,7 @@
 		return {
 			key			: $( parent ).data('key'),
 			allowNull	: $( element ).data('allow_null'),
+			minimumInputLength : 3,
 			ajax		: 1,
 			ajaxAction	: 'acf/fields/font-awesome/query'
 		}

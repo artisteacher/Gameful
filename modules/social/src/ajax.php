@@ -560,7 +560,9 @@ function go_followers_list(){
         $name = go_get_fullname($uid);
         $avatar = go_get_avatar($uid, false, array(32, 32));
         ob_start();
-        go_user_links($user_id, false, false, true);
+        $user_is_admin = go_user_is_admin($uid);
+        $show_blog_link = ($user_is_admin ?  false : true);
+        go_user_links($uid, false, false, $show_blog_link);
         $links = ob_get_clean();
         echo "<div class='go_follower' style='display: flex; justify-content:space-between;'><span><span>$avatar</span> $name  $links</span><span style='margin: 0 0 5px 30px;' >";
         if(in_array($uid, $following)) {

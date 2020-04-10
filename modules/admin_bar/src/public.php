@@ -27,6 +27,7 @@ function go_player_bar_v5() {
     //$go_stats_switch = get_option( 'options_go_stats_toggle' );
     $go_blog_switch = get_option('options_go_blogs_toggle');
     $go_leaderboard_switch = get_option('options_go_stats_leaderboard_toggle');
+    $go_forum_switch = get_option('options_go_forum_toggle');
 
     $xp_toggle = get_option('options_go_loot_xp_toggle');
     $gold_toggle = get_option('options_go_loot_gold_toggle');
@@ -87,6 +88,18 @@ function go_player_bar_v5() {
             $go_leaderboard_link = go_get_link_from_option('options_go_stats_leaderboard_name');
 
             echo "<div class='go_user_bar_icon'><a href='$go_leaderboard_link'><i class='fas fa-trophy ab-icon' aria-hidden='true'></i><br><div class='go_player_bar_text' id='go_leaderboard_page'>$go_leaderboard_name</div></a></div>";
+
+        }
+
+        if ($go_forum_switch) {
+            $go_forum_name = get_option('options_go_forum_name');
+            if(!$go_forum_name){
+                $go_forum_name = "Forum";
+            }
+            //$go_leaderboard_link = get_site_url(null, $go_leaderboard_name);
+            $go_forum_link = get_site_url(null, 'forums');
+
+            echo "<div class='go_user_bar_icon'><a href='$go_forum_link'><i class='fas fa-comments-alt ab-icon' aria-hidden='true'></i><br><div class='go_player_bar_text' id='go_forum_page'>$go_forum_name</div></a></div>";
 
         }
 

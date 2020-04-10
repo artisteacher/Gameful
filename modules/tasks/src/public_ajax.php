@@ -599,7 +599,8 @@ function go_print_1_message ( $custom_fields, $i ){
 
     $heading = (isset($custom_fields['go_stages_' . $i . '_heading'][0]) ?  $custom_fields['go_stages_' . $i . '_heading'][0] : "");
     $key = 'go_stages_' . $i . '_content';
-    $content = $custom_fields[$key][0];
+    //$content = $custom_fields[$key][0];
+    $content = (isset($custom_fields[$key][0]) ?  $custom_fields[$key][0] : null);
     $message = ( ! empty( $content ) ? $content : '' ); // Completion Message
     //adds oembed to content
     //if(isset($GLOBALS['wp_embed']))
@@ -1088,7 +1089,7 @@ function go_new_pagination ( $task_id, $custom_fields = null ) {
     $chain_id = (isset($custom_fields['go-location_map_loc'][0]) ?  $custom_fields['go-location_map_loc'][0] : null);
 
     if (!empty($chain_id)) {
-        $chain_order = go_get_chain_posts($chain_id, false);
+        $chain_order = go_get_chain_posts($chain_id, 'task_chains', false);
         if ( empty( $chain_order ) || ! is_array( $chain_order ) ) {
             return;
         }

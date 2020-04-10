@@ -351,3 +351,9 @@ template {
 #go_profile_wrapper .success {
   background: lightgreen;
   padding: 5px; }
+
+.acf-hide-label-frontend > .acf-label {
+  display: none; }
+
+.acf-hide-label-frontend > .acf-label ~ .acf-label {
+  display: block; }

@@ -318,7 +318,7 @@ function generate_single_archive($show_loot = false, $user_id,  $is_admin_archiv
         go_stats_header($user_id, false, false, false, true, $show_loot);
 
     ?>
-    <div id='loader_container' style='display:none; height: 250px; width: 100%; padding: 10px 30px; '>
+    <div id='loader_container' style='height: 250px; width: 100%; padding: 10px 30px; display: flex; justify-content: center; align-items: center; display:none; '>
         <div id='loader'>
             <i class='fas fa-spinner fa-pulse fa-4x'></i>
         </div>

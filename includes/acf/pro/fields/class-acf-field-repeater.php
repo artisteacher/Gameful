@@ -844,7 +844,7 @@ class acf_field_repeater extends acf_field {
 				unset($value['acfcloneindex']);
 				
 			}
-			
+
 			// loop through rows
 			foreach( $value as $row ) {	$i++;
 				

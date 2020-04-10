@@ -227,14 +227,16 @@ END TOOLTIP
 	flex-grow: 1;
 
 	.fig_wrap{
-		height:100px;
+		height:80px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 }
 .go_badge_wrap {
 	display: inline-block;
 	float: left;
-	margin: 15px;
-	height: 150px; 
+	margin: 5px;
 }
 
 .go_group_wrap {
@@ -244,8 +246,8 @@ END TOOLTIP
 	width: 100%;
 }
 
-#stats_badges,
-#stats_groups{
+.stats_badges,
+.stats_groups{
 
 	.go_badge_container,
 	.go_group_container {
@@ -280,8 +282,9 @@ END TOOLTIP
 #go_badges_list .parent_cat,
 #go_groups_list .parent_cat{
 	border: solid 1px;
-	padding: 15px;
-	margin: 15px;
+	border-radius: 7px;
+	padding: 5px;
+	margin: 5px;
 }
 
 /** Leaderboard Styles **/

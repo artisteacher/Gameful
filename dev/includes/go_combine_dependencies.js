@@ -9,3 +9,4 @@
 // @codekit-prepend 'js/select2.min.js'
 // @codekit-prepend 'js/datatables.min.js'
 // @codekit-prepend 'js/natural_sort_datatables.js'
+// @codekit-prepend 'js/Sortable.min.js'

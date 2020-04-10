@@ -25,6 +25,7 @@ if ( defined( 'DOING_AJAX' )) {
     include_once('custom-acf-fields/acf-quiz/acf-quiz.php');
     include_once('custom-acf-fields/acf-typography-field/acf-typography.php');
     include_once('custom-acf-fields/advanced-custom-fields-font-awesome/acf-font-awesome.php');
+    include_once('custom-acf-fields/timezone_picker.php');
 
     //Allows uploading on frontend
     include( 'wp-frontend-media-master/frontend-media.php' );
@@ -42,6 +43,7 @@ else if ( is_admin() ) {
     include_once('custom-acf-fields/acf-quiz/acf-quiz.php');
     include_once('custom-acf-fields/acf-typography-field/acf-typography.php');
     include_once('custom-acf-fields/advanced-custom-fields-font-awesome/acf-font-awesome.php');
+    include_once('custom-acf-fields/timezone_picker.php');
 
 
 
@@ -52,8 +54,27 @@ else{
     include_once( 'wp-frontend-media-master/frontend-media.php' );
 
 
-
 }
+
+// create a function to do the conditional check and include the files
+function include_files_homepage_only() {
+    $is_admin = go_user_is_admin();
+    if($is_admin){
+
+        //INCLUDE ACF and ACF custom fields
+        include_once('acf/acf.php');
+        include_once('custom-acf-fields/wp-acf-unique_id-master/acf-unique_id.php');
+        include_once('custom-acf-fields/acf-recaptcha-master/acf-recaptcha.php');
+        include_once('custom-acf-fields/acf-order-posts/acf-order-posts.php');
+        include_once('custom-acf-fields/acf-level2-taxonomy/acf-level2-taxonomy.php');
+        include_once('custom-acf-fields/acf-quiz/acf-quiz.php');
+        include_once('custom-acf-fields/acf-typography-field/acf-typography.php');
+        include_once('custom-acf-fields/advanced-custom-fields-font-awesome/acf-font-awesome.php');
+        include_once('custom-acf-fields/timezone_picker.php');
+    }
+}
+// hook into the wp action to call our function
+add_action('set_current_user', 'include_files_homepage_only');
 
 //$nsl_location = dirname(__FILE__) . '/nextend-gameon-connect/nextend-facebook-connect.php';
 //include($nsl_location);

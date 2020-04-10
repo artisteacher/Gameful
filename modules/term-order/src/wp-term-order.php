@@ -394,35 +394,40 @@ final class WP_Term_Order {
 	public static function set_term_order( $term_id = 0, $taxonomy = '', $order = 0, $clean_cache = false ) {
 		//global $wpdb;
 
-		if ($taxonomy == 'task_chains') {
+		if ($taxonomy == 'task_chains' || $taxonomy == 'store_types' ) {
             //Delete transient of map term order on previous map
-		    go_reset_map_transient($term_id);
+		    go_reset_map_transient($term_id, $taxonomy);
         }
 
 
         update_term_meta($term_id, 'go_order', $order);
 
-        if ($taxonomy == 'store_types') {
+        /*if ($taxonomy == 'store_types') {
             $store = go_make_store_html();
 
             update_option('go_store_html', $store);
-        }
+        }*/
 
-        if ($taxonomy == 'task_chains') {
+        /*
+        if ($taxonomy == 'task_chains' || $taxonomy == 'store_types') {
 
             //Delete transient of map term order on new map
-            go_reset_map_transient($term_id);
+            go_reset_map_transient($term_id, $taxonomy);
 
             $key = 'go_term_data_' . $term_id;
             go_delete_transient( $key );
 
-            $key = 'go_get_parent_map_id_' . $term_id;
+            $key = 'go_get_parent_term_id_' . $term_id;
             go_delete_transient( $key );
 
-            $key = 'go_get_maps_term_ids';
+            $key = 'go_get_parent_term_ids_'.$taxonomy;
             go_delete_transient( $key );
 
-        }
+        }*/
+
+        go_update_term_save( $term_id, null, $taxonomy );//clears transients
+
+
 
 
 		// Maybe clean the term cache

@@ -2015,21 +2015,77 @@ function go_quests_frontend(){
         //Loader goes here
         echo "<div id='quest_frontend_loader'></div>";
         echo "<div id='quest_frontend_container' style='display: none;'>";
+        //$task_name = get_option( 'options_go_tasks_name_plural'  );
+
+        $taxonomy = (isset($_REQUEST['taxonomy']) ?  $_REQUEST['taxonomy'] : null);
+
+        $post_id = (isset($_POST['post_id']) ?  $_POST['post_id'] : null);
+        $post_title = go_the_title($post_id);
+
+
+        if($taxonomy === 'task_chains'){
+            //go_clipboard_filters();
+            go_leaderboard_filters('single_quest');
+            ?>
+                <div id="clipboard_activity_wrap">
+                    <div class="quest_stats_wrapper"><h2 style="padding-right: 20px; margin: 0px;"><?php echo $post_title; ?></h2><div class="quest_stats complete" ><span id="quest_complete" class="quest_stats_num"></span> Complete</div><div class=" quest_stats started" ><span id="quest_started"  class="quest_stats_num"></span> In Progress</div><div class="quest_stats not_started"><span id="quest_not_encountered"  class="quest_stats_num"></span> Not Started</div> </div>
+                    <div id="clipboard_activity_datatable_container"></div>
+                </div>
+                <?php
+        }
+        else{
+            go_leaderboard_filters('single_store_item');
+            ?>
+            <div id="clipboard_store_wrap">
+                <div class="quest_stats_wrapper"><h2 style="padding-right: 20px; margin: 0px;"><?php echo $post_title; ?></h2></div>
+                <div id="clipboard_store_datatable_container"></div>
+            </div>
+            <?php
+
+        }
+        ?>
+
+
+        </div>
+        </div>
+        <?php
+        //go_hidden_footer();
+    }
+    die();
+}
+
+
+function go_store_frontend(){
+    //check_ajax_referer( 'go_clipboard_messages' );
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_quests_frontend' ) ) {
+        echo "refresh";
+        die( );
+    }
+
+    if ( ! go_user_is_admin() ) {
+        wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+    } else {
+
+        echo "<div id='quest_frontend_wrapper'>";
+        //Loader goes here
+        echo "<div id='quest_frontend_loader'></div>";
+        echo "<div id='quest_frontend_container' style='display: none;'>";
         $task_name = get_option( 'options_go_tasks_name_plural'  );
 
         $post_id = (isset($_POST['post_id']) ?  $_POST['post_id'] : null);
         $post_title = go_the_title($post_id);
         //go_clipboard_filters();
+        //single_store_item
         go_leaderboard_filters('single_quest');
         ?>
 
 
 
 
-            <div id="clipboard_activity_wrap">
-                <div class="quest_stats_wrapper"><h2 style="padding-right: 20px; margin: 0px;"><?php echo $post_title; ?></h2><div class="quest_stats complete" ><span id="quest_complete" class="quest_stats_num"></span> Complete</div><div class=" quest_stats started" ><span id="quest_started"  class="quest_stats_num"></span> In Progress</div><div class="quest_stats not_started"><span id="quest_not_encountered"  class="quest_stats_num"></span> Not Started</div> </div>
-                <div id="clipboard_activity_datatable_container"></div>
-            </div>
+        <div id="clipboard_activity_wrap">
+            <div class="quest_stats_wrapper"><h2 style="padding-right: 20px; margin: 0px;"><?php echo $post_title; ?></h2></div>
+            <div id="clipboard_store_datatable_container"></div>
+        </div>
 
         </div>
         </div>

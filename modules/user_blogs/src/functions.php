@@ -21,6 +21,8 @@
 function go_blog_form($blog_post_id, $suffix = '', $go_blog_task_id = null, $i = null, $bonus = null, $check_for_understanding = true, $all_content = false){
     //save draft button for drafts
     //print saved info for all
+    global $all_feedback;
+    $all_feedback = array();
     $is_lightbox = (isset($_POST['lightbox']) ?  $_POST['lightbox'] : false);
     if($is_lightbox === "true"){
         $suffix = '_lightbox';
@@ -710,6 +712,8 @@ function go_autosave_info(){
  */
 function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_understanding = false, $with_feedback = false, $show_author = false, $show_edit = false, $task_stage_num = null, $is_archive  = false, $is_single = false)
 {
+    global $all_feedback;
+    $all_feedback = array();
     $current_user = get_current_user_id();
     $is_admin = go_user_is_admin();
 
@@ -883,9 +887,10 @@ function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_underst
         if (!isset($task_stage_num)) {
             //get the stage number from actions or in meta--
             $task_stage_num = (isset($blog_meta['go_blog_task_stage'][0]) ? $blog_meta['go_blog_task_stage'][0] : null);
+            //$bonus_stage_num = (isset($blog_meta['go_blog_bonus_stage'][0]) ? $blog_meta['go_blog_bonus_stage'][0] : null);
         }
 
-        echo "<script>console.log('tsn: {$task_stage_num}')</script>";
+        //echo "<script>console.log('tsn: {$task_stage_num}')</script>";
         $i = $task_stage_num;
         echo "<script>console.log('i: {$i}')</script>";
         //if $i (task stage) is not set, then this must be a bonus stage
@@ -896,7 +901,7 @@ function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_underst
         // $user_id = get_current_user_id();
 
         //these are for the old blog posts that save right in the posts table--not as a question
-        if ($i !== null) {//regular stage
+        if ($i !== null && $i !== '0') {//regular stage
             $num_elements = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_blog_elements'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_blog_elements'][0] : false);
             $text_toggle = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_blog_text_toggle'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_blog_text_toggle'][0] : true);
             $prompt = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_blog_text_prompt'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_blog_text_prompt'][0] : '');
@@ -908,7 +913,7 @@ function go_blog_post($blog_post_id, $go_blog_task_id = null, $check_for_underst
 
         echo "<script>console.log('#: {$num_elements}')</script>";
         for ($x = 0; $x < $num_elements; $x++) {
-            if ($i !== null) {//regular stage
+            if ($i !== null && $i !== '0') {//regular stage
                 $bonus = false;
                 $type = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_blog_elements_' . $x . '_element'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_blog_elements_' . $x . '_element'][0] : 0);
                 $uniqueid = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_blog_elements_' . $x . '_uniqueid'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_blog_elements_' . $x . '_uniqueid'][0] : 0);
@@ -1091,6 +1096,8 @@ function go_blog_post_footer($blog_post_id, $go_blog_task_id = 0, $is_card = fal
 
 function go_blog_post_cards($blog_post_id, $go_blog_task_id = null, $show_author = false, $instructions = '')
 {
+    global $all_feedback;
+    $all_feedback = array();
     //$current_user = get_current_user_id();
     $is_admin = go_user_is_admin();
 
@@ -1428,29 +1435,30 @@ function go_blog_status($blog_post_id, $is_form = false, $is_archive = false){
     }
 
     if($is_admin || $is_current_user) {
-        $percent = get_post_meta($blog_post_id, 'go_feedback_percent', true);
+       // $percent = go_post_meta($blog_post_id, 'go_feedback_percent', true);
         $status_icon = go_post_status_icon($blog_post_id, $is_archive);
 
     }else{
-        $percent = '';
+        //$percent = '';
     }
 
-    $direction = (($percent > 0) ? '+' : '');
-    $class = (($percent > 0) ? 'up' : 'down');
-    if ($percent == '' || empty($percent)) {
+   // $direction = (($percent > 0) ? '+' : '');
+    //$class = (($percent > 0) ? 'up' : 'down');
+    /*if ($percent == '' || empty($percent)) {
         $percent_hide = " style='display:none;' ";
     }else{
         $percent_hide = '';
     }
     $percent =  '<div class="go_status_percent '.$class.'"'.$percent_hide.' ><strong>'.$direction.$percent.'%</strong></div>';
-
+*/
+    $feedback_icon = get_feedback_icon($blog_post_id);
+    $feedback_icon = "<div class='feedback_icon'>$feedback_icon</div>";
     if (!empty($status_icon) || !empty($favorite) ) {
-
         echo "
             <div class='go_blog_status'>
             <div class='go_blog_status_icons'>";
 
-        echo $status_icon . $favorite . $percent;
+        echo $status_icon . $favorite . $feedback_icon;//; . $percent;
         echo "</div></div>";
     }else{
         echo "<div></div>";

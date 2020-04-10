@@ -294,7 +294,7 @@ function go_send_feedback()
     $gold = (!empty($_POST['gold']) ? $_POST['gold'] : "");
     $health = (!empty($_POST['health']) ? $_POST['health'] : "");
     $title = '';
-    //$feedback_percent = null;
+    $feedback_percent = null;
 
     $message = '<h3>' . $feedback_title . '</h3>' . $feedback_message;
 
@@ -356,6 +356,7 @@ function go_send_feedback()
                 if ($percent > 0) {
 
                     //check last feedback, and if it exists, remove it
+                    /*
                     $last_feedback = $wpdb->get_results($wpdb->prepare("SELECT id, xp, gold, health
                 FROM {$aTable} 
                 WHERE source_id = %d AND check_type = %s AND action_type = %s
@@ -366,19 +367,19 @@ function go_send_feedback()
                     //get last feedback
                     $last_xp = $last_feedback[0]['xp'];
                     $last_gold = $last_feedback[0]['gold'];
-                    $last_health = $last_feedback[0]['health'];
+                    $last_health = $last_feedback[0]['health'];*/
 
                     //compute change and +/-
-                    $xp = intval($xp * $percent * .01 * $direction) - intval($last_xp);
+                    $xp = intval($xp * $percent * .01 * $direction); //- intval($last_xp);
                     $gold = $gold * $percent * .01 * $direction;
-                    $gold = number_format($gold, 2, '.', '') - $last_gold;
+                    $gold = number_format($gold, 2, '.', ''); // - $last_gold;
                     $health = $health * $percent * .01 * $direction;
-                    $health = number_format($health, 2, '.', '') - $last_health;
+                    $health = number_format($health, 2, '.', ''); // - $last_health;
 
                     if ($percent_toggle) {
-                        $loot_message = '<br>Your original loot was increased by ';
+                        $loot_message = '<br>Your loot was increased by ';
                     } else {
-                        $loot_message = '<br>Your original loot was decreased by ';
+                        $loot_message = '<br>Your loot was decreased by ';
                     }
 
                     $loot_message .= $percent . '%.<br>';
@@ -388,7 +389,7 @@ function go_send_feedback()
 
                 $feedback_percent = $percent * $direction;
                 //go_update_actions($user_id, 'feedback', $blog_post_id, 1, null, $uniqueid, $result, null, null, null, null, $xp, $gold, $health, null, null, false, false);
-                update_post_meta($blog_post_id, 'go_feedback_percent', $feedback_percent);
+                //update_post_meta($blog_post_id, 'go_feedback_percent', $feedback_percent);
 
             }
         }
@@ -469,7 +470,7 @@ function go_send_feedback()
         global $wpdb;
         $aTable = "{$wpdb->prefix}go_actions";
         //check last feedback, and if it exists, remove it
-        $all_feedback = $wpdb->get_results($wpdb->prepare("SELECT id, result
+        $all_feedback = $wpdb->get_results($wpdb->prepare("SELECT id, action_type, result, xp, gold, health
                 FROM {$aTable} 
                 WHERE source_id = %d AND (action_type = %s OR action_type = %s OR action_type = %s)
                 ORDER BY id DESC",
@@ -482,11 +483,17 @@ function go_send_feedback()
         $feedback_table = ob_get_contents();
         ob_end_clean();
 
+        ob_start();
+        echo get_feedback_icon($blog_post_id);
+        $icon = ob_get_contents();
+        ob_end_clean();
+
         echo json_encode(
             array(
                 'json_status' => 302,
                 'form' => $form,
-                'table' => $feedback_table
+                'table' => $feedback_table,
+                'icon' => $icon
             )
         );
 
@@ -497,6 +504,8 @@ function go_send_feedback()
         'post_status' => 'read',
     );
     wp_update_post($query, true);
+    $key = 'go_post_data_' . $blog_post_id;
+    go_delete_transient($key);
     die();
 }
 

@@ -1,60 +1,6 @@
 <?php
 
 
-/**
- * Auto update slugs
- * @author  Mick McMurray
- * Based on info from:
- * @link http://thestizmedia.com/custom-post-type-filter-admin-custom-taxonomy/
- */
-function go_update_slug( $data, $postarr ) {
-    $slug_toggle = get_site_option( 'options_go_slugs_toggle');
-    if ($slug_toggle) {
-        $post_type = $data['post_type'];
-        if ($post_type == 'tasks' || $post_type == 'go_store') {
-            $data['post_name'] = wp_unique_post_slug(sanitize_title($data['post_title']), $postarr['ID'], $data['post_status'], $data['post_type'], $data['post_parent']);
-        }
-        return $data;
-    }
-}
-add_filter( 'wp_insert_post_data', 'go_update_slug', 99, 2 );
-
-// define the wp_update_term_data callback
-/**
- * @param $data
- * @param $term_id
- * @param $taxonomy
- * @param $args
- * @return mixed
- */
-function go_update_term_slug($data, $term_id, $taxonomy, $args ) {
-    $slug_toggle = get_site_option( 'options_go_slugs_toggle');
-    if ($slug_toggle) {
-        $no_space_slug = sanitize_title($data['name']);
-        $data['slug'] = wp_unique_term_slug($no_space_slug, (object)$args);
-        return $data;
-    }
-};
-add_filter( 'wp_update_term_data', 'go_update_term_slug', 10, 4 );
-
-/**
- *
- */
-function hide_all_slugs() {
-    $slug_toggle = get_site_option( 'options_go_slugs_toggle');
-    if ($slug_toggle) {
-        global $post;
-        $post_type = get_post_type( get_the_ID() );
-        if ($post_type != 'post' && $post_type != 'page') {
-            $hide_slugs = "<style type=\"text/css\"> #slugdiv, #edit-slug-box, .term-slug-wrap { display: none; }</style>";
-            print($hide_slugs);
-        }
-
-    }
-}
-add_action( 'admin_head', 'hide_all_slugs'  );
-
-
 /*
  * Function for post duplication. Dups appear as drafts. User is redirected to the edit screen
  * https://www.hostinger.com/tutorials/how-to-duplicate-wordpress-page-post#gref
@@ -355,15 +301,13 @@ function go_add_toplevel_menu() {
         4 // menu position
     );
 
-    //add a new menu item
-    add_menu_page(
-        'Tools',// page title
-        'Tools',// page title
-        'manage_options',// capability
-        'game-tools',// menu slug
-        'go_admin_tools_menu_content',// callback function
-        '',// icon
-        4 // menu position
+    /* add the sub menu under content for posts */
+    add_submenu_page(
+        'game-tools', // parent slug
+        'Forum Tools', // page_title,
+        'Forum Tools', // menu_title,
+        'manage_options', // capability,
+        'tools.php?page=bbp-repair' // menu_slug,
     );
 
     //add a new menu item
@@ -1134,3 +1078,5 @@ function set_user_metaboxes($user_id=NULL) {
         update_user_meta( $user_id, $meta_key['hidden'], $meta_value );
 
 }*/
+
+

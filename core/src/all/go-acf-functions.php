@@ -228,7 +228,15 @@ function update_term_description($value, $post_id, $field) {
     if (!empty($value)) {
         $term_id = (isset($_REQUEST['tag_ID']) ?  $_REQUEST['tag_ID'] : '');
         //$taxonomy = $field['taxonomy'];
-        $taxonomy = $_POST['taxonomy'];
+       // $taxonomy = $_POST['taxonomy'];
+        $taxonomy = (isset($_POST['taxonomy']) ?  $_POST['taxonomy'] : null);
+        if(empty($taxonomy)) {
+            $term_obj = get_term($term_id);
+            if ($term_obj) {
+                $taxonomy = $term_obj->taxonomy;
+            }
+        }
+
         //$taxonomy = 'go_badges';
         wp_update_term($term_id, $taxonomy, array('description' => $value));
     }
@@ -246,8 +254,14 @@ add_filter('acf/update_value/key=field_5e389128e24e3', 'update_term_description'
 //function update_term_parents($valid, $value, $field, $input) {
 function update_term_parents( $value, $post_id, $field  ) {
     $term_id = substr($post_id, strpos($post_id, "_") + 1);
+
+    if(empty($value)){
+        $value = (isset($_POST['acf'][$field['key']]) ?  $_POST['acf'][$field['key']] : false);
+    }
+
     $_POST['parent'] = $value;
     $_REQUEST['parent'] = $value;
+
 
     if (!empty($value)) {
         $taxonomy = $field['taxonomy'];
@@ -255,7 +269,8 @@ function update_term_parents( $value, $post_id, $field  ) {
         $termParent = $term->parent;
 
 
-        $name = $_POST['name'];
+        $name = $term->name;
+        //$name = isset($_POST['name']) ? $_POST['name'] : null;
         if(empty($name)){
             $name = (isset($_REQUEST['tag-name']) ?  $_REQUEST['tag-name'] : '');
         }
@@ -266,6 +281,8 @@ function update_term_parents( $value, $post_id, $field  ) {
         if($termParent && $termParent != $value) {
             go_last_in_order($term_id, null, $taxonomy);
         }
+        go_reset_map_transient($value, $taxonomy);
+        go_reset_map_transient($termParent, $taxonomy);
     }
     return $value;
 }
@@ -375,6 +392,111 @@ function go_save_sections($value, $post_id, $field){
     return '';
 }
 
+add_action('init', 'go_update_bbpress_roles');
+function go_update_bbpress_roles(){
+    $update = get_option('options_go_forum_toggle_needs_update');
+    delete_option('options_go_forum_toggle_needs_update');
+
+    if($update){
+
+        $role_map  =  array(
+            'administrator' => 'bbp_keymaster',
+            'editor'        => 'bbp_participant',
+            'author'        => 'bbp_participant',
+            'contributor'   => 'bbp_participant',
+            'subscriber'    => 'bbp_participant'
+        );
+        $default_role = 'bbp_participant';
+
+
+        // Get non-forum roles
+        //$blog_roles = array_keys( get_editable_roles() );
+        $blog_roles = array_keys(wp_roles()->roles);
+        $forum_roles = array('bbp_keymaster','bbp_moderator', 'bbp_participant', 'bbp_spectator', 'bbp_blocked' );
+
+        $blog_roles = array_diff($blog_roles, $forum_roles);
+
+        // Iterate through each role...
+        foreach ( $blog_roles as $role ) {
+
+            // Reset the offset
+            $offset = 0;
+
+            // If no role map exists, give the default forum role (bbp-participant)
+            $new_role = isset( $role_map[ $role ] )
+                ? $role_map[ $role ]
+                : $default_role;
+
+            // Get users of this site, limited to 1000
+            while ( $users = get_users( array(
+                'role'   => $role,
+                'fields' => 'ID',
+                'number' => 1000,
+                'offset' => $offset
+            ) ) ) {
+
+                // Iterate through each user of $role and try to set it
+                foreach ( (array) $users as $user_id ) {
+                    $user    = get_userdata( $user_id );
+
+                    if ( ! empty( $user->roles ) ) {
+                        //$role_map = array('bbp_keymaster','bbp_moderator', 'bbp_participant', 'bbp_spectator', 'bbp_blocked' );
+                        $old_role = null;
+                        //$new_role = null;
+                        // Look for a bbPress role
+                        $current_forum_roles = array_intersect(
+                            array_values( $user->roles ),
+                            $forum_roles
+                        );
+
+
+                        if(count($current_forum_roles) >1){//if for some reason they have more than one role, fix it
+                            foreach($current_forum_roles as $old_role){
+                                $user->remove_role( $old_role );
+                            }
+                            // Add the new role
+                            if (!empty($new_role)) {
+                                $user->add_role($new_role);
+                            }
+                        }else{
+                            if ( ! empty( $current_forum_roles ) ) {
+                                $old_role = array_shift( $current_forum_roles );//get the first role (there should only be one)
+                            }
+
+                            if(empty($old_role) || in_array('administrator', $user->roles)) {//only change if there was no old role, or this is an admin user
+                                if (!empty($old_role)) {
+                                    $user->remove_role($old_role);
+                                }
+                                // Add the new role
+                                if (!empty($new_role)) {
+                                    $user->add_role($new_role);
+                                    $user->roles;
+                                }
+                            }
+
+                        }
+
+                    }
+
+
+                }
+
+                // Bump the offset for the next query iteration
+                $offset = $offset + 1000;
+            }
+        }
+    }
+}
+
+add_filter('acf/update_value/key=field_5e7e74538bdd3', 'go_update_forum', 10, 3);
+function go_update_forum($value, $post_id, $field){
+    $current_value = get_option('options_go_forum_toggle');
+    if($current_value !== $value && $value === '1') {
+        update_option('options_go_forum_toggle_needs_update', true);
+    }
+
+    return $value;
+}
 
 /**
  * FOR THE CHANGE TO THE CALL TO ACTION
@@ -520,3 +642,431 @@ function go_blog_editor_options($value, $post_id, $field) {
     return $value;
 }
 add_filter('acf/load_value/key=field_5e3f5754c36aa', 'go_blog_editor_options', 10, 3);
+
+
+
+/**
+ * Loads the term title on the frontend form
+ */
+function go_load_term_title($value, $post_id, $field) {
+    $map_data = go_term_data($_POST['tag_ID']);
+    $value = $map_data[0];
+
+    return $value;
+}
+add_filter('acf/load_value/key=field_5e833944130e4', 'go_load_term_title', 10, 3);
+add_filter('acf/load_value/key=field_5e8bcca1cedaa', 'go_load_term_title', 10, 3);
+add_filter('acf/load_value/key=field_5e8d46ac17a77', 'go_load_term_title', 10, 3);
+add_filter('acf/load_value/key=field_5e8d46bd475b8', 'go_load_term_title', 10, 3);
+
+
+/**
+ * Update the map term title on the frontend form
+ */
+function go_update_term_title($value, $post_id, $field) {
+    //$map_data = go_term_data($_POST['tag_ID']);
+    $parts = explode('_', $post_id);
+    $term_id = $parts[1];
+    $args =array(
+        'name' => $value,
+    );
+    wp_update_term($term_id, 'task_chains', $args );
+    return $value;
+}
+add_filter('acf/update_value/key=field_5e833944130e4', 'go_update_term_title', 10, 3);
+
+
+/**
+ * Update the term title on the frontend form
+ */
+function go_update_store_title($value, $post_id, $field) {
+    //$map_data = go_term_data($_POST['tag_ID']);
+    $parts = explode('_', $post_id);
+    $term_id = $parts[1];
+    $args =array(
+        'name' => $value,
+    );
+    wp_update_term($term_id, 'store_types', $args );
+    return $value;
+}
+add_filter('acf/update_value/key=field_5e8bcca1cedaa', 'go_update_store_title', 10, 3);
+
+/**
+ * Update the term title on the frontend form
+ */
+function go_update_badge_title($value, $post_id, $field) {
+    //$map_data = go_term_data($_POST['tag_ID']);
+    $parts = explode('_', $post_id);
+    $term_id = $parts[1];
+    $args =array(
+        'name' => $value,
+    );
+    wp_update_term($term_id, 'go_badges', $args );
+    return $value;
+}
+add_filter('acf/update_value/key=field_5e8d46ac17a77', 'go_update_badge_title', 10, 3);
+
+/**
+ * Update the term title on the frontend form
+ */
+function go_update_group_title($value, $post_id, $field) {
+    //$map_data = go_term_data($_POST['tag_ID']);
+    $parts = explode('_', $post_id);
+    $term_id = $parts[1];
+    $args =array(
+        'name' => $value,
+    );
+    wp_update_term($term_id, 'user_go_groups', $args );
+    return $value;
+}
+add_filter('acf/update_value/key=field_5e8d46bd475b8', 'go_update_group_title', 10, 3);
+
+
+/**
+ * GENERAL SETTINGS FORM
+ */
+
+/**
+ * Loads the site title on the frontend form
+ */
+function go_load_site_title($value, $post_id, $field) {
+    $name = get_bloginfo();
+
+    return $name;
+}
+add_filter('acf/load_value/key=field_5e8cf8c0f96af', 'go_load_site_title', 10, 3);
+
+
+/**
+ * Update the site title on the frontend form
+ */
+function go_update_site_title($value, $post_id, $field) {
+    update_option('blogname', $value);
+    return $value;
+}
+add_filter('acf/update_value/key=field_5e8cf8c0f96af', 'go_update_site_title', 10, 3);
+
+/**
+ * Loads the site tagline on the frontend form
+ */
+function go_load_site_tagline($value, $post_id, $field) {
+    $name = get_bloginfo('description');
+
+    return $name;
+}
+add_filter('acf/load_value/key=field_5e8cf8c9f96b0', 'go_load_site_tagline', 10, 3);
+
+
+/**
+ * Update the site title on the frontend form
+ */
+function go_update_site_tagline($value, $post_id, $field) {
+    update_option('blogdescription', $value);
+    return $value;
+}
+add_filter('acf/update_value/key=field_5e8cf8c9f96b0', 'go_update_site_tagline', 10, 3);
+
+
+/**
+ * Loads the site admin email on the frontend form
+ */
+function go_load_admin_email($value, $post_id, $field) {
+    $name = get_bloginfo('admin_email');
+
+    return $name;
+}
+add_filter('acf/load_value/key=field_5e8cf8d83fa91', 'go_load_admin_email', 10, 3);
+
+
+/**
+ * Update the site title on the frontend form
+ */
+function go_update_admin_email($value, $post_id, $field) {
+    update_option('admin_email', $value);
+    return $value;
+}
+add_filter('acf/update_value/key=field_5e8cf8d83fa91', 'go_update_admin_email', 10, 3);
+
+
+/**
+ * Loads the site admin email on the frontend form
+ */
+function go_load_timezone($value, $post_id, $field) {
+    $name = get_option('timezone_string');
+
+    return $name;
+}
+add_filter('acf/load_value/key=field_5e8cf9103fa92', 'go_load_timezone', 10, 3);
+
+
+/**
+ * Update the site title on the frontend form
+ */
+function go_update_timezone($value, $post_id, $field) {
+    update_option('timezone_string', $value);
+    return $value;
+}
+add_filter('acf/update_value/key=field_5e8cf9103fa92', 'go_update_timezone', 10, 3);
+
+
+
+//loads the information on the non-post front end forms (terms and settings)
+add_filter( 'wp_insert_post_data', 'acf_taxonomy_handler', '99', 2 );
+function acf_taxonomy_handler( $data, $postarr ) {
+    if ( $data[ 'post_type' ] == 'task_chains' ) {
+        global $wpdb;
+        //$group_ID = $wpdb->get_var( "SELECT ID FROM $wpdb->posts WHERE post_title = 'Technic CPT'" );
+        //$acf_fields = acf_get_fields_by_id( $group_ID );
+        $acf_fields = acf_get_fields('group_5e35978c81de6');
+        //foreach ($acf_fields as $acf_field) $$acf_field['name'] = trim(esc_attr(strip_tags($_POST['acf'][$acf_field['key']])));
+        $name = (isset($_POST['acf']['field_5e833944130e4']) ? $_POST['acf']['field_5e833944130e4'] : 'New Section');
+
+        $parent = (isset($_POST['acf']['field_5e35987e47073']) ? $_POST['acf']['field_5e35987e47073'] : 0);
+        if (empty($parent)) {
+            $parent = 0;
+            if (empty($name)) {
+                $name = 'New Map';
+            }
+        } else {
+            if (empty($name)) {
+                $name = 'New Section';
+            }
+        }
+        $args['parent'] = $parent;
+
+
+        $term = wp_insert_term($name, 'task_chains', $args);
+        if (is_wp_error($term)) {
+            $i = 0;
+            while (is_wp_error($term)) {
+                $i++;
+                $term = wp_insert_term($name . '_' . $i, 'task_chains', $args);
+            }
+        }
+
+        $term_id =$term['term_id'];
+        $term_obj = get_term($term_id);
+
+        if ($term_obj) :
+            foreach ($acf_fields as $acf_field) :
+                $key = (isset($acf_field['key']) ? $acf_field['key'] : 0);
+                $value = (isset($_POST['acf'][$key]) ? $_POST['acf'][$key] : 0);
+                update_field($key, $value, $term_obj);
+            endforeach;
+        endif;
+        return;
+    }
+    else if ( $data[ 'post_type' ] == 'store_types' ) {
+        global $wpdb;
+        //$group_ID = $wpdb->get_var( "SELECT ID FROM $wpdb->posts WHERE post_title = 'Technic CPT'" );
+        //$acf_fields = acf_get_fields_by_id( $group_ID );
+        $acf_fields = acf_get_fields('group_5e37ba0ceec3a');
+        //foreach ($acf_fields as $acf_field) $$acf_field['name'] = trim(esc_attr(strip_tags($_POST['acf'][$acf_field['key']])));
+        $name = (isset($_POST['acf']['field_5e8bcca1cedaa']) ? $_POST['acf']['field_5e8bcca1cedaa'] : 'New Section');
+
+        $parent = (isset($_POST['acf']['field_5e37bbe75b17d']) ? $_POST['acf']['field_5e37bbe75b17d'] : 0);
+        if (empty($parent)) {
+            $parent = 0;
+            if (empty($name)) {
+                $name = 'New Store Page';
+            }
+        } else {
+            if (empty($name)) {
+                $name = 'New Section';
+            }
+        }
+        $args['parent'] = $parent;
+
+
+        $term = wp_insert_term($name, 'store_types', $args);
+        if (is_wp_error($term)) {
+            $i = 0;
+            while (is_wp_error($term)) {
+                $i++;
+                $term = wp_insert_term($name . '_' . $i, 'store_types', $args);
+            }
+        }
+
+        $term_id =$term['term_id'];
+        $term_obj = get_term($term_id);
+
+        if ($term_obj) :
+            foreach ($acf_fields as $acf_field) :
+                $key = (isset($acf_field['key']) ? $acf_field['key'] : 0);
+                $value = (isset($_POST['acf'][$key]) ? $_POST['acf'][$key] : 0);
+                update_field($key, $value, $term_obj);
+            endforeach;
+        endif;
+        return;
+    }
+    else if ( $data[ 'post_type' ] == 'go_badges' ) {
+        $acf_fields = acf_get_fields('group_5e37cdd9253d4');
+        //foreach ($acf_fields as $acf_field) $$acf_field['name'] = trim(esc_attr(strip_tags($_POST['acf'][$acf_field['key']])));
+        $name = (isset($_POST['acf']['field_5e8d46ac17a77']) ? $_POST['acf']['field_5e8d46ac17a77'] : 'New Section');
+
+        $parent = (isset($_POST['acf']['field_5e37ce341f358']) ? $_POST['acf']['field_5e37ce341f358'] : 0);
+        if (empty($parent)) {
+            $parent = 0;
+            if (empty($name)) {
+                $name = 'New Badge';
+            }
+        } else {
+            if (empty($name)) {
+                $name = 'New Badge Section';
+            }
+        }
+        $args['parent'] = $parent;
+
+
+        $term = wp_insert_term($name, 'go_badges', $args);
+        if (is_wp_error($term)) {
+            $i = 0;
+            while (is_wp_error($term)) {
+                $i++;
+                $term = wp_insert_term($name . '_' . $i, 'go_badges', $args);
+            }
+        }
+
+        $term_id =$term['term_id'];
+        $term_obj = get_term($term_id);
+
+        if ($term_obj) :
+            foreach ($acf_fields as $acf_field) :
+                $key = (isset($acf_field['key']) ? $acf_field['key'] : 0);
+                $value = (isset($_POST['acf'][$key]) ? $_POST['acf'][$key] : 0);
+                update_field($key, $value, $term_obj);
+            endforeach;
+        endif;
+        return;
+    }
+    else if ( $data[ 'post_type' ] == 'user_go_groups' ) {
+        $acf_fields = acf_get_fields('group_5e389128bfb72');
+        //foreach ($acf_fields as $acf_field) $$acf_field['name'] = trim(esc_attr(strip_tags($_POST['acf'][$acf_field['key']])));
+        $name = (isset($_POST['acf']['field_5e8d46bd475b8']) ? $_POST['acf']['field_5e8d46bd475b8'] : 'New Section');
+
+        $parent = (isset($_POST['acf']['field_5e389128e24d3']) ? $_POST['acf']['field_5e389128e24d3'] : 0);
+        if (empty($parent)) {
+            $parent = 0;
+            if (empty($name)) {
+                $name = 'New Group';
+            }
+        } else {
+            if (empty($name)) {
+                $name = 'New Group Category';
+            }
+        }
+        $args['parent'] = $parent;
+
+
+        $term = wp_insert_term($name, 'user_go_groups', $args);
+        if (is_wp_error($term)) {
+            $i = 0;
+            while (is_wp_error($term)) {
+                $i++;
+                $term = wp_insert_term($name . '_' . $i, 'user_go_groups', $args);
+            }
+        }
+
+
+        $term_id =$term['term_id'];
+        $term_obj = get_term($term_id);
+
+        if ($term_obj) :
+            foreach ($acf_fields as $acf_field) :
+                $key = (isset($acf_field['key']) ? $acf_field['key'] : 0);
+                $value = (isset($_POST['acf'][$key]) ? $_POST['acf'][$key] : 0);
+                update_field($key, $value, $term_obj);
+            endforeach;
+        endif;
+        return;
+    }
+    else if ( $data[ 'post_type' ] == 'settings' ) {
+        global $wpdb;
+        //$group_ID = $wpdb->get_var( "SELECT ID FROM $wpdb->posts WHERE post_title = 'Technic CPT'" );
+        //$acf_fields = acf_get_fields_by_id( $group_ID );
+        $group = (isset($_POST['group']) ?  $_POST['group'] : false);
+        if(!$group){
+            return;
+        }
+        $acf_fields = acf_get_fields($group);
+        foreach ($acf_fields as $acf_field) $$acf_field['name'] = trim(esc_attr(strip_tags($_POST['acf'][$acf_field['key']])));
+
+        foreach ($acf_fields as $acf_field) :
+            $acf_field = $acf_field;
+        endforeach;
+
+        return;
+    }
+    else {
+        return $data;
+    }
+
+}
+
+
+//For saving terms
+//add_filter( 'acf/pre_save_post', 'go_acf_handle_form_save_frontend', 10, 1 );
+function go_acf_handle_form_save_frontend( $post_id ) {
+    // Function accepts id of object we're saving.
+    // All WordPress IDs are unique so we can use this to check which object it is now.
+    // We'll try to get term by id.
+    // We'll get term id with added taxonomy slug, for example 'technic_405'.
+    // For checking term existence we must cut out this slug.
+    //$cut_post_id = str_replace( 'technic_', '', $post_id );
+    $parts = explode('_', $post_id);
+    $term_id = $parts[1];
+    if($term_id === null){
+        global $go_new_term;
+
+        $term_id =$go_new_term['term_id'];
+    }
+    $term_obj = get_term($term_id);
+
+
+    //$test_tax_term = get_term_by( 'id', $term_id, 'task_chains' );
+    // If $test_tax_term is true - we are saving taxonomy term.
+    // So let's change form behaviour to saving term instead of post.
+    if ( $term_obj ) :
+        // Get array of fields, attached to our taxonomy
+        //global $wpdb;
+
+        $taxonomy = $term_obj -> taxonomy;
+
+        if($taxonomy === 'task_chains') {
+            $acf_fields = acf_get_fields('group_5e35978c81de6');
+        }else if($taxonomy === 'store_types') {
+            $acf_fields = acf_get_fields('group_5e37ba0ceec3a');
+        }else if($taxonomy === 'go_badges') {
+            $acf_fields = acf_get_fields('group_5e37cdd9253d4');
+        }else if($taxonomy === 'user_go_groups') {
+            $acf_fields = acf_get_fields('group_5e389128bfb72');
+        }else{
+            $acf_fields = array();
+        }
+        // Then sanitize fields from $_POST
+        // All acf fields will be in $_POST['acf']
+        /*
+            foreach ( $acf_fields as $acf_field ) :
+                $acf_field[ 'name' ] = trim( esc_attr( strip_tags( $_POST[ 'acf' ][ $acf_field[ 'key' ] ] ) ) );
+            endforeach;*/
+        // We need to have some fields in our group, which are just duplicates of standard term fields: name, slug, description.
+        // In this example it's only one field - term name, called 'technic_name'.
+        //$name = 'technic_name';
+        // Update base term info, in this example - only name.
+        //$term = wp_update_term( $cut_post_id, 'technic', array( 'name' => $name ) );
+        // If all is correct, update custom fields:
+        // if ( !is_wp_error( $term ) ) :
+        foreach ( $acf_fields as $acf_field ) :
+
+            update_field($acf_field['key'], $acf_field['value'], $term_obj);
+
+        endforeach;
+        $key = 'go_term_data_' . $term_id;
+        go_delete_transient($key);
+
+    // endif;
+    else :
+        // Here is saving usual post data. Do what you need for saving it or just skip this point
+    endif;
+    return $post_id;
+}

@@ -1,15 +1,7 @@
 
-#go_leaderboard_filters_container {
-  display: flex; justify-content: space-between;
-}
-#go_leaderboard_filters, #go_leaderboard_update_button {
-  padding: 20px;
-  text-align: right;
-}
 
-#go_leaderboard_filters h3,
-#go_leaderboard_filters .select2{
-  text-align: left;
+#go_leaderboard_filters {
+ margin-right: 20px;
 }
 
 #records_tabs a, #records_tabs .tooltip{

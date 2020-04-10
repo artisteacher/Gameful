@@ -230,7 +230,7 @@ function go_store_shortcode( $atts ) {
 		 */
 
 		$output .= sprintf(
-			'<a id="%s" class="go_str_item">%s</a>',
+			'<a class="go_str_item" data-post_id="%s">%s</a>',
 			$atts['id'],
 			get_the_title( $atts['id'] )
 		);

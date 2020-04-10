@@ -16,6 +16,24 @@ if (! function_exists('slug_scripts_masonry') ) :
 endif; //! slug_scripts_masonry exists
 
 
+/**
+ * Used by hook: 'customize_preview_init'
+ *
+ * @see add_action('customize_preview_init',$func)
+ */
+function go_customizer_live_preview()
+{
+    wp_enqueue_script(
+        'go-themecustomizer',			//Give the script an ID
+        plugin_dir_url( __FILE__ ).'scripts/customizer-min.js',//Point to file
+        array( 'jquery','customize-preview' ),	//Define dependencies
+        '',						//Define a version (optional)
+        true						//Put script in footer?
+    );
+}
+add_action( 'customize_preview_init', 'go_customizer_live_preview' );
+
+
 add_action( 'wp_enqueue_scripts', 'go_scripts' );
 function go_scripts () {
 
@@ -158,10 +176,27 @@ function go_scripts () {
                 'go_new_pagination_ajax'        => wp_create_nonce('go_new_pagination_ajax'),
                 'go_attendance_check_ajax'      => wp_create_nonce('go_attendance_check_ajax'),
                 'go_quests_frontend'            => wp_create_nonce('go_quests_frontend'),
+                'go_trash_post'            => wp_create_nonce('go_trash_post'),
+                'go_new_task_from_template'        => wp_create_nonce('go_new_task_from_template'),
 
             ),
             'go_is_admin'                   => $is_admin,
             'userID'	=>  $user_id
+        )
+    );
+
+    wp_localize_script(
+        'go_frontend',
+        'GO_ACF_DATA',
+        array(
+            'go_store_toggle'       => get_option('options_go_store_toggle') ,
+            'go_map_toggle'         => get_option('options_go_locations_map_toggle') ,
+            'go_gold_toggle'        => get_option('options_go_loot_gold_toggle') ,
+            'go_xp_toggle'          => get_option('options_go_loot_xp_toggle') ,
+            'go_health_toggle'      => get_option('options_go_loot_health_toggle') ,
+            'go_badges_toggle'      => get_option('options_go_badges_toggle'),
+            'go_leaderboard_toggle'      => get_option('options_go_stats_leaderboard_toggle')
+
         )
     );
 
@@ -194,7 +229,8 @@ function go_scripts () {
 
     $page_uri = go_get_page_uri();
     $map_url = get_option('options_go_locations_map_map_link');
-    if ($page_uri === $map_url) {
+    $store_name = get_option('options_go_store_store_link');
+    if (in_array($page_uri, array($map_url, $store_name)) ) {
         wp_localize_script(
             'go_frontend',
             'go_is_map',
@@ -236,3 +272,41 @@ function go_scripts () {
     go_localize_all_pages();
 
 }
+
+
+/*
+function add_defer_attribute($tag, $handle) {
+    // add script handles to the array below
+    $scripts_to_skip = array('jquery-core',
+        //'jquery-migrate',
+        'zxcvbn-async', 'utils', 'moxiejs', 'plupload', 'json2', 'mediaelement-core', 'mediaelement-migrate',
+        'admin-bar', 'password-strength-meter',
+        //'go_frontend_media', 'go_summernote',
+        'underscore', 'shortcode',
+        'backbone',
+        'wp-util', 'wp-backbone', 'media-models', 'wp-plupload',
+        //'jquery-ui-core', 'jquery-ui-widget', 'jquery-ui-mouse', 'jquery-ui-sortable', 'wp-mediaelement', 'wp-api-request',
+        // 'media-views', 'media-editor', 'media-audiovideo',
+        'mce-view',
+        //'go_frontend', 'go_all_pages_js', 'go_combined_js_depend',
+        //'jquery-ui-accordion', 'jquery-ui-datepicker', 'jquery-ui-draggable', 'jquery-ui-droppable',
+        //'jquery-ui-button', 'jquery-ui-spinner', 'jquery-ui-progressbar', 'jquery-effects-core', 'jquery-ui-tabs',
+        //'wp-polyfill', 'wp-hooks', 'heartbeat', 'wp_auth_check', 'generate-classlist', 'generate-menu', 'generate-a11y',
+        //'comment-reply',
+        'backbone-marionette', 'backbone-radio',
+        'elementor-common-modules', 'jquery-ui-position', 'elementor-dialog',
+        'elementor-common', 'wp-embed', 'editor', 'quicktags', 'wp-sanitize', 'wp-a11y', 'wplink',
+        //'jquery-ui-menu', 'jquery-ui-autocomplete',
+        'thickbox', 'media-upload', 'wp-tinymce-root',
+        'wp-tinymce');
+    //$scripts_to_skip = array('' );
+    //foreach($scripts_to_skip as $skip_script) {
+    if (!in_array($handle, $scripts_to_skip) ){
+        return str_replace(' src', ' defer="defer" src', $tag);
+    }
+    // }
+    return $tag;
+}
+if(!is_admin()) {
+    // add_filter('script_loader_tag', 'add_defer_attribute', 10, 2);
+}*/

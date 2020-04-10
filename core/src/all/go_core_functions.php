@@ -21,10 +21,61 @@ function go_clone_post_new($is_template = false, $print = false){
      */
     $post_id = (isset($_GET['post']) ? absint( $_GET['post'] ) : absint( $_POST['post'] ) );
     $global = (isset($_GET['global']) ? $_GET['global']  : false );
+    $chain_id = (isset($_GET['chain_id']) ? $_GET['chain_id']  : false );
+    $frontend_edit = (isset($_GET['frontend_edit']) ? $_GET['frontend_edit']  : false );
+
+    /*
+    * if you don't want current user to be the new post author,
+    * then change next couple of lines to this: $new_post_author = $post->post_author;
+    */
+    $current_user = wp_get_current_user();
+    $new_post_author = $current_user->ID;
 
     if ($post_id == 0){
+        if($frontend_edit){
+            //make a new empty post
+            $args = array (
+                'comment_status' => 'open',
+                'ping_status' => 'closed',
+                'post_author' => $new_post_author,
+                'post_content' => '',
+                'post_excerpt' => '',
+                'post_name' => '',
+                'post_parent' => 0,
+                'post_password' => '',
+                'post_status' => 'draft',
+                'post_title' => 'New Post Title',
+                'post_type' => 'tasks',
+                'to_ping' => '',
+                'menu_order' => 0,
+            );
+
+
+            $new_post_id = wp_insert_post( $args );
+            if($chain_id){
+                update_post_meta( $new_post_id, 'go-location_map_toggle', 1 );
+                update_post_meta( $new_post_id, 'go-location_map_loc', $chain_id );
+                $order = count(go_get_chain_posts($chain_id, 'task_chains'))+1;
+                update_post_meta( $new_post_id, 'go-location_map_order_item', $order );
+                update_post_meta( $new_post_id, 'go_stages', 1 );
+                wp_set_post_terms( $new_post_id, $chain_id, 'task_chains');
+                wp_update_post(array(
+                    'ID'    =>  $new_post_id,
+                    'post_status'   =>  'publish'
+                ));
+
+                $key = 'go_get_chain_posts_' . $chain_id;
+                go_delete_transient($key);
+            }
+
+
+
+            echo json_encode(array('redirect' => 'false', 'post_id' => $new_post_id));
+            die();
+        }
         if ($print){
-            echo get_admin_url(null, 'post-new.php?post_type=tasks');
+            $link = get_admin_url(null, 'post-new.php?post_type=tasks');
+            echo json_encode(array('redirect' => 'true', 'link' => $link));
             die();
         }
     }
@@ -38,12 +89,6 @@ function go_clone_post_new($is_template = false, $print = false){
     $post = get_post( $post_id );
 
 
-    /*
-     * if you don't want current user to be the new post author,
-     * then change next couple of lines to this: $new_post_author = $post->post_author;
-     */
-    $current_user = wp_get_current_user();
-    $new_post_author = $current_user->ID;
 
     /*
      * if post data exists, create the post duplicate
@@ -81,12 +126,15 @@ function go_clone_post_new($is_template = false, $print = false){
         if($global == "true" && is_gameful()){
             restore_current_blog();
         }
+
         $new_post_id = wp_insert_post( $args );
+
         if($global !== "true") {
             /*
              * get all current post terms ad set them to the new post draft
              */
             $taxonomies = get_object_taxonomies($post->post_type); // returns array of taxonomy names for post type, ex array("category", "post_tag");
+
             foreach ($taxonomies as $taxonomy) {
                 $post_terms = wp_get_object_terms($post_id, $taxonomy, array('fields' => 'slugs'));
                 wp_set_object_terms($new_post_id, $post_terms, $taxonomy, false);
@@ -103,6 +151,9 @@ function go_clone_post_new($is_template = false, $print = false){
         if($global == "true" && is_gameful()){
             restore_current_blog();
         }
+
+
+
         if (count($post_meta_infos)!=0) {
             $sql_query = "INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value) ";
             foreach ($post_meta_infos as $meta_info) {
@@ -115,8 +166,28 @@ function go_clone_post_new($is_template = false, $print = false){
             $wpdb->query($sql_query);
         }
 
+        if($chain_id){
+            update_post_meta( $new_post_id, 'go-location_map_toggle', 1 );
+            update_post_meta( $new_post_id, 'go-location_map_loc', $chain_id );
+            wp_set_post_terms( $new_post_id, $chain_id, 'task_chains');
+            wp_update_post(array(
+                'ID'    =>  $new_post_id,
+                'post_status'   =>  'publish'
+            ));
+
+            $key = 'go_get_chain_posts_' . $chain_id;
+            go_delete_transient($key);
+
+        }
+
+        if($frontend_edit){
+            echo json_encode(array('redirect' => 'false', 'post_id' => $new_post_id));
+            die();
+        }
+
         if ($print){
-            echo  admin_url( 'post.php?action=edit&post=' . $new_post_id );
+            $link =  admin_url( 'post.php?action=edit&post=' . $new_post_id );
+            echo json_encode(array('redirect' => 'true', 'link' => $link));
             die();
         }
         /*
@@ -254,9 +325,9 @@ function go_get_terms_ordered($taxonomy, $parent = '', $number = ''){
     return $terms;
 }
 
-function go_get_ordered_posts($term_id){
+function go_get_ordered_posts($term_id, $taxonomy = ''){
     $taxonomy = null;
-    if(empty($post_slug)) {
+    if(empty($taxonomy)) {
         $term = get_term($term_id);
         $taxonomy = $term->taxonomy;
     }
@@ -428,6 +499,7 @@ function go_override_avatar ($avatar_html, $id_or_email, $size, $default, $alt) 
 
     }
 
+
     return $avatar;
 }
 
@@ -528,6 +600,12 @@ function go_acf_replace_text($match){
     }
     else if($match === '[Groups]'){
         $replace_with = ucwords(get_option('options_go_groups_name_plural'));
+    }
+    else if($match === '[Quest]'){
+        $replace_with = ucwords(get_option( 'options_go_tasks_name_singular'  ));
+    }
+    else if($match === '[Quests]'){
+        $replace_with = ucwords(get_option( 'options_go_tasks_name_plural'  ));
     }
     return $replace_with;
 }
@@ -685,9 +763,12 @@ function go_get_gold_name(){
     return $gold_name;
 }
 
-function go_get_link_from_option($option_name){
+function go_get_link_from_option($option_name, $admin = false){
     $option = get_option($option_name);
     $option = urlencode((string)$option);
+    if($admin){
+        $option = "edit_" . lcfirst($option);
+    }
     $link = get_site_url(null, $option);
     return $link;
 }
@@ -714,17 +795,17 @@ function go_copy_var_to_clipboard($var, $message = null, $icon_only = false){
         $message = 'Copy to Clipboard';
     }
     if($icon_only){
-        $copy_icon = "  <span onclick='go_copy_to_clipboard(this)' class='tooltip' data-tippy-content='$message'>
+        $copy_icon = "  <span onclick='go_copy_to_clipboard(this)' class='tooltip action_icon' data-tippy-content='$message'>
                             <span class='tooltip_click' data-tippy-content='Copied!'>
-                                <span  style='background-color: white; display:none;' class='go_copy_this'>$var</span> 
-                                <i style='' class='fas fa-1x fa-link'></i>
+                                <span  style='background-color: white; display:none;' class='go_copy_this '>$var</span> 
+                                <a><i style='' class='far fa-1x fa-link'></i></a>
                             </span>
                     </span>";
     }else {
         $copy_icon = "  <span onclick='go_copy_to_clipboard(this)' class='tooltip' data-tippy-content='$message'>
                             <span class='tooltip_click' data-tippy-content='Copied!'>
-                                <span class='go_copy_this' style='background-color: white;'>$var</span> 
-                                <i style='' class='fas fa-1x fa-link'></i>
+                                <span class='go_copy_this action_icon' style='background-color: white;'>$var</span> 
+                                <a><i style='' class='far fa-1x fa-link'></i></a>
                             </span>
                     </span>";
     }
@@ -746,10 +827,30 @@ function go_acf_load_field_message($field  ) {
 
 add_filter('acf/load_field/type=message', 'go_acf_load_field_message', 10, 3);
 
+
 function go_customize_register( $wp_customize ) {
     /**
      * Add our Header & Navigation Panel
      */
+    $heading = '#c3eafb';
+    $available = '#fff7aa';
+    $done = '#cee3ac';
+    $locked = '#cccccc';
+    $up = '#90EE90';
+    $down = '#ffc0cb';
+    $background = '#ffffff';
+    $font = '#000000';
+
+    $palette = array( // Optional. Select the colours for the colour palette . Default: WP color control palette
+        $heading,
+        $available,
+        $done,
+        $locked,
+        $background,
+        $font,
+        '#7ed934',
+        '#1571c1'
+    );
 
         $wp_customize->add_panel( 'go_panel',
             array(
@@ -764,8 +865,8 @@ function go_customize_register( $wp_customize ) {
 
     $wp_customize->add_section( 'go_map_controls_section',
         array(
-            'title' => __( 'Map Display' ),
-            'description' => esc_html__( 'Customize the Map. Navigate to the map page in the preview panel to see your changes before you save them.' ),
+            'title' => __( 'Map/Store Display' ),
+            'description' => esc_html__( 'Customize the Map & Store.' ),
             'panel' => 'go_panel',
             'priority' => 10, // Not typically needed. Default is 160
             'capability' => 'edit_theme_options', // Not typically needed. Default is edit_theme_options
@@ -774,11 +875,42 @@ function go_customize_register( $wp_customize ) {
     );
 
 
+    $google_fonts_default = json_encode(
+        array(
+            'font' => 'Muli',
+            'regularweight' => 'regular',
+            'italicweight' => 'italic',
+            'boldweight' => '700',
+            'category' => 'sans-serif'
+        )
+    );
+    // Test of Google Font Select Control
+    $wp_customize->add_setting( 'go_map_google_font_select',
+        array(
+            'default' => $google_fonts_default,
+            //'transport' => 'postMessage',
+            //'sanitize_callback' => 'skyrocket_google_font_sanitization',
+            'type' => 'option',
+        )
+    );
+    $wp_customize->add_control( new Skyrocket_Google_Font_Select_Custom_Control( $wp_customize, 'go_map_google_font_select',
+        array(
+            'label' => __( 'Map Font', 'go' ),
+            'description' => esc_html__( 'All Google Fonts sorted alphabetically. The default value is Muli.', 'skyrocket' ),
+            'section' => 'go_map_controls_section',
+            'settings' => 'go_map_google_font_select',
+            'input_attrs' => array(
+                'font_count' => 'all',
+                'orderby' => 'alpha',
+            ),
+        )
+    ) );
+
     // Test of Slider Custom Control
     $wp_customize->add_setting( 'go_map_font_size_control',
         array(
-            'default' => '17',
-            'transport' => 'refresh',
+            'default' => '15',
+            'transport' => 'postMessage',
             'type' => 'option',
             //'sanitize_callback' => 'absint'
         )
@@ -796,203 +928,260 @@ function go_customize_register( $wp_customize ) {
         )
     ) );
 
-    $google_fonts_default = json_encode(
-        array(
-            'font' => 'Open Sans',
-            'regularweight' => 'regular',
-            'italicweight' => 'italic',
-            'boldweight' => '700',
-            'category' => 'sans-serif'
-        )
-    );
-    // Test of Google Font Select Control
-    $wp_customize->add_setting( 'go_map_google_font_select',
-        array(
-            'default' => $google_fonts_default,
-            //'sanitize_callback' => 'skyrocket_google_font_sanitization',
-            'type' => 'option',
-        )
-    );
-    $wp_customize->add_control( new Skyrocket_Google_Font_Select_Custom_Control( $wp_customize, 'go_map_google_font_select',
-        array(
-            'label' => __( 'Map Font', 'go' ),
-            'description' => esc_html__( 'All Google Fonts sorted alphabetically', 'skyrocket' ),
-            'section' => 'go_map_controls_section',
-            'settings' => 'go_map_google_font_select',
-            'input_attrs' => array(
-                'font_count' => 'all',
-                'orderby' => 'alpha',
-            ),
-        )
+
+    $wp_customize->add_control( 'go_reset_map', array(
+        'type' => 'button',
+        'settings' => array(), // 👈
+        'priority' => 10,
+        'section' => 'go_map_controls_section',
+        'input_attrs' => array(
+            'value' => __( 'Reset Map Colors', 'textdomain' ), // 👈
+            'class' => 'button button-primary', // 👈
+        ),
     ) );
 
     $wp_customize->add_setting( 'go_map_bkg_color',
         array(
-            'default' => "#ffffff",
-            'transport' => 'refresh',
-            'type' => 'option',
-            //'sanitize_callback' => 'skyrocket_hex_rgba_sanitization'
+            'default' => $background,
+            'transport' => 'postMessage',
+            'type' => 'option'
         )
     );
-    $wp_customize->add_control( 'go_map_bkg_color',
+    $wp_customize->add_control( new Skyrocket_Customize_Alpha_Color_Control( $wp_customize, 'go_map_bkg_color',
         array(
             'label' => __( 'Map Background Color', 'go' ),
-            //'description' => esc_html__( 'Change the Map Background Color', 'go' ),
+            //'description' => esc_html__( 'Sample custom control description' ),
             'section' => 'go_map_controls_section',
-            'type' => 'color',
+            'show_opacity' => false, // Optional. Show or hide the opacity value on the opacity slider handle. Default: true
+            'palette' => $palette,
         )
-    ) ;
+    ) );
 
     $wp_customize->add_setting( 'go_map_font_color',
         array(
-            'default' => "#ffffff",
-            'transport' => 'refresh',
-            'type' => 'option',
-            //'sanitize_callback' => 'skyrocket_hex_rgba_sanitization'
+            'default' => $font,
+            'transport' => 'postMessage',
+            'type' => 'option'
         )
     );
-    $wp_customize->add_control( 'go_map_font_color',
+    $wp_customize->add_control( new Skyrocket_Customize_Alpha_Color_Control( $wp_customize, 'go_map_font_color',
         array(
             'label' => __( 'Map Font Color', 'go' ),
-            //'description' => esc_html__( 'Change the Map Font Color', 'go' ),
+            //'description' => esc_html__( 'Sample custom control description' ),
             'section' => 'go_map_controls_section',
-            'type' => 'color',
+            'show_opacity' => false, // Optional. Show or hide the opacity value on the opacity slider handle. Default: true
+            'palette' => $palette,
         )
-    ) ;
+    ) );
 
 
     $wp_customize->add_setting( 'go_map_chain_color',
         array(
-            'default' => "#c3eafb",
-            'transport' => 'refresh',
-            'type' => 'option',
-            //'sanitize_callback' => 'skyrocket_hex_rgba_sanitization'
+            'default' => $heading,
+            'transport' => 'postMessage',
+            'type' => 'option'
         )
     );
-    $wp_customize->add_control( 'go_map_chain_color',
+    $wp_customize->add_control( new Skyrocket_Customize_Alpha_Color_Control( $wp_customize, 'go_map_chain_color',
         array(
             'label' => __( 'Column Heading Color', 'go' ),
-            //'description' => esc_html__( 'Change the Quest Category Color', 'go' ),
+            //'description' => esc_html__( 'Sample custom control description' ),
             'section' => 'go_map_controls_section',
-            'type' => 'color',
+            'show_opacity' => false, // Optional. Show or hide the opacity value on the opacity slider handle. Default: true
+            'palette' => $palette,
         )
-    ) ;
+    ) );
+
     $wp_customize->add_setting( 'go_map_chain_font_color',
         array(
-            'default' => "#000000",
-            'transport' => 'refresh',
-            'type' => 'option',
-            //'sanitize_callback' => 'skyrocket_hex_rgba_sanitization'
+            'default' => $font,
+            'transport' => 'postMessage',
+            'type' => 'option'
         )
     );
-    $wp_customize->add_control( 'go_map_chain_font_color',
+    $wp_customize->add_control( new Skyrocket_Customize_Alpha_Color_Control( $wp_customize, 'go_map_chain_font_color',
         array(
             'label' => __( 'Column Heading Font Color', 'go' ),
-            //'description' => esc_html__( 'Change the Map Font Color', 'go' ),
+            //'description' => esc_html__( 'Sample custom control description' ),
             'section' => 'go_map_controls_section',
-            'type' => 'color',
+            'show_opacity' => false, // Optional. Show or hide the opacity value on the opacity slider handle. Default: true
+            'palette' => $palette,
         )
-    ) ;
+    ) );
+
     $wp_customize->add_setting( 'go_map_available_color',
         array(
-            'default' => "#fff7aa",
-            'transport' => 'refresh',
-            'type' => 'option',
-            //'sanitize_callback' => 'skyrocket_hex_rgba_sanitization'
+            'default' => $available,
+            'transport' => 'postMessage',
+            'type' => 'option'
         )
     );
-    $wp_customize->add_control( 'go_map_available_color',
+    $wp_customize->add_control( new Skyrocket_Customize_Alpha_Color_Control( $wp_customize, 'go_map_available_color',
         array(
-            'label' => __( 'Available Quest Color', 'go' ),
-            //'description' => esc_html__( 'Change the Available Quest Color', 'go' ),
+            'label' => __( 'Map Available Color', 'go' ),
+            //'description' => esc_html__( 'Sample custom control description' ),
             'section' => 'go_map_controls_section',
-            'type' => 'color',
+            'show_opacity' => false, // Optional. Show or hide the opacity value on the opacity slider handle. Default: true
+            'palette' => $palette,
         )
-    ) ;
+    ) );
+
     $wp_customize->add_setting( 'go_map_available_font_color',
         array(
-            'default' => "#000000",
-            'transport' => 'refresh',
-            'type' => 'option',
-            //'sanitize_callback' => 'skyrocket_hex_rgba_sanitization'
+            'default' => $font,
+            'transport' => 'postMessage',
+            'type' => 'option'
         )
     );
-    $wp_customize->add_control( 'go_map_available_font_color',
+    $wp_customize->add_control( new Skyrocket_Customize_Alpha_Color_Control( $wp_customize, 'go_map_available_font_color',
         array(
             'label' => __( 'Map Available Font Color', 'go' ),
-            //'description' => esc_html__( 'Change the Map Font Color', 'go' ),
+            //'description' => esc_html__( 'Sample custom control description' ),
             'section' => 'go_map_controls_section',
-            'type' => 'color',
+            'show_opacity' => false, // Optional. Show or hide the opacity value on the opacity slider handle. Default: true
+            'palette' => $palette,
         )
-    ) ;
-
+    ) );
 
     $wp_customize->add_setting( 'go_map_done_color',
         array(
-            'default' => "#cee3ac",
-            'transport' => 'refresh',
-            'type' => 'option',
-            //'sanitize_callback' => 'skyrocket_hex_rgba_sanitization'
+            'default' => $done,
+            'transport' => 'postMessage',
+            'type' => 'option'
         )
     );
-    $wp_customize->add_control( 'go_map_done_color',
+    $wp_customize->add_control( new Skyrocket_Customize_Alpha_Color_Control( $wp_customize, 'go_map_done_color',
         array(
-            'label' => __( 'Finished Quest Color', 'go' ),
-            //'description' => esc_html__( 'Change the Finished Quest Color', 'go' ),
+            'label' => __( 'Map Done Color', 'go' ),
+            //'description' => esc_html__( 'Sample custom control description' ),
             'section' => 'go_map_controls_section',
-            'type' => 'color',
+            'show_opacity' => false, // Optional. Show or hide the opacity value on the opacity slider handle. Default: true
+            'palette' => $palette,
         )
-    ) ;
+    ) );
+
     $wp_customize->add_setting( 'go_map_done_font_color',
         array(
-            'default' => "#000000",
-            'transport' => 'refresh',
-            'type' => 'option',
-            //'sanitize_callback' => 'skyrocket_hex_rgba_sanitization'
+            'default' => $font,
+            'transport' => 'postMessage',
+            'type' => 'option'
         )
     );
-    $wp_customize->add_control( 'go_map_done_font_color',
+    $wp_customize->add_control( new Skyrocket_Customize_Alpha_Color_Control( $wp_customize, 'go_map_done_font_color',
         array(
-            'label' => __( 'Map Finished Font Color', 'go' ),
-            //'description' => esc_html__( 'Change the Map Font Color', 'go' ),
+            'label' => __( 'Map Done Font Color', 'go' ),
+            //'description' => esc_html__( 'Sample custom control description' ),
             'section' => 'go_map_controls_section',
-            'type' => 'color',
+            'show_opacity' => false, // Optional. Show or hide the opacity value on the opacity slider handle. Default: true
+            'palette' => $palette,
         )
-    ) ;
-
+    ) );
 
     $wp_customize->add_setting( 'go_map_locked_color',
         array(
-            'default' => "#cccccc",
-            'transport' => 'refresh',
-            'type' => 'option',
-            //'sanitize_callback' => 'skyrocket_hex_rgba_sanitization'
+            'default' => $locked,
+            'transport' => 'postMessage',
+            'type' => 'option'
         )
     );
-    $wp_customize->add_control( 'go_map_locked_color',
+    $wp_customize->add_control( new Skyrocket_Customize_Alpha_Color_Control( $wp_customize, 'go_map_locked_color',
         array(
-            'label' => __( 'Locked Quest Color', 'go' ),
-            //'description' => esc_html__( 'Change the Locked Quest Color', 'go' ),
+            'label' => __( 'Map Locked Color', 'go' ),
+            //'description' => esc_html__( 'Sample custom control description' ),
             'section' => 'go_map_controls_section',
-            'type' => 'color',
+            'show_opacity' => false, // Optional. Show or hide the opacity value on the opacity slider handle. Default: true
+            'palette' => $palette,
         )
-    ) ;
+    ) );
+
+
     $wp_customize->add_setting( 'go_map_locked_font_color',
         array(
-            'default' => "#000000",
-            'transport' => 'refresh',
-            'type' => 'option',
-            //'sanitize_callback' => 'skyrocket_hex_rgba_sanitization'
+            'default' => $font,
+            'transport' => 'postMessage',
+            'type' => 'option'
         )
     );
-    $wp_customize->add_control( 'go_map_locked_font_color',
+    $wp_customize->add_control( new Skyrocket_Customize_Alpha_Color_Control( $wp_customize, 'go_map_locked_font_color',
         array(
             'label' => __( 'Map Locked Font Color', 'go' ),
-            //'description' => esc_html__( 'Change the Map Font Color', 'go' ),
+            //'description' => esc_html__( 'Sample custom control description' ),
             'section' => 'go_map_controls_section',
-            'type' => 'color',
+            'show_opacity' => false, // Optional. Show or hide the opacity value on the opacity slider handle. Default: true
+            'palette' => $palette,
         )
-    ) ;
+    ) );
+
+
+    $wp_customize->add_setting( 'go_store_up_color',
+        array(
+            'default' => $up,
+            'transport' => 'postMessage',
+            'type' => 'option'
+        )
+    );
+    $wp_customize->add_control( new Skyrocket_Customize_Alpha_Color_Control( $wp_customize, 'go_store_up_color',
+        array(
+            'label' => __( 'Store Reward Color', 'go' ),
+            //'description' => esc_html__( 'Sample custom control description' ),
+            'section' => 'go_map_controls_section',
+            'show_opacity' => false, // Optional. Show or hide the opacity value on the opacity slider handle. Default: true
+            'palette' => $palette,
+        )
+    ) );
+
+
+    $wp_customize->add_setting( 'go_store_up_font_color',
+        array(
+            'default' => $font,
+            'transport' => 'postMessage',
+            'type' => 'option'
+        )
+    );
+    $wp_customize->add_control( new Skyrocket_Customize_Alpha_Color_Control( $wp_customize, 'go_store_up_font_color',
+        array(
+            'label' => __( 'Store Reward Font Color', 'go' ),
+            //'description' => esc_html__( 'Sample custom control description' ),
+            'section' => 'go_map_controls_section',
+            'show_opacity' => false, // Optional. Show or hide the opacity value on the opacity slider handle. Default: true
+            'palette' => $palette,
+        )
+    ) );
+
+    $wp_customize->add_setting( 'go_store_down_color',
+        array(
+            'default' => $down,
+            'transport' => 'postMessage',
+            'type' => 'option'
+        )
+    );
+    $wp_customize->add_control( new Skyrocket_Customize_Alpha_Color_Control( $wp_customize, 'go_store_down_color',
+        array(
+            'label' => __( 'Store Cost Color', 'go' ),
+            //'description' => esc_html__( 'Sample custom control description' ),
+            'section' => 'go_map_controls_section',
+            'show_opacity' => false, // Optional. Show or hide the opacity value on the opacity slider handle. Default: true
+            'palette' => $palette,
+        )
+    ) );
+
+
+    $wp_customize->add_setting( 'go_store_down_font_color',
+        array(
+            'default' => $font,
+            'transport' => 'postMessage',
+            'type' => 'option'
+        )
+    );
+    $wp_customize->add_control( new Skyrocket_Customize_Alpha_Color_Control( $wp_customize, 'go_store_down_font_color',
+        array(
+            'label' => __( 'Store Cost Font Color', 'go' ),
+            //'description' => esc_html__( 'Sample custom control description' ),
+            'section' => 'go_map_controls_section',
+            'show_opacity' => false, // Optional. Show or hide the opacity value on the opacity slider handle. Default: true
+            'palette' => $palette,
+        )
+    ) );
 
 
 
@@ -1268,12 +1457,48 @@ function go_user_bar_dynamic_styles() {
 
     $map_locked_font_color = get_option('go_map_locked_font_color');
     $map_locked_font_color  = ($map_locked_font_color ?  $map_locked_font_color : "#000000");
+
+    $map_up = get_option('go_store_up_color');
+    $map_up  = ($map_up ?  $map_up : "#ffc0cb");
+
+    $map_up_font_color = get_option('go_store_up_font_color');
+    $map_up_font_color  = ($map_up_font_color ?  $map_up_font_color : "#000000");
+
+    $map_down = get_option('go_store_down_color');
+    $map_down  = ($map_down ?  $map_down : "#90EE90");
+
+    $map_down_font_color = get_option('go_store_down_font_color');
+    $map_down_font_color  = ($map_down_font_color ?  $map_down_font_color : "#000000");
+
+
 //
     $chain_box = get_option('go_map_chain_color');
     $chain_box  = ($chain_box ?  $chain_box : "#c3eafb");
 
     $go_map_chain_font_color = get_option('go_map_chain_font_color');
     $go_map_chain_font_color  = ($go_map_chain_font_color ?  $go_map_chain_font_color : "#000000");
+
+    $font = get_option('go_map_google_font_select');
+    if(!$font){
+        $font = '{"font":"Muli","category":"sans-serif"}';
+    }
+    $font = json_decode($font);
+    $myfont = $font->font;
+    // $font_weight = $font->regularweight;
+    // $font_boldweight = $font->boldweight;
+    $font_category = $font->category;
+
+
+    $get_font = $myfont;
+
+    wp_enqueue_style( 'acft-gf', 'https://fonts.googleapis.com/css?family='.$get_font );
+
+
+    $font_size = get_option('go_map_font_size_control');
+    if(!$font_size){
+        $font_size = 17;
+    }
+    $font_family = $myfont . "," . $font_category;
 
 //
     ?>
@@ -1296,14 +1521,36 @@ function go_user_bar_dynamic_styles() {
             background-color: <?php echo $map_locked; ?>;
             color: <?php echo $map_locked_font_color; ?>; }
 
+        #maps .go_store_loot_list_cost,
+        .go_store_lightbox_container .go_cost,
+        .loot-box.down,
+        #gp_store_minus{
+            background-color: <?php echo $map_down; ?>;
+            color: <?php echo $map_down_font_color; ?>;
+            border-color: <?php echo $map_down_font_color; ?>;}
+
+        #maps .go_store_loot_list_reward,
+        .go_store_lightbox_container .go_reward,
+        .loot-box.up,
+        #gp_store_plus
+        {
+            background-color: <?php echo $map_up; ?>;
+            color: <?php echo $map_up_font_color; ?>;
+            border-color: <?php echo $map_up_font_color; ?>;}
+
         #maps .available,
-        .dropbtn, .dropbtn:hover, .dropbtn:focus, #go_Dropdown{
+        .dropdown,
+        .go_store_actions{
             background-color: <?php echo $map_available; ?>;
             color: <?php echo $map_available_font_color; ?>; }
 
-        #mapwrapper {
+        #go_map_container,
+        .featherlight.store .featherlight-content{
             background-color: <?php echo $map_bkg; ?>;
             color: <?php echo $map_font_color; ?>;
+            font-family: <?php echo $font_family; ?>;
+            font-style: normal;
+            font-size:<?php echo $font_size; ?>px;
         }
 
         #maps .go_task_chain_map_box{
@@ -1355,11 +1602,13 @@ function go_leaderboard_filters($type = 'reader', $user_id = null) {
 
     $is_admin = go_user_is_admin();
 
-    $initial = $badge_ids = (isset($_GET['is_initial_single_stage']) ?  $_GET['is_initial_single_stage'] : false);
+    $initial =  (isset($_GET['is_initial_single_stage']) ?  $_GET['is_initial_single_stage'] : false);
     if($initial && !$is_admin){
         $type = 'single_quest';
     }
 
+    $show_date_filters = true;
+    $show_store_item_filter = true;
 
     $user_id_data = '';
     if ($type === 'reader'){
@@ -1390,6 +1639,15 @@ function go_leaderboard_filters($type = 'reader', $user_id = null) {
         $status_filter = false;
         $order_filter = false;
     }
+    else if ($type === 'single_store_item'){
+        $filter_on_change = false;
+        $show_action_filters = true;
+        $show_date_filters = true;
+        $show_store_item_filter = false;
+        $show_user_filters = true;
+        $status_filter = false;
+        $order_filter = false;
+    }
     else if ($type === 'blog'){
         $filter_on_change = true;
         if($is_admin) {
@@ -1397,7 +1655,7 @@ function go_leaderboard_filters($type = 'reader', $user_id = null) {
             $order_filter = true;
         }else{
             $show_action_filters = false;
-            $order_filter = false;
+            $order_filter = true;
         }
         $show_user_filters = false;
         $status_filter = true;
@@ -1424,12 +1682,20 @@ function go_leaderboard_filters($type = 'reader', $user_id = null) {
         $is_single_stage = true;
     }
 
+
     if($post_id){
         $tasks = "data-tasks='{$post_id}'";
         $task_option = "<option value='$post_id' selected>$post_id</option>";
     }else{
         $tasks = '';
         $task_option = '';
+    }
+
+    $store_option = '';
+    if($type === 'single_store_item'){
+        if($post_id){
+            $store_option = "<option value='$post_id' selected>$post_id</option>";
+        }
     }
 
     if($stage){
@@ -1450,76 +1716,74 @@ function go_leaderboard_filters($type = 'reader', $user_id = null) {
         $user_id_data = "data-user_id='{$user_id}'";
     }
 
-
-
-
-
-
-    ?>
-
-
-    <?php
-    //<h3>User Filter</h3>
-    //<h3>Blog Post Filter</h3>
-    // <div id="go_action_filters_1" style="padding: 0px 20px 20px 20px;">
-    //<div id="go_action_filters_2" style="padding: 40px 20px 20px 20px;">
-
     ?>
 <div id="go_leaderboard_filters" style="flex-wrap: wrap;" data-type="<?php echo $type; ?>"  <?php echo " " . $filter_on_change_data . " "  . $stage . " "  . $user_id_data . " "  . $tasks; ?>>
     <?php
     echo "<h3>Filters</h3>";
     if($show_user_filters) {
         ?>
-        <div id="go_user_filters">
-
-            <div id="go_user_filters_1" style="display: flex;"
-            ">
-            <div class="user_filter"><label
-                        for="go_reader_user_go_sections_select">Section </label><?php go_make_tax_select('user_go_sections', 'reader', false, false, true); ?>
+        <div id="go_user_filters" class="filter_row">
+            <div class="user_filter filter sections_filter"><div
+                        class="label">Section </div><?php go_make_tax_select('user_go_sections', 'reader', false, false, true); ?>
             </div>
-            <div class="user_filter"><label
-                        for="go_reader_user_go_groups_select">Group </label><?php go_make_tax_select('user_go_groups', 'reader', false, false, true); ?>
+            <div class="user_filter filter"><div
+                        class="label">Group </div><?php go_make_tax_select('user_go_groups', 'reader', false, false, true); ?>
             </div>
-            <div class="user_filter"><label
-                        for="go_reader_go_badges_select">Badge </label><?php go_make_tax_select('go_badges', 'reader', false, false, true); ?>
+            <div class="user_filter filter"><div
+                        class="label">Badge </div><?php go_make_tax_select('go_badges', 'reader', false, false, true); ?>
             </div>
-        </div>
         </div>
         <?php
     }
 
-    if($show_action_filters) {
-        $display = 'display:flex;';
+    if($show_action_filters === false) {
+        $display_action = 'display:none;';
     }else{
-        $display = 'display:none;';
+        $display_action = 'display:flex;';
     }
+    $display_action = 'display:none;';
         ?>
-        <div id="go_action_filters" style="<?php echo $display; ?>">
+        <div id="go_action_filters" class="filter_row" style="<?php echo $display_action; ?>">
             <?php
-            if($is_single_stage ) {
-                $display = 'display:none;';
-            }else{
-                $display = 'display:flex;';
-            }
-            ?>
 
-            <div id="go_datepicker_container"
-                 style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 400px; <?php echo $display; ?> ">
-                <div id="go_datepicker_clipboard">
-                    <i class="fa fa-calendar" style="float: left;"></i>&nbsp;
-                    <span id="go_datepicker"></span> <i id="go_reset_datepicker" class=""
-                                                        select2-selection__clear><b> × </b></i><i
-                            class="fa fa-caret-down"></i>
+            ?>
+            <div class="filter"  style=" <?php //echo $display_date; ?> ">
+                <div class="label">Date Range</div>
+                <div id="go_datepicker_container"
+                >
+
+                    <div id="go_datepicker_clipboard">
+                        <i class="fa fa-calendar" style="float: left; line-height: 1.5em;"></i>&nbsp;
+                        <span id="go_datepicker"></span> <i id="go_reset_datepicker" class=""
+                                                            select2-selection__clear><b> × </b></i><i
+                                class="fa fa-caret-down"></i>
+                    </div>
                 </div>
             </div>
 
 
-            <div style="padding-top: 10px; <?php echo $display; ?>">
-                                <span id="go_task_filters"><label
-                                            for="go_clipboard_task_select"><?php echo $task_name; ?> </label><select
-                                            id="go_task_select" class="js-store_data"
-                                            style="width:250px;" ><?php echo $task_option; ?></select></span>
+            <div id="go_task_filters" class="filter"><div
+                        class="label"><?php echo $task_name; ?></div>
+                <select
+                        id="go_task_select" class="js-store_data"
+                        style="width:250px;" ><?php echo $task_option; ?></select>
             </div>
+
+            <div id="go_store_filters" class="filter" style="<?php //echo $display_store; ?>">
+                <div class="label">Store Items</div>
+                <select id="go_store_item_select" class="js-store_data" style="width:250px;"><?php echo $store_option; ?></select></div>
+
+            <?php
+            /*
+            ?>
+            <div id="go_show_unmatched" >
+                <div class="label">Show Unmatched Users </div>
+                <input id="go_unmatched_toggle" type="checkbox" class="checkbox" name="unmatched" >
+                <span class="tooltip" data-tippy-content="Show a minimum of one row per user. This is useful to see who has not done something, in addition to those who have.">
+                    <span><i class="fa fa-info-circle"></i></span>
+                </span>
+            </div>*/
+            ?>
 
         </div>
             <?php
@@ -1530,10 +1794,8 @@ function go_leaderboard_filters($type = 'reader', $user_id = null) {
 
         if($status_filter){
             ?>
-            <div style="width: 100%;
-    display: flex;
-    flex-wrap: wrap;">
-            <div class="status_filters">
+            <div class="filter_row status_row">
+            <div class="status_filters filter">
                 <?php
                 if($is_admin){
                     $action = (isset($_GET['action']) ? $_GET['action'] : false);
@@ -1591,7 +1853,7 @@ if($order_filter){
         $oldest = 'checked';
     }
     ?>
-    <div class="order_filter">
+    <div class="order_filter filter">
         <input type="radio" id="go_reader_order_oldest" class="go_reader_input" name="go_reader_order"
                value="ASC" <?php echo $oldest; ?>><label for="go_reader_order_oldest"> Oldest First</label>
         <input type="radio" id="go_reader_order_newest" class="go_reader_input" name="go_reader_order"
@@ -1682,3 +1944,75 @@ function go_get_task_id($blog_post_id){
     }
     return $task_id;
 }
+
+function go_embed_defaults($embed_size){
+    $go_video_unit = get_option ('go_video_width_type_control');$go_video_unit = get_option ('go_video_width_type_control');
+
+    if ($go_video_unit == '%'){
+        $pixels = 400;
+    }else{
+        $pixels = get_option( 'go_video_width_px_control' );
+        if($pixels === false){
+            $pixels = 400;
+        }
+
+    }
+    $embed_size['width'] = $pixels;
+    return $embed_size;
+}
+add_filter('embed_defaults', 'go_embed_defaults');
+
+
+/**
+ * Auto update slugs
+ * @author  Mick McMurray
+ * Based on info from:
+ * @link http://thestizmedia.com/custom-post-type-filter-admin-custom-taxonomy/
+ */
+function go_update_slug( $data, $postarr ) {
+    $slug_toggle = get_site_option( 'options_go_slugs_toggle');
+    if ($slug_toggle) {
+        $post_type = $data['post_type'];
+        if ($post_type == 'tasks' || $post_type == 'go_store') {
+            $data['post_name'] = wp_unique_post_slug(sanitize_title($data['post_title']), $postarr['ID'], $data['post_status'], $data['post_type'], $data['post_parent']);
+        }
+        return $data;
+    }
+}
+add_filter( 'wp_insert_post_data', 'go_update_slug', 99, 2 );
+
+// define the wp_update_term_data callback
+/**
+ * @param $data
+ * @param $term_id
+ * @param $taxonomy
+ * @param $args
+ * @return mixed
+ */
+function go_update_term_slug($data, $term_id, $taxonomy, $args ) {
+    $slug_toggle = get_site_option( 'options_go_slugs_toggle');
+    if ($slug_toggle) {
+        $no_space_slug = sanitize_title($data['name']);
+        $data['slug'] = wp_unique_term_slug($no_space_slug, (object)$args);
+        return $data;
+    }
+};
+add_filter( 'wp_update_term_data', 'go_update_term_slug', 10, 4 );
+
+/**
+ *
+ */
+function hide_all_slugs() {
+    $slug_toggle = get_site_option( 'options_go_slugs_toggle');
+    if ($slug_toggle) {
+        global $post;
+        $post_type = get_post_type( get_the_ID() );
+        if ($post_type != 'post' && $post_type != 'page') {
+            $hide_slugs = "<style type=\"text/css\"> #slugdiv, #edit-slug-box, .term-slug-wrap { display: none; }</style>";
+            print($hide_slugs);
+        }
+
+    }
+}
+add_action( 'admin_head', 'hide_all_slugs'  );
+

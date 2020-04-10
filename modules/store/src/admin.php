@@ -49,12 +49,13 @@ function go_convert_store_id_to_term_in_query($query) {
 /**
  * Update the store html on activation if it doesn't exist
  */
+/*
 function go_update_store_html( ) {
     if(get_option('go_store_html') == false) {
         $html = go_make_store_html();
         update_option('go_store_html', $html);
     }
-}
+}*/
 
 // hide certain meta boxes on the 'YOUR_CUSTOM_POST_TYPE' custom post type
 add_filter('add_meta_boxes', 'hide_meta_boxes_go_store', 99, 3);

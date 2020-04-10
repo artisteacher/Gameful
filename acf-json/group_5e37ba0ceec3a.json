@@ -4,7 +4,7 @@
     "fields": [
         {
             "key": "field_5e37bb8f5b17c",
-            "label": "Row or Column",
+            "label": "New Page or Page Section",
             "name": "parent_or_child",
             "type": "radio",
             "instructions": "Rows are the container that holds the columns. Columns hold the store items.",
@@ -28,7 +28,7 @@
         },
         {
             "key": "field_5e37bbe75b17d",
-            "label": "Choose a Row",
+            "label": "Choose a Page",
             "name": "choose_row",
             "type": "taxonomy",
             "instructions": "",
@@ -113,5 +113,5 @@
     "active": 1,
     "description": "",
     "recaptcha": 0,
-    "modified": 1580715633
+    "modified": 1586277233
 }

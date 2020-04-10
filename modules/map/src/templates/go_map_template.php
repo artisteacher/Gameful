@@ -18,6 +18,17 @@
  * @version 1.0
  */
 
+
+function go_map_title() {
+    $title = get_option('options_go_locations_map_title');
+    return $title; // add dynamic content to this title (if needed)
+}
+add_action( 'pre_get_document_title', 'go_map_title' );
+
+$is_admin = go_user_is_admin();
+if($is_admin){
+    acf_form_head();
+    }
 get_header();
 //$map_name = get_option( 'options_go_locations_map_map_link');
 go_make_map();

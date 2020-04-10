@@ -29,6 +29,7 @@ if ( !is_admin() ) {
     add_action( 'wp_ajax_go_stats_store_item_dataloader', 'go_stats_store_item_dataloader');
     add_action( 'wp_ajax_go_tasks_dataloader_ajax', 'go_tasks_dataloader_ajax');
     add_action( 'wp_ajax_go_print_grade_scales', 'go_print_grade_scales');
+    add_action( 'wp_ajax_go_update_badges_page', 'go_update_badges_page');
 
 
 }else{

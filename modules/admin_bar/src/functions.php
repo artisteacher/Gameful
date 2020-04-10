@@ -144,7 +144,10 @@ function go_admin_bar_v5() {
             $wp_admin_bar->remove_node('new-go_store');
             $comments = $wp_admin_bar->get_node('comments');
             $wp_admin_bar->remove_node('comments');//add back later
+            $customize = $wp_admin_bar->get_node('customize');
+            $wp_admin_bar->remove_node('customize');//add back later
             $edit = $wp_admin_bar->get_node('edit');
+
             $wp_admin_bar->remove_node('edit');//add back later
 
             $view = $wp_admin_bar->get_node('view');
@@ -222,7 +225,7 @@ function go_admin_bar_v5() {
                     )
                 );
 
-
+/*
                 $wp_admin_bar->add_node(
                     array(
                         'id' => 'go_nav_options',
@@ -280,8 +283,40 @@ function go_admin_bar_v5() {
                 // displays Badges
                 $badges_toggle = get_option('options_go_badges_toggle');
                 if ($badges_toggle) {
-                    $wp_admin_bar->add_node(array('id' => 'go_nav_badges', 'title' => ucfirst(get_option('options_go_badges_name_plural')), 'href' => esc_url(get_admin_url()) . 'edit-tags.php?taxonomy=go_badges', 'parent' => 'go_options', 'meta' => array('class' => 'go_site_name_menu_item')));
+                    $wp_admin_bar->add_node(
+                        array(
+                            'id' => 'go_nav_badges',
+                            'title' => ucfirst(get_option('options_go_badges_name_plural')),
+                            'href' => esc_url(get_admin_url()) . 'edit-tags.php?taxonomy=go_badges',
+                            'parent' => 'go_options',
+                            'meta' => array('class' => 'go_site_name_menu_item')));
                 }
+*/
+
+
+                    $wp_admin_bar->add_node(
+                        array(
+                            'id' => 'go_users',
+                            'title' => 'Users',
+                            'href' => esc_url(get_admin_url()) . 'users.php',
+                            'parent' => 'go_options',
+                            'meta' => array('class' => 'go_site_name_menu_item')));
+
+                $wp_admin_bar->add_node(
+                    array(
+                        'id' => 'go_pages',
+                        'title' => 'Pages',
+                        'href' => esc_url(get_admin_url()) . 'edit.php?post_type=page',
+                        'parent' => 'go_options',
+                        'meta' => array('class' => 'go_site_name_menu_item')));
+
+                $wp_admin_bar->add_node(
+                    array(
+                        'id' => 'go_announcements',
+                        'title' => 'Announcements',
+                        'href' => esc_url(get_admin_url()) . 'edit.php',
+                        'parent' => 'go_options',
+                        'meta' => array('class' => 'go_site_name_menu_item')));
 
 
                 /*
@@ -348,26 +383,107 @@ function go_admin_bar_v5() {
             ///
 
             if ($is_admin) {//only show to admin
+                // Add Quest
+                $wp_admin_bar->add_node(
+                    array(
+                        'id' => 'go_settings',
+                        //'title' => "<div class='go_settings'><i class='far fa-cogs'></i><div style='float: right;'>Settings</div></div>",
+                        'title' => "<i class='fas fa-cogs ab-icon ' aria-hidden='true'></i><div id='go_reader_link' style='float: right;'>Settings</div>",
+                        'meta' => array('class' => 'go_settings'),
+
+                        //'parent' => 'go_add_content',
+                    )
+                );
+
+                $wp_admin_bar->add_node(
+                    array(
+                        'id' => 'go_general_settings',
+                        //'title' => "General Settings",
+                        'title' => "<a href='#'  onclick='go_edit_frontend(this)' class='go_edit_frontend go_settings' data-settings='true' data-title='General Settings' data-group='group_5e8cf8b42aa7f' data-frontend_edit='true' >General Settings</a>",
+                        //'href' => get_admin_url(null, 'options-general.php'),
+                        'parent' => 'go_settings',
+                        'meta' => array('class' => 'go_settings'),
+                    )
+                );
+                $wp_admin_bar->add_node(
+                    array(
+                        'id' => 'go_game_settings',
+                        'title' => "<a href='#'  onclick='go_edit_frontend(this)' class='go_edit_frontend go_settings' data-settings='true' data-title='Game Setup'  data-group='group_5abc5718c2c1b' data-frontend_edit='true' >Game Setup</a>",
+                        //'title' => 'Game Setup',
+                        'parent' => 'go_settings',
+                        'meta' => array('class' => 'go_settings'),
+                    )
+                );
+                $wp_admin_bar->add_node(
+                    array(
+                        'id' => 'go_login_settings',
+                        'title' => "<a href='#'  onclick='go_edit_frontend(this)' class='go_edit_frontend go_settings' data-settings='true' data-title='Login and Registration'  data-group='group_5d1a547987fd1' data-frontend_edit='true' >Login and Registration</a>",
+                        //'title' => 'Login and Registration',
+                        'parent' => 'go_settings',
+                        'meta' => array('class' => 'go_settings'),
+                    )
+                );
+                $wp_admin_bar->add_node(
+                    array(
+                        'id' => 'go_attendance_settings',
+                        'title' => "<a  href='#' onclick='go_edit_frontend(this)' class='go_edit_frontend go_settings' data-settings='true' data-title='Attendance'  data-group='group_5df05b0c1e8bf' data-frontend_edit='true' >Attendance</a>",
+                        //'title' => 'Attendance',
+                        'parent' => 'go_settings',
+                        'meta' => array('class' => 'go_settings'),
+                    )
+                );
+                $wp_admin_bar->add_node(
+                    array(
+                        'id' => 'go_feedback_settings',
+                        'title' => "<a href='#'  onclick='go_edit_frontend(this)' class='go_edit_frontend go_settings' data-settings='true' data-title='Canned Feedback'  data-group='group_5cd8a9e1010ad' data-frontend_edit='true' >Canned Feedback</a>",
+                        //'title' => 'Canned Feedback',
+                        'parent' => 'go_settings',
+                        'meta' => array('class' => 'go_settings'),
+                    )
+                );
+                $wp_admin_bar->add_node(
+                    array(
+                        'id' => 'go_messages_settings',
+                        'title' => "<a href='#'  onclick='go_edit_frontend(this)' class='go_edit_frontend go_settings' data-settings='true' data-title='Canned Messages'  data-group='group_5cd8aba98de2c' data-frontend_edit='true' >Canned Messages</a>",
+                        //'title' => 'Canned Messages',
+                        'parent' => 'go_settings',
+                        'meta' => array('class' => 'go_settings'),
+                    )
+                );
+                $wp_admin_bar->add_node(
+                    array(
+                        'id' => 'go_bonus_loot_settings',
+                        'title' => "<a href='#'  onclick='go_edit_frontend(this)' class='go_edit_frontend go_settings' data-settings='true' data-title='Bonus Loot'  data-group='group_5cd8abc03abce' data-frontend_edit='true' >Bonus Loot</a>",
+                        //'title' => 'Bonus Loot',
+                        'parent' => 'go_settings',
+                        'meta' => array('class' => 'go_settings'),
+                    )
+                );
+                $wp_admin_bar->add_node(
+                    array(
+                        'id' => 'go_comments_settings',
+                        //'title' => "<div  onclick='go_edit_frontend(this)' class='go_edit_frontend ' data-settings='true' data-group='group_5d1a547987fd1' data-frontend_edit='true' >Login and Registration</div>",
+                        'title' => "<div  class=' go_settings'> Comments</div>",
+                        'href' => get_admin_url(null, 'options-discussion.php'),
+                        'parent' => 'go_settings',
+                        'meta' => array('class' => 'go_settings'),
+                    )
+                );
+
+
+                /*
                 $wp_admin_bar->add_node(
                     array(
                         'id' => 'go_add_content',
                         'title' => '<i class="fas fa-plus-circle ab-icon" aria-hidden="true"></i>',
                         'href' => ''
                     )
-                );
-
-                // Add Quest
-                /*$wp_admin_bar->add_node(
-                    array(
-                        'id' => 'go_add_quest',
-                        'title' => 'Add ' . get_option('options_go_tasks_name_singular') ,
-                        'href' => '',
-                        'parent' => 'go_add_content',
-                        'meta' => array('class' => 'go_options')
-                    )
                 );*/
 
-                // Add Quest
+
+
+
+                /*
                 $wp_admin_bar->add_node(
                     array(
                         'id' => 'go_add_quest_from_template',
@@ -389,6 +505,7 @@ function go_admin_bar_v5() {
                         'meta' => array('class' => 'go_options')
                     )
                 );
+                */
 
             }
         }
@@ -464,7 +581,7 @@ function go_admin_bar_v5() {
         }
 
         //MAP AND STORE LINKS IF YOU ARE ON THE BACKEND
-        if (is_admin()){
+        //if (is_admin()){
             $go_map_switch = get_option( 'options_go_locations_map_toggle' );
             $go_store_switch = get_option( 'options_go_store_toggle' );
             if ($go_map_switch) {
@@ -502,7 +619,44 @@ function go_admin_bar_v5() {
                     )
                 );
             };
-        }
+        $go_badges_switch = get_option( 'options_go_badges_toggle' );
+        if ($go_badges_switch) {
+            /*
+            $go_store_link = get_option('options_go_store_store_link');
+            //$go_store_link = get_permalink(get_page_by_path($go_store_link));
+            $go_store_link = get_site_url(null, $go_store_link);
+            $name = get_option('options_go_store_name');
+*/
+            $go_badges_link = go_get_link_from_option('options_go_badges_name_plural', true);
+            $wp_admin_bar->add_node(
+                array(
+                    'id' => 'go_badges',
+                    //'title' => '<i class="fas fa-store ab-icon" aria-hidden="true"></i><div id="go_store_page" style="float: right;">' . $name . '</div>',
+                    'title' => '<i class="fas fa-award ab-icon" aria-hidden="true"></i><div id="go_badges_page" style="float: right;"></div>',
+                    'href' => $go_badges_link,
+                )
+            );
+        };
+
+        $go_groups_switch = get_option( 'options_go_groups_toggle' );
+        if ($go_groups_switch) {
+            /*
+            $go_store_link = get_option('options_go_store_store_link');
+            //$go_store_link = get_permalink(get_page_by_path($go_store_link));
+            $go_store_link = get_site_url(null, $go_store_link);
+            $name = get_option('options_go_store_name');
+*/
+            $go_groups_link = go_get_link_from_option('options_go_groups_name_plural', true);
+            $wp_admin_bar->add_node(
+                array(
+                    'id' => 'go_groups',
+                    //'title' => '<i class="fas fa-store ab-icon" aria-hidden="true"></i><div id="go_store_page" style="float: right;">' . $name . '</div>',
+                    'title' => '<i class="fas fa-users ab-icon" aria-hidden="true"></i><div id="go_badges_page" style="float: right;"></div>',
+                    'href' => $go_groups_link,
+                )
+            );
+        };
+        //}
 
         //Move edit, view, and comments
         if ($is_admin && !$is_guest_view) {
@@ -510,10 +664,28 @@ function go_admin_bar_v5() {
 
             $comments = (array)$comments;
             $wp_admin_bar->add_node($comments);
-            $edit = (array)$edit;
-            $wp_admin_bar->add_node($edit);
+
             $view = (array)$view;
             $wp_admin_bar->add_node($view);
+            $customize = (array)$customize;
+            $wp_admin_bar->add_node($customize);
+
+
+            if(!empty($edit) && !empty($task_name)) {
+                $post_id = get_the_ID();
+                $wp_admin_bar->add_node(
+                    array(
+                        //<span class='go_edit_frontend action_icon actiontip' data-tippy-content='Edit this $task_name_singular.' data-post_id='$post_id'>
+                        'id' => 'go_edit_task',
+                        //'title' => '<i class="fas fa-store ab-icon" aria-hidden="true"></i><div id="go_store_page" style="float: right;">' . $name . '</div>',
+                        'title' => "<div class='go_edit_frontend_task' data-post_id='$post_id'><i class='fas fa-edit ab-icon' aria-hidden='true'></i><div id='go_edit_task' style='float: right;'>Edit $task_name</div></div>",
+                        'href' => '',
+                    )
+                );
+            }else{
+                $edit = (array)$edit;
+                $wp_admin_bar->add_node($edit);
+            }
         }
 
     }
@@ -534,7 +706,7 @@ function go_reorder_admin_bar(){
 function go_admin_bar_remove_items() {
     global $wp_admin_bar;
     $wp_admin_bar->remove_menu( 'wp-logo' );
-    $wp_admin_bar->remove_menu('customize');
+
     $wp_admin_bar->remove_menu('new-content');
     $wp_admin_bar->remove_menu('site-name');
     if(!is_super_admin()) {
@@ -553,7 +725,8 @@ function remove_howdy( $wp_admin_bar ) {
 
     if ( 0 != $user_id ) {
         /* Add the "My Account" menu */
-        $avatar = get_avatar( $user_id, 28 );
+        //$avatar = get_avatar( $user_id, 28 );
+        $avatar = go_get_avatar($user_id, false, array(29, 29));
         $user_display_name = go_get_user_display_name($user_id);
         $howdy = sprintf( __('Welcome, %1$s'), $user_display_name );
         $class = empty( $avatar ) ? '' : 'with-avatar';

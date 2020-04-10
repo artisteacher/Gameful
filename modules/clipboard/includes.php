@@ -21,7 +21,9 @@ if ( defined( 'DOING_AJAX' )) {
     add_action( 'wp_ajax_go_clipboard_attendance_dataloader_ajax', 'go_clipboard_attendance_dataloader_ajax' );
     add_action( 'wp_ajax_go_clipboard_activity_stats_ajax', 'go_clipboard_activity_stats_ajax' );
     add_action( 'wp_ajax_go_quests_frontend', 'go_quests_frontend' );
-    add_action( 'wp_ajax_go_quick_edit_task', 'go_quick_edit_task' );
+    add_action( 'wp_ajax_go_trash_post', 'go_trash_post' );
+    add_action( 'wp_ajax_go_quick_edit', 'go_quick_edit' );
+    add_action( 'wp_ajax_go_edit_frontend', 'go_edit_frontend' );
 
     include_once('src/ajax.php');
     include_once('src/public_ajax.php');

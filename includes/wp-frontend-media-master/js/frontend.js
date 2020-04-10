@@ -55,8 +55,8 @@ function go_upload_frontend(div_id, mime_types) {
     file_frame.on('select', function () {
         const attachment = file_frame.state().get('selection').first().toJSON();
         // do something with the file here
-        $('#frontend-button').attr('value', 'Change File');
-        $('#go_stage_error_msg').hide();
+        jQuery('#frontend-button').attr('value', 'Change File');
+        jQuery('#go_stage_error_msg').hide();
         if (attachment.type == 'image') {
             console.log('image');
             var url = '';
@@ -69,10 +69,10 @@ function go_upload_frontend(div_id, mime_types) {
                 }else{
                     url = attachment.url;
                 }
-                $('#go_change_avatar').show();
-                $(val).attr('src', url);
-                $(val).css('max-width', '150px');
-                $(val).closest('a').attr('data-featherlight', url);
+                jQuery('#go_change_avatar').show();
+                jQuery(val).attr('src', url);
+                jQuery(val).css('max-width', '150px');
+                jQuery(val).closest('a').attr('data-featherlight', url);
             }else {
                 if (typeof attachment.sizes.medium !== 'undefined') {
                     // your code here
@@ -81,9 +81,9 @@ function go_upload_frontend(div_id, mime_types) {
                 }else{
                     url = attachment.url;
                 }
-                $(val).attr('src', url);
-                $(val).css('max-width', '300px');
-                $(val).closest('a').attr('data-featherlight', attachment.url);
+                jQuery(val).attr('src', url);
+                jQuery(val).css('max-width', '300px');
+                jQuery(val).closest('a').attr('data-featherlight', attachment.url);
             }
 
         }
@@ -91,8 +91,8 @@ function go_upload_frontend(div_id, mime_types) {
             console.log('other');
             $(val).attr('src', attachment.icon);
         }
-        $(val).attr('value', attachment.id);
-        $(val).next().html(attachment.title);
+        jQuery(val).attr('value', attachment.id);
+        jQuery(val).next().html(attachment.title);
         //$(val).closest('.go_checks_and_buttons').find('.file_title').html(attachment.title);
         //$('#go_result_media_name').html(attachment.title);
 

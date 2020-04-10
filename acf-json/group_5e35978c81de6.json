@@ -85,7 +85,7 @@
                 "Chain",
                 "Pod"
             ],
-            "allow_null": 1,
+            "allow_null": 0,
             "other_choice": 0,
             "default_value": "",
             "layout": "horizontal",
@@ -628,7 +628,7 @@
                                         ]
                                     ],
                                     "wrapper": {
-                                        "width": "",
+                                        "width": "100",
                                         "class": "go_badges",
                                         "id": ""
                                     },
@@ -844,5 +844,5 @@
     "active": 1,
     "description": "",
     "recaptcha": 0,
-    "modified": 1580711413
+    "modified": 1586281416
 }

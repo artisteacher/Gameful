@@ -1,5 +1,6 @@
 jQuery(document).ready(function(){
 
+
     setTimeout(set_height_mce, 1000);
 
     jQuery("input,select").bind("keydown", function (e) {
@@ -45,9 +46,30 @@ jQuery(document).ready(function(){
     });
 
 
+    jQuery('#_customize-input-go_reset_map').click(function () {
+        console.log('go_reset_map');
+        jQuery('#sub-accordion-section-go_map_controls_section .wp-picker-default').click();
+        //jQuery('#go_map_font_size_control').val('15').trigger('change');
+    });
+
+
+//variables to set the acf fields based on query strings
+    /*
+    const urlParams = new URLSearchParams(window.location.search);
+    const chain_id = urlParams.get('chain_id');
+    const chain_name = urlParams.get('chain_name');
+    jQuery('#acf-field_5a960f458bf8c-field_5ab197179d24a-field_5ab197699d24b').prop("checked", 'true').trigger('change').find('.acf-switch').addClass('-on').removeClass('-off');
+    //jQuery('.tax_field_5a960f468bf8e').val(myParam).trigger('change.select2');
+
+    jQuery('.tax_field_5a960f468bf8e').select2("trigger", "select", {
+        data: { id: chain_id, text: chain_name }
+    });
+    */
 
 
 });
+
+
 
 //  This collapses acf repeater fields if go_acf_header class is applied
 

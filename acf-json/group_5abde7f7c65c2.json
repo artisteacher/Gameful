@@ -4,7 +4,7 @@
     "fields": [
         {
             "key": "field_5abde7f92fc75",
-            "label": "Item Location",
+            "label": "Location",
             "name": "",
             "type": "accordion",
             "instructions": "",
@@ -20,9 +20,9 @@
             "endpoint": 0
         },
         {
-            "key": "field_5abde7f92fd6a",
-            "label": "Location",
-            "name": "go-store-location",
+            "key": "field_5abde7f964b9f",
+            "label": "Place in Section",
+            "name": "go-store-location_store-sec",
             "type": "group",
             "instructions": "",
             "required": 0,
@@ -32,104 +32,87 @@
                 "class": "",
                 "id": ""
             },
-            "layout": "table",
+            "layout": "block",
             "sub_fields": [
                 {
-                    "key": "field_5abde7f964b9f",
-                    "label": "Store Section",
-                    "name": "store-sec",
-                    "type": "group",
+                    "key": "field_5abde7f980bdf",
+                    "label": "toggle",
+                    "name": "toggle",
+                    "type": "true_false",
                     "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
+                        "class": "acf-hide-label",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 0,
+                    "ui": 1,
+                    "ui_on_text": "",
+                    "ui_off_text": ""
+                },
+                {
+                    "key": "field_5abde7f980c65",
+                    "label": "Section",
+                    "name": "loc",
+                    "type": "level2_taxonomy",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5abde7f980bdf",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "select2_child acf-hide-label",
+                        "id": ""
+                    },
+                    "taxonomy": "store_types",
+                    "field_type": "select",
+                    "order_field": "field_5abde7f980cc5"
+                },
+                {
+                    "key": "field_5abde7f980cc5",
+                    "label": "Order",
+                    "name": "order",
+                    "type": "order_posts",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5abde7f980bdf",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
                         "class": "",
                         "id": ""
                     },
-                    "layout": "block",
-                    "sub_fields": [
-                        {
-                            "key": "field_5abde7f980bdf",
-                            "label": "toggle",
-                            "name": "toggle",
-                            "type": "true_false",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "acf-hide-label",
-                                "id": ""
-                            },
-                            "message": "",
-                            "default_value": 0,
-                            "ui": 1,
-                            "ui_on_text": "",
-                            "ui_off_text": ""
-                        },
-                        {
-                            "key": "field_5abde7f980c65",
-                            "label": "Section",
-                            "name": "loc",
-                            "type": "level2_taxonomy",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": [
-                                [
-                                    {
-                                        "field": "field_5abde7f980bdf",
-                                        "operator": "==",
-                                        "value": "1"
-                                    }
-                                ]
-                            ],
-                            "wrapper": {
-                                "width": "",
-                                "class": "select2_child acf-hide-label",
-                                "id": ""
-                            },
-                            "taxonomy": "store_types",
-                            "field_type": "select",
-                            "order_field": "field_5abde7f980cc5"
-                        },
-                        {
-                            "key": "field_5abde7f980cc5",
-                            "label": "Order",
-                            "name": "order",
-                            "type": "order_posts",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": [
-                                [
-                                    {
-                                        "field": "field_5abde7f980bdf",
-                                        "operator": "==",
-                                        "value": "1"
-                                    }
-                                ]
-                            ],
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "sort_term": "go-store-location_store-sec_loc",
-                            "taxonomy_field": "field_5abde7f980c65",
-                            "order_key_name": "go-store-location_store_item",
-                            "return_format": "id",
-                            "post_type": [],
-                            "taxonomy": [],
-                            "min": 0,
-                            "max": 0,
-                            "filters": [
-                                "search",
-                                "post_type",
-                                "taxonomy"
-                            ],
-                            "elements": []
-                        }
-                    ]
+                    "sort_term": "go-store-location_store-sec_loc",
+                    "taxonomy_field": "field_5abde7f980c65",
+                    "order_key_name": "go-store-location_store_item",
+                    "return_format": "id",
+                    "post_type": [],
+                    "taxonomy": [],
+                    "min": 0,
+                    "max": 0,
+                    "filters": [
+                        "search",
+                        "post_type",
+                        "taxonomy"
+                    ],
+                    "elements": []
                 }
             ]
         },
@@ -340,7 +323,7 @@
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
-                "width": "5",
+                "width": "",
                 "class": "",
                 "id": ""
             },
@@ -1313,5 +1296,5 @@
     "active": 1,
     "description": "",
     "recaptcha": 0,
-    "modified": 1579390914
+    "modified": 1586277383
 }

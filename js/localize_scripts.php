@@ -19,7 +19,7 @@ function go_localize_all_pages(){
     if($go_lightbox_switch === false){
         $go_lightbox_switch = 1;
     }
-    $go_video_unit = get_option ('go_video_width_type_control');$go_video_unit = get_option ('go_video_width_type_control');
+    $go_video_unit = get_option ('go_video_width_type_control');
     if ($go_video_unit == '%'){
         $percent = get_option( 'go_video_width_percent_control' );
         if($percent === false){
@@ -44,7 +44,9 @@ function go_localize_all_pages(){
             'nonces' => array(
                 'go_clipboard_activity' => wp_create_nonce( 'go_clipboard_activity' ),
                 'go_clipboard_save_filters'     => wp_create_nonce( 'go_clipboard_save_filters' ),
-                'go_clipboard_activity_stats_ajax'     => wp_create_nonce( 'go_clipboard_activity_stats_ajax' )
+                'go_clipboard_activity_stats_ajax'     => wp_create_nonce( 'go_clipboard_activity_stats_ajax' ),
+                'go_clipboard_store'     => wp_create_nonce( 'go_clipboard_store' ),
+                //'go_clipboard_store_stats_ajax'     => wp_create_nonce( 'go_clipboard_store_stats_ajax' ),
             ),
         )
     );
@@ -86,12 +88,20 @@ function go_localize_all_pages(){
                 'go_check_messages_ajax'        => wp_create_nonce('go_check_messages_ajax'),
                 'go_attendance_check_ajax'      => wp_create_nonce('go_attendance_check_ajax'),
                 'go_loadmore_reader'            => wp_create_nonce('go_loadmore_reader'),
+                'go_update_map_order'         => wp_create_nonce('go_update_map_order'),
                 'go_update_chain_order'         => wp_create_nonce('go_update_chain_order'),
+                'go_update_badge_group_sort'         => wp_create_nonce('go_update_badge_group_sort'),
+                //'go_update_group_order'         => wp_create_nonce('go_update_group_order'),
                 'go_update_task_order'          => wp_create_nonce('go_update_task_order'),
-                'go_quick_edit_task'            => wp_create_nonce('go_quick_edit_task'),
+                'go_quick_edit'            => wp_create_nonce('go_quick_edit'),
+                'go_edit_frontend'            => wp_create_nonce('go_edit_frontend'),
+                'go_update_badges_page'            => wp_create_nonce('go_update_badges_page'),
             ),
             'go_lightbox_switch'            => $go_lightbox_switch,
             'go_fitvids_maxwidth'           => $go_fitvids_maxwidth
         )
     );
 }
+
+
+

@@ -382,10 +382,11 @@ add_filter( 'manage_user_go_groups_custom_column', 'go_badges_add_field_column_c
     //add_filter( 'views_edit-tasks', 'go_add_from_template_edit_screen' ); // tasks is my custom post type
 //});
 # echo the tabs
+/*
 function go_add_from_template_edit_screen() {
     go_new_task_from_template(false);
         //echo '<span class="go_add_quest_from_template"><a href="javascript:void(0);">Add ' . get_option('options_go_tasks_name_singular') . ' from Template</a></span>';
-}
+}*/
 
 
 

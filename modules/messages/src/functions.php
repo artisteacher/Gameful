@@ -169,7 +169,7 @@ function go_check_messages(){
                     $type='info';
                 }
 
-                if(!empty($message) && !empty($loot)) {
+                if(!empty($message) || !empty($loot)) {
 
                     $message = "<div>$message</div><div>$loot</div>";
 
@@ -713,6 +713,10 @@ function go_send_message($skip_ajax = false, $title = '', $sent_message = '', $t
         if($is_note != "true") {
             update_user_option($user_id, 'go_new_messages', true);
         }
+    }
+
+    if(!$skip_ajax) {
+    die();
     }
 
 }

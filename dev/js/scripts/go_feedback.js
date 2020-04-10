@@ -33,7 +33,7 @@ function go_activate_reader(is_single_stage = false){
 
     go_load_daterangepicker('go_activate_reader');
     //set the datepicker to clear
-    jQuery('#go_datepicker_container').html('<div id="go_datepicker_clipboard"><i class="fas fa-calendar" style="float: left;"></i><span id="go_datepicker"></span> <i id="go_reset_datepicker" class=""select2-selection__clear><b> × </b></i><i class="fa fa-caret-down"></i></div>');
+    jQuery('#go_datepicker_container').html('<div id="go_datepicker_clipboard"><i class="fas fa-calendar" style="float: left; line-height: 1.5em;"></i><span id="go_datepicker"></span> <i id="go_reset_datepicker" class=""select2-selection__clear><b> × </b></i><i class="fa fa-caret-down"></i></div>');
     //jQuery('#go_datepicker_clipboard span').html('');
     jQuery('#go_reset_datepicker').hide();
 
@@ -170,7 +170,6 @@ function go_reader_update(target, is_initial_single_stage = false) {
                     jQuery('#go_posts_wrapper').html(res).promise().done(function () {
                         //your callback logic / code here
                         jQuery('#go_posts_wrapper').show();
-                        go_blog_new_posts();
 
                         if(type === "quest_stage"){
                             jQuery('.go_apply_filters').off().one("click", function () {
@@ -183,9 +182,14 @@ function go_reader_update(target, is_initial_single_stage = false) {
                             });
                         }
 
+
+
                         jQuery([document.documentElement, document.body]).animate({
                             scrollTop: ((jQuery("#go_posts_wrapper").offset().top) -150)
                         }, 500);
+
+                        go_blog_new_posts();
+
                     });
                 }
             }
@@ -682,8 +686,8 @@ function go_send_feedback(target) {
                     table: '',
                     form: '',
                 };
-            }
-           ;console.log(response.json_status);
+            };
+            //console.log(response.json_status);
             if ( 302 === Number.parseInt( response.json_status ) ) {
                 console.log (302);
                 jQuery('.go_blog_post_wrapper_' + post_id).find('.fa-eye-slash').hide();
@@ -691,8 +695,9 @@ function go_send_feedback(target) {
 
                 let table = response.table;
                 let form = response.form;
-                console.log(toggle_percent);
-                if (radio == 'percent') {
+                let icon = response.icon;
+                console.log(icon);
+                /*if (radio == 'percent') {
                     if (toggle_percent === 1) {
                         let mypercent = "<strong>+" + percent + "%</strong>";
                         jQuery(target).closest('.go_blog_post_wrapper').find('.go_status_percent').addClass('up').removeClass('down').html(mypercent).show();
@@ -701,8 +706,12 @@ function go_send_feedback(target) {
 
                         jQuery(target).closest('.go_blog_post_wrapper').find('.go_status_percent').addClass('down').removeClass('up').html(mypercent).show();
                     }
-                }
+                }*/
                 //jQuery(target).closest('.go_blog_post_wrapper').find('.go_status_percent').html(percent);
+                //jQuery(target).closest('.feedback_accordion').html(table);
+
+                var wrapper = jQuery(target).closest('.go_blog_post_wrapper');
+                jQuery(target).closest('.go_blog_post_wrapper').find('.feedback_icon').html(icon);
                 if (jQuery(target).closest('.feedback_accordion').find('.go_feedback_table_container').length) {
                     jQuery(target).closest('.feedback_accordion').find('.go_feedback_table_container').html(table);
                 }
@@ -710,9 +719,17 @@ function go_send_feedback(target) {
                     var newDiv = '<h3>Feedback</h3><div class="go_blog_feedback"><div class="go_feedback_table_container"></div></div>'
                     //var newDiv = "<div><h3>Q4 New Question</h3><div>New Content</div></div>";
                     jQuery(target).closest('.feedback_accordion').prepend(newDiv)
-                    jQuery('.feedback_accordion').accordion("refresh");
                     jQuery(target).closest('.feedback_accordion').find('.go_feedback_table_container').html(table);
                 }
+
+                jQuery(target).closest('.feedback_accordion').find('.go_feedback_form_container').html(form);
+                jQuery('.feedback_accordion').accordion("refresh");
+                go_blog_new_posts();
+
+                jQuery('html, body').animate({
+                    scrollTop: jQuery(wrapper).offset().top-100
+                }, 2000);
+
                 /*jQuery(target).closest('.go_feedback_form_container').html(form).find('.summernote').summernote({
                     toolbar: [
                         // [groupName, [list of button]]
@@ -725,6 +742,8 @@ function go_send_feedback(target) {
                         ['insert', ['link']],
                     ]
                 });*/
+
+                /*
 
                 var fullId = 'go_feedback_text_area_id_'+post_id;
                 var plugins = "charmap,hr,lists,media,paste,tabfocus,textcolor,fullscreen,wordpress,wpeditimage,wpgallery,wplink,wpdialogs,wpview,wordcount,go_shortcode_button,go_admin_comment";
@@ -781,15 +800,16 @@ function go_send_feedback(target) {
                 });
 
                 // this is needed for the editor to initiate
-                tinyMCE.execCommand('mceAddEditor', false, fullId);
+                tinyMCE.execCommand('mceAddEditor', false, fullId);*/
 
-                jQuery(target).closest('.go_feedback_form').find('.go_title_input').val('');
+               // jQuery(target).closest('.go_feedback_form').find('.go_feedback_canned').val(jQuery(".go_feedback_canned option:first").val());
+                //jQuery(target).closest('.go_feedback_form').find('.go_title_input').val('');
                 //jQuery(target).closest('.go_feedback_form').find('.go_message_input').html($message);
 
-                tinyMCE.get('go_feedback_text_area_id_'+post_id).setContent('');
+               // tinyMCE.get('go_feedback_text_area_id_'+post_id).setContent('');
 
 
-                go_blog_new_posts();
+               // go_blog_new_posts();
 
 
             }

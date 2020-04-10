@@ -44,6 +44,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+<iframe src="https://docs.google.com/presentation/d/e/2PACX-1vT3CBcDQA4Huj8EalgAXx0MzVThWwARsPSEbnqCD9aStkxikS6hsETNnJyYOnXg2Jcz1ObKrbar07kE/embed?start=false&loop=false&delayms=3000"
+frameborder="0" width="960" height="569"
+allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
 */
 add_action( 'init', 'go_frame_it_up' );
 add_filter( 'tiny_mce_before_init', 'go_frame_it_up_tinymce' );
@@ -59,15 +62,18 @@ function go_frame_it_up( $init_array ){
         'height' => true,
         'allowtransparency' => true,
         'frameborder' => true,
+        'allowfullscreen' => true,
+        'mozallowfullscreen' => true,
+        'webkitallowfullscreen' => true,
     );
 }
 
 
 function go_frame_it_up_tinymce( $init_array ){
     if( isset( $init_array['extended_valid_elements'] ) )
-        $init_array['extended_valid_elements'] .= ',iframe[id|name|class|style|src|width|height|allowtransparency|frameborder]';
+        $init_array['extended_valid_elements'] .= ',iframe[id|name|class|style|src|width|height|allowtransparency|frameborder|allowfullscreen|webkitallowfullscreen|mozallowfullscreen]';
     else
-        $init_array['extended_valid_elements'] = 'iframe[id|name|class|style|src|width|height|allowtransparency|frameborder]';
+        $init_array['extended_valid_elements'] = 'iframe[id|name|class|style|src|width|height|allowtransparency|frameborder|allowfullscreen|webkitallowfullscreen|mozallowfullscreen]';
     return $init_array;
 }
 

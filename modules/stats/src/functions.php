@@ -6,7 +6,294 @@
  * Time: 19:30
  */
 
+/* Template Include */
+add_filter('template_include', 'go_badges_template_include', 1, 1);
+function go_badges_template_include($template)
+{
+    if(is_gameful() && is_main_site()){
+        $hide = true;
+    }
+    else{
+        $hide = false;
+    }
+    if (!$hide) {
+        global $wp_query; //Load $wp_query object
+        //$store_name = get_option('options_go_store_store_link');
 
+        $page_value = (isset($wp_query->query['pagename']) ? $wp_query->query['pagename'] : false); //Check for query var "blah"
+        $badges_page = "edit_" . lcfirst(get_option('options_go_badges_name_plural'));
+        $groups_page = "edit_" . lcfirst(get_option('options_go_groups_name_plural'));
+        if (in_array($page_value, array($badges_page, $groups_page))) { //Verify "blah" exists and value is "true".
+            return plugin_dir_path(__FILE__) . 'templates/badges_template.php'; //Load your template or file
+        }
+    }
+    return $template; //Load normal template when $page_value != "true" as a fallback
+}
+
+
+
+/**
+ * @param $skip_ajax_checks
+ * @param $user_id
+ *
+ */
+function go_stats_badges_list($skip_ajax_checks = false, $user_id = null) {
+    if(!$skip_ajax_checks) {
+        if (!is_user_logged_in()) {
+            echo "login";
+            die();
+        }
+
+        //check_ajax_referer( 'go_stats_badges_list_' );
+        if (!wp_verify_nonce($_REQUEST['_ajax_nonce'], 'go_stats_badges_list')) {
+            echo "refresh";
+            die();
+        }
+    }
+
+    if($user_id === 'edit'){
+        $user_id = null;
+        $show_edit_button = false;
+    }else {
+        $user_id = (isset($_POST['user_id']) ? (int)$_POST['user_id'] : null);
+        if (empty($user_id)) {
+            $user_id = get_current_user_id();
+        }
+        $show_edit_button = true;
+    }
+
+
+
+    /* Get all task chains with no parents--these are the badge categories.  */
+    $taxonomy = 'go_badges';
+    //$badges_name = get_option('options_go_badges_name_plural');
+
+    //$rows = go_get_terms_ordered($taxonomy, '0');
+    $rows = go_get_parent_term_ids($taxonomy);
+    echo"<div id='go_badges_list' class='go_datatables'> ";
+
+    if(go_user_is_admin() && $show_edit_button){
+        echo "<span class='go_map_action_icons ' style='right: 40px; z-index: 100; font-size: 1.3em;'>";
+
+        echo "<div class='my_tooltip'><div class='go_actions_wrapper_flex'>";
+        echo "<span class='tools task_tools'>";
+
+        $link = go_get_link_from_option('options_go_badges_name_plural', true);
+        echo "<span class='go_edit_frontend_badge action_icon'><a href='$link'><i class='far fa-edit'></i></a></span>";
+
+
+
+        echo "</span></div></div></span>";
+    }
+
+    // For each Store Category with no parent.
+    $chainParentNum = 0;
+    echo '<div id="go_stats_badges">';
+    //for each row
+    foreach ( $rows as $row ) {
+        $chainParentNum++;
+        $row_id = $row->term_id;//id of the row
+
+        //$badges = go_get_terms_ordered($taxonomy, $row_id);
+        $badges = go_get_child_term_ids($row_id, $taxonomy);
+
+        if(empty($badges)){
+            // continue;
+        }
+
+        $name = '';
+        $data = go_term_data($row_id);
+        $custom_fields = $data[1];
+        $hidden = (isset($custom_fields['go_hidden'][0]) ?  $custom_fields['go_hidden'][0] : false);
+        if($hidden && ($user_id === null)){
+            $name .= "Hidden: ";
+        }
+
+        $name .= $data[0];
+
+        echo 	"<div class='parent_cat' data-term_id='$row_id' >
+                        <div id='row_$chainParentNum' class='badges_row_container go_show_actions' style='display: inline-block;'>
+						    <h3>$name</h3>";
+
+        go_add_action_icons($row_id, $taxonomy, true);
+        echo "	</div>
+					    <div class='badges_row badges_row_$row_id' data-taxonomy='go_badges' data-term_id='$row_id'>
+						";//row title and row container
+
+
+
+        /*Loop for each chain.  Prints the chain name then looks up children (quests). */
+        $badge_blocks = '';
+
+        foreach ( $badges as $badge) {
+            $badge_id = $badge;
+
+            go_print_single_badge( $badge_id, 'badge', true, $user_id , 'stats');
+        }
+        echo "</div></div>";
+    }
+    echo "</div></div>";
+    if(!$skip_ajax_checks) {
+        die();
+    }
+}
+
+
+/**
+ *
+ * @param $skip_ajax_checks
+ * @param $user_id
+ */
+function go_stats_groups_list($skip_ajax_checks = false, $user_id = null) {
+    if(!$skip_ajax_checks) {
+        if ( !is_user_logged_in() ) {
+            echo "login";
+            die();
+        }
+
+        //check_ajax_referer( 'go_stats_groups_list_' );
+        if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_groups_list' ) ) {
+            echo "refresh";
+            die( );
+        }
+    }
+
+
+    if($user_id === 'edit'){
+        $user_id = null;
+        $show_edit_button = false;
+    }else {
+        $user_id = (isset($_POST['user_id']) ? (int)$_POST['user_id'] : null);
+        if (empty($user_id)) {
+            $user_id = get_current_user_id();
+        }
+        $show_edit_button = true;
+    }
+
+
+    /* Get all task chains with no parents--these are the sections of the page.  */
+    $taxonomy = 'user_go_groups';
+    //$rows = go_get_terms_ordered($taxonomy, '0');
+    $rows = go_get_parent_term_ids($taxonomy);
+
+    echo"<div id='go_groups_list' class='go_datatables' >";
+
+    if(go_user_is_admin() && $show_edit_button){
+        echo "<span class='go_map_action_icons ' style='right: 40px; z-index: 100; font-size: 1.3em;'>";
+
+        echo "<div class='my_tooltip'><div class='go_actions_wrapper_flex'>";
+        echo "<span class='tools task_tools'>";
+
+        $link = go_get_link_from_option('options_go_groups_name_plural', true);
+        echo "<span class='go_edit_frontend_badge action_icon'><a href='$link'><i class='far fa-edit'></i></a></span>";
+
+
+
+        echo "</span></div></div></span>";
+    }
+
+
+
+    /* For each Store Category with no parent, get all the children.  These are the store rows.*/
+    $chainParentNum = 0 ;
+    echo '<div id="go_groups">';
+
+    foreach ( $rows as $row ) {
+        $chainParentNum++;
+        $row_id = $row->term_id;//id of the row
+
+        //$groups = go_get_terms_ordered($taxonomy, $row_id);
+        $groups = go_get_child_term_ids($row_id, $taxonomy);
+        if(empty($groups)){
+           // continue;
+        }
+
+        $name = '';
+        $data = go_term_data($row_id);
+        $custom_fields = $data[1];
+        $hidden = (isset($custom_fields['go_hidden'][0]) ?  $custom_fields['go_hidden'][0] : false);
+        if($hidden && ($user_id === null)){
+            $name .= "Hidden: ";
+        }
+
+        $name .= $data[0];
+
+        echo 	"<div class='parent_cat' data-term_id='$row_id'>
+                        <div id='row_$chainParentNum' class='badges_row_container go_show_actions' style='display: inline-block;'>
+						    <h3>$name</h3>";
+
+        go_add_action_icons($row_id, $taxonomy, true);
+
+        echo "</div>
+					    <div class='badges_row badges_row_$row_id' data-taxonomy='user_go_groups' data-term_id='$row_id'>
+						";//row title and row container
+
+        /*Loop for each chain.  Prints the chain name then looks up children. */
+        foreach ( $groups as $group) {
+            $id = $group;
+            go_print_single_badge( $id, 'group', $output = true, $user_id, 'stats' );
+        }
+        echo "</div></div>";
+    }
+    echo "</div></div>";
+    if(!$skip_ajax_checks) {
+        die();
+    }
+}
+
+function go_add_action_icons($term_id, $taxonomy, $parent){
+    if($taxonomy === 'go_badges') {
+        $name_plural = 'badges';
+    }else{
+        $name_plural = 'groups';
+    }
+    $term_data = go_term_data($term_id);
+    $term_name = $term_data[0];
+    $custom_fields = $term_data[1];
+    $is_hidden = (isset($custom_fields['go_hidden'][0]) ?  $custom_fields['go_hidden'][0] : null);
+
+    echo "<div class='actions_tooltip' style='display: none;'>";
+
+
+    echo "<div class='my_tooltip'><div class='go_actions_wrapper_flex'>";
+    echo "<span class='tools task_tools'>";
+    if(is_gameful()){
+        do_action('gop_add_importer_icon', $term_id, 'term', null, false);
+    }
+    if(!$parent) {
+        echo "<span class='go_edit_frontend action_icon actiontip' data-tippy-content='Edit this section.' data-taxonomy='$taxonomy' data-term_id='$term_id'><a><i class='far fa-edit'></i></a></span>";
+    }else{
+        echo "<span class='go_edit_frontend action_icon actiontip' data-new_child_term='$term_id' data-term_name='$term_name' data-tippy-content='Add a new item.' data-taxonomy='$taxonomy' ><a><i class='far fa-plus-circle'></i></a></span>";
+
+    }
+    echo "<span class='go_quick_edit_show action_icon actiontip' data-tippy-content='Quick edit.' data-taxonomy='$taxonomy' data-term_id='$term_id'><a><i class='far fa-bolt'></i></a></span>";
+
+    echo "<span class='go_trash_post action_icon actiontip' data-tippy-content='Trash this section and all the $name_plural in it.' data-taxonomy='$taxonomy' data-term_id='{$term_id}' data-title='{$term_name}'><a><i class='far fa-trash'></i></a></span>";
+
+    echo "</span>";
+
+    ?>
+    <span class="quickedit_form_container" style="display: none;">
+                    <span class="quickedit_form" data-term_id='<?php echo $term_id; ?>'>
+                        <div style="display: block;">
+
+                            <input type="text" class="term_title" name="term_title" size="30" value="<?php echo htmlspecialchars($term_name); ?>">
+                                    <span class="checkbox" style="padding: 10px;">
+                                    <label for="hidden">  Hidden </label>
+                                    <input type="checkbox" class="hidden_checkbox" name="hidden"
+                                        <?php if ($is_hidden) {
+                                            echo 'checked';
+                                        } ?>>
+                                    </span>
+
+                        </div>
+                    </span>
+                </span>
+
+    <?php
+
+    echo "</div></div></div>";
+}
 
 function go_stats_header($user_id, $show_stats_link = true, $show_internal_links = true, $show_blog_link = true, $is_blog = false, $show_loot = false ){
 
@@ -29,7 +316,8 @@ function go_stats_header($user_id, $show_stats_link = true, $show_internal_links
     //$user_avatar_id = get_user_option( 'go_avatar', $user_id );
     //$user_avatar = wp_get_attachment_image($user_avatar_id);
 
-    $user_avatar = get_avatar($user_id);
+    //$user_avatar = get_avatar($user_id);
+    $user_avatar = go_get_avatar($user_id, false, array(96, 96));
 
 /////////////////////////
 ///

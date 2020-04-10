@@ -2,29 +2,46 @@
 .mce-notification {
   display: none !important; }
 
+.go_settings {
+  cursor: pointer;
+  padding-left: 0px !important;
+  margin-right: 0px !important; }
+
+#noty_layout__topCenter {
+  top: 119px !important; }
+
 /********************
 *	Map and Store actions
 ********************/
 .go_actions_wrapper_flex a {
   color: #1a1a1a !important; }
 
-.go_actions_wrapper_flex {
-  display: flex;
-  justify-content: flex-end; }
+.go_actions_wrapper_flex .tools {
+  display: flex !important;
+  justify-content: flex-end !important;
+  flex-wrap: nowrap !important; }
 
 .go_actions_wrapper {
-  display: inline; }
+  display: inline-block !important; }
 
 .go_actions_wrapper_flex,
 .go_actions_wrapper {
   font-size: 18px !important;
-  padding: 5px 10px !important; }
-  .go_actions_wrapper_flex > span span,
-  .go_actions_wrapper > span span {
-    padding: 0 10px !important; }
+  margin: 5px 10px !important; }
+  .go_actions_wrapper_flex .action_icon,
+  .go_actions_wrapper .action_icon {
+    margin: 0 5px !important; }
   .go_actions_wrapper_flex a,
   .go_actions_wrapper a {
-    display: inline !important; }
+    display: inline !important;
+    padding: 0 5px !important; }
+  .go_actions_wrapper_flex .action_icon a,
+  .go_actions_wrapper .action_icon a {
+    cursor: pointer;
+    padding: 0 3px; }
+  .go_actions_wrapper_flex .action_icon a:hover,
+  .go_actions_wrapper .action_icon a:hover {
+    color: #0b457f !important; }
 
 .fa-clone {
   cursor: pointer; }
@@ -130,6 +147,7 @@ body.wp-admin {
 #go_user_bar {
   position: fixed;
   top: 0px;
+  left: 0px;
   width: 100%;
   z-index: 100000;
   font-family: sans-serif;
@@ -245,7 +263,12 @@ body.wp-admin {
     margin-top: 0px; } }
 
 .go_loader_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 250px;
   width: 100%;
+  padding: 40px 0;
   text-align: center;
   margin: 60px 0px; }
 
@@ -332,42 +355,8 @@ input[type="checkbox"]:checked + label span.checkbox::after {
 	margin-bottom: 10px;
 }
 */
-#go_datepicker_container {
-  text-align: right; }
-
-.daterangepicker {
-  z-index: 100003 !important; }
-  .daterangepicker td, .daterangepicker th {
-    padding: 0; }
-
-#go_user_filters {
-  width: 100%;
-  padding-bottom: 20px; }
-
-#go_user_filters_1 {
-  text-align: right; }
-
-#go_user_filters_1 .user_filter {
-  min-width: 150px;
-  padding-left: 10px; }
-  #go_user_filters_1 .user_filter label {
-    padding: 0 10px; }
-
-#go_user_filters_1 label {
-  float: left; }
-
-#go_action_filters {
-  flex-wrap: wrap;
-  padding: 20px 40px 20px 20px; }
-  #go_action_filters div {
-    padding: 0 15px;
-    align-items: center; }
-
-.status_filters, .order_filter {
-  padding: 20px 40px 20px 20px; }
-
-.order_filter {
-  float: left; }
+.select2-results__options {
+  max-height: 400px !important; }
 
 #go_leaderboard_filters {
   display: flex;
@@ -375,9 +364,64 @@ input[type="checkbox"]:checked + label span.checkbox::after {
   border: 1px solid black;
   border-radius: 3px;
   padding: 15px;
-  background-color: white; }
-  #go_leaderboard_filters > span {
-    margin-right: 20px; }
+  background-color: white;
+  justify-content: space-between; }
+  #go_leaderboard_filters .select2-selection__rendered {
+    line-height: 24px !important; }
+  #go_leaderboard_filters .select2-container .select2-selection--single {
+    height: 35px !important; }
+  #go_leaderboard_filters .select2-selection__arrow {
+    height: 34px !important; }
+  #go_leaderboard_filters .select2-selection--multiple {
+    height: 38px !important; }
+  #go_leaderboard_filters #go_leaderboard_update_button {
+    padding: 20px;
+    text-align: right; }
+  #go_leaderboard_filters .filter_row {
+    margin: 10px 0px;
+    width: 100%;
+    text-align: right;
+    display: flex;
+    align-items: stretch; }
+    #go_leaderboard_filters .filter_row .filter {
+      flex-grow: 1;
+      display: flex;
+      align-items: center; }
+    #go_leaderboard_filters .filter_row .sections_filter {
+      flex-grow: .5; }
+  #go_leaderboard_filters h3 {
+    text-align: left; }
+  #go_leaderboard_filters .select2,
+  #go_leaderboard_filters #go_datepicker_container {
+    flex-grow: 1;
+    margin: 0 15px 0 5px; }
+  #go_leaderboard_filters #go_datepicker_container {
+    text-align: right;
+    background: #fff;
+    cursor: pointer;
+    padding: 0px;
+    border: 1px solid #aaa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    height: 35px; }
+    #go_leaderboard_filters #go_datepicker_container #go_datepicker_clipboard {
+      width: 100%;
+      padding: 0 10px; }
+    #go_leaderboard_filters #go_datepicker_container span {
+      line-height: 1em; }
+  #go_leaderboard_filters .daterangepicker {
+    z-index: 100003 !important; }
+    #go_leaderboard_filters .daterangepicker td, #go_leaderboard_filters .daterangepicker th {
+      padding: 0; }
+  #go_leaderboard_filters #go_user_filters .user_filter {
+    min-width: 150px; }
+  #go_leaderboard_filters .status_row .status_filters label, #go_leaderboard_filters .status_row .order_filter label {
+    padding: 0 15px 0 5px; }
+  #go_leaderboard_filters .status_row .order_filter {
+    justify-content: flex-end;
+    margin-right: 30px; }
 
 /**VIDEOS EMBEDED WITH MEDIA MANAGER
 https://cfxdesign.com/how-to-make-the-wordpress-video-shortcode-responsive/
@@ -435,6 +479,9 @@ video.wp-video-shortcode {
 .featherlight {
   z-index: 100002 !important;
   background: rgba(0, 0, 0, 0.8) !important; }
+
+.daterangepicker {
+  z-index: 100003 !important; }
 
 .featherlight.help {
   z-index: 999999 !important; }
@@ -682,7 +729,8 @@ body:not(.wp-customizer) .media-modal {
   padding: 10px;
   margin: 10px 0;
   background-color: #f5b3bd;
-  min-width: 200px; }
+  min-width: 200px;
+  color: black; }
 
 .go_lock .go_error_red {
   color: unset; }
@@ -810,7 +858,8 @@ input[type='text'].go_error_red {
 
 .progress-bar-border {
   height: 16px;
-  border: thin white solid;
+  border-color: #FFFFFF;
+  border-width: 1px 0px;
   position: relative;
   background-color: black;
   font-size: 14px;
@@ -2478,13 +2527,15 @@ END TOOLTIP
   flex-grow: 1; }
   #go_stats_badges .fig_wrap,
   #go_groups .fig_wrap {
-    height: 100px; }
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center; }
 
 .go_badge_wrap {
   display: inline-block;
   float: left;
-  margin: 15px;
-  height: 150px; }
+  margin: 5px; }
 
 .go_group_wrap {
   display: inline-block;
@@ -2492,10 +2543,10 @@ END TOOLTIP
   margin-right: 25px;
   width: 100%; }
 
-#stats_badges .go_badge_container,
-#stats_badges .go_group_container,
-#stats_groups .go_badge_container,
-#stats_groups .go_group_container {
+.stats_badges .go_badge_container,
+.stats_badges .go_group_container,
+.stats_groups .go_badge_container,
+.stats_groups .go_group_container {
   width: 200px;
   max-width: 200px;
   display: flex;
@@ -2523,8 +2574,9 @@ END TOOLTIP
 #go_badges_list .parent_cat,
 #go_groups_list .parent_cat {
   border: solid 1px;
-  padding: 15px;
-  margin: 15px; }
+  border-radius: 7px;
+  padding: 5px;
+  margin: 5px; }
 
 /** Leaderboard Styles **/
 #go_leaderboard_flex {
@@ -2552,289 +2604,240 @@ END TOOLTIP
 .go_is_user td {
   background-color: #fdb7b7 !important; }
 
-.featherlight.store .featherlight-content {
-  min-width: 70%; }
-
+/*
 #store {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  text-align: center;
-  clear: both; }
-  #store ul {
-    margin: 0px !important; }
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center ;
+    clear: both;
+
+    ul {
+        margin: 0px !important;
+    }
+}
 
 #go_store_container h1 {
-  text-align: center !important;
-  padding: unset; }
+    text-align: center !important;
+    padding: unset;
 
-/*
-store categories styles
- */
-.store_row_container {
-  margin: 10px;
-  background-color: white;
-  background-color: #f8f8f8; }
-  .store_row_container h2 {
-    margin: 10px 0  0 10px; }
 
+}
+
+
+
+
+
+//store categories styles
+
+//.store_row_container {
+    margin: 15px;
+    background-color: white;
+
+    background-color: #f8f8f8;
+
+
+    h2 {
+        margin: 10px 0  0 10px;
+    }
+}
 .store_row {
-  display: flex;
-  flex-wrap: wrap; }
-
+display: flex;
+flex-wrap: wrap;
+    }
+    
 .store_cats {
-  width: 250px;
-  padding: 10px 30px;
-  margin: 10px;
-  background-color: white; }
+	width: 250px;
+    //float: left;
+    padding: 10px 30px;
+    margin: 10px;
+    background-color: white;
+    }
 
-.store_items li {
-  display: flex;
-  flex-direction: column;
-  margin: 5px 0;
-  align-items: flex-start;
-  border-bottom: 1px solid;
-  border-color: grey;
-  padding-bottom: 5px; }
 
-.go_store_loot_list {
-  display: flex; }
+
+.store_items li{
+    display: flex;
+    flex-direction: column;
+    margin: 5px 0;
+    align-items: flex-start;
+    border-bottom: 1px solid;
+    border-color: grey;
+    padding-bottom: 5px;
+}
+
+.go_store_loot_list{
+    display: flex;
+    justify-content: center;
+}
 
 .go_store_loot_list_item {
-  border-radius: 30px;
-  padding: 0 5px;
-  margin: 0 5px; }
+    border-radius: 10px;
+    padding: 0 5px !important;
+    margin: 5px 10px !important;
+}
 
-.go_store_loot_list_cost {
-  background-color: rgba(255, 192, 203, 0.5); }
+.go_store_loot_list_cost{
+    background-color: rgba(255, 192, 203, 0.5);
+}
 
-.go_store_loot_list_reward {
-  background-color: rgba(144, 238, 144, 0.5); }
-
+.go_store_loot_list_reward{
+    background-color: rgba(144 ,238 ,144, 0.5);
+}
+*/
 /*
 store lightbox styles
  */
-.go_store_container {
-  display: flex;
-  padding: 10px;
-  height: 100%; }
-
-#go_cost {
-  background-color: pink;
-  margin: 10px; }
-
-#go_reward {
-  background-color: lightgreen;
-  margin: 10px; }
-
-.go_store_loot_left {
-  position: relative;
-  left: -25px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center; }
-
-.go_round_button_container {
-  width: 30px; }
-
-.go_store_round_button {
-  width: 30px;
-  height: 30px;
-  /* padding-bottom: 100%; */
-  border-radius: 50%;
-  border: 3px solid #cfdcec;
-  /* overflow: hidden; */
-  box-shadow: 0 0 3px grey;
-  /* padding-bottom: 25px; */
-  text-align: center;
-  color: white; }
-  .go_store_round_button div {
-    margin-top: -2px; }
-
-#gp_store_plus {
-  background-color: green; }
-
-#gp_store_minus {
-  background-color: red; }
-
-.go_store_loot_right {
-  margin-left: -20px;
-  flex-grow: 1; }
-
-#go_store_loot {
-  display: flex;
-  padding-top: 20px; }
-
-#go_cost, #go_reward {
-  flex-grow: 1;
-  padding: 5px; }
-
-#go_badges_groups {
-  clear: both;
-  padding-top: 20px;
-  display: flex; }
-
-#go_badges {
-  float: left;
-  flex-grow: 1; }
-
-#go_groups {
-  padding-left: 20px;
-  flex-grow: 1; }
-
-#go_store_actions {
-  margin-top: 30px;
-  padding: 10px;
-  background-color: lightgoldenrodyellow;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center; }
-  #go_store_actions #go_purch_limits {
-    margin: 10px;
-    flex-grow: 1; }
-  #go_store_actions #golb-fr-qty {
-    /* Chrome, Safari, Edge, Opera */
-    /* Firefox */ }
-    #go_store_actions #golb-fr-qty #go_qty {
-      width: 60px; }
-    #go_store_actions #golb-fr-qty input::-webkit-outer-spin-button,
-    #go_store_actions #golb-fr-qty input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0; }
-    #go_store_actions #golb-fr-qty input[type=number] {
-      -moz-appearance: textfield; }
-
-.black_overlay {
-  position: fixed;
-  top: 0%;
-  left: 0%;
-  width: 100%;
-  height: 100%;
-  background-color: black;
-  z-index: 99998;
-  -moz-opacity: 0.8;
-  opacity: 0.8;
-  filter: alpha(opacity=80); }
-
-.white_content {
-  position: relative;
-  padding: 16px;
-  background-color: white;
-  z-index: 99999;
-  overflow: auto;
-  border-radius: 3px;
-  border: 1px solid black !important; }
-
-.go_lb_closer {
-  position: absolute;
-  top: 7px;
-  right: 13px; }
-
-.go-lb-loading {
-  background: url("../../media/images/ajax-loader.gif");
-  width: 16px;
-  height: 16px;
-  margin: 0 auto;
-  margin-top: 25%; }
-
-#go-buy-loading {
-  background: url("../../media/images/ajax-loader.gif");
-  width: 16px;
-  height: 11px;
-  margin: 0 auto;
-  margin-top: 5px;
-  margin-bottom: 5px; }
-
-.golb-fr-boxes-r {
-  float: left;
-  padding: 5px 10px 5px 10px;
-  margin-top: 7px;
-  text-align: center;
-  font-size: 15px;
-  font-weight: bold;
-  margin-right: 1.5%;
-  color: white;
-  background-color: #ff0000;
-  border: 1px solid #c00;
-  border-radius: 3px;
-  cursor: pointer; }
-
-.golb-fr-boxes-r:hover {
-  border-color: black; }
-
-.golb-fr-boxes-r:active {
-  border-color: black; }
-
-.golb-fr-boxes-n {
-  float: left;
-  padding: 5px 10px 5px 10px;
-  margin-top: 7px;
-  text-align: center;
-  font-size: 15px;
-  font-weight: bold;
-  margin-right: 1.5%;
-  background-color: #808080;
-  color: white;
-  border: 1px solid;
-  border-radius: 3px;
-  cursor: pointer; }
-
-.golb-fr-boxes-gold {
-  float: left;
-  padding: 5px 10px 5px 10px;
-  margin-top: 7px;
-  text-align: center;
-  font-size: 15px;
-  font-weight: bold;
-  margin-right: 1.5%;
-  background-color: #ffcc00;
-  color: white;
-  border: 1px solid;
-  border-radius: 3px;
-  cursor: pointer;
-  border-color: #c7a000; }
-
-.golb-fr-boxes-g {
-  float: left;
-  padding: 5px 10px 5px 10px;
-  margin-top: 7px;
-  text-align: center;
-  font-size: 15px;
-  font-weight: bold;
-  margin-right: 1.5%;
-  background-color: #39b54a;
-  color: white;
-  border: 1px solid;
-  border-radius: 3px;
-  cursor: pointer; }
-
-.golb-fr-boxes-g:hover {
-  border-color: black; }
-
-.golb-fr-boxes-g:active {
-  border-color: black; }
-
-.go_str_item {
-  cursor: pointer; }
-
-.go_str_item:hover {
-  cursor: pointer; }
-
-#lb-content h2 {
-  font-size: 30px;
-  margin: 0px 0px 5px 0px;
-  padding: 0px; }
-
-#golb-fr-purchase-limit {
-  position: realtive;
-  top: 80%; }
-
-.ui-spinner {
-  bottom: 1px; }
+.go_store_lightbox_container {
+  padding: 25px;
+  max-width: 1000px;
+  min-width: 400px; }
+  .go_store_lightbox_container .top_content {
+    position: relative;
+    padding: 25px;
+    background-color: white;
+    color: black;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+    z-index: 99999;
+    margin-bottom: 25px; }
+    .go_store_lightbox_container .top_content .text_wrapper {
+      padding: 0 15.5px; }
+      .go_store_lightbox_container .top_content .text_wrapper h1,
+      .go_store_lightbox_container .top_content .text_wrapper .go_store_description {
+        margin-bottom: 25px;
+        display: flex; }
+  .go_store_lightbox_container #go_store_loot {
+    margin-bottom: 12.5px;
+    display: flex; }
+    .go_store_lightbox_container #go_store_loot .loot_container {
+      flex-grow: 1;
+      padding-left: 12.5px;
+      display: flex;
+      align-items: center;
+      border-radius: 7px;
+      margin: 0 12.5px; }
+      .go_store_lightbox_container #go_store_loot .loot_container .go_store_round_button {
+        width: 30px;
+        height: 30px;
+        position: relative;
+        left: -25px;
+        border-radius: 50%;
+        border: 3px solid !important;
+        box-shadow: 0 0 3px grey;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center; }
+        .go_store_lightbox_container #go_store_loot .loot_container .go_store_round_button div {
+          display: inline-block; }
+      .go_store_lightbox_container #go_store_loot .loot_container .loot-box {
+        float: left;
+        padding: 5px 10px 5px 10px;
+        text-align: center;
+        font-size: 1em;
+        font-weight: bold;
+        margin: 12.5px;
+        border-radius: 7px;
+        border: 1px solid; }
+      .go_store_lightbox_container #go_store_loot .loot_container .loot-box.down,
+      .go_store_lightbox_container #go_store_loot .loot_container #gp_store_minus {
+        -webkit-box-shadow: rgba(0, 0, 0, 0) 1px 1px 4px 0px, inset 0px 0px 15px 15px rgba(0, 0, 0, 0.2);
+        -moz-box-shadow: rgba(0, 0, 0, 0) 1px 1px 4px 0px, inset 0px 0px 15px 15px rgba(0, 0, 0, 0.2);
+        box-shadow: rgba(0, 0, 0, 0) 1px 1px 4px 0px, inset 0px 0px 15px 15px rgba(0, 0, 0, 0.2); }
+      .go_store_lightbox_container #go_store_loot .loot_container .loot-box.up,
+      .go_store_lightbox_container #go_store_loot .loot_container #gp_store_plus {
+        -webkit-box-shadow: rgba(0, 0, 0, 0) 1px 1px 4px 0px, inset 0px 0px 15px 15px rgba(0, 0, 0, 0.2);
+        -moz-box-shadow: rgba(0, 0, 0, 0) 1px 1px 4px 0px, inset 0px 0px 15px 15px rgba(0, 0, 0, 0.2);
+        box-shadow: rgba(0, 0, 0, 0) 1px 1px 4px 0px, inset 0px 0px 15px 15px rgba(0, 0, 0, 0.2); }
+      .go_store_lightbox_container #go_store_loot .loot_container .go_store_loot {
+        margin-left: -20px;
+        flex-grow: 1; }
+      .go_store_lightbox_container #go_store_loot .loot_container #go_badges_groups {
+        clear: both;
+        padding-top: 20px;
+        display: flex; }
+      .go_store_lightbox_container #go_store_loot .loot_container #go_badges {
+        float: left;
+        flex-grow: 1; }
+      .go_store_lightbox_container #go_store_loot .loot_container #go_groups {
+        padding-left: 20px;
+        flex-grow: 1; }
+  .go_store_lightbox_container .go_store_actions {
+    padding: 25px;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    border-radius: 7px;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.5) 1px 1px 4px 0px;
+    -moz-box-shadow: rgba(0, 0, 0, 0.5) 1px 1px 4px 0px;
+    /* FF 3.5+ */
+    box-shadow: rgba(0, 0, 0, 0.5) 1px 1px 4px 0px; }
+    .go_store_lightbox_container .go_store_actions #go_purch_limits {
+      flex-grow: 1; }
+    .go_store_lightbox_container .go_store_actions .quantity_container {
+      float: left;
+      padding: 5px 10px 5px 10px;
+      margin-top: 7px;
+      text-align: center;
+      font-weight: bold;
+      margin-right: 1.5%;
+      background-color: white;
+      color: black;
+      border: 1px solid;
+      border-color: #0b0b0b;
+      border-radius: 3px;
+      cursor: pointer;
+      /* Chrome, Safari, Edge, Opera */
+      /* Firefox */ }
+      .go_store_lightbox_container .go_store_actions .quantity_container .ui-spinner {
+        bottom: 1px; }
+      .go_store_lightbox_container .go_store_actions .quantity_container .go_qty {
+        width: 60px; }
+      .go_store_lightbox_container .go_store_actions .quantity_container input::-webkit-outer-spin-button,
+      .go_store_lightbox_container .go_store_actions .quantity_container input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0; }
+      .go_store_lightbox_container .go_store_actions .quantity_container input[type=number] {
+        -moz-appearance: textfield; }
+    .go_store_lightbox_container .go_store_actions .buy_button {
+      /*
+            padding: 5px 10px 5px 10px;
+            margin-top: 7px;
+            text-align: center;
+            font-size: 15px;
+            font-weight: bold;
+            margin-right: 1.5%;
+            background-color: #ffcc00;
+            color: white;
+            border: 1px solid;
+            border-radius: 3px;
+            cursor: pointer;
+            border-color: #c7a000;*/ }
+    .go_store_lightbox_container .go_store_actions .go-lb-loading {
+      background: url("../../media/images/ajax-loader.gif");
+      width: 16px;
+      height: 16px;
+      margin: 0 auto;
+      margin-top: 25%; }
+    .go_store_lightbox_container .go_store_actions #go-buy-loading {
+      background: url("../../media/images/ajax-loader.gif");
+      width: 16px;
+      height: 11px;
+      margin: 0 auto;
+      margin-top: 5px;
+      margin-bottom: 5px; }
+    .go_store_lightbox_container .go_store_actions #golb-fr-purchase-limit {
+      position: relative;
+      top: 80%; }
 
 /* ------------------------------------------------------------
     lightbox
 ------------------------------------------------------------ */
+.featherlight.go_edit_frontend_lightbox .featherlight-content {
+  width: 90%; }
+
 .featherlight.quests .featherlight-content {
   width: 90%; }
 
@@ -2847,14 +2850,14 @@ store lightbox styles
   position: relative;
   z-index: 1; }
 
-#sitemap {
-  margin: 10px; }
-
 #go_map_container {
   text-align: center; }
 
 #mapwrapper {
-  padding: 30px; }
+  padding: 30px 0px; }
+
+.map_header {
+  padding: 30px 30px 0 30px; }
 
 .quickedit_form {
   font-size: .8em;
@@ -2862,7 +2865,141 @@ store lightbox styles
   .quickedit_form .checkbox {
     padding: 0 10px !important; }
 
+/* ------------------------------------------------------------
+    Dropdown Styles
+------------------------------------------------------------ */
+/* --------	Top Level --------- */
+/*.singleCol {
+    //	background: url('../../media/map/vertical-line.png') center top no-repeat !important;
+    width: 100% !important;
+}*/
+#sitemap {
+  position: absolute;
+  width: 100%;
+  z-index: 99;
+  margin-bottom: 30px; }
+  #sitemap .go_show_actions {
+    display: inline-block; }
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  cursor: pointer;
+  margin: 0px 10px 0px 10px;
+  display: inline-block;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.5) 1px 1px 4px 0px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.5) 1px 1px 4px 0px;
+  /* FF 3.5+ */
+  box-shadow: rgba(0, 0, 0, 0.5) 1px 1px 4px 0px;
+  border-radius: 7px;
+  font: inherit;
+  z-index: 3;
+  font-size: 1.5em; }
+  .dropdown .droptop {
+    display: flex;
+    min-width: 450px;
+    justify-content: space-between;
+    flex-direction: column; }
+    .dropdown .droptop .drop_title {
+      padding: 5px 10px;
+      flex-grow: 1000;
+      line-height: 35px; }
+      .dropdown .droptop .drop_title p {
+        margin: 0px;
+        padding: 2px 10px; }
+    .dropdown .droptop #go_drop_arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(50, 50, 50, 0.2); }
+      .dropdown .droptop #go_drop_arrow .down {
+        display: block; }
+      .dropdown .droptop #go_drop_arrow .up {
+        display: none; }
+    .dropdown .droptop #go_drop_arrow.open .down {
+      display: none; }
+    .dropdown .droptop #go_drop_arrow.open .up {
+      display: block; }
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: contents;
+  position: absolute;
+  min-width: 160px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.5) 1px 1px 4px 0px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.5) 1px 1px 4px 0px;
+  /* FF 3.5+ */
+  box-shadow: rgba(0, 0, 0, 0.5) 1px 1px 4px 0px;
+  z-index: 1;
+  font-size: .8em; }
+
+/* Links inside the dropdown */
+.dropdown-content .mapLink {
+  padding: 6px 10px;
+  display: block; }
+
+/* Change color of dropdown links on hover */
+.dropdown-content .mapLink:hover {
+  background-color: #f1f1f1; }
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.hidden {
+  display: none; }
+
+#go_Dropdown .mapLink:hover,
+#go_Dropdown .current {
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: inset 0 -1px 0 #928c8c; }
+
+/* ------------------------------------------------------------
+    Utility Navigation
+------------------------------------------------------------ */
+/*
+#go_Dropdown {
+	float: left;
+	width: 100%;
+	min-width: 300px;
+	margin-right: 10px;
+	margin-bottom: 40px;
+	//border-radius: $corner_radius;
+}
+#utilityNav li {
+	float: left;
+	margin-bottom: 10px;
+}
+#go_Dropdown a {
+	display: block;
+	//font-size: .9em;
+	min-width: 150px;
+	//color: black;
+	//background: #bae9ff;
+	cursor: pointer;
+
+}
+
+#go_Dropdown .locked a,
+#go_Dropdown .locked a:hover {
+	//background-color: #cccccc;
+	border-color: #000;
+	color: #555;
+}
+#go_Dropdown .done a,
+#go_Dropdown .done a:hover {
+	//background-color: #cee3ac;
+	border-color: #b8da83;
+}
+
+#utilityNav li a:hover {
+	background-color: #fffce5;
+	border-color: #d1b62c;
+	cursor: pointer;
+}
+
+*/
+.store_map .title {
+  padding: 6px 10px 0 10px !important; }
+
 #maps {
+  margin: 82px 30px;
   /* ------------------------------------------------------------
         Reset Styles (from meyerweb.com)
     ------------------------------------------------------------ */
@@ -2870,14 +3007,6 @@ store lightbox styles
   /* ------------------------------------------------------------
         General Styles
     ------------------------------------------------------------ */
-  /* ------------------------------------------------------------
-        Site Map Styles
-    ------------------------------------------------------------ */
-  /* --------	Top Level --------- */
-  /*.singleCol {
-		//	background: url('../../media/map/vertical-line.png') center top no-repeat !important;
-		width: 100% !important;
-	}*/
   /* ------------------------------------------------------------
     ------------------------------------------------------------ */
   /* ------------------------------------------------------------
@@ -2906,14 +3035,10 @@ store lightbox styles
     margin: 0;
     padding: 0;
     border: 0;
-    font-size: 100%;
-    font: inherit;
     vertical-align: baseline; }
   #maps article, #maps aside, #maps details, #maps figcaption, #maps figure,
   #maps footer, #maps header, #maps hgroup, #maps menu, #maps nav, #maps section {
     display: block; }
-  #maps body {
-    line-height: 1; }
   #maps ol, #maps ul {
     list-style: none; }
   #maps blockquote, #maps q {
@@ -2935,7 +3060,7 @@ store lightbox styles
     margin: 0 0 5px 0; }
   #maps h3 {
     font-size: 1.2em;
-    margin: 0 0 20px 0; }
+    margin: 0 0 5px 0; }
   #maps a {
     text-decoration: none; }
   #maps ol, #maps ul {
@@ -2947,90 +3072,13 @@ store lightbox styles
     #maps .map .map_title {
       font-size: 1.7em; }
   #maps .title {
-    padding: 10px; }
-  #maps .ParentNav {
-    display: inline-block;
-    /* Dropdown Button */
-    /* The container <div> - needed to position the dropdown content */
-    /* Dropdown Content (Hidden by Default) */
-    /* Links inside the dropdown */
-    /* Change color of dropdown links on hover */
-    /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
-    /* ------------------------------------------------------------
-            Utility Navigation
-        ------------------------------------------------------------ */ }
-    #maps .ParentNav .dropbtn, #maps .ParentNav .dropbtn:hover, #maps .ParentNav .dropbtn:focus {
-      cursor: pointer;
-      margin: 0;
-      display: block;
-      text-align: center;
-      border: 2px solid rgba(50, 50, 50, 0.2);
-      border-right: 50px solid rgba(50, 50, 50, 0.2);
-      -webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
-      -moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
-      /* FF 3.5+ */
-      /* styling */
-      border-radius: 7px;
-      font: inherit;
-      padding: 10px;
-      width: 300px; }
-    #maps .ParentNav .dropdown {
-      position: relative;
-      display: inline-block;
-      z-index: 3;
-      font-size: unset;
-      font-size: 1.1em; }
-      #maps .ParentNav .dropdown #go_drop_arrow {
-        line-height: 28px;
-        float: right;
-        position: relative;
-        right: -43px; }
-    #maps .ParentNav .dropdown-content {
-      display: none;
-      position: absolute;
-      min-width: 160px;
-      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-      z-index: 1;
-      font-size: .8em; }
-    #maps .ParentNav .dropdown-content a {
-      padding: 8px 10px;
-      text-decoration: none;
-      display: block; }
-    #maps .ParentNav .dropdown-content a:hover {
-      background-color: #f1f1f1; }
-    #maps .ParentNav .show {
-      display: block; }
-    #maps .ParentNav #go_Dropdown {
-      float: left;
-      width: 100%;
-      min-width: 300px;
-      margin-right: 10px;
-      margin-bottom: 40px; }
-    #maps .ParentNav #utilityNav li {
-      float: left;
-      margin-bottom: 10px; }
-    #maps .ParentNav #go_Dropdown a {
-      display: block;
-      min-width: 150px;
-      cursor: pointer; }
-    #maps .ParentNav #go_Dropdown a:hover {
-      background-color: rgba(255, 255, 255, 0.5);
-      box-shadow: inset 0 -1px 0 #928c8c; }
-    #maps .ParentNav #go_Dropdown .locked a,
-    #maps .ParentNav #go_Dropdown .locked a:hover {
-      border-color: #000;
-      color: #555; }
-    #maps .ParentNav #go_Dropdown .done a,
-    #maps .ParentNav #go_Dropdown .done a:hover {
-      border-color: #b8da83; }
-    #maps .ParentNav #utilityNav li a:hover {
-      background-color: #fffce5;
-      border-color: #d1b62c;
-      cursor: pointer; }
-    #maps .ParentNav .go_badge_wrap {
-      width: unset;
-      font-size: .6em;
-      width: 100%; }
+    padding: 6px 10px 6px 10px; }
+  #maps .go_map_chain_title {
+    line-height: 35px; }
+  #maps .go_badge_wrap {
+    width: unset;
+    font-size: .6em;
+    width: 100%; }
   #maps .primaryNav {
     margin: 0px 0 0 0;
     width: 100%;
@@ -3039,38 +3087,51 @@ store lightbox styles
     flex-wrap: wrap;
     align-items: stretch; }
     #maps .primaryNav .go_map_quest_hover:hover {
-      background-color: rgba(255, 255, 255, 0.5);
+      background-color: rgba(255, 255, 255, 0.2);
       cursor: pointer;
       border-radius: 7px; }
     #maps .primaryNav .go_chain_loot_info {
       background-color: #ffffff;
-      border-color: #444444; }
+      border-color: #444444;
+      border-radius: 7px; }
     #maps .primaryNav .loot_info {
       display: none;
       color: #0b0b0b;
       font-size: .7em;
-      background-color: rgba(255, 255, 255, 0.7); }
+      background-color: rgba(255, 255, 255, 0.7);
+      border-radius: 0 0 7px 7px; }
+    #maps .primaryNav .go_store_loot_list {
+      display: flex;
+      justify-content: center;
+      padding: 3px 0; }
+    #maps .primaryNav .go_store_loot_list_item {
+      border-radius: 7px;
+      padding: 0 8px 0 5px !important;
+      margin: 0 5px 5px 5px !important;
+      font-size: 1em;
+      border: 1px solid;
+      border-color: rgba(100, 100, 100, 0.3); }
     #maps .primaryNav .go_task_chain {
       flex: 1;
       padding: 0 10px; }
       #maps .primaryNav .go_task_chain .task,
       #maps .primaryNav .go_task_chain .go_task_chain_map_box,
       #maps .primaryNav .go_task_chain .go_task_pod_required {
-        -webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
-        -moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
+        -webkit-box-shadow: rgba(0, 0, 0, 0.5) 1px 1px 4px 0px;
+        -moz-box-shadow: rgba(0, 0, 0, 0.5) 1px 1px 4px 0px;
         /* FF 3.5+ */
-        box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
+        box-shadow: rgba(0, 0, 0, 0.5) 1px 1px 4px 0px;
         display: block;
         text-align: center; }
       #maps .primaryNav .go_task_chain .show_shadow {
-        -webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px, inset 0px 0px 6px 6px rgba(0, 0, 0, 0.6);
-        -moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px, inset 0px 0px 6px 6px rgba(0, 0, 0, 0.6);
-        box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px, inset 0px 0px 6px 6px rgba(0, 0, 0, 0.6); }
+        -webkit-box-shadow: rgba(0, 0, 0, 0.5) 1px 1px 4px 0px, inset 0px 0px 6px 6px rgba(0, 0, 0, 0.6);
+        -moz-box-shadow: rgba(0, 0, 0, 0.5) 1px 1px 4px 0px, inset 0px 0px 6px 6px rgba(0, 0, 0, 0.6);
+        box-shadow: rgba(0, 0, 0, 0.5) 1px 1px 4px 0px, inset 0px 0px 6px 6px rgba(0, 0, 0, 0.6); }
       #maps .primaryNav .go_task_chain .task_container,
       #maps .primaryNav .go_task_chain .go_task_chain_map_box {
         margin: 10px 0; }
       #maps .primaryNav .go_task_chain .go_task_chain_map_box {
-        font-size: 1.1em;
+        font-size: 1.3em;
         border-radius: 7px;
         margin-top: 0px; }
       #maps .primaryNav .go_task_chain .go_task_chain_map_box_badge {
@@ -3080,10 +3141,35 @@ store lightbox styles
       #maps .primaryNav .go_task_chain .tasks .task_container {
         position: relative;
         /* --------	available tasks colors --------- */ }
+        #maps .primaryNav .go_task_chain .tasks .task_container .task {
+          padding: 0px;
+          border-radius: 7px; }
+          #maps .primaryNav .go_task_chain .tasks .task_container .task .go_bonus_progresss_bar_container {
+            height: 18px;
+            border: 1px solid;
+            box-sizing: unset;
+            border: thin black solid;
+            background-color: #292929;
+            color: whitesmoke;
+            position: relative;
+            width: 100%;
+            border-radius: 0 0 7px 7px; }
+            #maps .primaryNav .go_task_chain .tasks .task_container .task .go_bonus_progresss_bar_container .go_bonus_progress_bar {
+              position: absolute;
+              height: 18px;
+              background-color: #39b54a;
+              border-radius: 0 0 7px 7px; }
+            #maps .primaryNav .go_task_chain .tasks .task_container .task .go_bonus_progresss_bar_container .bonus_progress {
+              position: relative;
+              width: 100%;
+              height: 18px;
+              font-size: .75em;
+              line-height: 18px; }
         #maps .primaryNav .go_task_chain .tasks .task_container .up {
           border-color: mediumturquoise;
           border-width: 4px 4px 4px 4px;
-          border-style: solid; }
+          border-style: solid;
+          border-radius: 11px; }
         #maps .primaryNav .go_task_chain .tasks .task_container .down {
           border-color: indianred;
           border-width: 4px 4px 4px 4px;
@@ -3101,30 +3187,6 @@ store lightbox styles
           border-width: 4px 4px 4px 4px;
           border-radius: 11px 11px 11px 11px;
           border-style: solid; }
-        #maps .primaryNav .go_task_chain .tasks .task_container .task {
-          padding: 0px;
-          border-radius: 7px; }
-          #maps .primaryNav .go_task_chain .tasks .task_container .task .go_bonus_progresss_bar_container {
-            height: 17px;
-            border: 1px solid;
-            box-sizing: unset;
-            border: thin black solid;
-            background-color: #292929;
-            color: whitesmoke;
-            position: relative;
-            width: 100%;
-            border-radius: 0 0 7px 7px; }
-            #maps .primaryNav .go_task_chain .tasks .task_container .task .go_bonus_progresss_bar_container .go_bonus_progress_bar {
-              position: absolute;
-              height: 17px;
-              background-color: #39b54a;
-              border-radius: 0 0 7px 7px; }
-            #maps .primaryNav .go_task_chain .tasks .task_container .task .go_bonus_progresss_bar_container .bonus_progress {
-              position: relative;
-              width: 100%;
-              height: 17px;
-              font-size: .75em;
-              line-height: 17px; }
         #maps .primaryNav .go_task_chain .tasks .task_container .optional {
           background-size: 75px 75px;
           background-image: linear-gradient(45deg, rgba(69, 69, 69, 0.05) 25%, rgba(51, 51, 51, 0.1) 25%, rgba(51, 51, 51, 0.1) 50%, rgba(69, 69, 69, 0.05) 50%, rgba(69, 69, 69, 0.05) 75%, rgba(51, 51, 51, 0.1) 75%, rgba(51, 51, 51, 0.1) 100%); }
@@ -3142,12 +3204,12 @@ store lightbox styles
         #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_toggle {
           margin-top: 0px;
           color: black;
-          -webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
-          -moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
+          -webkit-box-shadow: rgba(0, 0, 0, 0.5) 1px 1px 4px 0px;
+          -moz-box-shadow: rgba(0, 0, 0, 0.5) 1px 1px 4px 0px;
           /* FF 3.5+ */
-          box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px; }
+          box-shadow: rgba(0, 0, 0, 0.5) 1px 1px 4px 0px; }
           #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_toggle .nested_icon {
-            line-height: 17px; }
+            line-height: 18px; }
         #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_toggle.open {
           border-radius: 0; }
           #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_toggle.open .nested_opaque {
@@ -3155,7 +3217,7 @@ store lightbox styles
         #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_toggle,
         #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_hover,
         #maps .primaryNav .go_task_chain .tasks .task_container .nested_opaque {
-          height: 19px; }
+          height: 18px; }
         #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_list {
           display: none; }
           #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_list .task_container {
@@ -3167,17 +3229,20 @@ store lightbox styles
             #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_list .task .go_bonus_progress_bar,
             #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_list .task .go_map_quest_hover:hover {
               border-radius: 0; }
-          #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_list :last-child .task {
+          #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_list .task_container:last-child .task {
             border-radius: 0 0 7px 7px; }
-            #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_list :last-child .task .go_bonus_progresss_bar_container,
-            #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_list :last-child .task .go_bonus_progress_bar,
-            #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_list :last-child .task .go_map_quest_hover:hover {
+            #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_list .task_container:last-child .task .go_bonus_progresss_bar_container,
+            #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_list .task_container:last-child .task .go_bonus_progress_bar,
+            #maps .primaryNav .go_task_chain .tasks .task_container .go_nested_list .task_container:last-child .task .go_map_quest_hover:hover {
               border-radius: 0 0 7px 7px; }
-      #maps .primaryNav .go_task_chain .tasks .hasNested > .task {
+      #maps .primaryNav .go_task_chain .tasks .hasNested .task {
         border-radius: 7px 7px 0 0; }
-        #maps .primaryNav .go_task_chain .tasks .hasNested > .task .go_bonus_progresss_bar_container,
-        #maps .primaryNav .go_task_chain .tasks .hasNested > .task .go_bonus_progress_bar {
-          border-radius: 0px !important; }
+        #maps .primaryNav .go_task_chain .tasks .hasNested .task .go_bonus_progresss_bar_container,
+        #maps .primaryNav .go_task_chain .tasks .hasNested .task .go_bonus_progress_bar,
+        #maps .primaryNav .go_task_chain .tasks .hasNested .task .loot_info {
+          border-radius: 0px; }
+      #maps .primaryNav .go_task_chain .tasks .hasBonus > .task .loot_info, #maps .primaryNav .go_task_chain .tasks .hasBadges > .task .loot_info {
+        border-radius: 0px; }
       #maps .primaryNav .go_task_chain .tasks.sorting {
         background-color: rgba(255, 255, 255, 0.3);
         border: 1px solid;
@@ -7393,17 +7458,8 @@ html[dir="rtl"] .go-acf-table > tbody > tr > td.order + td {
   background-color: #fff;
   font-size: 14px; }
 
-#go_leaderboard_filters_container {
-  display: flex;
-  justify-content: space-between; }
-
-#go_leaderboard_filters, #go_leaderboard_update_button {
-  padding: 20px;
-  text-align: right; }
-
-#go_leaderboard_filters h3,
-#go_leaderboard_filters .select2 {
-  text-align: left; }
+#go_leaderboard_filters {
+  margin-right: 20px; }
 
 #records_tabs a, #records_tabs .tooltip {
   color: blue; }
@@ -7482,3 +7538,308 @@ html[dir="rtl"] .go-acf-table > tbody > tr > td.order + td {
 
 .quest_stats.not_started {
   background-color: pink; }
+
+.edit-tags-php #col-right {
+  overflow-x: hidden; }
+
+.go_call_to_action {
+  background-color: cornsilk; }
+
+.go_acf_header {
+  background-color: linen; }
+
+table tbody tr td.go_acf_header {
+  top-padding: 10em; }
+
+/**
+ * Date Picker Setting Row
+ */
+.go_date_picker_modifier_input {
+  height: 30px;
+  width: 70px; }
+
+/**
+*set column widths on manage term pages
+ */
+.column-primary {
+  flex: 1 !important; }
+
+.posts.column-posts,
+.manage-column.column-posts,
+.locks_on.column-locks_on,
+.manage-column.column-locks_on,
+.locked_prev.column-locked_prev,
+.manage-column.column-locked_prev,
+.manage-column.column-hidden_term,
+.hidden_term.column-hidden_term,
+.pod_toggle.column-pod_toggle,
+.manage-column.column-pod_toggle {
+  text-align: center;
+  flex: none !important;
+  display: block;
+  width: 60px;
+  padding: 0 8px; }
+
+.pod_achievement.column-pod_achievement,
+.manage-column.column-pod_achievement {
+  text-align: center;
+  flex: none !important;
+  display: block;
+  width: 15% !important;
+  padding: 0 8px; }
+
+.description.column-description,
+.manage-column.column-description,
+.thumb.column-thumb,
+.manage-column.column-thumb {
+  text-align: center;
+  flex: none !important;
+  display: block;
+  width: 25% !important;
+  padding: 0 8px; }
+
+.pod_done_num.column-pod_done_num,
+.manage-column.column-pod_done_num,
+.slug.column-slug,
+.manage-column.column-slug {
+  text-align: center;
+  flex: none !important;
+  display: block;
+  width: 60px;
+  padding: 0 8px; }
+
+/********************
+*	Edit term tables
+hides table on term page until reorder.js is complete
+********************/
+#col-right .col-wrap {
+  display: none; }
+
+ul .row-actions {
+  display: none; }
+
+/*hides description field*/
+.taxonomy-task_chains .term-description-wrap,
+.taxonomy-task_focus_categories .term-description-wrap,
+.taxonomy-task_categories .term-description-wrap,
+.taxonomy-task_menus .term-description-wrap,
+.taxonomy-go_badges .term-description-wrap,
+.taxonomy-user_go_groups .term-description-wrap,
+.taxonomy-store_types .term-description-wrap,
+.taxonomy-task_chains .term-parent-wrap,
+.taxonomy-store_types .term-parent-wrap,
+.taxonomy-go_badges .term-parent-wrap,
+.taxonomy-user_go_groups .term-parent-wrap,
+.acf-field-5e37cdfe1f357,
+.acf-field-5e389128e24ab,
+.acf-field-5e37bb8f5b17c,
+.acf-field-5e35979c47071 {
+  display: none; }
+
+.edit-tags-php .acf-field-5e37cdfe1f357,
+.edit-tags-php .acf-field-5e389128e24ab,
+.edit-tags-php .acf-field-5e37bb8f5b17c,
+.edit-tags-php .acf-field-5e35979c47071 {
+  display: block; }
+
+/********************
+*
+********************/
+.wp-has-submenu.toplevel_page_maps_menus .wp-first-item {
+  display: none; }
+
+.term-php .term-parent-wrap,
+.term-php .go_child_term {
+  display: none; }
+
+.acf-editor-wrap iframe {
+  min-height: 100px !important; }
+
+.wp-customizer #accordion-section-themes {
+  display: none !important; }
+
+.go-acf-locks .acf-fields.-left > .acf-field:before {
+  display: none; }
+
+.go-acf-keys .acf-row-handle.ui-sortable-handle:before {
+  content: " and"; }
+
+.go-acf-keys .acf-actions {
+  position: relative;
+  top: -8px; }
+
+.select2_child .select2 {
+  width: 100% !important; }
+
+.key_options .acf-label {
+  display: none; }
+
+.key_options .acf-table {
+  border: none; }
+
+.key_options .acf-field {
+  padding: 0px !important; }
+
+.go-acf-keys .acf-input {
+  width: 100% !important; }
+
+.go_toggle {
+  width: 100px; }
+
+.go-number .acf-input {
+  width: 200px !important; }
+
+.go-timer .acf-th {
+  display: none !important; }
+
+.go-timer .acf-field,
+.go-timer .acf-table .go-timer-input {
+  padding: 5px !important; }
+
+.go-timer .acf-table {
+  border: none; }
+
+.go-due-date .acf-th {
+  display: none !important; }
+
+.go-modifiers .acf-th {
+  display: table-cell !important; }
+
+.go-due-date .acf-table {
+  border: none; }
+
+.go-modifiers .acf-table {
+  border: #DFDFDF solid 1px; }
+
+.go-stages .acf-input .acf-label {
+  float: none !important;
+  width: 100% !important; }
+
+.go-stages .acf-field:before {
+  background: none !important;
+  border: none !important; }
+
+.go-stages .go-content .acf-input {
+  width: 100% !important; }
+
+.go-stages .go-content .acf-label {
+  display: none !important; }
+
+.go-stages .acf-accordion {
+  margin: 3px 10px !important;
+  border: solid 1px #dddddd; }
+
+.acf-accordion-title {
+  background: lightblue !important; }
+
+[data-key="field_5d35279fb1592"] {
+  display: none; }
+
+.acf-hide-label .acf-label {
+  display: none; }
+
+.go-loot .acf-th {
+  display: table-cell; }
+
+.acf-no-padding {
+  padding: 0px !important; }
+
+.acf-hide-table-header .acf-th {
+  display: none; }
+
+.acf-table-no-border .acf-table {
+  border: solid 0px !important; }
+
+/********************
+*QUIZ
+********************/
+.go_test_field_table {
+  border-collapse: collapse; }
+
+.go_test_field_table tr {
+  border: solid 2px;
+  border-color: #969696; }
+
+.go_test_field_table ul {
+  list-style: none; }
+
+.go_test_field_table li {
+  display: flex;
+  margin-left: 50px;
+  justify-content: flex-end; }
+
+.go_test_field_input_question {
+  /* width: 100%; */
+  margin-left: 25px; }
+
+.go_test_field_table {
+  width: 100%; }
+
+.go_test_field_table td {
+  padding: 20px !important;
+  margin-left: -2px; }
+
+.go_test_field_input_row select,
+.go_test_field_input_question,
+.go_test_field_add,
+.go_test_field_rm,
+.go_test_field_add_block_button {
+  margin-left: inherit; }
+
+.go_test_loot_mod {
+  text-align: center;
+  width: 40px; }
+
+.go_test_field_input_question {
+  width: 100%; }
+
+.go_test_field_input_question::-webkit-input-placeholder {
+  padding-top: 2px; }
+
+.go_test_field_input_question::-moz-placeholder {
+  padding-top: 2px; }
+
+.go_test_field_input {
+  width: 75%;
+  margin: 0 5px 0 5px !important;
+  padding-top: 4px; }
+
+.go_test_field_input::-webkit-input-placeholder {
+  padding-top: 2px; }
+
+.go_test_field_input::-moz-placeholder {
+  padding-top: 2px; }
+
+.go_test_field_input_checkbox {
+  margin: 0 0 4px -2px !important; }
+
+.go_button_add_field, .go_test_field_add {
+  color: green; }
+
+.go_button_del_field, .go_test_field_rm {
+  color: red;
+  margin-left: 5px; }
+
+.go_test_field_input_rm_row_button {
+  margin-left: -2px !important; }
+
+/*
+ACF Registration Page styles
+ */
+.go_profile_fields .acf-switch {
+  overflow: hidden; }
+
+/*************
+Attendance page
+*************** */
+.attendance_table tr:nth-child(even) .acf-field-group {
+  background-color: #dbdbdb; }
+
+.attendance_table tr:nth-child(even) .acf-accordion-title {
+  background: #ababab !important; }
+
+.attendance_table tr:nth-child(odd) .acf-field-group {
+  background-color: #ccdde3; }
+
+.attendance_table tr:nth-child(odd) .acf-accordion-title {
+  background: lightblue !important; }

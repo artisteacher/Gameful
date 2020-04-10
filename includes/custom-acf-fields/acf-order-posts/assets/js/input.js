@@ -43,31 +43,8 @@
 		acf.add_action('append_field/type=order_posts', initialize_field);
 
 
-	} else {
-
-		/*
-		*  acf/setup_fields (ACF4)
-		*
-		*  These single event is called when a field element is ready for initizliation.
-		*
-		*  @param	event		an event object. This can be ignored
-		*  @param	element		An element which contains the new HTML
-		*  @return	n/a
-		*/
-
-		$(document).on('acf/setup_fields', function(e, postbox){
-
-			// find all relevant fields
-			$(postbox).find('.field[data-field_type="order_posts"]').each(function(){
-
-				// initialize
-				initialize_field( $(this) );
-
-			});
-
-		});
-
 	}
+
 
 })(jQuery);
 

@@ -1,6 +1,7 @@
 
 jQuery( document ).ready( function() {
-
+    go_setup_badges_page();
+    go_setup_groups_page();
     go_activate_tippy();
     if (typeof (GO_TASK_LIST) !== 'undefined'){
         jQuery('.page-title-action').removeAttr("href").css("cursor","pointer").on("click", function(e){
@@ -10,11 +11,11 @@ jQuery( document ).ready( function() {
 
     //This is to fix a bug in select2 that affects Safari only
     jQuery('select.select2-hidden-accessible').on('select2:closing', function() {
-        $('body > span.select2-container.select2-container--default.select2-container--open').hide();
+        jQuery('body > span.select2-container.select2-container--default.select2-container--open').hide();
     });
 
     jQuery('select.select2-hidden-accessible').on('select2:open', function() {
-        $('body > span.select2-container.select2-container--default.select2-container--open').css('display','inline-block');
+        jQuery('body > span.select2-container.select2-container--default.select2-container--open').css('display','inline-block');
     });
     //END SELECT2 fix
 
@@ -62,6 +63,10 @@ jQuery( document ).ready( function() {
     if (typeof (hideFooterWidgets) !== 'undefined') {
         jQuery('#footer-widgets').hide();
     }
+
+    jQuery(".go_edit_frontend_task").off().one("click", function(){
+        go_edit_frontend(this);
+    });
 });
 
 
@@ -103,7 +108,7 @@ function go_highlight_apply_filters() {
 function go_after_ajax(){
     //activate any new store item links on the result
     jQuery('.go_str_item').off().one("click", function(e){
-        go_lb_opener( this.id );
+        go_lb_opener( this );
     });
     //do the attendance ajax
     go_check_attendance();
@@ -174,17 +179,40 @@ function go_activate_tippy(){
         zIndex: 999999,
         placement: 'top',
     });
+
+    tippy('.actiontip', {
+        delay: 0,
+        arrow: true,
+        arrowType: 'round',
+        size: 'large',
+        duration: [300, 0],
+        animation: 'scale',
+        zIndex: 9999999,
+        placement: 'top',
+    });
+
+
 }
 
-function go_new_task_from_template(){
+function go_new_task_from_template(target){
+    tippyInstances.forEach(instance => {
+        instance.hide();
+    });
     console.log('go_new_task_from_template');
+    var nonce = GO_FRONTEND_DATA.nonces.go_new_task_from_template;
+
+    var frontend_edit = jQuery(target).data('frontend_edit');
+    var chain_id = jQuery(target).data('chain_id');
+    var chain_name = jQuery(target).data('chain_name');
     jQuery.ajax({
         type: "post",
         url: MyAjax.ajaxurl,
         data: {
-            //_ajax_nonce: nonce,
+            _ajax_nonce: nonce,
             action: 'go_new_task_from_template',
-            is_frontend: is_frontend,
+            frontend_edit: frontend_edit,
+            chain_id: chain_id,
+            chain_name: chain_name,
         },
         /**
          * A function to be called if the request fails.
@@ -212,7 +240,7 @@ function go_new_task_from_template(){
                     jQuery.featherlight(res);
 
                     jQuery('.go_new_task_from_template_button').one('click', function(){
-                        go_clone_post_new_menu_bar();
+                        go_clone_post_new_menu_bar(this);
                     });
                 }
 
@@ -223,14 +251,12 @@ function go_new_task_from_template(){
 }
 
 //sends the selected post_id to the clone function
-//there should be no return--just a redirect
-function go_clone_post_new_menu_bar() {
-    console.log('go_clone_post_new_menu_bar22');
+function go_clone_post_new_menu_bar(target) {
+    console.log('go_clone_post_new_menu_bar');
     let post_id = jQuery('.go_new_task_from_template').val();
     let global = jQuery('.go_new_task_from_template .'+ post_id).data('global');
-    console.log("global");
-    //console.log(global);
-
+    let chain_id = jQuery(target).data('chain_id');
+    let frontend_edit = jQuery(target).data('frontend_edit');
     var nonce = GO_EVERY_PAGE_DATA.nonces.go_clone_post_new_menu_bar;
 
     jQuery.ajax({
@@ -241,7 +267,9 @@ function go_clone_post_new_menu_bar() {
             action: 'go_clone_post_new_menu_bar',
             is_frontend: is_frontend,
             post: post_id,
-            global: global
+            chain_id: chain_id,
+            global: global,
+            frontend_edit: frontend_edit
 
         },
         /**
@@ -254,17 +282,22 @@ function go_clone_post_new_menu_bar() {
             }
 
         },
-        success: function (res) {
-            console.log(res);
-            let error = go_ajax_error_checker(res);
+        success: function (results) {
+console.log(results);
+            let error = go_ajax_error_checker(results);
             if (error == 'true') return;
 
-            if (-1 !== res) {
-
-                if (res) {
-                    //console.log
-                    window.location.href = res;
+            if (-1 !== results) {
+                var res = jQuery.parseJSON(results);
+                console.log(res);
+                //console.log(res);
+                if (res.redirect == 'true') {
+                    window.location.href = res.link;
                 }
+                else{
+                    go_edit_frontend(null, res.post_id, true);
+                }
+
 
             }
 
@@ -760,11 +793,15 @@ function go_stats_lightbox_page_button( uid ) {//this is called from the admin b
 
 
                 //if there is no about tab, and there is a task tab, load the task table
-                if(!jQuery('#stats_about').length){
-                    if(jQuery('#stats_tasks').length) {
-                        go_stats_task_list();
+                //if(!jQuery('#stats_about').length){
+                    if(jQuery('#stats_badges').length) {
+                        go_stats_badges_list();
+                    }else{
+                        if(jQuery('#stats_tasks').length) {
+                            go_stats_task_list();
+                        }
                     }
-                }
+                //}
 
 
             }
@@ -834,8 +871,9 @@ function go_make_select2_filter(taxonomy, location, use_saved_value = false, par
     var value = jQuery('#go_' + location + '_' + taxonomy + '_select').data('value');
     var value_name = jQuery('#go_' + location + '_' + taxonomy + '_select').data('value_name');
     if (use_saved_value) {
+
         // Get saved data from sessionStorage
-        if(value === null) {
+        if(value === null || typeof value === 'undefined') {
             var saved_value = localStorage.getItem(taxonomy);
             var saved_value_name = localStorage.getItem(taxonomy + '_name');
         }else{
@@ -852,10 +890,10 @@ function go_make_select2_filter(taxonomy, location, use_saved_value = false, par
             value_name = '';
         }
     }
-    console.log("taxonomy"+taxonomy);
-    console.log("value"+value);
-    console.log('value_name'+value_name);
-    console.log('location: ' + location);
+    //console.log("taxonomy"+taxonomy);
+   // console.log("value"+value);
+   // console.log('value_name'+value_name);
+    //console.log('location: ' + location);
 
     if( value != null && value != 'null') {
         // Fetch the preselected item, and add to the control
@@ -867,7 +905,6 @@ function go_make_select2_filter(taxonomy, location, use_saved_value = false, par
 
     //if clear is pressed, remove all options before continueing with ajax
     jQuery('#go_' + location + '_' + taxonomy + '_select').on("select2:unselecting", function(e) {
-        console.log("unselecting");
         jQuery('#go_' + location + '_' + taxonomy + '_select').val(null).trigger('change');
         jQuery('#go_' + location + '_' + taxonomy + '_select').empty();
         if(jQuery('#go_' + location + '_' + taxonomy + '_select').hasClass("go_activate_filter")) {
@@ -938,7 +975,6 @@ function go_make_select2_filter(taxonomy, location, use_saved_value = false, par
 
             },
             success: function( data ) {
-                console.log("success_select2");
                 go_after_ajax();
             },
             cache: true
@@ -991,13 +1027,17 @@ function go_make_select2_cpt( my_div, cpt) {
 
 function go_loader_html(size){
     var url = ( PluginDir.url + 'media/images/spinner-solid.svg' );
+    var url2 = ( PluginDir.url + 'media/images/30.svg' );
     if(size == "big"){
         var px = 75;
-        var html = "<div id='loader_container' style='display:block; height: 250px; width: 100%; padding: 40px 0; text-align: center'><div id='loader'><img style='height: " + px + "px;' class='go_loader fa-pulse' src='" + url + "'></div></div>";
+        var html = "<div id='loader_container' class='go_loader_container'><div id='loader'><img style='height: " + px + "px;' class='go_loader fa-pulse' src='" + url + "'></div></div>";
 
     }else if(size == "tiny"){
         var px = 15
         var html = "<img style='height: " + px + "px; margin-top: 7px;' class='go_loader fa-pulse' src='" + url + "'>";
+    }
+    else if(size === 'fountain') {
+        var html = "<div id='loader_container' class='go_loader_container'><img class='' src='" + url2 + "'></div>";
     }
     else{
         var px = 25
@@ -1194,42 +1234,57 @@ function go_stats_store_list() {
 }
 
 function go_actions_tooltip(){
+
     if(typeof window.tippyInstances == 'undefined' ){
         window.tippyInstances = []
     };
     var map_actions = sessionStorage.getItem('map_actions');
     if(map_actions === 'true') {
-        if (jQuery('.go_show_actions').has('.actions_tooltip').length) {
 
-            const instances = tippy('.go_show_actions', {
-                content(reference) {
-                    const tooltip = reference.getElementsByClassName("actions_tooltip")[0];
-                    //console.log(tooltip);
-                    if (typeof (tooltip) !== 'undefined') {
-                        return tooltip.getElementsByClassName("my_tooltip")[0].innerHTML;
+        if (jQuery('.go_show_actions').each(function(){
+            if(jQuery(this).find('.actions_tooltip').length) {
+
+
+                const instances = tippy(this, {
+                    content(reference) {
+                        const tooltip = reference.getElementsByClassName("actions_tooltip")[0];
+                        if (typeof (tooltip) !== 'undefined') {
+                            let this_tooltip = tooltip.getElementsByClassName("my_tooltip")[0].innerHTML;
+                            return this_tooltip;
+                        }
+                        //return reference;
+                    },
+                    interactive: true,
+                    arrow: true,
+                    delay: [500, 0],
+                    theme: 'light',
+                    placement: 'top',
+                    flip: false,
+                    followCursor: 'initial',
+                    zIndex: 9999999,
+                    onCreate(instance) {
+
+                    },
+                    onMount(instance) {
+
+                        //jQuery('.tools').show();
+                        //jQuery('.quickedit_form').hide();
+                    },
+                    onShown(instance) {
+                        // ...
+
+                        go_tooltip_callback();
+
+
                     }
-                    //return reference;
-                },
-                interactive: true,
-                arrow: true,
-                delay: [500, 0],
-                theme: 'light',
-                placement: 'top',
-                flip: false,
-                followCursor: 'initial',
-                zIndex: 9999999,
-                onMount(instance) {
-                    //jQuery('.tools').show();
-                    //jQuery('.quickedit_form').hide();
-                },
-                onShown(instance) {
-                    // ...
-                    go_tooltip_callback();
-                }
-            });
+                });
 
-            window.tippyInstances = tippyInstances.concat(instances);
-        }
+                if (typeof instances !== 'undefined') {
+                    window.tippyInstances = tippyInstances.concat(instances);
+                }
+
+            }
+        }));
     }
 }
 
@@ -1250,6 +1305,21 @@ function go_tooltip_callback(){
     jQuery(".go_quick_edit_show").off().one("click", function(){
         go_quick_edit_show(this);
     });
+
+    jQuery(".go_edit_frontend").off().one("click", function(){
+        go_edit_frontend(this);
+    });
+
+    jQuery(".go_edit_frontend_post").off().one("click", function(){
+        go_new_task_from_template(this);
+    });
+
+    jQuery(".go_trash_post").off().one("click", function(){
+        go_trash_post(this);
+    });
+
+    go_activate_tippy();
+
 }
 
 function go_stats_activity_list() {
@@ -1369,7 +1439,7 @@ function go_stats_messages() {
 
 function go_stats_badges_list() {
 
-    if (jQuery("#go_badges_list").length === 0) {
+    if (jQuery("#stats_badges #go_badges_list").length === 0) {
         var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_badges_list;
 
         var loader_html = go_loader_html('big');
@@ -1399,17 +1469,140 @@ function go_stats_badges_list() {
                 //console.log(res);
                 if (-1 !== res) {
                     jQuery('#stats_badges').html(res);
-
                     go_activate_tippy();
+
                 }
             }
         });
     }
 }
 
+function go_setup_badges_page(){
+    console.log('go_setup_badges');
+    go_activate_tippy();
+    go_actions_tooltip();
+    go_disable_tooltips(true);
+
+    jQuery(".go_edit_frontend_badge").off().one("click", function(){
+        go_edit_frontend(this);
+    });
+
+    if(jQuery('#stats_badges_page').hasClass('sortable')) {
+
+        var elements = document.getElementsByClassName('go_stats_badges');
+        for (var i = 0; i < elements.length; i++) {
+
+            var el = elements[i];
+            new Sortable(el, {
+
+
+        //var el = document.getElementsByClassName('go_stats_badges');
+       // console.log(el);
+        //new Sortable(el, {
+            //group: 'shared', // set both lists to same group
+            animation: 150,
+            onUpdate: function (/**Event*/evt) {
+                console.log('update badge group order');
+                console.log(evt);
+                var itemEl = evt.item; // dragged HTMLElement
+                var listEl = evt.from; //previous list
+                console.log(itemEl);
+                console.log(listEl);
+
+                var terms = [];
+
+                jQuery(listEl).find('.parent_cat').each(function () {
+                    var term_id = jQuery(this).data('term_id');
+                    terms.push(term_id);
+                });
+                console.log('terms');
+                console.log(terms);
+                var nonce = GO_EVERY_PAGE_DATA.nonces.go_update_chain_order;
+                jQuery.ajax({
+                    type: 'post',
+                    url: MyAjax.ajaxurl,
+                    data: {
+                        _ajax_nonce: nonce,
+                        action: 'go_update_chain_order',
+                        terms: terms,
+                        taxonomy: 'go_badges',
+                    },
+
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        if (jqXHR.status === 400) {
+                            jQuery(document).trigger('heartbeat-tick.wp-auth-check', [{'wp-auth-check': false}]);
+                        }
+                    },
+                    success: function (res) {
+                        console.log(res);
+                        if (res !== 'success') {
+                            swal.fire({
+                                type: 'warning',
+                                title: 'There was a problem updating the order.',
+                                text: 'The page will be updated and then you can try again.',
+                                confirmButtonText:
+                                    "Refresh",
+                                timer: 15000,
+                            }).then((result) => {
+                                location.reload();
+                            });
+                        }
+
+                    }
+                });
+
+            },
+        });
+
+        }
+
+
+
+
+        var elements = document.getElementsByClassName('badges_row');
+        for (var i = 0; i < elements.length; i++) {
+
+            var el = elements[i];
+            new Sortable(el, {
+                group: 'shared', // set both lists to same group
+                animation: 150,
+                onAdd: function (/**Event*/evt) {
+                    console.log('update task order Add');
+                    var itemEl = evt.item; // dragged HTMLElement
+                    var NewListEl = evt.to;    // target list
+                    var listEl = evt.from; //previous list
+
+                    go_update_badge_group_sort(NewListEl)
+
+                },
+                onRemove: function (/**Event*/evt) {
+                    console.log('update task order Remove');
+                    var itemEl = evt.item; // dragged HTMLElement
+                    var NewListEl = evt.to;    // target list
+                    var listEl = evt.from; //previous list
+
+                    go_update_badge_group_sort(listEl)
+
+                },
+                onUpdate: function (/**Event*/evt) {
+                    console.log('update task order update');
+                    var itemEl = evt.item; // dragged HTMLElement
+                    var NewListEl = evt.to;    // target list
+                    var listEl = evt.from; //previous list
+
+                    go_update_badge_group_sort(listEl)
+
+                },
+            });
+        }
+
+
+    }
+}
+
 function go_stats_groups_list() {
     console.log("go_stats_groups_list");
-    if (jQuery("#go_groups_list").length == 0) {
+    if (jQuery("#stats_badges #go_groups_list").length == 0) {
         var nonce = GO_EVERY_PAGE_DATA.nonces.go_stats_groups_list;
 
         var loader_html = go_loader_html('big');
@@ -1435,12 +1628,125 @@ function go_stats_groups_list() {
             },
             success: function (res) {
                 go_after_ajax();
+                console.log(res)
                 //console.log(res);
                 if (-1 !== res) {
                     jQuery('#stats_groups').html(res);
+                    go_activate_tippy();
+
                 }
             }
         });
+    }
+}
+
+function go_setup_groups_page(){
+    go_activate_tippy();
+    go_actions_tooltip();
+    go_disable_tooltips(true);
+
+    jQuery(".go_edit_frontend_badge").off().one("click", function(){
+        go_edit_frontend(this);
+    });
+
+    if(jQuery('#stats_groups_page').hasClass('sortable')) {
+
+        var el = document.getElementById('go_groups');
+        console.log(el);
+        new Sortable(el, {
+            //group: 'shared', // set both lists to same group
+            animation: 150,
+            onUpdate: function (/**Event*/evt) {
+                console.log('update badge group order');
+                console.log(evt);
+                var itemEl = evt.item; // dragged HTMLElement
+                var listEl = evt.from; //previous list
+                console.log(itemEl);
+                console.log(listEl);
+
+                var terms = [];
+
+                jQuery(listEl).find('.parent_cat').each(function () {
+                    var term_id = jQuery(this).data('term_id');
+                    terms.push(term_id);
+                });
+                console.log('terms');
+                console.log(terms);
+                var nonce = GO_EVERY_PAGE_DATA.nonces.go_update_chain_order;
+                jQuery.ajax({
+                    type: 'post',
+                    url: MyAjax.ajaxurl,
+                    data: {
+                        _ajax_nonce: nonce,
+                        action: 'go_update_chain_order',
+                        terms: terms,
+                        taxonomy: 'user_go_groups',
+                    },
+
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        if (jqXHR.status === 400) {
+                            jQuery(document).trigger('heartbeat-tick.wp-auth-check', [{'wp-auth-check': false}]);
+                        }
+                    },
+                    success: function (res) {
+                        console.log(res);
+                        if (res !== 'success') {
+                            swal.fire({
+                                type: 'warning',
+                                title: 'There was a problem updating the order.',
+                                text: 'The page will be updated and then you can try again.',
+                                confirmButtonText:
+                                    "Refresh",
+                                timer: 15000,
+                            }).then((result) => {
+                                location.reload();
+                            });
+                        }
+
+                    }
+                });
+
+            },
+        });
+
+        var elements = document.getElementsByClassName('badges_row');
+        for (var i = 0; i < elements.length; i++) {
+
+            var el = elements[i];
+            new Sortable(el, {
+                group: 'shared', // set both lists to same group
+                animation: 150,
+                onAdd: function (/**Event*/evt) {
+                    console.log('update task order Add');
+                    var itemEl = evt.item; // dragged HTMLElement
+                    var NewListEl = evt.to;    // target list
+                    var listEl = evt.from; //previous list
+
+                    go_update_badge_group_sort(NewListEl)
+
+                },
+                onRemove: function (/**Event*/evt) {
+                    console.log('update task order Remove');
+                    var itemEl = evt.item; // dragged HTMLElement
+                    var NewListEl = evt.to;    // target list
+                    var listEl = evt.from; //previous list
+
+                    go_update_badge_group_sort(listEl)
+
+                },
+                onUpdate: function (/**Event*/evt) {
+                    console.log('update task order update');
+                    var itemEl = evt.item; // dragged HTMLElement
+                    var NewListEl = evt.to;    // target list
+                    var listEl = evt.from; //previous list
+
+                    go_update_badge_group_sort(listEl)
+
+                },
+            });
+        }
+
+
     }
 }
 
@@ -1694,4 +2000,54 @@ function go_save_filters(location){
         }
     });
     */
+}
+
+
+function go_update_badges_page(){
+    console.log('go_update_badges_page');
+    var loader_html = go_loader_html('big');
+
+    var nonce = GO_EVERY_PAGE_DATA.nonces.go_update_badges_page;
+    var taxonomy = jQuery('.go_page_container').data("taxonomy");
+
+    if(taxonomy==='go_badges'){
+        jQuery("#stats_badges_page").html(loader_html);
+    }
+    else if(taxonomy==='go_groups'){
+        jQuery("#stats_groups_page").html(loader_html);
+    }
+
+
+    jQuery.ajax({
+        type: "POST",
+        url : MyAjax.ajaxurl,
+        data: {
+            is_frontend: is_frontend,
+            action:'go_update_badges_page',
+            taxonomy : taxonomy,
+            _ajax_nonce: nonce
+        },
+        /**
+         * A function to be called if the request fails.
+         * Assumes they are not logged in and shows the login message in lightbox
+         */
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400){
+                jQuery(document).trigger('heartbeat-tick.wp-auth-check', [ {'wp-auth-check': false} ]);
+            }
+        },
+        success:function(res) {
+            go_after_ajax();
+            console.log("success!");
+            if(taxonomy==='go_badges'){
+                jQuery("#stats_badges_page").html(res);
+                go_setup_badges_page();
+            }
+            else if(taxonomy==='user_go_groups'){
+                jQuery("#stats_groups_page").html(res);
+                go_setup_groups_page();
+            }
+        }
+
+    });
 }

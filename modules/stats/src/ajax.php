@@ -68,11 +68,23 @@ function go_stats_lightbox() {
             // prepares tab titles
             $badges_name = ucfirst(get_option('options_go_badges_name_plural'));
             $groups_name = ucfirst(get_option('options_go_groups_name_plural'));
+            if($badges_toggle) {
+                ?>
+                <li class="stats_tabs" tab="badges"><a
+                            href="#stats_badges"><?php echo strtoupper($badges_name); ?></a></li>
+                <?php
+            }
+            if($groups_toggle) {
+                ?>
+                <li class="stats_tabs" tab="groups"><a
+                            href="#stats_groups"><?php echo strtoupper($groups_name); ?></a></li>
+                <?php
+            }
 
             if($is_admin || $is_current_user) {
                 ?>
 
-
+                <li class="stats_tabs" tab="messages"><a href="#stats_messages">MESSAGES</a></li>
                 <li class="stats_tabs" tab="tasks"><a
                             href="#stats_tasks"><?php echo strtoupper(get_option('options_go_tasks_name_plural')); ?></a>
                 </li>
@@ -86,22 +98,11 @@ function go_stats_lightbox() {
                     <?php
                 }
                 ?>
-                <li class="stats_tabs" tab="messages"><a href="#stats_messages">MESSAGES</a></li>
+
                 <li class="stats_tabs" tab="history"><a href="#stats_history">HISTORY</a></li>
                 <?php
             }
-            if($badges_toggle) {
-                ?>
-                <li class="stats_tabs" tab="badges"><a
-                            href="#stats_badges"><?php echo strtoupper($badges_name); ?></a></li>
-                <?php
-            }
-            if($groups_toggle) {
-                ?>
-                <li class="stats_tabs" tab="groups"><a
-                            href="#stats_groups"><?php echo strtoupper($groups_name); ?></a></li>
-                <?php
-            }
+
         echo '</ul>';
 
 
@@ -129,10 +130,14 @@ function go_stats_lightbox() {
             <div id="stats_store"></div>
             <div id="stats_messages"></div>
             <div id="stats_history"></div>
-            <div id="stats_badges"></div>
-            <div id="stats_groups"></div>
-
-        <?php
+            <?php
+            if($is_admin){
+                echo '<div id="stats_badges" class="sortable stats_badges"></div>';
+                echo '<div id="stats_groups" class="sortable stats_groups"></div>';
+            }else{
+                echo '<div id="stats_badges" class="stats_badges"></div>';
+                echo '<div id="stats_groups" class="stats_groups"></div>';
+            }
         }else  {
 
             echo '<div id="stats_badges">';
@@ -1296,132 +1301,91 @@ function go_activity_dataloader_ajax(){
     die();
 }
 
-/**
- * @param $skip_ajax_checks
- * @param $user_id
- *
- */
-function go_stats_badges_list($skip_ajax_checks = false, $user_id = null) {
-    if(!$skip_ajax_checks) {
-        if (!is_user_logged_in()) {
-            echo "login";
-            die();
-        }
 
-        //check_ajax_referer( 'go_stats_badges_list_' );
-        if (!wp_verify_nonce($_REQUEST['_ajax_nonce'], 'go_stats_badges_list')) {
-            echo "refresh";
-            die();
-        }
-    }
-
-    if ( ! empty( $_POST['user_id'] ) ) {
-        $user_id = (int) $_POST['user_id'];
-    }
-
-
-
-    /* Get all task chains with no parents--these are the badge categories.  */
-    $taxonomy = 'go_badges';
-    //$badges_name = get_option('options_go_badges_name_plural');
-
-    $rows = go_get_terms_ordered($taxonomy, '0');
-    echo"<div id='go_badges_list' class='go_datatables'> ";
-
-    /* For each Store Category with no parent, get all the children. */
-    $chainParentNum = 0;
-    echo '<div id="go_stats_badges">';
-    //for each row
-    foreach ( $rows as $row ) {
-        $chainParentNum++;
-        $row_id = $row->term_id;//id of the row
-
-        $badges = go_get_terms_ordered($taxonomy, $row_id);
-        if(empty($badges)){
-            continue;
-        }
-
-        echo 	"<div class='parent_cat'>
-                        <div id='row_$chainParentNum' class='badges_row_container'>
-						    <h3>$row->name</h3>
-						</div>
-					    <div class='badges_row'>
-						";//row title and row container
-
-
-
-        /*Loop for each chain.  Prints the chain name then looks up children (quests). */
-        $badge_blocks = '';
-
-        foreach ( $badges as $badge) {
-            $badge_id = $badge->term_id;
-
-            go_print_single_badge( $badge_id, 'badge', true, $user_id );
-        }
-        echo "</div></div>";
-    }
-    echo "</div></div>";
-    if(!$skip_ajax_checks) {
+function go_update_badge_group_sort(){
+    $is_admin_user = go_user_is_admin();
+    if(!$is_admin_user){
+        echo "not admin";
         die();
     }
-}
-
-/**
- * @param $user_id
- */
-function go_stats_groups_list() {
 
     if ( !is_user_logged_in() ) {
         echo "login";
         die();
     }
 
-    //check_ajax_referer( 'go_stats_groups_list_' );
-    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_stats_groups_list' ) ) {
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_update_badge_group_sort' ) ) {
         echo "refresh";
         die( );
     }
 
-    if ( ! empty( $_POST['user_id'] ) ) {
-        $user_id = (int) $_POST['user_id'];
+    if(empty($_POST) || !isset($_POST)) {
+        ajaxStatus('error', 'Nothing to update.');
     } else {
-        $user_id = get_current_user_id();
-    }
+        $terms = $_POST['terms'];
+        $parent_id = $_POST['term_id'];
+        $taxonomy = $_POST['taxonomy'];
+        $i = 0;
+        foreach($terms as $term){
+            $i++;
+            //$obj = get_term($term);
+            wp_update_term(intval($term),$taxonomy, $args = array(
+                'parent' => $parent_id,));
+            update_term_meta(intval($term), 'choose_category', $parent_id);
+            update_term_meta(intval($term), 'go_order', $i);
 
-    /* Get all task chains with no parents--these are the sections of the store.  */
-    $taxonomy = 'user_go_groups';
-    $rows = go_get_terms_ordered($taxonomy, '0');
 
-    echo"<div id='go_groups_list' class='go_datatables'>";
+            $key = 'go_term_data_' . $term;
+            go_delete_transient($key);
 
-
-    /* For each Store Category with no parent, get all the children.  These are the store rows.*/
-    $chainParentNum = 0 ;
-    echo '<div id="go_groups">';
-
-    foreach ( $rows as $row ) {
-        $chainParentNum++;
-        $row_id = $row->term_id;//id of the row
-
-        $groups = go_get_terms_ordered($taxonomy, $row_id);
-        if(empty($groups)){
-            continue;
+            $key = 'go_get_child_term_ids_' . $term;
+            go_delete_transient($key);
         }
 
-        echo 	"<div class='parent_cat'>
-                        <div id='row_$chainParentNum' class='badges_row_container'>
-						    <h3>$row->name</h3>
-						</div>
-					    <div class='badges_row'>
-						";//row title and row container
+        $key = 'go_term_data_' . $parent_id;
+        go_delete_transient($key);
 
-        /*Loop for each chain.  Prints the chain name then looks up children. */
-        foreach ( $groups as $group) {
-            $id = $group->term_id;
-            go_print_single_badge( $id, 'group', $output = true, $user_id );
-        }
-        echo "</div></div>";
+        $key = 'go_term_data_' . $parent_id;
+        go_delete_transient($key);
+
+
+
+
+        echo json_encode(
+            array(
+                'json_status' => 302
+            )
+        );
+        die();
     }
-    echo "</div></div>";
-    die();
+}
+
+
+function go_update_badges_page(){
+    if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_update_badges_page' ) ) {
+        echo "There was an error.  Please refresh the page.";
+        die( );
+    }
+
+    if(empty($_POST) || !isset($_POST)) {
+        ajaxStatus('error', 'Nothing to update.');
+    } else {
+        try {
+            $taxonomy = $_POST['taxonomy'];
+
+            if($taxonomy === 'go_badges'){
+                go_stats_badges_list(true, 'edit');
+            }
+            else if($taxonomy === 'user_go_groups'){
+                go_stats_groups_list(true, 'edit');
+            }
+
+
+
+
+            die();
+        } catch (Exception $e){
+            echo 'Caught exception: ',  $e->getMessage(), "\n";
+        }
+    }
 }

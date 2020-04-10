@@ -16,7 +16,7 @@
  * @return bool
  */
 function go_display_timer ($custom_fields, $is_logged_in, $user_id, $post_id, $task_name){
-    $timer_on = $custom_fields['go_timer_toggle'][0];
+    $timer_on = (isset($custom_fields['go_timer_toggle'][0]) ?  $custom_fields['go_timer_toggle'][0] : false);
     if ($timer_on && $is_logged_in) {
         $timer_status = go_timer($custom_fields, $user_id, $post_id, $task_name);
         //if ($timer_status == true) {

@@ -1,6 +1,5 @@
 (function($){
-	
-	
+
 	/**
 	*  initialize_field
 	*
@@ -14,11 +13,11 @@
 	*/
 	
 	function initialize_field( $field ) {
-        var taxonomy = $field.find(".l2tax").attr("data-taxonomy");
+        var taxonomy = $field.find(".l2select_wrapper").data("taxonomy");
         console.log("taxonomy");
         console.log(taxonomy);
         //$field.doStuff();
-        $field.find(".l2tax").select2({
+       /* $field.find(".l2select_wrapper").select2({
             ajax: {
                 url: ajaxurl, // AJAX URL is predefined in WordPress admin
                 dataType: 'json',
@@ -42,11 +41,55 @@
             //multiple: false,
             placeholder: "Select",
             allowClear: true
+        });*/
+
+        $field.find('select').select2({
+            ajax: {
+                url: MyAjax.ajaxurl, // AJAX URL is predefined in WordPress admin
+                dataType: 'json',
+                delay: 400, // delay in ms while typing when to perform a AJAX search
+
+                data: function (params) {
+
+                    return {
+                        q: params.term, // search query
+                        is_frontend: is_frontend,
+                        action: 'go_make_taxonomy_dropdown_ajax', // AJAX action for admin-ajax.php
+                        taxonomy: taxonomy,
+                        //parents_only: parents_only,
+                    };
+                },
+                processResults: function( data ) {
+                    console.log("processing");
+                    console.log(data);
+                    console.log("INITIALIZE");
+                    return {
+                        results: data,
+
+                    };
+
+                },
+                success: function( data ) {
+                    console.log("success_select2");
+
+                    //go_after_ajax();
+                },
+                cache: false
+            },
+            minimumInputLength: 0, // the minimum of symbols to input before perform a search
+            //multiple: false,
+            placeholder: "Select",
+            allowClear: true
         });
 
+        $field.find('select').on('select2:select', function() {
+                acf_level2_taxonomy_update(this);
+            }
+        )
+
 	}
-	
-	
+
+    //console.log(typeof acf.add_action);
 	if( typeof acf.add_action !== 'undefined' ) {
 		/*
 		*  ready & append (ACF5)
@@ -61,32 +104,9 @@
 		
 		acf.add_action('ready_field/type=level2_taxonomy', initialize_field);
 		acf.add_action('append_field/type=level2_taxonomy', initialize_field);
+        //acf.add_action('append', initialize_field);
 		
 		
-	} else {
-		
-		/*
-		*  acf/setup_fields (ACF4)
-		*
-		*  These single event is called when a field element is ready for initizliation.
-		*
-		*  @param	event		an event object. This can be ignored
-		*  @param	element		An element which contains the new HTML
-		*  @return	n/a
-		*/
-		
-		$(document).on('acf/setup_fields', function(e, postbox){
-			
-			// find all relevant fields
-			$(postbox).find('.field[data-field_type="level2_taxonomy"]').each(function(){
-				
-				// initialize
-				initialize_field( $(this) );
-				
-			});
-		
-		});
-	
 	}
 })(jQuery);
 
@@ -94,10 +114,10 @@
 function acf_level2_taxonomy_update(obj) {
     console.log("acf_level2_taxonomy_update");
     //var selected = jQuery(obj).children('option:selected');
-
+    console.log(obj);
     //var val = jQuery(obj).children('option:selected').val();
     var myval = jQuery(obj).select2('val');
-
+    console.log(myval);
     if(myval !== null) {
         myval = myval.toString();
         //myval = JSON.stringify(myval);
@@ -114,7 +134,7 @@ function acf_level2_taxonomy_update(obj) {
 
     //////////
 
-    var order_field = jQuery(obj).data('order_field');
+    var order_field = jQuery(obj).closest('.l2select_wrapper').data('order_field');
 
     if(order_field != 'none') {
         order_field = jQuery("#" + order_field);

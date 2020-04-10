@@ -5,13 +5,13 @@ Plugin URI: http://gameful.me
 Description: Gamification tools for teachers. Forked from the Game On Project.
 Author: Gameful.me
 Author URI: https://github.com/mcmick/Gameful
-Version: 5.8
+Version: 5.830
 */
 
-$go_js_version = 5.800;
+$go_js_version = 5.831;
 global $go_js_version;
-
-$go_css_version = 5.800;
+//
+$go_css_version = 5.821;
 global $go_css_version;
 
 function is_gameful()
@@ -35,7 +35,6 @@ function is_gameful()
 
     return $is_gameful;
 }
-
 
 if(is_gameful() === false && is_multisite()) {
     //this is the multisite not gameful notification
@@ -93,7 +92,8 @@ if ($go_debug) {
     }
 
 
-} else {
+}
+else {
     function remove_acf_menu()
     {
         remove_menu_page('edit.php?post_type=acf-field-group');
@@ -203,6 +203,17 @@ if (!$game_disabled) {
     include_once('modules/term-order/includes.php'); //try to load only on admin pages
 }
 
+
+add_action( 'get_header', 'go_add_acf_form_header' );
+function go_add_acf_form_header(){
+    $is_admin = go_user_is_admin();
+    if($is_admin) {
+        acf_form_head();
+    }
+}
+
+
+
 // Plugin Activation Hooks
 
 register_activation_hook(__FILE__, 'go_update_db_ms');
@@ -283,7 +294,6 @@ add_action('wp_enqueue_scripts', 'go_login_session_expired');
 //https://wordpress.stackexchange.com/questions/137545/custom-login-iframe-doesnt-work
 //remove_action('login_init', 'send_frame_options_header');
 remove_action('admin_init', 'send_frame_options_header');
-
 add_filter('wp_auth_check_same_domain', 'go_allow_same_orgin');
 function go_allow_same_orgin($same_domain)
 {
@@ -329,41 +339,6 @@ function multisite_custom_css_map_meta_cap( $caps, $cap ) {
 }
 
 
-function add_defer_attribute($tag, $handle) {
-    // add script handles to the array below
-    $scripts_to_skip = array('jquery-core',
-        //'jquery-migrate',
-        'zxcvbn-async', 'utils', 'moxiejs', 'plupload', 'json2', 'mediaelement-core', 'mediaelement-migrate',
-        'admin-bar', 'password-strength-meter',
-        //'go_frontend_media', 'go_summernote',
-        'underscore', 'shortcode',
-        'backbone',
-        'wp-util', 'wp-backbone', 'media-models', 'wp-plupload',
-        //'jquery-ui-core', 'jquery-ui-widget', 'jquery-ui-mouse', 'jquery-ui-sortable', 'wp-mediaelement', 'wp-api-request',
-        // 'media-views', 'media-editor', 'media-audiovideo',
-        'mce-view',
-        //'go_frontend', 'go_all_pages_js', 'go_combined_js_depend',
-        //'jquery-ui-accordion', 'jquery-ui-datepicker', 'jquery-ui-draggable', 'jquery-ui-droppable',
-        //'jquery-ui-button', 'jquery-ui-spinner', 'jquery-ui-progressbar', 'jquery-effects-core', 'jquery-ui-tabs',
-        //'wp-polyfill', 'wp-hooks', 'heartbeat', 'wp_auth_check', 'generate-classlist', 'generate-menu', 'generate-a11y',
-        //'comment-reply',
-        'backbone-marionette', 'backbone-radio',
-        'elementor-common-modules', 'jquery-ui-position', 'elementor-dialog',
-        'elementor-common', 'wp-embed', 'editor', 'quicktags', 'wp-sanitize', 'wp-a11y', 'wplink',
-        //'jquery-ui-menu', 'jquery-ui-autocomplete',
-        'thickbox', 'media-upload', 'wp-tinymce-root',
-        'wp-tinymce');
-    //$scripts_to_skip = array('' );
-    //foreach($scripts_to_skip as $skip_script) {
-        if (!in_array($handle, $scripts_to_skip) ){
-            return str_replace(' src', ' defer="defer" src', $tag);
-        }
-   // }
-    return $tag;
-}
-if(!is_admin()) {
-   // add_filter('script_loader_tag', 'add_defer_attribute', 10, 2);
-}
 
 /**
  * Debugging Functions
@@ -411,36 +386,6 @@ function go_login_url_filter($login_url, $redirect, $force_reauth)
 }
 */
 
-//add_action('init', 'temp_convert_all_featured_images', 1);
-function temp_convert_all_featured_images(){
-   //get all posts
-    //for each post
-    $args = array(
-        'post_type' => 'tasks',
-        'meta_query' => array(
-            array(
-                'key' => '_thumbnail_id',
-            )
-        )
-    );
-    $query = new WP_Query($args);
-
-    $posts = $query->posts;
-    foreach($posts as $post){
-        $image_id = get_post_meta($post->ID,'_thumbnail_id');
-        $image_id = $image_id[0];
-        $post_id = $post->ID;
-        update_post_meta( $post_id, 'go_featured_image', $image_id );
-        delete_post_meta( $post_id, '_thumbnail_id' );
-        $key = 'go_post_data_' . $post_id;
-        go_delete_transient($key);
-
-    }
-    //if it has featured image
-    //set new featured image
-    //remove old retured image
-}
-
 
 /*
 
@@ -468,243 +413,4 @@ function fb_mce_before_init( $settings ) {
 
 }
 */
-
-//add_action('init', 'fix_favorites');
-function fix_favorites()
-{
-
-    $sites = get_sites();
-    $sites  = array_column($sites, 'blog_id');
-    foreach ($sites as $site) {
-        $fixed = get_option('go_fix_favorites');
-        if($fixed){
-            restore_current_blog();
-            return;
-        }
-
-        $mail = get_blog_option($site, 'admin_email');
-        $user_from_email = get_user_by('email', $mail);
-        if(is_object($user_from_email)) {
-            $user_id = $user_from_email->ID;
-            if ($user_id) {
-                switch_to_blog(intval($site));
-                $user_array = array();
-                $user_array[] = $user_id;
-                $user_array = serialize($user_array);
-
-                //get all posts with a favorite
-
-                global $wpdb;
-                $pmTable = "{$wpdb->prefix}postmeta";
-
-                $wpdb->query( $wpdb->prepare("
-                    UPDATE $pmTable
-                    SET meta_value = %s
-                    WHERE meta_key = 'go_blog_favorite'
-                        AND meta_value = %s",
-                                    $user_array,
-                                    'true') );
-                update_option('go_fix_favorites', true);
-                restore_current_blog();
-
-                //set favorite to an array with this user_id
-            }
-        }
-    }
-}
-
-////add_action('init', 'fix_trashed');
-function fix_trashed()
-{
-
-    $sites = get_sites();
-    $sites  = array_column($sites, 'blog_id');
-    foreach ($sites as $site) {
-        switch_to_blog(intval($site));
-        $fixed = get_option('go_fix_trashed');
-        if($fixed){
-            restore_current_blog();
-            return;
-        }
-
-        $args = array(
-            'post_type'         => 'go_blogs',
-            'status' => 'ids'
-        );
-        //$query = new WP_Query($args);
-
-
-        global $wpdb;
-        $pmTable = "{$wpdb->prefix}postmeta";
-        $pTable = "{$wpdb->prefix}posts";
-        $aTable = "{$wpdb->prefix}go_actions";
-        $tTable = "{$wpdb->prefix}go_tasks";
-
-        $rows = $wpdb->get_results(
-            "SELECT t3.*, t4.status, t4.bonus_status
-              FROM
-                (SELECT t1.ID, stage, bonus_status AS tbonus, uid, source_id
-              FROM
-                (SELECT ID
-                FROM $pTable 
-                WHERE post_status = 'trash'
-                AND post_type = 'go_blogs') AS t1
-                INNER JOIN {$aTable} AS t2 ON t1.ID = t2.result
-                WHERE t2.action_type = 'blog_post' ) AS t3
-                INNER JOIN {$tTable} AS t4 ON t3.source_id = t4.post_id
-                WHERE t4.uid = t3.uid", ARRAY_A);
-        $posts_array = array_column($rows, 'post_id');
-
-        foreach($rows as $row){
-            if(is_numeric($row['tbonus']) && $row['tbonus']>0){
-                if($row['bonus_status'] > 0){
-                    //mark as unread
-                    wp_update_post(array(
-                        'ID'    =>  $row['ID'],
-                        'post_status'   =>  'unread'
-                    ));
-                }
-            }else if(is_numeric($row['stage']) && $row['stage']>0){
-                if($row['status'] >= $row['stage']){
-                    //mark as unread
-                    wp_update_post(array(
-                        'ID'    =>  $row['ID'],
-                        'post_status'   =>  'unread'
-                    ));
-                }
-            }
-            update_option('go_fix_trashed', true);
-        }
-
-    }
-}
-
-//add_action('init', 'go_fix_hidden');
-function go_fix_hidden()
-{
-
-    $sites = get_sites();
-    $sites  = array_column($sites, 'blog_id');
-    foreach ($sites as $site) {
-        switch_to_blog(intval($site));
-
-        $fixed = get_option('go_fix_hidden');
-        if($fixed){
-            restore_current_blog();
-            return;
-        }
-
-        //get all hidden posts
-        //add new meta is true
-        $args=array(
-            'post_type'        => 'tasks',
-            'orderby'          => 'meta_value_num',
-            'order'            => 'ASC',
-            'posts_per_page'   => -1,
-            //'meta_key'         => 'go-location_map_opt',
-            'post_status'      => 'publish',
-            'suppress_filters' => true,
-            'meta_query' => array(
-                array(
-                    'key'     => 'go-location_map_opt',
-                    'value'   => 1,
-                )
-            ),
-
-        );
-
-        $posts = get_posts($args);
-        foreach($posts as $post){
-            $post_id= $post->ID;
-            update_post_meta($post_id, 'go-location_map_options_hidden', 1 );
-            update_post_meta($post_id, 'go-location_map_options_nested', 1 );
-            update_post_meta($post_id, 'go-location_map_options_optional', 1 );
-            $key = 'go_post_data_' . $post_id;
-            go_delete_transient($key);
-        }
-
-       // $data = $data;
-        update_option('go_fix_hidden', true);
-
-
-    restore_current_blog();
-   }
-
-}
-
-
-//add_action('init', 'go_fix_attendance');
-function go_fix_attendance()
-{
-
-    $sites = get_sites();
-    $sites  = array_column($sites, 'blog_id');
-    foreach ($sites as $site) {
-
-        switch_to_blog(intval($site));
-        $fixed = get_option('go_fix_attendance');
-        if($fixed){
-            restore_current_blog();
-            return;
-        }
-
-        $count = get_option('options_go_timed_award');
-        $i=0;
-        while($i < $count){
-
-            $title = get_option('options_go_timed_award_'.$i.'_award_title');
-            $active = get_option('options_go_timed_award_'.$i.'_active');
-
-            update_option('options_go_timed_award_'.$i.'_information_award_title', $title);
-            update_option('options_go_timed_award_'.$i.'_information_active', $active);
-            $i++;
-        }
-
-        // $data = $data;
-        update_option('go_fix_attendance', true);
-
-
-        restore_current_blog();
-    }
-
-}
-
-
-//add_action('init', 'go_fixed_canned_messages');
-function go_fixed_canned_messages()
-{
-
-    $sites = get_sites();
-    $sites  = array_column($sites, 'blog_id');
-    foreach ($sites as $site) {
-
-        switch_to_blog(intval($site));
-        $fixed = get_option('go_fixed_canned_messages');
-        if($fixed){
-            restore_current_blog();
-            return;
-        }
-
-        $count = get_option('options_go_messages_canned');
-        $i=0;
-        while($i < $count){
-
-            $toggle = get_option('options_go_messages_canned_'.$i.'_toggle');
-            if($toggle){
-                update_option('options_go_messages_canned_'.$i.'_radio', 'add');
-            }
-            else{
-               update_option('options_go_messages_canned_'.$i.'_radio', 'remove');
-            }
-
-            $i++;
-        }
-
-        // $data = $data;
-        update_option('go_fixed_canned_messages', true);
-
-        restore_current_blog();
-    }
-
-}
 

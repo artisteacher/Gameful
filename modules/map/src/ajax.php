@@ -9,23 +9,29 @@
 /**
  * @param bool $map_id
  */
-function go_update_last_map($map_id = false) {
-    //check_ajax_referer( 'go_update_last_map' );
+function go_update_last_map() {
     if ( ! wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'go_update_last_map' ) ) {
         echo "There was an error.  Please refresh the page.";
         die( );
     }
+
     if(empty($_POST) || !isset($_POST)) {
         ajaxStatus('error', 'Nothing to update.');
     } else {
         try {
-            if (!$map_id){
-                $mapid = $_POST['goLastMap'];
-            }
+            $taxonomy = $_POST['taxonomy'];
+            $map_id = $_POST['goLastMap'];
             $user_id = get_current_user_id();
-            update_user_option( $user_id, 'go_last_map', $mapid );
-            $user_id = $_POST['uid'];
-            go_make_single_map($mapid, true, $user_id);
+
+            if($taxonomy === 'store_types'){
+                update_user_option( $user_id, 'go_last_store', $map_id );
+            }
+            else{
+                update_user_option( $user_id, 'go_last_map', $map_id );
+            }
+
+
+            go_make_single_map(true, $map_id, true, $taxonomy);
 
             die();
         } catch (Exception $e){
@@ -66,13 +72,9 @@ function go_user_map_ajax(){
         echo "There was an error.  Please refresh the page.";
         die( );
     }
-    $user_id = intval($_POST['uid']);
-    $current_user_id = get_current_user_id();
-    $map_id = get_user_option('go_last_map', $current_user_id);
+
     echo "<div class='go_user_map_wrapper'>";
-    //go_make_map_dropdown('task_chains', $last_map_id, $user_id);
-    //go_make_single_map($last_map_id, false, $user_id);// do your thing
-    go_make_map($map_id, $current_user_id);
+    go_make_map('task_chains', false);
     echo "</div>";
     die();
 }

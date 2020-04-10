@@ -40,11 +40,11 @@ class go_acf_plugin_order_posts {
 	*/
 	
 	function __construct() {
-		//
+//
 		// settings
 		// - these will be passed into the field class.
 		$this->settings = array(
-			'version'	=> '1.0.1',
+			'version'	=> '1.0.4',
 			'url'		=> plugin_dir_url( __FILE__ ),
 			'path'		=> plugin_dir_path( __FILE__ )
 		);
