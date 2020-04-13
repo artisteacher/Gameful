@@ -312,6 +312,89 @@ function go_blog_is_private($post_id){
     }
 }
 
+function does_quest_have_favorites($go_blog_task_id, $user_id){
+    $i = 0;
+    $data = go_post_data($go_blog_task_id);
+    $custom_fields = $data[3];
+    $status = go_get_status($go_blog_task_id, $user_id);
+    $stage_count = $custom_fields['go_stages'][0];
+    $blog_post_ids = array();
+    while ($i <= $status && $stage_count > $i) {//get blog post ids from regular stages
+
+        //check the task meta for a uniqueid
+        $uniqueid = (isset($custom_fields['go_stages_' . $i . '_uniqueid'][0]) ? $custom_fields['go_stages_' . $i . '_uniqueid'][0] : false);
+
+        //if uniqueid found then get the blog_post_id with the meta data
+        if ($uniqueid) {
+            $blog_post_id = go_get_blog_post_id($go_blog_task_id, $user_id, 'go_stage_uniqueid', $uniqueid, null);
+        }
+        if (empty($blog_post_id)) {
+            //if no uniqueid was set or the blog post couldn't be found
+            //search using the v4 methods where that was saved with the stage# in the meta
+            $blog_post_id = go_get_blog_post_id($go_blog_task_id, $user_id, 'go_blog_task_stage', null, $i);
+        }
+        if (!empty($blog_post_id)) {
+            $blog_post_ids[] = $blog_post_id;
+        }
+        $i++;
+
+    }
+    //if there are bonus stages
+    $bonus_status = go_get_bonus_status($go_blog_task_id, $user_id);
+    if ($bonus_status <= 0) {
+
+        $statuses = array('draft', 'unread', 'read', 'publish', 'revise');
+
+        $args = array(
+            'post_status' => $statuses,
+            'post_type' => 'go_blogs',
+            'post_parent' => intval($go_blog_task_id),
+            'author' => $user_id,
+            'posts_per_page' => 0,
+            'meta_query' => array(
+                array(
+                    'key' => 'go_blog_bonus_stage',
+                    'value' => 1,
+                    'compare' => '>=',
+                )
+            ),
+        );
+        $my_query = new WP_Query($args);
+
+
+        if ($my_query->have_posts()) {
+            while ($my_query->have_posts()) {
+                // Do your work...
+                $my_query->the_post();
+                $blog_post_id = get_the_ID();
+                $blog_post_ids[] = $blog_post_id;
+            } // end while
+        } // end if
+        wp_reset_postdata();
+    }
+
+    $is_favorite = false;
+    foreach ($blog_post_ids as $blog_post_id) {
+
+        $status = go_post_meta($blog_post_id, 'go_blog_favorite', true );
+        if(is_serialized($status)) {
+            $status = unserialize($status);
+        }
+        if ($status == 'true') {
+            $is_favorite = true;
+            break;
+        } else if (is_array($status)) {
+            if (count($status) > 0) {
+                $is_favorite = true;
+                break;
+            }
+        }
+
+    }
+    return $is_favorite;
+}
+
+
 function go_blog_favorite($post_id, $is_archive = false){
     $user_id = get_current_user_id();
     $post_author_id = get_post_field('post_author', $post_id);
@@ -420,14 +503,42 @@ function go_blog_favorite_toggle(){
     update_post_meta( $post_id, 'go_blog_favorite', $current_likes);
     $key = 'go_post_data_' . $post_id;
     go_delete_transient($key);
+    $post_author_id = get_post_field('post_author', $post_id);
+    $parent = wp_get_post_parent_id($post_id);
+    global $wpdb;
+    $go_task_table_name = "{$wpdb->prefix}go_tasks";
+    $has_favorite = 0;
     if($status === 'true') {
         $message = '<i class="fas fa-heart fa-4x" style="color:#8B0000"></i>';
-        $post_author_id = get_post_field('post_author', $post_id);
         $vars[0]['uid']= $post_author_id;
         $post_title = get_post_field('post_title', $post_id);
         $current_user_name = ucwords(go_get_user_display_name());
         go_send_message(true, $current_user_name .' liked your post "'.$post_title.'."', $message, 'message', true, 0, 0, 0, 0, false, '', '', $vars);
+
+        //add favorite to blog_post_parent
+        $has_favorite = 1;
+
     }
+    else{
+        $this_favorite = does_quest_have_favorites($parent, $post_author_id);
+        if($this_favorite){
+            $has_favorite = 1;
+        }
+    }
+
+    $wpdb->query(
+        $wpdb->prepare(
+            "UPDATE {$go_task_table_name} 
+                SET 
+                    favorite = %d        
+                WHERE uid= %d AND post_id=%d ",
+            $has_favorite,
+            intval($post_author_id),
+            $parent
+        )
+    );
+
+    die();
 }
 
 function go_blog_post_history_table($post_id){

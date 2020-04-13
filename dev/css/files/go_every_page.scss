@@ -1,4 +1,19 @@
+$corner_radius : 7px;
+
 .mce-notification {display: none !important;}
+.mce-wordcount{
+	color:black !important;
+}
+
+//remove links from post titles
+.entry-title {pointer-events: none;
+	a,
+	a:visited,
+	a:hover,
+	a:focus{
+		color: unset;
+	}
+}
 
 .go_settings{
 	cursor: pointer;
@@ -15,7 +30,7 @@
 ********************/
 
 .go_actions_wrapper_flex a{
-	color: #1a1a1a !important;
+	color: inherit !important;
 }
 
 .go_actions_wrapper_flex .tools {
@@ -162,7 +177,7 @@
 	margin-right: 2.5% !important;
 	margin-left: 2.5% !important;
 	background: #efefef !important;
-	overflow: scroll !important;
+	//overflow: scroll !important;
 }
 
 /********************
@@ -486,14 +501,14 @@ input[type="checkbox"]:checked + label span.checkbox::after {
 }
 */
 
-.select2-results__options {
+.select2-results__options:not(.select2-results__options--nested) {
 	max-height: 400px !important;
 }
 
 #go_leaderboard_filters {
 
-	.select2-selection__rendered {
-		line-height: 24px !important;
+	#go_user_filters .select2-selection__rendered {
+		line-height: 35px !important;
 	}
 	.select2-container .select2-selection--single {
 		height: 35px !important;
@@ -817,15 +832,17 @@ body:not(.wp-customizer) .media-modal {
 
 #go_buttons {
 	overflow: auto;
-	position: relative;
-	padding: 10px;
-    min-height: 40px;
+	//position: relative;
+	//padding: 10px;
+    //min-height: 40px;
+	display: flex;
+	justify-content: space-between;
 }
 
 #go_back_button {
-	float:left;
-	position: absolute;
-	bottom: 10px;
+	//float:left;
+	//position: absolute;
+	//bottom: 10px;
 
 }
 
@@ -837,7 +854,7 @@ body:not(.wp-customizer) .media-modal {
 }
 
 #go_button {
-	float: right;
+	//float: right;
 }
 
 .go_blog_actions{
@@ -849,21 +866,24 @@ body:not(.wp-customizer) .media-modal {
 }
 .go_button_round {/*Button itself*/
 	//position: absolute;
-	content: '';
+	//content: '';
 	width: 40px;
 	height: 40px;
-	line-height: 40px;
-	vertical-align: middle;
-	margin: 0px 5px 15px;
-	top: 8px;
+	//line-height: 40px;
+	//vertical-align: middle;
+	margin: 0px 0px 0px 5px;
+	//top: 8px;
 	border-radius: 50%;
 	font-size: 25px;
 	background-image: -webkit-linear-gradient(#e8e8e8 0%, #d6d6d6 100%);
 	background-image: linear-gradient(#e8e8e8 0%, #d6d6d6 100%);
 	text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.66);
 	box-shadow: inset 0 2px 0 rgba(255,255,255,0.5), 0 2px 2px rgba(0, 0, 0, 0.19);
-	border-bottom: solid 2px #b5b5b5;
+	//border-bottom: solid 2px #b5b5b5;
 	cursor: pointer;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .go_button_round .go_round_inner:active{
@@ -897,12 +917,16 @@ body:not(.wp-customizer) .media-modal {
 
 
 .go_blog_form_footer {
+
 	background-color: #b3b3b3;
-	width: 100%;
+	//width: 100%;
 	//height: 60px;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	color: black;
+	padding:5px;
+	flex-direction: row-reverse;
 }
 
 .go_blog_form_footer._lightbox {
@@ -914,7 +938,7 @@ body:not(.wp-customizer) .media-modal {
 	width: auto;
 	padding: 5px;
 	border-radius: 3px;
-	margin: 5px;
+	//margin: 5px;
 	float: left;
 	font-size: .8em;
 	text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.66);
@@ -929,6 +953,14 @@ body:not(.wp-customizer) .media-modal {
 
 .go_blog_status_icons div {
 	padding: 0px 10px;
+}
+
+.go_buttons{
+	border-radius: 7px;
+}
+
+.go_checks_and_buttons .go_buttons{
+	margin-top:10px;
 }
 
 #go_back_button,
@@ -964,7 +996,8 @@ body:not(.wp-customizer) .media-modal {
 .go_locks {
 	padding: 10px;
 	margin: 10px;
-	background-color: #ddd;
+	border-radius: $corner_radius;
+	//background-color: #ddd;
 
 
 	p{
@@ -984,12 +1017,12 @@ body:not(.wp-customizer) .media-modal {
 
 .go_lock, .go_late_mods, .go_sched_access_message, .go_timer_message, .go_checks_and_buttons {
 	//border: solid 1px;
-	border-radius: 3px;
-	padding: 10px;
+	border-radius: $corner_radius;
+	padding: 20px;
 	margin: 10px 0;
-	background-color: #f5b3bd;
+	//background-color: #f5b3bd;
 	min-width: 200px;
-	color: black;
+	//color: black;
 }
 
 .go_lock .go_error_red {
@@ -998,12 +1031,13 @@ body:not(.wp-customizer) .media-modal {
 
 .go_checks_and_buttons{
 	background-color: #c9fbc9;
+	padding: 20px;
 
 }
 
 .go_checks_and_buttons.active{
-	background-color: cornsilk;
-	padding: 20px;
+	//background-color: cornsilk;
+
 
 	hr {
 		margin-top: 20px;
@@ -1080,21 +1114,21 @@ body:not(.wp-customizer) .media-modal {
 }
 
 .go_error_red, .go_error {
-	color: red;
+	//color: red;
 }
 
 .go-error-message {
 	position: relative;
 	display: block;
-	background: pink;
+	//background: pink;
 	margin: 5px 0 15px;
 	padding: 1px 12px;
 	min-height: 0px;
-	border-left: #dd4232 solid 4px;
+	//border-left: #dd4232 solid 4px;
 }
 
 input[type='text'].go_error_red {
-	border: 2px solid red;
+	//border: 2px solid red;
 	outline: none;
 }
 
@@ -1143,9 +1177,9 @@ input[type='text'].go_error_red {
 	display: flex;}
 
 .progress-bar-border {
-	height: 16px;
-	border-color: #FFFFFF;
-	border-width: 1px 0px;
+	height: 19px;
+	//border-color: #FFFFFF;
+	//border-width: 1px 0px;
 	position: relative;
 	background-color: black;
 	font-size: 14px;
@@ -1313,9 +1347,19 @@ input[name="go_admin_bar_submit"] {
 	-moz-box-shadow: 6px 6px 23px -9px rgba(0,0,0,0.68);
 	box-shadow: 6px 6px 23px -9px rgba(0,0,0,0.68);
 	background-color: white;
+	color: black;
 }
-.go_call_to_action {
-	margin: 10px;
+
+.go_test_container,
+.go_quiz_results{
+	background-color: white;
+	color: #0b0b0b;
+	margin: 0 0 20px 0;
+	padding: 20px;
+
+	p:last-child {
+		margin-bottom: 0px;
+	}
 }
 
 #outro.go_checks_and_buttons{
@@ -1553,9 +1597,13 @@ ul#go_bonus_loot_wrap li.go_error {
 }
 
 .go_stage_message {
-	border-bottom: 1px solid;
-	border-bottom-color: inherit;
+	//border-bottom: 1px solid;
+	//border-bottom-color: inherit;
 	padding: 20px 0 20px 0;
+
+	p:last-child{
+		margin-bottom: 0px;
+	}
 }
 
 
@@ -2094,6 +2142,7 @@ $turn-time: 3s;
 	padding:20px !important;
 }
 
+/*
 
 .noty_theme__sunset.noty_type__success{
 	background-color: #1bb15a !important;
@@ -2118,6 +2167,7 @@ $turn-time: 3s;
 	background-color: #4a84ef !important;
 	//text-shadow: -1px -1px 0 #800311, 1px -1px 0 #800311, -1px 1px 0 #800311, 1px 1px 0 #800311;
 }
+*/
 
 .noty_theme__sunset.noty_type__success,
 .noty_theme__sunset.noty_type__error{
@@ -2170,6 +2220,11 @@ $turn-time: 3s;
 /********************
 *	Feedback and blog
 ********************/
+
+.go_blog_post_wrapper{
+	background-color: white;
+	color: black;
+}
 .go_blog_post_wrapper .question{
 	font-size: .8em;
 	//font-style: italic;

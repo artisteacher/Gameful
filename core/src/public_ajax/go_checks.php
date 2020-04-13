@@ -68,7 +68,7 @@ function go_checks_for_understanding ($custom_fields, $i, $status, $user_id, $po
 
 
     $blog_post_id = null;
-    if ($check_type == 'blog') {
+    if ($check_type === 'blog') {
 
         $blog_post_id = go_blog_check($custom_fields, $i, $status, $user_id, $post_id, $bonus, $bonus_status, $all_content, $repeat_max, $check_type, $stage_count, $instructions);
     //} else if ($check_type == 'URL') {
@@ -86,81 +86,21 @@ function go_checks_for_understanding ($custom_fields, $i, $status, $user_id, $po
         go_no_check($i, $status, $custom_fields, $bonus, $bonus_status);
     }
 
-    if ($check_type != 'blog') {//blog posts add their own buttons with some extra stuff
+
+    if ($check_type === 'blog') {
+        $show_all_post_button = true;
+    }else{
+        $show_all_post_button = false;
+    }
+       //blog posts add their own buttons with some extra stuff
         //Buttons
-        go_buttons($custom_fields, $i, $stage_count, $status, $check_type, $bonus, $bonus_status, $repeat_max, false, $blog_post_id);
-    }
-
-    if ($check_type == 'blog') {
-        global $last_bonus_printed_done;
-        $displayed = false;
-        $uniqueid = false;
-        $all_posts_button_toggle = get_option('options_social_options_show_all_posts');
-        if ($all_posts_button_toggle !== '0' ) {
-            $task_version = (isset($custom_fields['go_task_version'][0]) ? $custom_fields['go_task_version'][0] : false);
-            //$show = false;
-            if ($bonus && $last_bonus_printed_done) {
-                $uniqueid = 'bonus';
-                if($task_version) {
-                    $opts = (isset($custom_fields['go_bonus_stage_blog_options_v5_opts'][0]) ? $custom_fields['go_bonus_stage_blog_options_v5_opts'][0] : false);
-                    $opts = unserialize($opts);
-                    if (is_array($opts)) {
-                        $displayed = in_array('show_posts', $opts);
-                    }
-                }else{
-                    $displayed = (isset($custom_fields['go_bonus_stage_blog_options_v5_view_posts_button_show'][0]) ? $custom_fields['go_bonus_stage_blog_options_v5_view_posts_button_show'][0] : false);
-                    $displayed = intval($displayed);
-                }
-                //$when = (isset($custom_fields['go_bonus_stage_blog_options_v5_view_posts_button_when'][0]) ? $custom_fields['go_bonus_stage_blog_options_v5_view_posts_button_when'][0] : "after");
-                //$is_private = (isset($custom_fields['go_bonus_stage_blog_options_v5_private'][0]) ?  $custom_fields['go_bonus_stage_blog_options_v5_private'][0] : false);
-
-            } else if($status > $i) {
-                $uniqueid = (isset($custom_fields['go_stages_' . $i . '_uniqueid'][0]) ?  $custom_fields['go_stages_' . $i . '_uniqueid'][0] : false);
-                if($task_version) {
-                    $opts = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_opts'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_opts'][0] : false);
-                    $opts = unserialize($opts);
-                    if (is_array($opts)) {
-                        $displayed = in_array('show_posts', $opts);
-                    }
-                }else{
-                    $displayed = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_view_posts_button_show'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_view_posts_button_show'][0] : "1");
-                    $displayed = intval($displayed);
-                }
-
-                //$when = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_view_posts_button_when'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_view_posts_button_when'][0] : "after");
-                //$is_private = (isset($custom_fields['go_stages_'.$i.'_blog_options_v5_private'][0]) ?  $custom_fields['go_stages_'.$i.'_blog_options_v5_private'][0] : false);
-
-            }
-            $button_text = "See All Posts";
-
-            $is_admin = go_user_is_admin();
-            if($is_admin){
-                $displayed = true;
-            }
-            //if($is_private){
-                //$show = false;
-           // }
-            /*
-            if ($show) {
-                //if ($when != 'after' || $stage <= $status || ($stage == 'bonus' && $bonus_status > 0)) {
-                if ($is_admin || $stage <= $status || ($stage == 'bonus' && $bonus_status > 0)) {
-                    $displayed = true;
-                }
-
-            }*/
-           /* if (!$displayed) {
-                $button_text = "See All Posts (admin only)";
-            }*/
-
-            //if ($is_admin || $displayed) {
-            if ($displayed) {
-                echo "<div class='go_quest_reader_lightbox'><button class='go_quest_reader_lightbox_button' data-post_id='" . intval($post_id) . "' data-stage='" . $uniqueid . "'><i class='fas fa-book-open'></i> $button_text</button></div>";
-            }
-        }
-    }
+        go_buttons($custom_fields, $i, $stage_count, $status, $check_type, $bonus, $bonus_status, $repeat_max, false, $blog_post_id, $show_all_post_button, $post_id);
+   // }
 
 
-        echo "</div>";
+
+
+    echo "</div>";
 }
 
 function go_get_instructions($custom_fields, $bonus, $i = false ){
@@ -182,7 +122,7 @@ function go_get_instructions($custom_fields, $bonus, $i = false ){
 
     if(!empty($instructions)) {
         $instructions = apply_filters( 'go_awesome_text', $instructions );
-        $instructions = "<div class='go_call_to_action'><br>" . $instructions . " </div>";
+        $instructions = "<div class='go_call_to_action'>" . $instructions . " </div>";
     }
 
     return $instructions;
@@ -202,7 +142,7 @@ function go_get_instructions($custom_fields, $bonus, $i = false ){
  * @param bool $outro
  * @param $blog_post_id
  */
-function go_buttons($custom_fields, $i, $stage_count, $status, $check_type, $bonus, $bonus_status, $repeat_max, $outro = false, $blog_post_id = null){
+function go_buttons($custom_fields, $i, $stage_count, $status, $check_type, $bonus, $bonus_status, $repeat_max, $outro = false, $blog_post_id = null, $show_all_post_button = false, $post_id = null){
 
     //$custom_fields //meta of the task_id
     //$i
@@ -277,7 +217,7 @@ function go_buttons($custom_fields, $i, $stage_count, $status, $check_type, $bon
             $undo = 'undo_last';
         }
         echo "<div id='go_buttons'>";
-        echo "<a style='font-size: 1.2em;'><div id='go_back_button' class='go_buttons' undo='true' button_type='{$undo}' status='{$status}' check_type='{$check_type}' blog_post_id='{$undo_blog_post_id}'><i class=\"fas fa-arrow-square-up\"></i> Undo</div></a>";
+        echo "<button id='go_back_button' class='go_buttons' undo='true' button_type='{$undo}' status='{$status}' check_type='{$check_type}' blog_post_id='{$undo_blog_post_id}'><i class=\"fas fa-arrow-square-up\"></i> Undo</button>";
         if ($custom_fields['bonus_switch'][0] && ! $bonus_is_complete) {
             //echo "There is a bonus stage.";
             echo "<button id='go_button' class='show_bonus go_buttons' status='{$status}' check_type='{$check_type}' button_type='show_bonus'  admin_lock='true' >Show Bonus Challenge</button> ";
@@ -285,35 +225,111 @@ function go_buttons($custom_fields, $i, $stage_count, $status, $check_type, $bon
         }
         echo "</div>";
     }
-
-    else if ( $i == $status || $status == 'unlock' ) {//admin_view for guest
+    else  {//admin_view for guest
 
         echo "<div id='go_buttons'>";
-        if ($i == 0) {
-            echo "<a style='font-size: 1.2em;'><div id='go_back_button'  class='go_buttons' undo='true' button_type='{$abandon}' status='{$status}' check_type='{$check_type}' blog_post_id='{$undo_blog_post_id}'><i class=\"fas fa-arrow-square-left\"></i> Abandon</div></a>";
-        } else {
-            echo "<a style='font-size: 1.2em;'><div id='go_back_button' class='go_buttons' undo='true' button_type='{$undo}' status='{$status}' check_type='{$check_type}' blog_post_id='{$undo_blog_post_id}'><i class=\"fas fa-arrow-square-up\"></i> Undo</div></a>";
-        }
-        if (($i + 1) == $stage_count) {
-            $button_text = "Complete";
-            if ($bonus){
-                $button_type = 'complete_bonus';
-            }else {
-                $button_type = 'complete';
+        if ( $i == $status || $status == 'unlock' ) {
+            if ($i == 0 ) {
+                echo "<button id='go_back_button'  class='go_buttons' undo='true' button_type='{$abandon}' status='{$status}' check_type='{$check_type}' blog_post_id='{$undo_blog_post_id}'><i class=\"fas fa-arrow-square-left\"></i> Abandon</button>";
+            } else {
+                echo "<button id='go_back_button' class='go_buttons' undo='true' button_type='{$undo}' status='{$status}' check_type='{$check_type}' blog_post_id='{$undo_blog_post_id}'><i class=\"fas fa-arrow-square-up\"></i> Undo</button>";
             }
-
-        } else {
-            $button_text = "Continue";
-            if ($bonus){
-                $button_type = 'continue_bonus';
-            }else {
-                $button_type = 'continue';
-            }
-
-            //echo "<button id='go_button' class='progress go_buttons' status='{$status}' check_type='{$check_type}' button_type='{$continue}' admin_lock='true' min_words='{$min_words}' blog_suffix ='' text_toggle='{$text_toggle}' blog_post_id='{$blog_post_id}'>Continue</button>";
         }
-        echo "<button id='go_button' class='progress go_buttons go_blog_autosave_button' status='{$status}' check_type='{$check_type}' button_type='{$button_type}' admin_lock='true' min_words='{$min_words}' blog_suffix ='' text_toggle='{$text_toggle}' blog_post_id='{$blog_post_id}'>{$button_text}</button> ";
-        //go_autosave_info();
+
+        if($show_all_post_button){
+            global $last_bonus_printed_done;
+            $is_admin = go_user_is_admin();
+            $displayed = false;
+            $uniqueid = false;
+            $all_posts_button_toggle = get_option('options_social_options_show_all_posts');
+            if ($all_posts_button_toggle !== '0' ) {
+                $task_version = (isset($custom_fields['go_task_version'][0]) ? $custom_fields['go_task_version'][0] : false);
+                //$show = false;
+                if ($bonus && $last_bonus_printed_done) {
+                    $uniqueid = 'bonus';
+                    if($task_version) {
+                        $opts = (isset($custom_fields['go_bonus_stage_blog_options_v5_opts'][0]) ? $custom_fields['go_bonus_stage_blog_options_v5_opts'][0] : false);
+                        $opts = unserialize($opts);
+                        if (is_array($opts)) {
+                            $displayed = in_array('show_posts', $opts);
+                        }
+                    }else{
+                        $displayed = (isset($custom_fields['go_bonus_stage_blog_options_v5_view_posts_button_show'][0]) ? $custom_fields['go_bonus_stage_blog_options_v5_view_posts_button_show'][0] : false);
+                        $displayed = intval($displayed);
+                    }
+                    //$when = (isset($custom_fields['go_bonus_stage_blog_options_v5_view_posts_button_when'][0]) ? $custom_fields['go_bonus_stage_blog_options_v5_view_posts_button_when'][0] : "after");
+                    //$is_private = (isset($custom_fields['go_bonus_stage_blog_options_v5_private'][0]) ?  $custom_fields['go_bonus_stage_blog_options_v5_private'][0] : false);
+
+                //} else if($status > $i) {
+                } else if($status > $i || $is_admin) {
+                    $uniqueid = (isset($custom_fields['go_stages_' . $i . '_uniqueid'][0]) ?  $custom_fields['go_stages_' . $i . '_uniqueid'][0] : false);
+                    if($task_version) {
+                        $opts = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_opts'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_opts'][0] : false);
+                        $opts = unserialize($opts);
+                        if (is_array($opts)) {
+                            $displayed = in_array('show_posts', $opts);
+                        }
+                    }else{
+                        $displayed = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_view_posts_button_show'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_view_posts_button_show'][0] : "1");
+                        $displayed = intval($displayed);
+                    }
+
+                    if($is_admin){
+                        $displayed = true;
+                    }
+
+                    //$when = (isset($custom_fields['go_stages_' . $i . '_blog_options_v5_view_posts_button_when'][0]) ? $custom_fields['go_stages_' . $i . '_blog_options_v5_view_posts_button_when'][0] : "after");
+                    //$is_private = (isset($custom_fields['go_stages_'.$i.'_blog_options_v5_private'][0]) ?  $custom_fields['go_stages_'.$i.'_blog_options_v5_private'][0] : false);
+
+                }
+                $button_text = "See All Posts";
+
+
+
+                //if($is_private){
+                //$show = false;
+                // }
+                /*
+                if ($show) {
+                    //if ($when != 'after' || $stage <= $status || ($stage == 'bonus' && $bonus_status > 0)) {
+                    if ($is_admin || $stage <= $status || ($stage == 'bonus' && $bonus_status > 0)) {
+                        $displayed = true;
+                    }
+
+                }*/
+                /* if (!$displayed) {
+                     $button_text = "See All Posts (admin only)";
+                 }*/
+
+                //if ($is_admin || $displayed) {
+                if ($displayed) {
+                    echo "<button class='go_buttons go_quest_reader_lightbox_button' data-post_id='" . intval($post_id) . "' data-stage='" . $uniqueid . "'><i class='fas fa-book-open'></i> $button_text</button>";
+                }
+            }
+        }
+
+        if ( $i == $status || $status == 'unlock' ) {
+            if (($i + 1) == $stage_count) {
+                $button_text = "Complete";
+                if ($bonus) {
+                    $button_type = 'complete_bonus';
+                } else {
+                    $button_type = 'complete';
+                }
+
+            } else {
+                $button_text = "Continue";
+                if ($bonus) {
+                    $button_type = 'continue_bonus';
+                } else {
+                    $button_type = 'continue';
+                }
+
+                //echo "<button id='go_button' class='progress go_buttons' status='{$status}' check_type='{$check_type}' button_type='{$continue}' admin_lock='true' min_words='{$min_words}' blog_suffix ='' text_toggle='{$text_toggle}' blog_post_id='{$blog_post_id}'>Continue</button>";
+            }
+            echo "<button id='go_button' class='progress go_buttons go_blog_autosave_button' status='{$status}' check_type='{$check_type}' button_type='{$button_type}' admin_lock='true' min_words='{$min_words}' blog_suffix ='' text_toggle='{$text_toggle}' blog_post_id='{$blog_post_id}'>{$button_text}</button> ";
+            //go_autosave_info();
+        }
         echo "</div>";
         echo "<p id='go_stage_error_msg' style='display: none; color: red;'></p>";
     }
@@ -451,7 +467,7 @@ function go_blog_check ($custom_fields, $i, $status, $user_id, $post_id, $bonus,
                 go_blog_form($blog_post_id, '', $post_id, $i, $bonus_status, true, $all_content);
                 //go_buttons($custom_fields, $i, $stage_count, $status, $check_type, $bonus, $bonus_status, $repeat_max, false, $blog_post_id);
             }
-            go_buttons($custom_fields, $i, $stage_count, $status, $check_type, $bonus, $bonus_status, $repeat_max, false, $blog_post_id);
+           // go_buttons($custom_fields, $i, $stage_count, $status, $check_type, $bonus, $bonus_status, $repeat_max, false, $blog_post_id, true, $post_id);
 
             return $blog_post_id;
         }
@@ -502,7 +518,7 @@ function go_blog_check ($custom_fields, $i, $status, $user_id, $post_id, $bonus,
 
             go_blog_post($blog_post_id, $post_id, true, true, false, true, null, false);
             if($bonus_status == $go_bonus_count){
-                go_buttons($custom_fields, $i, $stage_count, $status, $check_type, $bonus, $bonus_status, $repeat_max, false, $blog_post_id);
+                go_buttons($custom_fields, $i, $stage_count, $status, $check_type, $bonus, $bonus_status, $repeat_max, false, $blog_post_id, true, $post_id);
 
             }
            // $go_print_next++;
@@ -514,6 +530,10 @@ function go_blog_check ($custom_fields, $i, $status, $user_id, $post_id, $bonus,
             $blog_post_id = (isset($_POST['blog_post)id']) ? $_POST['blog_post)id']  : false);
             if(!$blog_post_id) {
                 if (!$all_content) {
+
+                    /*
+                     *
+                     */
 
                     //if this is a continue, get any post, offset by the number already printed
                     if($go_bonus_direction == 'up') {
@@ -563,7 +583,7 @@ function go_blog_check ($custom_fields, $i, $status, $user_id, $post_id, $bonus,
             if(!$check_autosave){
                 go_blog_form($blog_post_id, '', $post_id, $i, $bonus, true, $all_content);
             }
-            go_buttons($custom_fields, $i, $stage_count, $status, $check_type, $bonus, $bonus_status, $repeat_max, false, $blog_post_id);
+            go_buttons($custom_fields, $i, $stage_count, $status, $check_type, $bonus, $bonus_status, $repeat_max, false, $blog_post_id, true, $post_id);
             //if($blog_post_id){do_action('go_blog_template_after_post', $blog_post_id, false);}
 
             return $blog_post_id;
@@ -1105,6 +1125,7 @@ function go_test_check ($custom_fields, $i, $status, $go_actions_table_name, $us
 
         //if on task and not 100%
         //then get the most recent attempt
+        echo "<div class='go_quiz_results'>";
         if (!$show_first) {//on a task
             if ($quiz_mod == 0) {
                 echo "<div>You got {$score} correct. 100% Good job!</div>";
@@ -1142,6 +1163,7 @@ function go_test_check ($custom_fields, $i, $status, $go_actions_table_name, $us
 
 
         }
+        echo "</div>";
         /*
         if ($quiz_mod > 0) {
 

@@ -59,7 +59,17 @@ function go_make_reader($with_header = true, $order = null) {
             $post_slug = get_post_field('post_name', get_post());
             $path = "quest_posts?post_id={$post_id}&stage={$stage}";
             $url = get_site_url(null, $path, null);
-            echo "<span><a href='{$url}'><i class='fas fa-link'></i></a></span>";
+            $message = 'Get a link to these posts on their own page. This can then be placed other content to come directly to submissions on this assignment.';
+            echo "
+            <span onclick='go_copy_to_clipboard(this)' class='tooltip action_icon' data-tippy-content='$message'>
+                            <span class='tooltip_click' data-tippy-content='Copied!'>
+                                <span  style='background-color: white; display:none;' class='go_copy_this '>$url</span> 
+                                <a><i style='' class='far fa-1x fa-link'></i></a>
+                            </span>
+                    </span>
+                    ";
+
+           // echo "<span class='tooltip'  data-tippy-content=''><a href='{$url}'><i class='fas fa-link'></i></a></span>";
             echo "</div>";
         }
     }
@@ -215,13 +225,14 @@ function go_reader_get_posts($sQuery2 = null, $pWhere = null, $order = null, $bl
     }
 
     $include_unread = (isset($_GET['unread']) ?  $_GET['unread'] : 'true');
-        if ($include_unread === 'true') {
+    if ($include_unread === 'true') {
         $tQuery1 = " SELECT COUNT(*) ";
         $pWhere2 = " WHERE ((t4.post_type = 'go_blogs') AND (t4.post_status = 'unread')) ";
         $tQuery = $tQuery1 . $sQuery2 . $pWhere2;
 
         $TotalunRead = $wpdb->get_results($tQuery, ARRAY_N);
-        $TotalunRead = $TotalunRead[0][0];
+        //$TotalunRead = $TotalunRead[0][0];
+        $TotalunRead = (isset($TotalunRead[0][0]) ?  $TotalunRead[0][0] : 0);
     }else{
         $TotalunRead = 0;
     }

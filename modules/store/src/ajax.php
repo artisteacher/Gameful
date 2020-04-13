@@ -256,7 +256,7 @@ function go_the_lb_ajax() {
     $is_admin = go_user_is_admin(  );
 
     ob_start();
-
+    $task_is_locked = false;
     $unlock_flag = true;
     echo "<div class='go_store_lightbox_container'>";
     if($skip_locks == false) {
@@ -286,7 +286,8 @@ function go_the_lb_ajax() {
                 </div>
             </div>
             <?php
-        } else if ($task_is_locked == true && $is_logged_in) { //change this code to show admin override box
+        }
+        else if ($task_is_locked == true && $is_logged_in) { //change this code to show admin override box
             //if ($is_logged_in) { //add of show password field is on
             ?>
             <div id="go_store_admin_override" style="overflow: auto; width: 100%;">
@@ -330,6 +331,8 @@ function go_the_lb_ajax() {
             $unlock_flag = 'bad_password';
         }
     }
+
+
     if (!$task_is_locked) {
 
 
@@ -372,6 +375,7 @@ function go_the_lb_ajax() {
         if ($store_limit_toggle) {
             $store_limit = (($custom_fields['go-store-options_limit_num'][0] == true) ? $custom_fields['go-store-options_limit_num'][0] : null);
         }
+
         $purchase_remaining_max = go_get_purchase_limit($post_id, $user_id, $custom_fields, $purchase_count);
         if (!is_int($purchase_remaining_max)){
             $message = $purchase_remaining_max;
@@ -399,10 +403,10 @@ function go_the_lb_ajax() {
             echo '<div id="go_store_description" >' . $the_content . '</div>';
         }
         echo "</div>";
-
-
-        }
         echo "</div>";//end loot and top content
+
+    }
+
 
     //loot
     echo "<div id='go_store_loot'>";
@@ -420,12 +424,12 @@ function go_the_lb_ajax() {
 
         echo "</div></div>";
     }
-    //
+        //
 
     if (($xp_on && $store_toggle_xp == true) || ($gold_on && $store_toggle_gold == true) || ($health_on && $store_toggle_health == true) || (!empty($badges)) || (!empty($groups))) {
         echo "<div class='go_reward loot_container'><div id='gp_store_plus' class='go_store_round_button'><div>+</div></div><div class='go_store_loot'>";
         if ($xp_on && $store_toggle_xp == true) {
-            echo '<div class="loot-box up">' . $store_cost_xp .  '</div>';
+            echo '<div class="loot-box up">' . $store_cost_xp . '</div>';
         }
         if ($gold_on && $store_toggle_gold == true) {
             echo '<div class="loot-box up">' . $store_cost_gold . '</div>';
@@ -461,78 +465,81 @@ function go_the_lb_ajax() {
         }
 
         echo "</div></div>";//close the reward container
-        echo "</div>";
-
-
-        ?>
-        <div class="go_store_actions" >
-            <?php
-            $store_multiple_toggle = (isset($custom_fields['go-store-options_multiple'][0]) ? $custom_fields['go-store-options_multiple'][0] : null);
-
-            if ($purchase_remaining_max > 0 && $store_multiple_toggle) {
-                ?>
-
-                <div class="quantity_container">Qty: <input class="go_qty" type="number" value="1" disabled="disabled">
-                </div>
-                <?php
-            }
-            ?>
-
-            <div id="go_purch_limits">
-                <?php
-                //$store_limit_duration = false;
-                $store_limit_frequency = ucwords( ($custom_fields['go-store-options_limit_toggle'][0] == true ) ? $custom_fields['go-store-options_limit_frequency'][0] : null );
-
-                if ($store_limit_frequency == 'Total') {
-                    $var1 = ' ';
-                } else {
-                    $var1 = ' / ';
-                }
-
-                if ($store_limit_toggle) {
-                    ?>
-                    <div id="golb-fr-purchase-limit"
-                         val="<?php echo(!empty($purchase_remaining_max) ? $purchase_remaining_max : 0); ?>"><?php echo(($store_limit_toggle) ? "Limit {$store_limit}{$var1}{$store_limit_frequency}" : 'No limit'); ?></div>
-                    <?php
-                }
-                ?>
-                <div id="golb-purchased">
-                    <?php
-                    if (is_null($purchase_count)) {
-                        echo 'Quantity purchased: 0';
-                    } else {
-                        echo "Quantity purchased: {$purchase_count}";
-                    }
-                    ?>
-                </div>
-            </div>
-
-            <?php
-            if ($purchase_remaining_max > 0) {
-                ?>
-                <button id="golb-fr-buy" class="buy_button"
-                     onclick="goBuytheItem( '<?php echo $post_id; ?>', '<?php echo $purchase_count ?>' ); this.removeAttribute( 'onclick' );"><?php
-                    $custom_toggle = ( ($custom_fields['go-store-options_custom_button_text_toggle'][0] == true ) ? $custom_fields['go-store-options_custom_button_text_toggle'][0] : false );
-                    if ($custom_toggle){
-                        $custom_button = ( ($custom_fields['go-store-options_custom_button_text_button_text'][0] == true ) ? $custom_fields['go-store-options_custom_button_text_button_text'][0] : 'Buy' );
-                    }else{
-                        $custom_button = "Buy";
-                    }
-                    echo $custom_button; ?>
-                </button>
-                <?php
-            }
-            if ($purchase_remaining_max == 0) {
-                ?>
-                <div class="error"><?php echo $message; ?></div>
-                <?php
-            }
-            ?>
-
-        </div></div>
-
-        <?php
     }
+        echo "</div>";//close the loot
+
+        if ($purchase_remaining_max > 0) {
+            ?>
+            <div class="go_store_actions">
+                <?php
+                $store_multiple_toggle = (isset($custom_fields['go-store-options_multiple'][0]) ? $custom_fields['go-store-options_multiple'][0] : null);
+
+                if ($purchase_remaining_max > 0 && $store_multiple_toggle) {
+                    ?>
+
+                    <div class="quantity_container">Qty: <input class="go_qty" type="number" value="1"
+                                                                disabled="disabled">
+                    </div>
+                    <?php
+                }
+                ?>
+
+                <div id="go_purch_limits">
+                    <?php
+                    //$store_limit_duration = false;
+                    $store_limit_frequency = ucwords(($custom_fields['go-store-options_limit_toggle'][0] == true) ? $custom_fields['go-store-options_limit_frequency'][0] : null);
+
+                    if ($store_limit_frequency == 'Total') {
+                        $var1 = ' ';
+                    } else {
+                        $var1 = ' / ';
+                    }
+
+                    if ($store_limit_toggle) {
+                        ?>
+                        <div id="golb-fr-purchase-limit"
+                             val="<?php echo(!empty($purchase_remaining_max) ? $purchase_remaining_max : 0); ?>"><?php echo(($store_limit_toggle) ? "Limit {$store_limit}{$var1}{$store_limit_frequency}" : 'No limit'); ?></div>
+                        <?php
+                    }
+                    ?>
+                    <div id="golb-purchased">
+                        <?php
+                        if (is_null($purchase_count)) {
+                            echo 'Quantity purchased: 0';
+                        } else {
+                            echo "Quantity purchased: {$purchase_count}";
+                        }
+                        ?>
+                    </div>
+                </div>
+
+                <?php
+                if ($purchase_remaining_max > 0) {
+                    ?>
+                    <button id="golb-fr-buy" class="buy_button"
+                            onclick="goBuytheItem( '<?php echo $post_id; ?>', '<?php echo $purchase_count ?>' ); this.removeAttribute( 'onclick' );"><?php
+                        $custom_toggle = (($custom_fields['go-store-options_custom_button_text_toggle'][0] == true) ? $custom_fields['go-store-options_custom_button_text_toggle'][0] : false);
+                        if ($custom_toggle) {
+                            $custom_button = (($custom_fields['go-store-options_custom_button_text_button_text'][0] == true) ? $custom_fields['go-store-options_custom_button_text_button_text'][0] : 'Buy');
+                        } else {
+                            $custom_button = "Buy";
+                        }
+                        echo $custom_button; ?>
+                    </button>
+                    <?php
+                }
+                if ($purchase_remaining_max == 0) {
+                    ?>
+                    <div class="error"><?php echo $message; ?></div>
+                    <?php
+                }
+                ?>
+
+            </div></div>
+
+            <?php
+        }
+
     echo "</div>";
     $store_lightbox_html = ob_get_contents();
     ob_end_clean();

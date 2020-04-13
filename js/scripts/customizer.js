@@ -57,42 +57,42 @@ jQuery( document ).ready( function() {
     // Update the site title in real time...
     wp.customize( 'go_map_available_color', function( value ) {
         value.bind( function( newval ) {
-            $( '#maps .available, .go_store_actions' ).css('background-color', newval );
+            $( '#maps .available, .go_store_actions, .go_checks_and_buttons.active' ).css('background-color', newval );
         } );
     } );
 
     // Update the site title in real time...
     wp.customize( 'go_map_available_font_color', function( value ) {
         value.bind( function( newval ) {
-            $( '#maps .available, .go_store_actions' ).css('color', newval );
+            $( '#maps .available, .go_store_actions, .go_checks_and_buttons.active' ).css('color', newval );
         } );
     } );
 
     // Update the site title in real time...
     wp.customize( 'go_map_done_color', function( value ) {
         value.bind( function( newval ) {
-            $( '#maps .done' ).css('background-color', newval );
+            $( '#maps .done, .go_checks_and_buttons' ).css('background-color', newval );
         } );
     } );
 
     // Update the site title in real time...
     wp.customize( 'go_map_done_font_color', function( value ) {
         value.bind( function( newval ) {
-            $( '#maps .done' ).css('color', newval );
+            $( '#maps .done, .go_checks_and_buttons' ).css('color', newval );
         } );
     } );
 
     // Update the site title in real time...
     wp.customize( 'go_map_locked_color', function( value ) {
         value.bind( function( newval ) {
-            $( '#maps .locked' ).css('background-color', newval );
+            $( '#maps .locked, .go_locks, .go_lock, .go_late_mods, .go_sched_access_message, .go_timer_message' ).css('background-color', newval );
         } );
     } );
 
     // Update the site title in real time...
     wp.customize( 'go_map_locked_font_color', function( value ) {
         value.bind( function( newval ) {
-            $( '#maps .locked' ).css('color', newval );
+            $( '#maps .locked, .go_locks, .go_lock, .go_late_mods, .go_sched_access_message, .go_timer_message' ).css('color', newval );
         } );
     } );
 
@@ -102,7 +102,7 @@ jQuery( document ).ready( function() {
             $( '#maps .go_store_loot_list_reward, .go_store_lightbox_container .go_reward, .loot-box.up, #gp_store_plus' ).css('background-color', newval );
         } );
     } );
-
+//
     // Update the site title in real time...
     wp.customize( 'go_store_up_font_color', function( value ) {
         value.bind( function( newval ) {
@@ -121,6 +121,46 @@ jQuery( document ).ready( function() {
     wp.customize( 'go_store_down_font_color', function( value ) {
         value.bind( function( newval ) {
             $( '#maps .go_store_loot_list_cost, .go_store_lightbox_container .go_cost, .loot-box.down, #gp_store_minus' ).css('color', newval );
+        } );
+    } );
+
+    // Update the site title in real time...
+    wp.customize( 'go_sound_up', function( value ) {
+        value.bind( function( newval ) {
+        //<script>var audio = new Audio( PluginDir.url + '". $sound ."' ); audio.play();</script>
+            var script = '<script>var audio = new Audio( PluginDir.url +"' + 'media/sounds/' + newval + '" ); audio.play();</script>';
+            console.log(script);
+            $( 'body' ).append(script);
+        } );
+    } );
+
+    // Update the site title in real time...
+    wp.customize( 'go_sound_down', function( value ) {
+        value.bind( function( newval ) {
+            //<script>var audio = new Audio( PluginDir.url + '". $sound ."' ); audio.play();</script>
+            var script = '<script>var audio = new Audio( PluginDir.url +"' + 'media/sounds/' + newval + '" ); audio.play();</script>';
+            console.log(script);
+            $( 'body' ).append(script);
+        } );
+    } );
+
+    // Update the site title in real time...
+    wp.customize( 'go_sound_level_up', function( value ) {
+        value.bind( function( newval ) {
+            //<script>var audio = new Audio( PluginDir.url + '". $sound ."' ); audio.play();</script>
+            var script = '<script>var audio = new Audio( PluginDir.url +"' + 'media/sounds/' + newval + '" ); audio.play();</script>';
+            console.log(script);
+            $( 'body' ).append(script);
+        } );
+    } );
+
+    // Update the site title in real time...
+    wp.customize( 'go_sound_level_down', function( value ) {
+        value.bind( function( newval ) {
+            //<script>var audio = new Audio( PluginDir.url + '". $sound ."' ); audio.play();</script>
+            var script = '<script>var audio = new Audio( PluginDir.url +"' + 'media/sounds/' + newval + '" ); audio.play();</script>';
+            console.log(script);
+            $( 'body' ).append(script);
         } );
     } );
 

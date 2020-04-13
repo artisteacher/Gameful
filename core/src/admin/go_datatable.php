@@ -6,7 +6,7 @@ global $wpdb;
 go_update_db_check();
 
 function go_update_db_check() {
-    $go_db_version = 5.2;
+    $go_db_version = 5.81;
     $old_version = get_option( 'go_db_version' );
 
     if ( $old_version != $go_db_version ) {
@@ -29,7 +29,7 @@ function go_update_db() {
     go_table_actions();
     go_install_data();
     //go_set_options_autoload(); //legacy function
-    go_convert_all_featured_images();
+    //go_convert_all_featured_images();
 }
 
 function go_table_tasks() {
@@ -51,6 +51,7 @@ function go_table_tasks() {
 			last_time datetime,
 			timer_time datetime,
 			class VARCHAR (4096),
+			favorite TINYINT DEFAULT 0,
 			PRIMARY KEY  (id),
             KEY uid (uid),
             KEY post_id (post_id),

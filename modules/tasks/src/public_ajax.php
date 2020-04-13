@@ -296,7 +296,9 @@ function go_display_locks ($post_id, $user_id, $is_admin, $task_name, $badge_nam
     else{
         $on_map = false;
     }
-    if ($custom_fields['go_lock_toggle'][0] == true || $custom_fields['go_sched_toggle'][0] == true || $on_map == true) {
+    $lock_toggle = (isset($custom_fields['go_lock_toggle'][0]) ?  $custom_fields['go_lock_toggle'][0] : null);
+    $go_sched_toggle = (isset($custom_fields['go_sched_toggle'][0]) ?  $custom_fields['go_sched_toggle'][0] : null);
+    if ($lock_toggle == true || $go_sched_toggle == true || $on_map == true) {
         $task_is_locked = go_task_locks($post_id, false, $user_id, $task_name, $custom_fields);
     }
 

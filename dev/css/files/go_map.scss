@@ -231,7 +231,7 @@ $shadow: 1px 1px 4px 0px;
 */
 
 .store_map {
-	.title {
+	.tasks .title {
 		padding: 6px 10px 0 10px !important;
 	}
 }
@@ -459,6 +459,15 @@ $shadow: 1px 1px 4px 0px;
 
 			.go_task_pod_required{
 				font-size: .8em;
+				background-color: white;
+				color: black;
+				border-radius: $corner_radius;
+				padding: 10px;
+
+				.go_locks {
+				color: black;
+				}
+
 			}
 
 			.tasks{
@@ -510,33 +519,10 @@ $shadow: 1px 1px 4px 0px;
 					}
 
 					/* --------	available tasks colors --------- */
-					.up{
-						border-color: mediumturquoise;
-						border-width: 4px 4px 4px 4px;
-						border-style: solid;
-						border-radius: 4px + $corner_radius;
-					}
-
-					.down{
-						border-color: indianred;
-						border-width: 4px 4px 4px 4px;
-						border-radius: (4px + $corner_radius) (4px + $corner_radius) (4px + $corner_radius) (4px + $corner_radius);
-						border-style: solid;
-					}
-
-					.reset{
-						border-color: indianred;
-						border-width: 2px 2px 2px 2px;
-						border-radius: (2px + $corner_radius) (2px + $corner_radius) (2px + $corner_radius) (2px + $corner_radius);
-						border-style: solid;
-						background-color: pink;
-						color: black;
-					}
-
-					.resetted{
-						border-color: #F4B400;
-						border-width: 4px 4px 4px 4px;
-						border-radius: (4px + $corner_radius) (4px + $corner_radius) (4px + $corner_radius) (4px + $corner_radius);
+					.resetted, .reset, .down, .up{
+						//border-color: #F4B400;
+						border-width: 2px;
+						border-radius: (2px + $corner_radius) ;
 						border-style: solid;
 					}
 
@@ -631,8 +617,10 @@ $shadow: 1px 1px 4px 0px;
 
 						.go_bonus_progresss_bar_container,
 						.go_bonus_progress_bar,
-						.loot_info{
-							border-radius: 0px;
+						.loot_info,
+						.go_map_quest_hover {
+							border-bottom-right-radius: 0px !important;
+							border-bottom-left-radius: 0px !important;
 						}
 
 				}
@@ -658,12 +646,6 @@ $shadow: 1px 1px 4px 0px;
 				border-radius: $corner_radius;
 			}
 
-			.go_task_pod_required{
-				background-color: white;
-				color: black;
-				border-radius: $corner_radius;
-				padding: 10px;
-			}
 
 		}//task_chain
 

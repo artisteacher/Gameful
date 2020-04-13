@@ -160,6 +160,7 @@ store lightbox styles
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                font-family: Arial, sans-serif;
 
                 div {
                     display: inline-block;
@@ -246,6 +247,7 @@ store lightbox styles
 
         #go_purch_limits {
             flex-grow: 1;
+            margin-right: 10px;
         }
 
 

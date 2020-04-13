@@ -165,7 +165,7 @@ function go_leaderboard_table() {
                                         } else {
                                             var section_value = localStorage.getItem('user_go_sections');
                                         }
-                                        console.log("section_value:" + section_value)
+                                        //console.log("section_value:" + section_value)
                                         if (jQuery('#go_reader_user_go_groups_select').hasClass("select2-hidden-accessible")) {
                                             var group_value = jQuery('#go_reader_user_go_groups_select').val();
                                         } else {
@@ -178,9 +178,9 @@ function go_leaderboard_table() {
                                         }
                                         //var show_all = jQuery('#go_show_all_leaderboard').prop('checked');
 
-                                        d.section = section_value;
-                                        d.group = group_value;
-                                        d.badge = badge_value;
+                                        //d.section = section_value;
+                                        //d.group = group_value;
+                                       // d.badge = badge_value;
                                         d.show_all = false;
                                         d._ajax_nonce = nonce;
                                     }
@@ -606,7 +606,7 @@ function go_following_list(target){
 }
 
 function go_make_feed() {
-
+    console.log("go_make_feed");
    if (jQuery("#go_feed_container").length == 0 ) {
 
         var loader_html = go_loader_html('big');

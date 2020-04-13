@@ -357,3 +357,6 @@ template {
 
 .acf-hide-label-frontend > .acf-label ~ .acf-label {
   display: block; }
+
+.go_blog_post_wrapper {
+  margin: 5px 0; }

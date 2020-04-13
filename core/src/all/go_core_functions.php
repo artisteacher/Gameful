@@ -865,7 +865,7 @@ function go_customize_register( $wp_customize ) {
 
     $wp_customize->add_section( 'go_map_controls_section',
         array(
-            'title' => __( 'Map/Store Display' ),
+            'title' => __( 'Game Colors and Fonts' ),
             'description' => esc_html__( 'Customize the Map & Store.' ),
             'panel' => 'go_panel',
             'priority' => 10, // Not typically needed. Default is 160
@@ -895,7 +895,7 @@ function go_customize_register( $wp_customize ) {
     );
     $wp_customize->add_control( new Skyrocket_Google_Font_Select_Custom_Control( $wp_customize, 'go_map_google_font_select',
         array(
-            'label' => __( 'Map Font', 'go' ),
+            'label' => __( 'Font', 'go' ),
             'description' => esc_html__( 'All Google Fonts sorted alphabetically. The default value is Muli.', 'skyrocket' ),
             'section' => 'go_map_controls_section',
             'settings' => 'go_map_google_font_select',
@@ -917,7 +917,7 @@ function go_customize_register( $wp_customize ) {
     );
     $wp_customize->add_control( new Skyrocket_Slider_Custom_Control( $wp_customize, 'go_map_font_size_control',
         array(
-            'label' => __( 'Map Font Size (px)', 'go' ),
+            'label' => __( 'Font Size (px)', 'go' ),
             'section' => 'go_map_controls_section',
             'settings' => 'go_map_font_size_control',
             'input_attrs' => array(
@@ -949,7 +949,7 @@ function go_customize_register( $wp_customize ) {
     );
     $wp_customize->add_control( new Skyrocket_Customize_Alpha_Color_Control( $wp_customize, 'go_map_bkg_color',
         array(
-            'label' => __( 'Map Background Color', 'go' ),
+            'label' => __( 'Main Background Color', 'go' ),
             //'description' => esc_html__( 'Sample custom control description' ),
             'section' => 'go_map_controls_section',
             'show_opacity' => false, // Optional. Show or hide the opacity value on the opacity slider handle. Default: true
@@ -966,7 +966,7 @@ function go_customize_register( $wp_customize ) {
     );
     $wp_customize->add_control( new Skyrocket_Customize_Alpha_Color_Control( $wp_customize, 'go_map_font_color',
         array(
-            'label' => __( 'Map Font Color', 'go' ),
+            'label' => __( 'Main Font Color', 'go' ),
             //'description' => esc_html__( 'Sample custom control description' ),
             'section' => 'go_map_controls_section',
             'show_opacity' => false, // Optional. Show or hide the opacity value on the opacity slider handle. Default: true
@@ -1018,7 +1018,7 @@ function go_customize_register( $wp_customize ) {
     );
     $wp_customize->add_control( new Skyrocket_Customize_Alpha_Color_Control( $wp_customize, 'go_map_available_color',
         array(
-            'label' => __( 'Map Available Color', 'go' ),
+            'label' => __( 'Available Color', 'go' ),
             //'description' => esc_html__( 'Sample custom control description' ),
             'section' => 'go_map_controls_section',
             'show_opacity' => false, // Optional. Show or hide the opacity value on the opacity slider handle. Default: true
@@ -1035,7 +1035,7 @@ function go_customize_register( $wp_customize ) {
     );
     $wp_customize->add_control( new Skyrocket_Customize_Alpha_Color_Control( $wp_customize, 'go_map_available_font_color',
         array(
-            'label' => __( 'Map Available Font Color', 'go' ),
+            'label' => __( 'Available Font Color', 'go' ),
             //'description' => esc_html__( 'Sample custom control description' ),
             'section' => 'go_map_controls_section',
             'show_opacity' => false, // Optional. Show or hide the opacity value on the opacity slider handle. Default: true
@@ -1052,7 +1052,7 @@ function go_customize_register( $wp_customize ) {
     );
     $wp_customize->add_control( new Skyrocket_Customize_Alpha_Color_Control( $wp_customize, 'go_map_done_color',
         array(
-            'label' => __( 'Map Done Color', 'go' ),
+            'label' => __( 'Done Color', 'go' ),
             //'description' => esc_html__( 'Sample custom control description' ),
             'section' => 'go_map_controls_section',
             'show_opacity' => false, // Optional. Show or hide the opacity value on the opacity slider handle. Default: true
@@ -1069,7 +1069,7 @@ function go_customize_register( $wp_customize ) {
     );
     $wp_customize->add_control( new Skyrocket_Customize_Alpha_Color_Control( $wp_customize, 'go_map_done_font_color',
         array(
-            'label' => __( 'Map Done Font Color', 'go' ),
+            'label' => __( 'Done Font Color', 'go' ),
             //'description' => esc_html__( 'Sample custom control description' ),
             'section' => 'go_map_controls_section',
             'show_opacity' => false, // Optional. Show or hide the opacity value on the opacity slider handle. Default: true
@@ -1086,7 +1086,7 @@ function go_customize_register( $wp_customize ) {
     );
     $wp_customize->add_control( new Skyrocket_Customize_Alpha_Color_Control( $wp_customize, 'go_map_locked_color',
         array(
-            'label' => __( 'Map Locked Color', 'go' ),
+            'label' => __( 'Locked Color', 'go' ),
             //'description' => esc_html__( 'Sample custom control description' ),
             'section' => 'go_map_controls_section',
             'show_opacity' => false, // Optional. Show or hide the opacity value on the opacity slider handle. Default: true
@@ -1104,7 +1104,7 @@ function go_customize_register( $wp_customize ) {
     );
     $wp_customize->add_control( new Skyrocket_Customize_Alpha_Color_Control( $wp_customize, 'go_map_locked_font_color',
         array(
-            'label' => __( 'Map Locked Font Color', 'go' ),
+            'label' => __( 'Locked Font Color', 'go' ),
             //'description' => esc_html__( 'Sample custom control description' ),
             'section' => 'go_map_controls_section',
             'show_opacity' => false, // Optional. Show or hide the opacity value on the opacity slider handle. Default: true
@@ -1122,7 +1122,7 @@ function go_customize_register( $wp_customize ) {
     );
     $wp_customize->add_control( new Skyrocket_Customize_Alpha_Color_Control( $wp_customize, 'go_store_up_color',
         array(
-            'label' => __( 'Store Reward Color', 'go' ),
+            'label' => __( 'Reward Color', 'go' ),
             //'description' => esc_html__( 'Sample custom control description' ),
             'section' => 'go_map_controls_section',
             'show_opacity' => false, // Optional. Show or hide the opacity value on the opacity slider handle. Default: true
@@ -1140,7 +1140,7 @@ function go_customize_register( $wp_customize ) {
     );
     $wp_customize->add_control( new Skyrocket_Customize_Alpha_Color_Control( $wp_customize, 'go_store_up_font_color',
         array(
-            'label' => __( 'Store Reward Font Color', 'go' ),
+            'label' => __( 'Reward Font Color', 'go' ),
             //'description' => esc_html__( 'Sample custom control description' ),
             'section' => 'go_map_controls_section',
             'show_opacity' => false, // Optional. Show or hide the opacity value on the opacity slider handle. Default: true
@@ -1157,7 +1157,7 @@ function go_customize_register( $wp_customize ) {
     );
     $wp_customize->add_control( new Skyrocket_Customize_Alpha_Color_Control( $wp_customize, 'go_store_down_color',
         array(
-            'label' => __( 'Store Cost Color', 'go' ),
+            'label' => __( 'Cost Color', 'go' ),
             //'description' => esc_html__( 'Sample custom control description' ),
             'section' => 'go_map_controls_section',
             'show_opacity' => false, // Optional. Show or hide the opacity value on the opacity slider handle. Default: true
@@ -1175,7 +1175,7 @@ function go_customize_register( $wp_customize ) {
     );
     $wp_customize->add_control( new Skyrocket_Customize_Alpha_Color_Control( $wp_customize, 'go_store_down_font_color',
         array(
-            'label' => __( 'Store Cost Font Color', 'go' ),
+            'label' => __( 'Cost Font Color', 'go' ),
             //'description' => esc_html__( 'Sample custom control description' ),
             'section' => 'go_map_controls_section',
             'show_opacity' => false, // Optional. Show or hide the opacity value on the opacity slider handle. Default: true
@@ -1361,6 +1361,144 @@ function go_customize_register( $wp_customize ) {
         )
     ) );
 
+    //SOUND SECTION
+
+    $wp_customize->add_section( 'go_sounds',
+        array(
+            'title' => __( 'Game Sounds' ),
+            'description' => esc_html__( 'Customize the Action Sounds' ),
+            'panel' => 'go_panel',
+            'priority' => 160, // Not typically needed. Default is 160
+            'capability' => 'edit_theme_options', // Not typically needed. Default is edit_theme_options
+
+        )
+    );
+
+    // Test of Dropdown Select2 Control (single select)
+    $wp_customize->add_setting( 'go_sound_up',
+        array(
+            'default' => '1',
+            'transport' => 'postMessage',
+            'type' => 'option',
+            'sanitize_callback' => 'skyrocket_text_sanitization'
+        )
+    );
+    $wp_customize->add_control( new Skyrocket_Dropdown_Select2_Custom_Control( $wp_customize, 'up_sound_selector',
+        array(
+            'label' => __( 'Select Reward Sound', 'skyrocket' ),
+            //'description' => esc_html__( 'Sample Dropdown Select2 custom control (Single Select)', 'skyrocket' ),
+            'section' => 'go_sounds',
+            'settings' => 'go_sound_up',
+            'input_attrs' => array(
+                'placeholder' => __( 'Please select a sound...', 'skyrocket' ),
+                'multiselect' => false,
+            ),
+            'choices' => array(
+                'coins.mp3' => __( 'Coins', 'skyrocket' ),
+                'chime.m4a' => __( 'Chime', 'skyrocket' ),
+                'jingle.mp3' => __( 'Jingle', 'skyrocket' ),
+                'notification.mp3' => __( 'Notification', 'skyrocket' ),
+                'ping.m4a' => __( 'Ping', 'skyrocket' ),
+                'Tones.m4a' => __( 'Tones', 'skyrocket' ),
+            )
+        )
+    ) );
+
+    // Test of Dropdown Select2 Control (single select)
+    $wp_customize->add_setting( 'go_sound_down',
+        array(
+            'default' => '1',
+            'transport' => 'postMessage',
+            'type' => 'option',
+            'sanitize_callback' => 'skyrocket_text_sanitization'
+        )
+    );
+    $wp_customize->add_control( new Skyrocket_Dropdown_Select2_Custom_Control( $wp_customize, 'down_sound_selector',
+        array(
+            'label' => __( 'Select Penalty Sound', 'skyrocket' ),
+            //'description' => esc_html__( 'Sample Dropdown Select2 custom control (Single Select)', 'skyrocket' ),
+            'section' => 'go_sounds',
+            'settings' => 'go_sound_down',
+            'input_attrs' => array(
+                'placeholder' => __( 'Please select a sound...', 'skyrocket' ),
+                'multiselect' => false,
+            ),
+            'choices' => array(
+                'down.mp3' => __( 'Down', 'skyrocket' ),
+                'down2.m4a' => __( 'Down 2', 'skyrocket' ),
+                'down3.m4a' => __( 'Down 3', 'skyrocket' ),
+                'down4.m4a' => __( 'Down 4', 'skyrocket' ),
+                'down5.m4a' => __( 'Down 5', 'skyrocket' ),
+                'down6.m4a' => __( 'Down 6', 'skyrocket' ),
+            )
+        )
+    ) );
+
+    // Test of Dropdown Select2 Control (single select)
+    $wp_customize->add_setting( 'go_sound_level_up',
+        array(
+            'default' => '1',
+            'transport' => 'postMessage',
+            'type' => 'option',
+            'sanitize_callback' => 'skyrocket_text_sanitization'
+        )
+    );
+    $wp_customize->add_control( new Skyrocket_Dropdown_Select2_Custom_Control( $wp_customize, 'level_down_sound_selector',
+        array(
+            'label' => __( 'Select Level Up Sound', 'skyrocket' ),
+            //'description' => esc_html__( 'Sample Dropdown Select2 custom control (Single Select)', 'skyrocket' ),
+            'section' => 'go_sounds',
+            'settings' => 'go_sound_level_up',
+            'input_attrs' => array(
+                'placeholder' => __( 'Please select a sound...', 'skyrocket' ),
+                'multiselect' => false,
+            ),
+            'choices' => array(
+                'applause.m4a' => __( 'Applause', 'skyrocket' ),
+                'calm_up.m4a' => __( 'Calm Up', 'skyrocket' ),
+                'chime.m4a' => __( 'Chime', 'skyrocket' ),
+                'jingle.mp3' => __( 'Jingle', 'skyrocket' ),
+                'level_up_voice_1.m4a' => __( 'Level Up Voice 1', 'skyrocket' ),
+                'level_up_voice_2.m4a' => __( 'Level Up Voice 2', 'skyrocket' ),
+                'milestone2.mp3' => __( 'Trumpets', 'skyrocket' ),
+                'notification.mp3' => __( 'Notification', 'skyrocket' ),
+                'ping.m4a' => __( 'Ping', 'skyrocket' ),
+                'Tones.m4a' => __( 'Tones', 'skyrocket' ),
+                'power_up.mp3' => __( 'Power Up', 'skyrocket' )
+            )
+        )
+    ) );
+
+    // Test of Dropdown Select2 Control (single select)
+    $wp_customize->add_setting( 'go_sound_level_down',
+        array(
+            'default' => '1',
+            'transport' => 'postMessage',
+            'type' => 'option',
+            'sanitize_callback' => 'skyrocket_text_sanitization'
+        )
+    );
+    $wp_customize->add_control( new Skyrocket_Dropdown_Select2_Custom_Control( $wp_customize, 'level_up_sound_selector',
+        array(
+            'label' => __( 'Select Level Down Sound', 'skyrocket' ),
+            //'description' => esc_html__( 'Sample Dropdown Select2 custom control (Single Select)', 'skyrocket' ),
+            'section' => 'go_sounds',
+            'settings' => 'go_sound_level_down',
+            'input_attrs' => array(
+                'placeholder' => __( 'Please select a sound...', 'skyrocket' ),
+                'multiselect' => false,
+            ),
+            'choices' => array(
+                'down.mp3' => __( 'Down', 'skyrocket' ),
+                'down2.m4a' => __( 'Down 2', 'skyrocket' ),
+                'down3.m4a' => __( 'Down 3', 'skyrocket' ),
+                'down4.m4a' => __( 'Down 4', 'skyrocket' ),
+                'down5.m4a' => __( 'Down 5', 'skyrocket' ),
+                'down6.m4a' => __( 'Down 6', 'skyrocket' ),
+            )
+        )
+    ) );
+
 
 }
 add_action( 'customize_register', 'go_customize_register', 11 );
@@ -1459,13 +1597,13 @@ function go_user_bar_dynamic_styles() {
     $map_locked_font_color  = ($map_locked_font_color ?  $map_locked_font_color : "#000000");
 
     $map_up = get_option('go_store_up_color');
-    $map_up  = ($map_up ?  $map_up : "#ffc0cb");
+    $map_up  = ($map_up ?  $map_up : "#90EE90");
 
     $map_up_font_color = get_option('go_store_up_font_color');
     $map_up_font_color  = ($map_up_font_color ?  $map_up_font_color : "#000000");
 
     $map_down = get_option('go_store_down_color');
-    $map_down  = ($map_down ?  $map_down : "#90EE90");
+    $map_down  = ($map_down ?  $map_down : "#ffc0cb");
 
     $map_down_font_color = get_option('go_store_down_font_color');
     $map_down_font_color  = ($map_down_font_color ?  $map_down_font_color : "#000000");
@@ -1513,11 +1651,35 @@ function go_user_bar_dynamic_styles() {
 
 
 
-        #maps .done {
+
+        .noty_theme__sunset.noty_type__success{
+            background-color: <?php echo $map_done ; ?> !important;
+            color: <?php echo $map_done_font_color; ?>  !important;
+        }
+
+
+
+        .noty_theme__sunset.noty_type__error{
+            background-color: <?php echo $map_locked ; ?> !important;
+            color: <?php echo $map_locked_font_color; ?>  !important;
+        }
+
+        .noty_theme__sunset.noty_type__warning{
+            background-color: <?php echo $map_available ; ?> !important;
+            color: <?php echo $map_available_font_color; ?>  !important;
+        }
+
+        .noty_theme__sunset.noty_type__info{
+            background-color: <?php echo $chain_box ; ?> !important;
+            color: <?php echo $go_map_chain_font_color; ?>  !important;
+        }
+
+
+        #maps .done, .go_checks_and_buttons {
             background-color: <?php echo $map_done; ?>;
             color: <?php echo $map_done_font_color; ?>; }
 
-        #maps .locked {
+        #maps .locked, .go_locks, .go_lock, .go_late_mods, .go_sched_access_message, .go_timer_message {
             background-color: <?php echo $map_locked; ?>;
             color: <?php echo $map_locked_font_color; ?>; }
 
@@ -1540,12 +1702,35 @@ function go_user_bar_dynamic_styles() {
 
         #maps .available,
         .dropdown,
-        .go_store_actions{
+        .go_store_actions,
+        .go_checks_and_buttons.active,
+        #maps .mapLink{
             background-color: <?php echo $map_available; ?>;
-            color: <?php echo $map_available_font_color; ?>; }
+            color: <?php echo $map_available_font_color; ?>;
+        }
+
+        #maps .down,
+        #maps .reset,
+        #maps .resetted{
+            border-color:<?php echo $map_down; ?>;
+        }
+
+        #maps .up{
+            border-color:<?php echo $map_up; ?>;
+        }
+
+
+        .go_checks_and_buttons a,
+        .go_checks_and_buttons a:hover,
+        .go_checks_and_buttons a:visited,
+        .go_checks_and_buttons a:focus{
+            color: <?php echo $map_bkg; ?>;
+            mix-blend-mode: difference;
+        }
 
         #go_map_container,
-        .featherlight.store .featherlight-content{
+        .featherlight.store .featherlight-content,
+        .go_checks_and_buttons .go_buttons{
             background-color: <?php echo $map_bkg; ?>;
             color: <?php echo $map_font_color; ?>;
             font-family: <?php echo $font_family; ?>;
@@ -1553,10 +1738,25 @@ function go_user_bar_dynamic_styles() {
             font-size:<?php echo $font_size; ?>px;
         }
 
+
+        <?php
+        $map_bkg = get_option('go_map_bkg_color');
+        if($map_bkg){
+                ?>
+
+
+            .go_checks_and_buttons .go_buttons{
+                border: 1px solid;
+            }<?php
+        }
+        ?>
+
         #maps .go_task_chain_map_box{
             background-color: <?php echo $chain_box; ?>;
             color: <?php echo $go_map_chain_font_color; ?>;
         }
+
+
 
     </style>
     <?php
@@ -2015,4 +2215,28 @@ function hide_all_slugs() {
     }
 }
 add_action( 'admin_head', 'hide_all_slugs'  );
+
+
+/**
+ * Filter the link query arguments to change the post types.
+ * This limits the posts shown in the link picker in MCE.
+ * Users were seeing all content.
+ *
+ * @param array $query An array of WP_Query arguments.
+ * @return array $query
+ */
+function go_custom_link_query( $query ){
+
+    // change the post types by hand:
+    if(!go_user_is_admin()) {
+        $query['post_type'] = array('post', 'pages', 'tasks');
+    }
+   else{
+       $query['post_type'] = array();
+   }
+
+    return $query;
+}
+
+add_filter( 'wp_link_query_args', 'go_custom_link_query' );
 

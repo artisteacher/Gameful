@@ -204,6 +204,7 @@ function go_mark_one_read_toggle(){
         die( );
     }
     $post_id = (isset($_POST['postid']) ? $_POST['postid'] : null);
+    $post_author_id = get_post_field( 'post_author', $post_id );
     $status = get_post_status($post_id);
     if($status == 'unread') {
         $query = array(
@@ -212,6 +213,41 @@ function go_mark_one_read_toggle(){
         );
         wp_update_post($query, true);
         echo "read";
+        //also set parent task class to read
+            //get parent task
+        $go_blog_task_id = go_get_task_id($post_id);
+        global $wpdb;
+        $class = null;
+        $go_task_table_name = "{$wpdb->prefix}go_tasks";
+        $current_class = $wpdb->get_var($wpdb->prepare("SELECT class
+			FROM {$go_task_table_name}
+			WHERE uid = %d and post_id = %d
+			ORDER BY last_time DESC", $post_author_id, $go_blog_task_id
+        ));
+
+        if(empty($current_class)){
+            $class = 'read';
+        }
+
+        if ($class != null) {
+
+            $wpdb->query(
+                $wpdb->prepare(
+                    "UPDATE {$go_task_table_name} 
+                    SET 
+                        class = %s        
+                    WHERE uid= %d AND post_id=%d ",
+                    $class,
+                    $post_author_id,
+                    $go_blog_task_id
+                )
+            );
+        }
+
+            //check for class
+            //if class is empty
+            //set class to read
+
     }
     else if($status == 'read') {
         $query = array(
@@ -299,6 +335,7 @@ function go_send_feedback()
     $message = '<h3>' . $feedback_title . '</h3>' . $feedback_message;
 
     $blog_post_id = (!empty($_POST['post_id']) ? $_POST['post_id'] : "");
+    $this_class = null;
     $class = null;
 
     //$user_id = $vars['uid'];
@@ -343,10 +380,10 @@ function go_send_feedback()
                 if ($percent !=0) {
                     if ($percent_toggle) {
                         $direction = 1;
-                        $class = 'up';
+                       // $class = 'up';
                     } else {
                         $direction = -1;
-                        $class = 'down';
+                       // $class = 'down';
                     }
                 }else{
                     $direction = 1;
@@ -407,13 +444,13 @@ function go_send_feedback()
             }
 
             if ($assign_toggle){
-                $class = 'up';
+                $this_class = 'up';
             }
             else{
                 $xp = $xp * (-1);
                 $gold = $gold * (-1);
                 $health = $health * (-1);
-                $class = 'down';
+                $this_class = 'down';
             }
 
 
@@ -428,6 +465,137 @@ function go_send_feedback()
                 $message = $feedback_message;
             }
         }
+
+        //the class for the entire task should change based on the following
+            //if the current class is reset, it stays reset
+                //this changes to resetted when the user resubmits, still shows reset until admin looks at it
+
+            //get all stages on this quest
+            //are any down?
+                //then down
+            //are any up?
+                //then up
+            //are all read
+                //then read
+        $go_task_table_name = "{$wpdb->prefix}go_tasks";
+        $current_class = $wpdb->get_var($wpdb->prepare("SELECT class
+			FROM {$go_task_table_name}
+			WHERE uid = %d and post_id = %d
+			ORDER BY last_time DESC", $user_id, $go_blog_task_id
+        ));
+
+        if($current_class === 'reset'){
+            $class = 'reset';
+        }
+        else{
+            if($current_class === 'down'){
+                $class = 'down';
+            }else {
+                $i = 0;
+                $data = go_post_data($go_blog_task_id);
+                $custom_fields = $data[3];
+                $status = $data[1];
+                $stage_count = $custom_fields['go_stages'][0];
+                $blog_post_ids = array();
+                while ($i <= $status && $stage_count > $i) {//get blog post ids from regular stages
+
+                    //check the task meta for a uniqueid
+                    $uniqueid = (isset($custom_fields['go_stages_' . $i . '_uniqueid'][0]) ? $custom_fields['go_stages_' . $i . '_uniqueid'][0] : false);
+
+                    //if uniqueid found then get the blog_post_id with the meta data
+                    if ($uniqueid) {
+                        $blog_post_id = go_get_blog_post_id($go_blog_task_id, $user_id, 'go_stage_uniqueid', $uniqueid, null);
+                    }
+                    if (empty($blog_post_id)) {
+                        //if no uniqueid was set or the blog post couldn't be found
+                        //search using the v4 methods where that was saved with the stage# in the meta
+                        $blog_post_id = go_get_blog_post_id($go_blog_task_id, $user_id, 'go_blog_task_stage', null, $i);
+                    }
+                    if (!empty($blog_post_id)) {
+                        $blog_post_ids[] = $blog_post_id;
+                    }
+                    $i++;
+
+                }
+                //if there are bonus stages
+                $bonus_status = go_get_bonus_status($go_blog_task_id, $user_id);
+                if ($bonus_status <= 0) {
+
+                    $statuses = array('draft', 'unread', 'read', 'publish', 'revise');
+
+                    $args = array(
+                        'post_status' => $statuses,
+                        'post_type' => 'go_blogs',
+                        'post_parent' => intval($go_blog_task_id),
+                        'author' => $user_id,
+                        'posts_per_page' => 0,
+                        'meta_query' => array(
+                            array(
+                                'key' => 'go_blog_bonus_stage',
+                                'value' => 1,
+                                'compare' => '>=',
+                            )
+                        ),
+                    );
+                    $my_query = new WP_Query($args);
+
+
+                    if ($my_query->have_posts()) {
+                        while ($my_query->have_posts()) {
+                            // Do your work...
+                            $my_query->the_post();
+                            $blog_post_id = get_the_ID();
+                            $blog_post_ids[] = $blog_post_id;
+                        } // end while
+                    } // end if
+                    wp_reset_postdata();
+                }
+
+                //get all stages on this quest
+                //are any down?
+                //then down
+                //are any up?
+                //then up
+                //are all read
+                //then read
+                $all_read = null;
+                if (!empty($blog_post_ids)) {
+                    $all_read = true;
+                }
+
+                foreach ($blog_post_ids as $blog_post_id) {
+                    $status = get_feedback_status($blog_post_id);
+                    if ($status === 'down') {
+                        $down = true;
+                        break;//stop if any have down
+                    } else if ($status === 'up') {
+                        $up = true;
+                    } else if ($status === 'has') {
+                        $has = true;
+                    }
+                }
+
+                if (!empty($blog_post_ids)) {
+                    if(!empty($down)){
+                        $class = 'down';
+                    }else if(!empty($up)){
+                        $class = 'up';
+                    }
+                    else if(!empty($has)){
+                        $class = 'has_feedback';
+                    }
+
+                    if (empty($class)) {
+                        if ($all_read) {
+                            $class = 'read';
+                        }
+                    }
+                }
+
+            }
+        }
+
+
 
         ////START MESSAGE CONSTRUCTION
         //the results are combined for saving in the database as a serialized array
@@ -447,7 +615,7 @@ function go_send_feedback()
         update_user_option($user_id, 'go_new_messages', true);
 
         if ($class != null) {
-            $go_task_table_name = "{$wpdb->prefix}go_tasks";
+
             $wpdb->query(
                 $wpdb->prepare(
                     "UPDATE {$go_task_table_name} 

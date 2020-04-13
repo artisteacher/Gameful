@@ -576,12 +576,13 @@ function go_send_message($skip_ajax = false, $title = '', $sent_message = '', $t
             //below is for both resets and reset_stage
 
             //set class
-            $class = array('reset');
-            if (!empty($sent_xp) || !empty($sent_gold) || !empty($sent_health)) {
-                $class[] = 'down';
-            }
+           // $class = array('reset');
+            $class = 'reset';
+            //if (!empty($sent_xp) || !empty($sent_gold) || !empty($sent_health)) {
+               // $class[] = 'down';
+           // }
 
-            $class = serialize($class);
+            //$class = serialize($class);
 
             //update task table
             /*

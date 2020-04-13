@@ -1942,12 +1942,27 @@ function go_save_filters(location){
         var unmatched = jQuery("#go_unmatched_toggle").attr('checked');
     }*/
     //localStorage.setItem('test_this', "yep");
+    /*
     localStorage.setItem('user_go_sections', section);
     localStorage.setItem('go_badges', badge);
     localStorage.setItem('user_go_groups', group);
     localStorage.setItem('user_go_sections_name', section_name);
     localStorage.setItem('go_badges_name', badge_name);
-    localStorage.setItem('user_go_groups_name', group_name);
+    localStorage.setItem('user_go_groups_name', group_name);*/
+
+    localStorage.setItem('user_go_sections', '');
+    localStorage.setItem('go_badges', '');
+    localStorage.setItem('user_go_groups', '');
+    localStorage.setItem('user_go_sections_name', '');
+    localStorage.setItem('go_badges_name', '');
+    localStorage.setItem('user_go_groups_name', '');
+
+    document.cookie="user_go_sections="+section+"; expires = Thu, 01 Jan 2037 00:00:00 GMT; path=/";
+    document.cookie="go_badges="+badge+"; expires = Thu, 01 Jan 2037 00:00:00 GMT; path=/";
+    document.cookie="user_go_groups="+group+"; expires = Thu, 01 Jan 2037 00:00:00 GMT; path=/";
+    document.cookie="user_go_sections_name="+section_name+"; expires = Thu, 01 Jan 2037 00:00:00 GMT; path=/";
+    document.cookie="go_badges_name="+badge_name+"; expires = Thu, 01 Jan 2037 00:00:00 GMT; path=/";
+    document.cookie="user_go_groups_name="+group_name+"; expires = Thu, 01 Jan 2037 00:00:00 GMT; path=/";
     //localStorage.setItem('go_unmatched', unmatched);
 
 

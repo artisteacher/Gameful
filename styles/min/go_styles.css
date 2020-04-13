@@ -2,6 +2,17 @@
 .mce-notification {
   display: none !important; }
 
+.mce-wordcount {
+  color: black !important; }
+
+.entry-title {
+  pointer-events: none; }
+  .entry-title a,
+  .entry-title a:visited,
+  .entry-title a:hover,
+  .entry-title a:focus {
+    color: unset; }
+
 .go_settings {
   cursor: pointer;
   padding-left: 0px !important;
@@ -14,7 +25,7 @@
 *	Map and Store actions
 ********************/
 .go_actions_wrapper_flex a {
-  color: #1a1a1a !important; }
+  color: inherit !important; }
 
 .go_actions_wrapper_flex .tools {
   display: flex !important;
@@ -121,8 +132,7 @@
   width: 95%;
   margin-right: 2.5% !important;
   margin-left: 2.5% !important;
-  background: #efefef !important;
-  overflow: scroll !important; }
+  background: #efefef !important; }
 
 /********************
 *	User Bar
@@ -355,7 +365,7 @@ input[type="checkbox"]:checked + label span.checkbox::after {
 	margin-bottom: 10px;
 }
 */
-.select2-results__options {
+.select2-results__options:not(.select2-results__options--nested) {
   max-height: 400px !important; }
 
 #go_leaderboard_filters {
@@ -366,8 +376,8 @@ input[type="checkbox"]:checked + label span.checkbox::after {
   padding: 15px;
   background-color: white;
   justify-content: space-between; }
-  #go_leaderboard_filters .select2-selection__rendered {
-    line-height: 24px !important; }
+  #go_leaderboard_filters #go_user_filters .select2-selection__rendered {
+    line-height: 35px !important; }
   #go_leaderboard_filters .select2-container .select2-selection--single {
     height: 35px !important; }
   #go_leaderboard_filters .select2-selection__arrow {
@@ -598,22 +608,13 @@ body:not(.wp-customizer) .media-modal {
 ********************/
 #go_buttons {
   overflow: auto;
-  position: relative;
-  padding: 10px;
-  min-height: 40px; }
-
-#go_back_button {
-  float: left;
-  position: absolute;
-  bottom: 10px; }
+  display: flex;
+  justify-content: space-between; }
 
 #go_abandon_task {
   float: left;
   position: absolute;
   bottom: 10px; }
-
-#go_button {
-  float: right; }
 
 .go_blog_actions {
   display: flex; }
@@ -625,21 +626,19 @@ body:not(.wp-customizer) .media-modal {
 
 .go_button_round {
   /*Button itself*/
-  content: '';
   width: 40px;
   height: 40px;
-  line-height: 40px;
-  vertical-align: middle;
-  margin: 0px 5px 15px;
-  top: 8px;
+  margin: 0px 0px 0px 5px;
   border-radius: 50%;
   font-size: 25px;
   background-image: -webkit-linear-gradient(#e8e8e8 0%, #d6d6d6 100%);
   background-image: linear-gradient(#e8e8e8 0%, #d6d6d6 100%);
   text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.66);
   box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.5), 0 2px 2px rgba(0, 0, 0, 0.19);
-  border-bottom: solid 2px #b5b5b5;
-  cursor: pointer; }
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
 
 .go_button_round .go_round_inner:active {
   background-image: -webkit-linear-gradient(#efefef 0%, #d6d6d6 100%);
@@ -664,10 +663,12 @@ body:not(.wp-customizer) .media-modal {
 
 .go_blog_form_footer {
   background-color: #b3b3b3;
-  width: 100%;
   display: flex;
   justify-content: space-between;
-  align-items: center; }
+  align-items: center;
+  color: black;
+  padding: 5px;
+  flex-direction: row-reverse; }
 
 .go_blog_form_footer._lightbox {
   justify-content: flex-end; }
@@ -677,7 +678,6 @@ body:not(.wp-customizer) .media-modal {
   width: auto;
   padding: 5px;
   border-radius: 3px;
-  margin: 5px;
   float: left;
   font-size: .8em;
   text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.66);
@@ -690,6 +690,12 @@ body:not(.wp-customizer) .media-modal {
 
 .go_blog_status_icons div {
   padding: 0px 10px; }
+
+.go_buttons {
+  border-radius: 7px; }
+
+.go_checks_and_buttons .go_buttons {
+  margin-top: 10px; }
 
 #go_back_button,
 #go_button,
@@ -714,7 +720,7 @@ body:not(.wp-customizer) .media-modal {
 .go_locks {
   padding: 10px;
   margin: 10px;
-  background-color: #ddd; }
+  border-radius: 7px; }
   .go_locks p {
     margin-bottom: 10px; }
 
@@ -725,25 +731,21 @@ body:not(.wp-customizer) .media-modal {
   margin: 0px !important; }
 
 .go_lock, .go_late_mods, .go_sched_access_message, .go_timer_message, .go_checks_and_buttons {
-  border-radius: 3px;
-  padding: 10px;
+  border-radius: 7px;
+  padding: 20px;
   margin: 10px 0;
-  background-color: #f5b3bd;
-  min-width: 200px;
-  color: black; }
+  min-width: 200px; }
 
 .go_lock .go_error_red {
   color: unset; }
 
 .go_checks_and_buttons {
-  background-color: #c9fbc9; }
-
-.go_checks_and_buttons.active {
-  background-color: cornsilk;
+  background-color: #c9fbc9;
   padding: 20px; }
-  .go_checks_and_buttons.active hr {
-    margin-top: 20px;
-    margin-bottom: 20px; }
+
+.go_checks_and_buttons.active hr {
+  margin-top: 20px;
+  margin-bottom: 20px; }
 
 .go_lock ul ul {
   list-style-type: disc !important;
@@ -798,20 +800,14 @@ body:not(.wp-customizer) .media-modal {
 .go_error {
   padding: 5px 0 5px 0; }
 
-.go_error_red, .go_error {
-  color: red; }
-
 .go-error-message {
   position: relative;
   display: block;
-  background: pink;
   margin: 5px 0 15px;
   padding: 1px 12px;
-  min-height: 0px;
-  border-left: #dd4232 solid 4px; }
+  min-height: 0px; }
 
 input[type='text'].go_error_red {
-  border: 2px solid red;
   outline: none; }
 
 .go_no_scroll {
@@ -857,9 +853,7 @@ input[type='text'].go_error_red {
   display: flex; }
 
 .progress-bar-border {
-  height: 16px;
-  border-color: #FFFFFF;
-  border-width: 1px 0px;
+  height: 19px;
   position: relative;
   background-color: black;
   font-size: 14px;
@@ -990,10 +984,18 @@ input[name="go_admin_bar_submit"] {
   -webkit-box-shadow: 6px 6px 23px -9px rgba(0, 0, 0, 0.68);
   -moz-box-shadow: 6px 6px 23px -9px rgba(0, 0, 0, 0.68);
   box-shadow: 6px 6px 23px -9px rgba(0, 0, 0, 0.68);
-  background-color: white; }
+  background-color: white;
+  color: black; }
 
-.go_call_to_action {
-  margin: 10px; }
+.go_test_container,
+.go_quiz_results {
+  background-color: white;
+  color: #0b0b0b;
+  margin: 0 0 20px 0;
+  padding: 20px; }
+  .go_test_container p:last-child,
+  .go_quiz_results p:last-child {
+    margin-bottom: 0px; }
 
 #outro.go_checks_and_buttons {
   padding: 20px; }
@@ -1182,9 +1184,9 @@ ul#go_bonus_loot_wrap li.go_error {
   margin-bottom: 10px; }
 
 .go_stage_message {
-  border-bottom: 1px solid;
-  border-bottom-color: inherit;
   padding: 20px 0 20px 0; }
+  .go_stage_message p:last-child {
+    margin-bottom: 0px; }
 
 #go_description .go_stage_message {
   background-color: transparent; }
@@ -2162,19 +2164,32 @@ input#go_pass_lock::-moz-placeholder {
 .noty_theme__sunset.noty_bar .noty_body {
   padding: 20px !important; }
 
-.noty_theme__sunset.noty_type__success {
-  background-color: #1bb15a !important; }
+/*
 
-.noty_theme__sunset.noty_type__error {
-  background-color: #cf343a !important; }
+.noty_theme__sunset.noty_type__success{
+	background-color: #1bb15a !important;
+//text-shadow: -1px -1px 0 #008000, 1px -1px 0 #008000, -1px 1px 0 #008000, 1px 1px 0 #008000;
 
-.noty_theme__sunset.noty_type__warning {
-  color: black !important;
-  background-color: #ffe400 !important; }
+}
 
-.noty_theme__sunset.noty_type__info {
-  background-color: #4a84ef !important; }
 
+
+.noty_theme__sunset.noty_type__error{
+	background-color: #cf343a !important;
+//text-shadow: -1px -1px 0 #800311, 1px -1px 0 #800311, -1px 1px 0 #800311, 1px 1px 0 #800311;
+}
+
+.noty_theme__sunset.noty_type__warning{
+	color: black !important;
+	background-color: #ffe400 !important;
+	//text-shadow: -1px -1px 0 #800311, 1px -1px 0 #800311, -1px 1px 0 #800311, 1px 1px 0 #800311;
+}
+
+.noty_theme__sunset.noty_type__info{
+	background-color: #4a84ef !important;
+	//text-shadow: -1px -1px 0 #800311, 1px -1px 0 #800311, -1px 1px 0 #800311, 1px 1px 0 #800311;
+}
+*/
 .noty_theme__sunset.noty_type__success,
 .noty_theme__sunset.noty_type__error {
   border-color: unset !important;
@@ -2216,6 +2231,10 @@ input#go_pass_lock::-moz-placeholder {
 /********************
 *	Feedback and blog
 ********************/
+.go_blog_post_wrapper {
+  background-color: white;
+  color: black; }
+
 .go_blog_post_wrapper .question {
   font-size: .8em;
   font-weight: bold; }
@@ -2729,7 +2748,8 @@ store lightbox styles
         text-align: center;
         display: flex;
         align-items: center;
-        justify-content: center; }
+        justify-content: center;
+        font-family: Arial, sans-serif; }
         .go_store_lightbox_container #go_store_loot .loot_container .go_store_round_button div {
           display: inline-block; }
       .go_store_lightbox_container #go_store_loot .loot_container .loot-box {
@@ -2775,7 +2795,8 @@ store lightbox styles
     /* FF 3.5+ */
     box-shadow: rgba(0, 0, 0, 0.5) 1px 1px 4px 0px; }
     .go_store_lightbox_container .go_store_actions #go_purch_limits {
-      flex-grow: 1; }
+      flex-grow: 1;
+      margin-right: 10px; }
     .go_store_lightbox_container .go_store_actions .quantity_container {
       float: left;
       padding: 5px 10px 5px 10px;
@@ -2995,7 +3016,7 @@ store lightbox styles
 }
 
 */
-.store_map .title {
+.store_map .tasks .title {
   padding: 6px 10px 0 10px !important; }
 
 #maps {
@@ -3137,7 +3158,13 @@ store lightbox styles
       #maps .primaryNav .go_task_chain .go_task_chain_map_box_badge {
         border-radius: 7px; }
       #maps .primaryNav .go_task_chain .go_task_pod_required {
-        font-size: .8em; }
+        font-size: .8em;
+        background-color: white;
+        color: black;
+        border-radius: 7px;
+        padding: 10px; }
+        #maps .primaryNav .go_task_chain .go_task_pod_required .go_locks {
+          color: black; }
       #maps .primaryNav .go_task_chain .tasks .task_container {
         position: relative;
         /* --------	available tasks colors --------- */ }
@@ -3165,27 +3192,9 @@ store lightbox styles
               height: 18px;
               font-size: .75em;
               line-height: 18px; }
-        #maps .primaryNav .go_task_chain .tasks .task_container .up {
-          border-color: mediumturquoise;
-          border-width: 4px 4px 4px 4px;
-          border-style: solid;
-          border-radius: 11px; }
-        #maps .primaryNav .go_task_chain .tasks .task_container .down {
-          border-color: indianred;
-          border-width: 4px 4px 4px 4px;
-          border-radius: 11px 11px 11px 11px;
-          border-style: solid; }
-        #maps .primaryNav .go_task_chain .tasks .task_container .reset {
-          border-color: indianred;
-          border-width: 2px 2px 2px 2px;
-          border-radius: 9px 9px 9px 9px;
-          border-style: solid;
-          background-color: pink;
-          color: black; }
-        #maps .primaryNav .go_task_chain .tasks .task_container .resetted {
-          border-color: #F4B400;
-          border-width: 4px 4px 4px 4px;
-          border-radius: 11px 11px 11px 11px;
+        #maps .primaryNav .go_task_chain .tasks .task_container .resetted, #maps .primaryNav .go_task_chain .tasks .task_container .reset, #maps .primaryNav .go_task_chain .tasks .task_container .down, #maps .primaryNav .go_task_chain .tasks .task_container .up {
+          border-width: 2px;
+          border-radius: 9px;
           border-style: solid; }
         #maps .primaryNav .go_task_chain .tasks .task_container .optional {
           background-size: 75px 75px;
@@ -3239,19 +3248,16 @@ store lightbox styles
         border-radius: 7px 7px 0 0; }
         #maps .primaryNav .go_task_chain .tasks .hasNested .task .go_bonus_progresss_bar_container,
         #maps .primaryNav .go_task_chain .tasks .hasNested .task .go_bonus_progress_bar,
-        #maps .primaryNav .go_task_chain .tasks .hasNested .task .loot_info {
-          border-radius: 0px; }
+        #maps .primaryNav .go_task_chain .tasks .hasNested .task .loot_info,
+        #maps .primaryNav .go_task_chain .tasks .hasNested .task .go_map_quest_hover {
+          border-bottom-right-radius: 0px !important;
+          border-bottom-left-radius: 0px !important; }
       #maps .primaryNav .go_task_chain .tasks .hasBonus > .task .loot_info, #maps .primaryNav .go_task_chain .tasks .hasBadges > .task .loot_info {
         border-radius: 0px; }
       #maps .primaryNav .go_task_chain .tasks.sorting {
         background-color: rgba(255, 255, 255, 0.3);
         border: 1px solid;
         border-radius: 7px; }
-      #maps .primaryNav .go_task_chain .go_task_pod_required {
-        background-color: white;
-        color: black;
-        border-radius: 7px;
-        padding: 10px; }
   #maps .go_badge_wrap {
     width: 100%;
     height: unset;
@@ -7542,7 +7548,7 @@ html[dir="rtl"] .go-acf-table > tbody > tr > td.order + td {
 .edit-tags-php #col-right {
   overflow-x: hidden; }
 
-.go_call_to_action {
+.acf-field.go_call_to_action {
   background-color: cornsilk; }
 
 .go_acf_header {

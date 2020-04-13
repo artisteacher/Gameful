@@ -23,8 +23,10 @@ function go_task_locks ( $id, $check_only, $user_id = null, $task_name = false, 
         $user_id = get_current_user_id();
     }
     if($custom_fields === null){
-        $custom_fields = go_post_meta($id);
-        $custom_fields = go_post_meta($id);
+        //$custom_fields = go_post_meta($id);
+        $data = go_post_data($id);
+        $custom_fields = $data[3];
+        //$custom_fields = go_post_meta($id);
     }
 
     $is_logged_in = is_user_logged_in();
@@ -381,17 +383,20 @@ function go_badge_lock($id, $user_id, $task_name, $custom_fields, $i, $k, $is_lo
 
 
                             $term = get_term($term_id);
-                            $term_name = $term->name;
-                            if (!$first) {
-                                if ($count === $i) {
-                                    $this_lock .= " or ";
-                                } else {
-                                    //$this_lock .= "<p> –or– </p>";
-                                    $this_lock .= ", ";
+                            $data = go_term_data($term_id);
+                            if(!empty($data)) {
+                                $term_name = $data[0];
+                                if (!$first) {
+                                    if ($count === $i) {
+                                        $this_lock .= " or ";
+                                    } else {
+                                        //$this_lock .= "<p> –or– </p>";
+                                        $this_lock .= ", ";
+                                    }
                                 }
+                                $first = false;
+                                $this_lock .= "$term_name";
                             }
-                            $first = false;
-                            $this_lock .= "$term_name";
                         }
 
                     }

@@ -6874,6 +6874,30 @@
 		"oAP": "/media/sounds/airhorn.mp3",
 		"oF": 0
 		},
+	"/media/sounds/applause.m4a": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/media/sounds/applause.m4a",
+		"oF": 0
+		},
+	"/media/sounds/calm_up.m4a": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/media/sounds/calm_up.m4a",
+		"oF": 0
+		},
+	"/media/sounds/chime.m4a": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/media/sounds/chime.m4a",
+		"oF": 0
+		},
 	"/media/sounds/coins.mp3": {
 		"cB": 0,
 		"ft": 8192,
@@ -6890,6 +6914,70 @@
 		"oAP": "/media/sounds/down.mp3",
 		"oF": 0
 		},
+	"/media/sounds/down2.m4a": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/media/sounds/down2.m4a",
+		"oF": 0
+		},
+	"/media/sounds/down3.m4a": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/media/sounds/down3.m4a",
+		"oF": 0
+		},
+	"/media/sounds/down4.m4a": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/media/sounds/down4.m4a",
+		"oF": 0
+		},
+	"/media/sounds/down5.m4a": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/media/sounds/down5.m4a",
+		"oF": 0
+		},
+	"/media/sounds/down6.m4a": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/media/sounds/down6.m4a",
+		"oF": 0
+		},
+	"/media/sounds/jingle.mp3": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/media/sounds/jingle.mp3",
+		"oF": 0
+		},
+	"/media/sounds/level_up_voice_1.m4a": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/media/sounds/level_up_voice_1.m4a",
+		"oF": 0
+		},
+	"/media/sounds/level_up_voice_2.m4a": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/media/sounds/level_up_voice_2.m4a",
+		"oF": 0
+		},
 	"/media/sounds/milestone2.mp3": {
 		"cB": 0,
 		"ft": 8192,
@@ -6904,6 +6992,30 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/media/sounds/notification.mp3",
+		"oF": 0
+		},
+	"/media/sounds/ping.m4a": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/media/sounds/ping.m4a",
+		"oF": 0
+		},
+	"/media/sounds/power_up.mp3": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/media/sounds/power_up.mp3",
+		"oF": 0
+		},
+	"/media/sounds/Tones.m4a": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/media/sounds/Tones.m4a",
 		"oF": 0
 		},
 	"/media/sounds/win.mp3": {

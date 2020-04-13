@@ -10,11 +10,12 @@
  * @param bool $section
  * @return string
  */
-function go_sectionQuery($section = false){
-    if ($section === false) {
-        $section = (isset($_REQUEST['section']) ? $_REQUEST['section'] : null);
-    }
-    if (!empty($section) && $section != 'null') {
+function go_sectionQuery(){
+
+        //$section = (isset($_REQUEST['section']) ? $_REQUEST['section'] : null);
+    $section = (isset($_COOKIE['user_go_sections']) ? $_COOKIE['user_go_sections'] : null);
+
+    if (!empty($section) && $section !== 'null' && $section !== 'undefined') {
         global $wpdb;
         if(is_gameful()) {
             $main_site_id = get_network()->site_id;
@@ -40,8 +41,9 @@ function go_sectionQuery($section = false){
  */
 function go_badgeQuery(){
 
-    $badge = (isset($_GET['badge']) ?  $_GET['badge'] : null);
-    if (!empty($badge)) {
+    //$badge = (isset($_GET['badge']) ?  $_GET['badge'] : null);
+    $badge = (isset($_COOKIE['go_badges']) ? $_COOKIE['go_badges'] : null);
+    if (!empty($badge) && $badge !== 'null' && $badge !== 'undefined') {
 
         global $wpdb;
         if(is_gameful()){
@@ -67,11 +69,12 @@ function go_badgeQuery(){
  * @param bool $group
  * @return string
  */
-function go_groupQuery($group = false){
-    if($group === false) {
-        $group = (isset($_GET['group']) ? $_GET['group'] : null);
-    }
-    if (!empty($group)  && $group != 'null') {
+function go_groupQuery(){
+
+       // $group = (isset($_GET['group']) ? $_GET['group'] : null);
+        $group = (isset($_COOKIE['user_go_groups']) ? $_COOKIE['user_go_groups'] : null);
+
+    if (!empty($group)  && $group !== 'null' && $group !== 'undefined') {
 
         global $wpdb;
         if(is_gameful()){

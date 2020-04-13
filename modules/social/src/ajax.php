@@ -167,8 +167,8 @@ function go_leaderboard_dataloader_ajax(){
     $is_admin = go_user_is_admin();
 
 
-    $section = $_GET['section'];
-    $group = $_GET['group'];
+    //$section = $_GET['section'];
+    //$group = $_GET['group'];
     $show_all = $_GET['show_all'];
 
     //$section = go_section();
@@ -217,9 +217,9 @@ function go_leaderboard_dataloader_ajax(){
         $sOrder = "ORDER BY " . 'mynickname' . " ASC";
     }//
 
-    $sectionQuery = go_sectionQuery($section);
+    $sectionQuery = go_sectionQuery();
     $badgeQuery = go_badgeQuery();
-    $groupQuery = go_groupQuery($group);
+    $groupQuery = go_groupQuery();
     //$badgeQuery = '';
 
     $caps_key = "{$wpdb->prefix}capabilities";

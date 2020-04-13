@@ -337,6 +337,10 @@ function go_make_single_map($link_to_tasks = true, $map_id = null, $reload, $tax
         //$map_data = go_term_data($map_id);
         //$name = $term_data[0];
         //$custom_fields = $map_data[1];
+
+        //START: The list of tasks in the chain
+        $chain_messages = array();
+
         $hide_if_locked = (isset($term_custom['hide_if_locked'][0]) ? $term_custom['hide_if_locked'][0] : false);
         if (in_array($hide_if_locked, array('message', 'show'))) {
             $check_only = false;
@@ -349,9 +353,14 @@ function go_make_single_map($link_to_tasks = true, $map_id = null, $reload, $tax
             $locked_html = ob_get_contents();
             ob_end_clean();
             if ($is_locked) {
-                if (in_array($hide_if_locked, array('hide')) && !$is_admin) {
-                    continue;
+                if (in_array($hide_if_locked, array('hide')) ) {
+                    if(!$is_admin) {
+                        continue;
+                    }else{
+                        $chain_messages[] = "When locked, section is hidden from players if they don't have the key.";
+                    }
                 }
+
             }
         }else{
             $is_locked = false;
@@ -457,8 +466,7 @@ function go_make_single_map($link_to_tasks = true, $map_id = null, $reload, $tax
 
         echo "<div style='clear:both;' class='go_map_chain_title title'>$term_name</div></div>";
 
-        //START: The list of tasks in the chain
-        $chain_messages = array();
+
 
         if ($is_hidden){
             $chain_messages[] = "This section is hidden from players.";
@@ -600,7 +608,7 @@ function go_make_single_map($link_to_tasks = true, $map_id = null, $reload, $tax
                 $marked_hidden = (isset($custom_fields['go-location_map_options_hidden'][0]) ? $custom_fields['go-location_map_options_hidden'][0] : false);
                 $optional = (isset($custom_fields['go-location_map_options_optional'][0]) ? $custom_fields['go-location_map_options_optional'][0] : false);
                 $hidden_class = '';
-
+                $favorite = false;
                 if(!is_user_logged_in() && $marked_hidden){
                     continue;
                 }
@@ -634,6 +642,7 @@ function go_make_single_map($link_to_tasks = true, $map_id = null, $reload, $tax
                     $my_xp = $this_task['xp'];
                     $my_gold = $this_task['gold'];
                     $my_health = $this_task['health'];
+                    $favorite = $this_task['favorite'];
 
                     $chain_my_xp = $chain_my_xp + $my_xp;
                     $chain_my_gold = $chain_my_gold + $my_gold;
@@ -643,18 +652,25 @@ function go_make_single_map($link_to_tasks = true, $map_id = null, $reload, $tax
                     $map_my_gold = $map_my_gold + $my_gold;
                     $map_my_health = $map_my_health + $my_health;
 
-
-                    if (!empty($class)) {
-                        if (is_serialized($class)) {
-                            $class = unserialize($class);
-                        }
-                        if (is_array($class)) {
-                            $class = implode(" ", $class);
-                        }
-                    }
                     if ($status == -2) {//if the entire task was reset
                         $class .= ' reset';
+
                     }
+                    else {
+                        if (!empty($class)) {
+                            if (is_serialized($class)) {
+                                $class = unserialize($class);
+                            }
+                            if (is_array($class)) {
+                                $class = implode(" ", $class);
+                            }
+                            //$class is a string of one or more classes
+
+
+                        }
+
+                    }
+
                 }
                 else {
                     $status = 0;
@@ -1046,8 +1062,17 @@ function go_make_single_map($link_to_tasks = true, $map_id = null, $reload, $tax
                 echo "<div class='go_map_quest_hover '>";
 
 
+                echo "<div class='map_post_top_container' style='display: flex; justify-content: space-between;'>";
+                $favorite_icon = '';
+                if(!empty($favorite)) {
+                    if ($favorite) {
+                        $favorite_icon = '<i class="fas fa-heart" aria-hidden="true"></i>';
+                    }
+                }
+                echo "<div class='map_post_left' style='display: flex; justify-content: center; align-items: center; width: 40px;'>$favorite_icon</div>";
+                echo "<div class='map_post_top_main_container' style='display: flex; flex-direction:column; justify-content: center; align-items: center;'>";
 
-                echo "<div><div class='title'>$task_name </div>$unlock_message</div>";
+                echo "<div class='title_and_unlock_message'><div class='title'>$task_name </div>$unlock_message</div>";
 
 
                 //<a href="javascript:;" class="go_blog_user_task" data-UserId="'.$user_id.'" onclick="go_blog_user_task('.$user_id.', '.$post_id.');">
@@ -1123,6 +1148,26 @@ function go_make_single_map($link_to_tasks = true, $map_id = null, $reload, $tax
                         go_print_single_badge($groups, 'group', $output = true, $user_id, 'go_map_badge');
                     }
                 }
+
+                echo "</div>";//end main container
+
+                $feedback_icon = '';
+                if(!empty($class)){
+                    if($class === 'up'){
+                        $feedback_icon = '<i class="far fa-comment-alt-plus" aria-hidden="true"></i>';
+                    }else if($class === 'down'){
+                        $feedback_icon = '<i class="far fa-comment-alt-minus" aria-hidden="true"></i>';
+                    }else if($class === 'has_feedback'){
+                        $feedback_icon = '<i class="far fa-comment-alt" aria-hidden="true"></i>';
+                    }else if($class === 'read'){
+                        $feedback_icon = '<i class="far fa-eye" aria-hidden="true"></i>';
+                    }else if( in_array($class, array('reset', 'resetted')) ){
+                        $feedback_icon = '<i class="far fa-times-circle" aria-hidden="true"></i>';
+                    }
+
+                }
+                echo "<div class='map_post_right' style='display: flex; justify-content: center; align-items: center; width: 40px;'>$feedback_icon</div>";
+                echo "</div>";//end top container
 
                 /*
                 if ($bonus_stage_toggle == true){
@@ -1680,7 +1725,7 @@ function go_make_map_dropdown($taxonomy, $map_id, $user_id, $is_admin, $clipboar
     if($is_admin){
         echo "
                 <div class='mapLink '  >
-                    <span class='go_edit_frontend action_icon' data-new_parent_term='true'><a><i class='far fa-plus-circle'></i></a></span>
+                    <span class='go_edit_frontend action_icon' data-new_parent_term='true'><i class='far fa-plus-circle'></i></span>
                 </div>";
     }
     echo"</div></div></div></div> ";
@@ -1782,6 +1827,11 @@ function go_update_task_order() {
         $taxonomy = $_POST['taxonomy'];
         $i = 0;
         $lock_info = array();
+        $key = 'go_get_chain_posts_' . $chain_id;
+        go_delete_transient($key);
+
+
+
         foreach($tasks as $task){
             $task_id = $task[0];
             $nested = $task[1];
@@ -1792,8 +1842,8 @@ function go_update_task_order() {
                 update_post_meta(intval($task_id), 'go-location_map_loc', $chain_id);
                 wp_set_post_terms($task_id, array($chain_id), 'task_chains', false);
                 update_post_meta(intval($task_id), 'go-location_map_order_item', $i);
-                $user_id = get_current_user_id();
-                $task_is_locked = go_task_locks($task_id, true, $user_id, false);
+
+                //$task_is_locked = go_task_locks($task_id, true, $user_id, false);
             }
             else if ($taxonomy === 'store_types'){
                 $task_is_locked = false;
@@ -1805,14 +1855,27 @@ function go_update_task_order() {
             $key = 'go_post_data_' . $task_id;
             go_delete_transient($key);
 
+
+        }
+
+        foreach($tasks as $task) {
+            $task_id = $task[0];
+            if ($taxonomy === 'task_chains') {
+                $user_id = get_current_user_id();
+                $task_is_locked = go_task_locks($task_id, true, $user_id, false);
+                if ($task_is_locked !== true && in_array($task_is_locked, array('password', 'master password'))) {
+                    $task_is_locked = false;
+                }
+            } else {
+                $task_is_locked = false;
+            }
+
             $task_info = array();
             $task_info[] = $task_id;
             $task_info[] = $task_is_locked;
             $lock_info[] = $task_info;
         }
 
-        $key = 'go_get_chain_posts_' . $chain_id;
-        go_delete_transient($key);
 
         echo json_encode(
             array(
@@ -1820,6 +1883,9 @@ function go_update_task_order() {
                 'lock_info' => $lock_info,
             )
         );
+
+        $key = 'go_get_chain_posts_' . $chain_id;
+        go_delete_transient($key);
         die();
     }
 }

@@ -483,26 +483,20 @@ function go_update_stage_table ($user_id, $post_id, $custom_fields, $status, $bo
     //UPDATE ELEMENT CLASS (used for color on map
     //check if the parent quest is reset and un-reset if it is
     //outline color or reset red color for map
-    $class = $wpdb->get_results($wpdb->prepare("SELECT class
+    $class = $wpdb->get_var($wpdb->prepare("SELECT class
 			FROM {$go_task_table_name}
 			WHERE uid = %d and post_id = %d
 			ORDER BY last_time DESC", $user_id, $post_id
     ));
 
-    if(is_array($class)) {
-        $class = (isset($class[0]->class) ?  $class[0]->class : null);
-        //$class = $class[0]->class;
         if(is_serialized($class)) {
             $class = unserialize($class);
-            if (in_array('reset', $class)) {
-                if (($key = array_search('reset', $class)) !== false) {
-                    unset($class[$key]);
-                }
-                $class[] = 'resetted';
-                $class = serialize($class);
-            }
+            $class = $class[0];
         }
-    }
+        if($class === 'reset'){
+            $class = 'resetted';
+        }
+
 
 
 
@@ -1353,12 +1347,31 @@ function go_update_totals_table($user_id, $xp, $gold, $health, $notify){
 
             update_user_option($user_id, "go_rank", $rank_num);
             go_noty_level_up($rank_num, $rank_name );
-            echo "<script>var audio = new Audio( PluginDir.url + 'media/sounds/milestone2.mp3' ); audio.play();</script>";
+
+            $sound = get_option('go_sound_level_up');
+            if($sound){
+                $sound = 'media/sounds/'.$sound;
+            }else{
+                $sound = 'media/sounds/chime.m4a';
+            }
+
+            $sound =  "<script>var audio = new Audio( PluginDir.url + '". $sound ."' ); audio.play();</script>";
+
+            echo $sound;
         }
 
         if ($rank_num < $old_rank){
             update_user_option($user_id, "go_rank", $rank_num);
             go_noty_level_down($rank_num, $rank_name );
+
+            $sound = get_option('go_sound_level_down');
+            if($sound){
+                $sound = 'media/sounds/'.$sound;
+            }else{
+                $sound = 'media/sounds/down.mp3';
+            }
+            $sound =  "<script>var audio = new Audio( PluginDir.url + '". $sound ."' ); audio.play();</script>";
+            echo $sound;
 
             $i = $old_rank - $rank_num;
             while ($i > 0){
@@ -1714,12 +1727,26 @@ function go_noty_message_modal($type = 'alert', $title, $content) {
 
 
 function go_up_sound(){
-    $sound =  "<script>var audio = new Audio( PluginDir.url + 'media/sounds/coins.mp3' ); audio.play();</script>";
+    $sound = get_option('go_sound_up');
+    if($sound){
+        $sound = 'media/sounds/'.$sound;
+    }else{
+        $sound = 'media/sounds/coins.mp3';
+    }
+
+    $sound =  "<script>var audio = new Audio( PluginDir.url + '". $sound ."' ); audio.play();</script>";
     return $sound;
 }
 
 function go_down_sound(){
-    $sound = "<script>var audio = new Audio( PluginDir.url + 'media/sounds/down.mp3' ); audio.play();</script>";
+    $sound = get_option('go_sound_down');
+    if($sound){
+        $sound = 'media/sounds/'.$sound;
+    }else{
+        $sound = 'media/sounds/down.mp3';
+    }
+
+    $sound =  "<script>var audio = new Audio( PluginDir.url + '". $sound ."' ); audio.play();</script>";
     return $sound;
 }
 

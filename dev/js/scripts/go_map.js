@@ -194,7 +194,7 @@ function go_setup_map(){
                     });
 
                     if(new_task_id != task_id) {
-                        console.log('update Add');
+                        //console.log('update Add');
                         go_update_nested_sort(NewListEl)
                     };
 
@@ -345,7 +345,7 @@ function go_setup_map(){
 
 //frontend map sort
 function go_update_task_sort(listEl){
-    console.log('go_update_task_sort');
+
     var tasks = [];
     jQuery(listEl).find('.task_container').each(function () {
         var task_info = [];
@@ -369,7 +369,7 @@ function go_update_task_sort(listEl){
     var chain_id = jQuery(listEl).data('chain_id');
     var taxonomy = jQuery("#maps").data('taxonomy');
     var nonce = GO_EVERY_PAGE_DATA.nonces.go_update_task_order;
-
+    console.log('go_update_task_sort');
     console.log(tasks);
     console.log(chain_id);
     jQuery.ajax({
@@ -397,7 +397,8 @@ function go_update_task_sort(listEl){
 
 //front end map sort
 function go_update_nested_sort(listEL){
-    console.log('go_update_nested_sort');
+
+    var taxonomy = jQuery("#maps").data('taxonomy');
     var tasks = [];
     jQuery(listEL).find('.go_nested_toggle').remove();
     jQuery(listEL).find('.go_nested_hover').contents().unwrap();
@@ -436,6 +437,10 @@ function go_update_nested_sort(listEL){
     });
     var chain_id = jQuery(listEL).closest('.tasks').data('chain_id');
     var nonce = GO_EVERY_PAGE_DATA.nonces.go_update_task_order;
+    //console.log('nested');
+    console.log('go_update_nested_sort');
+    console.log(tasks);
+    console.log(chain_id);
     jQuery.ajax({
         type: 'post',
         url: MyAjax.ajaxurl,
@@ -444,6 +449,7 @@ function go_update_nested_sort(listEL){
             action: 'go_update_task_order',
             tasks: tasks,
             chain_id: chain_id,
+            taxonomy: taxonomy
         },
         error: function (jqXHR, textStatus, errorThrown) {
             if (jqXHR.status === 400) {
@@ -458,7 +464,7 @@ function go_update_nested_sort(listEL){
 }
 
 function go_set_nested_toggle_colors(){
-    console.log('go_set_nested_toggle_colors');
+    //console.log('go_set_nested_toggle_colors');
     jQuery('.go_nested_list').each(function() {
         //jQuery(this).find('.task').last().addClass('lastNested');
         var count = 0;
@@ -502,6 +508,8 @@ function go_set_nested_toggle_colors(){
 }
 
 function go_fix_task_colors(raw){
+    //console.log('go_fix_task_colors');
+    //console.log(raw);
     var error = go_ajax_error_checker(raw);
     if (error == 'true') return;
 

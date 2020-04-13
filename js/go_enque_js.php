@@ -23,11 +23,12 @@ endif; //! slug_scripts_masonry exists
  */
 function go_customizer_live_preview()
 {
+    global $go_js_version;
     wp_enqueue_script(
         'go-themecustomizer',			//Give the script an ID
         plugin_dir_url( __FILE__ ).'scripts/customizer-min.js',//Point to file
         array( 'jquery','customize-preview' ),	//Define dependencies
-        '',						//Define a version (optional)
+        $go_js_version,						//Define a version (optional)
         true						//Put script in footer?
     );
 }
